@@ -1,0 +1,80 @@
+{
+    "name": "@juicyllama/utils",
+    "version": "0.0.100",
+    "description": "Juicyllama Utils",
+    "author": {
+        "name": "JuicyLlama Studio",
+        "email": "studio@juicyllama.com",
+        "url": "https://juicyllama.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/juicyllama-npm/utils"
+    },
+    "bugs": "https://github.com/juicyllama-npm/utils",
+    "license": "BSD-4-Clause",
+    "readmeFilename": "README.md",
+    "main": "dist/index.js",
+    "files": [
+        "dist/**/*",
+        "*.md"
+    ],
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "start:dev": "tsc -w",
+        "build": "tsc",
+        "prepare": "npm run build",
+        "format": "prettier --write \"src/**/*.ts\"",
+        "lint": "eslint \"src/**/*.ts\" --fix",
+        "test": "jest",
+        "test:clear": "npx jest --clearCache",
+        "test:watch": "jest --watch",
+        "test:cov": "jest --coverage",
+        "test:e2e": "jest --config ./test/jest-e2e.json",
+        "release": "release-it --ci",
+        "release:minor": "release-it minor --ci",
+        "release:major": "release-it major --ci"
+    },
+    "dependencies": {
+        "@juicyllama/dev": "workspace:*",
+        "axios": "latest",
+        "dayjs": "^1.11.9",
+        "showdown": "latest"
+    },
+    "release-it": {
+        "hooks": {
+            "before:init": [
+                "npm run format",
+                "npm run lint",
+                "npm run test"
+            ],
+            "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
+        },
+        "npm": {
+            "publish": true
+        },
+        "github": {
+            "release": false
+        },
+        "git": {
+            "commit": true,
+            "tag": true,
+            "push": true,
+            "requireCleanWorkingDir": false
+        }
+    },
+    "jest": {
+        "moduleFileExtensions": [
+            "js",
+            "json",
+            "ts"
+        ],
+        "rootDir": "src",
+        "testRegex": ".spec.ts$",
+        "transform": {
+            "^.+\\.(t|j)s$": "ts-jest"
+        },
+        "coverageDirectory": "../coverage",
+        "testEnvironment": "node"
+    }
+}

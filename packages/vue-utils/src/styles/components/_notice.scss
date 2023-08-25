@@ -1,0 +1,51 @@
+$warning: #f9e09b;
+$warning_bg: #fcf2d7;
+
+$success: #9cedaf;
+$success_bg: #daf8e1;
+
+$error: #ff808e;
+$error_bg: #ffdfe3;
+
+$info: #80c6ff;
+$info_bg: #dffbff;
+
+.notice {
+	border-radius: 4px;
+	margin: 16px 0;
+	padding: 16px 24px;
+	font-size: 1em;
+	line-height: 1.35em;
+	border-width: 0 5px;
+	border-style: solid;
+	letter-spacing: 0.5px;
+
+	// variant
+	&--warning {
+		background-color: $warning_bg;
+		border-color: $warning;
+	}
+
+	&--success {
+		background-color: $success_bg;
+		border-color: $success;
+	}
+
+	&--error {
+		background-color: $error_bg;
+		border-color: $error;
+	}
+
+	&--info {
+		background-color: $info_bg;
+		border-color: $info;
+	}
+}
+
+.notice p {
+	margin: auto;
+}
+
+body.body--dark .notice p {
+	color: #000000;
+}

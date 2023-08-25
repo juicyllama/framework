@@ -1,0 +1,125 @@
+.otp-input {
+	width: 40px;
+	height: 40px;
+	padding: 5px;
+	margin: 0 10px;
+	font-size: 20px;
+	border-radius: 4px;
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	text-align: center;
+}
+.otp-input.is-complete {
+	background-color: #e4e4e4;
+}
+.otp-input::-webkit-inner-spin-button,
+.otp-input::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+.q-select__dropdown-icon {
+	font-size: 0.6em;
+}
+
+.icon_fix {
+	padding-bottom: 4px;
+}
+
+.q-layout__section--marginal {
+	background-color: unset;
+	color: unset;
+}
+
+.q-card,
+.q-btn {
+	box-shadow: none;
+}
+
+.q-table__card {
+	box-shadow: none;
+	padding: 1rem;
+}
+
+.q-btn:before,
+.q-btn--actionable.q-btn--standard:active:before,
+.q-btn--actionable.q-btn--standard.q-btn--active:before {
+	box-shadow: none;
+}
+
+.main {
+	margin-left: 1.5rem;
+	margin-right: 1.5rem;
+}
+
+.auth-card {
+	min-width: 300px;
+	max-width: 400px;
+	box-shadow: 0 3px 5px -1px rgb(0 0 0 / 20%), 0 5px 8px rgb(0 0 0 / 14%), 0 1px 14px rgb(0 0 0 / 12%);
+}
+
+.desktop .auth-card {
+	width: 400px;
+}
+
+.auth-field-container {
+	padding-top: 16px;
+}
+
+.auth_actions a {
+	font-size: 12px;
+}
+
+.passwordVerification {
+	background-color: var(--q-info);
+}
+
+.common_form_item {
+	padding: 0.5rem;
+}
+
+.JLButton .q-btn__content {
+	gap: 0.4rem;
+}
+
+.JLButton .q-btn__content span {
+	gap: 0.4rem;
+}
+
+.JLTableJLFormWrapper {
+	padding: 1rem;
+}
+
+.JLFormItemPlugin .q-field__prepend .q-field__control {
+	border: unset;
+	min-height: 50px;
+	border-radius: 0;
+}
+
+.JLFormItemPlugin .q-field__prepend .q-field__native {
+	padding-right: 0.5rem;
+	min-height: 51px;
+}
+
+.JLIconDelete {
+	color: var(--q-negative);
+}
+
+.JLIconUpdate {
+	color: var(--q-primary);
+}
+
+.JLFormItem {
+	padding: 0.5rem;
+}
+
+.JLButton {
+	background: var(--q-primary);
+	color: white;
+}
+
+.q-field--labeled.q-field--dense .q-field__native,
+.q-field--labeled.q-field--dense .q-field__prefix,
+.q-field--labeled.q-field--dense .q-field__suffix {
+	padding-top: unset;
+	padding-bottom: unset;
+}

@@ -1,0 +1,195 @@
+{
+    "id": 596,
+    "date": "2023-05-11T09:34:35",
+    "date_gmt": "2023-05-11T09:34:35",
+    "guid": {
+        "rendered": "https://ampli.co/wp-content/uploads/2023/05/cropped-icon.png"
+    },
+    "modified": "2023-05-11T09:34:35",
+    "modified_gmt": "2023-05-11T09:34:35",
+    "slug": "cropped-icon-png",
+    "status": "inherit",
+    "type": "attachment",
+    "link": "https://ampli.co/cropped-icon-png/",
+    "title": {
+        "rendered": "cropped-icon.png"
+    },
+    "author": 2,
+    "comment_status": "",
+    "ping_status": "closed",
+    "template": "",
+    "meta": [],
+    "description": {
+        "rendered": "<a data-toggle=\"lightbox\" data-gallery=\"multiimages\" data-title=\"\"  class=\"thumbnail img-thumbnail\" href='https://ampli.co/wp-content/uploads/2023/05/cropped-icon.png'><img width=\"512\" height=\"512\" src=\"https://ampli.co/wp-content/uploads/2023/05/cropped-icon.png\" class=\"attachment-th_img_xl size-th_img_xl\" alt=\"\" decoding=\"async\" loading=\"lazy\" srcset=\"https://ampli.co/wp-content/uploads/2023/05/cropped-icon.png 512w, https://ampli.co/wp-content/uploads/2023/05/cropped-icon-300x300.png 300w, https://ampli.co/wp-content/uploads/2023/05/cropped-icon-150x150.png 150w, https://ampli.co/wp-content/uploads/2023/05/cropped-icon-28x28.png 28w, https://ampli.co/wp-content/uploads/2023/05/cropped-icon-80x80.png 80w, https://ampli.co/wp-content/uploads/2023/05/cropped-icon-394x394.png 394w, https://ampli.co/wp-content/uploads/2023/05/cropped-icon-303x303.png 303w, https://ampli.co/wp-content/uploads/2023/05/cropped-icon-270x270.png 270w, https://ampli.co/wp-content/uploads/2023/05/cropped-icon-192x192.png 192w, https://ampli.co/wp-content/uploads/2023/05/cropped-icon-180x180.png 180w, https://ampli.co/wp-content/uploads/2023/05/cropped-icon-32x32.png 32w\" sizes=\"(max-width: 512px) 100vw, 512px\" /></a>\n<p>https://ampli.co/wp-content/uploads/2023/05/cropped-icon.png</p>\n"
+    },
+    "caption": {
+        "rendered": "<p>https://ampli.co/wp-content/uploads/2023/05/cropped-icon.png</p>\n"
+    },
+    "alt_text": "test",
+    "media_type": "image",
+    "mime_type": "image/png",
+    "media_details": {
+        "width": 512,
+        "height": 512,
+        "file": "2023/05/cropped-icon.png",
+        "filesize": 16178,
+        "sizes": {
+            "medium": {
+                "file": "cropped-icon-300x300.png",
+                "width": 300,
+                "height": 300,
+                "filesize": 9782,
+                "mime_type": "image/png",
+                "source_url": "https://ampli.co/wp-content/uploads/2023/05/cropped-icon-300x300.png"
+            },
+            "thumbnail": {
+                "file": "cropped-icon-150x150.png",
+                "width": 150,
+                "height": 150,
+                "filesize": 4483,
+                "mime_type": "image/png",
+                "source_url": "https://ampli.co/wp-content/uploads/2023/05/cropped-icon-150x150.png"
+            },
+            "themo-logo": {
+                "file": "cropped-icon-28x28.png",
+                "width": 28,
+                "height": 28,
+                "filesize": 842,
+                "mime_type": "image/png",
+                "source_url": "https://ampli.co/wp-content/uploads/2023/05/cropped-icon-28x28.png"
+            },
+            "th_img_xs": {
+                "file": "cropped-icon-80x80.png",
+                "width": 80,
+                "height": 80,
+                "filesize": 2270,
+                "mime_type": "image/png",
+                "source_url": "https://ampli.co/wp-content/uploads/2023/05/cropped-icon-80x80.png"
+            },
+            "th_img_sm_landscape": {
+                "file": "cropped-icon-394x303.png",
+                "width": 394,
+                "height": 303,
+                "filesize": 11396,
+                "mime_type": "image/png",
+                "source_url": "https://ampli.co/wp-content/uploads/2023/05/cropped-icon-394x303.png"
+            },
+            "th_img_sm_portrait": {
+                "file": "cropped-icon-394x512.png",
+                "width": 394,
+                "height": 512,
+                "filesize": 13871,
+                "mime_type": "image/png",
+                "source_url": "https://ampli.co/wp-content/uploads/2023/05/cropped-icon-394x512.png"
+            },
+            "th_img_sm_square": {
+                "file": "cropped-icon-394x394.png",
+                "width": 394,
+                "height": 394,
+                "filesize": 13649,
+                "mime_type": "image/png",
+                "source_url": "https://ampli.co/wp-content/uploads/2023/05/cropped-icon-394x394.png"
+            },
+            "th_img_sm_standard": {
+                "file": "cropped-icon-303x303.png",
+                "width": 303,
+                "height": 303,
+                "filesize": 9810,
+                "mime_type": "image/png",
+                "source_url": "https://ampli.co/wp-content/uploads/2023/05/cropped-icon-303x303.png"
+            },
+            "th_img_md_landscape": {
+                "file": "cropped-icon-512x465.png",
+                "width": 512,
+                "height": 465,
+                "filesize": 17777,
+                "mime_type": "image/png",
+                "source_url": "https://ampli.co/wp-content/uploads/2023/05/cropped-icon-512x465.png"
+            },
+            "site_icon-270": {
+                "file": "cropped-icon-270x270.png",
+                "width": 270,
+                "height": 270,
+                "filesize": 8549,
+                "mime_type": "image/png",
+                "source_url": "https://ampli.co/wp-content/uploads/2023/05/cropped-icon-270x270.png"
+            },
+            "site_icon-192": {
+                "file": "cropped-icon-192x192.png",
+                "width": 192,
+                "height": 192,
+                "filesize": 5793,
+                "mime_type": "image/png",
+                "source_url": "https://ampli.co/wp-content/uploads/2023/05/cropped-icon-192x192.png"
+            },
+            "site_icon-180": {
+                "file": "cropped-icon-180x180.png",
+                "width": 180,
+                "height": 180,
+                "filesize": 5368,
+                "mime_type": "image/png",
+                "source_url": "https://ampli.co/wp-content/uploads/2023/05/cropped-icon-180x180.png"
+            },
+            "site_icon-32": {
+                "file": "cropped-icon-32x32.png",
+                "width": 32,
+                "height": 32,
+                "filesize": 926,
+                "mime_type": "image/png",
+                "source_url": "https://ampli.co/wp-content/uploads/2023/05/cropped-icon-32x32.png"
+            },
+            "full": {
+                "file": "cropped-icon.png",
+                "width": 512,
+                "height": 512,
+                "mime_type": "image/png",
+                "source_url": "https://ampli.co/wp-content/uploads/2023/05/cropped-icon.png"
+            }
+        },
+        "image_meta": {
+            "aperture": "0",
+            "credit": "",
+            "camera": "",
+            "caption": "",
+            "created_timestamp": "0",
+            "copyright": "",
+            "focal_length": "0",
+            "iso": "0",
+            "shutter_speed": "0",
+            "title": "",
+            "orientation": "0",
+            "keywords": []
+        }
+    },
+    "post": null,
+    "source_url": "https://ampli.co/wp-content/uploads/2023/05/cropped-icon.png",
+    "_links": {
+        "self": [
+            {
+                "href": "https://ampli.co/wp-json/wp/v2/media/596"
+            }
+        ],
+        "collection": [
+            {
+                "href": "https://ampli.co/wp-json/wp/v2/media"
+            }
+        ],
+        "about": [
+            {
+                "href": "https://ampli.co/wp-json/wp/v2/types/attachment"
+            }
+        ],
+        "author": [
+            {
+                "embeddable": true,
+                "href": "https://ampli.co/wp-json/wp/v2/users/2"
+            }
+        ],
+        "replies": [
+            {
+                "embeddable": true,
+                "href": "https://ampli.co/wp-json/wp/v2/comments?post=596"
+            }
+        ]
+    }
+}

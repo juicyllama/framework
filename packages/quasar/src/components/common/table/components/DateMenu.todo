@@ -1,0 +1,309 @@
+<script setup lang="ts">
+import { onMounted, ref, toRefs } from "vue";
+import { ICurrentDate } from "@/interface/global";
+import dayjs from "dayjs";
+import { UseMobileSize } from "@/composable/UseMobileSize";
+
+const { mobile } = UseMobileSize()
+
+const props = defineProps<{
+  currentDate: ICurrentDate
+}>()
+const emit = defineEmits<{
+  (e: 'update:current-date', data: ICurrentDate): void,
+  (e: 'open-menu'): void,
+  (e: 'close-menu'): void,
+  (e: 'clear'): void,
+  (e: 'refresh'): void
+}>()
+const today = ref(dayjs().format())
+const subtractDate = (value: number, unit: string) => {
+  return dayjs().subtract(value, unit).format()
+}
+
+const { currentDate } = toRefs(props)
+
+const isActiveCustomDate = ref(false)
+
+const dateFilter = ref([
+  {
+    title: 'Today',
+    value: {
+      from: dayjs().startOf('day').format(),
+      to: today.value,
+    },
+  },
+  {
+    title: 'Last 24hrs',
+    value: {
+      from: subtractDate(1, 'day'),
+      to: today.value,
+    },
+  },
+  {
+    title: 'Last 7 days',
+    value: {
+      from: subtractDate(7, 'day'),
+      to: today.value,
+    },
+  },
+  {
+    title: 'Last 30 days',
+    value: {
+      from: subtractDate(30, 'day'),
+      to: today.value,
+    },
+  },
+  {
+    title: 'Last 90 days',
+    value: {
+      from: subtractDate(90, 'day'),
+      to: today.value,
+    },
+  },
+  {
+    title: 'Last 12 months',
+    value: {
+      from: subtractDate(12, 'month'),
+      to: today.value,
+    },
+  },
+])
+const customDate = ref({
+  title: 'Custom',
+  value: {
+    to: new Date(),
+    from: new Date(),
+  },
+})
+
+const setSelectDate = (): ICurrentDate => {
+  if (currentDate.value.title === 'Custom'){
+    isActiveCustomDate.value = true
+    customDate.value.value.to = new Date(currentDate.value.value.to)
+    customDate.value.value.from = new Date(currentDate.value.value.from)
+    return {
+      title: currentDate.value.title,
+      value: {
+        from: new Date(currentDate.value.value.from),
+        to: new Date(currentDate.value.value.to)
+      }
+    }
+  } else {
+    const findDate = dateFilter.value.find(data => data.title === currentDate.value.title)
+    return findDate ? findDate : currentDate.value
+  }
+}
+
+const selectDate = ref<ICurrentDate>(setSelectDate())
+
+const updateSelectDate = (date: ICurrentDate) => {
+  selectDate.value = {
+    ...date,
+    value: {
+      from: date.value.from,
+      to: date.value.to
+    }
+  }
+}
+
+const clearSelectDate = () => {
+  customDate.value.value = {
+    to: new Date(),
+    from: new Date(),
+  }
+  isActiveCustomDate.value = false
+  const findDate = dateFilter.value.find(data => data.title === 'Last 24hrs')
+  selectDate.value = findDate ? findDate : currentDate.value
+  emit('clear')
+}
+
+const updateCustomDate = () => {
+  selectDate.value.value = {
+    ...customDate.value.value
+  }
+}
+
+const setDate = () => {
+  emit('update:current-date', {
+    ...selectDate.value,
+    value: {
+      from: selectDate.value.value.from,
+      to: selectDate.value.value.to
+    }
+  })
+  emit('refresh')
+}
+
+onMounted(() => {
+  emit('update:current-date', {
+    ...selectDate.value,
+    value: {
+      from: selectDate.value.value.from,
+      to: selectDate.value.value.to
+    }
+  })
+})
+</script>
+
+<template>
+  <v-dialog v-if="mobile">
+    <template v-slot:activator="{ props }">
+      <v-btn
+        v-bind="props"
+        class="mx-3 no-uppercase light-grey-btn"
+        @click="$emit('open-menu', 'dateMenu')"
+      >
+        <div class="d-flex">
+          <img alt="datePicker" src="/icons/datePicker.svg" />
+        </div>
+      </v-btn>
+    </template>
+    <v-list class="pa-4 list-title dropdown-menu__date d-flex flex-column">
+      <div class="d-flex justify-space-between">
+        <p class="dropdown-menu__title">
+          Date Range
+        </p>
+        <v-icon
+          class="cursor-pointer"
+          @click="$emit('close-menu')"
+        >
+          mdi-close-circle
+        </v-icon>
+      </div>
+      <v-radio-group :model-value="selectDate" @update:modelValue="updateSelectDate" hide-details>
+        <v-radio
+          v-for="item in dateFilter"
+          :key="item.title"
+          :label="item.title"
+          :value="item"
+          color="primary"
+          @input="isActiveCustomDate = false"
+        ></v-radio>
+        <v-radio
+          :key="customDate.title"
+          :label="customDate.title"
+          :value="customDate"
+          color="primary"
+          @input="isActiveCustomDate = true"
+        ></v-radio>
+      </v-radio-group>
+      <div v-if="isActiveCustomDate" class="pa-2">
+        To:
+        <date-picker v-model="customDate.value.to" class="datePicker" @update:modelValue="updateCustomDate"/>
+
+        From:
+        <date-picker v-model="customDate.value.from" class="datePicker" @update:modelValue="updateCustomDate"/>
+      </div>
+      <v-row class="mt-2">
+        <v-col cols="4">
+          <v-btn
+            :block="true"
+            @click="clearSelectDate"
+            variant="outlined"
+            size="large"
+            color="primary"
+            class="no-uppercase py-4 menu__button"
+          >
+            Clear
+          </v-btn>
+        </v-col>
+        <v-col cols="8">
+          <v-btn
+            :block="true"
+            @click="setDate"
+            variant="outlined"
+            size="large"
+            color="primary"
+            class="no-uppercase py-4 menu__button"
+          >
+            Apply
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-list>
+  </v-dialog>
+  <v-menu
+    v-else
+    class="dropdown-menu"
+    transition="scale-transition"
+    :close-on-content-click="false"
+  >
+    <template v-slot:activator="{ props }">
+      <v-btn
+        v-bind="props"
+        class="mx-3 no-uppercase light-grey-btn"
+        append-icon="mdi-chevron-down"
+        @click="$emit('open-menu', 'dateMenu')"
+      >
+        <div class="d-flex">
+          <img alt="datePicker" src="/icons/datePicker.svg" class="mr-2" />
+          <p>{{ currentDate.title }}</p>
+        </div>
+      </v-btn>
+    </template>
+    <v-list class="pa-4 list-title dropdown-menu__date d-flex flex-column">
+      <div class="d-flex justify-space-between">
+        <p class="dropdown-menu__title">
+          Date Range
+        </p>
+        <v-icon
+          class="cursor-pointer"
+          @click="$emit('close-menu')"
+        >
+          mdi-close-circle
+        </v-icon>
+      </div>
+      <v-radio-group :model-value="selectDate" @update:modelValue="updateSelectDate" hide-details>
+        <v-radio
+          v-for="item in dateFilter"
+          :key="item.title"
+          :label="item.title"
+          :value="item"
+          color="primary"
+          @input="isActiveCustomDate = false"
+        ></v-radio>
+        <v-radio
+          :key="customDate.title"
+          :label="customDate.title"
+          :value="customDate"
+          color="primary"
+          @input="isActiveCustomDate = true"
+        ></v-radio>
+      </v-radio-group>
+      <div v-if="isActiveCustomDate" class="pa-2">
+        To:
+        <date-picker v-model="customDate.value.to" class="datePicker" @update:modelValue="updateCustomDate"/>
+
+        From:
+        <date-picker v-model="customDate.value.from" class="datePicker" @update:modelValue="updateCustomDate"/>
+      </div>
+      <v-row class="mt-2">
+        <v-col cols="4">
+          <v-btn
+            :block="true"
+            @click="clearSelectDate"
+            variant="outlined"
+            size="large"
+            color="primary"
+            class="no-uppercase py-4 menu__button"
+          >
+            Clear
+          </v-btn>
+        </v-col>
+        <v-col cols="8">
+          <v-btn
+            :block="true"
+            @click="setDate"
+            variant="outlined"
+            size="large"
+            color="primary"
+            class="no-uppercase py-4 menu__button"
+          >
+            Apply
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-list>
+  </v-menu>
+</template>

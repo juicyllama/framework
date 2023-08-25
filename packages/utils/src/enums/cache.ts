@@ -1,0 +1,10 @@
+export enum CachePeriod {
+	NEVER = 0,
+	MINUTE = 60,
+	TWENTY = 1200,
+	HOUR = 3600,
+	DAY = 86400,
+	WEEK = 604800,
+	MONTH = 2419200,
+	YEAR = 31535965,
+}
