@@ -39,6 +39,7 @@ export class AwsSesService {
 
 			const command = new SendEmailCommand(params)
 
+			//@ts-ignore FIXME - this is a bug in the aws-sdk, the type is wrong. ts-ignoring for now
 			const data = await client.send(command)
 
 			this.logger.debug(`[${domain}] Result`, data)

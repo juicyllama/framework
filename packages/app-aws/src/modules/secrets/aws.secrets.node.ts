@@ -25,6 +25,7 @@ export async function getSecret(secret_name: string): Promise<any> {
 
 		const client = new SecretsManagerClient(config)
 
+		//@ts-ignore FIXME - this is a bug in the aws-sdk, the type is wrong. ts-ignoring for now
 		const response = await client.send(
 			new GetSecretValueCommand({
 				SecretId: secret_name,
@@ -71,6 +72,7 @@ export async function listSecrets(): Promise<object> {
 
 		const client = new SecretsManagerClient(config)
 
+		//@ts-ignore FIXME - this is a bug in the aws-sdk, the type is wrong. ts-ignoring for now
 		const response = await client.send(new ListSecretsCommand({}))
 
 		return response.SecretList

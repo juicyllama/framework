@@ -1,29 +1,14 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "skipLibCheck": true,
-    "allowJs": true,
-    "lib": ["es5", "es6", "dom", "ESNext"],
-    "module": "CommonJS",
-    "moduleResolution": "Node",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es2017",
-    "sourceMap": false,
-    "incremental": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "types": ["node", "jest", "multer"],
     "outDir": "./dist",
-    "baseUrl": "./",
+    "rootDir": "./src",
+    "baseUrl": "./"
   },
-  "exclude": ["node_modules", "dist", "**/*spec.ts", "**/*.test.spec.ts", "**/*.test.paused.ts", "**/*.test.config.ts"],
-  "include": ["src/**/*.ts"]
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

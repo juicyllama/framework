@@ -90,6 +90,7 @@ export class AwsS3Service {
 			Bucket: awsS3Config().s3buckets[bucket].bucket,
 			Prefix: location,
 		})
+		//@ts-ignore FIXME - this is a bug in the aws-sdk, the type is wrong. ts-ignoring for now
 		const data = await client.send(command)
 
 		const files = []
@@ -130,6 +131,7 @@ export class AwsS3Service {
 		let result
 
 		try {
+			//@ts-ignore FIXME - this is a bug in the aws-sdk, the type is wrong. ts-ignoring for now
 			const data = await client.send(command)
 			result = await streamToString(data.Body)
 		} catch (e) {
@@ -184,6 +186,7 @@ export class AwsS3Service {
 			Key: location,
 		})
 
+		//@ts-ignore FIXME - this is a bug in the aws-sdk, the type is wrong. ts-ignoring for now
 		return await client.send(command)
 	}
 }

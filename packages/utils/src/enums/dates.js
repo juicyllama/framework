@@ -1,0 +1,55 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.month_names_short = exports.month_names = exports.FrequencyPerYear = exports.SubscriptionFrequency = void 0;
+var SubscriptionFrequency;
+(function (SubscriptionFrequency) {
+    SubscriptionFrequency[SubscriptionFrequency["DAILY"] = 1] = "DAILY";
+    SubscriptionFrequency[SubscriptionFrequency["WEEKLY"] = 7] = "WEEKLY";
+    SubscriptionFrequency[SubscriptionFrequency["BIWEEKLY"] = 14] = "BIWEEKLY";
+    SubscriptionFrequency[SubscriptionFrequency["MONTHLY"] = 30] = "MONTHLY";
+    SubscriptionFrequency[SubscriptionFrequency["BIMONTHLY"] = 60] = "BIMONTHLY";
+    SubscriptionFrequency[SubscriptionFrequency["QUARTERLY"] = 90] = "QUARTERLY";
+    SubscriptionFrequency[SubscriptionFrequency["BIQUARTERLY"] = 180] = "BIQUARTERLY";
+    SubscriptionFrequency[SubscriptionFrequency["YEARLY"] = 365] = "YEARLY";
+})(SubscriptionFrequency || (exports.SubscriptionFrequency = SubscriptionFrequency = {}));
+var FrequencyPerYear;
+(function (FrequencyPerYear) {
+    FrequencyPerYear[FrequencyPerYear["DAILY"] = 365] = "DAILY";
+    FrequencyPerYear[FrequencyPerYear["TWICE_PER_WEEK"] = 104] = "TWICE_PER_WEEK";
+    FrequencyPerYear[FrequencyPerYear["WEEKLY"] = 52] = "WEEKLY";
+    FrequencyPerYear[FrequencyPerYear["TWICE_PER_MONTH"] = 24] = "TWICE_PER_MONTH";
+    FrequencyPerYear[FrequencyPerYear["MONTHLY"] = 12] = "MONTHLY";
+    FrequencyPerYear[FrequencyPerYear["QUARTERLY"] = 4] = "QUARTERLY";
+    FrequencyPerYear[FrequencyPerYear["YEARLY"] = 1] = "YEARLY";
+    FrequencyPerYear[FrequencyPerYear["NONE"] = 0] = "NONE";
+})(FrequencyPerYear || (exports.FrequencyPerYear = FrequencyPerYear = {}));
+var month_names;
+(function (month_names) {
+    month_names[month_names["January"] = 0] = "January";
+    month_names[month_names["February"] = 1] = "February";
+    month_names[month_names["March"] = 2] = "March";
+    month_names[month_names["April"] = 3] = "April";
+    month_names[month_names["May"] = 4] = "May";
+    month_names[month_names["June"] = 5] = "June";
+    month_names[month_names["July"] = 6] = "July";
+    month_names[month_names["August"] = 7] = "August";
+    month_names[month_names["September"] = 8] = "September";
+    month_names[month_names["October"] = 9] = "October";
+    month_names[month_names["November"] = 10] = "November";
+    month_names[month_names["December"] = 11] = "December";
+})(month_names || (exports.month_names = month_names = {}));
+var month_names_short;
+(function (month_names_short) {
+    month_names_short[month_names_short["Jan"] = 0] = "Jan";
+    month_names_short[month_names_short["Feb"] = 1] = "Feb";
+    month_names_short[month_names_short["Mar"] = 2] = "Mar";
+    month_names_short[month_names_short["Apr"] = 3] = "Apr";
+    month_names_short[month_names_short["May"] = 4] = "May";
+    month_names_short[month_names_short["Jun"] = 5] = "Jun";
+    month_names_short[month_names_short["Jul"] = 6] = "Jul";
+    month_names_short[month_names_short["Aug"] = 7] = "Aug";
+    month_names_short[month_names_short["Sep"] = 8] = "Sep";
+    month_names_short[month_names_short["Oct"] = 9] = "Oct";
+    month_names_short[month_names_short["Nov"] = 10] = "Nov";
+    month_names_short[month_names_short["Dec"] = 11] = "Dec";
+})(month_names_short || (exports.month_names_short = month_names_short = {}));

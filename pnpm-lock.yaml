@@ -28,6 +28,28 @@ importers:
       '@juicyllama/core':
         specifier: workspace:*
         version: link:../core
+      '@juicyllama/utils':
+        specifier: workspace:*
+        version: link:../utils
+    devDependencies:
+      '@juicyllama/dev':
+        specifier: workspace:*
+        version: link:../dev
+
+  packages/app-mollie:
+    dependencies:
+      '@juicyllama/billing':
+        specifier: workspace:*
+        version: link:../billing
+      '@juicyllama/core':
+        specifier: workspace:*
+        version: link:../core
+      '@juicyllama/utils':
+        specifier: workspace:*
+        version: link:../utils
+      '@mollie/api-client':
+        specifier: latest
+        version: 3.7.0
     devDependencies:
       '@juicyllama/dev':
         specifier: workspace:*
@@ -38,6 +60,9 @@ importers:
       '@juicyllama/core':
         specifier: workspace:*
         version: link:../core
+      '@juicyllama/utils':
+        specifier: workspace:*
+        version: link:../utils
       openai:
         specifier: ^3.3.0
         version: 3.3.0
@@ -47,31 +72,30 @@ importers:
       '@juicyllama/core':
         specifier: workspace:*
         version: link:../core
+      '@juicyllama/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@slack/bolt':
         specifier: latest
         version: 3.13.3
-
-  packages/app-store:
-    dependencies:
-      '@juicyllama/core':
-        specifier: workspace:*
-        version: link:../core
-    optionalDependencies:
-      '@juicyllama/app-wordpress':
-        specifier: workspace:*
-        version: link:../app-wordpress
 
   packages/app-wordpress:
     dependencies:
       '@juicyllama/core':
         specifier: workspace:*
         version: link:../core
+      '@juicyllama/utils':
+        specifier: workspace:*
+        version: link:../utils
 
   packages/billing:
     dependencies:
       '@juicyllama/core':
         specifier: workspace:*
         version: link:../core
+      '@juicyllama/utils':
+        specifier: workspace:*
+        version: link:../utils
 
   packages/core:
     dependencies:
@@ -2888,6 +2912,15 @@ packages:
   /@mdit-vue/types@0.12.0:
     resolution: {integrity: sha512-mrC4y8n88BYvgcgzq9bvTlDgFyi2zuvzmPilRvRc3Uz1iIvq8mDhxJ0rHKFUNzPEScpDvJdIujqiDrulMqiudA==}
     dev: true
+
+  /@mollie/api-client@3.7.0:
+    resolution: {integrity: sha512-8pYq08xwv7VJIQvOJU+3nThZbXuNLhtD8iJQQ4UYW67kxHw4eC6cVE9SNVtUuHRfxTwcKLv5wrZd9jFb3BFqiA==}
+    engines: {node: '>=6.14'}
+    dependencies:
+      axios: 0.27.2
+    transitivePeerDependencies:
+      - debug
+    dev: false
 
   /@nestjs/cli@9.4.2:
     resolution: {integrity: sha512-QWpk3UkpcAIvlqh2sSc6atHyaNFl7POi45Ujd5sAtVNogzpGphOlSyh39XuJcpe0FP3Z9IxX/0AUHF7KL/VyJQ==}
