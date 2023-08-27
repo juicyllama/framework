@@ -1,4 +1,5 @@
-import { CacheModule, forwardRef, MiddlewareConsumer, Module } from '@nestjs/common'
+import { forwardRef, MiddlewareConsumer, Module } from '@nestjs/common'
+import { CacheModule } from '@nestjs/cache-manager'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { JwtModule } from '@nestjs/jwt'
 import { ConfigModule } from '@nestjs/config'

@@ -17,7 +17,7 @@ describe('TypeORM query', () => {
 		scaffold = await scaffolding.up(MODULE, SERVICE)
 
 		scaffold.values.mock = {
-			account_name: faker.random.words(),
+			account_name: faker.word.sample(),
 		}
 	})
 
@@ -235,7 +235,7 @@ describe('TypeORM query', () => {
 		it('Perform a create query', async () => {
 			const mockAccountUpdate = {
 				account_id: scaffold.values.account.account_id,
-				account_name: faker.random.words(),
+				account_name: faker.word.sample(),
 			}
 
 			const result = await scaffold.query.update(scaffold.repository, mockAccountUpdate)

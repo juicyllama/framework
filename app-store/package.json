@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-store",
-    "version": "0.0.11",
+    "version": "0.0.12",
     "description": "Juicyllama App Store Module",
     "author": {
         "name": "JuicyLlama Studio",
@@ -34,6 +34,9 @@
         "release": "release-it --ci",
         "release:minor": "release-it minor --ci",
         "release:major": "release-it major --ci"
+    },
+    "devDependencies": {
+        "@juicyllama/dev": "workspace:*"
     },
     "dependencies": {
         "@juicyllama/core": "workspace:*",

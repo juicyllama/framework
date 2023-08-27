@@ -1,6 +1,5 @@
 import {
 	BadRequestException,
-	CACHE_MANAGER,
 	ForbiddenException,
 	forwardRef,
 	ImATeapotException,
@@ -9,6 +8,7 @@ import {
 	NotFoundException,
 	UnauthorizedException,
 } from '@nestjs/common'
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { CachePeriod, Enums, Env, JLCache, Logger, Modules, OTP, Strings, SuccessResponseDto } from '@juicyllama/utils'
 import { InjectRepository } from '@nestjs/typeorm'
 import { In, Like, Repository } from 'typeorm'

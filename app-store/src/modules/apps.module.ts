@@ -1,4 +1,5 @@
-import { CacheModule, forwardRef, Module } from '@nestjs/common'
+import { forwardRef, Module } from '@nestjs/common'
+import { CacheModule } from '@nestjs/cache-manager'
 import { AppsController } from './apps.controller'
 import { AppsService } from './apps.service'
 import { TypeOrmModule } from '@nestjs/typeorm'

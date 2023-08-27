@@ -1,14 +1,17 @@
-import { faker } from '@faker-js/faker'
-import { Account } from '../modules/accounts/account.entity'
-import { User } from '../modules/users/users.entity'
+import {faker} from '@faker-js/faker'
+import {Account} from '../modules/accounts/account.entity'
+import {User} from '../modules/users/users.entity'
 
 export function MockAccountRequest(password?: string) {
 	if (!password) {
-		password = faker.internet.password(20, false, /[!-~]/)
+		password = faker.internet.password(20,
+			false,
+			/[!-~]/
+		)
 	}
 
 	return {
-		account_name: faker.random.words(),
+		account_name: faker.word.noun(),
 		owners_email: faker.internet.email(),
 		owners_password: password,
 		owners_first_name: 'Owner',
@@ -17,7 +20,11 @@ export function MockAccountRequest(password?: string) {
 }
 
 export function MockUserRequest(account: Account): Partial<User> {
-	const password = faker.internet.password(20, false, /[!-~]/)
+	const password = faker.internet.password(
+		20,
+		false,
+		/[!-~]/
+	)
 
 	return {
 		accounts: [account],

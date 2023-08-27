@@ -151,6 +151,10 @@ export async function crudUpdate<T>(options: {
 		}
 	}
 
+	if (!options.primaryKey) {
+		throw new BadRequestException(`Missing required field: ${PRIMARY_KEY}`)
+	}
+
 	return await options.service.update({
 		[PRIMARY_KEY]: options.primaryKey,
 		...options.data,

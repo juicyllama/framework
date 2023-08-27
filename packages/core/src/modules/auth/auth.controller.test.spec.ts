@@ -12,7 +12,11 @@ type T = Role
 const MODULE = AuthModule
 const SERVICE = AuthService
 const url = '/auth'
-const new_password = faker.internet.password(20, false, /[!-~]/)
+const new_password = faker.internet.password({
+	length: 20, 
+	memorable: false, 
+	pattern: /[!-~]/
+})
 
 describe('Auth Endpoints', () => {
 	const scaffolding = new Scaffold<T>()

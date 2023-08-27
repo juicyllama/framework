@@ -15,7 +15,11 @@ const SERVICE = AccountService
 const url = '/account'
 const NAME = 'Account'
 const PRIMARY_KEY = 'account_id'
-const password = faker.internet.password(20, false, /[!-~]/)
+const password = faker.internet.password({
+	length: 20,
+	memorable: false,
+	pattern: /[!-~]/
+})
 
 describe(`${NAME} Endpoints`, () => {
 	const scaffolding = new Scaffold<T>()
@@ -127,7 +131,7 @@ describe(`${NAME} Endpoints`, () => {
 
 	describe('Update', () => {
 		const patch = {
-			account_name: faker.random.word(),
+			account_name: faker.word.sample(),
 		}
 
 		it(`Update ${NAME} `, async () => {
@@ -164,7 +168,7 @@ describe(`${NAME} Endpoints`, () => {
 					Authorization: 'Bearer ' + owner_access_token,
 					'account-id': account.account_id.toString(),
 				})
-				.send({ account_name: faker.random.word() })
+				.send({ account_name: faker.word.sample() })
 				.then(async ({ body }) => {
 					try {
 						expect(body.account).toBeDefined()

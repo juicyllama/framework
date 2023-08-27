@@ -11,7 +11,7 @@ const MODULE = SettingsModule
 const SERVICE = SettingsService
 
 const mock = <DeepPartial<Setting>>{
-	key: <string>faker.random.word(),
+	key: <string>faker.word.sample(),
 	value: { name: faker.name.fullName() },
 }
 

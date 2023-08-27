@@ -1,9 +1,9 @@
-import {UsersModule} from './users.module'
-import {MockUserRequest, Scaffold, ScaffoldDto, TestEndpoint} from '../../test'
-import {User} from './users.entity'
-import {METHOD} from '../../types'
-import {ChartsPeriod, ChartsResponseDto} from '@juicyllama/utils'
-import {UsersService} from './users.service'
+import { UsersModule } from './users.module'
+import { MockUserRequest, Scaffold, ScaffoldDto, TestEndpoint } from '../../test'
+import { User } from './users.entity'
+import { METHOD } from '../../types'
+import { ChartsPeriod, ChartsResponseDto } from '@juicyllama/utils'
+import { UsersService } from './users.service'
 
 const E = User
 type T = User
@@ -179,7 +179,7 @@ describe(`${NAME} Charts Endpoint`, () => {
 				first_name: 'Alexa',
 				last_name: 'Test',
 			})
-			const result = await testCharts({fields: [], period: ChartsPeriod.DAY, search: 'Test'})
+			const result = await testCharts({ fields: [], period: ChartsPeriod.DAY, search: 'Test' })
 			await userService.purge(u1)
 			await userService.purge(u2)
 			await userService.purge(u3)
@@ -215,7 +215,7 @@ describe(`${NAME} Charts Endpoint`, () => {
 				first_name: 'Alexa',
 				last_name: 'Test',
 			})
-			const result = await testCharts({period: ChartsPeriod.DAY, search: 'Test'})
+			const result = await testCharts({ period: ChartsPeriod.DAY, search: 'Test' })
 			await userService.purge(u1)
 			await userService.purge(u2)
 			await userService.purge(u3)
@@ -259,7 +259,11 @@ describe(`${NAME} Charts Endpoint`, () => {
 				first_name: 'Alexa',
 				last_name: 'Test',
 			})
-			const result = await testCharts({fields: ['first_name', 'last_name'], period: ChartsPeriod.DAY, search: 'Test'})
+			const result = await testCharts({
+				fields: ['first_name', 'last_name'],
+				period: ChartsPeriod.DAY,
+				search: 'Test',
+			})
 			await userService.purge(u1)
 			await userService.purge(u2)
 			await userService.purge(u3)
@@ -295,7 +299,6 @@ describe(`${NAME} Charts Endpoint`, () => {
 				},
 			])
 		})
-
 	})
 
 	describe('Line', () => {
@@ -332,8 +335,8 @@ describe(`${NAME} Charts Endpoint`, () => {
 
 			expect(result['datasets'].length).toEqual(1)
 			expect(result['datasets'][0]['data']).toEqual([
-				{count: '2', time_interval: '2023-08-07T14:30:00.000Z'},
-				{count: '2', time_interval: '2023-08-07T14:45:00.000Z'},
+				{ count: '2', time_interval: '2023-08-07T14:30:00.000Z' },
+				{ count: '2', time_interval: '2023-08-07T14:45:00.000Z' },
 			])
 		})
 
@@ -370,8 +373,8 @@ describe(`${NAME} Charts Endpoint`, () => {
 
 			expect(result['datasets'].length).toEqual(1)
 			expect(result['datasets'][0]['data']).toEqual([
-				{count: '2', time_interval: '2023-08-07T14:30:00.000Z'},
-				{count: '2', time_interval: '2023-08-07T14:00:00.000Z'},
+				{ count: '2', time_interval: '2023-08-07T14:30:00.000Z' },
+				{ count: '2', time_interval: '2023-08-07T14:00:00.000Z' },
 			])
 		})
 
@@ -408,8 +411,8 @@ describe(`${NAME} Charts Endpoint`, () => {
 
 			expect(result['datasets'].length).toEqual(1)
 			expect(result['datasets'][0]['data']).toEqual([
-				{count: '2', time_interval: '2023-08-07T14:00:00.000Z'},
-				{count: '2', time_interval: '2023-08-07T15:00:00.000Z'},
+				{ count: '2', time_interval: '2023-08-07T14:00:00.000Z' },
+				{ count: '2', time_interval: '2023-08-07T15:00:00.000Z' },
 			])
 		})
 
@@ -426,7 +429,7 @@ describe(`${NAME} Charts Endpoint`, () => {
 				...MockUserRequest(scaffold.values.account),
 				created_at: new Date('2020-01-10'),
 			})
-			const result = await testCharts({fields: [], period: ChartsPeriod.WEEK})
+			const result = await testCharts({ fields: [], period: ChartsPeriod.WEEK })
 			await userService.purge(u1)
 			await userService.purge(u2)
 			await userService.purge(u3)
@@ -444,7 +447,7 @@ describe(`${NAME} Charts Endpoint`, () => {
 				...MockUserRequest(scaffold.values.account),
 				created_at: new Date('2020-01-03'),
 			})
-			const result = await testCharts({fields: [], period: ChartsPeriod.MONTH})
+			const result = await testCharts({ fields: [], period: ChartsPeriod.MONTH })
 			await userService.purge(u1)
 			await userService.purge(u2)
 
@@ -472,7 +475,7 @@ describe(`${NAME} Charts Endpoint`, () => {
 				...MockUserRequest(scaffold.values.account),
 				created_at: new Date('2020-04-03'),
 			})
-			const result = await testCharts({fields: [], period: ChartsPeriod.YEAR})
+			const result = await testCharts({ fields: [], period: ChartsPeriod.YEAR })
 			await userService.purge(u1)
 			await userService.purge(u2)
 
@@ -631,32 +634,32 @@ describe(`${NAME} Charts Endpoint`, () => {
 		const testData = [
 			{
 				name: 'EQ',
-				create: {last_name: 'TestName'},
-				query: {last_name: 'EQ:TestName'},
+				create: { last_name: 'TestName' },
+				query: { last_name: 'EQ:TestName' },
 				expected: 1,
 			},
 			{
 				name: 'EQ with no matches',
-				create: {last_name: 'TestName'},
-				query: {last_name: 'EQ:WrongName'},
+				create: { last_name: 'TestName' },
+				query: { last_name: 'EQ:WrongName' },
 				expected: 0,
 			},
 			{
 				name: '!EQ',
-				create: {last_name: 'TestName'},
-				query: {last_name: '!EQ:TestName'},
+				create: { last_name: 'TestName' },
+				query: { last_name: '!EQ:TestName' },
 				expected: 1, // existing record
 			},
 			{
 				name: '!EQ with no matches',
-				create: {last_name: 'TestName'},
-				query: {last_name: '!EQ:WrongName'},
+				create: { last_name: 'TestName' },
+				query: { last_name: '!EQ:WrongName' },
 				expected: 2, // existing record + new record
 			},
 			{
 				name: 'GT',
-				create: {last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z'},
-				query: {last_name: 'EQ:TestName', created_at: 'GT:2020-02-01T00:00:00.000Z'},
+				create: { last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z' },
+				query: { last_name: 'EQ:TestName', created_at: 'GT:2020-02-01T00:00:00.000Z' },
 				expected: 1,
 			},
 			// GT doesn't seem to work as expected with dates
@@ -668,50 +671,50 @@ describe(`${NAME} Charts Endpoint`, () => {
 			// },
 			{
 				name: 'GT with no matches',
-				create: {last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z'},
-				query: {last_name: 'EQ:TestName', created_at: 'GT:2022-02-01T00:00:00.000Z'},
+				create: { last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z' },
+				query: { last_name: 'EQ:TestName', created_at: 'GT:2022-02-01T00:00:00.000Z' },
 				expected: 0,
 			},
 			{
 				name: 'GTE',
-				create: {last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z'},
-				query: {last_name: 'EQ:TestName', created_at: 'GTE:2020-02-01T00:00:00.000Z'},
+				create: { last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z' },
+				query: { last_name: 'EQ:TestName', created_at: 'GTE:2020-02-01T00:00:00.000Z' },
 				expected: 1,
 			},
 			{
 				name: 'GTE with exact match',
-				create: {last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z'},
-				query: {last_name: 'EQ:TestName', created_at: 'GTE:2021-02-01T00:00:00.000Z'},
+				create: { last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z' },
+				query: { last_name: 'EQ:TestName', created_at: 'GTE:2021-02-01T00:00:00.000Z' },
 				expected: 1,
 			},
 			{
 				name: 'GTE with no matches',
-				create: {last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z'},
-				query: {last_name: 'EQ:TestName', created_at: 'GTE:2022-02-01T00:00:00.000Z'},
+				create: { last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z' },
+				query: { last_name: 'EQ:TestName', created_at: 'GTE:2022-02-01T00:00:00.000Z' },
 				expected: 0,
 			},
 			{
 				name: 'LT',
-				create: {last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z'},
-				query: {last_name: 'EQ:TestName', created_at: 'LT:2022-02-01T00:00:00.000Z'},
+				create: { last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z' },
+				query: { last_name: 'EQ:TestName', created_at: 'LT:2022-02-01T00:00:00.000Z' },
 				expected: 1,
 			},
 			{
 				name: 'LT with exact matches',
-				create: {last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z'},
-				query: {last_name: 'EQ:TestName', created_at: 'LT:2021-02-01T00:00:00.000Z'},
+				create: { last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z' },
+				query: { last_name: 'EQ:TestName', created_at: 'LT:2021-02-01T00:00:00.000Z' },
 				expected: 0,
 			},
 			{
 				name: 'LT with no matches',
-				create: {last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z'},
-				query: {last_name: 'EQ:TestName', created_at: 'LT:2020-02-01T00:00:00.000Z'},
+				create: { last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z' },
+				query: { last_name: 'EQ:TestName', created_at: 'LT:2020-02-01T00:00:00.000Z' },
 				expected: 0,
 			},
 			{
 				name: 'LTE',
-				create: {last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z'},
-				query: {last_name: 'EQ:TestName', created_at: 'LTE:2022-02-01T00:00:00.000Z'},
+				create: { last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z' },
+				query: { last_name: 'EQ:TestName', created_at: 'LTE:2022-02-01T00:00:00.000Z' },
 				expected: 1,
 			},
 			// LTE doesn't seem to work as expected with dates
@@ -723,13 +726,13 @@ describe(`${NAME} Charts Endpoint`, () => {
 			// },
 			{
 				name: 'LTE with no matches',
-				create: {last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z'},
-				query: {last_name: 'EQ:TestName', created_at: 'LTE:2020-02-01T00:00:00.000Z'},
+				create: { last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z' },
+				query: { last_name: 'EQ:TestName', created_at: 'LTE:2020-02-01T00:00:00.000Z' },
 				expected: 0,
 			},
 			{
 				name: 'Overloading operators: Overloading operators: GT and LT',
-				create: {last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z'},
+				create: { last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z' },
 				query: {
 					last_name: 'EQ:TestName',
 					created_at: ['GT:2020-02-01T00:00:00.000Z', 'LT:2022-01-01T00:00:00.000Z'],
@@ -738,7 +741,7 @@ describe(`${NAME} Charts Endpoint`, () => {
 			},
 			{
 				name: 'Overloading operators: GT and LT with no matches',
-				create: {last_name: 'TestName', created_at: '2023-02-01T00:00:00.000Z'},
+				create: { last_name: 'TestName', created_at: '2023-02-01T00:00:00.000Z' },
 				query: {
 					last_name: 'EQ:TestName',
 					created_at: ['GT:2020-02-01T00:00:00.000Z', 'LT:2022-01-01T00:00:00.000Z'],
@@ -747,7 +750,7 @@ describe(`${NAME} Charts Endpoint`, () => {
 			},
 			{
 				name: 'Overloading operators: GT and LT with no matches #2',
-				create: {last_name: 'TestName', created_at: '2019-02-01T00:00:00.000Z'},
+				create: { last_name: 'TestName', created_at: '2019-02-01T00:00:00.000Z' },
 				query: {
 					last_name: 'EQ:TestName',
 					created_at: ['GT:2020-02-01T00:00:00.000Z', 'LT:2022-01-01T00:00:00.000Z'],
@@ -756,7 +759,7 @@ describe(`${NAME} Charts Endpoint`, () => {
 			},
 			{
 				name: 'Overloading operators: GT, GTE and LT',
-				create: {last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z'},
+				create: { last_name: 'TestName', created_at: '2021-02-01T00:00:00.000Z' },
 				query: {
 					last_name: 'EQ:TestName',
 					created_at: [
@@ -769,7 +772,7 @@ describe(`${NAME} Charts Endpoint`, () => {
 			},
 			{
 				name: 'Overloading operators: GT, GTE and LT with no matches',
-				create: {last_name: 'TestName', created_at: '2023-02-01T00:00:00.000Z'},
+				create: { last_name: 'TestName', created_at: '2023-02-01T00:00:00.000Z' },
 				query: {
 					last_name: 'EQ:TestName',
 					created_at: [
@@ -782,7 +785,7 @@ describe(`${NAME} Charts Endpoint`, () => {
 			},
 			{
 				name: 'Overloading operators: GT, GTE and LT with no matches #2',
-				create: {last_name: 'TestName', created_at: '2019-02-01T00:00:00.000Z'},
+				create: { last_name: 'TestName', created_at: '2019-02-01T00:00:00.000Z' },
 				query: {
 					last_name: 'EQ:TestName',
 					created_at: [
@@ -795,30 +798,30 @@ describe(`${NAME} Charts Endpoint`, () => {
 			},
 			{
 				name: 'NULL',
-				create: {last_name: null},
-				query: {last_name: 'NULL'},
+				create: { last_name: null },
+				query: { last_name: 'NULL' },
 				expected: 1,
 			},
 			{
 				name: 'NULL with no matches',
-				create: {last_name: 'notNull'},
-				query: {last_name: 'NULL'},
+				create: { last_name: 'notNull' },
+				query: { last_name: 'NULL' },
 				expected: 0,
 			},
 			{
 				name: '!NULL',
-				create: {last_name: null},
-				query: {last_name: '!NULL'},
+				create: { last_name: null },
+				query: { last_name: '!NULL' },
 				expected: 1, // existing record
 			},
 			{
 				name: '!NULL with no matches',
-				create: {last_name: 'notNull'},
-				query: {last_name: '!NULL'},
+				create: { last_name: 'notNull' },
+				query: { last_name: '!NULL' },
 				expected: 2, // existing record and newly created one
 			},
 		]
-		testData.forEach(({name, create, query, expected}) => {
+		testData.forEach(({ name, create, query, expected }) => {
 			it(name, async () => {
 				// @ts-ignore
 				const u1 = await userService.create({

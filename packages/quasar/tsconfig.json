@@ -1,4 +1,5 @@
 {
+	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
 		"target": "esnext",
 		"module": "esnext",
@@ -7,10 +8,6 @@
 		"importHelpers": true,
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
-		"sourceMap": true,
 		"noImplicitThis": false,
 		"noImplicitAny": false,
 		"strictNullChecks": false,

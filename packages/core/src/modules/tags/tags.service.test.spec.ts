@@ -9,7 +9,7 @@ type T = Tag
 const MODULE = TagsModule
 const SERVICE = TagsService
 
-const tag = faker.random.word().toUpperCase()
+const tag = faker.word.sample().toUpperCase()
 
 describe('TagsService', () => {
 	const scaffolding = new Scaffold<T>()

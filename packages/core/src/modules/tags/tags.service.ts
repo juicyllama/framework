@@ -1,4 +1,5 @@
-import { CACHE_MANAGER, forwardRef, Inject, Injectable } from '@nestjs/common'
+import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, FindOneOptions, MoreThanOrEqual, Repository } from 'typeorm'
 import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'

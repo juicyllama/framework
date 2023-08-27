@@ -1,4 +1,5 @@
-import { CacheModule, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
+import { CacheModule } from '@nestjs/cache-manager'
 import { StorageService } from './storage.service'
 import { Logger } from '@juicyllama/utils'
 import cacheConfig from '../../configs/cache.config'

@@ -83,7 +83,7 @@ describe('Account Service', () => {
 
 		it('Create an additional account', async () => {
 			new_account = await scaffold.services.service.onboardAdditional(owner, {
-				account_name: faker.random.word(),
+				account_name: faker.word.sample(),
 			})
 			expect(new_account).toBeDefined()
 			expect(new_account.account).toBeDefined()

@@ -54,7 +54,11 @@ export class Scaffold<T> {
 		let account: Account
 		let owner: User
 		let owner_access_token: string
-		const password = faker.internet.password(20, false, /[!-~]/)
+		const password = faker.internet.password(
+			20,
+			false,
+			/[!-~]/
+		)
 
 		const imports = [forwardRef(() => AccountModule), forwardRef(() => AuthModule)]
 
