@@ -1,0 +1,124 @@
+{
+    "id": 3,
+    "username": "andy",
+    "name": "Andy Slack",
+    "first_name": "Andy",
+    "last_name": "Slack",
+    "email": "andy@ampli.co",
+    "url": "",
+    "description": "",
+    "link": "https://ampli.co/author/andy/",
+    "locale": "en_GB",
+    "nickname": "andy",
+    "slug": "andy",
+    "roles": [
+        "administrator"
+    ],
+    "registered_date": "2023-02-10T17:28:52+00:00",
+    "capabilities": {
+        "switch_themes": true,
+        "edit_themes": true,
+        "activate_plugins": true,
+        "edit_plugins": true,
+        "edit_users": true,
+        "edit_files": true,
+        "manage_options": true,
+        "moderate_comments": true,
+        "manage_categories": true,
+        "manage_links": true,
+        "upload_files": true,
+        "import": true,
+        "unfiltered_html": true,
+        "edit_posts": true,
+        "edit_others_posts": true,
+        "edit_published_posts": true,
+        "publish_posts": true,
+        "edit_pages": true,
+        "read": true,
+        "level_10": true,
+        "level_9": true,
+        "level_8": true,
+        "level_7": true,
+        "level_6": true,
+        "level_5": true,
+        "level_4": true,
+        "level_3": true,
+        "level_2": true,
+        "level_1": true,
+        "level_0": true,
+        "edit_others_pages": true,
+        "edit_published_pages": true,
+        "publish_pages": true,
+        "delete_pages": true,
+        "delete_others_pages": true,
+        "delete_published_pages": true,
+        "delete_posts": true,
+        "delete_others_posts": true,
+        "delete_published_posts": true,
+        "delete_private_posts": true,
+        "edit_private_posts": true,
+        "read_private_posts": true,
+        "delete_private_pages": true,
+        "edit_private_pages": true,
+        "read_private_pages": true,
+        "delete_users": true,
+        "create_users": true,
+        "unfiltered_upload": true,
+        "edit_dashboard": true,
+        "update_plugins": true,
+        "delete_plugins": true,
+        "install_plugins": true,
+        "update_themes": true,
+        "install_themes": true,
+        "update_core": true,
+        "list_users": true,
+        "remove_users": true,
+        "promote_users": true,
+        "edit_theme_options": true,
+        "delete_themes": true,
+        "export": true,
+        "frm_view_forms": true,
+        "frm_edit_forms": true,
+        "frm_delete_forms": true,
+        "frm_change_settings": true,
+        "frm_view_entries": true,
+        "frm_delete_entries": true,
+        "wpseo_manage_options": true,
+        "administrator": true
+    },
+    "extra_capabilities": {
+        "administrator": true
+    },
+    "avatar_urls": {
+        "24": "https://secure.gravatar.com/avatar/1109b88d5bf725a4c9a29ddd60023980?s=24&d=mm&r=g",
+        "48": "https://secure.gravatar.com/avatar/1109b88d5bf725a4c9a29ddd60023980?s=48&d=mm&r=g",
+        "96": "https://secure.gravatar.com/avatar/1109b88d5bf725a4c9a29ddd60023980?s=96&d=mm&r=g"
+    },
+    "meta": {
+        "persisted_preferences": {
+            "core/edit-post": {
+                "openPanels": [
+                    "post-status",
+                    "yoast-seo/document-panel"
+                ],
+                "isComplementaryAreaVisible": true,
+                "welcomeGuide": false
+            },
+            "_modified": "2023-06-20T16:39:27.638Z"
+        }
+    },
+    "yoast_head": null,
+    "yoast_head_json": null,
+    "_links": {
+        "self": [
+            {
+                "href": "https://ampli.co/wp-json/wp/v2/users/3"
+            }
+        ],
+        "collection": [
+            {
+                "href": "https://ampli.co/wp-json/wp/v2/users"
+            }
+        ]
+    }
+}

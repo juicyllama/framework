@@ -22,6 +22,7 @@
 		"types/*.d.ts"
 	],
 	"scripts": {
+		"prepare": "npm run build",
 		"build": "vite build && npm run build:types",
 		"build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types ",
 		"typecheck": "vue-tsc --noEmit",

@@ -2,5 +2,11 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/packages/app-aws" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/packages/app-mollie" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/packages/app-openai" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/packages/app-slack" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/packages/app-wordpress" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/packages/billing" vcs="Git" />
   </component>
 </project>
