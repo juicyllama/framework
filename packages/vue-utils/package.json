@@ -1,0 +1,55 @@
+{
+	"name": "@juicyllama/vue-utils",
+	"version": "3.0.13",
+	"description": "Juicyllama Vue Utils",
+	"author": {
+		"name": "JuicyLlama Studio",
+		"email": "studio@juicyllama.com",
+		"url": "https://juicyllama.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/juicyllama-npm/vue-utils"
+	},
+	"bugs": "https://github.com/juicyllama-npm/vue-utils",
+	"license": "0BSD",
+	"readmeFilename": "README.md",
+	"main": "dist/JLUtils.umd.js",
+	"module": "dist/JLUtils.es.js",
+	"types": "dist/types/index.d.ts",
+	"files": [
+		"dist",
+		"types/*.d.ts"
+	],
+	"scripts": {
+		"build": "vite build && npm run build:types",
+		"build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types ",
+		"typecheck": "vue-tsc --noEmit",
+		"format": "prettier --write .",
+		"lint": "eslint \"**/*.{js,ts,vue}\" --quiet --fix",
+		"prerelease": "npm run format && npm run lint && npm run build",
+		"release": "release-it --ci",
+		"release:minor": "release-it minor --ci",
+		"release:major": "release-it major --ci"
+	},
+	"dependencies": {
+		"@juicyllama/vue-dev": "workspace:*"
+	},
+	"release-it": {
+		"hooks": {
+			"after:release": "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
+		},
+		"npm": {
+			"publish": true
+		},
+		"github": {
+			"release": false
+		},
+		"git": {
+			"commit": true,
+			"tag": true,
+			"push": true,
+			"requireCleanWorkingDir": false
+		}
+	}
+}

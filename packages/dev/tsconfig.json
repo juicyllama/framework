@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		"esModuleInterop": true,
+		"outDir": "./dist",
+		"types": [
+			"node",
+			"jest"
+		]
+	}
+}

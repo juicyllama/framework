@@ -1,0 +1,130 @@
+{
+    "name": "@juicyllama/core",
+    "version": "0.0.306",
+    "description": "Juicyllama NestJS Core",
+    "author": {
+        "name": "JuicyLlama Studio",
+        "email": "studio@juicyllama.com",
+        "url": "https://juicyllama.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/juicyllama-npm/core"
+    },
+    "bugs": "https://github.com/juicyllama-npm/core",
+    "license": "0BSD",
+    "readmeFilename": "README.md",
+    "main": "dist/index.js",
+    "files": [
+        "dist/**/*",
+        "*.md"
+    ],
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "sandbox": "nest start --config src/sandbox/nest-cli.json --watch ",
+        "prebuild": "rimraf dist",
+        "build": "tsc",
+        "prepare": "npm run build",
+        "format": "prettier --write \"src/**/*.ts\"",
+        "lint": "eslint \"src/**/*.ts\" --fix",
+        "test": "npm run prebuild && jest --runInBand --detectOpenHandles --forceExit --bail",
+        "test:users": "npm run prebuild && jest --runInBand --detectOpenHandles --forceExit --bail --testPathPattern=src/modules/users/users.controller.test.spec.ts",
+        "test:charts": "npm run prebuild && jest --runInBand --detectOpenHandles --forceExit --bail --testPathPattern=src/modules/users/users.controller.charts.test.spec.ts",
+        "test:filtering": "npm run prebuild && jest --runInBand --detectOpenHandles --forceExit --bail --testPathPattern=src/utils/typeorm/Query.filtering.test.spec.ts",
+        "test:clear": "npx jest --clearCache",
+        "test:watch": "jest --watch",
+        "test:cov": "jest --coverage",
+        "test:clearCache": "jest --clearCache",
+        "prerelease": "npm run prebuild && npm run format && npm run lint && npm run test && npm run build",
+        "release": "release-it --ci",
+        "release:minor": "release-it minor --ci",
+        "release:major": "release-it major --ci",
+        "releaseit:skip": "release-it --ci"
+    },
+    "dependencies": {
+        "@bugsnag/js": "^7.21.0",
+        "@bugsnag/plugin-express": "^7.19.0",
+        "@juicyllama/dev": "workspace:*",
+        "@juicyllama/nestjs-redoc": "latest",
+        "@juicyllama/utils": "workspace:*",
+        "@nestjs/cache-manager": "^2.1.0",
+        "@nestjs/cli": "^10.1.16",
+        "@nestjs/common": "^10.2.1",
+        "@nestjs/config": "^3.0.0",
+        "@nestjs/core": "^10.2.1",
+        "@nestjs/jwt": "^10.0.3",
+        "@nestjs/mapped-types": "^2.0.2",
+        "@nestjs/microservices": "^10.2.1",
+        "@nestjs/passport": "^10.0.1",
+        "@nestjs/platform-express": "^10.2.1",
+        "@nestjs/schedule": "^3.0.3",
+        "@nestjs/schematics": "^10.0.2",
+        "@nestjs/serve-static": "^4.0.0",
+        "@nestjs/swagger": "^7.1.8",
+        "@nestjs/testing": "^10.2.1",
+        "@nestjs/typeorm": "^10.0.0",
+        "@types/jest": "^29.5.4",
+        "@types/node": "^20.5.6",
+        "amqp-connection-manager": "^4.1.14",
+        "amqplib": "^0.10.3",
+        "cache-manager": "^5.2.3",
+        "cache-manager-redis-store": "^3.0.1",
+        "class-transformer": "^0.5.1",
+        "class-validator": "^0.14.0",
+        "csv-parser": "^3.0.0",
+        "dotenv": "^16.3.1",
+        "joi": "^17.9.2",
+        "lodash": "^4.17.21",
+        "module-alias": "^2.2.3",
+        "mongodb": "^5.8.1",
+        "mysql2": "^3.2.3",
+        "nestjs-command": "^3.1.4",
+        "nestjs-real-ip": "^3.0.1",
+        "passport": "^0.6.0",
+        "passport-azure-ad": "^4.3.5",
+        "passport-facebook": "^3.0.0",
+        "passport-github": "^1.1.0",
+        "passport-google-oauth20": "^2.0.0",
+        "passport-headerapikey": "^1.2.2",
+        "passport-http": "^0.3.0",
+        "passport-instagram": "^1.0.0",
+        "passport-jwt": "^4.0.1",
+        "passport-linkedin-oauth2": "^2.0.0",
+        "passport-local": "^1.0.0",
+        "passport-microsoft": "^1.0.0",
+        "passport-oauth": "^1.0.0",
+        "pusher": "^5.1.2",
+        "qs": "^6.11.2",
+        "redis": "^4.6.8",
+        "reflect-metadata": "^0.1.13",
+        "source-map-support": "^0.5.21",
+        "swagger-ui-express": "^5.0.0",
+        "typeorm": "^0.3.17",
+        "typescript": "^5.2.2"
+    },
+    "eslintConfig": {
+        "extends": [
+            "./node_modules/@juicyllama/dev/.eslintrc.js"
+        ]
+    },
+    "prettier": "./node_modules/@juicyllama/dev/.prettierrc.js",
+    "release-it": {
+        "hooks": {
+            "after:release": "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
+        },
+        "npm": {
+            "publish": true,
+            "timeout": 100000
+        },
+        "github": {
+            "release": true,
+            "timeout": 100000
+        },
+        "git": {
+            "commit": true,
+            "tag": true,
+            "push": true,
+            "requireCleanWorkingDir": false
+        }
+    }
+}

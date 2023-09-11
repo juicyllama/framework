@@ -1,0 +1,343 @@
+<script setup lang="ts">
+import { toRefs } from "vue";
+import { sortArrayObjectByKey } from "@/utils/sortArrayObjectByKey";
+import { IFilterList, INewFilter } from "@/interface/global";
+import { UseMobileSize } from "@/composable/UseMobileSize";
+import { useSelect, usePopper } from "@/composable/use/select";
+
+const { mobile } = UseMobileSize()
+
+const props = defineProps<{
+  newFilter: INewFilter[],
+  filtersList: IFilterList[]
+}>()
+const emit = defineEmits<{
+  (e: 'open-menu'): void,
+  (e: 'close-menu'): void,
+  (e: 'clear'): void,
+  (e: 'refresh'): void
+}>()
+const { filtersList, newFilter } = toRefs(props)
+
+const { closeSelect, openSelect, isSelected } = useSelect()
+const resetValue = (item: any) => {
+  if (item.value) {
+    item.value = null
+  }
+}
+const checkOptions = (key: string, options: string) => {
+  const item = filtersList.value.find((item: any) => item.value === key)
+  if (!item || !item.options) return false
+  return item.options[options]
+}
+
+const rulesInputText = (item: any, newValue: any) => {
+  if (checkOptions(item.key, 'toUpperCase')) {
+    item.value = newValue.toUpperCase()
+  }
+}
+
+const getItems = (key: string) => {
+  const item = filtersList.value.find((item: any) => item.value === key)
+  return sortArrayObjectByKey(item ? item.values : [], 'title')
+}
+
+const addNewFilter = () => {
+  newFilter.value.push({ key: null, value: null })
+}
+</script>
+
+<template>
+  <v-dialog v-if="mobile">
+    <template v-slot:activator="{ props }">
+      <v-btn
+        v-bind="props"
+        class="mx-3 no-uppercase light-grey-btn"
+        @click="$emit('open-menu', 'filterMenu')"
+      >
+        <div class="d-flex">
+          <v-icon>
+            mdi-sort-variant
+          </v-icon>
+        </div>
+      </v-btn>
+    </template>
+    <v-list class="pa-4 menu dropdown-menu__filter">
+      <div class="d-flex justify-space-between ma-2">
+        <p class="dropdown-menu__title">Customize Filter</p>
+        <v-icon
+          class="cursor-pointer"
+          @click="$emit('close-menu')"
+        >
+          mdi-close-circle
+        </v-icon>
+      </div>
+      <v-row v-for="(item, index) in newFilter" :key="index">
+        <v-col xs="12" sm="12">
+          <vue-select
+            class="filter-select align-end"
+            v-model="item.key"
+            label="title"
+            placeholder="Select Filter"
+            :reduce="(option) => option.value"
+            :clearable="false"
+            :options="filtersList"
+            @update:modelValue="resetValue(item)"
+            append-to-body
+            :calculate-position="usePopper"
+            @open="openSelect"
+            @close="closeSelect"
+          >
+            <template #open-indicator="{ attributes }">
+              <span v-bind="attributes">
+                <img alt="triangle" src="/icons/triangle-small-down.svg" />
+              </span>
+            </template>
+            <template #header>
+              <span>Filter</span>
+            </template>
+          </vue-select>
+        </v-col>
+        <v-col xs="12" sm="12">
+          <v-text-field
+            v-if="checkOptions(item.key, 'int')"
+            class="mt-6 filter-input-text input-text-field"
+            type="number"
+            :disabled="!item.key || (filtersList[item.key] && filtersList[item.key].values.length)"
+            v-model="item.value"
+            variant="outlined"
+            hide-details
+            placeholder="Type value"
+          ></v-text-field>
+          <v-text-field
+            v-else-if="checkOptions(item.key, 'string')"
+            class="mt-6 input-text-field"
+            type="text"
+            :disabled="!item.key || (filtersList[item.key] && filtersList[item.key].values.length)"
+            v-model="item.value"
+            variant="outlined"
+            @update:modelValue="rulesInputText(item, $event)"
+            hide-details
+            placeholder="Type value"
+          ></v-text-field>
+          <vue-select
+            v-else
+            class="filter-select"
+            :disabled="!item.key || (filtersList[item.key] && filtersList[item.key].values.length)"
+            v-model="item.value"
+            placeholder="Select Value"
+            :multiple="checkOptions(item.key, 'multiple')"
+            label="title"
+            :reduce="(option) => option.value"
+            :options="getItems(item.key)"
+            append-to-body
+            :calculate-position="usePopper"
+            @open="openSelect"
+            @close="closeSelect"
+          >
+            <template #open-indicator="{ attributes }">
+              <span v-bind="attributes">
+                <img src="/icons/triangle-small-down.svg" />
+              </span>
+            </template>
+            <template #header>
+              <span>Options:</span>
+            </template>
+          </vue-select>
+        </v-col>
+      </v-row>
+      <v-row class="pa-2">
+        <v-col>
+          <v-btn
+            :block="true"
+            @click="$emit('clear')"
+            variant="outlined"
+            size="large"
+            color="primary"
+            class="no-uppercase menu__button"
+          >Clear
+          </v-btn>
+        </v-col>
+        <v-col>
+          <v-btn
+            :block="true"
+            @click="$emit('refresh')"
+            variant="outlined"
+            size="large"
+            color="primary"
+            class="no-uppercase menu__button"
+          >
+            Apply
+          </v-btn>
+        </v-col>
+        <v-col md="6" lg="6" 	xl="6" xs="12" sm="12">
+          <v-btn
+            :block="true"
+            @click="addNewFilter"
+            variant="outlined"
+            size="large"
+            color="primary"
+            class="no-uppercase py-6 menu__button"
+          >
+            Add filter
+            <v-icon size="15" class="ml-2">
+              mdi-arrow-right
+            </v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-list>
+  </v-dialog>
+  <v-menu
+    v-else
+    class="dropdown-menu"
+    transition="scale-transition"
+    :close-on-content-click="false"
+    :persistent="isSelected"
+    :no-click-animation="isSelected"
+  >
+    <template v-slot:activator="{ props }">
+      <v-btn
+        v-bind="props"
+        class="mx-3 no-uppercase light-grey-btn"
+        append-icon="mdi-chevron-down"
+        @click="$emit('open-menu', 'filterMenu')"
+      >
+        <div class="d-flex">
+          <v-icon>
+            mdi-sort-variant
+          </v-icon>
+          <p>
+            Filter by
+          </p>
+        </div>
+      </v-btn>
+    </template>
+    <v-list class="pa-4 menu dropdown-menu__filter">
+      <div class="d-flex justify-space-between ma-2">
+        <p class="dropdown-menu__title">Customize Filter</p>
+        <v-icon
+          class="cursor-pointer"
+          @click="$emit('close-menu')"
+        >
+          mdi-close-circle
+        </v-icon>
+      </div>
+      <div v-for="(item, index) in newFilter" :key="index" class="d-flex">
+        <div class="ma-2">
+          <vue-select
+            class="filter-select align-end"
+            v-model="item.key"
+            label="title"
+            placeholder="Select Filter"
+            :reduce="(option) => option.value"
+            :clearable="false"
+            :options="filtersList"
+            @update:modelValue="resetValue(item)"
+            append-to-body
+            :calculate-position="usePopper"
+            @open="openSelect"
+            @close="closeSelect"
+          >
+            <template #open-indicator="{ attributes }">
+              <span v-bind="attributes">
+                <img alt="triangle" src="/icons/triangle-small-down.svg" />
+              </span>
+            </template>
+            <template #header>
+              <span>Filter</span>
+            </template>
+          </vue-select>
+        </div>
+        <div class="ma-2 flex-grow-1">
+          <v-text-field
+            v-if="checkOptions(item.key, 'int')"
+            class="mt-6 filter-input-text input-text-field"
+            type="number"
+            :disabled="!item.key || (filtersList[item.key] && filtersList[item.key].values.length)"
+            v-model="item.value"
+            variant="outlined"
+            hide-details
+            placeholder="Type value"
+          ></v-text-field>
+          <v-text-field
+            v-else-if="checkOptions(item.key, 'string')"
+            class="mt-6 input-text-field"
+            type="text"
+            :disabled="!item.key || (filtersList[item.key] && filtersList[item.key].values.length)"
+            v-model="item.value"
+            variant="outlined"
+            @update:modelValue="rulesInputText(item, $event)"
+            hide-details
+            placeholder="Type value"
+          ></v-text-field>
+          <vue-select
+            v-else
+            class="filter-select"
+            :disabled="!item.key || (filtersList[item.key] && filtersList[item.key].values.length)"
+            v-model="item.value"
+            placeholder="Select Value"
+            :multiple="checkOptions(item.key, 'multiple')"
+            label="title"
+            :reduce="(option) => option.value"
+            :options="getItems(item.key)"
+            append-to-body
+            :calculate-position="usePopper"
+            @open="openSelect"
+            @close="closeSelect"
+          >
+            <template #open-indicator="{ attributes }">
+              <span v-bind="attributes">
+                <img src="/icons/triangle-small-down.svg" />
+              </span>
+            </template>
+            <template #header>
+              <span>Options:</span>
+            </template>
+          </vue-select>
+        </div>
+      </div>
+      <v-row class="pa-2">
+        <v-col>
+          <v-btn
+            :block="true"
+            @click="$emit('clear')"
+            variant="outlined"
+            size="large"
+            color="primary"
+            class="no-uppercase py-6 menu__button"
+          >Clear
+          </v-btn>
+        </v-col>
+        <v-col>
+          <v-btn
+            :block="true"
+            @click="$emit('refresh')"
+            variant="outlined"
+            size="large"
+            color="primary"
+            class="no-uppercase py-6 menu__button"
+          >
+            Apply
+          </v-btn>
+        </v-col>
+        <v-col cols="6">
+          <v-btn
+            :block="true"
+            @click="addNewFilter"
+            variant="outlined"
+            size="large"
+            color="primary"
+            class="no-uppercase py-6 menu__button"
+          >
+            Add filter
+            <v-icon size="15" class="ml-2">
+              mdi-arrow-right
+            </v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-list>
+  </v-menu>
+</template>
+
