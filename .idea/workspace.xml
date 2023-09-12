@@ -5,9 +5,51 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e65a247-e91b-4797-8f2d-be04e8fee55d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/packages/app-store/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/jest.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/docs/install.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/app_logs/logs.constants.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/app_logs/logs.entity.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/app_logs/logs.enums.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/app_logs/logs.mocks.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/app_logs/logs.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/app_logs/logs.service.test.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/app_logs/logs.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/apps.constants.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/apps.controller.test.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/apps.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/apps.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/apps.entity.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/apps.enums.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/apps.mocks.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/apps.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/apps.service.test.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/apps.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/installed/installed.constants.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/installed/installed.controller.test.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/installed/installed.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/installed/installed.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/installed/installed.entity.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/installed/installed.enums.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/installed/installed.mocks.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/installed/installed.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/installed/installed.service.test.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/installed/installed.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/oauth/oauth.constants.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/oauth/oauth.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/oauth/oauth.entity.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/oauth/oauth.mocks.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/oauth/oauth.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/oauth/oauth.service.test.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/modules/oauth/oauth.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/sandbox/main.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/sandbox/nest-cli.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/sandbox/sandbox.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/src/sandbox/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/app-store/tsconfig.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/app-xero-cc/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/app-xero-cc/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/crm/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/crm/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -70,7 +112,7 @@
       <option name="presentableId" value="Default" />
       <updated>1692877415479</updated>
       <workItem from="1692877416718" duration="16996000" />
-      <workItem from="1693126423008" duration="39784000" />
+      <workItem from="1693126423008" duration="40611000" />
     </task>
     <servers />
   </component>

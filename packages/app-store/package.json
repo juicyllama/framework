@@ -1,0 +1,73 @@
+{
+    "name": "@juicyllama/app-store",
+    "version": "0.0.15",
+    "description": "Juicyllama App Store Module",
+    "author": {
+        "name": "JuicyLlama Studio",
+        "email": "studio@juicyllama.com",
+        "url": "https://juicyllama.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/juicyllama-npm/app-store"
+    },
+    "bugs": "https://github.com/juicyllama-npm/app-store",
+    "license": "0BSD",
+    "readmeFilename": "README.md",
+    "main": "dist/index.js",
+    "files": [
+        "dist/**/*",
+        "*.md"
+    ],
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "sandbox": "nest start --config src/sandbox/nest-cli.json --watch ",
+        "build": "tsc",
+        "prepare": "npm run build",
+        "format": "prettier --write \"src/**/*.ts\"",
+        "lint": "eslint \"src/**/*.ts\" --fix",
+        "test": "jest --runInBand --detectOpenHandles --forceExit",
+        "test:clear": "npx jest --clearCache",
+        "test:watch": "jest --watch",
+        "test:cov": "jest --coverage",
+        "prerelease": "npm run format && npm run lint && npm run build && npm run test",
+        "release": "release-it --ci",
+        "release:minor": "release-it minor --ci",
+        "release:major": "release-it major --ci"
+    },
+    "devDependencies": {
+        "@juicyllama/dev": "workspace:*"
+    },
+    "dependencies": {
+        "@juicyllama/core": "workspace:*",
+        "@juicyllama/utils": "workspace:*"
+    },
+    "optionalDependencies": {
+        "@juicyllama/app-wordpress": "workspace:*"
+    },
+    "eslintConfig": {
+        "extends": [
+            "./node_modules/@juicyllama/dev/.eslintrc.js"
+        ]
+    },
+    "prettier": "./node_modules/@juicyllama/dev/.prettierrc.js",
+    "release-it": {
+        "hooks": {
+            "after:release": "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
+        },
+        "npm": {
+            "publish": true,
+            "timeout": 100000
+        },
+        "github": {
+            "release": true,
+            "timeout": 100000
+        },
+        "git": {
+            "commit": true,
+            "tag": true,
+            "push": true,
+            "requireCleanWorkingDir": false
+        }
+    }
+}

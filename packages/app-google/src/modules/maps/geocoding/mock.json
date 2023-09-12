@@ -1,0 +1,77 @@
+{
+	"address_components": [
+		{
+			"long_name": "Heathrow Airport",
+			"short_name": "Heathrow Airport",
+			"types": [
+				"airport",
+				"establishment",
+				"point_of_interest"
+			]
+		},
+		{
+			"long_name": "Longford",
+			"short_name": "Longford",
+			"types": [
+				"locality",
+				"political"
+			]
+		},
+		{
+			"long_name": "Greater London",
+			"short_name": "Greater London",
+			"types": [
+				"administrative_area_level_2",
+				"political"
+			]
+		},
+		{
+			"long_name": "England",
+			"short_name": "England",
+			"types": [
+				"administrative_area_level_1",
+				"political"
+			]
+		},
+		{
+			"long_name": "United Kingdom",
+			"short_name": "GB",
+			"types": [
+				"country",
+				"political"
+			]
+		},
+		{
+			"long_name": "TW6",
+			"short_name": "TW6",
+			"types": [
+				"postal_code"
+			]
+		}
+	],
+	"formatted_address": "Heathrow Airport (LHR), Longford TW6, UK",
+	"geometry": {
+		"location": {
+			"lat": 51.4700223,
+			"lng": -0.4542955
+		},
+		"location_type": "GEOMETRIC_CENTER",
+		"viewport": {
+			"south": 51.4579141,
+			"west": -0.495271,
+			"north": 51.48121399999999,
+			"east": -0.4229406
+		}
+	},
+	"partial_match": true,
+	"place_id": "ChIJ6W3FzTRydkgRZ0H2Q1VT548",
+	"plus_code": {
+		"compound_code": "FGCW+27 Longford, UK",
+		"global_code": "9C3XFGCW+27"
+	},
+	"types": [
+		"airport",
+		"establishment",
+		"point_of_interest"
+	]
+}
