@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -e
+. "$JL_WORKDIR/common"
+
+cli_help() {
+  echo "
+Command: release
+
+Use: Once the issue is complete, this will merge the branch into main, push the changes to the remote, and delete the branch.
+
+Options:
+
+Example: JL release
+"
+exit 1
+}
+
+echo "The pull request ID to release: [<number>]"
+read PR_ID
+export PR_ID
+
+echo "Release message which will be shared with the client: [<string>]"
+read JL_RELEASE_MESSAGE
+export JL_RELEASE_MESSAGE
+
+echo "Hours worked on issue (optional): [0]"
+read JL_HOURS_WORKED
+export JL_HOURS_WORKED
+
+export $(grep -v '^#' .env)
+
+cli_log "RELEASE"
+
+cli_log "Checkout Pull Request: $PR_ID"
+gh pr checkout $PR_ID
+
+set_current_branch
+
+git checkout main
+git pull origin main
+
+cli_log "Merging $JL_BRANCH into main"
+git merge $JL_BRANCH
+
+cli_log "Running Release-it"
+npm run release | tee "$JL_WORKDIR/logs/release-it.log"
+
+get_issue_id_from_branch
+
+GIT_COMMENT="🦙"
+cli_log "Adding Issue $JL_ISSUE Comment"
+GIT_COMMENT="$JL_RELEASE_MESSAGE closes #$JL_ISSUE"
+gh issue comment $JL_ISSUE --body "$GIT_COMMENT"
+
+cli_log "Closing PR $PR_ID"
+gh pr close $PR_ID
+
+cli_log "Deleting branch $JL_BRANCH"
+git branch -d $JL_BRANCH
+git push origin --delete $JL_BRANCH
+
+cli_hours_worked
+
+set_working_brand_to_main
+
+cli_log_error "TODO: Post release to JL API for changelog management and client updating automatically"
+
+cli_log "END"

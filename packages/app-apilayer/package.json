@@ -1,7 +1,7 @@
 {
-    "name": "@juicyllama/utils",
-    "version": "0.0.102",
-    "description": "Juicyllama Utils",
+    "name": "@juicyllama/app-apilayer",
+    "version": "0.0.27",
+    "description": "Juicyllama ApiLayer App",
     "author": {
         "name": "JuicyLlama Studio",
         "email": "studio@juicyllama.com",
@@ -9,10 +9,10 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/juicyllama-npm/utils"
+        "url": "https://github.com/juicyllama-npm/app-apilayer"
     },
-    "bugs": "https://github.com/juicyllama-npm/utils",
-    "license": "BSD-4-Clause",
+    "bugs": "https://github.com/juicyllama-npm/app-apilayer",
+    "license": "0BSD",
     "readmeFilename": "README.md",
     "main": "dist/index.js",
     "files": [
@@ -26,29 +26,30 @@
         "prepare": "npm run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "jest",
-        "test:clear": "npx jest --clearCache",
+        "test": "jest --detectOpenHandles --forceExit",
         "test:watch": "jest --watch",
         "test:cov": "jest --coverage",
         "test:e2e": "jest --config ./test/jest-e2e.json",
+        "prerelease": "npm run format && npm run lint && npm run build && npm run test",
         "release": "release-it --ci",
         "release:minor": "release-it minor --ci",
         "release:major": "release-it major --ci"
     },
-    "dependencies": {
-        "@juicyllama/dev": "workspace:*",
-        "axios": "^1.4.0",
-        "dayjs": "latest",
-        "showdown": "latest"
+    "peerDependencies": {
+        "@juicyllama/core": "latest"
     },
+    "devDependencies": {
+        "@juicyllama/dev": "latest"
+    },
+    "eslintConfig": {
+        "extends": [
+            "./node_modules/@juicyllama/dev/.eslintrc.js"
+        ]
+    },
+    "prettier": "./node_modules/@juicyllama/dev/.prettierrc.js",
     "release-it": {
         "hooks": {
-            "before:init": [
-                "npm run format",
-                "npm run lint",
-                "npm run test"
-            ],
-            "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
+            "after:release": "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
         },
         "npm": {
             "publish": true
@@ -62,19 +63,5 @@
             "push": true,
             "requireCleanWorkingDir": false
         }
-    },
-    "jest": {
-        "moduleFileExtensions": [
-            "js",
-            "json",
-            "ts"
-        ],
-        "rootDir": "src",
-        "testRegex": ".spec.ts$",
-        "transform": {
-            "^.+\\.(t|j)s$": "ts-jest"
-        },
-        "coverageDirectory": "../coverage",
-        "testEnvironment": "node"
     }
 }

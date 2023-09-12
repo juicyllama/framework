@@ -1,7 +1,7 @@
 {
-    "name": "@juicyllama/utils",
-    "version": "0.0.102",
-    "description": "Juicyllama Utils",
+    "name": "@juicyllama/app-wise",
+    "version": "0.0.3",
+    "description": "Juicyllama NestJs Wise App",
     "author": {
         "name": "JuicyLlama Studio",
         "email": "studio@juicyllama.com",
@@ -9,10 +9,10 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/juicyllama-npm/utils"
+        "url": "https://github.com/juicyllama-npm/app-wise"
     },
-    "bugs": "https://github.com/juicyllama-npm/utils",
-    "license": "BSD-4-Clause",
+    "bugs": "https://github.com/juicyllama-npm/app-wise",
+    "license": "0BSD",
     "readmeFilename": "README.md",
     "main": "dist/index.js",
     "files": [
@@ -21,34 +21,38 @@
     ],
     "types": "dist/index.d.ts",
     "scripts": {
-        "start:dev": "tsc -w",
+        "sandbox": "nest start --config src/sandbox/nest-cli.json --watch ",
+        "start:ngrok": "~/ngrok http http://localhost:3000 -subdomain=juicyllama",
         "build": "tsc",
         "prepare": "npm run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "jest",
+        "test": "jest --runInBand --detectOpenHandles --forceExit",
         "test:clear": "npx jest --clearCache",
         "test:watch": "jest --watch",
         "test:cov": "jest --coverage",
         "test:e2e": "jest --config ./test/jest-e2e.json",
+        "prerelease": "npm run format && npm run lint && npm run build && npm run test",
         "release": "release-it --ci",
         "release:minor": "release-it minor --ci",
         "release:major": "release-it major --ci"
     },
-    "dependencies": {
-        "@juicyllama/dev": "workspace:*",
-        "axios": "^1.4.0",
-        "dayjs": "latest",
-        "showdown": "latest"
+    "peerDependencies": {
+        "@juicyllama/billing": "latest",
+        "@juicyllama/core": "latest"
     },
+    "devDependencies": {
+        "@juicyllama/dev": "latest"
+    },
+    "eslintConfig": {
+        "extends": [
+            "./node_modules/@juicyllama/dev/.eslintrc.js"
+        ]
+    },
+    "prettier": "./node_modules/@juicyllama/dev/.prettierrc.js",
     "release-it": {
         "hooks": {
-            "before:init": [
-                "npm run format",
-                "npm run lint",
-                "npm run test"
-            ],
-            "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
+            "after:release": "echo ✅ Successfully released ${name} v${version} to ${repo.repository}."
         },
         "npm": {
             "publish": true
@@ -62,19 +66,5 @@
             "push": true,
             "requireCleanWorkingDir": false
         }
-    },
-    "jest": {
-        "moduleFileExtensions": [
-            "js",
-            "json",
-            "ts"
-        ],
-        "rootDir": "src",
-        "testRegex": ".spec.ts$",
-        "transform": {
-            "^.+\\.(t|j)s$": "ts-jest"
-        },
-        "coverageDirectory": "../coverage",
-        "testEnvironment": "node"
     }
 }

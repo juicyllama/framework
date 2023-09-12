@@ -7,14 +7,9 @@
     <list default="true" id="0e65a247-e91b-4797-8f2d-be04e8fee55d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/app-aws/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/app-aws/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/app-mollie/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/app-mollie/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/app-openai/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/app-openai/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/app-slack/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/app-slack/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/app-store/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/app-store/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/app-wordpress/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/app-wordpress/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/billing/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/billing/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/vue-utils/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/vue-utils/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/app-apilayer/.github/dependabot.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/app-apilayer/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/utils/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/utils/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -23,7 +18,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/packages/billing" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -42,7 +37,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "hoist",
     "last_opened_file_path": "/Users/yossishasho/git/juicyllama/framework",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -76,7 +71,7 @@
       <option name="presentableId" value="Default" />
       <updated>1692877415479</updated>
       <workItem from="1692877416718" duration="16996000" />
-      <workItem from="1693126423008" duration="36040000" />
+      <workItem from="1693126423008" duration="37418000" />
     </task>
     <servers />
   </component>

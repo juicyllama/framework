@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+set -e
+export JL_WORKDIR=$(cd $(dirname $0) && pwd)
+
+. "$JL_WORKDIR/common"
+
+set_env_file
+set_user_env_file
+load_env_files
+load_user_env_files
+
+cli_help() {
+
+  cli_name=${0##*/}
+
+  echo "
+$cli_name
+JuicyLlama Studio CLI
+Version: $(cat $JL_WORKDIR/VERSION)
+https://github.com/juicyllama-npm/cli
+
+Usage: $cli_name [command] [params]
+
+Commands:
+    *         List commands (this)
+    install   Install the project with all dependencies, SSL, docker etc
+    start     Start the project and work on selected issue
+    stop      Stop working on the current project
+    save      Saves your work to the cloud and optionally tracks time
+    finish    Finished the task, tests, pushes and creates a PR
+    pr        Pull request operations
+    release   Release a new version of the project live
+    issue     Issue operations
+    logs      Log related commands
+"
+  exit 1
+}
+
+[ ! -f "$JL_WORKDIR/.env" ] \
+  && echo "ERROR: No $JL_WORKDIR/.env file found. " \
+  && echo "cp $JL_WORKDIR/env.template $JL_WORKDIR/.env and adjust." \
+  && exit 1
+
+#cli_log_error "TODO: New endpoint for the CLI JL time to log hours (hive out from the save command)"
+
+case "$1" in
+  install|d)
+      "$JL_WORKDIR/commands/install" "$2" | tee "$JL_WORKDIR/logs/install.log"
+      ;;
+  start|d)
+      "$JL_WORKDIR/commands/start" "$2" | tee "$JL_WORKDIR/logs/start.log"
+      ;;
+  stop|d)
+        "$JL_WORKDIR/commands/stop" | tee "$JL_WORKDIR/logs/stop.log"
+        ;;
+  save|d)
+      "$JL_WORKDIR/commands/save" "$2" "$3" | tee "$JL_WORKDIR/logs/save.log"
+      ;;
+  finish|d)
+      "$JL_WORKDIR/commands/finish" "$2" "$3" "$4" | tee "$JL_WORKDIR/logs/finish.log"
+      ;;
+  pr|d)
+      "$JL_WORKDIR/commands/pr" "$2" "$3" | tee "$JL_WORKDIR/logs/pr.log"
+      ;;
+  release|d)
+        "$JL_WORKDIR/commands/release" "$2" "$3" "$4" | tee "$JL_WORKDIR/logs/release.log"
+        ;;
+  issue|d)
+        "$JL_WORKDIR/commands/issue" "$2" "$3" "$4" "$5" | tee "$JL_WORKDIR/logs/issue.log"
+        ;;
+  logs|d)
+          "$JL_WORKDIR/commands/logs" | tee "$JL_WORKDIR/logs/logs.log"
+          ;;
+  services|d)
+            "$JL_WORKDIR/commands/services" | tee "$JL_WORKDIR/logs/services.log"
+            ;;
+  playground|d)
+         "$JL_WORKDIR/commands/_playground" "$2" "$3" "$4" "$5" | tee "$JL_WORKDIR/logs/_playground.log"
+         ;;
+  *)
+    cli_help
+    ;;
+esac

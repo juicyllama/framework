@@ -1,0 +1,59 @@
+{
+    "name": "@juicyllama/cli",
+    "version": "1.0.8",
+    "description": "JuicyLlama Studio CLI",
+    "author": {
+        "name": "JuicyLlama Studio",
+        "email": "studio@juicyllama.com",
+        "url": "https://juicyllama.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/juicyllama-npm/cli"
+    },
+    "bugs": "https://github.com/juicyllama-npm/cli",
+    "license": "BSD-4-Clause",
+    "readmeFilename": "README.md",
+    "bin": {
+        "jl": "cli.ts"
+    },
+    "jl": {
+        "project_name": "jl_cli",
+        "apps": []
+    },
+    "scripts": {
+        "start": "ts-node cli.ts",
+        "release": "release-it --ci",
+        "release:minor": "release-it minor --ci",
+        "release:major": "release-it major --ci"
+    },
+    "dependencies": {
+        "@types/node": "^20.3.1",
+        "ipt": "^3.1.1",
+        "read-pkg": "^5.2.0",
+        "simple-output": "^2.1.1",
+        "yargs": "^15.3.1"
+    },
+    "devDependencies": {
+        "release-it": "latest"
+    },
+    "release-it": {
+        "hooks": {
+            "after:release": "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
+        },
+        "npm": {
+            "publish": true
+        },
+        "github": {
+            "release": true,
+            "timeout": 100000
+        },
+        "git": {
+            "commit": true,
+            "tag": true,
+            "push": true,
+            "release": true,
+            "requireCleanWorkingDir": false
+        }
+    }
+}

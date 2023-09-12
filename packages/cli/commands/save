@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+set -e
+. "$JL_WORKDIR/common"
+
+cli_help() {
+  echo "
+Command: save
+
+Use: When you are done working on an issue, this will commit your changes and push them to the remote. You can also optionally log hours worked on the issue.
+
+Options:
+  -stop 	- stops working on the issue, updates project and puts your dev enviroment back to main, stops the docker containers.
+
+Example: JL save
+Example: JL save stop
+"
+exit 1
+}
+
+echo "Provide a commit message:"
+read JL_COMMIT_MESSAGE
+export JL_COMMIT_MESSAGE
+
+#echo "How many hours did you work on this issue (this will be billed to the client)? [0]"
+#read JL_HOURS_WORKED
+#export JL_HOURS_WORKED
+
+load_env_files
+
+cli_log "SAVE"
+
+set_current_branch
+
+cli_log "Committing changes: $JL_BRANCH > $JL_COMMIT_MESSAGE"
+git commit -am "$JL_COMMIT_MESSAGE"
+
+cli_hours_worked
+get_issue_id_from_branch
+
+GIT_COMMENT="🦙"
+cli_log "Adding Issue $JL_ISSUE Comment"
+GIT_COMMENT="$GIT_COMMENT Details: $JL_COMMIT_MESSAGE"
+gh issue comment $JL_ISSUE --body "$GIT_COMMENT"
+
+cli_log "Pushing code to ${JL_BRANCH//\"}"
+git push
+
+case "$1" in
+  stop|d)
+  "$JL_WORKDIR/commands/stop" | tee "$JL_WORKDIR/logs/stop.log"
+	;;
+esac
+
+
+cli_log "END"

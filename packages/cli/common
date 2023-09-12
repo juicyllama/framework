@@ -1,0 +1,374 @@
+#!/usr/bin/env bash
+
+#Black        0;30     Dark Gray     1;30
+ #Red          0;31     Light Red     1;31
+ #Green        0;32     Light Green   1;32
+ #Brown/Orange 0;33     Yellow        1;33
+ #Blue         0;34     Light Blue    1;34
+ #Purple       0;35     Light Purple  1;35
+ #Cyan         0;36     Light Cyan    1;36
+ #Light Gray   0;37     White         1;37
+
+export YELLOW='\033[1;33m'
+export RED='\033[0;31m'
+export NC='\033[0m' # No Color
+
+cli_log() {
+  #script_name=${0##*/}
+  #timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  echo -e "🦙 ${YELLOW}$1${NC}"
+}
+
+cli_log_error() {
+  echo -e "⛔️ ${RED}$1${NC}"
+}
+
+cli_hours_worked(){
+	if [ "$JL_HOURS_WORKED" ] && [ "$JL_HOURS_WORKED" -gt 0 ]; then
+
+      if [ ! "$JL_PROJECT_ID" ] || [ "$JL_PROJECT_ID" -eq 0 ]; then
+        cli_log "Project not set. Please run JL config to set your project."
+        exit 1
+      fi
+
+       if [ ! "$JL_USER_ID" ] || [ "$JL_USER_ID" -eq 0 ]; then
+          cli_log "User not set. Please run JL config to set your user ID."
+          exit 1
+        fi
+
+    curl -s \
+    -H "CLI-KEY: $JL_CLI_KEY" \
+    -H "Accept: application/json" \
+    -H "Content-Type:application/json" \
+    -X POST --data "$(generate_post_data)" "$JL_BASE_URL_API/cli/hours" > /dev/null
+
+    	cli_log "Logged hours worked > $JL_HOURS_WORKED"
+
+    	GIT_COMMENT="$GIT_COMMENT We have spent $JL_HOURS_WORKED hour(s) working on this task. <br> <br>"
+
+    fi
+}
+
+generate_post_data()
+{
+	cat <<EOF
+      {
+    		"userId": "$JL_USER_ID",
+    		"projectId": "$JL_PROJECT_ID",
+    		"name": $JL_BRANCH,
+    		"description": "$JL_COMMIT_MESSAGE",
+    		"hours": "$JL_HOURS_WORKED"
+    	  }
+EOF
+}
+
+#####
+# Make sure you export JL_BRANCH before running this function
+#####
+
+get_issue_id_from_branch(){
+
+	load_user_env_files
+
+	IFS='-'
+    read -ra JL_ISSUE_ID <<< "${JL_BRANCH//\"}"
+    ISSUE=${JL_ISSUE_ID[1]}
+
+    if [ -z $ISSUE ]; then ISSUE=0; fi
+
+    	if [ -z "$JL_ISSUE" ]
+        then
+        	write_to_file "local" "JL_ISSUE=$ISSUE"
+        else
+        	update_file "local" "JL_ISSUE" "$ISSUE"
+        fi
+
+    	JL_ISSUE=$ISSUE
+    	export JL_ISSUE
+    	cli_log "You are working on issue ID: $JL_ISSUE"
+}
+
+set_current_branch(){
+
+	load_user_env_files
+
+	BRANCH=$(git branch --show-current)
+
+	 if [ -z $BRANCH ]; then BRANCH="main"; fi
+
+	if [ -z "$JL_BRANCH" ]
+    then
+        	write_to_file "local" "JL_BRANCH=\"$BRANCH\""
+        else
+        	update_file "local" "JL_BRANCH" "\"$BRANCH\""
+        fi
+
+	JL_BRANCH=$BRANCH
+	export JL_BRANCH
+
+	cli_log "Working branch set to $JL_BRANCH"
+
+}
+
+update_branch(){
+	set_current_branch
+	get_issue_id_from_branch
+}
+
+set_working_brand_to_main(){
+	cli_log "Setting working branch back to main and pulling latest changes"
+    git pull origin main
+    git checkout main
+
+	update_file "local" "JL_BRANCH" "\"main\""
+	update_file "local" "JL_ISSUE" "0"
+}
+
+load_env_files(){
+	export $(grep -v '^#' .JL.env) > /dev/null
+}
+
+load_user_env_files(){
+	export $(grep -v '^#' .JL.local.env) > /dev/null
+}
+
+set_env_file() {
+
+	if [ ! -f "$(pwd)/.JL.env" ]; then
+		echo "" > "$(pwd)/.JL.env"
+	fi
+
+	env="$(pwd)/.JL.env"
+	export env
+}
+
+set_user_env_file() {
+
+    if [ ! -f "$(pwd)/.JL.local.env" ]; then
+        echo "" > "$(pwd)/.JL.local.env"
+    fi
+
+	envLocal="$(pwd)/.JL.local.env"
+	export envLocal
+}
+
+get_github_originisation_name(){
+
+	REPO_NAME=$(git config --get remote.origin.url | sed -e 's/^git@.*:\([[:graph:]]*\).git/\1/')
+    cli_log "Repo Name: $REPO_NAME"
+
+    IFS='/'
+    read -ra REPO <<< "${REPO_NAME}"
+    GITHUB_ORG=${REPO[0]}
+	export GITHUB_ORG
+}
+
+set_github_project_node_id(){
+
+set_env_file
+get_github_originisation_name
+
+RESPONSE=$(gh api graphql -f query="
+  query{
+    organization(login: \"${GITHUB_ORG}\"){
+      projectV2(number: $GITHUB_PROJECT_BOARD_ID) {
+        id
+      }
+    }
+  }")
+
+  echo $RESPONSE
+  GITHUB_PROJECT_NODE_ID=$(echo "$RESPONSE" | jq -r '.data.organization.projectV2.id')
+
+  if [ -z "$GITHUB_PROJECT_NODE_ID" ]
+  then
+          	write_to_file "global" "GITHUB_PROJECT_NODE_ID=$GITHUB_PROJECT_NODE_ID"
+          else
+          	update_file "global" "GITHUB_PROJECT_NODE_ID" "$GITHUB_PROJECT_NODE_ID"
+          fi
+
+  export GITHUB_PROJECT_NODE_ID
+}
+
+write_to_file(){
+	if [ "$1" ] && [ "$2" ];
+	then
+
+		if [ "$1" == "other" ] && [ ! "$3" ] ; then
+		    cli_log_error "Missing file location with 'other': write_to_file [<local|global|other>] [data] [other_file_location]"
+		fi
+
+		case "$1" in
+		global|d)
+			echo -e "$2" | sudo tee -a "$env" >/dev/null
+ 		;;
+		local|l)
+			echo -e "$2" | sudo tee -a "$envLocal" >/dev/null
+		;;
+		other|o)
+			echo -e "$2" | sudo tee -a "$3" >/dev/null
+		;;
+		*)
+			cli_log_error "Invalid options: write_to_file [<local|global|other>] [data] [other_file_location]"
+		;;
+		esac
+	else
+		cli_log_error "Invalid options: write_to_file [<local|global|other>] [data] [other_file_location]"
+	fi
+
+}
+
+update_file(){
+	if [ "$1" ] && [ "$2" ] && [ "$3" ]
+	then
+
+		if [ "$1" == "other" ] && [ ! "$4" ] ; then
+		    cli_log_error "Missing file location with 'other': update_file [<local|global|other>] [key] [value] [other_file_location]"
+		fi
+
+		case "$1" in
+		global|d)
+			sed "s/^\($2=\).*/\1$3/" "$env"
+ 		;;
+		local|l)
+			sed "s/^\($2=\).*/\1$3/" "$envLocal"
+		;;
+		other|o)
+			sed "s/^\($2=\).*/\1$3/" "$4"
+		;;
+		*)
+			cli_log_error "Invalid options: update_file [<local|global|other>] [key] [value] [other_file_location]"
+		;;
+		esac
+	else
+		cli_log_error "Invalid options: update_file [<local|global|other>] [key] [value] [other_file_location]"
+	fi
+
+}
+
+start_services(){
+
+	cli_log "Starting services"
+
+	if [ "$PROJECT_NEST_SERVICES" ]
+	then
+		#cli_log "Run migrations"
+        #		npm run migration:run > logs/migrations.log 2>&1 &
+
+        		IFS=', ' read -r -a PORTS <<< "$PROJECT_PORTS"
+
+        		INDEX=0
+        		for i in ${PROJECT_NEST_SERVICES//,/ }
+            	do
+            		npx kill-port ${PORTS[$INDEX]}
+        	    	cli_log "Starting service: $i"
+        	    	echo "Starting service: $i" > logs/$i.log &
+        	    	export PORT_$INDEX=${PORTS[$INDEX]}
+                	nest start --watch $i > logs/$i.log 2>&1 &
+                	INDEX=$(expr $INDEX + 1)
+                done
+    elif [ "$PROJECT_VITE_SERVICES" ]
+	then
+		IFS=', ' read -r -a PORTS <<< "$PROJECT_PORTS"
+
+                		INDEX=0
+                		for i in ${PROJECT_VITE_SERVICES//,/ }
+                    	do
+                    		npx kill-port ${PORTS[$INDEX]}
+                	    	cli_log "Starting service: $i"
+                	    	echo "Starting service: $i" > logs/$i.log &
+                	    	export PORT_$INDEX=${PORTS[$INDEX]}
+                        	vite --mode dev --force > logs/$i.log 2>&1 &
+                        	INDEX=$(expr $INDEX + 1)
+                        done
+		elif [ "$PROJECT_QUASAR_SERVICES" ]
+    	then
+    		IFS=', ' read -r -a PORTS <<< "$PROJECT_PORTS"
+
+                    		INDEX=0
+                    		for i in ${PROJECT_QUASAR_SERVICES//,/ }
+                        	do
+                        		npx kill-port ${PORTS[$INDEX]}
+                    	    	cli_log "Starting service: $i"
+                    	    	echo "Starting service: $i" > logs/$i.log &
+                    	    	export PORT_$INDEX=${PORTS[$INDEX]}
+                            	quasar dev > logs/$i.log 2>&1 &
+                            	INDEX=$(expr $INDEX + 1)
+                            done
+    	else
+    		cli_log "No services need running for this project"
+    	fi
+}
+
+clear_service_logs()
+{
+	cli_log "Clearing Logs"
+
+	if [ "$PROJECT_NEST_SERVICES" ]
+	then
+        IFS=', ' read -r -a PORTS <<< "$PROJECT_PORTS"
+		INDEX=0
+        for i in ${PROJECT_NEST_SERVICES//,/ }
+	    	do
+        	    cli_log "Logs cleaned: $i"
+        		echo "" > logs/$i.log &
+            	INDEX=$INDEX+1
+            done
+    elif [ "$PROJECT_VITE_SERVICES" ]
+	then
+		IFS=', ' read -r -a PORTS <<< "$PROJECT_PORTS"
+		INDEX=0
+        for i in ${PROJECT_VITE_SERVICES//,/ }
+        	do
+            	cli_log "Logs cleaned: $i"
+                echo "" > logs/$i.log &
+                INDEX=$INDEX+1
+            done
+	fi
+}
+
+stop_services(){
+
+	cli_log "Stopping services"
+
+    	if [ "$PROJECT_NEST_SERVICES" ]
+    	then
+    		#cli_log "Run migrations"
+            #		npm run migration:run > logs/migrations.log 2>&1 &
+
+            IFS=', ' read -r -a PORTS <<< "$PROJECT_PORTS"
+            INDEX=0
+            for i in ${PROJECT_NEST_SERVICES//,/ }
+            	do
+                	cli_log "Stopping service: $i"
+                    npx kill-port ${PORTS[$INDEX]}
+                    INDEX=$INDEX+1
+                done
+        elif [ "$PROJECT_VITE_SERVICES" ]
+    	then
+    		IFS=', ' read -r -a PORTS <<< "$PROJECT_PORTS"
+    		INDEX=0
+            for i in ${PROJECT_VITE_SERVICES//,/ }
+                do
+                    cli_log "Stopping service: $i"
+                    npx kill-port ${PORTS[$INDEX]}
+    	            INDEX=$INDEX+1
+                done
+    	else
+    		cli_log "No services need stopping"
+    	fi
+}
+
+print_service_urls() {
+	cli_log "Service URLS:"
+	if [ "$PROJECT_DOMAINS" ]
+        	then
+                IFS=', ' read -r -a PORTS <<< "$PROJECT_PORTS"
+                INDEX=0
+                for i in ${PROJECT_DOMAINS//,/ }
+                	do
+                		echo "https://$i:${PORTS[$INDEX]}"
+                        INDEX=$INDEX+1
+                    done
+        	fi
+}

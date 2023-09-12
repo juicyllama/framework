@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+set -e
+. "$JL_WORKDIR/common"
+
+cli_help() {
+  echo "
+Command: playground
+
+Use: Used for testing commands and features
+
+Options:
+
+Example: JL playground
+"
+exit 1
+}
+
+cli_log "🏗️ PLAYGROUND 🏗️"
+
+
+
+options=("Option 1" "Option 2" "Option 3" "Quit")
+selected=()
+
+# Set the cursor to the first option
+cursor=1
+
+# Move the cursor up one option
+function move_cursor_up() {
+    (( cursor > 1 )) && (( cursor-- ))
+}
+
+# Move the cursor down one option
+function move_cursor_down() {
+    (( cursor < ${#options[@]} )) && (( cursor++ ))
+}
+
+# Print the options, highlighting the selected option
+function print_options() {
+    clear
+    for i in "${!options[@]}"
+    do
+        if (( i == cursor - 1 )); then
+            echo "> ${options[i]}"
+        else
+            echo "  ${options[i]}"
+        fi
+    done
+}
+
+while true
+do
+    print_options
+
+    # Read a single character from the user
+    read -rsn1 key
+
+    case "$key" in
+        "q")
+            break 2
+            ;;
+        $'\x1b[A') # Up arrow
+            move_cursor_up
+            ;;
+        $'\x1b[B') # Down arrow
+            move_cursor_down
+            ;;
+        "")
+            # Enter key selects the option
+            selected+=("${options[cursor - 1]}")
+            ;;
+        *)
+            # Ignore other keys
+            ;;
+    esac
+done
+
+echo "Selected options: ${selected[@]}"
+
+
+
+cli_log "END"

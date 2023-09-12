@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+set -e
+. "$JL_WORKDIR/common"
+
+cli_help() {
+  echo "
+Command: start
+
+Use: When you start working on a new issue, this will create a new branch and pull the latest changes from the remote. If the docker flag is set, it will also start the docker containers.
+
+Options:
+
+Example: JL start
+"
+exit 1
+}
+
+
+
+echo "What is the name of the issue you are starting work on: [ISSUE-123]"
+read JL_USER_BRANCH
+
+cli_log "START"
+
+if [ "$JL_USER_BRANCH" ]; then
+	cli_log "Branching from main > $JL_USER_BRANCH"
+
+    git pull origin main
+    git branch "$JL_USER_BRANCH"
+    git checkout "$JL_USER_BRANCH"
+
+    update_branch
+
+    #cli_log "Setting upstream to $JL_BRANCH"
+    #git -set-upstream origin $JL_BRANCH
+
+    cli_log "Assigning ticket #${JL_ISSUE} to you"
+    gh issue edit $JL_ISSUE --add-assignee @me
+
+    cli_log "Start working on #${JL_ISSUE}"
+    USER_NAME=$(git config user.name)
+    GIT_COMMENT="🦙 $USER_NAME has started working on this issue."
+    gh issue comment "$JL_ISSUE" --body "$GIT_COMMENT"
+
+
+    cli_log_error "TODO: Move ticket into in progress in github"
+    #todo move ticket into in progress in github
+    #
+    #cli_log "Transition Issue: ${ISSUE_ID}"
+    #gh issue view ${ISSUE_ID} --json > logs/current-issue.json id,title,body,projectItems,projectCards
+    #echo $GITHUB_ISSUE
+fi
+
+if [ $JL_DOCKER -eq 1 ]; then
+    cli_log "Starting docker"
+    docker container start $(docker ps -a -q --filter="name=$PROJECT_NAME-*")
+fi
+
+start_services
+
+print_service_urls
+
+cli_log "END"

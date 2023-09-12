@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+set -e
+. "$JL_WORKDIR/common"
+
+cli_help() {
+  echo "
+Command: issue
+
+Use: Operations for github issues
+
+Options:
+  create 	- Creates a new issue and assigns it to the project board, optionally starts the issue
+
+Example: JL issue create
+"
+exit 1
+}
+
+[ ! -n "$1" ] && cli_help
+
+cli_log "Issue"
+
+case "$1" in
+  create|d)
+
+		echo "Provide a title for your issue: [string]"
+		read ISSUE_TITLE
+		export ISSUE_TITLE
+
+		echo "Provide the content of your issue: [string]"
+        read ISSUE_BODY
+        export ISSUE_BODY
+
+        cli_log "Create new issue"
+       # gh issue create --title "$2" --body "$3" --project "$PROJECT_NAME" > ISSUE_URL
+       ISSUE_URL=$(gh issue create --title "$ISSUE_TITLE" --body "$ISSUE_BODY")
+
+        cli_log "Issue: $ISSUE_URL"
+
+        echo "Would you liek to start the issue (optional)? [y/N]"
+        read START_ISSUE
+        export START_ISSUE
+
+		if [ "$START_ISSUE" == "y" ]
+		then
+			#start the issue
+			cli_log "Starting issue"
+			#get the issue number from the github issue url
+        	ISSUE_NUMBER=$(echo "$ISSUE_URL" |  grep -o '[^/]*$')
+        	"$JL_WORKDIR/commands/start" "ISSUE-${ISSUE_NUMBER}" | tee "$JL_WORKDIR/logs/start.log"
+		fi
+
+		cli_log_error "TODO: Add to project board automatically"
+
+        ;;
+  *)
+    cli_help
+    ;;
+esac
+
+cli_log "END"

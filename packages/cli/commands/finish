@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+set -e
+. "$JL_WORKDIR/common"
+
+cli_help() {
+  echo "
+Command: finish
+
+Use: Once you have finished work on the issue, this will it will run lints and tests, performs a JL save, then open a pull request on your behalf.
+
+Options:
+
+Example: JL finish
+"
+exit 1
+}
+
+cli_log "FINISH"
+
+npm run format
+npm run lint
+npm run test
+
+cli_log "Tests passed 🏁. Saving..."
+
+set_current_branch
+
+"$JL_WORKDIR/commands/save" "stop" | tee "$JL_WORKDIR/logs/save.log"
+
+echo "Provide a pull request message (optional): [<string>]"
+read JL_PR_MESSAGE
+export JL_PR_MESSAGE
+
+if([ ! -n "$JL_PR_MESSAGE" ]); then
+  JL_PR_MESSAGE=$JL_COMMIT_MESSAGE
+fi
+
+export $(grep -v '^#' .env)
+
+USER_NAME=$(git config user.name)
+JL_PR_TITLE="$USER_NAME > $JL_BRANCH"
+
+get_issue_id_from_branch
+
+if [ "$JL_ISSUE" -gt 0 ]; then
+ JL_PR_MESSAGE="$JL_PR_MESSAGE - Issue #$JL_ISSUE"
+ JL_PR_TITLE="$USER_NAME > ISSUE-$JL_ISSUE"
+fi
+
+cli_log "Opening pull request $JL_PR_TITLE"
+gh pr create --title "$JL_PR_TITLE" --body "$JL_PR_MESSAGE"
+
+set_working_brand_to_main
+
+cli_log "END"
