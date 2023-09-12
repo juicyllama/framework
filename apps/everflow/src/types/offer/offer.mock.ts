@@ -1,0 +1,48 @@
+import { faker } from '@faker-js/faker'
+import { EverflowOffer } from './offer.dto'
+
+export function mockOffer(): EverflowOffer {
+	return {
+		network_offer_id: faker.number.int(),
+		network_id: faker.number.int(),
+		name: faker.company.name(),
+		thumbnail_url: faker.image.urlPicsumPhotos(),
+		network_category_id: faker.number.int(),
+		preview_url: faker.internet.url(),
+		offer_status: 'active',
+		currency_id: 'USD',
+		caps_timezone_id: 63,
+		date_live_until: '',
+		html_description: faker.lorem.paragraphs({ min: 1, max: 10 }),
+		is_using_explicit_terms_and_conditions: false,
+		terms_and_conditions: '',
+		is_force_terms_and_conditions: false,
+		visibility: 'public',
+		is_caps_enabled: false,
+		is_using_suppression_list: false,
+		suppression_list_id: 0,
+		network_tracking_domain_id: faker.number.int(),
+		daily_conversion_cap: 0,
+		weekly_conversion_cap: 0,
+		monthly_conversion_cap: 0,
+		global_conversion_cap: 0,
+		daily_payout_cap: 0,
+		weekly_payout_cap: 0,
+		monthly_payout_cap: 0,
+		global_payout_cap: 0,
+		daily_click_cap: 0,
+		weekly_click_cap: 0,
+		monthly_click_cap: 0,
+		global_click_cap: 0,
+		tracking_url: faker.internet.url(),
+		app_identifier: '',
+		time_created: new Date(faker.date.past()).getTime(),
+		time_saved: new Date(faker.date.past()).getTime(),
+		is_description_plain_text: true,
+		is_use_direct_linking: true,
+		relationship: {
+			offer_affiliate_status: 'public',
+		},
+		impression_tracking_url: '',
+	}
+}
