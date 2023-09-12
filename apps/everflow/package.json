@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-everflow",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Juicyllama NestJs Everflow App",
     "author": {
         "name": "JuicyLlama Studio",
@@ -37,7 +37,7 @@
         "test:cov": "jest --coverage",
         "test:e2e": "jest --config ./test/jest-e2e.json",
         "prerelease": "npm run format && npm run lint && npm run build && npm run test",
-        "postrelease": "pnpm -r publish --no-git-checks --access=public",
+        "postrelease": "pnpm publish --no-git-checks --access=public",
         "release": "release-it --ci",
         "release:minor": "release-it minor --ci",
         "release:major": "release-it major --ci",
@@ -58,7 +58,10 @@
     "prettier": "./node_modules/@juicyllama/dev/.prettierrc.js",
     "release-it": {
         "hooks": {
-            "after:release": "npm run postrelease && echo ✅ Successfully released ${name} v${version} to ${npm.name}."
+            "after:release": [
+                "npm run postrelease",
+                "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
+            ]
         },
         "npm": {
             "publish": false
