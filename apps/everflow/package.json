@@ -15,6 +15,7 @@
         "access": "public",
         "registry": "https://registry.npmjs.org/"
     },
+    "private": false,
     "bugs": "https://github.com/juicyllama/framework",
     "license": "0BSD",
     "readmeFilename": "README.md",

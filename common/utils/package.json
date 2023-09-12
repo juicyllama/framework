@@ -11,7 +11,7 @@
         "type": "git",
         "url": "https://github.com/juicyllama-npm/utils"
     },
-    "bugs": "https://github.com/juicyllama-npm/utils",
+    "bugs": "https://github.com/juicyllama/framework",
     "license": "BSD-4-Clause",
     "readmeFilename": "README.md",
     "main": "dist/index.js",

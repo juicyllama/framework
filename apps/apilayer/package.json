@@ -11,7 +11,7 @@
         "type": "git",
         "url": "https://github.com/juicyllama-npm/app-apilayer"
     },
-    "bugs": "https://github.com/juicyllama-npm/app-apilayer",
+    "bugs": "https://github.com/juicyllama/framework",
     "license": "0BSD",
     "readmeFilename": "README.md",
     "main": "dist/index.js",

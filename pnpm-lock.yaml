@@ -49,6 +49,19 @@ importers:
         specifier: workspace:*
         version: link:../../common/dev
 
+  apps/everflow:
+    dependencies:
+      '@juicyllama/core':
+        specifier: workspace:*
+        version: link:../../backend/core
+      '@juicyllama/utils':
+        specifier: workspace:*
+        version: link:../../common/utils
+    devDependencies:
+      '@juicyllama/dev':
+        specifier: workspace:*
+        version: link:../../common/dev
+
   apps/google:
     dependencies:
       '@googlemaps/google-maps-services-js':
