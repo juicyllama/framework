@@ -36,7 +36,7 @@
         "test:watch": "jest --watch",
         "test:cov": "jest --coverage",
         "test:e2e": "jest --config ./test/jest-e2e.json",
-        "prerelease": "npm run format && npm run lint && npm run build && npm run test",
+        "prerelease": "npm run format && npm run lint && npm run test && npm run build ",
         "postrelease": "pnpm publish --no-git-checks --access=public",
         "release": "release-it --ci",
         "release:minor": "release-it minor --ci",

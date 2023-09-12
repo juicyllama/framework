@@ -37,11 +37,11 @@
         "release:major": "release-it major --ci"
     },
     "dependencies": {
-        "@juicyllama/core": "workspace:*",
-        "@juicyllama/utils": "workspace:*"
+        "@juicyllama/core": "workspace:latest",
+        "@juicyllama/utils": "workspace:latest"
     },
     "devDependencies": {
-        "@juicyllama/dev": "workspace:*"
+        "@juicyllama/dev": "workspace:latest"
     },
     "eslintConfig": {
         "extends": [

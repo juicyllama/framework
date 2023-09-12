@@ -29,9 +29,12 @@
 		"format": "prettier --write .",
 		"lint": "eslint --fix",
 		"test": "jest --runInBand --detectOpenHandles --forceExit",
-		"release": "release-it --ci",
-		"release:minor": "release-it minor --ci",
-		"release:major": "release-it major --ci"
+        "prerelease": "npm run format && npm run lint && npm run test && npm run build ",
+        "postrelease": "pnpm publish --no-git-checks --access=public",
+        "release": "release-it --ci",
+        "release:minor": "release-it minor --ci",
+        "release:major": "release-it major --ci",
+        "releaseit:skip": "release-it --ci"
 	},
 	"dependencies": {
 		"@babel/preset-typescript": "^7.22.11",
@@ -66,26 +69,24 @@
 		"tsc-watch": "6.0.4",
 		"tsconfig-paths": "^4.1.2"
 	},
-	"release-it": {
-		"hooks": {
-			"before:init": [
-				"npm run format",
-				"npm run lint",
-				"npm run test"
-			],
-			"after:release": "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
-		},
-		"npm": {
-			"publish": true
-		},
-		"github": {
-			"release": false
-		},
-		"git": {
-			"commit": true,
-			"tag": true,
-			"push": true,
-			"requireCleanWorkingDir": false
-		}
-	}
+    "release-it": {
+        "hooks": {
+            "after:release": [
+                "npm run postrelease",
+                "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
+            ]
+        },
+        "npm": {
+            "publish": false
+        },
+        "github": {
+            "release": false
+        },
+        "git": {
+            "commit": true,
+            "tag": true,
+            "push": true,
+            "requireCleanWorkingDir": false
+        }
+    }
 }

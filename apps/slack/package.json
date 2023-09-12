@@ -30,18 +30,20 @@
         "test:watch": "jest --watch",
         "test:cov": "jest --coverage",
         "test:e2e": "jest --config ./test/jest-e2e.json",
-        "prerelease": "npm run format && npm run lint && npm run build",
+        "prerelease": "npm run format && npm run lint && npm run test && npm run build ",
+        "postrelease": "pnpm publish --no-git-checks --access=public",
         "release": "release-it --ci",
         "release:minor": "release-it minor --ci",
-        "release:major": "release-it major --ci"
+        "release:major": "release-it major --ci",
+        "releaseit:skip": "release-it --ci"
     },
     "dependencies": {
         "@slack/bolt": "latest",
-        "@juicyllama/core": "workspace:*",
-        "@juicyllama/utils": "workspace:*"
+        "@juicyllama/core": "workspace:latest",
+        "@juicyllama/utils": "workspace:latest"
     },
     "devDependencies": {
-        "@juicyllama/dev": "workspace:*"
+        "@juicyllama/dev": "workspace:latest"
     },
     "eslintConfig": {
         "extends": [
@@ -51,10 +53,13 @@
     "prettier": "./node_modules/@juicyllama/dev/.prettierrc.js",
     "release-it": {
         "hooks": {
-            "after:release": "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
+            "after:release": [
+                "npm run postrelease",
+                "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
+            ]
         },
         "npm": {
-            "publish": true
+            "publish": false
         },
         "github": {
             "release": false
