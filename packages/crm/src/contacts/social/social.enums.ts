@@ -1,0 +1,7 @@
+export enum ContactSocialType {
+	FACEBOOK = 'FACEBOOK',
+	INSTAGRAM = 'INSTAGRAM',
+	LINKEDIN = 'LINKEDIN',
+	TWITTER = 'TWITTER',
+	YOUTUBE = 'YOUTUBE',
+}
