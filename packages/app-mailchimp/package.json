@@ -37,8 +37,8 @@
     "dependencies": {
         "@mailchimp/mailchimp_marketing": "^3.0.80",
         "@types/mailchimp__mailchimp_marketing": "^3.0.6",
-        "@juicyllama/core": "latest",
-        "@juicyllama/dev": "latest"
+        "@juicyllama/core": "workspace:*",
+        "@juicyllama/utils": "workspace:*"
     },
     "release-it": {
         "hooks": {

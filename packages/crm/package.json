@@ -37,11 +37,12 @@
         "releaseit:skip": "release-it --ci"
     },
     "devDependencies": {
-        "@juicyllama/dev": "latest"
+        "@juicyllama/dev": "workspace:*"
     },
     "dependencies": {
-        "@juicyllama/app-apilayer": "latest",
-        "@juicyllama/core": "latest"
+        "@juicyllama/app-apilayer": "workspace:*",
+        "@juicyllama/core": "workspace:*",
+        "@juicyllama/utils": "workspace:*"
     },
     "eslintConfig": {
         "extends": [

@@ -21,7 +21,7 @@
     ],
     "types": "dist/index.d.ts",
     "scripts": {
-        "build": "tsc",
+        "build": "rm -fr dist && tsc",
         "prepare": "npm run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
@@ -39,7 +39,8 @@
         "@juicyllama/dev": "workspace:*"
     },
     "dependencies": {
-        "@juicyllama/core": "workspace:*"
+        "@juicyllama/core": "workspace:*",
+        "@juicyllama/utils": "workspace:*"
     },
     "optionalDependencies": {
         "@juicyllama/app-mollie": "workspace:*"

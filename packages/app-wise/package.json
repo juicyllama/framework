@@ -38,11 +38,12 @@
         "release:major": "release-it major --ci"
     },
     "peerDependencies": {
-        "@juicyllama/billing": "latest",
-        "@juicyllama/core": "latest"
+        "@juicyllama/billing": "workspace:*",
+        "@juicyllama/core": "workspace:*"
     },
     "devDependencies": {
-        "@juicyllama/dev": "latest"
+        "@juicyllama/dev": "workspace:*",
+        "@juicyllama/utils": "workspace:*"
     },
     "eslintConfig": {
         "extends": [

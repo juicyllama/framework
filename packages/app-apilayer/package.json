@@ -36,10 +36,10 @@
         "release:major": "release-it major --ci"
     },
     "peerDependencies": {
-        "@juicyllama/core": "latest"
+        "@juicyllama/core": "workspace:*"
     },
     "devDependencies": {
-        "@juicyllama/dev": "latest"
+        "@juicyllama/dev": "workspace:*"
     },
     "eslintConfig": {
         "extends": [

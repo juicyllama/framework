@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e65a247-e91b-4797-8f2d-be04e8fee55d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/app-apilayer/.github/dependabot.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/app-apilayer/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/utils/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/utils/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/app-xero-cc/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/app-xero-cc/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/crm/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/crm/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -44,6 +42,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
     "ts.external.directory.path": "/Users/yossishasho/git/juicyllama/framework/packages/core/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
@@ -71,7 +70,7 @@
       <option name="presentableId" value="Default" />
       <updated>1692877415479</updated>
       <workItem from="1692877416718" duration="16996000" />
-      <workItem from="1693126423008" duration="37418000" />
+      <workItem from="1693126423008" duration="39784000" />
     </task>
     <servers />
   </component>

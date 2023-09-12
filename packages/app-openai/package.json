@@ -38,6 +38,7 @@
     },
     "dependencies": {
         "@juicyllama/core": "workspace:*",
+        "@juicyllama/utils": "workspace:*",
         "openai": "^3.3.0"
     },
     "eslintConfig": {
