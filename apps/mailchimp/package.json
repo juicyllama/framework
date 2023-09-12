@@ -1,0 +1,68 @@
+{
+    "name": "@juicyllama/app-mailchimp",
+    "version": "0.0.19",
+    "description": "Juicyllama App Mailchimp",
+    "author": {
+        "name": "JuicyLlama Studio",
+        "email": "studio@juicyllama.com",
+        "url": "https://juicyllama.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/juicyllama-npm/app-mailchimp"
+    },
+    "bugs": "https://github.com/juicyllama-npm/app-mailchimp",
+    "license": "0BSD",
+    "readmeFilename": "README.md",
+    "main": "dist/index.js",
+    "files": [
+        "dist/**/*",
+        "*.md"
+    ],
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "prepare": "npm run build",
+        "format": "prettier --write \"src/**/*.ts\"",
+        "lint": "eslint \"src/**/*.ts\" --fix",
+        "test": "jest --runInBand --detectOpenHandles --forceExit",
+        "test:clear": "npx jest --clearCache",
+        "test:watch": "jest --watch",
+        "test:cov": "jest --coverage",
+        "test:e2e": "jest --config ./test/jest-e2e.json",
+        "release": "release-it --ci",
+        "release:minor": "release-it minor --ci",
+        "release:major": "release-it major --ci"
+    },
+    "dependencies": {
+        "@mailchimp/mailchimp_marketing": "^3.0.80",
+        "@types/mailchimp__mailchimp_marketing": "^3.0.11",
+        "@juicyllama/core": "workspace:*",
+        "@juicyllama/utils": "workspace:*"
+    },
+    "devDependencies": {
+        "@juicyllama/dev": "workspace:*"
+    },
+    "release-it": {
+        "hooks": {
+            "before:init": [
+                "npm run format",
+                "npm run lint",
+                "npm run test"
+            ],
+            "after:release": "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
+        },
+        "npm": {
+            "publish": true
+        },
+        "github": {
+            "release": true
+        },
+        "git": {
+            "commit": true,
+            "tag": true,
+            "push": true,
+            "requireCleanWorkingDir": false
+        }
+    }
+}

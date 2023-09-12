@@ -2,7 +2,10 @@
 
 ## Installation
 
-1. `$ npm i -g pnpm`
-2. `$ git clone git@github.com:juicyllama/framework.git`
-3. `$ cd framework`
-4. `$ pnpm i --shamefully-hoist`. This will result in an error. run it again
+```bash
+npm i -g pnpm
+git clone git@github.com:juicyllama/framework.git
+cd framework
+pnpm i --shamefully-hoist
+```
+if `pnpm i --shamefully-hoist` results in an error. run it again

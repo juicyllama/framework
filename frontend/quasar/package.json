@@ -1,0 +1,73 @@
+{
+	"name": "@juicyllama/quasar",
+	"version": "0.0.251",
+	"description": "Juicyllama Quasar",
+	"author": {
+		"name": "JuicyLlama Studio",
+		"email": "studio@juicyllama.com",
+		"url": "https://juicyllama.com"
+	},
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org/"
+	},
+	"repository": "git://github.com/juicyllama-npm/quasar.git",
+	"bugs": "https://github.com/juicyllama-npm/quasar",
+	"license": "0BSD",
+	"readmeFilename": "README.md",
+	"main": "dist/JLQuasar.umd.js",
+	"module": "dist/JLQuasar.es.js",
+	"types": "dist/types/index.d.ts",
+	"files": [
+		"dist",
+		"types/*.d.ts"
+	],
+	"scripts": {
+		"build": "vite build && npm run build:types",
+		"build:vite": "vite build",
+		"build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types ",
+		"typecheck": "vue-tsc --noEmit",
+		"format": "prettier --write \"src/**/*.ts\"",
+		"lint": "eslint \"**/*.{js,ts,vue}\" --quiet --fix",
+		"test": "vitest --silent --run",
+		"format-test": "prettier --write \"test/**/*.ts\"",
+		"lint-test": "eslint \"./test/**/*.{js,ts,vue}\" --quiet --fix",
+		"coverage": "vitest run --coverage",
+		"prerelease": "npm run format && npm run lint && npm run test && npm run build",
+		"release": "release-it --ci",
+		"release:minor": "release-it minor --ci",
+		"release:major": "release-it major --ci",
+		"releaseit:skip": "npm run build && release-it --ci"
+	},
+	"dependencies": {
+		"@juicyllama/utils": "workspace:*",
+		"@juicyllama/vue-utils": "workspace:*",
+        "@juicyllama/vue-dev": "workspace:*"
+	},
+	"eslintConfig": {
+		"extends": [
+			"./node_modules/@juicyllama/vue-dev/.eslintrc.js"
+		]
+	},
+	"prettier": "./node_modules/@juicyllama/vue-dev/.prettierrc.js",
+	"jest": {
+		"preset": "./node_modules/@juicyllama/vue-dev/.jest.config.js"
+	},
+	"release-it": {
+		"hooks": {
+			"after:release": "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
+		},
+		"npm": {
+			"publish": true,
+			"timeout": 100000
+		},
+		"github": {
+			"release": true
+		},
+		"git": {
+			"commit": true,
+			"tag": true,
+			"push": true,
+			"requireCleanWorkingDir": false
+		}
+	}
+}

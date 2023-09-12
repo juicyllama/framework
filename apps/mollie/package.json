@@ -1,0 +1,72 @@
+{
+    "name": "@juicyllama/app-mollie",
+    "version": "0.0.42",
+    "description": "Juicyllama NestJs Mollie App",
+    "author": {
+        "name": "JuicyLlama Studio",
+        "email": "studio@juicyllama.com",
+        "url": "https://juicyllama.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/juicyllama-npm/app-mollie"
+    },
+    "bugs": "https://github.com/juicyllama-npm/app-mollie",
+    "license": "0BSD",
+    "readmeFilename": "README.md",
+    "main": "dist/index.js",
+    "files": [
+        "dist/**/*",
+        "*.md"
+    ],
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "install:force": "npm install --force",
+        "start:dev": "tsc -w",
+        "build": "tsc",
+        "prepare": "npm run build",
+        "format": "prettier --write \"src/**/*.ts\"",
+        "lint": "eslint \"src/**/*.ts\" --fix",
+        "test": "jest --runInBand --detectOpenHandles --forceExit",
+        "test:clear": "npx jest --clearCache",
+        "test:watch": "jest --watch",
+        "test:cov": "jest --coverage",
+        "test:e2e": "jest --config ./test/jest-e2e.json",
+        "prerelease": "npm run format && npm run lint && npm run test && npm run build",
+        "release": "release-it --ci",
+        "release:minor": "release-it minor --ci",
+        "release:major": "release-it major --ci"
+    },
+    "devDependencies": {
+        "@juicyllama/dev": "workspace:*"
+    },
+    "dependencies": {
+        "@juicyllama/billing": "workspace:*",
+        "@juicyllama/core": "workspace:*",
+        "@juicyllama/utils": "workspace:*",
+        "@mollie/api-client": "^3.7.0"
+    },
+    "eslintConfig": {
+        "extends": [
+            "./node_modules/@juicyllama/dev/.eslintrc.js"
+        ]
+    },
+    "prettier": "./node_modules/@juicyllama/dev/.prettierrc.js",
+    "release-it": {
+        "hooks": {
+            "after:release": "echo ✅ Successfully released ${name} v${version} to ${repo.repository}."
+        },
+        "npm": {
+            "publish": true
+        },
+        "github": {
+            "release": false
+        },
+        "git": {
+            "commit": true,
+            "tag": true,
+            "push": true,
+            "requireCleanWorkingDir": false
+        }
+    }
+}

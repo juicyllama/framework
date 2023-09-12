@@ -1,0 +1,68 @@
+{
+    "name": "@juicyllama/ai",
+    "version": "0.1.9",
+    "description": "Juicyllama NestJs AI Module",
+    "author": {
+        "name": "JuicyLlama Studio",
+        "email": "studio@juicyllama.com",
+        "url": "https://juicyllama.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/juicyllama-npm/ai"
+    },
+    "bugs": "https://github.com/juicyllama-npm/ai",
+    "license": "0BSD",
+    "readmeFilename": "README.md",
+    "main": "dist/index.js",
+    "files": [
+        "dist/**/*",
+        "*.md"
+    ],
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "prebuild": "rimraf dist",
+        "build": "tsc",
+        "format": "prettier --write \"src/**/*.ts\"",
+        "lint": "eslint \"src/**/*.ts\" --fix",
+        "test": "jest --runInBand --detectOpenHandles --forceExit",
+        "test:clear": "npx jest --clearCache",
+        "test:watch": "jest --watch",
+        "test:cov": "jest --coverage",
+        "test:e2e": "jest --config ./test/jest-e2e.json",
+        "prerelease": "npm run prebuild && npm run format && npm run lint && npm run test && npm run build",
+        "release": "release-it --ci",
+        "release:minor": "release-it minor --ci",
+        "release:major": "release-it major --ci"
+    },
+    "dependencies": {
+        "@juicyllama/core": "workspace:*",
+        "@juicyllama/utils": "workspace:*"
+    },
+    "devDependencies": {
+        "@juicyllama/dev": "workspace:*"
+    },
+    "eslintConfig": {
+        "extends": [
+            "./node_modules/@juicyllama/dev/.eslintrc.js"
+        ]
+    },
+    "prettier": "./node_modules/@juicyllama/dev/.prettierrc.js",
+    "release-it": {
+        "hooks": {
+            "after:release": "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
+        },
+        "npm": {
+            "publish": true
+        },
+        "github": {
+            "release": true
+        },
+        "git": {
+            "commit": true,
+            "tag": true,
+            "push": true,
+            "requireCleanWorkingDir": false
+        }
+    }
+}
