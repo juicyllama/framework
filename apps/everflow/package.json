@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-everflow",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Juicyllama NestJs Everflow App",
     "author": {
         "name": "JuicyLlama Studio",
@@ -37,6 +37,7 @@
         "test:cov": "jest --coverage",
         "test:e2e": "jest --config ./test/jest-e2e.json",
         "prerelease": "npm run format && npm run lint && npm run build && npm run test",
+        "postrelease": "pnpm -r publish --no-git-checks --access=public",
         "release": "release-it --ci",
         "release:minor": "release-it minor --ci",
         "release:major": "release-it major --ci",
