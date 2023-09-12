@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-everflow",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Juicyllama NestJs Everflow App",
     "author": {
         "name": "JuicyLlama Studio",
@@ -58,10 +58,10 @@
     "prettier": "./node_modules/@juicyllama/dev/.prettierrc.js",
     "release-it": {
         "hooks": {
-            "after:release": "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
+            "after:release": "npm run postrelease && echo ✅ Successfully released ${name} v${version} to ${npm.name}."
         },
         "npm": {
-            "publish": true
+            "publish": false
         },
         "github": {
             "release": false
