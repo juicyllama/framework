@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-everflow",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "Juicyllama NestJs Everflow App",
     "author": {
         "name": "JuicyLlama Studio",
@@ -44,11 +44,11 @@
         "releaseit:skip": "release-it --ci"
     },
     "dependencies": {
-        "@juicyllama/core": "workspace:*",
-        "@juicyllama/utils": "workspace:*"
+        "@juicyllama/core": "workspace:latest",
+        "@juicyllama/utils": "workspace:latest"
     },
     "devDependencies": {
-        "@juicyllama/dev": "workspace:*"
+        "@juicyllama/dev": "workspace:latest"
     },
     "eslintConfig": {
         "extends": [
