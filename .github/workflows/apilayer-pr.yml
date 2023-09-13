@@ -27,9 +27,12 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2
 
-            -   name: Install pnpm
-                uses: pnpm/action-setup@v2
-                with:
+            - name: FontAwesome Auth
+              run: echo @fortawesome:registry=https://npm.fontawesome.com/ //npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }} > .npmrc
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@v2
+              with:
                     version: 8
                     run_install: true
 
