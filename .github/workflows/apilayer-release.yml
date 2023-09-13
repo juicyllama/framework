@@ -10,8 +10,10 @@ name: 'Release Package: ApiLayer'
 
 on:
     push:
-        branches: [ main ]
-        path: 'apps/apilayer/**'
+        branches:
+            - main
+        paths:
+            - 'apps/apilayer/**'
         workflow_dispatch:
 
 jobs:
@@ -52,7 +54,7 @@ jobs:
                     major-wording: 'JLMAJOR'
                     minor-wording: 'feature,feat'
                     patch-wording: 'patch,fixes,misc,docs,refactor'    # Providing patch-wording will override commits
-                    commit-message: '[skip ci]'
+                    commit-message: 'Release Package: ApiLayer Bump Version [skip ci]'
 
             -   name: 'Authenticate with NPM'
                 run: echo -e "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc

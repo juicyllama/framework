@@ -11,8 +11,11 @@ name: PR Checks (ApiLayer)
 
 on:
     pull_request:
-        branches: [ main ]
-        path: apps/apilayer/**
+        branches:
+            - main
+        paths:
+            - 'apps/apilayer/**'
+        workflow_dispatch:
 
 jobs:
     pr_checks:
@@ -25,10 +28,10 @@ jobs:
                     node-version: 19
 
             -   name: Checkout
-              uses: actions/checkout@v3
+                uses: actions/checkout@v3
 
-            - name: FontAwesome Auth
-              run: echo -e "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
+            -   name: FontAwesome Auth
+                run: echo -e "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
 
             -   name: Install dependencies
                 uses: pnpm/action-setup@v2
@@ -36,14 +39,14 @@ jobs:
                     version: 8
                     run_install: false
 
-            - name: Install dependencies
-              run: pnpm i --shamefully-hoist
+            -   name: Install dependencies
+                run: pnpm i --shamefully-hoist
 
-            - name: Lint
-              run:  cd apps/apilayer/ && pnpm run && pnpm run lint
+            -   name: Lint
+                run: cd apps/apilayer/ && pnpm run && pnpm run lint
 
-            - name: Build Docker Image
-              run: pnpm run start:docker:build
+            -   name: Build Docker Image
+                run: pnpm run start:docker:build
 
-            - name: Test
-              run: cd apps/apilayer/ && pnpm run test
+            -   name: Test
+                run: cd apps/apilayer/ && pnpm run test
