@@ -7,5 +7,5 @@ on:
             - 'apps/apilayer/**'
 jobs:
     pr_checks:
-        name: PR Checks
-        uses: apps/apilayer/.github/workflows/pr.yml@main
+        steps:
+            uses: apps/apilayer/.github/workflows/pr.yml@main

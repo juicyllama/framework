@@ -8,5 +8,4 @@ on:
 jobs:
     release:
         steps:
-            name: Release
             uses: apps/apilayer/.github/workflows/release.yml@main
