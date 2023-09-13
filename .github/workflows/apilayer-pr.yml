@@ -19,13 +19,13 @@ jobs:
         name: PR Checks
         runs-on: ubuntu-latest
         steps:
+            - name: Install Node.js
+              uses: actions/setup-node@v3
+              with:
+                node-version: 19
+
             - name: Checkout
               uses: actions/checkout@v2
-
-            -   name: Install Node.js
-                uses: actions/setup-node@v3
-                with:
-                    node-version: 19
 
             - name: Choose correct package
               run: cd apps/apilayer/
