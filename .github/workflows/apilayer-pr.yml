@@ -24,8 +24,8 @@ jobs:
                 with:
                     node-version: 19
 
-            - name: Checkout
-              uses: actions/checkout@v2
+            -   name: Checkout
+              uses: actions/checkout@v3
 
             - name: FontAwesome Auth
               run: echo -e "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
