@@ -16,6 +16,8 @@ on:
 
 jobs:
     pr_checks:
+        name: PR Checks (ApiLayer)
+        runs-on: ubuntu-latest
         steps:
             - name: PR Checks (ApiLayer)
               uses: ./pr.yml
