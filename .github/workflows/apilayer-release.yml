@@ -19,7 +19,7 @@ env:
 
 jobs:
     release:
-        name: Release ${{PACKAGE}}
+        name: Release $PACKAGE
         runs-on: ubuntu-latest
         permissions:
             contents: write
