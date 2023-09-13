@@ -42,5 +42,8 @@ jobs:
             - name: Lint
               run:  cd apps/apilayer/ && pnpm run && pnpm run lint
 
+            - name: Build Docker Image
+              run: pnpm run start:docker:build
+
             - name: Test
               run: cd apps/apilayer/ && pnpm run test

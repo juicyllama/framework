@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+    juicyllama-mysql:
+        image: mysql:8.0
+        container_name: juicyllama-mysql
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: localhost
+            MYSQL_DATABASE: juicyllama
+        command: --init-file /mysql/init.sql
+        volumes:
+            - ./.docker/setup.sql:/mysql/init.sql
+        networks:
+            - juicyllama-network
+    juicyllama-redis:
+        image: redis:6.2.5
+        container_name: juicyllama-redis
+        ports:
+            - "6379:6379"
+        networks:
+            - juicyllama-network
+    juicyllama-mongodb:
+        image: mongo:latest
+        container_name: juicyllama-mongodb
+        ports:
+            - "27017:27017"
+        networks:
+            - juicyllama-network
+    juicyllama-rabbitmq:
+        image: rabbitmq:3.8.9-management
+        container_name: juicyllama-rabbitmq
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        networks:
+            - juicyllama-network
+networks:
+    juicyllama-network:
+        driver: bridge
+        name: juicyllama-network
