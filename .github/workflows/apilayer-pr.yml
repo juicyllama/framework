@@ -23,6 +23,8 @@ jobs:
                 uses: actions/setup-node@v3
                 with:
                     node-version: 19
+                    cache: 'pnpm'
+                    cache-dependency-path: apps/apilayer/package-lock.json
 
             - name: Checkout
               uses: actions/checkout@v2
