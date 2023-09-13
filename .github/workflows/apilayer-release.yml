@@ -16,7 +16,8 @@ on:
 
 jobs:
     pr_checks:
-        call-pr_checks:
+        steps:
+            name: PR Checks (ApiLayer)
             uses: ./pr.yml
 
     release:
