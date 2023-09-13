@@ -1,11 +1,52 @@
-name: ApiLayer
+#
+# GitHub Actions workflow.
+#
+# Releases the package to npm when a push into main is detected.
+# * Perform the PR Checks
+# * Bump version number
+# * Release to NPM
+#
 
-on:
-    push:
-        branches: [ main ]
-        paths:
-            - 'apps/apilayer/**'
+name: Release (ApiLayer)
+
 jobs:
+    pr_checks:
+        call-pr_checks:
+            uses: ./pr.yml
+
     release:
+        needs: [ pr_checks ]
+        name: Release
+        runs-on: ubuntu-latest
         steps:
-            uses: apps/apilayer/.github/workflows/release.yml@main
+            -   name: Checkout
+                uses: actions/checkout@v2
+
+            -   name: Install Node.js
+                uses: actions/setup-node@v3
+                with:
+                    node-version: 19
+
+            -   name: Install pnpm
+                uses: pnpm/action-setup@v2
+                with:
+                    version: 7
+                    run_install: false
+
+            -   name: Choose correct package
+                run: cd apps/apilayer/
+
+            -   name: Bumping version
+                id: bumping-version
+                uses: jpb06/bump-package@latest
+                with:
+                    major-keywords: VERSION_MAJOR
+                    minor-keywords: feature,feat,minor
+                    patch-keywords: fix,chore,bug,path,refactor,docs,test,misc
+                    should-default-to-patch: true
+
+            - name: Publishing package
+              if: steps.bumping-version.outputs.bump-performed == 'true'
+              run: pnpm publish --access public
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
