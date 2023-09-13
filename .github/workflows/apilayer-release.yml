@@ -39,19 +39,19 @@ jobs:
                     version: 8
                     run_install: false
 
-            -   name: 'Automated Version Bump'
-                uses: 'phips28/gh-action-bump-version@master'
+            -   name: Install dependencies
+                run: pnpm i --shamefully-hoist
+
+            -   name: Version Bump
+                uses: phips28/gh-action-bump-version@master
                 env:
                     GITHUB_TOKEN: ${{ secrets.GH_CI_CD_RELEASE }}
-                    PACKAGEJSON_DIR: 'apps/apilayer/'
+                    PACKAGEJSON_DIR: apps/apilayer/
                 with:
                     major-wording: 'JLMAJOR'
                     minor-wording: 'feature,feat'
                     patch-wording: 'patch,fixes,misc,docs,refactor'    # Providing patch-wording will override commits
                     # defaulting to a patch bump.
-
-            -   name: Install dependencies
-                run: pnpm i --shamefully-hoist
 
             -   name: Authenticate with NPM
                 run: echo -e "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
