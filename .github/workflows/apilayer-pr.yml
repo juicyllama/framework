@@ -34,10 +34,10 @@ jobs:
               run: cd apps/apilayer/
 
             - name: Install dependencies
-              run: npm install
+              run: npm install --include=dev
 
             - name: Lint
-              run:  ./node_modules/.bin/eslint "src/**/*.ts" --fix
+              run:  npm run lint
 
             - name: Test
-              run: jest --detectOpenHandles --forceExit
+              run: npm run test

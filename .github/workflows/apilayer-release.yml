@@ -17,8 +17,8 @@ on:
 jobs:
     pr_checks:
         steps:
-            name: PR Checks (ApiLayer)
-            uses: ./pr.yml
+            - name: PR Checks (ApiLayer)
+              uses: ./pr.yml
 
     release:
         needs: [ pr_checks ]
