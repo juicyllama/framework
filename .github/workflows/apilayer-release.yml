@@ -11,7 +11,7 @@ name: 'Release Package: ApiLayer'
 on:
     push:
         branches: [ main ]
-        path: ${PATH}/**
+        path: 'apps/apilayer/**'
 
 env:
     PACKAGE: ApiLayer
