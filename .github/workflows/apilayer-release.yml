@@ -6,63 +6,63 @@
 # * Release to NPM
 #
 
-env:
-    PACKAGE: ApiLayer
-    PATH: apps/apilayer
-
-name: Release ($PACKAGE)
+name: 'Release Package: ApiLayer'
 
 on:
     push:
         branches: [ main ]
         path: ${PATH}/**
 
+env:
+    PACKAGE: ApiLayer
+    PATH: apps/apilayer
+
 jobs:
     release:
-        name: Release $PACKAGE
+        name: Release ${env.PACKAGE}
         runs-on: ubuntu-latest
         permissions:
             contents: write
         steps:
-            -   name: 'Install Node.js ::coffee::'
+            -   name: 'Install Node.js'
                 uses: actions/setup-node@v3
                 with:
                     node-version: 19
 
-            -   name: 'Checkout ::octocat::'
+            -   name: 'Checkout'
                 uses: actions/checkout@v2
                 with:
                     token: ${{ secrets.GH_CI_CD_RELEASE }}
 
-            -   name: 'FontAwesome Auth ::fontawesome::'
+            -   name: 'FontAwesome Auth'
                 run: echo -e "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
 
-            -   name: 'Install pnpm ::package::'
+            -   name: 'Install pnpm'
                 uses: pnpm/action-setup@v2
                 with:
                     version: 8
                     run_install: false
 
-            -   name: 'Install dependencies ::package::'
+            -   name: 'Install dependencies'
                 run: pnpm i --shamefully-hoist
 
-            -   name: 'Read package.json ::newspaper::'
+            -   name: 'Read package.json'
                 id: info
                 uses: jaywcjlove/github-action-package@main
 
-            -   name: 'Version Bump ::up::'
+            -   name: 'Version Bump'
                 uses: phips28/gh-action-bump-version@master
                 env:
                     GITHUB_TOKEN: ${{ secrets.GH_CI_CD_RELEASE }}
-                    PACKAGEJSON_DIR: $PATH
+                    PACKAGEJSON_DIR: ${env.PATH}
                 with:
                     major-wording: 'JLMAJOR'
                     minor-wording: 'feature,feat'
                     patch-wording: 'patch,fixes,misc,docs,refactor'    # Providing patch-wording will override commits
-                    commit-message: 'Release ${PACKAGE}: bumps ${{ steps.info.outputs.name }} version to {{version}} ::rocket::'
+                    commit-message: 'Release ${env.PACKAGE}: bumps ${{ steps.info.outputs.name }} version to {{version}} ::rocket::'
 
-            -   name: 'Authenticate with NPM ::key::'
+            -   name: 'Authenticate with NPM'
                 run: echo -e "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
-            -   name: 'Publishing package ::rocket::'
-                run: cd $PATH/ && pnpm publish --access public
+            -   name: 'Publishing package'
+                run: cd ${env.PATH}/ && pnpm publish --access public
