@@ -85,7 +85,6 @@ jobs:
                     # defaulting to a patch bump.
 
             - name: Publishing package
-              if: steps.bumping-version.outputs.bump-performed == 'true'
               run: cd apps/apilayer/ && pnpm publish --access public
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
