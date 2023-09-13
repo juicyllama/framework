@@ -51,14 +51,18 @@ jobs:
 #                run: cd apps/apilayer/ && pnpm run test
 
     release:
-       # needs: [ pr_checks ]
+      #  needs: [ pr_checks ]
         name: Release (ApiLayer)
         runs-on: ubuntu-latest
+        permissions:
+            contents: write
         steps:
             -   name: Install Node.js
                 uses: actions/setup-node@v3
                 with:
                     node-version: 19
+                    cache: 'pnpm'
+                    cache-dependency-path: apps/apilayer/package-lock.json
 
             -   name: Checkout
                 uses: actions/checkout@v2
@@ -72,13 +76,16 @@ jobs:
             -   name: Choose correct package
                 run: cd apps/apilayer/
 
-            -   name: Bump versions
-                uses: remorses/bump-version@js
+            -   name: 'Automated Version Bump'
+                uses: 'phips28/gh-action-bump-version@master'
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
+                    PACKAGEJSON_DIR: 'apps/apilayer/'
                 with:
-                    version_file: apps/apilayer/VERSION
-                    prefix: apilayer # this will prefix the created tag
-                #env:
-                   # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                    major-wording: 'JLMAJOR'
+                    minor-wording: 'feature,feat'
+                    patch-wording: 'patch,fixes,misc,docs,refactor'    # Providing patch-wording will override commits
+                    # defaulting to a patch bump.
 
             - name: Publishing package
               if: steps.bumping-version.outputs.bump-performed == 'true'
