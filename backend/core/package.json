@@ -24,7 +24,7 @@
         "sandbox": "nest start --config src/sandbox/nest-cli.json --watch ",
         "prebuild": "rimraf dist",
         "build": "tsc",
-        "prepare": "npm run build",
+        "prepare": "pnpm run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "npm run prebuild && jest --runInBand --detectOpenHandles --forceExit --bail",

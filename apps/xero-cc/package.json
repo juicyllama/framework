@@ -24,7 +24,7 @@
         "install:force": "npm install --force",
         "start:dev": "tsc -w",
         "build": "tsc",
-        "prepare": "npm run build",
+        "prepare": "pnpm run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "jest --runInBand --detectOpenHandles --forceExit",
