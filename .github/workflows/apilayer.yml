@@ -1,1 +1,10 @@
-uses: apps/apilayer/.github/workflows
+
+name: ApiLayer
+
+on:
+    pull_request:
+        branches: [ main ]
+        uses: apps/apilayer/.github/workflows/pr.yml@main
+    push:
+        branches: [ main ]
+        uses: apps/apilayer/.github/workflows/release.yml@main
