@@ -28,7 +28,7 @@ jobs:
               uses: actions/checkout@v2
 
             - name: Choose correct package
-              run: ls -l && cd apps/apilayer/ && ls -l
+              run: cd apps/apilayer/ && npm run
 
             - name: Lint
               run:  npm run lint
