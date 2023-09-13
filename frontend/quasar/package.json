@@ -40,9 +40,9 @@
         "releaseit:skip": "release-it --ci"
 	},
 	"dependencies": {
-		"@juicyllama/utils": "workspace:latest",
-		"@juicyllama/vue-utils": "workspace:latest",
-        "@juicyllama/vue-dev": "workspace:latest"
+		"@juicyllama/utils": "workspace:*",
+		"@juicyllama/vue-utils": "workspace:*",
+        "@juicyllama/vue-dev": "workspace:*"
 	},
 	"eslintConfig": {
 		"extends": [

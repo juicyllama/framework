@@ -10,6 +10,8 @@ export async function install(){
 
 	const project  = <JL>jl
 
+	cli_log(`Found ${project.apps.length} apps in package.json`)
+
 	for(const app of project.apps){
 		if(app.domain) {
 			await setupDomain(app)
@@ -24,7 +26,7 @@ export async function install(){
 		await setupDoppler()
 	}
 
-	exec(`npm install`, async (error, stdout, stderr) => {
+	exec(`pnpm install --shamefully-hoist`, async (error, stdout, stderr) => {
 		if (error) {
 			cli_error(`error: ${stderr}`)
 		}

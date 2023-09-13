@@ -45,7 +45,7 @@
         "@bugsnag/js": "^7.21.0",
         "@bugsnag/plugin-express": "^7.19.0",
         "@juicyllama/nestjs-redoc": "latest",
-        "@juicyllama/utils": "workspace:latest",
+        "@juicyllama/utils": "workspace:*",
         "@nestjs/cache-manager": "^2.1.0",
         "@nestjs/cli": "^10.1.16",
         "@nestjs/common": "^10.2.1",
@@ -102,7 +102,7 @@
         "typescript": "^5.2.2"
     },
     "devDependencies": {
-        "@juicyllama/dev": "workspace:latest"
+        "@juicyllama/dev": "workspace:*"
     },
     "eslintConfig": {
         "extends": [

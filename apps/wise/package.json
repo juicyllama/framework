@@ -40,12 +40,12 @@
         "releaseit:skip": "release-it --ci"
     },
     "dependencies": {
-        "@juicyllama/core": "workspace:latest",
-        "@juicyllama/billing": "workspace:latest",
-        "@juicyllama/utils": "workspace:latest"
+        "@juicyllama/core": "workspace:*",
+        "@juicyllama/billing": "workspace:*",
+        "@juicyllama/utils": "workspace:*"
     },
     "devDependencies": {
-        "@juicyllama/dev": "workspace:latest"
+        "@juicyllama/dev": "workspace:*"
     },
     "eslintConfig": {
         "extends": [

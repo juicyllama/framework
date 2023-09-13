@@ -41,7 +41,7 @@
         "showdown": "latest"
     },
     "devDependencies": {
-        "@juicyllama/dev": "workspace:latest"
+        "@juicyllama/dev": "workspace:*"
     },
     "release-it": {
         "hooks": {

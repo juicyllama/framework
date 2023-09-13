@@ -39,11 +39,11 @@
     },
     "dependencies": {
         "nanoid": "^3.3.4",
-        "@juicyllama/core": "workspace:latest",
-        "@juicyllama/utils": "workspace:latest"
+        "@juicyllama/core": "workspace:*",
+        "@juicyllama/utils": "workspace:*"
     },
     "devDependencies": {
-        "@juicyllama/dev": "workspace:latest"
+        "@juicyllama/dev": "workspace:*"
     },
     "eslintConfig": {
         "extends": [

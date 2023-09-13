@@ -1,4 +1,4 @@
-import {cli_error, cli_log} from "../helpers/logging";
+import {cli_error} from "../helpers/logging";
 import { jl } from '../package.json'
 import {setupDomain} from "../helpers/domains";
 import {setupSSL} from "../helpers/ssl";
@@ -24,7 +24,7 @@ export async function start(){
 		await setupDoppler()
 	}
 
-	exec(`npm install`, async (error, stdout, stderr) => {
+	exec(`pnpm install --shamefully-hoist`, async (error, stdout, stderr) => {
 		if (error) {
 			cli_error(`error: ${stderr}`)
 		}

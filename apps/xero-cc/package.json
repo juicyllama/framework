@@ -40,13 +40,13 @@
         "releaseit:skip": "release-it --ci"
     },
     "devDependencies": {
-        "@juicyllama/dev": "workspace:latest"
+        "@juicyllama/dev": "workspace:*"
     },
     "dependencies": {
         "xero-node": "^4.35.0",
-        "@juicyllama/core": "workspace:latest",
-        "@juicyllama/billing": "workspace:latest",
-        "@juicyllama/utils": "workspace:latest"
+        "@juicyllama/core": "workspace:*",
+        "@juicyllama/billing": "workspace:*",
+        "@juicyllama/utils": "workspace:*"
     },
     "eslintConfig": {
         "extends": [
