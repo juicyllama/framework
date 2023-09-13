@@ -30,14 +30,11 @@ jobs:
             - name: FontAwesome Auth
               run: echo -e "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
 
-            - name: Navigate to ApiLayer
-              run: cd apps/apilayer/
-
             - name: Install dependencies
-              run: npm install --include=dev
+              run: cd apps/apilayer/ && npm install --include=dev
 
             - name: Lint
-              run:  npm run && npm run lint
+              run:  cd apps/apilayer/ && npm run && npm run lint
 
             - name: Test
-              run: npm run test
+              run: cd apps/apilayer/ && npm run test
