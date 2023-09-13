@@ -15,8 +15,8 @@ on:
         workflow_dispatch:
 
 jobs:
-    bump:
-        name: 'Bump ApiLayer'
+    release:
+        name: 'Release Package: ApiLayer'
         runs-on: ubuntu-latest
         permissions:
             contents: write
@@ -53,35 +53,6 @@ jobs:
                     minor-wording: 'feature,feat'
                     patch-wording: 'patch,fixes,misc,docs,refactor'    # Providing patch-wording will override commits
                     commit-message: '[skip ci]'
-
-    release:
-        name: 'Release ApiLayer'
-        needs: bump
-        runs-on: ubuntu-latest
-        permissions:
-            contents: write
-        steps:
-            -   name: 'Install Node.js'
-                uses: actions/setup-node@v3
-                with:
-                    node-version: 19
-
-            -   name: 'Checkout'
-                uses: actions/checkout@v2
-                with:
-                    token: ${{ secrets.GH_CI_CD_RELEASE }}
-
-            -   name: 'FontAwesome Auth'
-                run: echo -e "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
-
-            -   name: 'Install pnpm'
-                uses: pnpm/action-setup@v2
-                with:
-                    version: 8
-                    run_install: false
-
-            -   name: 'Install dependencies'
-                run: pnpm i --shamefully-hoist
 
             -   name: 'Authenticate with NPM'
                 run: echo -e "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
