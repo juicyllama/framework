@@ -19,7 +19,7 @@ on:
 
 jobs:
     pr_checks:
-        name: PR Checks (ApiLayer)
+        name: 'Pull Request Package: ApiLayer'
         runs-on: ubuntu-latest
         steps:
             -   name: Install Node.js
