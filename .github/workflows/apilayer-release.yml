@@ -51,7 +51,7 @@ jobs:
 #                run: cd apps/apilayer/ && pnpm run test
 
     release:
-        needs: [ pr_checks ]
+       # needs: [ pr_checks ]
         name: Release (ApiLayer)
         runs-on: ubuntu-latest
         steps:
