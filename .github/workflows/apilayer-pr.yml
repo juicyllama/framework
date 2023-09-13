@@ -34,9 +34,9 @@ jobs:
               uses: pnpm/action-setup@v2
               with:
                     version: 8
-                    run_install: true
+                    run_install: false
 
-            - name: Choose correct package
+            - name: Navigate to ApiLayer
               run: cd apps/apilayer/
 
             - name: Lint
