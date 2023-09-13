@@ -29,14 +29,14 @@ jobs:
                 with:
                     node-version: 19
 
+            -   name: Checkout
+                uses: actions/checkout@v2
+
             -   name: Install pnpm
                 uses: pnpm/action-setup@v2
                 with:
-                    version: 7
+                    version: 8
                     run_install: false
-
-            -   name: Checkout
-                uses: actions/checkout@v2
 
             -   name: Choose correct package
                 run: cd apps/apilayer/
