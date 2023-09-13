@@ -11,6 +11,7 @@ name: PR Checks (ApiLayer)
 
 on:
     pull_request:
+        branches: [ main ]
         paths:
             - 'apps/apilayer/**'
 
