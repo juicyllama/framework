@@ -4,7 +4,15 @@ name: ApiLayer
 on:
     pull_request:
         branches: [ main ]
-        uses: apps/apilayer/.github/workflows/pr.yml@main
+        paths:
+            - 'apps/apilayer/**'
+        jobs:
+            pr_checks:
+                uses: apps/apilayer/.github/workflows/pr.yml@main
     push:
         branches: [ main ]
-        uses: apps/apilayer/.github/workflows/release.yml@main
+        paths:
+            - 'apps/apilayer/**'
+        jobs:
+            release:
+                uses: apps/apilayer/.github/workflows/release.yml@main
