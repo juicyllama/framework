@@ -65,7 +65,7 @@ jobs:
             -   name: Checkout
                 uses: actions/checkout@v2
                 with:
-                    token: ${{ secrets.GH_RELEASE_TOKEN }}
+                    token: ${{ secrets.GH_CI_CD_RELEASE }}
 
             -   name: Install pnpm
                 uses: pnpm/action-setup@v2
@@ -76,7 +76,7 @@ jobs:
             -   name: 'Automated Version Bump'
                 uses: 'phips28/gh-action-bump-version@master'
                 env:
-                    GITHUB_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
+                    GITHUB_TOKEN: ${{ secrets.GH_CI_CD_RELEASE }}
                     PACKAGEJSON_DIR: 'apps/apilayer/'
                 with:
                     major-wording: 'JLMAJOR'
