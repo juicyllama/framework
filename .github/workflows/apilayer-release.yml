@@ -1,0 +1,12 @@
+name: ApiLayer
+
+on:
+    push:
+        branches: [ main ]
+        paths:
+            - 'apps/apilayer/**'
+jobs:
+    release:
+        steps:
+            name: Release
+            uses: apps/apilayer/.github/workflows/release.yml@main

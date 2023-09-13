@@ -1,0 +1,11 @@
+name: ApiLayer
+
+on:
+    pull_request:
+        branches: [ main ]
+        paths:
+            - 'apps/apilayer/**'
+jobs:
+    pr_checks:
+        name: PR Checks
+        uses: apps/apilayer/.github/workflows/pr.yml@main
