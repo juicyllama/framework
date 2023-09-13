@@ -7,13 +7,15 @@ on:
             - 'apps/apilayer/**'
         jobs:
             pr_checks:
-                name: PR Checks
-                uses: apps/apilayer/.github/workflows/pr.yml@main
+                steps:
+                    name: PR Checks
+                    uses: apps/apilayer/.github/workflows/pr.yml@main
     push:
         branches: [ main ]
         paths:
             - 'apps/apilayer/**'
         jobs:
             release:
-                name: Release
-                uses: apps/apilayer/.github/workflows/release.yml@main
+                steps:
+                    name: Release
+                    uses: apps/apilayer/.github/workflows/release.yml@main
