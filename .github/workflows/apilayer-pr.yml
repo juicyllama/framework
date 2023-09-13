@@ -28,13 +28,13 @@ jobs:
               uses: actions/checkout@v2
 
             - name: Choose correct package
-              run: cd apps/apilayer/ && npm run
+              run: cd apps/apilayer/
 
             - name: Lint
-              run:  npm run-script lint
+              run:  pnpm run lint
 
             - name: Test
-              run: npm run-script test
+              run: pnpm run test
 
             - name: Build
-              run: npm run-script build
+              run: pnpm run build
