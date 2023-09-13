@@ -61,8 +61,6 @@ jobs:
                 uses: actions/setup-node@v3
                 with:
                     node-version: 19
-                    cache: 'pnpm'
-                    cache-dependency-path: apps/apilayer/package-lock.json
 
             -   name: Checkout
                 uses: actions/checkout@v2
@@ -72,9 +70,6 @@ jobs:
                 with:
                     version: 8
                     run_install: false
-
-            -   name: Choose correct package
-                run: cd apps/apilayer/
 
             -   name: 'Automated Version Bump'
                 uses: 'phips28/gh-action-bump-version@master'
@@ -89,6 +84,6 @@ jobs:
 
             - name: Publishing package
               if: steps.bumping-version.outputs.bump-performed == 'true'
-              run: pnpm publish --access public
+              run: cd apps/apilayer/ && pnpm publish --access public
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
