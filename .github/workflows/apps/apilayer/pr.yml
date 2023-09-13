@@ -1,0 +1,41 @@
+#
+# GitHub Actions workflow.
+#
+# Perfoms the following actions on a pull request:
+# * Lint the code
+# * Run the tests
+# * Confirm the build runs
+#
+
+name: PR Checks (ApiLayer)
+
+on:
+    pull_request:
+        branches: [ main ]
+        paths:
+            - 'apps/apilayer/**'
+
+    jobs:
+        pr_checks:
+            name: PR Checks
+            runs-on: ubuntu-latest
+            steps:
+                - name: Checkout
+                  uses: actions/checkout@v2
+
+                -   name: Install Node.js
+                    uses: actions/setup-node@v3
+                    with:
+                        node-version: 19
+
+                - name: Choose correct package
+                  run: cd apps/apilayer/
+
+                - name: Lint
+                  run:  npm run lint
+
+                - name: Test
+                  run: npm run test
+
+                - name: Build
+                  run: npm run build
