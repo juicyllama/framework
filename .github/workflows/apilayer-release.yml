@@ -24,33 +24,33 @@ jobs:
         permissions:
             contents: write
         steps:
-            -   name: Install Node.js ::coffee::
+            -   name: 'Install Node.js ::coffee::'
                 uses: actions/setup-node@v3
                 with:
                     node-version: 19
 
-            -   name: Checkout ::octocat::
+            -   name: 'Checkout ::octocat::'
                 uses: actions/checkout@v2
                 with:
                     token: ${{ secrets.GH_CI_CD_RELEASE }}
 
-            -   name: FontAwesome Auth ::fontawesome::
+            -   name: 'FontAwesome Auth ::fontawesome::'
                 run: echo -e "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
 
-            -   name: Install pnpm ::package::
+            -   name: 'Install pnpm ::package::'
                 uses: pnpm/action-setup@v2
                 with:
                     version: 8
                     run_install: false
 
-            -   name: Install dependencies ::package::
+            -   name: 'Install dependencies ::package::'
                 run: pnpm i --shamefully-hoist
 
-            -   name: Read package.json ::newspaper::
+            -   name: 'Read package.json ::newspaper::'
                 id: info
                 uses: jaywcjlove/github-action-package@main
 
-            -   name: Version Bump ::up::
+            -   name: 'Version Bump ::up::'
                 uses: phips28/gh-action-bump-version@master
                 env:
                     GITHUB_TOKEN: ${{ secrets.GH_CI_CD_RELEASE }}
@@ -61,8 +61,8 @@ jobs:
                     patch-wording: 'patch,fixes,misc,docs,refactor'    # Providing patch-wording will override commits
                     commit-message: 'Release ${PACKAGE}: bumps ${{ steps.info.outputs.name }} version to {{version}} ::rocket::'
 
-            -   name: Authenticate with NPM ::key::
+            -   name: 'Authenticate with NPM ::key::'
                 run: echo -e "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
-            -   name: Publishing package ::rocket::
+            -   name: 'Publishing package ::rocket::'
                 run: cd $PATH/ && pnpm publish --access public
