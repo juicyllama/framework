@@ -37,7 +37,7 @@ jobs:
               run: npm install
 
             - name: Lint
-              run:  npm run lint
+              run:  eslint "src/**/*.ts" --fix
 
             - name: Test
-              run: npm run test
+              run: jest --detectOpenHandles --forceExit
