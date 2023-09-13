@@ -75,7 +75,7 @@ jobs:
             -   name: Bump versions
                 uses: remorses/bump-version@js
                 with:
-                    version_file: apps/apilayer/package.json
+                    version_file: apps/apilayer/VERSION
                     prefix: apilayer # this will prefix the created tag
                 #env:
                    # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
