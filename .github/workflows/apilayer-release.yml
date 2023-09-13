@@ -50,11 +50,11 @@ jobs:
                     patch-wording: 'patch,fixes,misc,docs,refactor'    # Providing patch-wording will override commits
                     # defaulting to a patch bump.
 
-            - name: Install dependencies
-              run: pnpm i --shamefully-hoist
+            -   name: Install dependencies
+                run: pnpm i --shamefully-hoist
 
             -   name: Authenticate with NPM
-               run: echo -e "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+                run: echo -e "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
-            - name: Publishing package
-              run: cd apps/apilayer/ && pnpm publish --access public
+            -   name: Publishing package
+                run: cd apps/apilayer/ && pnpm publish --access public
