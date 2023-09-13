@@ -9,6 +9,11 @@
 
 name: PR Checks (ApiLayer)
 
+on:
+    pull_request:
+        branches: [ main ]
+        path: apps/apilayer/**
+
 jobs:
     pr_checks:
         name: PR Checks

@@ -9,6 +9,11 @@
 
 name: Release (ApiLayer)
 
+on:
+    push:
+        branches: [ main ]
+        path: apps/apilayer/**
+
 jobs:
     pr_checks:
         call-pr_checks:
