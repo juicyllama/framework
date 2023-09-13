@@ -13,13 +13,9 @@ on:
         branches: [ main ]
         path: 'apps/apilayer/**'
 
-env:
-    PACKAGE: ApiLayer
-    PATH: apps/apilayer
-
 jobs:
     release:
-        name: Release $PACKAGE
+        name: 'Release ApiLayer'
         runs-on: ubuntu-latest
         permissions:
             contents: write
@@ -54,15 +50,15 @@ jobs:
                 uses: phips28/gh-action-bump-version@master
                 env:
                     GITHUB_TOKEN: ${{ secrets.GH_CI_CD_RELEASE }}
-                    PACKAGEJSON_DIR: ${env.PATH}
+                    PACKAGEJSON_DIR: apps/apilayer
                 with:
                     major-wording: 'JLMAJOR'
                     minor-wording: 'feature,feat'
                     patch-wording: 'patch,fixes,misc,docs,refactor'    # Providing patch-wording will override commits
-                    commit-message: 'Release ${env.PACKAGE}: bumps ${{ steps.info.outputs.name }} version to {{version}} ::rocket::'
+                    commit-message: 'Release ApiLayer: bumps ${{ steps.info.outputs.name }} version to {{version}} ::rocket::'
 
             -   name: 'Authenticate with NPM'
                 run: echo -e "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
             -   name: 'Publishing package'
-                run: cd ${env.PATH}/ && pnpm publish --access public
+                run: cd apps/apilayer/ && pnpm publish --access public
