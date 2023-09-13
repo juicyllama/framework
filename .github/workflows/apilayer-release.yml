@@ -43,10 +43,6 @@ jobs:
             -   name: 'Install dependencies'
                 run: pnpm i --shamefully-hoist
 
-            -   name: 'Read package.json'
-                id: info
-                uses: jaywcjlove/github-action-package@main
-
             -   name: 'Version Bump'
                 uses: phips28/gh-action-bump-version@master
                 env:
@@ -56,7 +52,7 @@ jobs:
                     major-wording: 'JLMAJOR'
                     minor-wording: 'feature,feat'
                     patch-wording: 'patch,fixes,misc,docs,refactor'    # Providing patch-wording will override commits
-                    commit-message: 'Release ApiLayer: bumps ${{ steps.info.outputs.name }} version to {{version}} ::rocket:: [skip-ci]'
+                    commit-message: '[skip ci]'
 
     release:
         name: 'Release ApiLayer'
