@@ -39,6 +39,9 @@ jobs:
             - name: Navigate to ApiLayer
               run: cd apps/apilayer/
 
+            - name: Install dependencies
+              run: pnpm i --shamefully-hoist
+
             - name: Lint
               run:  pnpm run lint
 
