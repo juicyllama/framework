@@ -21,7 +21,7 @@ jobs:
 
     release:
         needs: [ pr_checks ]
-        name: Release
+        name: Release (ApiLayer)
         runs-on: ubuntu-latest
         steps:
             -   name: Install Node.js
