@@ -1,8 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm'
-import { BaseEntity } from '@juicyllama/core'
-import { IsArray, IsBoolean, IsEnum, IsString, MaxLength, MinLength } from 'class-validator'
-import { AppCategory, AppIntegrationType, AppStoreIntegrationName } from './apps.enums'
-import { AppSettingsDto } from './apps.dto'
+import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique} from "typeorm";
+import {BaseEntity} from '@juicyllama/core'
+import {IsArray, IsBoolean, IsEnum, IsString, MaxLength, MinLength} from 'class-validator'
+import {AppCategory, AppIntegrationType, AppStoreIntegrationName} from './apps.enums'
+import {AppSettingsDto} from './apps.dto'
 
 @Entity('apps')
 @Unique('apps_UNIQUE', ['integration_name'])
@@ -34,13 +34,23 @@ export class App extends BaseEntity {
 	@Column()
 	category: AppCategory
 
+	//Allow apps to have parent apps (pass through apps) which can be used for whitelabel / saas based applications which have multiple clients
+	@ManyToOne(type => App, service => service.children)
+	parent?: App;
+
+	@Column({default: null, nullable: true})
+	readonly parent_id?: number
+
+	@OneToMany(type => App, service => service.parent)
+	children?: App[];
+
 	@IsString()
 	@MinLength(4)
 	@MaxLength(10)
-	@Column({ default: null, nullable: true })
+	@Column({default: null, nullable: true})
 	hexcode?: string
 
-	@Column({ default: true })
+	@Column({default: true})
 	@IsBoolean()
 	active: boolean
 
