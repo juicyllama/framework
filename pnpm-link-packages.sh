@@ -1,0 +1,26 @@
+pnpm link --global --dir frontend/quasar-components-demo
+pnpm link --global --dir frontend/vue-dev
+pnpm link --global --dir frontend/quasar
+pnpm link --global --dir frontend/vue-utils
+pnpm link --global --dir backend/core
+pnpm link --global --dir backend/crm
+pnpm link --global --dir backend/app-store
+pnpm link --global --dir backend/ai
+pnpm link --global --dir backend/billing
+pnpm link --global --dir common/utils
+# pnpm link --global --dir common/docs
+pnpm link --global --dir common/cli
+pnpm link --global --dir common/dev
+pnpm link --global --dir apps/wordpress
+pnpm link --global --dir apps/pexels
+pnpm link --global --dir apps/google
+pnpm link --global --dir apps/apilayer
+pnpm link --global --dir apps/mailchimp
+pnpm link --global --dir apps/scrapingbee
+pnpm link --global --dir apps/mollie
+pnpm link --global --dir apps/wise
+pnpm link --global --dir apps/slack
+pnpm link --global --dir apps/aws
+pnpm link --global --dir apps/everflow
+pnpm link --global --dir apps/openai
+pnpm link --global --dir apps/xero-cc
