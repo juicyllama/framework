@@ -15,7 +15,7 @@
     "license": "BSD-4-Clause",
     "readmeFilename": "README.md",
     "bin": {
-        "jl": "cli.ts"
+        "jl": "./cli.ts"
     },
     "jl": {
         "project_name": "jl_cli",

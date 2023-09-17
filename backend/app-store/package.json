@@ -9,7 +9,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/juicyllama-npm/app-store"
+        "url": "https://github.com/juicyllama/framework/backend/app-store"
     },
     "bugs": "https://github.com/juicyllama/framework",
     "license": "0BSD",
@@ -26,16 +26,9 @@
         "prepare": "pnpm run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --detectOpenHandles --forceExit",
-        "test:clear": "npx jest --clearCache",
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand",
         "test:watch": "jest --watch",
-        "test:cov": "jest --coverage",
-        "prerelease": "npm run format && npm run lint && npm run test && npm run build ",
-        "postrelease": "pnpm publish --no-git-checks --access=public",
-        "release": "release-it --ci",
-        "release:minor": "release-it minor --ci",
-        "release:major": "release-it major --ci",
-        "releaseit:skip": "release-it --ci"
+        "test:cov": "jest --coverage"
     },
     "devDependencies": {
         "@juicyllama/dev": "workspace:*"
@@ -52,25 +45,5 @@
             "./node_modules/@juicyllama/dev/.eslintrc.js"
         ]
     },
-    "prettier": "./node_modules/@juicyllama/dev/.prettierrc.js",
-    "release-it": {
-        "hooks": {
-            "after:release": [
-                "npm run postrelease",
-                "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
-            ]
-        },
-        "npm": {
-            "publish": false
-        },
-        "github": {
-            "release": false
-        },
-        "git": {
-            "commit": true,
-            "tag": true,
-            "push": true,
-            "requireCleanWorkingDir": false
-        }
-    }
+    "prettier": "./node_modules/@juicyllama/dev/.prettierrc.js"
 }
