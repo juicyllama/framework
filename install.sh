@@ -2,37 +2,37 @@
 
 ### COMMON ###
 
-pnpm link --global @juicyllama/cli
-pnpm link --global @juicyllama/dev
-pnpm link --global @juicyllama/utils
+pnpm link --global --dir common/cli
+pnpm link --global --dir common/dev
+pnpm link --global --dir common/utils
 
 ### FRONTEND ###
 
-pnpm link --global @juicyllama/vue-dev
-pnpm link --global @juicyllama/vue-utils
-pnpm link --global @juicyllama/quasar
+pnpm link --global --dir frontend/vue-dev
+pnpm link --global --dir frontend/vue-utils
+pnpm link --global --dir frontend/quasar
 
 ### BACKEND ###
-pnpm link --global @juicyllama/core
-pnpm link --global @juicyllama/crm
-pnpm link --global @juicyllama/app-store
-pnpm link --global @juicyllama/ai
-pnpm link --global @juicyllama/billing
+pnpm link --global --dir backend/core
+pnpm link --global --dir backend/crm
+pnpm link --global --dir backend/app-store
+pnpm link --global --dir backend/ai
+pnpm link --global --dir backend/billing
 
 ### APPS ###
-pnpm link --global @juicyllama/app-apilayer
-pnpm link --global @juicyllama/app-aws
-pnpm link --global @juicyllama/app-everflow
-pnpm link --global @juicyllama/app-google
-pnpm link --global @juicyllama/app-mailchimp
-pnpm link --global @juicyllama/app-mollie
-pnpm link --global @juicyllama/app-openai
-pnpm link --global @juicyllama/app-pexels
-pnpm link --global @juicyllama/app-scrapingbee
-pnpm link --global @juicyllama/app-slack
-pnpm link --global @juicyllama/app-wise
-pnpm link --global @juicyllama/app-wordpress
-pnpm link --global @juicyllama/app-xero-cc
+pnpm link --global --dir apps/apilayer
+pnpm link --global --dir apps/aws
+pnpm link --global --dir apps/everflow
+pnpm link --global --dir apps/google
+pnpm link --global --dir apps/mailchimp
+pnpm link --global --dir apps/mollie
+pnpm link --global --dir apps/openai
+pnpm link --global --dir apps/pexels
+pnpm link --global --dir apps/scrapingbee
+pnpm link --global --dir apps/slack
+pnpm link --global --dir apps/wise
+pnpm link --global --dir apps/wordpress
+pnpm link --global --dir apps/xero-cc
 
 ### TOOLS ###
 

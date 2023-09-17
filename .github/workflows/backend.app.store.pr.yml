@@ -48,8 +48,5 @@ jobs:
             -   name: Build Docker Image
                 run: pnpm run start:docker:build
 
-            -   name: Add Environment Variables
-                run: export $(grep -v '^#' .env)
-
             -   name: Test
                 run: cd backend/app-store/ && pnpm run test

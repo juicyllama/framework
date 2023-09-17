@@ -26,7 +26,7 @@
         "prepare": "pnpm run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "jest --runInBand --detectOpenHandles --forceExit",
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --detectOpenHandles --forceExit",
         "test:clear": "npx jest --clearCache",
         "test:watch": "jest --watch",
         "test:cov": "jest --coverage",
