@@ -1,29 +1,30 @@
 {
-  "name": "@juicyllama/framework",
-  "version": "1.0.0",
-  "description": "Juicyllama Framework",
-  "author": {
-    "name": "JuicyLlama Studio",
-    "email": "studio@juicyllama.com",
-    "url": "https://juicyllama.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/juicyllama/framework"
-  },
-  "bugs": "https://github.com/juicyllama/framework",
-  "license": "0BSD",
-  "readmeFilename": "README.md",
-  "main": "index.js",
-  "keywords": [
-    "juicyllama",
-    "framework",
-    "application framework",
-    "nestjs",
-    "vue"
-  ],
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start:docker:build": "docker-compose --project-name juicyllama up --build --detach"
-  }
+    "name": "@juicyllama/framework",
+    "version": "1.0.0",
+    "description": "Juicyllama Framework",
+    "author": {
+        "name": "JuicyLlama Studio",
+        "email": "studio@juicyllama.com",
+        "url": "https://juicyllama.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/juicyllama/framework"
+    },
+    "bugs": "https://github.com/juicyllama/framework",
+    "license": "0BSD",
+    "readmeFilename": "README.md",
+    "main": "index.js",
+    "keywords": [
+        "juicyllama",
+        "framework",
+        "application framework",
+        "nestjs",
+        "vue"
+    ],
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "postinstall": "sh ./install.sh",
+        "start:docker:build": "docker-compose --project-name juicyllama up --build --detach"
+    }
 }

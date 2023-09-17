@@ -1,14 +1,7 @@
-# JuicyLlama Monorepo
+<div align="center">
+  <a href="https://juicyllama.com/" target="_blank">
+    <img src="https://juicyllama.com/assets/images/icon.png" width="100" alt="JuicyLlama Logo" />
+  </a>
 
-TODO: Move this into docs and link to it
-
-## Installation
-
-```bash
-npm i -g pnpm
-git clone git@github.com:juicyllama/framework.git
-cd framework
-pnpm i --shamefully-hoist
-```
-
-if `pnpm i --shamefully-hoist` results in an error. run it again
+Visit the [JuicyLlama Docs Portal](https://juicyllama.com/#installation) for installation instructions and more information.
+</div>
