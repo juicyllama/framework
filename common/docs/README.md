@@ -10,7 +10,7 @@ Our framework is currently in a beta phase while we work our way to a stable ver
 :::
 
 ::: danger
-Documentation Todo: 
+Documentation Todo:
 - Core (AS WIP)
 - Billing
 - CRM
@@ -35,7 +35,7 @@ Our framework is modular, you install the modules you need into your projects. T
 
 For example, if you want to build a SaaS API backend, you will likely need [@juicyllama/core](/backend/core) and [@juicyllama/billing](/backend/billing) to get started.
 
-We leverage: 
+We leverage:
 
 * [NestJS](https://nestjs.com/) for building APIs and backend applications
 * [Vue](https://vuejs.org) and [Quasar](https://quasar.dev/) for building frontend cross-platform applications

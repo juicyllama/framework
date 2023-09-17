@@ -24,7 +24,7 @@
     ],
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "postinstall": "sh ./install.sh",
+        "install": "sh ./install.sh",
         "start:docker:build": "docker-compose --project-name juicyllama up --build --detach"
     }
 }
