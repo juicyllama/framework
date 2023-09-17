@@ -214,9 +214,6 @@ importers:
 
   apps/xero-cc:
     dependencies:
-      '@juicyllama/billing':
-        specifier: workspace:*
-        version: link:../../backend/billing
       '@juicyllama/core':
         specifier: workspace:*
         version: link:../../backend/core
@@ -269,6 +266,10 @@ importers:
       '@juicyllama/utils':
         specifier: workspace:*
         version: link:../../common/utils
+    optionalDependencies:
+      '@juicyllama/app-xero-cc':
+        specifier: workspace:*
+        version: link:../../apps/xero-cc
     devDependencies:
       '@juicyllama/dev':
         specifier: workspace:*
