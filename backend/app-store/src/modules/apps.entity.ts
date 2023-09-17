@@ -1,6 +1,6 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm'
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique, JoinColumn } from 'typeorm'
 import { BaseEntity } from '@juicyllama/core'
-import { IsArray, IsBoolean, IsEnum, IsString, MaxLength, MinLength } from 'class-validator'
+import { IsArray, IsBoolean, IsEnum, IsString, MaxLength, MinLength, IsNumber } from 'class-validator'
 import { AppCategory, AppIntegrationType, AppStoreIntegrationName } from './apps.enums'
 import { AppSettingsDto } from './apps.dto'
 
@@ -35,13 +35,15 @@ export class App extends BaseEntity {
 	category: AppCategory
 
 	//Allow apps to have parent apps (pass through apps) which can be used for whitelabel / saas based applications which have multiple clients
-	@ManyToOne(type => App, service => service.children)
+	@ManyToOne(() => App, service => service.children, { onDelete: 'CASCADE' })
+	@JoinColumn({ name: 'parent_id' })
 	parent?: App
 
 	@Column({ default: null, nullable: true })
+	@IsNumber()
 	readonly parent_id?: number
 
-	@OneToMany(type => App, service => service.parent)
+	@OneToMany(() => App, service => service.parent)
 	children?: App[]
 
 	@IsString()
