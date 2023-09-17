@@ -27,6 +27,9 @@ Using [Brew](https://docs.brew.sh/Installation) install following packages:
 - jq: `brew install jq`
 - doppler: `brew install dopplerhq/cli/doppler`, more here: [doppler docs](https://docs.doppler.com/docs/install-cli)
 
+If you have not downloaded the framework yet, please do so now. You can find the instructions [here](/#Installation).
+
+Once installed 
 ### Install
 
 ````bash

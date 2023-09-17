@@ -50,3 +50,7 @@ If you wish to contribute please read the following guides:
 
 * [Contributing](/developers/contributing)
 * [Code Style Guide](/developers/code-style-guide)
+
+
+## Installation
+
