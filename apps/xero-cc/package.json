@@ -45,7 +45,6 @@
     "dependencies": {
         "xero-node": "^4.35.0",
         "@juicyllama/core": "workspace:*",
-        "@juicyllama/billing": "workspace:*",
         "@juicyllama/utils": "workspace:*"
     },
     "eslintConfig": {

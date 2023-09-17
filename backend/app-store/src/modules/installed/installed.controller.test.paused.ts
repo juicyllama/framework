@@ -1,3 +1,7 @@
+/**
+ * TODO test us paused as we need to figure out how to mock the installed app with a fake app (wordpress failing to connect)
+ */
+
 import { METHOD, Scaffold, ScaffoldDto, TestEndpoint } from '@juicyllama/core'
 import {
 	INSTALLED_APP_E,

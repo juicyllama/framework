@@ -16,7 +16,6 @@ import {
 	AppIntegrationType,
 	AppStoreIntegrationName,
 } from './apps.enums'
-import { PartialType } from '@nestjs/swagger'
 import { SwaggerPropertyDecorator, SwaggerPropertyType } from '@juicyllama/core'
 
 export class AppInputValidationDto {
@@ -197,7 +196,3 @@ export class AppDto {
 	})
 	readonly settings?: AppSettingsDto[]
 }
-
-export class CreateAppDto extends AppDto {}
-
-export class UpdateAppDto extends PartialType(AppDto) {}

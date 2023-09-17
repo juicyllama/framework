@@ -1,13 +1,14 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
-import { InstalledApp } from './installed.entity'
-import { BaseService, BeaconService, Query } from '@juicyllama/core'
-import { AppsService } from '../apps.service'
-import { AppIntegrationType, AppStoreIntegrationName } from '../apps.enums'
-import { Logger, Modules } from '@juicyllama/utils'
-import { App } from '../apps.entity'
-import { LazyModuleLoader } from '@nestjs/core'
+import {forwardRef, Inject, Injectable} from '@nestjs/common'
+import {InjectRepository} from '@nestjs/typeorm'
+import {Repository} from 'typeorm'
+import {InstalledApp} from './installed.entity'
+import {BaseService, BeaconService, Query} from '@juicyllama/core'
+import {AppsService} from '../apps.service'
+import {AppIntegrationType, AppStoreIntegrationName} from '../apps.enums'
+import {Logger, Modules} from '@juicyllama/utils'
+import {App} from '../apps.entity'
+import {LazyModuleLoader} from '@nestjs/core'
+import {precheckWordpress} from "./preinstall/wordpress";
 
 export const E = InstalledApp
 export type T = InstalledApp
@@ -85,45 +86,7 @@ export class InstalledAppsService extends BaseService<T> {
 		//if app can validate credentials, do so
 		switch (app.integration_name) {
 			case AppStoreIntegrationName.wordpress:
-				try {
-					//@ts-ignore
-					const { WordpressUsersModule, WordpressUsersService, WordpressContext } = await import(
-						'@juicyllama/app-wordpress'
-					)
-					const wordpressUsersModule = await this.lazyModuleLoader.load(() => WordpressUsersModule)
-					const wordpressUsersService = wordpressUsersModule.get(WordpressUsersService)
-
-					const result = await wordpressUsersService.findAll({
-						arguments: {
-							context: WordpressContext.edit,
-						},
-						config: settings,
-					})
-
-					if (!result) {
-						this.logger.debug(
-							`[${domain}][${app.integration_name}] Cannot authenticate with provided credentials`,
-							result,
-						)
-						return {
-							result: false,
-							error: `Authentication failed, please check your credentials and try again.`,
-						}
-					}
-				} catch (e: any) {
-					this.logger.debug(
-						`[${domain}][${app.integration_name}] Error connecting to WordPress: ${e.message}`,
-						e,
-					)
-					return {
-						result: false,
-						error: `Error connecting to WordPress: ${e.message}`,
-					}
-				}
-
-				return {
-					result: true,
-				}
+				return await precheckWordpress(domain, app, settings)
 		}
 	}
 }

@@ -42,6 +42,9 @@
         "@juicyllama/core": "workspace:*",
         "@juicyllama/utils": "workspace:*"
     },
+	"optionalDependencies": {
+		"@juicyllama/app-xero-cc": "workspace:*"
+	},
     "eslintConfig": {
         "extends": [
             "./node_modules/@juicyllama/dev/.eslintrc.js"
