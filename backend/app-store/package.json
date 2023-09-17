@@ -25,7 +25,7 @@
         "build": "tsc",
         "prepare": "pnpm run build",
         "format": "prettier --write \"src/**/*.ts\"",
-        "lint": "eslint \"src/**/*.ts\" --fix",
+        "lint": "eslint --fix",
         "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --detectOpenHandles --forceExit",
         "test:clear": "npx jest --clearCache",
         "test:watch": "jest --watch",
