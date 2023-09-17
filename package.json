@@ -24,7 +24,7 @@
     ],
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "link": "sh ./install.sh",
+        "link": "sh ./pnpm-link.sh",
         "start:docker:build": "docker-compose --project-name juicyllama up --build --detach"
     }
 }
