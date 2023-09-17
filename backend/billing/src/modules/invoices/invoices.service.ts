@@ -3,12 +3,18 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { LazyModuleLoader } from '@nestjs/core'
 import { DeepPartial, Repository } from 'typeorm'
 import { Logger, Modules } from '@juicyllama/utils'
-import { AccountService, AppIntegrationName, BaseService, Query } from '@juicyllama/core'
-import { StorageService } from '@juicyllama/core/dist/modules/storage/storage.service'
-import { StorageFileType } from '@juicyllama/core/dist/modules/storage/storage.enums'
+import {
+	AccountService,
+	AppIntegrationName,
+	BaseService,
+	Query,
+	StorageService,
+	StorageFileType,
+} from '@juicyllama/core'
 
 import { Invoice } from './invoices.entity'
 import { toXeroInvoice } from './invoice.mapper.xero'
+import { XeroService } from '@juicyllama/app-xero-cc'
 
 const E = Invoice
 type T = Invoice
@@ -68,7 +74,7 @@ export class InvoicesService extends BaseService<T> {
 
 			try {
 				const xeroModule = await this.lazyModuleLoader.load(() => XeroModule)
-				const xeroService = xeroModule.get<typeof XeroService>(XeroService)
+				const xeroService = xeroModule.get<XeroService>(XeroService)
 
 				const lineItems = []
 
