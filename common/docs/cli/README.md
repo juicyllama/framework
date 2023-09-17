@@ -29,19 +29,13 @@ Using [Brew](https://docs.brew.sh/Installation) install following packages:
 
 If you have not downloaded the framework yet, please do so now. You can find the instructions [here](/#Installation).
 
-Once installed 
-### Install
+Once installed you can then configure the CLI to work on your machine.
 
-````bash
-mkdir -p ~/Sites/JuicyLlama/@juicyllama/cli
-cd ~/Sites/JuicyLlama/@juicyllama/cli
-git clone git@github.com:juicyllama-npm/cli.git .
-npm install
-````
+### Configuration
 
 #### MacOS
 
-1. Get the CLI file location with the following command: `echo $PATH:$(pwd)`
+1. Copy the CLI location with the following command: `pnpm root --global`, it will be something like `/Users/{USER}/Library/pnpm/global/5/node_modules`
 2. Run the following commands:
 
 ````bash
@@ -50,11 +44,11 @@ touch .zshrc
 vim .zshrc
 ````
 
-3. Add the reference from step 1 to the end of the file and save it. Example:
+3. Add the reference from step 1 with the cli module appended `@juicyllama/cli` to the end of the file and save it. Example:
 
 ````bash
 #Running JL CLI Globally
-export PATH=$PATH:~/Sites/JuicyLlama/@juicyllama/cli
+export PATH=$PATH:/Users/{USER}/Library/pnpm/global/5/node_modules/@juicyllama/cli
 ````
 
 #### Windows
