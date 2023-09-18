@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-store",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Juicyllama App Store Module",
     "author": {
         "name": "JuicyLlama Studio",
@@ -40,8 +40,12 @@
     "optionalDependencies": {
         "@juicyllama/app-wordpress": "workspace:*"
     },
-   "pre-commit": ["format", "lint", "test"],
-"eslintConfig": {
+    "pre-commit": [
+        "format",
+        "lint",
+        "test"
+    ],
+    "eslintConfig": {
         "extends": [
             "./node_modules/@juicyllama/dev/.eslintrc.js"
         ]
