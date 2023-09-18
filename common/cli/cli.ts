@@ -26,7 +26,6 @@ async function runScript(script: Script) {
 	switch (script) {
 		case Script.install:
 			await install()
-			cli_log(`Install complete!`)
 			break
 
 		default:
@@ -41,8 +40,8 @@ async function run() {
 	//check if arguments were passed else run interactive mode
 	const { argv } = yargs(getMainArgs())
 
-	if (argv._.length > 0) {
-		runScript(Script[argv._[0]])
+	if (argv['_'].length > 0) {
+		await runScript(Script[argv['_'][0]])
 	} else {
 		ipt(Object.values(Script), {
 			message: 'Select a script to run',
@@ -55,6 +54,8 @@ async function run() {
 				cli_error(`Error building interactive interface`)
 			})
 	}
+
+	process.exit(0)
 }
 
 run()

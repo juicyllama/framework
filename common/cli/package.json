@@ -22,12 +22,7 @@
         "apps": []
     },
     "scripts": {
-        "start": "ts-node cli.ts",
-        "postrelease": "pnpm publish --no-git-checks --access=public",
-        "release": "release-it --ci",
-        "release:minor": "release-it minor --ci",
-        "release:major": "release-it major --ci",
-        "releaseit:skip": "release-it --ci"
+        "start": "ts-node cli.ts"
     },
     "dependencies": {
         "@types/node": "^20.3.1",
@@ -35,28 +30,5 @@
         "read-pkg": "^5.2.0",
         "simple-output": "^2.1.1",
         "yargs": "^15.3.1"
-    },
-    "devDependencies": {
-        "release-it": "latest"
-    },
-    "release-it": {
-        "hooks": {
-            "after:release": [
-                "npm run postrelease",
-                "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
-            ]
-        },
-        "npm": {
-            "publish": false
-        },
-        "github": {
-            "release": false
-        },
-        "git": {
-            "commit": true,
-            "tag": true,
-            "push": true,
-            "requireCleanWorkingDir": false
-        }
     }
 }

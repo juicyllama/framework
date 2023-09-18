@@ -1,38 +1,55 @@
-import {currentPath, fileExists} from "./files";
-import {cli_error, cli_log} from "./logging";
-import {exec} from "child_process";
+import { currentPath, fileExists } from './files'
+import { cli_error, cli_log } from './logging'
+import { exec, spawn } from 'child_process'
+import { JL } from './project'
 
-async function login(): Promise<boolean>{
-	exec(`doppler login`, async (error, stdout, stderr) => {
+async function login(project: JL): Promise<boolean> {
+	exec(`doppler login --debug`, (error, stdout, stderr) => {
 		if (error) {
-			cli_error(`error: ${stderr}`)
-			return false
+			console.error(`error: ${error.message}`)
+			return
 		}
+
+		if (stderr) {
+			console.error(`stderr: ${stderr}`)
+			return
+		}
+
+		console.log(`stdout:\n${stdout}`)
 	})
 
-	exec(`doppler setup --no-interactive`, async (error, stdout, stderr) => {
-		if (error) {
-			cli_error(`error: ${stderr}`)
-			return false
-		}
-	})
+	exec(
+		`doppler setup --no-interactive -p ${project.doppler.project} -c ${project.doppler.config}`,
+		async (error, stdout, stderr) => {
+			console.log(error, stdout, stderr)
+
+			if (error) {
+				cli_error(`error: ${stderr}`)
+				return false
+			}
+
+			console.log(stdout)
+		},
+	)
 
 	return true
 }
 
-async function sync(){
-
+async function sync() {
 	exec(`doppler secrets --json > secrets.json`, async (error, stdout, stderr) => {
 		if (error) {
 			cli_error(`error: ${stderr}`)
 		}
 	})
 
-	exec(`jq -r 'to_entries|map("\\(.key)=\\(.value.computed|tostring)")|.[]' secrets.json > .env`, async (error, stdout, stderr) => {
-		if (error) {
-			cli_error(`error: ${stderr}`)
-		}
-	})
+	exec(
+		`jq -r 'to_entries|map("\\(.key)=\\(.value.computed|tostring)")|.[]' secrets.json > .env`,
+		async (error, stdout, stderr) => {
+			if (error) {
+				cli_error(`error: ${stderr}`)
+			}
+		},
+	)
 
 	exec(`rm -rf secrets.json`, async (error, stdout, stderr) => {
 		if (error) {
@@ -46,17 +63,15 @@ async function sync(){
 		}
 	})
 
+	cli_log('Secrets Installed')
 }
 
-export async function setupDoppler() {
-
-	let created = false
-	let authed = true
+export async function setupDoppler(project: JL) {
+	let authed = false
 
 	if (!fileExists(currentPath + '.env')) {
 		cli_log(`Login to Doppler for fetching .env secrets`)
-		authed = await login()
-		created = true
+		authed = await login(project)
 	}
 
 	if (!authed) {
@@ -65,11 +80,4 @@ export async function setupDoppler() {
 	}
 
 	await sync()
-
-	if (created) {
-		cli_log('Secrets Installed')
-	} else {
-		cli_log('Secrets Updated')
-	}
-
 }

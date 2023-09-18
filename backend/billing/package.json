@@ -45,7 +45,8 @@
 	"optionalDependencies": {
 		"@juicyllama/app-xero-cc": "workspace:*"
 	},
-    "eslintConfig": {
+   "pre-commit": ["format", "lint", "test"],
+"eslintConfig": {
         "extends": [
             "./node_modules/@juicyllama/dev/.eslintrc.js"
         ]

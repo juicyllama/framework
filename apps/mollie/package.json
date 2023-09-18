@@ -48,7 +48,8 @@
         "@juicyllama/utils": "workspace:*",
         "@mollie/api-client": "^3.7.0"
     },
-    "eslintConfig": {
+   "pre-commit": ["format", "lint", "test"],
+"eslintConfig": {
         "extends": [
             "./node_modules/@juicyllama/dev/.eslintrc.js"
         ]

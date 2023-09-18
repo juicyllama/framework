@@ -29,4 +29,12 @@ Using [Brew](https://docs.brew.sh/Installation) install following packages:
 
 If you have not downloaded the framework yet, please do so now. You can find the instructions [here](/#Installation).
 
-Once the framework is installed either run the `pnpm run link` command to link all the packages or if you only want to link the CLI you can do so with `pnpm link --global --dir common/cli` this will enable the `jl` command globally on your machine.
+### Clients
+
+To install client projects pull the repo down locally and run the following command:
+
+```bash
+pnpm install
+pnpm run link
+npx jl install
+```
