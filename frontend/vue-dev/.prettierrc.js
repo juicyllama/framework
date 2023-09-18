@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 	"singleQuote": true,
 	"trailingComma": "all",
 	"tabWidth": 4,
