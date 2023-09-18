@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-apilayer",
-    "version": "0.0.37",
+    "version": "0.0.38",
     "description": "Juicyllama ApiLayer App",
     "author": {
         "name": "JuicyLlama Studio",
@@ -39,8 +39,12 @@
     "devDependencies": {
         "@juicyllama/dev": "workspace:*"
     },
-   "pre-commit": ["format", "lint", "test"],
-"eslintConfig": {
+    "pre-commit": [
+        "format",
+        "lint",
+        "test"
+    ],
+    "eslintConfig": {
         "extends": [
             "./node_modules/@juicyllama/dev/.eslintrc.js"
         ]
