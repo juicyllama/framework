@@ -34,7 +34,7 @@ If you have not downloaded the framework yet, please do so now. You can find the
 To install client projects pull the repo down locally and run the following command:
 
 ```bash
-pnpm install
 pnpm run link
+pnpm install --shamefully-hoist
 npx jl install
 ```
