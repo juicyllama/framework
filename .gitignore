@@ -4,3 +4,4 @@ build
 .npmrc
 .env
 .idea
+yarn.lock
