@@ -27,8 +27,11 @@ jobs:
                 with:
                     node-version: 19
 
-            -   name: Checkout
-                uses: actions/checkout@v3
+            -   name: 'Checkout'
+                uses: actions/checkout@v4
+                with:
+                    token: ${{ secrets.GH_CI_CD_RELEASE }}
+                    sparse-checkout: backend/app-store
 
             -   name: FontAwesome Auth
                 run: echo -e "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
@@ -43,10 +46,10 @@ jobs:
                 run: pnpm i --shamefully-hoist
 
             -   name: Lint
-                run: cd backend/app-store/ && pnpm run && pnpm run lint
+                run: cd backend/app-store && pnpm run && pnpm run lint
 
             -   name: Build Docker Image
                 run: pnpm run start:docker:build
 
             -   name: Test
-                run: cd backend/app-store/ && pnpm run test
+                run: cd backend/app-store && pnpm run test
