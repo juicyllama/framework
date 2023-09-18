@@ -34,6 +34,7 @@ export default defineConfig({
 		},
 		rollupOptions: {
 			external: [
+				/^\/@fs*/,
 				'@fortawesome/fontawesome-pro',
 				'@juicyllama/utils',
 				'@quasar/extras',
@@ -52,8 +53,6 @@ export default defineConfig({
 				'vue-router',
 				'vue3-otp-input',
 				'typeorm',
-				'msal',
-				'/src/**/.*', //trying to exclude src files from making it into npm release
 			],
 			output: {
 				globals: {
@@ -67,7 +66,6 @@ export default defineConfig({
 					'chart.js': 'chart.js',
 					'vue-chartjs': 'vue-chartjs',
 					'vue3-autocounter': 'vue3-autocounter',
-					'msal': 'msal',
 				},
 				exports: 'named',
 			},

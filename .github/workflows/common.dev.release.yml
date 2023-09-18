@@ -43,13 +43,13 @@ jobs:
                 run: pnpm i --shamefully-hoist
 
             -   name: Lint
-                run: cd common/dev/ && pnpm run && pnpm run lint
+                run: cd common/dev && pnpm run && pnpm run lint
 
             -   name: Build Docker Image
                 run: pnpm run start:docker:build
 
             -   name: Test
-                run: cd common/dev/ && pnpm run test
+                run: cd common/dev && pnpm run test
 
     release:
         name: 'Release Package: Dev'
@@ -85,7 +85,7 @@ jobs:
                 uses: phips28/gh-action-bump-version@master
                 env:
                     GITHUB_TOKEN: ${{ secrets.GH_CI_CD_RELEASE }}
-                    PACKAGEJSON_DIR: backend/app-store
+                    PACKAGEJSON_DIR: common/dev
                 with:
                     major-wording: 'JLMAJOR'
                     minor-wording: 'feature,feat'
@@ -96,4 +96,4 @@ jobs:
                 run: echo -e "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
             -   name: 'Publishing package'
-                run: cd common/dev/ && pnpm publish --no-git-checks --access public.
+                run: cd common/dev && pnpm publish --no-git-checks --access public

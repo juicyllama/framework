@@ -26,14 +26,11 @@
         "prepare": "pnpm run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "jest",
+		"test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand",
         "test:clear": "npx jest --clearCache",
         "test:watch": "jest --watch",
         "test:cov": "jest --coverage",
-        "test:e2e": "jest --config ./test/jest-e2e.json",
-        "release": "release-it --ci",
-        "release:minor": "release-it minor --ci",
-        "release:major": "release-it major --ci"
+        "test:e2e": "jest --config ./test/jest-e2e.json"
     },
     "dependencies": {
         "axios": "^1.4.0",
@@ -43,40 +40,15 @@
     "devDependencies": {
         "@juicyllama/dev": "workspace:*"
     },
-    "release-it": {
-        "hooks": {
-            "before:init": [
-                "npm run format",
-                "npm run lint",
-                "npm run test"
-            ],
-            "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
-        },
-        "npm": {
-            "publish": true
-        },
-        "github": {
-            "release": false
-        },
-        "git": {
-            "commit": true,
-            "tag": true,
-            "push": true,
-            "requireCleanWorkingDir": false
-        }
-    },
-    "jest": {
-        "moduleFileExtensions": [
-            "js",
-            "json",
-            "ts"
-        ],
-        "rootDir": "src",
-        "testRegex": ".spec.ts$",
-        "transform": {
-            "^.+\\.(t|j)s$": "ts-jest"
-        },
-        "coverageDirectory": "../coverage",
-        "testEnvironment": "node"
-    }
+	"pre-commit": [
+		"format",
+		"lint",
+		"test"
+	],
+	"eslintConfig": {
+		"extends": [
+			"./node_modules/@juicyllama/dev/.eslintrc.js"
+		]
+	},
+	"prettier": "./node_modules/@juicyllama/dev/.prettierrc.js"
 }

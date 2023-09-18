@@ -90,7 +90,7 @@ import { JLCache } from '@juicyllama/utils'
 
 Create a cache key from the given domain and optional params:
 
-```typescript   
+```typescript
 const domain = 'module::serivce::function'
 const params = {
 	id: 1,
@@ -110,7 +110,7 @@ Create a cache key from the given route and optional query params:
 @Get('/test')
 example(@Req req, @Query query){
     const cacheKey = JLCache.CacheKeyFromRoute(req.route.path, query)
-    //cacheKey = 'route::test/?id=1' 
+    //cacheKey = 'route::test/?id=1'
 }
 ```
 
@@ -288,7 +288,7 @@ Helper utils for working with emails
 
 [maskEmail](#maskEmail)
 
-```typescript  
+```typescript
 import { Emails } from '@juicyllama/utils'
 ```
 
@@ -306,7 +306,7 @@ const maskedEmail = Emails.maskEmail(email)
 
 Helper utils for working with enums
 
-[getKeyName](#getKeyName) | [toArray](#toArray) 
+[getKeyName](#getKeyName) | [toArray](#toArray)
 
 ```typescript
 import { Enums } from '@juicyllama/utils'
@@ -411,7 +411,7 @@ const isNotProd = Env.isNotProd()
 ```
 
 #### IsSandbox
-    
+
 Check if the current environment is sandbox:
 
 ```typescript
@@ -508,14 +508,14 @@ const coordinates = {
   longitude: 0.1278
 }
 
-const northeast: Coordinates = { 
-	latitude: 58.565119, 
-    longitude: -11.397972 
+const northeast: Coordinates = {
+	latitude: 58.565119,
+    longitude: -11.397972
 }
 
-const southwest: Coordinates = { 
-	latitude: 49.88128, 
-    longitude: 3.666387 
+const southwest: Coordinates = {
+	latitude: 49.88128,
+    longitude: 3.666387
 }
 
 const areCoordinatesBetweenTwoPoints = Geocoding.areCoordinatesBetweenTwoPoints(coordinates, northeast, southwest)
@@ -529,22 +529,25 @@ Here are some helper functions for locale information
 #### GetLocale
 
 ```typescript
-const locale = getLocale()
-//locale = 'en-GB'
+const locale = new Locale()
+const result = locale.getLocale()
+//result = 'en-GB'
 ```
 
 #### GetCountry
 
 ```typescript
-const country = getCountry()
-//locale = 'GB'
+const locale = new Locale()
+const country = locale.getCountry()
+//country = 'GB'
 ```
 
 #### GetLanguage
 
 ```typescript
-const language = getLanguage()
-//locale = 'en'
+const locale = new Locale()
+const language = locale.getLanguage()
+//language = 'en'
 ```
 
 ## Logger
@@ -686,7 +689,7 @@ const cents = Numbers.amountToCents(amount)
 ```
 
 #### ToCurrency
-    
+
 Convert a number to a currency string:
 
 ```typescript
@@ -853,7 +856,7 @@ const result = stopwatch.stop()
 
 Helper utils for working with strings
 
-[capitalize](#capitalize) | [replacer](#replacer) | [numbersToLetters](#numbersToLetters) | [numbersTo26Letters](#numbersTo26Letters) | [toHTMLConversion](#toHTMLConversion) | [fromHTMLtoStringConversion](#fromHTMLtoStringConversion) | [az09Lowercase](#az09Lowercase) | [onlyNumbers](#onlyNumbers) | [plural](#plural) 
+[capitalize](#capitalize) | [replacer](#replacer) | [numbersToLetters](#numbersToLetters) | [numbersTo26Letters](#numbersTo26Letters) | [toHTMLConversion](#toHTMLConversion) | [fromHTMLtoStringConversion](#fromHTMLtoStringConversion) | [az09Lowercase](#az09Lowercase) | [onlyNumbers](#onlyNumbers) | [plural](#plural)
 
 ```typescript
 import { Strings } from '@juicyllama/utils'

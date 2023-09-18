@@ -22,7 +22,7 @@
 		"types/*.d.ts"
 	],
 	"scripts": {
-		"build": "vite build && npm run build:types",
+		"build": "vite build && pnpm run build:types",
 		"build:vite": "vite build",
 		"build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types ",
 		"typecheck": "vue-tsc --noEmit",
@@ -31,13 +31,7 @@
 		"test": "vitest --silent --run",
 		"format-test": "prettier --write \"test/**/*.ts\"",
 		"lint-test": "eslint \"./test/**/*.{js,ts,vue}\" --quiet --fix",
-		"coverage": "vitest run --coverage",
-        "prerelease": "npm run format && npm run lint && npm run test && npm run build ",
-        "postrelease": "pnpm publish --no-git-checks --access=public",
-        "release": "release-it --ci",
-        "release:minor": "release-it minor --ci",
-        "release:major": "release-it major --ci",
-        "releaseit:skip": "release-it --ci"
+		"coverage": "vitest run --coverage"
 	},
 	"dependencies": {
 		"@juicyllama/utils": "workspace:*",
@@ -52,25 +46,5 @@
 	"prettier": "./node_modules/@juicyllama/vue-dev/.prettierrc.js",
 	"jest": {
 		"preset": "./node_modules/@juicyllama/vue-dev/.jest.config.js"
-	},
-    "release-it": {
-        "hooks": {
-            "after:release": [
-                "npm run postrelease",
-                "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
-            ]
-        },
-        "npm": {
-            "publish": false
-        },
-        "github": {
-            "release": false
-        },
-        "git": {
-            "commit": true,
-            "tag": true,
-            "push": true,
-            "requireCleanWorkingDir": false
-        }
-    }
+	}
 }

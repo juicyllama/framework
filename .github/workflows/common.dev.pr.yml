@@ -43,10 +43,10 @@ jobs:
                 run: pnpm i --shamefully-hoist
 
             -   name: Lint
-                run: cd common/dev/ && pnpm run && pnpm run lint
+                run: cd common/dev && pnpm run && pnpm run lint
 
             -   name: Build Docker Image
                 run: pnpm run start:docker:build
 
             -   name: Test
-                run: cd common/dev/ && pnpm run test
+                run: cd common/dev && pnpm run test

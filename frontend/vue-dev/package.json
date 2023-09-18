@@ -23,12 +23,7 @@
     ],
     "types": "index.d.ts",
     "scripts": {
-        "prerelease": "npm run format && npm run lint && npm run test && npm run build ",
-        "postrelease": "pnpm publish --no-git-checks --access=public",
-        "release": "release-it --ci",
-        "release:minor": "release-it minor --ci",
-        "release:major": "release-it major --ci",
-        "releaseit:skip": "release-it --ci"
+        "build": "tsc"
     },
     "dependencies": {
         "@babel/types": "^7.22.5",
@@ -45,7 +40,7 @@
         "@types/node": "^20.4.2",
         "@typescript-eslint/eslint-plugin": "^6.0.0",
         "@typescript-eslint/parser": "^6.0.0",
-        "@vitejs/plugin-vue": "^4.2.3",
+        "@vitejs/plugin-vue": "^4.3.4",
         "@vitest/coverage-c8": "^0.33.0",
         "@vitest/coverage-istanbul": "^0.33.0",
         "@vue/eslint-config-prettier": "^7.1.0",
@@ -76,7 +71,7 @@
         "sass": "^1.63.6",
         "ts-jest": "^29.1.1",
         "typescript": "^5.1.6",
-        "vite": "^4.4.4",
+        "vite": "^4.4.9",
         "vite-plugin-require": "^1.1.10",
         "vitest": "^0.33.0",
         "vue": "^3.3.4",
@@ -87,29 +82,5 @@
         "vue3-autocounter": "^1.0.6",
         "vue3-otp-input": "^0.4.1",
         "vue3-q-tel-input": "^1.1.7"
-    },
-    "overrides": {
-        "vite": "^4.4.4",
-        "@vitejs/plugin-vue": "^4.2.3"
-    },
-    "release-it": {
-        "hooks": {
-            "after:release": [
-                "npm run postrelease",
-                "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
-            ]
-        },
-        "npm": {
-            "publish": false
-        },
-        "github": {
-            "release": false
-        },
-        "git": {
-            "commit": true,
-            "tag": true,
-            "push": true,
-            "requireCleanWorkingDir": false
-        }
     }
 }

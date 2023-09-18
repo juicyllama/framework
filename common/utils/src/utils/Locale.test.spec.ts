@@ -2,25 +2,28 @@
  * @jest-environment jsdom
  */
 
-import { getLocale, getLanguage, getCountry } from './Locale'
+import { Locale } from './Locale'
 
 describe('GetLocale', () => {
 	it('Make sure we can get a locale', async () => {
-		const locale = getLocale()
-		expect(locale).toEqual('en-US')
+		const locale = new Locale()
+		const result = locale.getLocale()
+		expect(result).toEqual('en-US')
 	})
 })
 
 describe('GetCountry', () => {
 	it('Make sure we can get a country', async () => {
-		const country = getCountry()
+		const locale = new Locale()
+		const country = locale.getCountry()
 		expect(country).toEqual('US')
 	})
 })
 
 describe('GetLanguage', () => {
 	it('Make sure we can get a language', async () => {
-		const lang = getLanguage()
+		const locale = new Locale()
+		const lang = locale.getLanguage()
 		expect(lang).toEqual('en')
 	})
 })

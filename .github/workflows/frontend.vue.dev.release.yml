@@ -6,56 +6,21 @@
 # * Release to NPM
 #
 
-name: 'Release Package: ApiLayer'
+name: 'Release Package: Vue Dev'
 
 on:
     push:
         branches:
             - main
         paths:
-            - 'apps/apilayer/**'
+            - 'frontend/vue-dev/**'
         workflow_dispatch:
 
 jobs:
 
-    pr_checks:
-        name: 'Pre Release: ApiLayer'
-        runs-on: ubuntu-latest
-        steps:
-            -   name: Install Node.js
-                uses: actions/setup-node@v3
-                with:
-                    node-version: 19
-
-            -   name: Checkout
-                uses: actions/checkout@v3
-
-            -   name: FontAwesome Auth
-                run: echo -e "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
-
-            -   name: Install dependencies
-                uses: pnpm/action-setup@v2
-                with:
-                    version: 8
-                    run_install: false
-
-            -   name: Install dependencies
-                run: pnpm i --shamefully-hoist
-
-            -   name: Lint
-                run: cd apps/apilayer/ && pnpm run && pnpm run lint
-
-            -   name: Build Docker Image
-                run: pnpm run start:docker:build
-
-            -   name: Test
-                run: cd apps/apilayer/ && pnpm run test
-
     release:
-        name: 'Release Package: ApiLayer'
+        name: 'Release Package: Vue Dev'
         runs-on: ubuntu-latest
-        needs:
-            - pr_checks
         permissions:
             contents: write
         steps:
@@ -85,15 +50,15 @@ jobs:
                 uses: phips28/gh-action-bump-version@master
                 env:
                     GITHUB_TOKEN: ${{ secrets.GH_CI_CD_RELEASE }}
-                    PACKAGEJSON_DIR: apps/apilayer
+                    PACKAGEJSON_DIR: frontend/vue-dev
                 with:
                     major-wording: 'JLMAJOR'
                     minor-wording: 'feature,feat'
                     patch-wording: 'patch,fixes,misc,docs,refactor'    # Providing patch-wording will override commits
-                    commit-message: 'Release Package: ApiLayer Bump Version [skip ci]'
+                    commit-message: 'Release Package: Vue Dev Bump Version [skip ci]'
 
             -   name: 'Authenticate with NPM'
                 run: echo -e "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
             -   name: 'Publishing package'
-                run: cd apps/apilayer/ && pnpm publish --no-git-checks --access public
+                run: cd frontend/vue-dev && pnpm publish --no-git-checks --access public

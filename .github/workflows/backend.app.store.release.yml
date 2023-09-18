@@ -96,4 +96,4 @@ jobs:
                 run: echo -e "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
             -   name: 'Publishing package'
-                run: cd backend/app-store/ && pnpm publish --no-git-checks --access public.
+                run: cd backend/app-store/ && pnpm publish --no-git-checks --access public
