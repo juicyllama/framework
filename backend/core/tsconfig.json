@@ -1,31 +1,7 @@
 {
-  "compilerOptions": {
-    "skipLibCheck": true,
-    "allowJs": false,
-    "lib": ["es5", "es6", "dom", "ESNext"],
-    "module": "CommonJS",
-    "moduleResolution": "Node",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es2017",
-    "sourceMap": false,
-    "outDir": "./dist",
-    "baseUrl": "src",
-    "incremental": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "types": ["node", "jest", "multer"]
-  },
-  "exclude": ["node_modules", "dist", "**/*spec.ts", "**/*.test.spec.ts", "**/*.test.paused.ts", "**/*.test.config.ts"],
-  "include": ["src/**/*.ts",
-    "src/sandbox/**/*.ts"
-  ]
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "./dist",
+		"rootDir": "./src"
+	}
 }

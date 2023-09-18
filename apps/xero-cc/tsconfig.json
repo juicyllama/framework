@@ -1,24 +1,7 @@
 {
-  "compilerOptions": {
-    "skipLibCheck": true, //issue with some of the packages xero uses
-    "allowJs": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
-    "target": "es6",
-    "sourceMap": false,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "baseUrl": "./",
-    "noLib": false,
-    "types": ["node", "jest"],
-  },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist", "**/*spec.ts", "**/*.test.spec.ts", "**/*.test.config.ts"]
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "./dist",
+		"rootDir": "./src"
+	}
 }

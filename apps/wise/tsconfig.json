@@ -1,25 +1,7 @@
 {
-  "compilerOptions": {
-    "skipLibCheck": true,
-    "allowJs": true,
-    "lib": ["es5", "es6", "dom", "ESNext"],
-    "module": "CommonJS",
-    "moduleResolution": "Node",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
-    "target": "es6",
-    "sourceMap": false,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "baseUrl": "./",
-    "noLib": false,
-    "types": ["node", "jest"]
-  },
-  "include": ["src/**/*.ts", "src/sandbox/**/*.ts"],
-  "exclude": ["node_modules", "dist", "**/*spec.ts", "**/*.test.spec.ts", "**/*.test.config.ts", ]
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "./dist",
+		"rootDir": "./src"
+	}
 }
