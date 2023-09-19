@@ -31,7 +31,6 @@ jobs:
                 uses: actions/checkout@v4
                 with:
                     token: ${{ secrets.GH_CI_CD_RELEASE }}
-                    sparse-checkout: common/dev
 
             -   name: FontAwesome Auth
                 run: echo -e "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
@@ -71,7 +70,6 @@ jobs:
                 uses: actions/checkout@v4
                 with:
                     token: ${{ secrets.GH_CI_CD_RELEASE }}
-                    sparse-checkout: common/dev
 
             -   name: 'FontAwesome Auth'
                 run: echo -e "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
