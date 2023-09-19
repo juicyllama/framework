@@ -5,5 +5,4 @@
 
 Visit the [JuicyLlama NestJs ApiLayer App](https://docs.juicyllama.com/apps/apilayer) page for this module to learn more
 information.
-
 </div>
