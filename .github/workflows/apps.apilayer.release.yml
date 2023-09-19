@@ -93,7 +93,7 @@ jobs:
                 with:
                     major-wording: 'JLMAJOR'
                     minor-wording: 'feature,feat'
-                    patch-wording: 'patch,fixes,misc,docs,refactor'    # Providing patch-wording will override commits
+                    patch-wording: 'patch,fixes,fix,misc,docs,refactor'    # Providing patch-wording will override commits
                     commit-message: 'Release Package: ApiLayer Bump Version [skip ci]'
                     skip-tag: true
 

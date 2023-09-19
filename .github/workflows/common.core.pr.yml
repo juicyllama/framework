@@ -1,0 +1,55 @@
+#
+# GitHub Actions workflow.
+#
+# Perfoms the following actions on a pull request:
+# * Lint the code
+# * Run the tests
+# * Confirm the build runs
+#
+
+name: PR Checks (Core)
+
+on:
+    pull_request:
+        branches:
+            - main
+        paths:
+            - 'common/core/**'
+        workflow_dispatch:
+
+jobs:
+    pr_checks:
+        name: 'Pull Request Package: Core'
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Install Node.js
+                uses: actions/setup-node@v3
+                with:
+                    node-version: 19
+
+            -   name: 'Checkout'
+                uses: actions/checkout@v4
+                with:
+                    token: ${{ secrets.GH_CI_CD_RELEASE }}
+                    sparse-checkout: common/core
+
+            -   name: FontAwesome Auth
+                run: echo -e "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
+
+            -   name: Install dependencies
+                uses: pnpm/action-setup@v2
+                with:
+                    version: 8
+                    run_install: false
+
+            -   name: Install dependencies
+                run: pnpm i --shamefully-hoist
+
+            -   name: Lint
+                run: cd common/core && pnpm run && pnpm run lint
+
+            -   name: Build Docker Image
+                run: pnpm run start:docker:build
+
+            -   name: Test
+                run: cd common/core && pnpm run test

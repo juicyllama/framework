@@ -41,6 +41,11 @@ export class BeaconPushService {
 			unique: message.unique,
 		})
 
+		if(!push){
+			this.logger.error(`[${domain}] Failed to create push`, message)
+			return false
+		}
+
 		let service: any
 		let app_integration_name: string
 
