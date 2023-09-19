@@ -33,6 +33,7 @@ jobs:
                     token: ${{ secrets.GH_CI_CD_RELEASE }}
                     sparse-checkout:
                         apps/apilayer
+                        common/dev
                         tsconfig.json
 
             -   name: FontAwesome Auth
@@ -43,7 +44,6 @@ jobs:
                 with:
                     version: 8
                     run_install: false
-                    development: true
 
             -   name: Install dependencies
                 run: pnpm i --shamefully-hoist
