@@ -1,7 +1,7 @@
 {
+	"extends": "../../tsconfig.json",
 	"compilerOptions": {
-        "resolveJsonModule": true,
-		"esModuleInterop": true,
-        "lib": [ "es2015" ]
-	},
+		"outDir": "./dist",
+		"rootDir": "./src"
+	}
 }

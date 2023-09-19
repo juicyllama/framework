@@ -34,12 +34,7 @@
         "test:clear": "npx jest --clearCache",
         "test:watch": "jest --watch",
         "test:cov": "jest --coverage",
-        "test:clearCache": "jest --clearCache",
-        "prerelease": "npm run prebuild && npm run format && npm run lint && npm run test && npm run build",
-        "release": "release-it --ci",
-        "release:minor": "release-it minor --ci",
-        "release:major": "release-it major --ci",
-        "releaseit:skip": "release-it --ci"
+        "test:clearCache": "jest --clearCache"
     },
     "dependencies": {
         "@bugsnag/js": "^7.21.0",
@@ -104,30 +99,13 @@
     "devDependencies": {
         "@juicyllama/dev": "workspace:*"
     },
-   "pre-commit": ["format", "lint", "test"],
-"eslintConfig": {
-        "extends": [
-            "./node_modules/@juicyllama/dev/.eslintrc.js"
-        ]
-    },
-    "prettier": "./node_modules/@juicyllama/dev/.prettierrc.js",
-    "release-it": {
-        "hooks": {
-            "after:release": "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
-        },
-        "npm": {
-            "publish": true,
-            "timeout": 100000
-        },
-        "github": {
-            "release": true,
-            "timeout": 100000
-        },
-        "git": {
-            "commit": true,
-            "tag": true,
-            "push": true,
-            "requireCleanWorkingDir": false
-        }
-    }
+	"eslintConfig": {
+		"extends": [
+			"./node_modules/@juicyllama/dev/.eslintrc.js"
+		]
+	},
+	"prettier": "./node_modules/@juicyllama/dev/.prettierrc.js",
+	"jest": {
+		"preset": "./node_modules/@juicyllama/dev/jest.config.js"
+	}
 }
