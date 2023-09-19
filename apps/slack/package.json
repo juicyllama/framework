@@ -7,9 +7,13 @@
         "email": "studio@juicyllama.com",
         "url": "https://juicyllama.com"
     },
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	},
     "repository": {
         "type": "git",
-        "url": "https://github.com/juicyllama-npm/app-slack"
+        "url": "https://github.com/juicyllama/framework/apps/slack"
     },
     "bugs": "https://github.com/juicyllama/framework",
     "license": "0BSD",

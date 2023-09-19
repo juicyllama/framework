@@ -10,7 +10,10 @@
 	"publishConfig": {
 		"registry": "https://registry.npmjs.org/"
 	},
-	"repository": "git://github.com/juicyllama-npm/quasar.git",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/juicyllama/framework/frontend/quasar"
+	},
     "bugs": "https://github.com/juicyllama/framework",
 	"license": "0BSD",
 	"readmeFilename": "README.md",

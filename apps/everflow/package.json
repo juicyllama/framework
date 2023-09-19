@@ -7,13 +7,13 @@
         "email": "studio@juicyllama.com",
         "url": "https://juicyllama.com"
     },
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	},
     "repository": {
         "type": "git",
         "url": "https://github.com/juicyllama/framework/apps/everflow"
-    },
-    "publishConfig": {
-        "access": "public",
-        "registry": "https://registry.npmjs.org/"
     },
     "private": false,
     "bugs": "https://github.com/juicyllama/framework",

@@ -7,9 +7,13 @@
         "email": "studio@juicyllama.com",
         "url": "https://juicyllama.com"
     },
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	},
     "repository": {
         "type": "git",
-        "url": "https://github.com/juicyllama-npm/app-google"
+        "url": "https://github.com/juicyllama/framework/apps/google"
     },
     "bugs": "https://github.com/juicyllama/framework",
     "license": "0BSD",
