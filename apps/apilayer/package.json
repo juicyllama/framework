@@ -45,11 +45,11 @@
     },
     "eslintConfig": {
         "extends": [
-            "./node_modules/@juicyllama/dev/.eslintrc.js"
+            "./node_modules/@juicyllama/dev/dist/.eslintrc.js"
         ]
     },
-    "prettier": "./node_modules/@juicyllama/dev/.prettierrc.js",
+    "prettier": "./node_modules/@juicyllama/dev/dist/.prettierrc.js",
 	"jest": {
-		"preset": "./node_modules/@juicyllama/dev/jest.config.js"
+		"preset": "./node_modules/@juicyllama/dev/dist/jest.config.js"
 	}
 }

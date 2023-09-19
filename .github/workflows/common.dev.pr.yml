@@ -36,7 +36,7 @@ jobs:
             -   name: FontAwesome Auth
                 run: echo -e "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
 
-            -   name: Install dependencies
+            -   name: Install pnpm
                 uses: pnpm/action-setup@v2
                 with:
                     version: 8
