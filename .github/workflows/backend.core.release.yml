@@ -13,7 +13,7 @@ on:
         branches:
             - main
         paths:
-            - 'common/core/**'
+            - 'backend/core/**'
         workflow_dispatch:
 
 jobs:
@@ -45,13 +45,13 @@ jobs:
                 run: pnpm i --shamefully-hoist
 
             -   name: Lint
-                run: cd common/core && pnpm run && pnpm run lint
+                run: cd backend/core && pnpm run && pnpm run lint
 
             -   name: Build Docker Image
                 run: pnpm run start:docker:build
 
             -   name: Test
-                run: cd common/core && pnpm run test
+                run: cd backend/core && pnpm run test
 
     release:
         name: 'Release Package: Core'
@@ -87,7 +87,7 @@ jobs:
                 uses: phips28/gh-action-bump-version@master
                 env:
                     GITHUB_TOKEN: ${{ secrets.GH_CI_CD_RELEASE }}
-                    PACKAGEJSON_DIR: common/core
+                    PACKAGEJSON_DIR: backend/core
                 with:
                     major-wording: 'JLMAJOR'
                     minor-wording: 'feature,feat'
@@ -99,4 +99,4 @@ jobs:
                 run: echo -e "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
             -   name: 'Publishing package'
-                run: cd common/core && pnpm publish --no-git-checks --access public
+                run: cd backend/core && pnpm publish --no-git-checks --access public

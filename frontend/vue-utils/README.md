@@ -4,5 +4,4 @@
   </a>
 
 Visit the [JuicyLlama Vue Utils](https://docs.juicyllama.com/frontend/vue-utils) page for this module to learn more information.
-
 </div>
