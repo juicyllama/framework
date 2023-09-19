@@ -34,6 +34,7 @@ export interface FindOptions {
 	relations?: string
 	select?: string
 	search?: string
+	[key: string]: boolean | number | string; // for abstracted filters
 }
 
 export interface StatsResponse {
