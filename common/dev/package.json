@@ -20,7 +20,7 @@
         "*.md",
         "*.js",
         "*.ts",
-        "index.ts"
+        "src/index.ts"
     ],
     "types": "dist/index.d.ts",
     "scripts": {
@@ -63,6 +63,5 @@
         "ts-node": "^10.9.1",
         "tsc-watch": "6.0.4",
         "tsconfig-paths": "^4.1.2"
-    },
-    "pre-commit": ["format", "lint", "test"]
+    }
 }

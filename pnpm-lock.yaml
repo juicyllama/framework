@@ -626,37 +626,6 @@ importers:
         specifier: workspace:*
         version: link:../vue-utils
 
-  frontend/quasar-components-demo:
-    dependencies:
-      '@juicyllama/quasar':
-        specifier: file:../quasar
-        version: file:frontend/quasar
-      cors:
-        specifier: ^2.8.5
-        version: 2.8.5
-      pinia:
-        specifier: ^2.1.3
-        version: 2.1.6(typescript@5.2.2)(vue@3.3.4)
-      quasar:
-        specifier: ^2.12.0
-        version: 2.12.6
-      vue:
-        specifier: ^3.2.47
-        version: 3.3.4
-    devDependencies:
-      '@vitejs/plugin-vue':
-        specifier: ^4.1.0
-        version: 4.3.4(vite@4.4.9)(vue@3.3.4)
-      typescript:
-        specifier: ^5.0.2
-        version: 5.2.2
-      vite:
-        specifier: ^4.3.9
-        version: 4.4.9(@types/node@20.6.0)(sass@1.66.1)
-      vue-tsc:
-        specifier: ^1.4.2
-        version: 1.8.10(typescript@5.2.2)
-
   frontend/vue-dev:
     dependencies:
       '@babel/types':
@@ -5268,16 +5237,19 @@ packages:
     resolution: {integrity: sha512-JnsM1mIPdfGPxmoOcK1c7HYAsL6YOv0TCJ4aW3AXPZN/Jb4R77epDyMZIVudSGjWMbvv/JfUa+rQ+dGKTmgwBA==}
     dependencies:
       '@volar/source-map': 1.10.1
+    dev: false
 
   /@volar/source-map@1.10.1:
     resolution: {integrity: sha512-3/S6KQbqa7pGC8CxPrg69qHLpOvkiPHGJtWPkI/1AXCsktkJ6gIk/5z4hyuMp8Anvs6eS/Kvp/GZa3ut3votKA==}
     dependencies:
       muggle-string: 0.3.1
+    dev: false
 
   /@volar/typescript@1.10.1:
     resolution: {integrity: sha512-+iiO9yUSRHIYjlteT+QcdRq8b44qH19/eiUZtjNtuh6D9ailYM7DVR0zO2sEgJlvCaunw/CF9Ov2KooQBpR4VQ==}
     dependencies:
       '@volar/language-core': 1.10.1
+    dev: false
 
   /@vue/compiler-core@3.3.4:
     resolution: {integrity: sha512-cquyDNvZ6jTbf/+x+AgM2Arrp6G4Dzbb0R64jiG804HRMfRiFXWI6kqUVqZ6ZR0bQhIoQjB4+2bhNtVwndW15g==}
@@ -5435,6 +5407,7 @@ packages:
       muggle-string: 0.3.1
       typescript: 5.2.2
       vue-template-compiler: 2.7.14
+    dev: false
 
   /@vue/reactivity-transform@3.3.4:
     resolution: {integrity: sha512-MXgwjako4nu5WFLAjpBnCj/ieqcjE2aJBINUNQzkZQfzIZA4xn+0fV1tIYBJvvva3N3OvKGofRLvQIwEQPpaXw==}
@@ -5500,6 +5473,7 @@ packages:
       '@vue/language-core': 1.8.10(typescript@5.2.2)
     transitivePeerDependencies:
       - typescript
+    dev: false
 
   /@vuepress/bundler-vite@2.0.0-beta.67:
     resolution: {integrity: sha512-W6YXixxu2G+xPECPFvx4Tzv5fmpBYvApEYVw7qfSNf/5YZ6aeIfV0AMGJZvhk7R/KniofvBTGCjAMSK4fqKp8w==}
@@ -6439,6 +6413,7 @@ packages:
 
   /balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
+    dev: false
 
   /base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
@@ -6582,6 +6557,7 @@ packages:
     resolution: {integrity: sha512-XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==}
     dependencies:
       balanced-match: 1.0.2
+    dev: false
 
   /braces@3.0.2:
     resolution: {integrity: sha512-b8um+L1RzM3WDSzvhm6gIz1yfTbBt6YTlcEKAvsmqCZZFw46z626lVj9j1yEPW33H5H+lBQpZMP1k8l+78Ha0A==}
@@ -7622,6 +7598,7 @@ packages:
 
   /de-indent@1.0.2:
     resolution: {integrity: sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg==}
+    dev: false
 
   /debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -9578,6 +9555,7 @@ packages:
   /he@1.2.0:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
+    dev: false
 
   /hexoid@1.0.0:
     resolution: {integrity: sha512-QFLV0taWQOZtvIRIAdBChesmogZrtuXvVWsFHZTk2SU+anspqZ2vMnoLg7IE1+Uk16N19APic1BuF8bC8c2m5g==}
@@ -11350,6 +11328,7 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       yallist: 4.0.0
+    dev: false
 
   /lru-cache@7.18.3:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
@@ -11598,6 +11577,7 @@ packages:
     engines: {node: '>=16 || 14 >=14.17'}
     dependencies:
       brace-expansion: 2.0.1
+    dev: false
 
   /minimist@1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
@@ -11700,6 +11680,7 @@ packages:
 
   /muggle-string@0.3.1:
     resolution: {integrity: sha512-ckmWDJjphvd/FvZawgygcUeQCxzvohjFO5RxTjj4eq8kw359gFF3E1brjfI+viLMxss5JrHTDRHZvu2/tuy0Qg==}
+    dev: false
 
   /multer@1.4.4-lts.1:
     resolution: {integrity: sha512-WeSGziVj6+Z2/MwQo3GvqzgR+9Uc+qt8SwHKh3gvNPiISKfsMfG4SvCOFYlxxgkXt7yIV2i1yczehm0EOKIxIg==}
@@ -13582,6 +13563,7 @@ packages:
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
+    dev: false
 
   /send@0.18.0:
     resolution: {integrity: sha512-qqWzuOjSFOuqPjFe4NOsMLafToQQwBSOEpS+FwEt3A2V3vKubTquT3vmLTQpFgMXp8AlFWFuP1qKaJZOtPpVXg==}
@@ -14729,6 +14711,7 @@ packages:
     resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
     engines: {node: '>=14.17'}
     hasBin: true
+    dev: false
 
   /uc.micro@1.0.6:
     resolution: {integrity: sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==}
@@ -15358,6 +15341,7 @@ packages:
     dependencies:
       de-indent: 1.0.2
       he: 1.2.0
+    dev: false
 
   /vue-template-es2015-compiler@1.9.1:
     resolution: {integrity: sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==}
@@ -15373,6 +15357,7 @@ packages:
       '@vue/typescript': 1.8.10(typescript@5.2.2)
       semver: 7.5.4
       typescript: 5.2.2
+    dev: false
 
   /vue3-autocounter@1.0.6(vue@3.3.4):
     resolution: {integrity: sha512-jOgCD2WaOjt/tOAAGKDm2DTyQRdKyfqJv5ElUz/vR0ZJgUd4yDd6UX6+2YU3LQpY4qoFNZkzLloAfALAqK041g==}
@@ -15808,6 +15793,7 @@ packages:
 
   /yallist@4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
+    dev: false
 
   /yaml@1.10.2:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
@@ -15912,13 +15898,4 @@ packages:
       archiver-utils: 3.0.4
       compress-commons: 4.1.2
       readable-stream: 3.6.2
-    dev: false
-
-  file:frontend/quasar:
-    resolution: {directory: frontend/quasar, type: directory}
-    name: '@juicyllama/quasar'
-    dependencies:
-      '@juicyllama/utils': link:common/utils
-      '@juicyllama/vue-dev': link:frontend/vue-dev
-      '@juicyllama/vue-utils': link:frontend/vue-utils
     dev: false

@@ -17,12 +17,13 @@
         "resolveJsonModule": true,
         "types": [
             "node",
-            "jest"
+            "jest",
+			"multer",
         ]
     },
     "exclude": [
-        "node_modules",
-        "dist",
+        "**/node_modules",
+		"**/dist",
         "**/*spec.ts",
         "**/*.test.spec.ts",
         "**/*.test.paused.ts",
