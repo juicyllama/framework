@@ -1,6 +1,6 @@
 {
 	"name": "@juicyllama/quasar",
-	"version": "0.0.251",
+	"version": "0.0.252",
 	"description": "Juicyllama Quasar",
 	"author": {
 		"name": "JuicyLlama Studio",
@@ -14,7 +14,7 @@
 		"type": "git",
 		"url": "https://github.com/juicyllama/framework/frontend/quasar"
 	},
-    "bugs": "https://github.com/juicyllama/framework",
+	"bugs": "https://github.com/juicyllama/framework",
 	"license": "0BSD",
 	"readmeFilename": "README.md",
 	"main": "dist/JLQuasar.umd.js",
@@ -39,7 +39,7 @@
 	"dependencies": {
 		"@juicyllama/utils": "workspace:*",
 		"@juicyllama/vue-utils": "workspace:*",
-        "@juicyllama/vue-dev": "workspace:*"
+		"@juicyllama/vue-dev": "workspace:*"
 	},
 	"eslintConfig": {
 		"extends": [
