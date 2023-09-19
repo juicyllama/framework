@@ -31,14 +31,10 @@
         "prepare": "pnpm run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "npm run prebuild && jest --runInBand --detectOpenHandles --forceExit --bail",
-        "test:users": "npm run prebuild && jest --runInBand --detectOpenHandles --forceExit --bail --testPathPattern=src/modules/users/users.controller.test.spec.ts",
-        "test:charts": "npm run prebuild && jest --runInBand --detectOpenHandles --forceExit --bail --testPathPattern=src/modules/users/users.controller.charts.test.spec.ts",
-        "test:filtering": "npm run prebuild && jest --runInBand --detectOpenHandles --forceExit --bail --testPathPattern=src/utils/typeorm/Query.filtering.test.spec.ts",
-        "test:clear": "npx jest --clearCache",
-        "test:watch": "jest --watch",
-        "test:cov": "jest --coverage",
-        "test:clearCache": "jest --clearCache"
+		"test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand",
+        "test:users": "npm run test --testPathPattern=src/modules/users/users.controller.test.spec.ts",
+        "test:charts": "npm run test --testPathPattern=src/modules/users/users.controller.charts.test.spec.ts",
+        "test:filtering": "npm run test --testPathPattern=src/utils/typeorm/Query.filtering.test.spec.ts"
     },
     "dependencies": {
         "@bugsnag/js": "^7.21.0",
