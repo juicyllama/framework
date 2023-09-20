@@ -28,6 +28,7 @@
     ],
     "types": "dist/index.d.ts",
     "scripts": {
+		"prepare": "pnpm run build",
         "build": "tsc",
         "format": "prettier --write .",
         "lint": "eslint --fix",
