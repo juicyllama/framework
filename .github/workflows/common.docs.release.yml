@@ -24,16 +24,16 @@ jobs:
         permissions:
             contents: write
         steps:
-            -   name: 'Install Node.js'
-                uses: actions/setup-node@v3
-                with:
-                    node-version: 19
 
             -   name: 'Checkout'
                 uses: actions/checkout@v4
                 with:
                     token: ${{ secrets.GH_CI_CD_RELEASE }}
-                    sparse-checkout: frontend
+
+            -   name: 'Install Node.js'
+                uses: actions/setup-node@v3
+                with:
+                    node-version: 19
 
             -   name: 'Version Bump'
                 uses: phips28/gh-action-bump-version@master
