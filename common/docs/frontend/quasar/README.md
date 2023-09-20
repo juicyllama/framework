@@ -31,9 +31,7 @@ npm install @juicyllama/quasar
 
 ## Styling
 
-We use [Tailwind CSS](https://tailwindcss.com) for styling, you can override the default styles by creating a `tailwind.config.js` file in the root of your project.
-
-Each component has their own styles, which you can override by providing @Apply classes in your own CSS file.
+::: TODO
 
 ## Stack
 
