@@ -2,9 +2,9 @@
 
 Our framework is currently in a beta phase while we work our way to a stable version 1.0.0.
 
-Feel free to create issues and/or pull requests with your contributions to any of our modules.
+Feel free to create issues, discussions and/or pull requests with your contributions to any of our modules.
 
-## Need Help? 
+## Need Help?
 
 We are always on the lookout for interesting (and disruptive) projects to test the versatility of our framework.
 
