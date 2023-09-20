@@ -25,14 +25,13 @@
     ],
     "types": "dist/index.d.ts",
     "scripts": {
-        "build": "rm -fr dist && tsc",
-        "prepare": "pnpm run build",
+		"prebuild": "rimraf dist",
+        "build": "tsc",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "jest --runInBand --detectOpenHandles --forceExit --passWithNoTests",
-        "test:clear": "npx jest --clearCache",
-        "test:watch": "jest --watch",
-        "test:cov": "jest --coverage"
+		"test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand",
+		"test:watch": "jest --watch",
+		"test:cov": "jest --coverage"
     },
     "devDependencies": {
         "@juicyllama/dev": "workspace:*"
@@ -43,14 +42,5 @@
     },
 	"optionalDependencies": {
 		"@juicyllama/app-xero-cc": "workspace:*"
-	},
-	"eslintConfig": {
-		"extends": [
-			"./node_modules/@juicyllama/dev/dist/.eslintrc.js"
-		]
-	},
-	"prettier": "./node_modules/@juicyllama/dev/dist/.prettierrc.js",
-	"jest": {
-		"preset": "./node_modules/@juicyllama/dev/dist/jest.config.js"
 	}
 }

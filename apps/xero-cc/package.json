@@ -28,7 +28,6 @@
         "install:force": "npm install --force",
         "start:dev": "tsc -w",
         "build": "tsc",
-        "prepare": "pnpm run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "jest --runInBand --detectOpenHandles --forceExit",
@@ -44,14 +43,5 @@
         "xero-node": "^4.35.0",
         "@juicyllama/core": "workspace:*",
         "@juicyllama/utils": "workspace:*"
-    },
-	"eslintConfig": {
-		"extends": [
-			"./node_modules/@juicyllama/dev/dist/.eslintrc.js"
-		]
-	},
-	"prettier": "./node_modules/@juicyllama/dev/dist/.prettierrc.js",
-	"jest": {
-		"preset": "./node_modules/@juicyllama/dev/dist/jest.config.js"
-	}
+    }
 }

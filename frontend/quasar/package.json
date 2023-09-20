@@ -46,8 +46,5 @@
 			"./node_modules/@juicyllama/vue-dev/.eslintrc.js"
 		]
 	},
-	"prettier": "./node_modules/@juicyllama/vue-dev/.prettierrc.js",
-	"jest": {
-		"preset": "./node_modules/@juicyllama/vue-dev/.jest.config.js"
-	}
+	"prettier": "./node_modules/@juicyllama/vue-dev/.prettierrc.js"
 }

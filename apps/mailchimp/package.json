@@ -26,7 +26,6 @@
     "types": "dist/index.d.ts",
     "scripts": {
         "build": "tsc",
-        "prepare": "pnpm run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "jest --runInBand --detectOpenHandles --forceExit",
@@ -43,14 +42,5 @@
     },
     "devDependencies": {
         "@juicyllama/dev": "workspace:*"
-    },
-	"eslintConfig": {
-		"extends": [
-			"./node_modules/@juicyllama/dev/dist/.eslintrc.js"
-		]
-	},
-	"prettier": "./node_modules/@juicyllama/dev/dist/.prettierrc.js",
-	"jest": {
-		"preset": "./node_modules/@juicyllama/dev/dist/jest.config.js"
-	}
+    }
 }

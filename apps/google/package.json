@@ -27,7 +27,6 @@
     "scripts": {
         "start:dev": "tsc -w",
         "build": "tsc",
-        "prepare": "pnpm run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "jest --detectOpenHandles --forceExit",
@@ -49,14 +48,5 @@
         "@googlemaps/google-maps-services-js": {
             "axios": "^0.27.2"
         }
-    },
-	"eslintConfig": {
-		"extends": [
-			"./node_modules/@juicyllama/dev/dist/.eslintrc.js"
-		]
-	},
-	"prettier": "./node_modules/@juicyllama/dev/dist/.prettierrc.js",
-	"jest": {
-		"preset": "./node_modules/@juicyllama/dev/dist/jest.config.js"
-	}
+    }
 }

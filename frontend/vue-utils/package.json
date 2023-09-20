@@ -26,40 +26,13 @@
 		"types/*.d.ts"
 	],
 	"scripts": {
-		"prepare": "pnpm run build",
 		"build": "vite build && npm run build:types",
 		"build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types ",
 		"typecheck": "vue-tsc --noEmit",
 		"format": "prettier --write .",
-		"lint": "eslint \"**/*.{js,ts,vue}\" --quiet --fix",
-        "prerelease": "npm run format && npm run lint && npm run test && npm run build ",
-        "postrelease": "pnpm publish --no-git-checks --access=public",
-        "release": "release-it --ci",
-        "release:minor": "release-it minor --ci",
-        "release:major": "release-it major --ci",
-        "releaseit:skip": "release-it --ci"
+		"lint": "eslint \"**/*.{js,ts,vue}\" --quiet --fix"
 	},
 	"dependencies": {
 		"@juicyllama/vue-dev": "workspace:*"
-	},
-    "release-it": {
-        "hooks": {
-            "after:release": [
-                "npm run postrelease",
-                "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
-            ]
-        },
-        "npm": {
-            "publish": false
-        },
-        "github": {
-            "release": false
-        },
-        "git": {
-            "commit": true,
-            "tag": true,
-            "push": true,
-            "requireCleanWorkingDir": false
-        }
-    }
+	}
 }

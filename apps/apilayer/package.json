@@ -28,7 +28,6 @@
         "start:dev": "tsc -w",
         "prebuild": "rimraf dist",
         "build": "tsc",
-        "prepare": "pnpm run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand"
@@ -39,14 +38,5 @@
     },
     "devDependencies": {
         "@juicyllama/dev": "workspace:*"
-    },
-    "eslintConfig": {
-        "extends": [
-            "./node_modules/@juicyllama/dev/dist/.eslintrc.js"
-        ]
-    },
-    "prettier": "./node_modules/@juicyllama/dev/dist/.prettierrc.js",
-    "jest": {
-        "preset": "./node_modules/@juicyllama/dev/dist/jest.config.js"
     }
 }
