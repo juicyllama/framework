@@ -35,14 +35,12 @@
         "test:cov": "jest --coverage"
     },
     "devDependencies": {
-        "@juicyllama/dev": "workspace:*"
+        "@juicyllama/dev": "workspace:*",
+        "@juicyllama/app-wordpress": "workspace:*"
     },
     "dependencies": {
         "@juicyllama/core": "workspace:*",
         "@juicyllama/utils": "workspace:*"
-    },
-    "optionalDependencies": {
-        "@juicyllama/app-wordpress": "workspace:*"
     },
 	"eslintConfig": {
 		"extends": [
