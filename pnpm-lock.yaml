@@ -249,10 +249,11 @@ importers:
       '@juicyllama/utils':
         specifier: workspace:*
         version: link:../../common/utils
-    devDependencies:
+    optionalDependencies:
       '@juicyllama/app-wordpress':
         specifier: workspace:*
         version: link:../../apps/wordpress
+    devDependencies:
       '@juicyllama/dev':
         specifier: workspace:*
         version: link:../../common/dev
