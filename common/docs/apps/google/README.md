@@ -17,7 +17,7 @@ Follow these instructions to use the Google wrapper in your project.
 Install the package into your project:
 
 ```bash
-npm install @juicyllama/app-google
+pnpm install @juicyllama/app-google
 ```
 
 ### Environment Variables
