@@ -1,17 +1,19 @@
 const config = {
 	preset: 'ts-jest',
 	bail: true,
-    detectOpenHandles: true,
-    forceExit: true,
+	detectOpenHandles: true,
+	forceExit: true,
 	moduleFileExtensions: ['ts', 'js', 'json'],
 	rootDir: process.cwd(),
+	roots: ['<rootDir>/src'],
 	testRegex: '.*\\.spec\\.ts$',
-    transform: {
-        '^.+\\.ts$': 'ts-jest',
-    },
+	transform: {
+		'^.+\\.ts$': 'ts-jest',
+	},
 	testPathIgnorePatterns: ['dist', 'node_modules'],
-    transformIgnorePatterns: ['dist', 'node_modules'],
-    collectCoverageFrom: ['**/*.ts'],
+	transformIgnorePatterns: ['dist', 'node_modules'],
+	isolatedModules: true,
+	collectCoverageFrom: ['**/*.(t|j)s'],
 	coverageDirectory: '../coverage',
 	testEnvironment: 'node',
 	// moduleNameMapper: {
@@ -23,7 +25,7 @@ const config = {
 	testTimeout: 60000,
 	fakeTimers: {
 		enableGlobally: true,
-	},
+	}
 }
 
 module.exports = config
