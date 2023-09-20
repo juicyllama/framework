@@ -15,7 +15,7 @@ Follow these instructions to use the Slack app directly in your project.
 Install the package into your project:
 
 ```bash
-npm install @juicyllama/app-slack
+pnpm install @juicyllama/app-slack
 ```
 
 ### Slack App
@@ -45,4 +45,4 @@ import { SlackModule } from '@juicyllama/app-slack'
 
 ### Services
 
-Once imported you can inject the service into your application, you can find a list of [services / methods here](/apps/slack/methods). 
+Once imported you can inject the service into your application, you can find a list of [services / methods here](/apps/slack/methods).
