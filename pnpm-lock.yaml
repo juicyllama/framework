@@ -594,6 +594,9 @@ importers:
       '@vuepress/plugin-container':
         specifier: next
         version: 2.0.0-beta.67
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
       vuepress:
         specifier: next
         version: 2.0.0-beta.67(@vuepress/client@2.0.0-beta.67)(vue@3.3.4)
