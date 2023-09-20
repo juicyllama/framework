@@ -15,7 +15,7 @@ Follow these instructions to use the ScrapingBee wrapper in your project.
 Install the package into your project:
 
 ```bash
-npm install @juicyllama/app-scrapingbee
+pnpm install @juicyllama/app-scrapingbee
 ```
 
 ### Environment Variables
