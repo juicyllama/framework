@@ -1,6 +1,6 @@
 {
 	"name": "@juicyllama/docs",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "Juicyllama Framework Docs",
 	"author": {
 		"name": "JuicyLlama Studio",
@@ -21,12 +21,12 @@
 		"developer",
 		"docs"
 	],
-    "scripts": {
-        "docs:dev": "vuepress dev",
-        "docs:build": "vuepress build"
-    },
-    "devDependencies": {
-        "@vuepress/plugin-container": "next",
-        "vuepress": "next"
-    }
+	"scripts": {
+		"docs:dev": "vuepress dev",
+		"docs:build": "vuepress build"
+	},
+	"devDependencies": {
+		"@vuepress/plugin-container": "next",
+		"vuepress": "next"
+	}
 }
