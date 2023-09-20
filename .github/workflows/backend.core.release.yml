@@ -22,15 +22,16 @@ jobs:
         name: 'Pre Release: Core'
         runs-on: ubuntu-latest
         steps:
-            -   name: Install Node.js
-                uses: actions/setup-node@v3
-                with:
-                    node-version: 19
 
             -   name: 'Checkout'
                 uses: actions/checkout@v4
                 with:
                     token: ${{ secrets.GH_CI_CD_RELEASE }}
+
+            -   name: Install Node.js
+                uses: actions/setup-node@v3
+                with:
+                    node-version: 19
 
             -   name: FontAwesome Auth
                 run: echo -e "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
@@ -40,6 +41,19 @@ jobs:
                 with:
                     version: 8
                     run_install: false
+
+            -   name: Get pnpm store directory
+                shell: bash
+                run: |
+                    echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+            -   uses: actions/cache@v3
+                name: Setup pnpm cache
+                with:
+                    path: ${{ env.STORE_PATH }}
+                    key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+                    restore-keys: |
+                        ${{ runner.os }}-pnpm-store-
 
             -   name: Install dependencies
                 run: pnpm i --shamefully-hoist
@@ -61,15 +75,16 @@ jobs:
         permissions:
             contents: write
         steps:
-            -   name: 'Install Node.js'
-                uses: actions/setup-node@v3
-                with:
-                    node-version: 19
 
             -   name: 'Checkout'
                 uses: actions/checkout@v4
                 with:
                     token: ${{ secrets.GH_CI_CD_RELEASE }}
+
+            -   name: 'Install Node.js'
+                uses: actions/setup-node@v3
+                with:
+                    node-version: 19
 
             -   name: 'FontAwesome Auth'
                 run: echo -e "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
@@ -79,6 +94,19 @@ jobs:
                 with:
                     version: 8
                     run_install: false
+
+            -   name: Get pnpm store directory
+                shell: bash
+                run: |
+                    echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+            -   uses: actions/cache@v3
+                name: Setup pnpm cache
+                with:
+                    path: ${{ env.STORE_PATH }}
+                    key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+                    restore-keys: |
+                        ${{ runner.os }}-pnpm-store-
 
             -   name: 'Install dependencies'
                 run: pnpm i --shamefully-hoist
