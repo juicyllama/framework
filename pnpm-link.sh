@@ -1,24 +1,18 @@
 ## INSTALL PACKAGES##
 
 ### COMMON ###
-
 pnpm link --global --dir common/cli
 pnpm link --global --dir common/dev
+
+cd common/utils || return && pnpm run build && cd ../..
 pnpm link --global --dir common/utils
 
-cd common/utils || return
-pnpm run build
-cd ../..
-
 ### FRONTEND ###
-
 pnpm link --global --dir frontend/vue-dev
 pnpm link --global --dir frontend/vue-utils
 
+cd frontend/quasar || return && pnpm run build && cd ../..
 pnpm link --global --dir frontend/quasar
-cd frontend/quasar || return
-pnpm run build
-cd ../..
 
 ### BACKEND ###
 pnpm link --global --dir backend/core

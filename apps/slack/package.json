@@ -27,7 +27,6 @@
     "scripts": {
         "sandbox": "nest start --config src/sandbox/nest-cli.json --watch ",
         "build": "tsc",
-        "prepare": "pnpm run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "jest --detectOpenHandles --forceExit",

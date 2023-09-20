@@ -29,7 +29,6 @@
     "types": "dist/index.d.ts",
     "scripts": {
         "build": "tsc",
-        "prepare": "pnpm run build",
         "format": "prettier --write .",
         "lint": "eslint --fix",
         "test": "jest --runInBand --detectOpenHandles --forceExit"

@@ -28,7 +28,6 @@
         "sandbox": "nest start --config src/sandbox/nest-cli.json --watch ",
         "start:ngrok": "~/ngrok http http://localhost:3000 -subdomain=juicyllama",
         "build": "tsc",
-        "prepare": "pnpm run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "jest --runInBand --detectOpenHandles --forceExit",
