@@ -1,11 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { ConfigModule, ConfigService } from '@nestjs/config'
-import { Enviroment, Logger, Api } from '@juicyllama/utils'
-import { MONGODB, mongodbConfig, Query } from '@juicyllama/core'
+import { Enviroment } from '@juicyllama/utils'
 import { NumberVerificationService } from './number.verification.service'
-import apilayerConfig from '../../config/apilayer.config'
-import { NumberVerification } from './number.verification.entity.mongo'
+import { NumberVerificationModule } from './number.verification.module'
 
 describe('Number Verification Service', () => {
 	let moduleRef: TestingModule
@@ -18,15 +14,7 @@ describe('Number Verification Service', () => {
 		}
 
 		moduleRef = await Test.createTestingModule({
-			imports: [
-				ConfigModule.forRoot({
-					isGlobal: true,
-					load: [mongodbConfig, apilayerConfig],
-				}),
-				TypeOrmModule.forRootAsync(mongodbConfig()),
-				TypeOrmModule.forFeature([NumberVerification], MONGODB),
-			],
-			providers: [NumberVerificationService, Logger, Query, Api],
+			imports: [NumberVerificationModule],
 		}).compile()
 
 		numberVerificationService = moduleRef.get<NumberVerificationService>(NumberVerificationService)

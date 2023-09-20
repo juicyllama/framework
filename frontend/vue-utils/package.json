@@ -41,25 +41,5 @@
 	},
 	"dependencies": {
 		"@juicyllama/vue-dev": "workspace:*"
-	},
-    "release-it": {
-        "hooks": {
-            "after:release": [
-                "npm run postrelease",
-                "echo ✅ Successfully released ${name} v${version} to ${npm.name}."
-            ]
-        },
-        "npm": {
-            "publish": false
-        },
-        "github": {
-            "release": false
-        },
-        "git": {
-            "commit": true,
-            "tag": true,
-            "push": true,
-            "requireCleanWorkingDir": false
-        }
-    }
+	}
 }

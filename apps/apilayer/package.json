@@ -45,8 +45,5 @@
             "./node_modules/@juicyllama/dev/dist/.eslintrc.js"
         ]
     },
-    "prettier": "./node_modules/@juicyllama/dev/dist/.prettierrc.js",
-	"jest": {
-		"preset": "./node_modules/@juicyllama/dev/dist/jest.config.js"
-	}
+    "prettier": "./node_modules/@juicyllama/dev/dist/.prettierrc.js"
 }
