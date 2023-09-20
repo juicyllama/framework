@@ -27,6 +27,7 @@
 	},
 	"dependencies": {
 		"@vuepress/plugin-container": "next",
+		"vue": "^3.3.4",
 		"vuepress": "next"
 	}
 }
