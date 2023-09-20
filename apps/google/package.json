@@ -48,7 +48,5 @@
         "@googlemaps/google-maps-services-js": {
             "axios": "^0.27.2"
         }
-    },
-
-	"prettier": "./node_modules/@juicyllama/dev/dist/.prettierrc.js"
+    }
 }

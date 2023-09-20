@@ -44,7 +44,5 @@
         "@juicyllama/core": "workspace:*",
         "@juicyllama/utils": "workspace:*",
         "@mollie/api-client": "^3.7.0"
-    },
-
-	"prettier": "./node_modules/@juicyllama/dev/dist/.prettierrc.js"
+    }
 }

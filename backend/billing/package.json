@@ -42,7 +42,5 @@
     },
 	"optionalDependencies": {
 		"@juicyllama/app-xero-cc": "workspace:*"
-	},
-
-	"prettier": "./node_modules/@juicyllama/dev/dist/.prettierrc.js"
+	}
 }

@@ -40,7 +40,5 @@
     "dependencies": {
         "@juicyllama/core": "workspace:*",
         "@juicyllama/utils": "workspace:*"
-    },
-
-	"prettier": "./node_modules/@juicyllama/dev/dist/.prettierrc.js"
+    }
 }
