@@ -15,7 +15,8 @@ on:
             - main
         paths:
             - 'backend/app-store/**'
-        workflow_dispatch:
+    workflow_dispatch:
+    workflow_call:
 
 jobs:
     pr_checks:

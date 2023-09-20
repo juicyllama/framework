@@ -14,7 +14,7 @@ on:
             - main
         paths:
             - 'frontend/vue-dev/**'
-        workflow_dispatch:
+    workflow_dispatch:
 
 jobs:
 

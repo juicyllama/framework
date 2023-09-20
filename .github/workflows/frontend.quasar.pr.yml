@@ -15,7 +15,8 @@ on:
             - main
         paths:
             - 'frontend/quasar/**'
-        workflow_dispatch:
+    workflow_dispatch:
+    workflow_call:
 
 jobs:
     pr_checks:
