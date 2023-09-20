@@ -44,10 +44,6 @@
         "@juicyllama/core": "workspace:*",
         "@juicyllama/utils": "workspace:*"
     },
-	"eslintConfig": {
-		"extends": [
-			"./node_modules/@juicyllama/dev/dist/.eslintrc.js"
-		]
-	},
+
 	"prettier": "./node_modules/@juicyllama/dev/dist/.prettierrc.js"
 }

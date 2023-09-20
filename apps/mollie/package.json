@@ -45,10 +45,6 @@
         "@juicyllama/utils": "workspace:*",
         "@mollie/api-client": "^3.7.0"
     },
-	"eslintConfig": {
-		"extends": [
-			"./node_modules/@juicyllama/dev/dist/.eslintrc.js"
-		]
-	},
+
 	"prettier": "./node_modules/@juicyllama/dev/dist/.prettierrc.js"
 }

@@ -49,10 +49,6 @@
             "axios": "^0.27.2"
         }
     },
-	"eslintConfig": {
-		"extends": [
-			"./node_modules/@juicyllama/dev/dist/.eslintrc.js"
-		]
-	},
+
 	"prettier": "./node_modules/@juicyllama/dev/dist/.prettierrc.js"
 }
