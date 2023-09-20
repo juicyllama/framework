@@ -15,7 +15,7 @@ Follow these instructions to use the Pexels wrapper in your project.
 Install the package into your project:
 
 ```bash
-npm install @juicyllama/app-pexels
+pnpm install @juicyllama/app-pexels
 ```
 
 ### Environment Variables
