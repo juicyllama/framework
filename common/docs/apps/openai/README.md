@@ -15,7 +15,7 @@ Follow these instructions to use the OpenAi wrapper in your project.
 Install the package into your project:
 
 ```bash
-npm install @juicyllama/app-openai
+pnpm install @juicyllama/app-openai
 ```
 
 ### Environment Variables
