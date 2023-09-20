@@ -25,7 +25,7 @@
 		"docs:dev": "vuepress dev",
 		"docs:build": "vuepress build"
 	},
-	"devDependencies": {
+	"dependencies": {
 		"@vuepress/plugin-container": "next",
 		"vuepress": "next"
 	}
