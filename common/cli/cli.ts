@@ -22,7 +22,6 @@ function getMainArgs() {
 }
 
 async function runScript(script: Script) {
-	cli_log(`Running script ${script}`)
 	switch (script) {
 		case Script.install:
 			await install()
@@ -47,7 +46,7 @@ async function run() {
 			message: 'Select a script to run',
 			separator: sep,
 		})
-			.then(async (keys) => {
+			.then(async keys => {
 				await runScript(keys[0])
 			})
 			.catch(() => {

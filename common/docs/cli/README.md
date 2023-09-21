@@ -20,22 +20,34 @@ Follow these instructions to install the CLI globally on your machine.
 
 Before you install please make sure you have [Brew](https://docs.brew.sh/Installation) installed on your machine.
 
+Ideally you should also install the framework first, please do so now. You can find the instructions [here](/#Installation).
+
 ### Prerequisites
 
-Using [Brew](https://docs.brew.sh/Installation) install following packages:
+Install following packages:
 
-- jq: `brew install jq`
-- doppler: `brew install dopplerhq/cli/doppler`, more here: [doppler docs](https://docs.doppler.com/docs/install-cli)
-- pnpm: `npm install pnpm -g`
+```bash
+brew install jq
+npm install pnpm -g
+pnpm install npx -g
+```
 
-If you have not downloaded the framework yet, please do so now. You can find the instructions [here](/#Installation).
+Optional dependencies:
+
+```bash
+brew install dopplerhq/cli/doppler
+```
+
+#### Additional Reading
+
+- [Doppler docs](https://docs.doppler.com/docs/install-cli)
 
 ### Clients
 
 To install client projects pull the repo down locally and run the following command:
 
 ```bash
-pnpm run link
-pnpm install --shamefully-hoist
 npx jl install
 ```
+
+If this fails, you may not have the framework fully installed and linked. Please follow the [installation instructions](/#Installation) and try again.

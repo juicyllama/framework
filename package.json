@@ -28,10 +28,5 @@
         "link": "sh ./pnpm-link.sh",
         "start:docker:build": "docker-compose --project-name juicyllama up --build --detach"
     },
-	"pre-commit": ["format", "lint", "test"],
-	"eslintConfig": {
-		"extends": [
-			"./node_modules/@juicyllama/dev/dist/.eslintrc.js"
-		]
-	}
+	"pre-commit": ["format", "lint", "test"]
 }
