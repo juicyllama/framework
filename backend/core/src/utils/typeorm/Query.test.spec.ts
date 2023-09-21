@@ -208,6 +208,41 @@ describe('TypeORM query', () => {
 			expect(result[0].account_name).toEqual(scaffold.values.account.account_name)
 		})
 
+		it('Perform a find with buildWhere account_id and two search fields', async () => {
+			const where = scaffold.query.buildWhere({
+				repository: scaffold.repository,
+				account_id: scaffold.values.account.account_id,
+				query: {
+					search: scaffold.values.account.account_name,
+				},
+				search_fields: ['company_name', 'account_name'],
+			})
+
+			const result = await scaffold.query.findAll(scaffold.repository, { where: where })
+			expect(result).toBeDefined()
+			expect(result[0]).toBeDefined()
+			expect(result[0].account_id).toBeDefined()
+			expect(result[0].account_name).toEqual(scaffold.values.account.account_name)
+		})
+
+
+		it('Perform a find with buildWhere account_id and two search fields using partial query', async () => {
+			const where = scaffold.query.buildWhere({
+				repository: scaffold.repository,
+				account_id: scaffold.values.account.account_id,
+				query: {
+					search: scaffold.values.account.account_name.substring(1, 4),
+				},
+				search_fields: ['company_name', 'account_name'],
+			})
+
+			const result = await scaffold.query.findAll(scaffold.repository, { where: where })
+			expect(result).toBeDefined()
+			expect(result[0]).toBeDefined()
+			expect(result[0].account_id).toBeDefined()
+			expect(result[0].account_name).toEqual(scaffold.values.account.account_name)
+		})
+
 		it('Perform a find with buildWhere account_id and scaffold.query value is false', async () => {
 			await scaffold.query.update(scaffold.repository, {
 				account_id: scaffold.values.account.account_id,

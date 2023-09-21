@@ -128,6 +128,7 @@ describe(`${NAME} Charts Endpoint`, () => {
 				period: ChartsPeriod.DAY,
 				search: 'Test',
 			})
+
 			await userService.purge(u1)
 			expect(result['datasets'].length).toEqual(1)
 			expect(result['datasets'][0]['data']).toEqual([

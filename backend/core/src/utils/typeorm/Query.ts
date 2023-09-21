@@ -15,13 +15,14 @@ import {
 	Not,
 	Repository,
 } from 'typeorm'
-import { TypeOrm } from './TypeOrm'
-import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere'
-import { castArray, isNil, omitBy } from 'lodash'
-import { ComparisonOperator, Enums, Env, getMySQLTimeInterval, Logger } from '@juicyllama/utils'
-import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder'
-import { ChartOptions } from './types'
-import { ResultSetHeader } from 'mysql2'
+import _ from 'lodash'
+import {TypeOrm} from './TypeOrm'
+import {FindOptionsWhere} from 'typeorm/find-options/FindOptionsWhere'
+import {isNil, omitBy} from 'lodash'
+import {ComparisonOperator, Enums, Env, getMySQLTimeInterval, Logger} from '@juicyllama/utils'
+import {SelectQueryBuilder} from 'typeorm/query-builder/SelectQueryBuilder'
+import {ChartOptions} from './types'
+import {ResultSetHeader} from 'mysql2'
 
 const logger = new Logger()
 
@@ -355,35 +356,15 @@ export class Query<T> {
 		account_ids?: number[]
 		search_fields?: string[]
 	}): FindOptionsWhere<T>[] | FindOptionsWhere<T> {
+		const where = []
+
 		const whereBase = {}
 
-		if (isNil(options.query?.search) || options.query?.search === 'undefined') {
-			delete options.query.search
-		}
-
-		if (isNil(options.query?.relations) || options.query?.relations === 'undefined') {
-			delete options.query.relations
-		}
-
-		if (isNil(options.query?.select) || options.query?.select === 'undefined') {
-			delete options.query.select
-		}
-
-		//ensure primary key and created_at are always included
-		if (options.query.select) {
-			if (!options.query.select.includes('created_at')) {
-				options.query.select += ',created_at'
-			}
-			if (!options.query.select.includes(this.getPrimaryKey(options.repository))) {
-				options.query.select += ',' + this.getPrimaryKey(options.repository)
-			}
-		}
-
-		if (options.query.length) {
+		if (options.query) {
 			for (const [key, value] of Object.entries(options.query)) {
 				if (options.repository.metadata.columns.find(column => column.propertyName === key)) {
 					// @ts-ignore
-					const fieldLookupWhere: FindOperator<string>[] = castArray(value) // value may be a string or an array of strings
+					const fieldLookupWhere: FindOperator<string>[] = _.castArray(value) // value may be a string or an array of strings
 						.reduce((memo: FindOperator<string>[], currentValue: string) => {
 							if (typeof currentValue !== 'string') return memo
 							// checking if value is of the form "operator:value"
@@ -407,8 +388,8 @@ export class Query<T> {
 						fieldLookupWhere.length === 1
 							? fieldLookupWhere[0]
 							: fieldLookupWhere.length > 0
-							? And(...fieldLookupWhere)
-							: value // if no valid operator is found, return the value as is - backward compatibility
+								? And(...fieldLookupWhere)
+								: value // if no valid operator is found, return the value as is - backward compatibility
 				}
 			}
 		}
@@ -433,14 +414,26 @@ export class Query<T> {
 			}
 		}
 
-		if (options.query?.search && options.search_fields) {
-			for (const search in options.search_fields) {
-				// behind the scenes typeORM converts the different array members to OR clauses, and ObjectLiterals to AND clauses
-				whereBase[options.search_fields[search]] = Like(`%${options.query.search}%`)
-			}
+		if (options.query?.search?.length === 1 && options.query?.search[0] === 'undefined') {
+			delete options.query.search
 		}
 
-		return whereBase
+		if (!options.query?.search || !options.search_fields) {
+			return whereBase
+		}
+
+		if (options.query?.relations?.length === 1 && options.query?.relations[0] === 'undefined') {
+			delete options.query.relations
+		}
+
+		for (const search in options.search_fields) {
+			// behind the scenes typeORM converts the different array members to OR clauses, and ObjectLiterals to AND clauses
+			where.push({
+				...whereBase,
+				[options.search_fields[search]]: Like(`%${options.query.search}%`),
+			})
+		}
+		return where
 	}
 
 	findOneOptions(
