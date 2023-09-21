@@ -2,6 +2,7 @@
 
 ::: danger
 Documentation Todo:
+- Widgets (@shershen08)
 - Components (Use API as template)
 - Helpers (Use Table as template)
 - Plugin > Pusher
@@ -10,7 +11,7 @@ Documentation Todo:
   :::
 
 ::: tip
-Our frontend framework is built on top of [Quasar](https://quasar.dev) and [Vue](https://vuejs.org) frameworks, in addition to [TailwindCSS](https://tailwindcss.com) for styling. If you are not familiar with Vue, Quasar or Tailwind CSS, we recommend you read their documentation first.
+Our frontend framework is built on top of [Quasar](https://quasar.dev) and [Vue](https://vuejs.org) frameworks. If you are not familiar with Vue or Quasar, we recommend you read their documentation first.
 :::
 
 ## Installation
