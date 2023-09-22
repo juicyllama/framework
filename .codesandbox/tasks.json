@@ -1,20 +1,14 @@
 {
-    "setupTasks": [
-        {
-            "name": "Install Dependencies",
-            "command": "pnpm install"
-        }
-    ],
+    "$schema": "https://codesandbox.io/schemas/tasks.json",
+    "setupTasks": [],
     "tasks": {
         "FontAwesome Auth": {
-            "name": "install",
-            "command": "echo -e \"@fortawesome:registry=https://npm.fontawesome.com/\\n//npm.fontawesome.com/:_authToken=${{ FONTAWESOME_AUTH_TOKEN }}\" > .npmrc",
-            "runAtStart": true
+            "name": "FontAwesome",
+            "command": "echo -e \"@fortawesome:registry=https://npm.fontawesome.com/\\n//npm.fontawesome.com/:_authToken=$FONTAWESOME_AUTH_TOKEN\" > .npmrc"
         },
         "install:framework": {
             "name": "install:framework",
-            "command": "pnpm install:framework",
-            "runAtStart": true
+            "command": "pnpm install:framework"
         }
     }
 }
