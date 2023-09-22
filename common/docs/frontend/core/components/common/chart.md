@@ -22,7 +22,7 @@ Based on [chartjs](https://www.chartjs.org/) library.
 
 ```vue
 <script lang="ts" setup>
-import { JLChart } from '@juicyllama/quasar'
+import { JLChart } from '@juicyllama/frontend-core'
 
 const staticData = reactive({
 labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],

@@ -9,7 +9,7 @@ title: Common
 The find options for API lookups.
 
 ```typescript
-import type { FindOptions } from '@juicyllama/quasar'
+import type { FindOptions } from '@juicyllama/frontend-core'
 ```
 
 | Property | Type       | Description                |
@@ -29,7 +29,7 @@ import type { FindOptions } from '@juicyllama/quasar'
 The custom button object.
 
 ```typescript
-import type { CustomButton } from '@juicyllama/quasar'
+import type { CustomButton } from '@juicyllama/frontend-core'
 ```
 
 | Property | Type       | Description                                                                                                                                                                                      |
@@ -46,7 +46,7 @@ import type { CustomButton } from '@juicyllama/quasar'
 Sets the default icon settings for the application.
 
 ```typescript
-import type { IconSettings } from '@juicyllama/quasar'
+import type { IconSettings } from '@juicyllama/frontend-core'
 ```
 
 | Property | Type       | Description                                          |

@@ -6,14 +6,14 @@
 # * Release to NPM
 #
 
-name: 'Release Package: Quasar'
+name: 'Release Package: Frontend Core'
 
 on:
     push:
         branches:
             - main
         paths:
-            - 'frontend/quasar/**'
+            - 'frontend/core/**'
     workflow_dispatch:
 
 concurrency:
@@ -26,7 +26,7 @@ jobs:
         secrets: inherit
 
     release:
-        name: 'Release Package: Quasar'
+        name: 'Release Package: Frontend Core'
         runs-on: ubuntu-latest
         needs:
             - pr_checks
@@ -73,16 +73,16 @@ jobs:
                 uses: phips28/gh-action-bump-version@master
                 env:
                     GITHUB_TOKEN: ${{ secrets.GH_CI_CD_RELEASE }}
-                    PACKAGEJSON_DIR: frontend/quasar
+                    PACKAGEJSON_DIR: frontend/core
                 with:
                     major-wording: 'JLMAJOR'
                     minor-wording: 'feature,feat'
                     patch-wording: 'patch,fixes,fix,misc,docs,refactor'    # Providing patch-wording will override commits
-                    commit-message: 'Release Package: Quasar Bump Version [skip ci]'
+                    commit-message: 'Release Package: Frontend Core Bump Version [skip ci]'
                     skip-tag: true
 
             -   name: 'Authenticate with NPM'
                 run: echo -e "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
             -   name: 'Publishing package'
-                run: cd frontend/quasar && pnpm publish --no-git-checks --access public
+                run: cd frontend/core && pnpm publish --no-git-checks --access public

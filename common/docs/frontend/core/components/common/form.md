@@ -40,8 +40,8 @@ These are [Tailwind CSS](https://tailwindcss.com/docs/reusing-styles#extracting-
 
 ```vue
 <script setup lang='ts'>
-    import { JLForm } from '@juicyllama/quasar'
-    import type { FormField, FormFieldButtonType, FormFieldField, FormFieldType, FormSettings } from '@juicyllama/quasar'
+    import { JLForm } from '@juicyllama/frontend-core'
+    import type { FormField, FormFieldButtonType, FormFieldField, FormFieldType, FormSettings } from '@juicyllama/frontend-core'
 
     const form: FormField[] = reactive([])
 

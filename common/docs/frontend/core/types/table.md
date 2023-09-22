@@ -7,14 +7,14 @@ title: Table
 This component renders a table schema, it is used by the [JLTable](/frontend/quasar/components/common/table.html) component to render the table.
 
 ```typescript
-import type { TableSchema } from '@juicyllama/quasar'
+import type { TableSchema } from '@juicyllama/frontend-core'
 ```
 
 | Property | Type     | Description                                                    |
 |---------|----------|----------------------------------------------------------------|
 | `name`  | `string` | The name of the table                                          |
 | `schema` | `array`  | The array of [TableColumn](#tablecolumn)                       |
-| `title` | `[string]` | The title of the table                                         | 
+| `title` | `[string]` | The title of the table                                         |
 | `event` | `[string]` | The event pusher should listen for                             |
 |`endpoint` | `[string]` | The endpoint to fetch the data from                            |
 | `icon` | `[object]` | The [IconSettings](/frontend/quasar/types/common.html#icon-settings) to use for the table |
@@ -28,7 +28,7 @@ import type { TableSchema } from '@juicyllama/quasar'
 This is the schema for each table column you want to render.
 
 ```typescript
-import type { TableColumn } from '@juicyllama/quasar'
+import type { TableColumn } from '@juicyllama/frontend-core'
 ```
 
 | Property | Type    | Description                                                      |

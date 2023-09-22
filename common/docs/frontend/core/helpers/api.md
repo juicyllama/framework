@@ -5,7 +5,7 @@ The api helper makes it easy to perform API calls to the backend framework.
 ## Usage
 
 ```typescript
-import { Api } from '@juicyllama/quasar'
+import { Api } from '@juicyllama/frontend-core'
 
 const api = new Api<T>()
 ```
@@ -17,10 +17,10 @@ const api = new Api<T>()
 Create a record via the API endpoint.
 
 ```typescript
-import { Api, User } from '@juicyllama/quasar'
+import { Api, User } from '@juicyllama/frontend-core'
 
 const api = new Api<User>()
-const user = await api.create({ 
+const user = await api.create({
     url: '/users',
     data: {
 		name: 'John Doe',

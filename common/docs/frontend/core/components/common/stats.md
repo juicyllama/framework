@@ -25,7 +25,7 @@ For `value` and `delta` data consists of following fields:
 
 ```vue
 <script lang="ts" setup>
-import { JLStats } from '@juicyllama/quasar'
+import { JLStats } from '@juicyllama/frontend-core'
 
 const inputStatic = ref({
     title: 'Website visitor using mobile',

@@ -53,8 +53,8 @@ The following classes are available for styling:
 
 ```vue
 <script setup lang='ts'>
-    import { JLTable } from '@juicyllama/quasar'
-    import type { TableSchema, TableColumn } from '@juicyllama/quasar'
+    import { JLTable } from '@juicyllama/frontend-core'
+    import type { TableSchema, TableColumn } from '@juicyllama/frontend-core'
 
     const options = {
         title: 'Users',

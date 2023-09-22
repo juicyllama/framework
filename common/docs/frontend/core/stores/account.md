@@ -1,7 +1,7 @@
 # Account
 
 ```typescript
-import { accountStore } from '@juicyllama/quasar'
+import { accountStore } from '@juicyllama/frontend-core'
 ```
 
 ## State

@@ -14,7 +14,7 @@ If you wish to use SSO buttons checkout our [backend setup instructions](/backen
 
 ```vue
 <script lang="ts" setup>
-import { JLLogin } from '@juicyllama/quasar'
+import { JLLogin } from '@juicyllama/frontend-core'
 
 const google = Boolean(import.meta.env.VITE_SSO_GOOGLE)
 const facebook = Boolean(import.meta.env.VITE_SSO_FACEBOOK)
@@ -22,12 +22,12 @@ const linkedin = Boolean(import.meta.env.VITE_SSO_LINKEDIN)
 
 </script>
 <template>
-    <JLLogin 
-        :google='google' 
-        :facebook='facebook' 
-        :linkedin='linkedin' 
-        :dense="true" 
-        :lazy_rules='true' 
+    <JLLogin
+        :google='google'
+        :facebook='facebook'
+        :linkedin='linkedin'
+        :dense="true"
+        :lazy_rules='true'
         class="q-mt-md"
     > </JLLogin>
 </template>
@@ -41,7 +41,7 @@ Out of the box, the login form will render the following SSO buttons in the `act
 ```vue
 
 <script lang="ts" setup>
-import { JLLogin, googleLogin } from '@juicyllama/quasar'
+import { JLLogin, googleLogin } from '@juicyllama/frontend-core'
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 </script>
 
@@ -59,7 +59,7 @@ const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
                     <span v-else>LOGIN</span>
                   </q-btn>
                   </div>
-                    
+
                       <div class="auth-button">
                           <q-btn
                               color='white'

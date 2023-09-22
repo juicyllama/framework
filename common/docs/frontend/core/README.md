@@ -24,10 +24,10 @@ JL install
 
 Follow the prompts to install the framework and any modules you need.
 
-Alternatively you can install the modules individually via [NPM](https://www.npmjs.com/package/@juicyllama/quasar):
+Alternatively you can install the modules individually via [NPM](https://www.npmjs.com/package/@juicyllama/frontend-core):
 
 ```bash
-npm install @juicyllama/quasar
+npm install @juicyllama/frontend-core
 ```
 
 ## Styling
