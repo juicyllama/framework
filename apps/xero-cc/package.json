@@ -25,9 +25,10 @@
     ],
     "types": "dist/index.d.ts",
     "scripts": {
-        "install:force": "npm install --force",
-        "start:dev": "tsc -w",
+        "prebuild": "rimraf dist",
+        "prepare": "pnpm run build",
         "build": "tsc",
+        "start:dev": "tsc -w",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "jest --runInBand --detectOpenHandles --forceExit",

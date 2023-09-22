@@ -25,9 +25,11 @@
     ],
     "types": "dist/index.d.ts",
     "scripts": {
+        "prebuild": "rimraf dist",
+        "prepare": "pnpm run build",
+        "build": "tsc",
         "sandbox": "nest start --config src/sandbox/nest-cli.json --watch ",
         "start:dev": "tsc -w",
-        "build": "tsc",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "jest",

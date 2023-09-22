@@ -25,7 +25,8 @@
     ],
     "types": "dist/index.d.ts",
     "scripts": {
-		"prebuild": "rimraf dist",
+        "prebuild": "rimraf dist",
+        "prepare": "pnpm run build",
         "build": "tsc",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
