@@ -40,11 +40,5 @@
 		"@juicyllama/utils": "workspace:*",
 		"@juicyllama/vue-utils": "workspace:*",
 		"@juicyllama/vue-dev": "workspace:*"
-	},
-	"eslintConfig": {
-		"extends": [
-			"./node_modules/@juicyllama/vue-dev/.eslintrc.js"
-		]
-	},
-	"prettier": "./node_modules/@juicyllama/vue-dev/.prettierrc.js"
+	}
 }
