@@ -19,12 +19,6 @@
     "license": "0BSD",
     "readmeFilename": "README.md",
     "main": "dist/index.js",
-    "files": [
-        "dist/**/*",
-        "*.md",
-        "*.js",
-        "index.ts"
-    ],
     "types": "index.d.ts",
     "scripts": {
         "build": "tsc"

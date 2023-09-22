@@ -22,7 +22,7 @@ concurrency:
 jobs:
 
     pr_checks:
-        uses: juicyllama/framework/.github/workflows/frontend.quasar.pr.yml@main
+        uses: juicyllama/framework/.github/workflows/frontend.core.pr.yml@main
         secrets: inherit
 
     release:

@@ -31,10 +31,7 @@
 		"typecheck": "vue-tsc --noEmit",
 		"format": "prettier --write \"src/**/*.ts\"",
 		"lint": "eslint \"**/*.{js,ts,vue}\" --quiet --fix",
-		"test": "vitest --silent --run",
-		"format-test": "prettier --write \"test/**/*.ts\"",
-		"lint-test": "eslint \"./test/**/*.{js,ts,vue}\" --quiet --fix",
-		"coverage": "vitest run --coverage"
+		"test": "vitest --silent --run"
 	},
 	"dependencies": {
 		"@juicyllama/utils": "workspace:*",
