@@ -16,8 +16,6 @@ on:
             - 'common/utils/**'
     workflow_dispatch:
 
-concurrency:
-    group: ${{ github.ref }}
 
 jobs:
 

@@ -16,8 +16,6 @@ on:
             - 'backend/app-store/**'
     workflow_dispatch:
 
-concurrency:
-    group: ${{ github.ref }}
 
 jobs:
 

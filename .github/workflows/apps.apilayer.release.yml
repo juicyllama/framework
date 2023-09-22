@@ -16,8 +16,6 @@ on:
             - 'apps/apilayer/**'
     workflow_dispatch:
 
-concurrency:
-    group: ${{ github.ref }}
 
 jobs:
 

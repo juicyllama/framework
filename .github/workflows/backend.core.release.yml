@@ -16,8 +16,6 @@ on:
             - 'backend/core/**'
     workflow_dispatch:
 
-concurrency:
-    group: ${{ github.ref }}
 
 jobs:
 

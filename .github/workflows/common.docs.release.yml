@@ -16,8 +16,6 @@ on:
             - 'common/docs/**'
     workflow_dispatch:
 
-concurrency:
-    group: ${{ github.ref }}
 
 jobs:
 
