@@ -3,6 +3,5 @@
     <img src="https://juicyllama.com/assets/images/icon.png" width="100" alt="JuicyLlama Logo" />
   </a>
 
-Visit the [JuicyLlama NestJs ApiLayer App](https://docs.juicyllama.com/apps/apilayer) page for this module to learn more
-information.
+Visit the [JuicyLlama NestJs ApiLayer App](https://docs.juicyllama.com/apps/apilayer) to learn more.
 </div>

@@ -21,7 +21,8 @@ concurrency:
 
 jobs:
 
-    wait_your_turn:
+    # Due to the way GitHub Actions works and the fact that we bump into the same repo, we need to add a turnstyle to ensure the workflows run asynchronously.
+    turnstyle:
         runs-on: ubuntu-latest
         steps:
             - name: Turnstyle
@@ -33,7 +34,7 @@ jobs:
         uses: juicyllama/framework/.github/workflows/apps.apilayer.pr.yml@main
         secrets: inherit
         needs:
-            - wait_your_turn
+            - turnstyle
 
     release:
         name: 'Release Package: ApiLayer'
@@ -47,6 +48,8 @@ jobs:
                 uses: actions/checkout@v4
                 with:
                     token: ${{ secrets.GH_CI_CD_RELEASE }}
+
+            -   run: git pull
 
             -   name: 'Install Node.js'
                 uses: actions/setup-node@v3
