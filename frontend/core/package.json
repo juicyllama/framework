@@ -16,7 +16,6 @@
 	},
 	"bugs": "https://github.com/juicyllama/framework",
 	"license": "0BSD",
-	"readmeFilename": "README.md",
 	"main": "dist/JLCore.umd.js",
 	"module": "dist/JLCore.es.js",
 	"types": "dist/types/index.d.ts",
