@@ -5,6 +5,7 @@ pnpm link --global --dir common/cli
 pnpm link --global --dir common/dev
 
 ### FRONTEND ###
+pnpm link --global --dir frontend/core
 pnpm link --global --dir frontend/vue-dev
 pnpm link --global --dir frontend/vue-utils
 
