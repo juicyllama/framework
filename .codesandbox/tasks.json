@@ -2,13 +2,15 @@
     "$schema": "https://codesandbox.io/schemas/tasks.json",
     "setupTasks": [],
     "tasks": {
-        "FontAwesome Auth": {
+        "FontAwesome": {
             "name": "FontAwesome",
-            "command": "echo -e \"@fortawesome:registry=https://npm.fontawesome.com/\\n//npm.fontawesome.com/:_authToken=$FONTAWESOME_AUTH_TOKEN\" > .npmrc"
+            "command": "echo -e \"@fortawesome:registry=https://npm.fontawesome.com/\\n//npm.fontawesome.com/:_authToken=$FONTAWESOME_AUTH_TOKEN\" > $pwd/.npmrc",
+            "runOn": "setup"
         },
         "install:framework": {
             "name": "install:framework",
-            "command": "pnpm install:framework"
+            "command": "pnpm install:framework",
+            "runOn": "setup"
         }
     }
 }
