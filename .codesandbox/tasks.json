@@ -4,7 +4,7 @@
     "tasks": {
         "prepare": {
             "name": "prepare",
-            "command": "echo -e \"auto-install-peers=true\\nshamefully-hoist\\n@fortawesome:registry=https://npm.fontawesome.com/\\n//npm.fontawesome.com/:_authToken=$FONTAWESOME_AUTH_TOKEN\" > $pwd/.npmrc",
+            "command": "echo -e \"auto-install-peers=true\\nshamefully-hoist\\n@fortawesome:registry=https://npm.fontawesome.com/\\n//npm.fontawesome.com/:_authToken=$FONTAWESOME_AUTH_TOKEN\" > .npmrc",
             "runOn": "setup"
         },
         "install:framework": {
