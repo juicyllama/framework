@@ -1,0 +1,29 @@
+{
+    "setupTasks": [
+        {
+            "name": "Install Dependencies",
+            "command": "pnpm install"
+        }
+    ],
+    "tasks": {
+        "FontAwesome Auth": {
+            "name": "install",
+            "command": "echo -e \"@fortawesome:registry=https://npm.fontawesome.com/\\n//npm.fontawesome.com/:_authToken=${{ FONTAWESOME_AUTH_TOKEN }}\" > .npmrc"
+        },
+        "install:framework": {
+            "name": "install:framework",
+            "command": "pnpm install:framework",
+            "runAtStart": false
+        },
+        "link": {
+            "name": "link",
+            "command": "pnpm link",
+            "runAtStart": false
+        },
+        "start:docker:build": {
+            "name": "start:docker:build",
+            "command": "pnpm start:docker:build",
+            "runAtStart": false
+        }
+    }
+}
