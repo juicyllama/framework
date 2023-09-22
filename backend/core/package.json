@@ -101,6 +101,5 @@
         "@faker-js/faker": "^8.0.2",
         "@juicyllama/dev": "workspace:*",
         "jest": "^29.6.4"
-    },
-    "prettier": "./node_modules/@juicyllama/dev/dist/.prettierrc.js"
+    }
 }
