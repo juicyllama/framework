@@ -23,7 +23,7 @@
         "vue"
     ],
     "scripts": {
-        "install:framework": "pnpm install --shamefully-hoist && pnpm run link",
+        "install:framework": "pnpm install --shamefully-hoist -r && pnpm run link",
         "link": "sh ./pnpm-link.sh",
         "start:docker:build": "docker-compose --project-name juicyllama up --build --detach"
     },
