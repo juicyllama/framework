@@ -16,6 +16,10 @@ on:
             - 'frontend/quasar/**'
     workflow_dispatch:
 
+concurrency:
+    group: ${{ github.ref }}
+    cancel-in-progress: true
+
 jobs:
 
     pr_checks:

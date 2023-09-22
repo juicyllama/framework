@@ -16,6 +16,10 @@ on:
             - 'frontend/vue-dev/**'
     workflow_dispatch:
 
+concurrency:
+    group: ${{ github.ref }}
+    cancel-in-progress: true
+
 jobs:
 
     release:

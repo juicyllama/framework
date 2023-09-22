@@ -16,6 +16,10 @@ on:
             - 'backend/app-store/**'
     workflow_dispatch:
 
+concurrency:
+    group: ${{ github.ref }}
+    cancel-in-progress: true
+
 jobs:
 
     pr_checks:
