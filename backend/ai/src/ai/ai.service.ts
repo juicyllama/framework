@@ -6,7 +6,7 @@ import { Ai } from './ai.entity'
 import { DeepPartial, Repository } from 'typeorm'
 import { AppIntegrationName, Query } from '@juicyllama/core'
 import { AiSuccessType } from './ai.enums'
-import { AiChatRequest, AiImageRequest, AiSQLRequest } from '@/ai/ai.dto'
+import { AiChatRequest, AiImageRequest, AiSQLRequest } from './ai.dto'
 
 @Injectable()
 export class AiService {

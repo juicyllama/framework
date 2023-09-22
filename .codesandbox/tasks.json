@@ -9,7 +9,7 @@
         },
         "install": {
             "name": "install",
-            "command": "pnpm install --shamefully-hoist -r",
+            "command": "pnpm i",
             "runOn": "setup"
         }
     }
