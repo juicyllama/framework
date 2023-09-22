@@ -21,9 +21,19 @@ concurrency:
 
 jobs:
 
+    wait_your_turn:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Turnstyle
+              uses: rpadaki/turnstyle@v1
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     pr_checks:
         uses: juicyllama/framework/.github/workflows/apps.apilayer.pr.yml@main
         secrets: inherit
+        needs:
+            - wait_your_turn
 
     release:
         name: 'Release Package: ApiLayer'
