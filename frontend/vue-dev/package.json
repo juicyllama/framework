@@ -1,7 +1,7 @@
 {
     "name": "@juicyllama/vue-dev",
     "version": "0.0.41",
-    "description": "Juicyllama Framework Vue Development Dependencies",
+    "description": "Vue Development Dependencies",
     "author": {
         "name": "JuicyLlama Studio",
         "email": "studio@juicyllama.com",

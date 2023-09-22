@@ -27,10 +27,10 @@ export default defineConfig({
 			// Set the entry point (file that contains our components exported).
 			entry: resolve(__dirname, 'src/index.ts'),
 			// Name of the library.
-			name: 'JLQuasar',
+			name: 'JLCore',
 			// We are building for CJS and ESM, use a function to rename automatically files.
 			// Example: my-components-library.esm.js
-			fileName: format => `${'JLQuasar'}.${format}.js`,
+			fileName: format => `${'JLCore'}.${format}.js`,
 		},
 		rollupOptions: {
 			external: [

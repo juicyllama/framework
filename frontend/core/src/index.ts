@@ -3,7 +3,7 @@ import { AccountStore } from './store/account'
 import { token } from './store/token'
 import { UserStore } from './store/user'
 import instance from './services/index'
-import classes from './assets/JLQuasar.css'
+import classes from './assets/JLCore.css'
 import { ThemeStore } from './store/theme'
 import { JLForm, JLTable, JLMenu, JLChart, JLStats, JLLogin, JLDropdownButtonMenu } from '@/components'
 import { JLAccountProfile, JLAccountAvatar, JLAccountSwitcher, JLAccountBrand } from '@/components/core/account'
@@ -15,7 +15,7 @@ let userStore
 let accountStore
 let themeStore
 
-const JLQuasar = {
+const JLCore = {
 	install(app: App, options: any) {
 		const { $pinia } = options
 
@@ -49,7 +49,7 @@ export default {
 	},
 } as Plugin
 
-export { JLQuasar, classes }
+export { JLCore, classes }
 export { token }
 export { userStore, accountStore, themeStore }
 export * from './components'
