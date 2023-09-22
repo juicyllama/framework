@@ -19,20 +19,9 @@ on:
 
 jobs:
 
-    # Due to the way GitHub Actions works and the fact that we bump into the same repo, we need to add a turnstyle to ensure the workflows run asynchronously.
-    turnstyle:
-        runs-on: ubuntu-latest
-        steps:
-            -   name: Turnstyle
-                uses: rpadaki/turnstyle@v1
-                env:
-                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     pr_checks:
         uses: juicyllama/framework/.github/workflows/backend.app.store.pr.yml@main
         secrets: inherit
-        needs:
-            - turnstyle
 
     release:
         name: 'Release Package: App Store'
@@ -47,8 +36,6 @@ jobs:
                 uses: actions/checkout@v4
                 with:
                     token: ${{ secrets.GH_CI_CD_RELEASE }}
-
-            -   run: git pull
 
             -   name: 'Install Node.js'
                 uses: actions/setup-node@v3
@@ -79,6 +66,8 @@ jobs:
 
             -   name: 'Install dependencies'
                 run: pnpm i --shamefully-hoist
+
+            -   run: git pull
 
             -   name: 'Version Bump'
                 uses: phips28/gh-action-bump-version@master
