@@ -4,5 +4,4 @@
   </a>
 
 Visit the [JuicyLlama Frontend Core](https://docs.juicyllama.com/frontend/core) page for full documentation on this package.
-
 </div>
