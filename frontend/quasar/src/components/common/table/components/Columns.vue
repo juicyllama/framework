@@ -28,7 +28,7 @@ const openColumnsFilter: Ref<boolean> = ref(false)
 			<div v-for="col in props.tableSchema.schema" :key="col.field">
 				<q-item v-bind="col" v-if="col.field !== 'action'">
 					<q-item-section>
-						<q-item-label v-html="col.label" />
+						<q-item-label>{{ col.label }}</q-item-label>
 					</q-item-section>
 					<q-item-section side>
 						<q-toggle

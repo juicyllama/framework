@@ -1,5 +1,5 @@
 <template>
-    ... to be implemented...
+	<span>... to be implemented...</span>
 </template>
 <script lang="ts">
 // plugin for drawing Gauges
