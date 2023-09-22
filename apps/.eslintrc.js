@@ -9,4 +9,8 @@ module.exports = {
 		node: true,
 		jest: true,
 	},
+	plugins: [...require('../.eslintrc.js').plugins],
+	rules: {
+		...require('../.eslintrc.js').rules,
+	},
 }
