@@ -35,7 +35,7 @@ jobs:
                     node-version: 'latest'
 
             -   name: Prepare
-                run: echo -e "auto-install-peers=true\\nshamefully-hoist=true\\n@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
+                run: echo -e "shamefully-hoist=true\\n@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
 
             -   name: Install pnpm
                 uses: pnpm/action-setup@v2
@@ -57,7 +57,7 @@ jobs:
                         ${{ runner.os }}-pnpm-store-
 
             -   name: Install dependencies
-                run: pnpm i
+                run: pnpm i -r
 
             -   name: Lint
                 run: cd common/utils && pnpm run && pnpm run lint
