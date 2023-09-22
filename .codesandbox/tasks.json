@@ -2,9 +2,9 @@
     "$schema": "https://codesandbox.io/schemas/tasks.json",
     "setupTasks": [],
     "tasks": {
-        "FontAwesome": {
-            "name": "FontAwesome",
-            "command": "echo -e \"@fortawesome:registry=https://npm.fontawesome.com/\\n//npm.fontawesome.com/:_authToken=$FONTAWESOME_AUTH_TOKEN\" > $pwd/.npmrc",
+        "prepare": {
+            "name": "prepare",
+            "command": "echo -e \"auto-install-peers=true\\nshamefully-hoist\\n@fortawesome:registry=https://npm.fontawesome.com/\\n//npm.fontawesome.com/:_authToken=$FONTAWESOME_AUTH_TOKEN\" > $pwd/.npmrc",
             "runOn": "setup"
         },
         "install:framework": {
