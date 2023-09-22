@@ -1,16 +1,16 @@
 {
     "name": "@juicyllama/app-store",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Juicyllama App Store Module",
     "author": {
         "name": "JuicyLlama Studio",
         "email": "studio@juicyllama.com",
         "url": "https://juicyllama.com"
     },
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org/"
-	},
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/juicyllama/framework/backend/app-store"
@@ -42,7 +42,7 @@
         "@juicyllama/core": "workspace:*",
         "@juicyllama/utils": "workspace:*"
     },
-	"optionalDependencies": {
-		"@juicyllama/app-wordpress": "workspace:*"
-	}
+    "optionalDependencies": {
+        "@juicyllama/app-wordpress": "workspace:*"
+    }
 }
