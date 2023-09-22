@@ -25,6 +25,7 @@
     ],
     "types": "dist/index.d.ts",
     "scripts": {
+        "prepare": "pnpm run build",
         "start:dev": "tsc -w",
         "build": "tsc",
         "format": "prettier --write \"src/**/*.ts\"",
