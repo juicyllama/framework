@@ -29,7 +29,6 @@
 		"build": "vite build && pnpm run build:types",
 		"build:vite": "vite build",
 		"build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types ",
-		"typecheck": "vue-tsc --noEmit",
 		"format": "prettier --write \"src/**/*.ts\"",
 		"lint": "eslint \"**/*.{js,ts,vue}\" --quiet --fix",
 		"test": "vitest --silent --run"
