@@ -1,23 +1,13 @@
-<script lang="ts">
+<script setup lang="ts">
 import VOtpInput from 'vue3-otp-input'
-import { defineComponent, ref } from 'vue'
+import { ref } from 'vue'
 
-export default defineComponent({
-	name: 'OTP',
-	components: {
-		VOtpInput,
-	},
-	emits: ['complete'],
-	setup(props, { emit }) {
-		const otpInput = ref(null)
+const emit = defineEmits(['complete'])
+const otpInput = ref(null)
 
-		const handleOnComplete = (value: string) => {
-			emit('complete', value)
-		}
-
-		return { handleOnComplete, otpInput, emit, props }
-	},
-})
+const handleOnComplete = (value: string) => {
+	emit('complete', value)
+}
 </script>
 
 <template>

@@ -3,7 +3,6 @@ import { default as JLLogin } from './Login.vue'
 import JLSignup from './Signup.vue'
 import JLPasswordless from './Passwordless.vue'
 import JLResetPassword from './Reset.vue'
-
 export default {
 	install(Vue: App) {
 		Vue.component('JLLogin', JLLogin)

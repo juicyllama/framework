@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watch, Ref } from 'vue'
 import { logger } from '@/helpers/logger.js'
-import { default as JLForm } from '@/form/Form.vue'
+import { default as JLForm } from '@/components/common/form/Form.vue'
 import { SearchFilter, ColumnsFilter, CustomButtons } from './index.js'
 import {
 	TablePosition,
