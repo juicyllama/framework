@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { Ref, ref, watch } from 'vue'
-import { UserStore } from '@/store/user'
-import { AccountStore } from '@/store/account'
-import type { Account, FormSettings } from '@/types'
+import { UserStore } from '@/store/user.js'
+import { AccountStore } from '@/store/account.js'
+import type { Account, FormSettings } from '@/types/index.js'
+import { logger } from '@/helpers/logger.js'
+import { LogSeverity } from '@/types/index.js'
 
 let accounts: Ref<Account[]> = ref([])
 let options: { label: string; value: number }[]
@@ -15,6 +17,7 @@ const accountStore = AccountStore()
 const userStore = UserStore()
 
 userStore.$subscribe((mutation, state) => {
+	logger({ severity: LogSeverity.VERBOSE, message: `UserStore Subscription`, object: mutation })
 	accounts.value = state.user.accounts
 })
 

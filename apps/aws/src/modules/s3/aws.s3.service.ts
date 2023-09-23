@@ -5,10 +5,10 @@ import { awsS3Config } from './config/aws.s3.config'
 import { Logger } from '@juicyllama/utils'
 import { AwsS3Bucket, AwsS3Format } from './aws.s3.enums'
 
-const streamToString = (stream) =>
+const streamToString = stream =>
 	new Promise((resolve, reject) => {
 		const chunks = []
-		stream.on('data', (chunk) => chunks.push(chunk))
+		stream.on('data', chunk => chunks.push(chunk))
 		stream.on('error', reject)
 		stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')))
 	})
@@ -57,7 +57,7 @@ export class AwsS3Service {
 			})
 
 			return upload.done()
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.warn(
 				`[${domain}] Error: ${e.message}`,
 				e.response
@@ -132,7 +132,7 @@ export class AwsS3Service {
 		try {
 			const data = await client.send(command)
 			result = await streamToString(data.Body)
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.warn(
 				`[${domain}] Error: ${e.message}`,
 				e.response
@@ -153,7 +153,7 @@ export class AwsS3Service {
 			case AwsS3Format.JSON:
 				try {
 					result = JSON.parse(result.toString())
-				} catch (e) {
+				} catch (e: any) {
 					this.logger.error(`[${domain}] ${e.message}`, {
 						location: location,
 						bucket: bucket,

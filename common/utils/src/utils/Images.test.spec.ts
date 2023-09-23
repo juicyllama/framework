@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 
-import { Images } from './Images'
+import { Images } from './Images.js'
 
 describe('Images', () => {
 	it('Download Image', async () => {

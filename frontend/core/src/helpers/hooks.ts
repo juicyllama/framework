@@ -1,5 +1,5 @@
 import { useRoute, useRouter } from 'vue-router'
-import { accountStore, logger, LogSeverity, userStore } from '../index'
+import { accountStore, logger, LogSeverity, userStore } from '../index.js'
 
 export async function AuthHook() {
 	logger({ severity: LogSeverity.VERBOSE, message: `[HOOK] Auth` })
@@ -15,7 +15,7 @@ export async function AuthHook() {
 export async function GlobalSubscriptionHook(secrets: any) {
 	logger({ severity: LogSeverity.VERBOSE, message: `[HOOK] GlobalSubscription` })
 
-	const Pusher = await import('pusher-js')
+	const Pusher: any = await import('pusher-js')
 
 	if (Pusher) {
 		const key = secrets.VITE_PUSHER_KEY

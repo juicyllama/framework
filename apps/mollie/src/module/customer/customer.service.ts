@@ -60,7 +60,7 @@ export class CustomerService extends BaseService<T> {
 				ext_customer_id: mollie_response.id,
 				account: account,
 			})
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`Error: ${e.message}`, {
 				error: {
 					message: e.message,

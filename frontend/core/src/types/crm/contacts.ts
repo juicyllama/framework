@@ -1,6 +1,5 @@
-import { AvatarType } from '../user'
-import { Account } from '../account'
-import { User } from '../user'
+import { AvatarType, User } from '../user.js'
+import { Account } from '../account.js'
 
 export enum ContactSubscriptionStatus {
 	subscribed = 'subscribed',

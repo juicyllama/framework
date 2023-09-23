@@ -1,4 +1,4 @@
-import { FormField } from '@/types'
+import { FormField } from '../types/index.js'
 import { ValidationRule } from 'quasar'
 
 const validateEmail = (email: string): boolean => {

@@ -1,5 +1,5 @@
-import type { Role, UserRole } from './role'
-import type { Account } from './account'
+import type { Role, UserRole } from './role.js'
+import type { Account } from './account.js'
 
 export enum AvatarType {
 	NONE = 'NONE',

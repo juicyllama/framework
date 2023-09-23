@@ -226,7 +226,7 @@ export class BaseService<T> {
 					this.getCacheTTL(),
 				)
 			}
-		} catch (e) {
+		} catch (e: any) {
 			const logger = new Logger()
 			logger.error(`[core::baseService::cacheRecord] ${e.message()}`, e)
 		}

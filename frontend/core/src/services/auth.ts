@@ -1,10 +1,9 @@
-import instance from './index'
-import type { User } from '@/types'
-import type { UserLogin } from '@/types'
-import { logger } from '@/helpers'
-import { LogSeverity } from '@/types'
+import instance from './index.js'
+import type { User, UserLogin } from '../types/user.js'
+import { logger } from '@/helpers/logger.js'
+import { LogSeverity } from '../types/common.js'
 import { useQuasar } from 'quasar'
-import { userStore } from '@/index'
+import { userStore } from '../index.js'
 
 const $q = useQuasar()
 

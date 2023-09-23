@@ -1,28 +1,11 @@
 {
-	"compilerOptions": {
-		"target": "esnext",
-		"module": "esnext",
-		"strict": true,
-		"jsx": "preserve",
-		"importHelpers": true,
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
-		"sourceMap": true,
-		"noImplicitThis": false,
-		"noImplicitAny": false,
-		"strictNullChecks": false,
-		"types": ["vite/client", "node"],
-		"lib": ["esnext", "dom"],
-		"outDir": "./dist",
-		"baseUrl": "./",
-		"paths": {
-			"@/*": ["src/*"]
-		}
-	},
-	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "tests/**/*.ts", "tests/**/*.tsx"],
-	"exclude": ["node_modules"],
-	"lib": ["WebWorker"]
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "paths": {
+            "@/*": ["./src/*"],
+        }
+    },
+    "include": ["./src/**/*"],
 }

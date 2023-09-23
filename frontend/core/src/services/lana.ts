@@ -1,9 +1,9 @@
-import instance from './index'
+import instance from './index.js'
 import { DeepPartial, QVueGlobals } from 'quasar'
-import { logger } from '../helpers/logger'
-import { LogSeverity } from '../types/common'
-import { Lana } from '../types/lana'
-import { accountStore } from '@/index'
+import { logger } from '@/helpers/logger.js'
+import { LogSeverity } from '../types/common.js'
+import { Lana } from '../types/lana.js'
+import { accountStore } from '../index.js'
 
 export async function askLana(question: string, sql: boolean, q?: QVueGlobals): Promise<Lana> {
 	instance.defaults.headers.common['account-id'] = accountStore.selected_account.account_id

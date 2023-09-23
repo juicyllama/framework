@@ -24,7 +24,7 @@ export class PexelsService {
 			const result = await client.photos.search(options)
 			this.logger.debug(`[${domain}] Response: ${JSON.stringify(result, null, 2)}`)
 			return result
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.warn(`[${domain}] Error: ${JSON.stringify(e.message, null, 2)}`, e.response)
 		}
 	}

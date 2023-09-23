@@ -21,7 +21,7 @@ export class XeroWebhookController {
 			if (xero_req && xero_req.headers) {
 				webhook = xero_req
 			}
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.verbose(`App not matched`)
 		}
 

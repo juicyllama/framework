@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import type { User, UserLogin } from '@/types'
-import { UserPreferences } from '@/types'
+import { User, UserLogin, UserPreferences } from '../types/index.js'
+import { LogSeverity } from '../types/common.js'
 import {
 	accountAuthCheck,
 	getUser,
@@ -10,14 +10,12 @@ import {
 	resetPassword,
 	resetPasswordCode,
 	resetPasswordComplete,
-} from '@/services/auth'
-import { logger } from '@/helpers'
-import { token } from './token'
-import { goToLogin } from '@/helpers'
-import { UsersService, USERS_ENDPOINT } from '@/services/users'
-import { AccountStore } from './account'
+} from '../services/auth.js'
+import { token } from './token.js'
+import { goToLogin, logger } from '@/helpers/index.js'
+import { UsersService, USERS_ENDPOINT } from '../services/users.js'
+import { AccountStore } from './account.js'
 import { QVueGlobals } from 'quasar'
-import { LogSeverity } from '@/types'
 
 type T = User
 
@@ -55,6 +53,7 @@ export const UserStore = defineStore('user', {
 				return await this.processAccessToken(access_token, q)
 			} catch (e: any) {
 				logger({ severity: LogSeverity.ERROR, message: e.message })
+				return null
 			}
 		},
 
@@ -74,6 +73,7 @@ export const UserStore = defineStore('user', {
 				return await this.processAccessToken(access_token, q)
 			} catch (e: any) {
 				logger({ severity: LogSeverity.ERROR, message: e.message })
+				return null
 			}
 		},
 
@@ -103,6 +103,7 @@ export const UserStore = defineStore('user', {
 				return await this.processAccessToken(access_token, q)
 			} catch (e: any) {
 				logger({ severity: LogSeverity.ERROR, message: e.message })
+				return null
 			}
 		},
 
@@ -140,9 +141,13 @@ export const UserStore = defineStore('user', {
 						...data,
 					})
 					return user
+				} else {
+					logger({ severity: LogSeverity.WARN, message: 'Profile updated failed', q: q })
+					return null
 				}
 			} catch (e: any) {
 				logger({ severity: LogSeverity.ERROR, message: e.message })
+				return null
 			}
 		},
 
@@ -157,9 +162,13 @@ export const UserStore = defineStore('user', {
 						avatar_type: user.avatar_type,
 					})
 					return user
+				} else {
+					logger({ severity: LogSeverity.WARN, message: 'Avatar updated failed', q: q })
+					return null
 				}
 			} catch (e: any) {
 				logger({ severity: LogSeverity.ERROR, message: e.message })
+				return null
 			}
 		},
 
@@ -178,7 +187,7 @@ export const UserStore = defineStore('user', {
 
 			if (!user?.user_id) {
 				logger({ severity: LogSeverity.ERROR, message: `Authentication Error`, q: q })
-				return
+				return null
 			}
 
 			logger({ severity: LogSeverity.VERBOSE, message: `User logged in, setting account` })

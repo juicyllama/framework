@@ -43,7 +43,7 @@ export class EverflowAffiliateReportingConversionsService {
 				},
 				getEverflowAxiosConfig(options.config),
 			)
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`[${domain}] Error finding conversions: ${e.message}`, e)
 		}
 	}

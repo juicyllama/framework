@@ -10,7 +10,7 @@ export class SandboxController {
 	async message(@Req() req, @Body() data: ChatPostMessageArguments) {
 		try {
 			return await this.slackService.sendMessage(data)
-		} catch (e) {
+		} catch (e: any) {
 			console.log(e)
 		}
 	}

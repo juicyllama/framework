@@ -9,6 +9,10 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@': resolve(__dirname, 'src'),
+			fs: 'browserify-fs',
+			path: 'path-browserify',
+			os: 'os-browserify',
+			crypto: 'crypto-browserify',
 		},
 	},
 	plugins: [
@@ -20,6 +24,7 @@ export default defineConfig({
 		quasar(),
 	],
 	build: {
+		target: 'modules',
 		sourcemap: true,
 		// Output compiled files to /dist.
 		outDir: './dist',
@@ -34,9 +39,8 @@ export default defineConfig({
 		},
 		rollupOptions: {
 			external: [
-				/^\/@fs*/,
 				'@fortawesome/fontawesome-pro',
-				'@juicyllama/utils',
+				//'@juicyllama/utils',
 				'@quasar/extras',
 				'chart.js',
 				'chart.js/auto',
@@ -58,7 +62,7 @@ export default defineConfig({
 				globals: {
 					vue: 'Vue',
 					pinia: 'Pinia',
-					'@juicyllama/utils': 'JLUtils',
+					//'@juicyllama/utils': 'JLUtils',
 					'vue-router': 'vue-router',
 					'vue3-otp-input': 'vue3-otp-input',
 					'javascript-time-ago': 'javascript-time-ago',

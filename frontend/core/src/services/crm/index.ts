@@ -1,1 +1,1 @@
-export * from './contacts'
+export * from './contacts.js'

@@ -30,7 +30,7 @@ export class ScrapingBeeScrapeService {
 
 			this.logger.debug(`[${domain}] Response`, text)
 			return text
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`[${domain}] ${e.message}`, options)
 		}
 	}

@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { Locale } from './Locale'
+import { Locale } from './Locale.js'
 
 describe('GetLocale', () => {
 	it('Make sure we can get a locale', async () => {

@@ -1,7 +1,7 @@
 import type { SupportedCurrencies } from '@juicyllama/utils'
-import type { Role } from './role'
-import type { AuthFormState } from '../helpers/validators'
-import type { User } from './user'
+import type { Role } from './role.js'
+import type { AuthFormState } from '@/helpers/index.js'
+import type { User } from './user.js'
 
 export interface CreateAccount extends AuthFormState {
 	account_name: string

@@ -33,7 +33,7 @@ export class WordpressCategoriesService {
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
 			return await this.api.post(domain, url.toString(), options.data, getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`[${domain}] Error creating category: ${e.message}`, e)
 		}
 	}
@@ -53,7 +53,7 @@ export class WordpressCategoriesService {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString())
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`[${domain}] Error finding all categories: ${e.message}`, e)
 		}
 	}
@@ -74,7 +74,7 @@ export class WordpressCategoriesService {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString(), getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`[${domain}] Error finding one category: ${e.message}`, e)
 		}
 	}
@@ -94,7 +94,7 @@ export class WordpressCategoriesService {
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
 			return await this.api.post(domain, url.toString(), options.data, getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`[${domain}] Error updating category: ${e.message}`, e)
 		}
 	}
@@ -110,7 +110,7 @@ export class WordpressCategoriesService {
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
 			await this.api.delete(domain, url.toString(), getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`[${domain}] Error removing category: ${e.message}`, e)
 		}
 	}

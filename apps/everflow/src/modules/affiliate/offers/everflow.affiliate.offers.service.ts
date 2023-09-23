@@ -26,7 +26,7 @@ export class EverflowAffiliateOffersService {
 
 		try {
 			return await this.api.get(domain, ENDPOINT, getEverflowAxiosConfig(options.config))
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`[${domain}] Error finding offers: ${e.message}`, e)
 		}
 	}

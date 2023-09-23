@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref, Ref } from 'vue'
-import { UserStore } from '../../store/user'
+import { UserStore } from '@/store/user.js'
 import { useQuasar } from 'quasar'
-import { askLana, updateLana } from '../../services/lana'
+import { askLana, updateLana } from '@/services/lana.js'
 import { default as JLForm } from '../common/form/Form.vue'
 import { JLNotice, NoticeType } from '@juicyllama/vue-utils'
-import { Lana, LanaSuccessType } from '../../types/lana'
-import { FormField, FormFieldButtonType, FormFieldField, FormFieldType, FormSettings } from '../../types/form'
-import { defaultFormSettings } from '@/components/common/form/defaults'
+import { Lana, LanaSuccessType } from '@/types/lana.js'
+import { FormField, FormFieldButtonType, FormFieldField, FormFieldType, FormSettings } from '@/types/form.js'
+import { defaultFormSettings } from '../common/form/defaults.js'
 
 const userStore = UserStore()
 const $q = useQuasar()

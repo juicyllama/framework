@@ -18,8 +18,9 @@
     "bugs": "https://github.com/juicyllama/framework",
     "license": "0BSD",
     "readmeFilename": "README.md",
-    "main": "dist/index.js",
-    "types": "index.d.ts",
+    "type": "module",
+    "exports": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "scripts": {
         "build": "tsc"
     },
@@ -80,6 +81,13 @@
         "vue-tsc": "^1.8.5",
         "vue3-autocounter": "^1.0.6",
         "vue3-otp-input": "^0.4.1",
-        "vue3-q-tel-input": "^1.1.7"
+        "vue3-q-tel-input": "^1.1.7",
+        "browserify-fs": "1.0.0",
+        "path-browserify": "1.0.1",
+        "os-browserify": "0.3.0",
+        "crypto-browserify": "^3.12.0"
+    },
+    "engines": {
+        "node": ">=16"
     }
 }

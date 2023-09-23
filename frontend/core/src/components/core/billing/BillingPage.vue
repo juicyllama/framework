@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { BILLING_INVOICE_ENDPOINT, IconSettings } from '@/index'
+import { BILLING_INVOICE_ENDPOINT, IconSettings } from '@/index.js'
 import { StatsMethods } from '@juicyllama/utils'
-import { invoicesTableSchema } from './billing.table.schema'
+import { invoicesTableSchema } from './billing.table.schema.js'
 
 const props = defineProps<{
 	visibleColumns: string[]

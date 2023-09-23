@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
-import { UserStore } from '../../../store/user'
-import { default as JLForm } from '../../common/form/Form.vue'
+import { UserStore } from '@/store/user.js'
+import { default as JLForm } from '@/components/common/form/Form.vue'
 import { useQuasar } from 'quasar'
-import { FormField, FormFieldButtonType, FormFieldField, FormFieldType, FormSettings } from '../../../types/form'
-import { defaultFormSettings } from '@/components/common/form/defaults'
+import { FormField, FormFieldButtonType, FormFieldField, FormFieldType, FormSettings } from '@/types/form.js'
+import { defaultFormSettings } from '@/components/common/form/defaults.js'
 
 const userStore = UserStore()
 const $q = useQuasar()

@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
-import { UserStore } from '@/store/user'
+import { UserStore } from '@/store/user.js'
 import AuthActions from './Actions.vue'
 import { useRouter, useRoute } from 'vue-router'
-import type { AuthFormState } from '@/helpers'
-import { validateEmail, isPasswordValid, logger } from '@/helpers'
-import { token } from '@/store/token'
-import { goToLoginRedirect } from '@/helpers'
+import type { AuthFormState } from '@/helpers/index.js'
+import { validateEmail, isPasswordValid, logger, goToLoginRedirect } from '@/helpers/index.js'
+import { token } from '@/store/token.js'
 import { useQuasar } from 'quasar'
-import { LogSeverity } from '@/types'
+import { LogSeverity } from '@/types/common.js'
 import { Strings } from '@juicyllama/utils'
-import { completeGoogleLogin, completeLinkedInLogin, completeMicrosoftLogin, completeAzureLogin } from '@/services/auth'
+import {
+	completeGoogleLogin,
+	completeLinkedInLogin,
+	completeMicrosoftLogin,
+	completeAzureLogin,
+} from '@/services/auth.js'
 
 const $q = useQuasar()
 const userStore = UserStore()
@@ -119,7 +123,7 @@ onMounted(() => {
 				name="password"
 				label="Password *"
 				v-model="state.password.value"
-				:rules="[val => isPasswordValid(state.password) || 'Password must meet all criteria.']"
+				:rules="[() => isPasswordValid(state.password) || 'Password must meet all criteria.']"
 				id="password"
 				autocomplete="current-password"
 				filled

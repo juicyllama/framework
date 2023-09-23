@@ -16,13 +16,13 @@ import {
 	Repository,
 } from 'typeorm'
 import _ from 'lodash'
-import {TypeOrm} from './TypeOrm'
-import {FindOptionsWhere} from 'typeorm/find-options/FindOptionsWhere'
-import {isNil, omitBy} from 'lodash'
-import {ComparisonOperator, Enums, Env, getMySQLTimeInterval, Logger} from '@juicyllama/utils'
-import {SelectQueryBuilder} from 'typeorm/query-builder/SelectQueryBuilder'
-import {ChartOptions} from './types'
-import {ResultSetHeader} from 'mysql2'
+import { TypeOrm } from './TypeOrm'
+import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere'
+import { isNil, omitBy } from 'lodash'
+import { ComparisonOperator, Enums, Env, getMySQLTimeInterval, Logger } from '@juicyllama/utils'
+import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder'
+import { ChartOptions } from './types'
+import { ResultSetHeader } from 'mysql2'
 
 const logger = new Logger()
 
@@ -48,7 +48,7 @@ export class Query<T> {
 		try {
 			const record = repository.create(data)
 			return await repository.save(record)
-		} catch (e) {
+		} catch (e: any) {
 			return await this.handleCreateError(e, repository, data)
 		}
 	}
@@ -154,7 +154,7 @@ export class Query<T> {
 		try {
 			await repository.update(data[this.getPrimaryKey(repository)], <any>data)
 			return await this.findOneById(repository, data[this.getPrimaryKey(repository)])
-		} catch (e) {
+		} catch (e: any) {
 			return await this.handleUpdateError(e, repository, data)
 		}
 	}
@@ -388,8 +388,8 @@ export class Query<T> {
 						fieldLookupWhere.length === 1
 							? fieldLookupWhere[0]
 							: fieldLookupWhere.length > 0
-								? And(...fieldLookupWhere)
-								: value // if no valid operator is found, return the value as is - backward compatibility
+							? And(...fieldLookupWhere)
+							: value // if no valid operator is found, return the value as is - backward compatibility
 				}
 			}
 		}

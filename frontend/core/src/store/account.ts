@@ -1,12 +1,10 @@
 import { defineStore } from 'pinia'
-import type { User, UserLogin } from '@/types'
-import { logger } from '@/helpers/logger'
-import { createAccount, getAccount, updateAccount, updateAccountAvatar } from '@/services/account'
-import type { Account, CreateAccount } from '@/types'
-import { UserStore } from './user'
-import { LogSeverity } from '@/types'
+import { User, UserLogin, Account, CreateAccount, LogSeverity } from '../types/index.js'
+import { logger } from '@/helpers/logger.js'
+import { createAccount, getAccount, updateAccount, updateAccountAvatar } from '../services/account.js'
+import { UserStore } from './user.js'
 import { QVueGlobals } from 'quasar'
-import { getUser } from '@/services/auth'
+import { getUser } from '../services/auth.js'
 
 export const AccountStore = defineStore('account', {
 	state: () => ({
@@ -51,7 +49,7 @@ export const AccountStore = defineStore('account', {
 		},
 		async update(data: Partial<Account>, q?: QVueGlobals): Promise<Account> {
 			try {
-				const account = await updateAccount(this.$state.selected_account.account_id, data)
+				const account = await updateAccount(data, this.$state.selected_account.account_id)
 				if (account) {
 					logger({ severity: LogSeverity.LOG, message: 'Account updated successfully', q: q })
 					this.setSelectedAccount(account)
@@ -84,7 +82,6 @@ export const AccountStore = defineStore('account', {
 		async getAccountName(state): Promise<string> {
 			if (!state.selected_account?.account_id) {
 				if (!state.selected_account?.account_id) {
-					await this.setDefaultAccount()
 					return state.selected_account.account_name
 				}
 			}
@@ -93,7 +90,6 @@ export const AccountStore = defineStore('account', {
 		async getOnboardingStep(state: any): Promise<number> {
 			if (!state.selected_account?.account_id) {
 				if (!state.selected_account?.account_id) {
-					await this.setDefaultAccount()
 					return state.selected_account.onboarding_step
 				}
 			}

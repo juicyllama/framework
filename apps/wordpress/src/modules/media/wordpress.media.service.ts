@@ -47,7 +47,7 @@ export class WordpressMediaService {
 			})
 
 			return await this.update({ mediaId: media.id, data: options.data, config: options.config })
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`[${domain}] Error creating media: ${e.message}`, e)
 		}
 	}
@@ -67,7 +67,7 @@ export class WordpressMediaService {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString())
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`[${domain}] Error finding all media: ${e.message}`, e)
 		}
 	}
@@ -88,7 +88,7 @@ export class WordpressMediaService {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.mediaId)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString(), getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`[${domain}] Error finding one media: ${e.message}`, e)
 		}
 	}
@@ -108,7 +108,7 @@ export class WordpressMediaService {
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.mediaId)
 			return await this.api.post(domain, url.toString(), options.data, getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`[${domain}] Error updating media: ${e.message}`, e)
 		}
 	}
@@ -124,7 +124,7 @@ export class WordpressMediaService {
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.mediaId)
 			await this.api.delete(domain, url.toString(), getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`[${domain}] Error deleting media: ${e.message}`, e)
 		}
 	}

@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar'
-import { AppStoreIntegrationName, ConnectAppOptions, FormSchema, LogSeverity } from '@/types'
-import { logger } from '@/helpers'
-import { APPS_ENDPOINT, AppsService, INSTALLED_APPS_ENDPOINT, InstalledAppsService } from '@/services/app-store'
+import { AppStoreIntegrationName, ConnectAppOptions, FormSchema, LogSeverity } from '@/types/index.js'
+import { logger } from '@/helpers/index.js'
+import {
+	APPS_ENDPOINT,
+	AppsService,
+	INSTALLED_APPS_ENDPOINT,
+	InstalledAppsService,
+} from '@/services/app-store/index.js'
 import { reactive } from 'vue'
-import { buildAppForm } from '@/components/app-store/appSettingsToForm'
-import { JLForm } from '@/components/common/form'
+import { buildAppForm } from './appSettingsToForm.js'
+import { JLForm } from '@/components/common/form/index.js'
 
 const props = defineProps<ConnectAppOptions>()
 

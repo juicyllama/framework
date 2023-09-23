@@ -1,4 +1,4 @@
-import { UserStore } from '../store/user'
+import { UserStore } from '../store/user.js'
 
 export async function Logout() {
 	const userStore = UserStore()

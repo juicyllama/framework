@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import UserMenu from './UserMenu.vue'
-import { UserStore } from '@/store/user'
-import { User, AvatarType, UserAvatarOptions } from '@/types'
-import { gravatar } from '@/plugins/gravatar'
-import { logger } from '@/helpers'
+import { UserStore } from '@/store/user.js'
+import { User, AvatarType, UserAvatarOptions, LogSeverity } from '@/types/index.js'
+import { gravatar } from '@/plugins/gravatar.js'
+import { logger, stripPx, short } from '@/helpers/index.js'
 import { Strings } from '@juicyllama/utils'
-import { LogSeverity } from '@/types'
 import { useQuasar } from 'quasar'
-import { stripPx, short } from '@/helpers'
 
 const userStore = UserStore()
 const $q = useQuasar()

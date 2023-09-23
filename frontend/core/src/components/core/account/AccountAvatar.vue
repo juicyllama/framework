@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { logger } from '../../../helpers/logger'
-import { LogSeverity } from '../../../types/common'
+import { logger } from '@/helpers/logger.js'
+import { LogSeverity } from '@/types/common.js'
 import { getCssVar, useQuasar } from 'quasar'
-import { AccountStore } from '../../../store/account'
-import { Account } from '../../../types/account'
+import { AccountStore } from '@/store/account.js'
+import { Account } from '@/types/account.js'
 import { Color } from '@juicyllama/utils'
 
 const $q = useQuasar()

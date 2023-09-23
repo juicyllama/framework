@@ -15,14 +15,12 @@
 		"url": "https://github.com/juicyllama/framework/frontend/core"
 	},
 	"bugs": "https://github.com/juicyllama/framework",
-	"license": "0BSD",
-	"main": "dist/JLCore.umd.js",
-	"module": "dist/JLCore.es.js",
-	"types": "dist/types/index.d.ts",
-	"files": [
-		"dist",
-		"types/*.d.ts"
-	],
+    "license": "BSD-4-Clause",
+    "readmeFilename": "README.md",
+    "type": "module",
+    "main": "./dist/JLCore.umd.js",
+    "module": "./dist/JLCore.es.js",
+    "types": "./dist/types/index.d.ts",
 	"scripts": {
 		"prepare": "pnpm run build",
 		"build": "vite build && pnpm run build:types",
@@ -36,5 +34,8 @@
 		"@juicyllama/utils": "workspace:*",
 		"@juicyllama/vue-utils": "workspace:*",
 		"@juicyllama/vue-dev": "workspace:*"
-	}
+	},
+    "engines": {
+        "node": ">=16"
+    }
 }

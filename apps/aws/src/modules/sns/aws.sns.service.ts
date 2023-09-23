@@ -42,7 +42,7 @@ export class AwsSnsService {
 			this.logger.debug(`[${domain}] Result`, data)
 
 			return data.$metadata.httpStatusCode === 200
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.warn(
 				`[${domain}] Error: ${e.message}`,
 				e.response

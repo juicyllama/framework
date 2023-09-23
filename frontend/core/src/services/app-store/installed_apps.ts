@@ -1,5 +1,5 @@
-import { Api } from '@/helpers'
-import { InstalledApp } from '@/types'
+import { Api } from '@/helpers/api.js'
+import { InstalledApp } from '@/types/index.js'
 
 type T = InstalledApp
 export const INSTALLED_APPS_ENDPOINT = '/apps/installed'

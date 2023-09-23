@@ -18,12 +18,9 @@
     "bugs": "https://github.com/juicyllama/framework",
     "license": "BSD-4-Clause",
     "readmeFilename": "README.md",
-    "main": "dist/index.js",
-    "files": [
-        "dist/**/*",
-        "*.md"
-    ],
-    "types": "dist/index.d.ts",
+	"type": "module",
+	"exports": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "scripts": {
         "prebuild": "rimraf dist",
         "prepare": "pnpm run build",
@@ -44,5 +41,8 @@
     },
     "devDependencies": {
         "@juicyllama/dev": "workspace:*"
-    }
+    },
+	"engines": {
+		"node": ">=16"
+	}
 }

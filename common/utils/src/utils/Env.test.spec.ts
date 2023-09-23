@@ -1,4 +1,4 @@
-import { Env } from './Env'
+import { Env } from './Env.js'
 import * as path from 'path'
 describe('Env', () => {
 	it('setEnvValue', async () => {

@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { UserStore } from '@/store/user'
-import { logger } from '@/helpers/logger'
-import { token } from '@/store/token'
-import { LogSeverity } from '@/types'
+import { UserStore } from '../store/user.js'
+import { logger } from '@/helpers/logger.js'
+import { token } from '../store/token.js'
+import { LogSeverity } from '../types/common.js'
 import { Env } from '@juicyllama/utils'
 
 const headers = {

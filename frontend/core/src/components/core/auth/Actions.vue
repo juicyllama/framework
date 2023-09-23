@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, Ref, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { googleLogin, linkedInLogin, microsoftLogin, azureLogin } from '@/services/auth'
+import { googleLogin, linkedInLogin, microsoftLogin, azureLogin } from '@/services/auth.js'
 
 const router = useRouter()
 const route = useRoute()

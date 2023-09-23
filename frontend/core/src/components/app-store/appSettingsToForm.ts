@@ -1,6 +1,4 @@
-import { App, FormFieldButtonType, FormFieldField, FormFieldType } from '@/types'
-import { FormField } from '@/types'
-import { AppInputType } from '@/types'
+import { FormField, AppInputType, App, FormFieldButtonType, FormFieldField, FormFieldType } from '@/types/index.js'
 
 export function buildAppForm(
 	app: App,

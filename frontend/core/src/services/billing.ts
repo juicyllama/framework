@@ -1,5 +1,5 @@
-import instance from './index'
-import { accountStore } from '@/index'
+import instance from './index.js'
+import { accountStore } from '../index.js'
 import { SupportedCurrencies } from '@juicyllama/utils'
 
 export const BILLING_WALLET_ENDPOINT = '/billing/wallet'

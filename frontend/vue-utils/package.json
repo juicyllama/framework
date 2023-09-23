@@ -18,9 +18,10 @@
     "bugs": "https://github.com/juicyllama/framework",
 	"license": "0BSD",
 	"readmeFilename": "README.md",
-	"main": "dist/JLUtils.umd.js",
-	"module": "dist/JLUtils.es.js",
-	"types": "dist/types/index.d.ts",
+    "type": "module",
+    "main": "./dist/JLUtils.umd.js",
+    "module": "./dist/JLUtils.es.js",
+    "types": "./dist/types/index.d.ts",
 	"files": [
 		"dist",
 		"types/*.d.ts"
@@ -35,5 +36,8 @@
 	},
 	"dependencies": {
 		"@juicyllama/vue-dev": "workspace:*"
-	}
+	},
+    "engines": {
+        "node": ">=16"
+    }
 }

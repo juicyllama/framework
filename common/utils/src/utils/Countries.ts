@@ -265,8 +265,8 @@ export class Countries {
 	 * convert country name to ISO2 code
 	 */
 
-	static countryNameToISO2(countryName) {
-		return COUNTRIES.find((country) => country['Country Name'].toLowerCase() === countryName.toLowerCase()).ISO2
+	static countryNameToISO2(countryName: string): string {
+		return COUNTRIES.find(country => country['Country Name'].toLowerCase() === countryName.toLowerCase()).ISO2
 	}
 
 	/**
@@ -275,6 +275,6 @@ export class Countries {
 	 */
 
 	static getCountry(ISO2) {
-		return COUNTRIES.find((country) => country.ISO2 === ISO2)
+		return COUNTRIES.find(country => country.ISO2 === ISO2)
 	}
 }

@@ -1,24 +1,15 @@
-<template>
-	<q-spinner v-if="isLoading" color="primary" size="3em" />
-	<template v-else>
-		<div v-if="isError">
-			<q-icon size="15" class="ml-2" name="fa-regular fa-circle-exclamation" /> Failed to load
-		</div>
-		<component v-else :is="comps[type]" :data="dataDetails" :options="extendedOptions" />
-	</template>
-</template>
 <script setup lang="ts">
 import { toRefs, computed, onMounted, ref } from 'vue'
 import type { Ref } from 'vue'
-import type { ChartUISettings, ChartData } from '@/types/chart'
-import { labelsDefaultStyle } from './defaults'
+import type { ChartUISettings, ChartData } from '@/types/chart.js'
+import { labelsDefaultStyle } from './defaults.js'
 import LineChart from './components/LineChart.vue'
 import BarChart from './components/BarChart.vue'
 import PieChart from './components/PieChart.vue'
 import GaugeChart from './components/GaugeChart.vue'
-import { logger } from '@/index'
-import { LogSeverity } from '@/types'
-import { loadChart } from '@/services/chart'
+import { logger } from '@/index.js'
+import { LogSeverity } from '@/types/index.js'
+import { loadChart } from '@/services/chart.js'
 
 const props = defineProps<{
 	options: ChartUISettings
@@ -97,3 +88,13 @@ onMounted(async () => {
 	}
 })
 </script>
+
+<template>
+	<q-spinner v-if="isLoading" color="primary" size="3em" />
+	<template v-else>
+		<div v-if="isError">
+			<q-icon size="15" class="ml-2" name="fa-regular fa-circle-exclamation" /> Failed to load
+		</div>
+		<component v-else :is="comps[type]" :data="dataDetails" :options="extendedOptions" />
+	</template>
+</template>

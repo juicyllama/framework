@@ -195,7 +195,7 @@ export async function crudUploadCSV<T>(
 	try {
 		const { affectedRows } = await options.service.bulkInsert(dtos)
 		return { affectedRows }
-	} catch (e) {
+	} catch (e: any) {
 		throw new BadRequestException(e.message)
 	}
 }

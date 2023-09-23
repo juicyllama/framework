@@ -1,7 +1,7 @@
-import { logger } from './logger'
-import { LogSeverity, StatsResponse } from '../types/common'
+import { logger } from './logger.js'
+import { LogSeverity, StatsResponse } from '../types/common.js'
 import { QVueGlobals } from 'quasar'
-import instance from '../services/index'
+import instance from '../services/index.js'
 import {
 	FormApiOptionsCreate,
 	FormApiOptionsDelete,
@@ -9,7 +9,7 @@ import {
 	FormApiOptionsFindOne,
 	FormApiOptionsStats,
 	FormApiOptionsUpdate,
-} from '../types'
+} from '../types/index.js'
 import { StatsMethods } from '@juicyllama/utils'
 
 export async function apiRequest<T>(options: {
@@ -20,8 +20,9 @@ export async function apiRequest<T>(options: {
 	q?: QVueGlobals
 }): Promise<T> {
 	try {
-		const accountStore = (await import('@/index')).accountStore
-		instance.defaults.headers.common['account-id'] = accountStore.selected_account.account_id
+		instance.defaults.headers.common['account-id'] = (
+			await import('../index.js')
+		).accountStore.selected_account.account_id
 
 		let response: any
 

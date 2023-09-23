@@ -34,7 +34,7 @@ export class OpenaiService {
 			const result = await openai.createChatCompletion(options)
 			this.logger.debug(`[${domain}] Response: ${JSON.stringify(result.data, null, 2)}`)
 			return result.data
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.warn(`[${domain}] Error: ${JSON.stringify(e.message, null, 2)}`, e.response)
 		}
 	}
@@ -57,7 +57,7 @@ export class OpenaiService {
 			const result = await openai.createImage(options)
 			this.logger.debug(`[${domain}] Response: ${JSON.stringify(result.data, null, 2)}`)
 			return result.data
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.warn(`[${domain}] Error: ${JSON.stringify(e.message, null, 2)}`, e.response)
 		}
 	}
@@ -90,7 +90,7 @@ export class OpenaiService {
 	//
 	// 		await openai.createFineTune(f)
 	//
-	// 	} catch (e) {
+	// 	} catch (e: any) {
 	// 		if (e.response) {
 	// 			this.logger.error(`[${domain}] Error: ${e.message} `, e.response)
 	// 		} else {

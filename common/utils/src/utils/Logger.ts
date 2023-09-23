@@ -1,8 +1,5 @@
-import { Modules } from './Modules'
-import { Env } from './Env'
-
-/* eslint @typescript-eslint/no-var-requires: "off" */
-
+import { Modules } from './Modules.js'
+import { Env } from './Env.js'
 export class Logger {
 	data(key: string, value: object): void {
 		if (Env.IsNotTest()) {
@@ -105,7 +102,7 @@ export class Logger {
 					case 'object':
 						try {
 							message += ` ${JSON.stringify(param)}`
-						} catch (e) {
+						} catch (e: any) {
 							message += ` **Logger Error** Failed to read JSON object`
 						}
 						break
@@ -117,7 +114,7 @@ export class Logger {
 						this.error(`typeof param of optionalParams ${typeof param} not handled`)
 				}
 			}
-		} catch (e) {
+		} catch (e: any) {
 			this.error(e.message)
 			if (Modules.isInstalled('@bugsnag/js')) {
 				const Bugsnag = require('@bugsnag/js')

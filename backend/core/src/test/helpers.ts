@@ -52,7 +52,7 @@ export async function TestEndpoint<T>(options: {
 						}
 						options.skipResultCheck || checkResult<T>(<any>options.data, body, options.emitCheckResultKeys)
 						E = body
-					} catch (e) {
+					} catch (e: any) {
 						E = body
 						outputError<T>({
 							error: e,
@@ -82,7 +82,7 @@ export async function TestEndpoint<T>(options: {
 						}
 						checkResult<T>(<any>options.data, body, options.emitCheckResultKeys)
 						E = body
-					} catch (e) {
+					} catch (e: any) {
 						outputError<T>({
 							error: e,
 							response: body,
@@ -110,7 +110,7 @@ export async function TestEndpoint<T>(options: {
 						}
 						checkResult<T>(<any>options.data, body, options.emitCheckResultKeys)
 						E = body
-					} catch (e) {
+					} catch (e: any) {
 						outputError<T>({
 							error: e,
 							response: body,
@@ -136,7 +136,7 @@ export async function TestEndpoint<T>(options: {
 							expect(body[options.PRIMARY_KEY]).toBeDefined()
 						}
 						E = body
-					} catch (e) {
+					} catch (e: any) {
 						outputError<T>({
 							error: e,
 							response: body,
@@ -169,7 +169,7 @@ export async function TestEndpoint<T>(options: {
 							expect(body[0][options.PRIMARY_KEY]).toBeTruthy()
 						}
 						E = body
-					} catch (e) {
+					} catch (e: any) {
 						outputError<T>({
 							error: e,
 							response: body,
@@ -194,7 +194,7 @@ export async function TestEndpoint<T>(options: {
 					try {
 						expect(body.count).toBeGreaterThan(0)
 						E = body
-					} catch (e) {
+					} catch (e: any) {
 						outputError<T>({
 							error: e,
 							response: body,
@@ -220,7 +220,7 @@ export async function TestEndpoint<T>(options: {
 					try {
 						expect(body.datasets.length).toBeGreaterThan(0)
 						E = body
-					} catch (e) {
+					} catch (e: any) {
 						outputError<T>({
 							error: e,
 							response: body,
@@ -247,7 +247,7 @@ export async function TestEndpoint<T>(options: {
 							expect(body[options.PRIMARY_KEY]).toBeDefined()
 						}
 						E = body
-					} catch (e) {
+					} catch (e: any) {
 						outputError<T>({
 							error: e,
 							response: body,
@@ -281,7 +281,7 @@ export async function TestService<T>(options: {
 				expect(E[options.PRIMARY_KEY]).toBeDefined()
 				checkResult<T>(<any>options.mock, E)
 				return E
-			} catch (e) {
+			} catch (e: any) {
 				outputError<T>({
 					error: e,
 					...options,
@@ -296,7 +296,7 @@ export async function TestService<T>(options: {
 				expect(E[0][options.PRIMARY_KEY]).toBeDefined()
 				checkResult<T>(<any>options.mock, E[0])
 				return E
-			} catch (e) {
+			} catch (e: any) {
 				outputError<T>({
 					error: e,
 					...options,
@@ -311,7 +311,7 @@ export async function TestService<T>(options: {
 				expect(E[options.PRIMARY_KEY]).toBeDefined()
 				checkResult<T>(<any>options.mock, E)
 				return E
-			} catch (e) {
+			} catch (e: any) {
 				outputError<T>({
 					error: e,
 					...options,
@@ -326,7 +326,7 @@ export async function TestService<T>(options: {
 				expect(E).toBeDefined()
 				expect(E).toBeGreaterThan(0)
 				return E
-			} catch (e) {
+			} catch (e: any) {
 				outputError<T>({
 					error: e,
 					...options,
@@ -345,7 +345,7 @@ export async function TestService<T>(options: {
 				expect(E[options.PRIMARY_KEY]).toBeDefined()
 				checkResult(options.mock, E)
 				return E
-			} catch (e) {
+			} catch (e: any) {
 				outputError<T>({
 					error: e,
 					...options,
@@ -357,7 +357,7 @@ export async function TestService<T>(options: {
 		case METHOD.DELETE:
 			try {
 				await options.scaffold.services.service.remove(options.record)
-			} catch (e) {
+			} catch (e: any) {
 				outputError<T>({
 					error: e,
 					...options,
@@ -416,7 +416,7 @@ function checkResult<T>(data: DeepPartial<T>, result: T, emitCheckResultKeys?: s
 				default:
 					expect(result[key]).toBe(data[key])
 			}
-		} catch (e) {
+		} catch (e: any) {
 			throw new Error(`checkResult failed - ${key} issue, expected: ${data[key]} found: ${result[key]}  `)
 		}
 	}

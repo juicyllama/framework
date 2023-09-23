@@ -41,7 +41,7 @@ export class AwsSecretsService {
 			)
 
 			return JSON.parse(response.SecretString)
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(
 				`[${domain}] Error: ${e.message}`,
 				e.response

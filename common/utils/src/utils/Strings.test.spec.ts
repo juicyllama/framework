@@ -1,4 +1,4 @@
-import { Strings } from './Strings'
+import { Strings } from './Strings.js'
 
 describe('Strings', () => {
 	it('replacer', async () => {

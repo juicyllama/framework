@@ -33,7 +33,7 @@ export async function getSecret(secret_name: string): Promise<any> {
 		)
 
 		return JSON.parse(response.SecretString)
-	} catch (e) {
+	} catch (e: any) {
 		logger.error(
 			`[${domain}] Error: ${e.message}`,
 			e.response
@@ -74,7 +74,7 @@ export async function listSecrets(): Promise<object> {
 		const response = await client.send(new ListSecretsCommand({}))
 
 		return response.SecretList
-	} catch (e) {
+	} catch (e: any) {
 		logger.error(
 			`[${domain}] Error: ${e.message}`,
 			e.response

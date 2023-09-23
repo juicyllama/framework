@@ -1,13 +1,13 @@
-import { Api } from '@/helpers'
-import { Contact, FormApiOptionsCreate } from '@/types'
-import instance from '@/services'
-import { accountStore } from '@/index'
+import { Api } from '@/helpers/api.js'
+import { Contact, FormApiOptionsCreate } from '@/types/index.js'
+import instance from '../index.js'
+import { accountStore } from '@/index.js'
 
 type T = Contact
 export const CONTACTS_ENDPOINT = '/crm/contacts'
 export const CONTACTS_PUSHER_EVENT = `account_{account_id}_crm_contacts`
 export class ContactsService extends Api<T> {
-	async create(options: FormApiOptionsCreate): Promise<T> {
+	override async create(options: FormApiOptionsCreate): Promise<T> {
 		return await super.create(options)
 	}
 

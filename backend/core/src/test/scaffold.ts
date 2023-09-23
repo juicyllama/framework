@@ -71,7 +71,7 @@ export class Scaffold<T> {
 				imports: imports,
 				providers: [Query, Logger],
 			}).compile()
-		} catch (e) {
+		} catch (e: any) {
 			console.error(e.message, e)
 		}
 
@@ -122,7 +122,7 @@ export class Scaffold<T> {
 	async down(E?: any) {
 		try {
 			await testCleanup(moduleRef, E)
-		} catch (e) {
+		} catch (e: any) {
 			logger.warn(e.message, e)
 		}
 	}

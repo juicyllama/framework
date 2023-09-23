@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Strings } from '@juicyllama/utils'
-import { CustomButton, TableSchema } from '../../../../types'
+import { CustomButton, TableSchema } from '@/types/index.js'
 
 const props = defineProps<{
 	buttons: CustomButton[]

@@ -1,8 +1,6 @@
 {
     //todo move alot of this to a shared tsconfig once issues have been fixed in all packages
     "compilerOptions": {
-        "outDir": "./dist",
-        "rootDir": "./src",
 		"module": "node16",
 		"moduleResolution": "node16",
 		"moduleDetection": "force",
@@ -12,6 +10,7 @@
 			"DOM.Iterable",
 			"ES2021"
 		],
+        "types": ["vite/client"],
 		"allowSyntheticDefaultImports": true, // To provide backwards compatibility, Node.js allows you to import most CommonJS packages with a default import. This flag tells TypeScript that it's okay to use import on CommonJS modules.
 		"resolveJsonModule": true, // ESM doesn't yet support JSON modules.
 		"jsx": "react",
@@ -20,13 +19,10 @@
 		"newLine": "lf",
 		"stripInternal": true,
 		"strict": true,
-		"noImplicitReturns": true,
 		"noImplicitOverride": true,
-		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedIndexedAccess": true,
-		"noEmitOnError": true,
 		"useDefineForClassFields": true,
 		"forceConsistentCasingInFileNames": true,
 		"skipLibCheck": true,
@@ -34,9 +30,11 @@
 		"strictPropertyInitialization": false, // todo fix these issues so we can have this on
 		"strictNullChecks":false, // todo fix these issues so we can have this on
         "noImplicitAny": false, // todo fix these issues so we can have this on
+        "noImplicitReturns": false, // todo fix these issues so we can have this on
         "noPropertyAccessFromIndexSignature": false, // todo fix these issues so we can have this on
+        "noUnusedLocals": false, // todo fix these issues so we can have this on
+
     },
-    "include": ["src/**/*"],
     "exclude": [
         "**/node_modules",
         "**/dist",

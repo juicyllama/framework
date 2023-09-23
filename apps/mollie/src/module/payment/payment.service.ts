@@ -82,7 +82,7 @@ export class PaymentService extends BaseService<T> {
 				})
 				this.logger.debug(`Mollie payment response for first payment attempt: `, mollie_response)
 			}
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`Error: ${e.message}`, {
 				error: {
 					message: e.message,
@@ -135,7 +135,7 @@ export class PaymentService extends BaseService<T> {
 				mollie_response = await mollieClient.payments.get(payment.ext_payment_id)
 				this.logger.debug(`Get mollie payment response: `, mollie_response)
 			}
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`Error: ${e.message}`, {
 				error: {
 					message: e.message,
@@ -238,7 +238,7 @@ export class PaymentService extends BaseService<T> {
 				})
 				this.logger.debug(`Create mollie payment response: `, mollie_response)
 			}
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`Error: ${e.message}`, {
 				error: {
 					message: e.message,

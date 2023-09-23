@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TableColumn, TableExtraType } from '@/types'
+import { TableColumn, TableExtraType } from '@/types/index.js'
 
 const props = defineProps<{
 	col: TableColumn

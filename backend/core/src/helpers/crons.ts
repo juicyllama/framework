@@ -15,7 +15,7 @@ export async function CronRunner(
 
 	try {
 		cron_result = await func
-	} catch (e) {
+	} catch (e: any) {
 		logger.error(e.message, e)
 		return e.stack
 	}

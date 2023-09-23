@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watch, Ref } from 'vue'
-import { logger } from '@/helpers'
-import { default as JLForm } from '../../form/Form.vue'
-import { SearchFilter, ColumnsFilter, CustomButtons } from './index'
+import { logger } from '@/helpers/logger.js'
+import { default as JLForm } from '@/form/Form.vue'
+import { SearchFilter, ColumnsFilter, CustomButtons } from './index.js'
 import {
 	TablePosition,
 	LogSeverity,
@@ -11,7 +11,7 @@ import {
 	FormField,
 	FormFieldButtonType,
 	FormFieldField,
-} from '@/types'
+} from '@/types/index.js'
 import { useQuasar } from 'quasar'
 import FieldContents from '@/components/common/table/components/FieldContents.vue'
 import TableActions from '@/components/common/table/components/TableActions.vue'

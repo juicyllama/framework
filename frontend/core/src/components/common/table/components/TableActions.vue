@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TableSchema } from '@/types'
+import { TableSchema } from '@/types/index.js'
 
 const props = defineProps<{
 	tableSchema: TableSchema

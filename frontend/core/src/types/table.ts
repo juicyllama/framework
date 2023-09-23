@@ -1,5 +1,5 @@
-import { CustomButton, TablePosition, FindOptions, IconSettings } from './common'
-import { FormField } from './form'
+import { CustomButton, TablePosition, FindOptions, IconSettings } from './common.js'
+import { FormField } from './form.js'
 
 export interface TableOptions {
 	limit: number

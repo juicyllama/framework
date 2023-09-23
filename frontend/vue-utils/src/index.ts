@@ -1,6 +1,6 @@
 import { App } from 'vue'
 
-import * as components from './components'
+import * as components from './components/index.js'
 export * from './styles/index.scss'
 
 const JLUtils = {
@@ -15,5 +15,5 @@ const JLUtils = {
 export { JLUtils }
 
 // export all components as vue plugin
-export * from './components'
-export * from './types/index'
+export * from './components/index.js'
+export * from './types/index.js'

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { watchEffect, reactive } from 'vue'
-import { getInvoiceById } from '@/services/billing'
+import { getInvoiceById } from '@/services/billing.js'
 
 const props = defineProps<{
 	invoice_id: number

@@ -1,5 +1,5 @@
-import { App, AppStoreIntegrationName } from './apps'
-import { Account, User } from '@/types'
+import { App, AppStoreIntegrationName } from './apps.js'
+import { Account, User } from '../index.js'
 
 export enum AppScope {
 	ACCOUNT = 'ACCOUNT',

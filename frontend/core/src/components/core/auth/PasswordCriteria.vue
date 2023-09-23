@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AuthFormState, isPasswordValid } from '../../../helpers/validators'
+import { AuthFormState, isPasswordValid } from '@/helpers/validators.js'
 
 const props = defineProps<{
 	show?: boolean

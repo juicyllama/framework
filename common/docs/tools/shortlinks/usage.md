@@ -53,11 +53,11 @@ export class SmsSubscriber implements EntitySubscriberInterface<ShortlinkClick> 
 		try {
 			dataSource.subscribers.push(this)
 			logger.verbose(`SmsSubscriber: Registered`)
-		} catch (e) {
+		} catch (e: any) {
 			logger.warn(`SmsSubscriber Failed: ${e.message}`, e)
 		}
 	}
-	
+
 	listenTo() {
 		return ShortlinkClick
 	}
@@ -78,15 +78,15 @@ export class SmsSubscriber implements EntitySubscriberInterface<ShortlinkClick> 
 
         switch(shortlink.resource_type) {
             case 'SMS':
-                
+
                 const newSmsClick = {
                     sms_id: shortlink.resource_id,
                     clicked: true,
                 }
-        
+
                 logger.log(`[${domain}] Creating Sms Click`, newSmsClick)
                 return await event.manager.getRepository(SmsClick).save(newSmsClick)
-                
+
             default:
                 logger.error(`[${domain}] Resource type not recognised for shortlink`, shortlink)
                 return

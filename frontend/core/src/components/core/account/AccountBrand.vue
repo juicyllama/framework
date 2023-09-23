@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { AccountStore } from '../../../store/account'
-import { UserStore } from '../../../store/user'
+import { AccountStore } from '@/store/account.js'
+import { UserStore } from '@/store/user.js'
 import { ref } from 'vue'
 import AccountAvatar from '@/components/core/account/AccountAvatar.vue'
 

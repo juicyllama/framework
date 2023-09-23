@@ -1,5 +1,5 @@
 import { Env } from '@juicyllama/utils'
-import { LogSeverity, LogType } from '@/types'
+import { LogSeverity, LogType } from '../types/index.js'
 import { QVueGlobals } from 'quasar'
 
 export function logger(options: {

@@ -54,7 +54,7 @@ export class CrmCronsContactsService {
 				} else {
 					failed++
 				}
-			} catch (e) {
+			} catch (e: any) {
 				failures.push(e.message)
 			}
 		}

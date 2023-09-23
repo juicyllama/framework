@@ -34,7 +34,7 @@ export class EverflowAffiliateReportingClicksService {
 
 		try {
 			return await this.api.post(domain, ENDPOINT, options.arguments, getEverflowAxiosConfig(options.config))
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`[${domain}] Error finding clicks: ${e.message}`, e)
 		}
 	}

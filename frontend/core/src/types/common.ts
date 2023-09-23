@@ -1,4 +1,4 @@
-export * from './common/index'
+export * from './common/index.js'
 
 export interface DropdownOptions {
 	value: string | number
@@ -34,7 +34,7 @@ export interface FindOptions {
 	relations?: string
 	select?: string
 	search?: string
-	[key: string]: boolean | number | string; // for abstracted filters
+	[key: string]: boolean | number | string // for abstracted filters
 }
 
 export interface StatsResponse {

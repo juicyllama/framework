@@ -87,7 +87,7 @@ describe(`${NAME} Service`, () => {
 		it('Should delete existing record', async () => {
 			try {
 				await scaffold.services.service.remove(record)
-			} catch (e) {
+			} catch (e: any) {
 				console.error(e.message, e)
 				expect(e).toBeUndefined()
 			}

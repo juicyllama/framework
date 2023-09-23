@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import { Logger } from './Logger'
+import { Logger } from './Logger.js'
 
 const logger = new Logger()
 
@@ -39,7 +39,7 @@ export class Poll {
 
 				try {
 					result = await axios.get(url, config)
-				} catch (e) {
+				} catch (e: any) {
 					logger.warn(`[${domain}][${uuid}] POLL Error: ${e.message}`, {
 						error: {
 							message: e.message,
@@ -64,10 +64,10 @@ export class Poll {
 		}
 
 		return poll()
-			.then((result) => {
+			.then(result => {
 				return result
 			})
-			.catch((error) => {
+			.catch(error => {
 				throw Error(error)
 			})
 	}
@@ -111,7 +111,7 @@ export class Poll {
 
 				try {
 					result = await func()
-				} catch (e) {
+				} catch (e: any) {
 					logger.warn(`[${domain}][${uuid}] POLL Error: ${e.message}`, {
 						error: {
 							message: e.message,
@@ -139,10 +139,10 @@ export class Poll {
 		}
 
 		return poll()
-			.then((result) => {
+			.then(result => {
 				return result
 			})
-			.catch((e) => {
+			.catch(e => {
 				logger.warn(`[${domain}][${uuid}] POLL Error: ${e.message}`, {
 					error: {
 						message: e.message,

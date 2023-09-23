@@ -1,5 +1,5 @@
-import type { User } from './user'
-import type { Account } from './account'
+import type { User } from './user.js'
+import type { Account } from './account.js'
 export enum UserRole {
 	VIEWER_WITHOUT_REVENUE = 'VIEWER_WITHOUT_REVENUE',
 	VIEWER = 'VIEWER',

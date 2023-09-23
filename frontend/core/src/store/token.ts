@@ -1,4 +1,4 @@
-import instance from '../services'
+import instance from '../services/index.js'
 
 export const token = {
 	get(): string | null {

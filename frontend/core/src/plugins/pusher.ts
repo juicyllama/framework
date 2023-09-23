@@ -1,6 +1,6 @@
-import { logger } from '@/helpers'
-import { LogSeverity } from '@/types'
-import { userStore } from '@/index'
+import { logger } from '@/helpers/logger.js'
+import { LogSeverity } from '../types/common.js'
+import { userStore } from '../index.js'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -11,7 +11,7 @@ export const pusherCreds = {
 }
 
 export async function loadPusher(event: string, callback: Function): Promise<void> {
-	const Pusher = await import('pusher-js')
+	const Pusher: any = await import('pusher-js')
 
 	if (!Pusher) {
 		logger({ severity: LogSeverity.WARN, message: `[Pusher] Not installed` })

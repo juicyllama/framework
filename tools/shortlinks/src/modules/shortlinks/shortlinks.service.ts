@@ -67,7 +67,7 @@ export class ShortlinksService extends BaseService<T> {
 				resource_type: data.resource_type,
 				resource_id: data.resource_id,
 			})
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`[${domain}] ${e.message}`, e)
 			throw new UnprocessableEntityException('Server Error')
 		}

@@ -15,7 +15,7 @@ export default defineComponent({
 			emit('complete', value)
 		}
 
-		return { handleOnComplete, otpInput, emit }
+		return { handleOnComplete, otpInput, emit, props }
 	},
 })
 </script>

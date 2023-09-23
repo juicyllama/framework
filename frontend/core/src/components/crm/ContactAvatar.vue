@@ -2,11 +2,10 @@
 import { ref } from 'vue'
 import { Strings } from '@juicyllama/utils'
 import { useQuasar } from 'quasar'
-import { AvatarType, Contact, LogSeverity } from '@/types'
-import { logger } from '@/helpers'
-import { CONTACTS_ENDPOINT, ContactsService } from '@/services/crm/contacts'
-import { stripPx, short } from '@/helpers'
-import { gravatar } from '@/plugins/gravatar'
+import { AvatarType, Contact, LogSeverity } from '@/types/index.js'
+import { logger, stripPx, short } from '@/helpers/index.js'
+import { CONTACTS_ENDPOINT, ContactsService } from '@/services/crm/contacts.js'
+import { gravatar } from '@/plugins/gravatar.js'
 
 const props = defineProps<{
 	contact: Contact

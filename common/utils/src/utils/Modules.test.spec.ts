@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { Modules } from './Modules'
+import { Modules } from './Modules.js'
 
 describe('IsInstalled?', () => {
 	it('Can we check if a module is installed', async () => {

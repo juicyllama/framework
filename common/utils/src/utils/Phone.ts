@@ -1,5 +1,5 @@
 import CODES from '../assets/dailing_codes.json'
-import { Strings } from './Strings'
+import { Strings } from './Strings.js'
 
 export class Phone {
 	/**

@@ -61,7 +61,7 @@ export class InvoiceService {
 		this.logger.debug(`[${domain}] Create xero invoice - request`, data)
 		const xero = await this.authService.accessToken()
 
-		const response = await xero.accountingApi.createInvoices('', { invoices: [data] }, null,true, 4)
+		const response = await xero.accountingApi.createInvoices('', { invoices: [data] }, null, true, 4)
 		this.logger.debug(`[${domain}] Create xero invoice - response`, response)
 
 		const xero_response_body = response?.body
@@ -115,7 +115,7 @@ export class InvoiceService {
 			}
 
 			return await this.syncInvoice(invoice)
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`[${domain}] Error: ${e.message}`, {
 				error: {
 					message: e.message,
@@ -159,7 +159,7 @@ export class InvoiceService {
 				amount_due: xero_response.amountDue,
 				amount_paid: xero_response.amountPaid,
 			})
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`Error: ${e.message}`, {
 				error: {
 					message: e.message,

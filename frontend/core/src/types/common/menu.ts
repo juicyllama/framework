@@ -1,4 +1,4 @@
-import { Button } from '@/types'
+import { Button } from './button.js'
 
 export interface Menu {
 	items: MenuItems[]

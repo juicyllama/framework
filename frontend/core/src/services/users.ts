@@ -1,8 +1,8 @@
-import instance from './index'
-import type { User } from '@/types/user'
-import type { UserRole } from '@/types/role'
-import { Api, apiRequest } from '../helpers/api'
-import { accountStore } from '@/index'
+import instance from './index.js'
+import type { User } from '../types/user.js'
+import type { UserRole } from '../types/role.js'
+import { Api, apiRequest } from '@/helpers/api.js'
+import { accountStore } from '../index.js'
 
 type T = User
 export const USERS_ENDPOINT = '/users'

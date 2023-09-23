@@ -1,2 +1,2 @@
-export * from './apps'
-export * from './installedApp'
+export * from './apps.js'
+export * from './installedApp.js'

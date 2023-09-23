@@ -18,7 +18,7 @@ describe('Core Bootup', () => {
 					controllers: [],
 					providers: [],
 				}).compile()
-			} catch (e) {
+			} catch (e: any) {
 				expect(e.message).toEqual('Bootup failed')
 			}
 		})

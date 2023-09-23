@@ -9,7 +9,7 @@ export class Modules {
 		try {
 			const p = require.resolve(name)
 			return !!p
-		} catch (e) {
+		} catch (e: any) {
 			return false
 		}
 	}

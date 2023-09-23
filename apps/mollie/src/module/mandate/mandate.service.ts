@@ -65,7 +65,7 @@ export class MandateService extends BaseService<T> {
 
 				this.logger.debug(`Get mollie mandate response: `, mollie_response)
 			}
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`Error: ${e.message}`, {
 				error: {
 					message: e.message,

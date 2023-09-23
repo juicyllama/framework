@@ -1,5 +1,5 @@
 import axios, { RawAxiosRequestConfig } from 'axios'
-import { Logger } from './Logger'
+import { Logger } from './Logger.js'
 
 const logger = new Logger()
 
@@ -47,7 +47,7 @@ export class Api {
 			logger.verbose(`[${domain}]${uuid ? '[' + uuid + ']' : ''} Response data`, response.data)
 
 			return response.data
-		} catch (e) {
+		} catch (e: any) {
 			return this.processError(e, 'GET', url, domain, config, null, uuid)
 		}
 	}
@@ -79,7 +79,7 @@ export class Api {
 			const response = await axios.post(url, data, config)
 			logger.debug(`[${domain}]${uuid ? '[' + uuid + ']' : ''} Response ${response.status}`, response.data)
 			return response.data
-		} catch (e) {
+		} catch (e: any) {
 			return this.processError(e, 'POST', url, domain, config, data, uuid)
 		}
 	}
@@ -111,7 +111,7 @@ export class Api {
 			const response = await axios.patch(url, data, config)
 			logger.debug(`[${domain}]${uuid ? '[' + uuid + ']' : ''} Response ${response.status}`, response.data)
 			return response.data
-		} catch (e) {
+		} catch (e: any) {
 			return this.processError(e, 'PATCH', url, domain, config, data, uuid)
 		}
 	}
@@ -142,7 +142,7 @@ export class Api {
 			const response = await axios.put(url, data, config)
 			logger.debug(`[${domain}]${uuid ? '[' + uuid + ']' : ''} Response ${response.status}`, response.data)
 			return response.data
-		} catch (e) {
+		} catch (e: any) {
 			return this.processError(e, 'PUT', url, domain, config, data, uuid)
 		}
 	}
@@ -167,7 +167,7 @@ export class Api {
 			const response = await axios.delete(url, config)
 			logger.debug(`[${domain}]${uuid ? '[' + uuid + ']' : ''} Response ${response.status}`, response.data)
 			return true
-		} catch (e) {
+		} catch (e: any) {
 			return this.processError(e, 'DELETE', url, domain, config, null, uuid)
 		}
 	}

@@ -1,5 +1,5 @@
-import { FormField, FormFieldType, LogSeverity } from '@/types'
-import { logger } from './logger'
+import { FormField, FormFieldType, LogSeverity } from '../types/index.js'
+import { logger } from './logger.js'
 import { isNotEmptyObject } from 'class-validator'
 
 export function pipeFormData(data: any, schema: FormField[]) {

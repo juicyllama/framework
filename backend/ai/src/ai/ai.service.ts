@@ -259,7 +259,7 @@ export class AiService {
 	//
 	// 	try {
 	// 		//return this.openaiService.train(training.training_data)
-	// 	} catch (e) {
+	// 	} catch (e: any) {
 	// 		this.logger.error(e.message, e)
 	// 		return
 	// 	}

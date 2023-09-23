@@ -1,1 +1,1 @@
-export * from './shortlinks'
+export * from './shortlinks.js'

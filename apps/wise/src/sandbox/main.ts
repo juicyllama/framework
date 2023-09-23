@@ -24,6 +24,6 @@ async function bootstrap() {
 
 try {
 	bootstrap()
-} catch (e) {
+} catch (e: any) {
 	logger.error(`[${domain}] ${e.message}`, e)
 }

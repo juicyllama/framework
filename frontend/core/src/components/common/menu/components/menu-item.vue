@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MenuItem } from '@/types'
+import { MenuItem } from '@/types/common/menu.js'
 
 const props = defineProps<MenuItem>()
 </script>

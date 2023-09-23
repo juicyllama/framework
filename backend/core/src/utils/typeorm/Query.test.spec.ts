@@ -225,7 +225,6 @@ describe('TypeORM query', () => {
 			expect(result[0].account_name).toEqual(scaffold.values.account.account_name)
 		})
 
-
 		it('Perform a find with buildWhere account_id and two search fields using partial query', async () => {
 			const where = scaffold.query.buildWhere({
 				repository: scaffold.repository,
@@ -347,7 +346,7 @@ describe('TypeORM query', () => {
 		it('Perform a purge query', async () => {
 			try {
 				await scaffold.query.remove(scaffold.repository, scaffold.values.record)
-			} catch (e) {
+			} catch (e: any) {
 				console.error(e)
 				expect(e).toEqual('error')
 			}

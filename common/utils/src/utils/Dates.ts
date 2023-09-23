@@ -1,8 +1,8 @@
-import { DateRangeDto } from '../dto/date.dto'
-import { StepType } from '../enums/stats'
-import { month_names, month_names_short, SubscriptionFrequency } from '../enums/dates'
+import { DateRangeDto } from '../dto/date.dto.js'
+import { StepType } from '../enums/stats.js'
+import { month_names, month_names_short, SubscriptionFrequency } from '../enums/dates.js'
 
-const nth = function (d) {
+const nth = function (d: number) {
 	if (d > 3 && d < 21) return 'th'
 	switch (d % 10) {
 		case 1:
@@ -50,12 +50,6 @@ export class Dates {
 					? '0' + milliseconds
 					: milliseconds,
 			)
-	}
-
-	private static formatZerolessValue(value: number): string {
-		if (value < 10) return '0' + value
-
-		return String(value)
 	}
 
 	static addDays(date: Date, days: number): Date {

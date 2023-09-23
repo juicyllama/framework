@@ -1,14 +1,19 @@
 import type { App } from 'vue'
-import { AccountStore } from './store/account'
-import { token } from './store/token'
-import { UserStore } from './store/user'
-import instance from './services/index'
+import { AccountStore } from './store/account.js'
+import { token } from './store/token.js'
+import { UserStore } from './store/user.js'
+import instance from './services/index.js'
 import classes from './assets/JLCore.css'
-import { ThemeStore } from './store/theme'
-import { JLForm, JLTable, JLMenu, JLChart, JLStats, JLLogin, JLDropdownButtonMenu } from '@/components'
-import { JLAccountProfile, JLAccountAvatar, JLAccountSwitcher, JLAccountBrand } from '@/components/core/account'
-import { JLUserAvatar, JLUserProfile, JLUserMenu } from '@/components/core/user'
-import { JLAppStoreConnect } from '@/components/app-store'
+import { ThemeStore } from './store/theme.js'
+import { JLForm, JLTable, JLMenu, JLChart, JLStats, JLLogin, JLDropdownButtonMenu } from './components/index.js'
+import {
+	JLAccountProfile,
+	JLAccountAvatar,
+	JLAccountSwitcher,
+	JLAccountBrand,
+} from './components/core/account/index.js'
+import { JLUserAvatar, JLUserProfile, JLUserMenu } from './components/core/user/index.js'
+import { JLAppStoreConnect } from './components/app-store/index.js'
 import { Plugin } from 'vue'
 
 let userStore
@@ -16,7 +21,7 @@ let accountStore
 let themeStore
 
 const JLCore = {
-	install(app: App, options: any) {
+	install(options: any) {
 		const { $pinia } = options
 
 		if (!$pinia) {
@@ -52,17 +57,17 @@ export default {
 export { JLCore, classes }
 export { token }
 export { userStore, accountStore, themeStore }
-export * from './components'
-export * from './types/index'
+export * from './components/index.js'
+export * from './types/index.js'
 export { instance }
-export * from './plugins/index'
-export * from './helpers/index'
-export * from './services/app-store/index'
-export * from './services/crm/index'
-export * from './services/tools/index'
-export * from './services/account'
-export * from './services/auth'
-export * from './services/billing'
+export * from './plugins/index.js'
+export * from './helpers/index.js'
+export * from './services/app-store/index.js'
+export * from './services/crm/index.js'
+export * from './services/tools/index.js'
+export * from './services/account.js'
+export * from './services/auth.js'
+export * from './services/billing.js'
 export {
 	JLAccountProfile,
 	JLAccountAvatar,

@@ -32,7 +32,7 @@ export class SlackChatService {
 			const response = await app.client.chat.postMessage(message)
 			this.logger.debug(`[${domain}] Response`, response)
 			return response
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.error(`[${domain}] ${e.message}`, {
 				message: message,
 			})

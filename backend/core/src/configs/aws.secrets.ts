@@ -26,7 +26,7 @@ export async function loadEnvVariables(SECRET_MANAGER_NAME: string, envPath: str
 		}
 
 		return secrets
-	} catch (e) {
+	} catch (e: any) {
 		logger.error(`[loadEnvVariables] ${e.message}`, e.stack)
 	}
 }

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { UserStore } from '../../../store/user'
-import AuthActions from '@/components/core/auth/Actions.vue'
-import OTP from '@/components/core/auth/OTP.vue'
-import PasswordCriteria from '@/components/core/auth/PasswordCriteria.vue'
-import { validateEmail, isPasswordValid } from '../../../helpers/validators'
-import type { ValidationPassword, AuthFormState } from '../../../helpers/validators'
+import { UserStore } from '@/store/user.js'
+import AuthActions from './Actions.vue'
+import OTP from './OTP.vue'
+import PasswordCriteria from './PasswordCriteria.vue'
+import { validateEmail, isPasswordValid } from '@/helpers/validators.js'
+import type { ValidationPassword, AuthFormState } from '@/helpers/validators.js'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 
@@ -112,7 +112,7 @@ async function newEmail(state: AuthFormState) {
 					label="Password *"
 					v-model="state.password.value"
 					type="password"
-					:rules="[val => isPasswordValid(state.password) || 'Password must meet all criteria.']"
+					:rules="[() => isPasswordValid(state.password) || 'Password must meet all criteria.']"
 					autocomplete="new-password">
 				</q-input>
 

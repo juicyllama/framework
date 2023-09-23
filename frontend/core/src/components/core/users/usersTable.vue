@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { usersTableSchema } from '@/components/core/users/users.table.schema'
-import { JLTable, IconSettings, userStore, FormSettings } from '@/index'
+import { usersTableSchema } from './users.table.schema.js'
+import { JLTable, IconSettings, userStore, FormSettings } from '@/index.js'
 
 const props = defineProps<{
 	formSettings?: FormSettings

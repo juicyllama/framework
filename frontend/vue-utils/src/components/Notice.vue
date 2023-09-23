@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NoticeProps } from '../types'
+import { NoticeProps } from '../types/notice.js'
 
 const props = defineProps<NoticeProps>()
 </script>

@@ -12,7 +12,7 @@ export class SandboxController {
 	async message(@Req() req, @Body() options: SpbConfig) {
 		try {
 			return await this.scrapingBeeService.scrape(options)
-		} catch (e) {
+		} catch (e: any) {
 			console.log(e)
 		}
 	}

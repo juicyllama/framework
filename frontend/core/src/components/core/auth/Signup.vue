@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { validateEmail, isPasswordValid, type ValidationPassword } from '../../../helpers/validators'
+import { validateEmail, isPasswordValid, type ValidationPassword } from '@/helpers/validators.js'
 import PasswordCriteria from './PasswordCriteria.vue'
 import AuthActions from '@/components/core/auth/Actions.vue'
-import type { CreateAccount } from '../../../types/account'
-import { AccountStore } from '../../../store/account'
+import type { CreateAccount } from '@/types/account.js'
+import { AccountStore } from '@/store/account.js'
 import { useRouter } from 'vue-router'
 
 const props = defineProps<{
@@ -38,7 +38,6 @@ const router = useRouter()
 
 async function create(state: CreateAccount) {
 	loading.value = true
-
 
 	if (props.skip_account_name) {
 		state.account_name = `${state.first_name} ${state.last_name} project`
@@ -104,7 +103,7 @@ async function create(state: CreateAccount) {
 				label="Password *"
 				v-model="state.password.value"
 				type="password"
-				:rules="[val => isPasswordValid(state.password) || 'Password must meet all criteria.']"
+				:rules="[() => isPasswordValid(state.password) || 'Password must meet all criteria.']"
 				:lazy-rules="props?.lazy_rules ?? false">
 			</q-input>
 			<q-input

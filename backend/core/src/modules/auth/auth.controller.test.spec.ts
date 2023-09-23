@@ -38,7 +38,7 @@ describe('Auth Endpoints', () => {
 					try {
 						expect(body.access_token).toBeDefined()
 						scaffold.values.owner_access_token = body.access_token
-					} catch (e) {
+					} catch (e: any) {
 						console.error(body)
 						expect(e).toMatch('error')
 					}
@@ -71,7 +71,7 @@ describe('Auth Endpoints', () => {
 				.then(async ({ body }) => {
 					try {
 						expect(body.passed).toBeTruthy()
-					} catch (e) {
+					} catch (e: any) {
 						console.error(body)
 						expect(e).toMatch('error')
 					}
@@ -93,7 +93,7 @@ describe('Auth Endpoints', () => {
 				.then(async ({ body }) => {
 					try {
 						expect(body.success).toBeTruthy()
-					} catch (e) {
+					} catch (e: any) {
 						console.error(body)
 						expect(e).toMatch('error')
 					}
@@ -116,7 +116,7 @@ describe('Auth Endpoints', () => {
 				.then(async ({ body }) => {
 					try {
 						expect(body.success).toBeTruthy()
-					} catch (e) {
+					} catch (e: any) {
 						console.error(body)
 						expect(e).toMatch('error')
 					}
@@ -140,7 +140,7 @@ describe('Auth Endpoints', () => {
 				.then(async ({ body }) => {
 					try {
 						expect(body.access_token).toBeTruthy()
-					} catch (e) {
+					} catch (e: any) {
 						console.error(body)
 						expect(e).toMatch('error')
 					}
@@ -162,7 +162,7 @@ describe('Auth Endpoints', () => {
 				.then(async ({ body }) => {
 					try {
 						expect(body.success).toBeTruthy()
-					} catch (e) {
+					} catch (e: any) {
 						console.error(body)
 						expect(e).toMatch('error')
 					}
@@ -185,7 +185,7 @@ describe('Auth Endpoints', () => {
 				.then(async ({ body }) => {
 					try {
 						expect(body.access_token).toBeTruthy()
-					} catch (e) {
+					} catch (e: any) {
 						console.error(body)
 						expect(e).toMatch('error')
 					}

@@ -1,5 +1,5 @@
-import { Api } from '@/helpers'
-import { Shortlink } from '@/types'
+import { Api } from '@/helpers/api.js'
+import { Shortlink } from '@/types/index.js'
 
 type T = Shortlink
 

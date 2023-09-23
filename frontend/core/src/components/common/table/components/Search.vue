@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue'
-import { TableSchema } from '../../../../types/table'
+import { TableSchema } from '@/types/table.js'
 
 const props = defineProps<{
 	tableSchema: TableSchema

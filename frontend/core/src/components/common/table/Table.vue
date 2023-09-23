@@ -2,12 +2,12 @@
 import { onMounted, Ref, ref } from 'vue'
 import Table from '@/components/common/table/components/Table.vue'
 import { useQuasar } from 'quasar'
-import { FindOptions, LogSeverity } from '@/types'
-import { logger, TableColumn, TableSchema } from '../../../index'
+import { FindOptions, LogSeverity } from '@/types/index.js'
+import { logger, TableColumn, TableSchema } from '@/index.js'
 import { StatsMethods } from '@juicyllama/utils'
 import { defineStore } from 'pinia'
 import { isEmpty, isNull, result } from 'lodash'
-import { loadPusher } from '@/plugins'
+import { loadPusher } from '@/plugins/pusher.js'
 
 const props = defineProps<{
 	options: TableSchema

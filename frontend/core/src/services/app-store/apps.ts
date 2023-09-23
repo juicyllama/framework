@@ -1,5 +1,5 @@
-import { Api } from '@/helpers'
-import { App } from '@/types'
+import { Api } from '@/helpers/api.js'
+import { App } from '@/types/index.js'
 
 type T = App
 export const APPS_ENDPOINT = '/apps/store'

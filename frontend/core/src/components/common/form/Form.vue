@@ -10,15 +10,15 @@ import {
 	FormSchema,
 	InstalledApp,
 	LogSeverity,
-} from '@/types'
+} from '@/types/index.js'
 import { useQuasar } from 'quasar'
-import { inputEmailNotRequired, inputEmailRequired, inputRequired } from '@/helpers/validators'
-import { logger } from '@/helpers/logger'
+import { inputEmailNotRequired, inputEmailRequired, inputRequired } from '@/helpers/validators.js'
+import { logger } from '@/helpers/logger.js'
 import { Strings } from '@juicyllama/utils'
-import { pipeFormData } from '@/helpers/pipes'
+import { pipeFormData } from '@/helpers/pipes.js'
 import { default as Telephone } from '@/components/common/form/plugins/Telephone.vue'
 import { default as InstalledAppButton } from '@/components/common/form/plugins/InstallApp.vue'
-import countries from '../../../assets/json/countries.json'
+import countries from '@/assets/json/countries.json'
 import { JLNotice, NoticeType } from '@juicyllama/vue-utils'
 
 const props = defineProps<{

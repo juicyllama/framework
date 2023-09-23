@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { UserStore } from '../../../store/user'
+import { UserStore } from '@/store/user.js'
 import AuthActions from '@/components/core/auth/Actions.vue'
 import OTP from '@/components/core/auth/OTP.vue'
 import { useRouter } from 'vue-router'
-import type { AuthFormState } from '../../../helpers/validators'
+import type { AuthFormState } from '@/helpers/index.js'
 import { useQuasar } from 'quasar'
 
 const $q = useQuasar()
