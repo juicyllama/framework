@@ -10,7 +10,7 @@
         "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": true,
         "esModuleInterop": true,
-        "target": "es6",
+        "target": "esnext",
         "sourceMap": true,
         "noLib": false,
         "skipLibCheck": true,
