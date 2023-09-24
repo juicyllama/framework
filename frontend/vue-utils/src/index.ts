@@ -24,3 +24,5 @@ export * from './utils/Enums'
 export * from './utils/Numbers'
 
 export * from './enums/currencies'
+export * from './enums/dates'
+export * from './enums/stats'
