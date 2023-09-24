@@ -442,6 +442,9 @@ importers:
       source-map-support:
         specifier: ^0.5.21
         version: 0.5.21
+      supertest:
+        specifier: ^6.3.3
+        version: 6.3.3
       swagger-ui-express:
         specifier: ^5.0.0
         version: 5.0.0(express@4.18.2)
@@ -2689,13 +2692,13 @@ packages:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  /@juicyllama/core@0.0.309(@bugsnag/core@7.19.0)(express@4.18.2)(rxjs@7.8.1)(yargs@17.7.2):
-    resolution: {integrity: sha512-4Gy9ZQuIQ1qbgTKCGVBSUTY7Ml3OvbbU+xiDBCaYed92Xfroziom1gdRbQGoSVXXw90evLnW+jXpDcSCRjn6OA==}
+  /@juicyllama/core@0.0.310(@bugsnag/core@7.19.0)(express@4.18.2)(rxjs@7.8.1)(yargs@17.7.2):
+    resolution: {integrity: sha512-AAmdJtfYItP7V2Z330nAKQUT9WGJJ94J96Ng0bQHyg6vKUz3wJhtJhNfOKftLxqtSwtTh4ze/eJzVx+A2qhDfg==}
     dependencies:
       '@bugsnag/js': 7.21.0
       '@bugsnag/plugin-express': 7.19.0(@bugsnag/core@7.19.0)
       '@juicyllama/nestjs-redoc': 2.3.11(@bugsnag/core@7.19.0)(express@4.18.2)(rxjs@7.8.1)(yargs@17.7.2)
-      '@juicyllama/utils': 0.0.106
+      '@juicyllama/utils': 0.0.107
       '@nestjs/cache-manager': 2.1.0(@nestjs/common@10.2.6)(@nestjs/core@10.2.6)(cache-manager@5.2.3)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/cli': 10.1.17
       '@nestjs/common': 10.2.6(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
@@ -2795,7 +2798,7 @@ packages:
   /@juicyllama/nestjs-redoc@2.3.11(@bugsnag/core@7.19.0)(express@4.18.2)(rxjs@7.8.1)(yargs@17.7.2):
     resolution: {integrity: sha512-xDjGYhpsCoYIENQBqGwInHnAhkuITzZ0TXkxphjanjiCDnvVv0cEPBElI+llJ0ZxoNYhX8G7K8eQ9D47/ORivQ==}
     dependencies:
-      '@juicyllama/core': 0.0.309(@bugsnag/core@7.19.0)(express@4.18.2)(rxjs@7.8.1)(yargs@17.7.2)
+      '@juicyllama/core': 0.0.310(@bugsnag/core@7.19.0)(express@4.18.2)(rxjs@7.8.1)(yargs@17.7.2)
       express-basic-auth: 1.2.1
       express-handlebars: 7.1.2
     transitivePeerDependencies:
@@ -2840,8 +2843,8 @@ packages:
       - yargs
     dev: false
 
-  /@juicyllama/utils@0.0.106:
-    resolution: {integrity: sha512-+SEi6JigFxcF1P0FIQDtDFZG4znmKy0hJtEIuetQG5Ymh4hoivYXJmNAXUnA2cmTDYp014/7IKiAHwqLt6l0Lg==}
+  /@juicyllama/utils@0.0.107:
+    resolution: {integrity: sha512-ZeDjsefqHC92rwHu8yOaDA5p6Vh/RJeWpBqkZnWTSfbhbh345WBz5fOb6B+ylRnV6PZJWEYCSMXStbYDcfYndg==}
     dependencies:
       axios: 1.5.0
       dayjs: 1.11.10
