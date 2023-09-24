@@ -36,7 +36,7 @@ async function bootstrap() {
 		redoc = installAppStoreDocs(redoc)
 		logger.debug(`[${domain}] ...app store loaded`)
 		await RedocModule.setup('', app, document, redoc, true)
-	} catch (e) {
+	} catch (e: any) {
 		logger.error(`[${domain}] ${e.message}`, e)
 	}
 
@@ -48,6 +48,6 @@ async function bootstrap() {
 
 try {
 	bootstrap()
-} catch (e) {
+} catch (e: any) {
 	logger.error(`[${domain}] ${e.message}`, e)
 }

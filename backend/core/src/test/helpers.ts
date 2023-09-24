@@ -1,9 +1,9 @@
 import request from 'supertest'
-import { Account } from '../modules/accounts/account.entity'
+import { Account } from '../modules/accounts/account.entity.js'
 import { Logger, StatsMethods } from '@juicyllama/utils'
 import { DeepPartial } from 'typeorm'
-import { ScaffoldDto } from './scaffold'
-import { METHOD } from '../types'
+import { ScaffoldDto } from './scaffold.js'
+import { METHOD } from '../types/index.js'
 import * as querystring from 'querystring'
 
 //todo is there a way to pass the request type dynamically to merge some of these switch statements?

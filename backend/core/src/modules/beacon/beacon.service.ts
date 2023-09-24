@@ -1,10 +1,10 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { BeaconMessageDto } from './beacon.dto'
-import { BeaconEmailService } from './email/email.service'
-import { BeaconPushService } from './push/push.service'
-import { BeaconSmsService } from './sms/sms.service'
-import { BeaconNotificationService } from './notification/notification.service'
-import { BeaconImService } from './im/im.service'
+import { BeaconMessageDto } from './beacon.dto.js'
+import { BeaconEmailService } from './email/email.service.js'
+import { BeaconPushService } from './push/push.service.js'
+import { BeaconSmsService } from './sms/sms.service.js'
+import { BeaconNotificationService } from './notification/notification.service.js'
+import { BeaconImService } from './im/im.service.js'
 
 @Injectable()
 export class BeaconService {

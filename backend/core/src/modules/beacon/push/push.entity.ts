@@ -1,6 +1,6 @@
 import { IsEnum, IsNumber, IsDate, IsString, IsObject } from 'class-validator'
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
-import { BeaconStatus } from '../beacon.enums'
+import { BeaconStatus } from '../beacon.enums.js'
 
 @Entity('beacon_push')
 export class BeaconPush {

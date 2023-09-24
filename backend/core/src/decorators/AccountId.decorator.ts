@@ -9,7 +9,10 @@ export const AccountId = createParamDecorator((data: unknown, ctx: ExecutionCont
 
 	if (!account_id || isNil(account_id)) {
 		const logger = new Logger()
-		logger.warn('[@AccountId Decorator] Missing required header value: account-id', request)
+		logger.warn('[@AccountId Decorator] Missing required header value: account-id', {
+			request: request,
+			data: data
+		})
 		console.table(request.headers)
 		throw new BadRequestException('Missing required header value: account-id')
 	}

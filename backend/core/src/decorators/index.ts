@@ -1,4 +1,4 @@
-export { AccountId } from './AccountId.decorator'
+export { AccountId } from './AccountId.decorator.js';
 export {
 	CreateDecorator,
 	ReadOneDecorator,
@@ -8,6 +8,6 @@ export {
 	UpdateDecorator,
 	UploadFileDecorator,
 	DeleteDecorator,
-} from './crud.decorator'
-export { SwaggerPropertyType, SwaggerPropertyReference, SwaggerPropertyDecorator } from './Swagger.decorator'
-export { UserAuth } from './UserAuth.decorator'
+} from './crud.decorator.js';
+export { SwaggerPropertyType, SwaggerPropertyReference, SwaggerPropertyDecorator } from './Swagger.decorator.js';
+export { UserAuth } from './UserAuth.decorator.js';

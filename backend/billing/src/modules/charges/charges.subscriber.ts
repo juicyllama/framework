@@ -11,7 +11,7 @@ export class ChargesSubscriber implements EntitySubscriberInterface<Charge> {
 		try {
 			dataSource.subscribers.push(this)
 			logger.verbose(`ChargesSubscriber: Registered`)
-		} catch (e) {
+		} catch (e: any) {
 			logger.warn(`ChargesSubscriber Failed: ${e.message}`, e)
 		}
 	}

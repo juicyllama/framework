@@ -5,8 +5,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import 'reflect-metadata'
 import { Enviroment, Logger, Strings } from '@juicyllama/utils'
 import { RedocModule } from '@juicyllama/nestjs-redoc'
-import { redocConfig, TypeOrmFilter, validationPipeOptions } from '../index'
-import { SandboxModule } from './sandbox.module'
+import { redocConfig, TypeOrmFilter, validationPipeOptions } from '../index.js'
+import { SandboxModule } from './sandbox.module.js'
 
 const domain = 'main::bootstrap'
 const logger = new Logger()
@@ -31,7 +31,7 @@ async function bootstrap() {
 
 		const document = SwaggerModule.createDocument(app, swagger_document)
 		await RedocModule.setup('', app, document, redocConfig, true)
-	} catch (e) {
+	} catch (e: any) {
 		logger.error(`[${domain}] ${e.message}`, e)
 	}
 
@@ -41,6 +41,6 @@ async function bootstrap() {
 
 try {
 	bootstrap()
-} catch (e) {
+} catch (e: any) {
 	logger.error(`[${domain}] ${e.message}`, e)
 }

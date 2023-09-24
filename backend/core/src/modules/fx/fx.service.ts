@@ -2,10 +2,10 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { FxRate } from './fx.entity'
+import { FxRate } from './fx.entity.js'
 import { Cache } from 'cache-manager'
 import { CachePeriod, Dates, JLCache, Logger, Modules, SupportedCurrencies } from '@juicyllama/utils'
-import { Query } from '../../utils/typeorm/Query'
+import { Query } from '../../utils/typeorm/Query.js'
 
 const calc = (amount: number, from: number, to: number): number => {
 	return (amount / from) * to

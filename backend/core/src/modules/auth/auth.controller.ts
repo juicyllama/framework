@@ -1,17 +1,17 @@
 import { Body, Controller, forwardRef, Get, Inject, Post, Req, UseGuards } from '@nestjs/common'
 import { ApiHideProperty, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
-import { LoginResponseDto, ValidateCodeDto } from './dtos/login.dto'
-import { CompletePasswordResetDto, InitiateResetPasswordDto } from './dtos/password.reset.dto'
-import { User } from '../users/users.entity'
-import { InitiatePasswordlessLoginDto } from './dtos/passwordless.login.dto'
-import { UserAuth } from '../../decorators'
-import { AuthService } from './auth.service'
+import { LoginResponseDto, ValidateCodeDto } from './dtos/login.dto.js'
+import { CompletePasswordResetDto, InitiateResetPasswordDto } from './dtos/password.reset.dto.js'
+import { User } from '../users/users.entity.js'
+import { InitiatePasswordlessLoginDto } from './dtos/passwordless.login.dto.js'
+import { UserAuth } from '../../decorators/index.js'
+import { AuthService } from './auth.service.js'
 import { SuccessResponseDto } from '@juicyllama/utils'
-import { LocalAuthGuard } from './guards/local-auth.guard'
-import { UsersService } from '../users/users.service'
+import { LocalAuthGuard } from './guards/local-auth.guard.js'
+import { UsersService } from '../users/users.service.js'
 import { AuthGuard } from '@nestjs/passport'
-import { AccountId } from '../../decorators'
-import { AzureADGuard } from './strategies/azure.strategy'
+import { AccountId } from '../../decorators/index.js'
+import { AzureADGuard } from './strategies/azure.strategy.js'
 
 @ApiTags('Auth')
 @Controller('/auth')
@@ -61,7 +61,7 @@ export class AuthController {
 		type: SuccessResponseDto,
 	})
 	@Post('password-reset')
-	async initiatePasswordReset(@Req() req, @Body() data: InitiateResetPasswordDto): Promise<SuccessResponseDto> {
+	async initiatePasswordReset(@Body() data: InitiateResetPasswordDto): Promise<SuccessResponseDto> {
 		return {
 			success: await this.authService.initiatePasswordReset(data),
 		}
@@ -103,7 +103,6 @@ export class AuthController {
 	})
 	@Post('passwordless')
 	async initiatePasswordLessLogin(
-		@Req() req,
 		@Body() data: InitiatePasswordlessLoginDto,
 	): Promise<SuccessResponseDto> {
 		return {

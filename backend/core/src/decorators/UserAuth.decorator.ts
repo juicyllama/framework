@@ -6,7 +6,7 @@ import {
 	ApiNotFoundResponse,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
-import { JwtAuthGuard } from '../modules/auth/guards/jwt-auth.guard'
+import { JwtAuthGuard } from '../modules/auth/guards/jwt-auth.guard.js'
 
 export function UserAuth(options?: { skipAccountId?: boolean }) {
 	const decorators = [ApiBearerAuth(), UseGuards(JwtAuthGuard)]

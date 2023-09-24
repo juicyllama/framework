@@ -1,4 +1,4 @@
-import { User } from './users.entity'
+import { User } from './users.entity.js'
 
 export const E = User
 export type T = User

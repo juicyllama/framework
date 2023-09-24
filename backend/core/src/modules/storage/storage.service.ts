@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { Cache } from 'cache-manager'
 import { CachePeriod, Enviroment, JLCache, Logger, Modules } from '@juicyllama/utils'
-import { StorageFileFormat, StorageFileType } from './storage.enums'
+import { StorageFileFormat, StorageFileType } from './storage.enums.js'
 import { LazyModuleLoader } from '@nestjs/core'
 
 @Injectable()

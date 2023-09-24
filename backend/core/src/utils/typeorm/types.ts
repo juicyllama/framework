@@ -1,5 +1,5 @@
 import { ChartsPeriod } from '@juicyllama/utils'
-import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
+import { FindManyOptions } from 'typeorm'
 
 export type ChartOptions<T = any> = FindManyOptions<T> & {
 	search?: string

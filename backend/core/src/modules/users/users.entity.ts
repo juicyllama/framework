@@ -12,10 +12,10 @@ import {
 	MaxLength,
 	MinLength,
 } from 'class-validator'
-import { BaseEntity } from '../../helpers/baseEntity'
-import { Account } from '../accounts/account.entity'
-import { UserAvatarType } from './users.enums'
-import { Role } from '../auth/role.entity'
+import { BaseEntity } from '../../helpers/baseEntity.js'
+import { Account } from '../accounts/account.entity.js'
+import { UserAvatarType } from './users.enums.js'
+import { Role } from '../auth/role.entity.js'
 
 @Entity('users')
 export class User extends BaseEntity {

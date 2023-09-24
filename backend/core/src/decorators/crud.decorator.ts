@@ -103,7 +103,7 @@ export function ReadStatsDecorator(name?: string) {
 	)
 }
 
-export function ReadChartsDecorator(E, SelectEnum, name?: string) {
+export function ReadChartsDecorator(_E, SelectEnum, name?: string) {
 	return applyDecorators(
 		ApiOperation({ summary: name ? `${Strings.capitalize(name)} Charts` : 'Charts' }),
 		ApiQuery({

@@ -1,6 +1,6 @@
-import { SandboxModule } from './sandbox.module'
-import { Scaffold, ScaffoldDto } from '../test'
-import { Account } from '../modules/accounts/account.entity'
+import { SandboxModule } from './sandbox.module.js'
+import { Scaffold, ScaffoldDto } from '../test/index.js'
+import { Account } from '../modules/accounts/account.entity.js'
 
 const MODULE = SandboxModule
 type T = Account

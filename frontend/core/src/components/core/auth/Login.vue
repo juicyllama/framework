@@ -68,7 +68,7 @@ if (route.query.code) {
 		}
 
 		await router.push('/dashboard')
-	} catch (e) {
+	} catch (e: any) {
 		logger({
 			severity: LogSeverity.ERROR,
 			message: `${Strings.capitalize(localStorage.getItem('OAuthType'))} SSO failed, please try again`,

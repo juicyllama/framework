@@ -1,8 +1,9 @@
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy } from 'passport-google-oauth20'
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { UsersService } from '../../users/users.service'
-import { defaultSSOString } from '../../../configs/sso.config.joi'
+import { UsersService } from '../../users/users.service.js'
+import { defaultSSOString } from '../../../configs/sso.config.joi.js'
+import { Logger } from '@juicyllama/utils'
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -16,6 +17,13 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 	}
 
 	async validate(accessToken: string, refreshToken: string, profile: any): Promise<any> {
+		const logger = new Logger()
+		const domain = 'Auth::MicrosoftStrategy::validate'
+		logger.debug(domain, 'Validate Request', {
+			accessToken: accessToken,
+			refreshToken: refreshToken,
+			profile: profile,
+		})
 		const { emails } = profile
 		return await this.usersService.validateEmail(emails[0].value)
 	}

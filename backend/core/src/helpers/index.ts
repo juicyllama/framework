@@ -1,6 +1,6 @@
-export { BaseEntity } from './baseEntity'
-export { BaseService } from './baseService'
-export { CronRunner } from './crons'
+export { BaseEntity } from './baseEntity.js'
+export { BaseService } from './baseService.js'
+export { CronRunner } from './crons.js'
 export {
 	crudCreate,
 	crudFindOne,
@@ -10,4 +10,4 @@ export {
 	crudUpdate,
 	crudDelete,
 	crudPurge,
-} from './crudController'
+} from './crudController.js'

@@ -1,8 +1,8 @@
 import { IsNumber, IsDate, IsString, IsArray } from 'class-validator'
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { User } from '../../users/users.entity'
-import { Account } from '../../accounts/account.entity'
-import { BaseEntity } from '../../../helpers'
+import { User } from '../../users/users.entity.js'
+import { Account } from '../../accounts/account.entity.js'
+import { BaseEntity } from '../../../helpers/index.js'
 
 @Entity('beacon_notification')
 export class BeaconNotification extends BaseEntity {

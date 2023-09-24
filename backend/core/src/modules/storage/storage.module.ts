@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common'
 import { CacheModule } from '@nestjs/cache-manager'
-import { StorageService } from './storage.service'
+import { StorageService } from './storage.service.js'
 import { Logger } from '@juicyllama/utils'
-import cacheConfig from '../../configs/cache.config'
+import cacheConfig from '../../configs/cache.config.js'
 import { ConfigModule } from '@nestjs/config'
-import { Query } from '../../utils/typeorm/Query'
+import { Query } from '../../utils/typeorm/Query.js'
 
 @Module({
 	imports: [

@@ -1,6 +1,6 @@
 {
    "compilerOptions": {
-        "module": "node16",
+        "module": "NodeNext",
         "moduleResolution": "node16",
         "moduleDetection": "force",
         "target": "es2021", // Node.js 16
@@ -23,6 +23,7 @@
         "newLine": "lf",
         "stripInternal": true,
         "strict": true,
+        "emitDecoratorMetadata": true,
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
         "noUncheckedIndexedAccess": true,
@@ -41,9 +42,5 @@
     "exclude": [
         "**/node_modules",
         "**/dist",
-        "**/*spec.ts",
-        "**/*.test.spec.ts",
-        "**/*.test.paused.ts",
-        "**/*.test.config.ts"
     ]
 }

@@ -1,4 +1,4 @@
-import { Countries } from './Countries'
+import { Countries } from './Countries.js'
 
 describe('Countries', () => {
 	describe('Convert', () => {

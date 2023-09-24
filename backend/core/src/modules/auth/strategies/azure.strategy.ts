@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { PassportStrategy, AuthGuard } from '@nestjs/passport'
 import { BearerStrategy } from 'passport-azure-ad'
-import { defaultSSOString } from '../../../configs/sso.config.joi'
+import { defaultSSOString } from '../../../configs/sso.config.joi.js'
 
 const AZURE_AD_CLIENT_ID = process.env.AZURE_AD_CLIENT_ID ?? defaultSSOString
 const AZURE_AD_TENANT_ID = process.env.AZURE_AD_TENANT_ID ?? defaultSSOString

@@ -13,9 +13,9 @@ import {
 	UploadedFile,
 } from '@nestjs/common'
 import { StatsMethods, StatsResponseDto, Strings, SuccessResponseDto } from '@juicyllama/utils'
-import { AuthService } from '../auth/auth.service'
-import { AccountService } from './account.service'
-import { AccountId } from '../../decorators/AccountId.decorator'
+import { AuthService } from '../auth/auth.service.js'
+import { AccountService } from './account.service.js'
+import { AccountId } from '../../decorators/AccountId.decorator.js'
 import {
 	CreateDecorator,
 	ReadManyDecorator,
@@ -23,16 +23,16 @@ import {
 	ReadStatsDecorator,
 	UpdateDecorator,
 	UploadFileDecorator,
-} from '../../decorators/crud.decorator'
-import { OnboardAccountDto, OnboardAdditionalAccountDto, SuccessAccountDto, UpdateAccountDto } from './account.dto'
-import { Account } from './account.entity'
-import { AccountOrderBy, AccountRelations, AccountSelect } from './account.enums'
-import { TypeOrm } from '../../utils/typeorm/TypeOrm'
-import { Query as TQuery } from '../../utils/typeorm/Query'
-import { UserAuth } from '../../decorators/UserAuth.decorator'
-import { UserRole } from '../users/users.enums'
+} from '../../decorators/crud.decorator.js'
+import { OnboardAccountDto, OnboardAdditionalAccountDto, SuccessAccountDto, UpdateAccountDto } from './account.dto.js'
+import { Account } from './account.entity.js'
+import { AccountOrderBy, AccountRelations, AccountSelect } from './account.enums.js'
+import { TypeOrm } from '../../utils/typeorm/TypeOrm.js'
+import { Query as TQuery } from '../../utils/typeorm/Query.js'
+import { UserAuth } from '../../decorators/UserAuth.decorator.js'
+import { UserRole } from '../users/users.enums.js'
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
-import { UsersService } from '../users/users.service'
+import { UsersService } from '../users/users.service.js'
 
 const E = Account
 type T = Account

@@ -1,8 +1,8 @@
 import { IsString, MinLength, MaxLength, IsOptional, IsEnum, IsEmail } from 'class-validator'
 import { ApiProperty, PartialType } from '@nestjs/swagger'
 import { SupportedCurrencies } from '@juicyllama/utils'
-import { Account } from './account.entity'
-import { User } from '../users/users.entity'
+import { Account } from './account.entity.js'
+import { User } from '../users/users.entity.js'
 
 export class SuccessAccountDto {
 	readonly account: Account

@@ -1,4 +1,4 @@
-export { testCleanup } from './closedown'
-export { TestEndpoint, TestService } from './helpers'
-export { MockAccountRequest, MockUserRequest } from './mocks'
-export { ScaffoldDto, Scaffold } from './scaffold'
+export { testCleanup } from './closedown.js'
+export { TestEndpoint, TestService } from './helpers.js'
+export { MockAccountRequest, MockUserRequest } from './mocks.js'
+export { ScaffoldDto, Scaffold } from './scaffold.js'

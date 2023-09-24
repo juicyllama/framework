@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common'
-import { Query } from '../utils/typeorm/Query'
+import { Query } from '../utils/typeorm/Query.js'
 import { DeepPartial, FindOneOptions, Repository } from 'typeorm'
-import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
-import { BeaconService } from '../modules/beacon/beacon.service'
+import { FindManyOptions } from 'typeorm/find-options/FindManyOptions.js'
+import { BeaconService } from '../modules/beacon/beacon.service.js'
 import { Cache } from 'cache-manager'
 import { CachePeriod, JLCache, Logger } from '@juicyllama/utils'
-import { ChartOptions } from '../utils/typeorm/types'
+import { ChartOptions } from '../utils/typeorm/types.js'
 import { ResultSetHeader } from 'mysql2'
 
 /**

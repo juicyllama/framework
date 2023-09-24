@@ -12,12 +12,12 @@ import {
 	UploadedFile,
 } from '@nestjs/common'
 import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto, Strings } from '@juicyllama/utils'
-import { CreateUserDto, UpdateUserDto } from './users.dto'
-import { UserOrderBy, UserRelations, UserRole, UserSelect } from './users.enums'
+import { CreateUserDto, UpdateUserDto } from './users.dto.js'
+import { UserOrderBy, UserRelations, UserRole, UserSelect } from './users.enums.js'
 import { ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
-import { AuthService } from '../auth/auth.service'
-import { AccountService } from '../accounts/account.service'
-import { UsersService } from './users.service'
+import { AuthService } from '../auth/auth.service.js'
+import { AccountService } from '../accounts/account.service.js'
+import { UsersService } from './users.service.js'
 import {
 	AccountId,
 	CreateDecorator,
@@ -28,15 +28,15 @@ import {
 	UpdateDecorator,
 	UploadFileDecorator,
 	UserAuth,
-} from '../../decorators'
-import { Query as TQuery } from '../../utils/typeorm/Query'
-import { CSV_FIELDS, DEFAULT_ORDER_BY, E, NAME, PRIMARY_KEY, SEARCH_FIELDS, T } from './users.constants'
-import { crudDelete, crudFindAll, crudFindOne, crudStats } from '../../helpers'
-import { ReadChartsDecorator, UploadCSVDecorator } from '../../decorators/crud.decorator'
-import { crudCharts, crudUploadCSV } from '../../helpers/crudController'
-import { CsvService } from '../csv/csv.service'
-import { StorageService } from '../storage/storage.service'
-import { CrudUploadCSVResponse } from '../../types/common'
+} from '../../decorators/index.js'
+import { Query as TQuery } from '../../utils/typeorm/Query.js'
+import { CSV_FIELDS, DEFAULT_ORDER_BY, E, NAME, PRIMARY_KEY, SEARCH_FIELDS, T } from './users.constants.js'
+import { crudDelete, crudFindAll, crudFindOne, crudStats } from '../../helpers/index.js'
+import { ReadChartsDecorator, UploadCSVDecorator } from '../../decorators/crud.decorator.js'
+import { crudCharts, crudUploadCSV } from '../../helpers/crudController.js'
+import { CsvService } from '../csv/csv.service.js'
+import { StorageService } from '../storage/storage.service.js'
+import { CrudUploadCSVResponse } from '../../types/common.js'
 
 @ApiTags(Strings.capitalize(Strings.plural(NAME)))
 @UserAuth()
@@ -59,7 +59,7 @@ export class UsersController {
 	}
 
 	@ReadManyDecorator(E, UserSelect, UserOrderBy, UserRelations, NAME)
-	async findAll(@Req() req, @AccountId() account_id: number, @Query() query): Promise<T[]> {
+	async findAll(@AccountId() account_id: number, @Query() query): Promise<T[]> {
 		const users = await crudFindAll<T>({
 			service: this.service,
 			tQuery: this.tQuery,
@@ -77,7 +77,6 @@ export class UsersController {
 
 	@ReadStatsDecorator(NAME)
 	async stats(
-		@Req() req,
 		@AccountId() account_id: number,
 		@Query() query,
 		@Query('method') method?: StatsMethods,
@@ -94,7 +93,6 @@ export class UsersController {
 
 	@ReadChartsDecorator(E, UserSelect, NAME)
 	async charts(
-		@Req() req,
 		@Query() query: any,
 		@Query('search') search: string,
 		@Query('from') from: string,
@@ -116,11 +114,12 @@ export class UsersController {
 	}
 
 	@ReadOneDecorator(E, PRIMARY_KEY, UserSelect, UserRelations, NAME)
-	async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
+	async findOne(@AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
 		const user = await crudFindOne<T>({
 			service: this.service,
 			query: query,
 			primaryKey: params[PRIMARY_KEY],
+			account_id: account_id,
 		})
 
 		delete user.password

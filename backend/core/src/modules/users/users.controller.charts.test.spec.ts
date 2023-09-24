@@ -1,9 +1,9 @@
-import { UsersModule } from './users.module'
-import { MockUserRequest, Scaffold, ScaffoldDto, TestEndpoint } from '../../test'
-import { User } from './users.entity'
-import { METHOD } from '../../types'
+import { UsersModule } from './users.module.js'
+import { MockUserRequest, Scaffold, ScaffoldDto, TestEndpoint } from '../../test/index.js'
+import { User } from './users.entity.js'
+import { METHOD } from '../../types/index.js'
 import { ChartsPeriod, ChartsResponseDto } from '@juicyllama/utils'
-import { UsersService } from './users.service'
+import { UsersService } from './users.service.js'
 
 const E = User
 type T = User

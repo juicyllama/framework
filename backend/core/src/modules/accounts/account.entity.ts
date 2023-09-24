@@ -1,9 +1,9 @@
 import { IsArray, IsBoolean, IsEmail, IsEnum, IsNumber, IsString, IsUrl, MaxLength, MinLength } from 'class-validator'
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
-import { BaseEntity } from '../../helpers/baseEntity'
+import { BaseEntity } from '../../helpers/baseEntity.js'
 import { SupportedCurrencies } from '@juicyllama/utils'
-import { Tag } from '../tags/tags.entity'
-import { Role } from '../auth/role.entity'
+import { Tag } from '../tags/tags.entity.js'
+import { Role } from '../auth/role.entity.js'
 @Entity('accounts')
 export class Account extends BaseEntity {
 	@PrimaryGeneratedColumn()

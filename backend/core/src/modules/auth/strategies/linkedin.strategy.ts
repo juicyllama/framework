@@ -1,7 +1,8 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy } from 'passport-linkedin-oauth2'
-import { UsersService } from '../../users/users.service'
+import { UsersService } from '../../users/users.service.js'
+import { Logger } from '@juicyllama/utils'
 
 @Injectable()
 export class LinkedinStrategy extends PassportStrategy(Strategy, 'linkedin') {
@@ -15,6 +16,13 @@ export class LinkedinStrategy extends PassportStrategy(Strategy, 'linkedin') {
 	}
 
 	async validate(accessToken: string, refreshToken: string, profile: any): Promise<any> {
+		const logger = new Logger()
+		const domain = 'Auth::MicrosoftStrategy::validate'
+		logger.debug(domain, 'Validate Request', {
+			accessToken: accessToken,
+			refreshToken: refreshToken,
+			profile: profile,
+		})
 		const { emails } = profile
 		return await this.usersService.validateEmail(emails[0].value)
 	}

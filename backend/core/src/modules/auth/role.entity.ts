@@ -1,9 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
 import { IsEnum } from 'class-validator'
-import { BaseEntity } from '../../helpers/baseEntity'
-import { Account } from '../accounts/account.entity'
-import { User } from '../users/users.entity'
-import { UserRole } from '../users/users.enums'
+import { BaseEntity } from '../../helpers/baseEntity.js'
+import { Account } from '../accounts/account.entity.js'
+import { User } from '../users/users.entity.js'
+import { UserRole } from '../users/users.enums.js'
 import { Unique } from 'typeorm'
 
 @Entity('users_accounts_roles')
@@ -35,3 +35,4 @@ export class Role extends BaseEntity {
 		Object.assign(this, partial)
 	}
 }
+

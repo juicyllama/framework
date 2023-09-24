@@ -123,7 +123,7 @@ export class InvoicesService extends BaseService<T> {
 						app_invoice_id: app_invoice.xero_invoice_id,
 					})
 				}
-			} catch (e) {
+			} catch (e: any) {
 				this.logger.error(`[${domain}] Error: ${e.message}`, e)
 			}
 		}
@@ -142,7 +142,7 @@ export class InvoicesService extends BaseService<T> {
 				const xeroModule = await this.lazyModuleLoader.load(() => XeroModule)
 				const xeroService = xeroModule.get(XeroService)
 				await xeroService.createInvoicePayment(invoice.app_invoice_id, amount)
-			} catch (e) {
+			} catch (e: any) {
 				this.logger.error(`[${domain}] Error: ${e.message}`, e)
 			}
 		}

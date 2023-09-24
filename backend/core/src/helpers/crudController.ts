@@ -1,11 +1,11 @@
 import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto } from '@juicyllama/utils'
-import { Query as TQuery } from '../utils/typeorm/Query'
-import { TypeOrm } from '../utils/typeorm/TypeOrm'
+import { Query as TQuery } from '../utils/typeorm/Query.js'
+import { TypeOrm } from '../utils/typeorm/TypeOrm.js'
 import { BadRequestException } from '@nestjs/common'
 import _ from 'lodash'
-import { CsvService } from '../modules/csv/csv.service'
+import { CsvService } from '../modules/csv/csv.service.js'
 import { DeepPartial } from 'typeorm'
-import { CrudUploadCSVResponse } from '../types/common'
+import { CrudUploadCSVResponse } from '../types/common.js'
 
 export async function crudCreate<T>(options: { service: any; data: any }): Promise<T> {
 	return await options.service.create(options.data)

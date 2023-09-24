@@ -16,12 +16,12 @@ import {
 	Repository,
 } from 'typeorm'
 import _ from 'lodash'
-import { TypeOrm } from './TypeOrm'
-import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere'
+import { TypeOrm } from './TypeOrm.js'
+import { FindOptionsWhere } from 'typeorm'
 import { isNil, omitBy } from 'lodash'
 import { ComparisonOperator, Enums, Env, getMySQLTimeInterval, Logger } from '@juicyllama/utils'
-import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder'
-import { ChartOptions } from './types'
+import { SelectQueryBuilder } from 'typeorm'
+import { ChartOptions } from './types.js'
 import { ResultSetHeader } from 'mysql2'
 
 const logger = new Logger()
@@ -365,7 +365,7 @@ export class Query<T> {
 				if (options.repository.metadata.columns.find(column => column.propertyName === key)) {
 					// @ts-ignore
 					const fieldLookupWhere: FindOperator<string>[] = _.castArray(value) // value may be a string or an array of strings
-						.reduce((memo: FindOperator<string>[], currentValue: string) => {
+						.reduce((memo: FindOperator<string>[], currentValue: any) => {
 							if (typeof currentValue !== 'string') return memo
 							// checking if value is of the form "operator:value"
 							const [operator, lookupValue] = splitStringByFirstColon(currentValue)

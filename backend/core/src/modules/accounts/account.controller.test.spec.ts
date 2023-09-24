@@ -1,12 +1,12 @@
-import { Account } from './account.entity'
-import { User } from '../users/users.entity'
-import { MockAccountRequest } from '../../test'
+import { Account } from './account.entity.js'
+import { User } from '../users/users.entity.js'
+import { MockAccountRequest } from '../../test/index.js'
 import { faker } from '@faker-js/faker'
-import { AccountModule } from './account.module'
+import { AccountModule } from './account.module.js'
 import request from 'supertest'
-import { Scaffold, ScaffoldDto, TestEndpoint } from '../../test'
-import { AccountService } from './account.service'
-import { METHOD } from '../../types'
+import { Scaffold, ScaffoldDto, TestEndpoint } from '../../test/index.js'
+import { AccountService } from './account.service.js'
+import { METHOD } from '../../types/index.js'
 
 const E = Account
 type T = Account
@@ -49,7 +49,7 @@ describe(`${NAME} Endpoints`, () => {
 						account = body.account
 						primaryKey = body.account.account_id
 						owner = body.owner
-					} catch (e) {
+					} catch (e: any) {
 						console.error(body)
 						expect(e).toMatch('error')
 					}
@@ -69,7 +69,7 @@ describe(`${NAME} Endpoints`, () => {
 					try {
 						expect(body.access_token).toBeDefined()
 						owner_access_token = body.access_token
-					} catch (e) {
+					} catch (e: any) {
 						console.error(body)
 						expect(e).toMatch('error')
 					}
@@ -175,7 +175,7 @@ describe(`${NAME} Endpoints`, () => {
 						expect(body.account.account_id).toBeDefined()
 						expect(body.owner).toBeDefined()
 						expect(body.owner.email).toEqual(owner.email)
-					} catch (e) {
+					} catch (e: any) {
 						console.error(body)
 						expect(e).toMatch('error')
 					}

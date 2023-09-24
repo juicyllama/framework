@@ -58,7 +58,7 @@ describe('Wallet Controller', () => {
 						expect(body).toBeDefined()
 						expect(body[0]).toBeDefined()
 						expect(Number(body[0].balance)).toBe(0 - Number(charge.amount_total))
-					} catch (e) {
+					} catch (e: any) {
 						console.error(body)
 						expect(e).toMatch('error')
 					}

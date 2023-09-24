@@ -1,48 +1,10 @@
 {
-    //todo move alot of this to a shared tsconfig once issues have been fixed in all packages
+	"extends": "../../tsconfig.json",
     "compilerOptions": {
         "outDir": "./dist",
         "rootDir": "./src",
-		"module": "node16",
-		"moduleResolution": "node16",
-		"moduleDetection": "force",
-		"target": "es2021", // Node.js 16
-		"lib": [
-			"DOM",
-			"DOM.Iterable",
-			"ES2021"
-		],
-		"allowSyntheticDefaultImports": true, // To provide backwards compatibility, Node.js allows you to import most CommonJS packages with a default import. This flag tells TypeScript that it's okay to use import on CommonJS modules.
-		"resolveJsonModule": true, // ESM doesn't yet support JSON modules.
-		"jsx": "react",
-		"declaration": true,
-		"pretty": true,
-		"newLine": "lf",
-		"stripInternal": true,
-		"strict": true,
-		"noImplicitReturns": true,
-		"noImplicitOverride": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"noFallthroughCasesInSwitch": true,
-		"noUncheckedIndexedAccess": true,
-		"noEmitOnError": true,
-		"useDefineForClassFields": true,
-		"forceConsistentCasingInFileNames": true,
-		"skipLibCheck": true,
-        "experimentalDecorators": true,
-		"strictPropertyInitialization": false, // todo fix these issues so we can have this on
-		"strictNullChecks":false, // todo fix these issues so we can have this on
-        "noImplicitAny": false, // todo fix these issues so we can have this on
-        "noPropertyAccessFromIndexSignature": false, // todo fix these issues so we can have this on
     },
-    "include": ["src/**/*"],
-    "exclude": [
-        "**/node_modules",
-        "**/dist",
-        "**/*spec.ts",
-        "**/*.test.spec.ts",
-        "**/*.test.paused.ts",
-        "**/*.test.config.ts"
-    ]
+    "include": [
+        "src/**/*.ts"
+    ],
 }

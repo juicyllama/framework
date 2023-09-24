@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { forwardRef, HttpServer, INestApplication, ValidationPipe } from '@nestjs/common'
-import { AccountService } from '../modules/accounts/account.service'
-import { Account } from '../modules/accounts/account.entity'
-import { User } from '../modules/users/users.entity'
-import { Env, Logger, Security } from '@juicyllama/utils'
-import { MockAccountRequest } from './mocks'
-import { testCleanup } from './closedown'
-import { validationPipeOptions } from '../configs'
-import { AccountModule } from '../modules/accounts/account.module'
-import { AuthModule } from '../modules/auth/auth.module'
-import { AuthService } from '../modules/auth/auth.service'
-import { Query } from '../utils/typeorm/Query'
+import { AccountService } from '../modules/accounts/account.service.js'
+import { Account } from '../modules/accounts/account.entity.js'
+import { User } from '../modules/users/users.entity.js'
+import { Env, Logger } from '@juicyllama/utils'
+import { MockAccountRequest } from './mocks.js'
+import { testCleanup } from './closedown.js'
+import { validationPipeOptions } from '../configs/index.js'
+import { AccountModule } from '../modules/accounts/account.module.js'
+import { AuthModule } from '../modules/auth/auth.module.js'
+import { AuthService } from '../modules/auth/auth.service.js'
+import { Query } from '../utils/typeorm/Query.js'
 import { DeepPartial, Repository } from 'typeorm'
 import { faker } from '@faker-js/faker'
 
@@ -123,6 +123,9 @@ export class Scaffold<T> {
 		try {
 			await testCleanup(moduleRef, E)
 		} catch (e: any) {
+			if(!logger){
+				logger = new Logger()
+			}
 			logger.warn(e.message, e)
 		}
 	}

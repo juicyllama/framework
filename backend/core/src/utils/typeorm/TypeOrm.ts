@@ -1,8 +1,5 @@
-import { MoreThan, Repository } from 'typeorm'
-import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
-import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere'
+import { MoreThan, Repository, FindOneOptions, FindManyOptions, FindOptionsWhere } from 'typeorm'
 import { isNil, omitBy } from 'lodash'
-import { FindOneOptions } from 'typeorm/find-options/FindOneOptions'
 
 export class TypeOrm {
 	/**
@@ -77,7 +74,7 @@ export class TypeOrm {
 		if (options?.select) {
 			options.select = <string[]>options.select
 			const validSelectValues = repository.metadata.columns.map(column => column.propertyName)
-			options.select = options.select.filter((select: string) => validSelectValues.includes(select))
+			options.select = options.select.filter((select: any) => validSelectValues.includes(select))
 		}
 		return options
 	}

@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common'
 import { CacheModule } from '@nestjs/cache-manager'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { SettingsService } from './settings.service'
-import { Setting } from './settings.entity'
+import { SettingsService } from './settings.service.js'
+import { Setting } from './settings.entity.js'
 import { Logger } from '@juicyllama/utils'
-import { databaseConfig } from '../../configs'
-import cacheConfig from '../../configs/cache.config'
+import { databaseConfig } from '../../configs/index.js'
+import cacheConfig from '../../configs/cache.config.js'
 import { ConfigModule } from '@nestjs/config'
-import { Query } from '../../utils/typeorm/Query'
+import { Query } from '../../utils/typeorm/Query.js'
 
 @Module({
 	imports: [

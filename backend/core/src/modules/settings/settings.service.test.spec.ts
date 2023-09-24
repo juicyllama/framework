@@ -1,9 +1,9 @@
 import { DeepPartial } from 'typeorm'
-import { Setting } from './settings.entity'
-import { SettingsService } from './settings.service'
+import { Setting } from './settings.entity.js'
+import { SettingsService } from './settings.service.js'
 import { faker } from '@faker-js/faker'
-import { Scaffold, ScaffoldDto } from '../../test'
-import { SettingsModule } from './settings.module'
+import { Scaffold, ScaffoldDto } from '../../test/index.js'
+import { SettingsModule } from './settings.module.js'
 
 const E = Setting
 type T = Setting

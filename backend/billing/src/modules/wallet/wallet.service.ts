@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
+import { FindManyOptions } from 'typeorm'
 import { Wallet } from './wallet.entity'
 import { Account, Query } from '@juicyllama/core'
 import { GetBalanceResponseDto } from './wallet.dto'

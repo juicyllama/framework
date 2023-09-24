@@ -1,13 +1,13 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import { UsersModule } from './users.module'
-import { MockUserRequest, Scaffold, ScaffoldDto, TestEndpoint } from '../../test'
-import { User } from './users.entity'
-import { METHOD } from '../../types'
-import { UsersService } from './users.service'
-import { UserRole } from './users.enums'
+import { UsersModule } from './users.module.js'
+import { MockUserRequest, Scaffold, ScaffoldDto, TestEndpoint } from '../../test/index.js'
+import { User } from './users.entity.js'
+import { METHOD } from '../../types/index.js'
+import { UsersService } from './users.service.js'
+import { UserRole } from './users.enums.js'
 import { faker } from '@faker-js/faker'
-import { Role } from '../auth/role.entity'
+import { Role } from '../auth/role.entity.js'
 
 const E = User
 type T = User

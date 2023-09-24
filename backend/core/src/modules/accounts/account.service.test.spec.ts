@@ -1,14 +1,14 @@
 import { faker } from '@faker-js/faker'
-import { AccountService } from './account.service'
-import { MockAccountRequest } from '../../test'
-import { Account } from './account.entity'
-import { AccountModule } from './account.module'
-import { Query } from '../../utils/typeorm/Query'
-import { UsersService } from '../users/users.service'
-import { UserRole } from '../users/users.enums'
-import { UserDto } from '../users/users.dto'
-import { AccountDto, SuccessAccountDto } from './account.dto'
-import { Scaffold, ScaffoldDto } from '../../test'
+import { AccountService } from './account.service.js'
+import { MockAccountRequest } from '../../test/index.js'
+import { Account } from './account.entity.js'
+import { AccountModule } from './account.module.js'
+import { Query } from '../../utils/typeorm/Query.js'
+import { UsersService } from '../users/users.service.js'
+import { UserRole } from '../users/users.enums.js'
+import { UserDto } from '../users/users.dto.js'
+import { AccountDto, SuccessAccountDto } from './account.dto.js'
+import { Scaffold, ScaffoldDto } from '../../test/index.js'
 
 const E = Account
 type T = Account
@@ -100,7 +100,7 @@ describe('Account Service', () => {
 		it('Should delete additional account', async () => {
 			try {
 				await scaffold.services.service.remove(<Account>new_account.account)
-			} catch (e) {
+			} catch (e: any) {
 				expect(e).toBeUndefined()
 			}
 		})
@@ -110,7 +110,7 @@ describe('Account Service', () => {
 		it('Should delete existing record', async () => {
 			try {
 				await scaffold.services.service.remove(<Account>record)
-			} catch (e) {
+			} catch (e: any) {
 				expect(e).toBeUndefined()
 			}
 		})

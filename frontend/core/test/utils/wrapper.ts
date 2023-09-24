@@ -48,7 +48,7 @@ async function waitForTimeout(func: () => any) {
 		setTimeout(async () => {
 			try {
 				await func()
-			} catch (e) {
+			} catch (e: any) {
 				reject(e)
 				throw e
 			}

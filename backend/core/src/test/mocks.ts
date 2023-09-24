@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
-import { Account } from '../modules/accounts/account.entity'
-import { User } from '../modules/users/users.entity'
+import { Account } from '../modules/accounts/account.entity.js'
+import { User } from '../modules/users/users.entity.js'
 
 export function MockAccountRequest(password?: string) {
 	if (!password) {

@@ -1,8 +1,8 @@
 import { IsArray, IsBoolean, IsObject, IsString, IsUrl } from 'class-validator'
-import { BeaconCommunicationEmailDto } from './email/email.dto'
-import { UserRole } from '../users/users.enums'
-import { Account } from '../accounts/account.entity'
-import { BeaconCommunicationImDto } from './im/im.dto'
+import { BeaconCommunicationEmailDto } from './email/email.dto.js'
+import { UserRole } from '../users/users.enums.js'
+import { Account } from '../accounts/account.entity.js'
+import { BeaconCommunicationImDto } from './im/im.dto.js'
 
 export class BeaconMethodsDto {
 	@IsBoolean()

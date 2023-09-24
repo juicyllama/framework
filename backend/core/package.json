@@ -18,12 +18,14 @@
     "bugs": "https://github.com/juicyllama/framework",
     "license": "0BSD",
     "readmeFilename": "README.md",
-    "main": "dist/index.js",
+    "type": "module",
+    "exports": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "files": [
         "dist/**/*",
         "*.md"
     ],
-    "types": "dist/index.d.ts",
+   
     "scripts": {
         "prebuild": "rimraf dist",
         "prepare": "pnpm run build",
@@ -31,11 +33,7 @@
         "sandbox": "nest start --config src/sandbox/nest-cli.json --watch ",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && vitest",
-        "test:users": "pnpm run test --testPathPattern=src/modules/users/users.controller.test.spec.ts",
-        "test:charts": "pnpm run test --testPathPattern=src/modules/users/users.controller.charts.test.spec.ts",
-        "test:query": "pnpm run test --testPathPattern=src/utils/typeorm/Query.test.spec.ts",
-        "test:filtering": "pnpm run test --testPathPattern=src/utils/typeorm/Query.filtering.test.spec.ts"
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && vitest run"
     },
     "dependencies": {
         "@bugsnag/js": "^7.21.0",
@@ -58,7 +56,6 @@
         "@nestjs/swagger": "^7.1.11",
         "@nestjs/testing": "^10.2.5",
         "@nestjs/typeorm": "^10.0.0",
-        "@types/jest": "^29.5.5",
         "@types/node": "^20.6.3",
         "amqp-connection-manager": "^4.1.14",
         "amqplib": "^0.10.3",
@@ -99,7 +96,9 @@
     },
     "devDependencies": {
         "@faker-js/faker": "^8.0.2",
-        "@juicyllama/dev": "workspace:*",
-        "jest": "^29.6.4"
+        "@juicyllama/dev": "workspace:*"
+    },
+    "engines": {
+        "node": ">=16"
     }
 }
