@@ -13,7 +13,7 @@ module.exports = {
 	},
 	ignorePatterns: [
 		'.eslintrc.js',
-		'.eslintrc.cjs',
+		'.eslintrc.js',
 		'node_modules',
 		'test',
 		'dist',

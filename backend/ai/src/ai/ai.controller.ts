@@ -1,4 +1,4 @@
-import { Body, Controller, forwardRef, Inject, Param, Patch, Post, Req, UseGuards } from '@nestjs/common'
+import { Body, Controller, forwardRef, Inject, Param, Patch, Post, UseGuards } from '@nestjs/common'
 import {
 	ApiBearerAuth,
 	ApiForbiddenResponse,
@@ -10,9 +10,9 @@ import {
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 import { JwtAuthGuard } from '@juicyllama/core'
-import { AiService } from './ai.service'
-import { Ai } from './ai.entity'
-import { AiChatRequest, AiSQLRequest } from './ai.dto'
+import { AiService } from './ai.service.js'
+import { Ai } from './ai.entity.js'
+import { AiChatRequest, AiSQLRequest } from './ai.dto.js'
 import { DeepPartial } from 'typeorm'
 
 @ApiTags('Lana')
@@ -35,7 +35,7 @@ export class AiController {
 		type: Ai,
 	})
 	@Post('ask')
-	async ask(@Req() req, @Body() data: AiChatRequest): Promise<Ai> {
+	async ask(@Body() data: AiChatRequest): Promise<Ai> {
 		return await this.aiService.chat(data)
 	}
 
@@ -45,7 +45,7 @@ export class AiController {
 		type: Ai,
 	})
 	@Post('sql')
-	async sql(@Req() req, @Body() data: AiSQLRequest): Promise<Ai> {
+	async sql(@Body() data: AiSQLRequest): Promise<Ai> {
 		return await this.aiService.sql(data)
 	}
 
@@ -65,7 +65,7 @@ export class AiController {
 		type: Ai,
 	})
 	@Patch('update/:ai_id')
-	async update(@Req() req, @Param('ai_id') ai_id: number, @Body() ai_data: DeepPartial<Ai>): Promise<Ai> {
+	async update(@Param('ai_id') ai_id: number, @Body() ai_data: DeepPartial<Ai>): Promise<Ai> {
 		return await this.aiService.update({
 			ai_id: ai_id,
 			...ai_data,

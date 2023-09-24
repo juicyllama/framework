@@ -2,11 +2,11 @@ import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/commo
 import { Logger, Modules } from '@juicyllama/utils'
 import { LazyModuleLoader } from '@nestjs/core'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Ai } from './ai.entity'
+import { Ai } from './ai.entity.js'
 import { DeepPartial, Repository } from 'typeorm'
 import { AppIntegrationName, Query } from '@juicyllama/core'
-import { AiSuccessType } from './ai.enums'
-import { AiChatRequest, AiImageRequest, AiSQLRequest } from './ai.dto'
+import { AiSuccessType } from './ai.enums.js'
+import { AiChatRequest, AiImageRequest, AiSQLRequest } from './ai.dto.js'
 
 @Injectable()
 export class AiService {

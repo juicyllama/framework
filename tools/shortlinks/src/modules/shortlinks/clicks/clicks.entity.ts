@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { IsString, IsOptional, IsArray } from 'class-validator'
 import { BaseEntity } from '@juicyllama/core'
-import { Shortlink } from '../shortlinks.entity'
+import { Shortlink } from '../shortlinks.entity.js'
 
 @Entity('tools_shortlinks_clicks')
 export class ShortlinkClick extends BaseEntity {

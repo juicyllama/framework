@@ -1,5 +1,5 @@
 module.exports = {
-	extends: ['../.eslintrc.cjs', 'plugin:vue/essential', 'plugin:@typescript-eslint/recommended'],
+	extends: ['../.eslintrc.js', 'plugin:vue/essential', 'plugin:@typescript-eslint/recommended'],
 	env: {
 		browser: true,
 		es2021: true,
@@ -10,9 +10,9 @@ module.exports = {
 		sourceType: 'module',
 	},
 	parser: 'vue-eslint-parser',
-	plugins: [...require('../.eslintrc.cjs').plugins, 'vue'],
+	plugins: [...require('../.eslintrc.js').plugins, 'vue'],
 	rules: {
-		...require('../.eslintrc.cjs').rules,
+		...require('../.eslintrc.js').rules,
 		'vue/require-valid-default-prop': 'off',
 		'vue/no-mutating-props': 'off',
 		'vue/multi-word-component-names': 'off',

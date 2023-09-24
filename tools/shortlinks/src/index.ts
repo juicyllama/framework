@@ -1,2 +1,2 @@
-export * from './modules/shortlinks/index'
-export * from './docs/index'
+export * from './modules/shortlinks/index.js'
+export * from './docs/index.js'

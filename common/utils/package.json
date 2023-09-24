@@ -19,7 +19,7 @@
     "license": "BSD-4-Clause",
     "readmeFilename": "README.md",
 	"type": "module",
-	"exports": "./dist/index.js",
+    "exports": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "scripts": {
         "prebuild": "rimraf dist",
@@ -28,11 +28,7 @@
         "start:dev": "tsc -w",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand",
-        "test:clear": "npx jest --clearCache",
-        "test:watch": "jest --watch",
-        "test:cov": "jest --coverage",
-        "test:e2e": "jest --config ./test/jest-e2e.json"
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && vitest run"
     },
     "dependencies": {
         "axios": "^1.5.0",

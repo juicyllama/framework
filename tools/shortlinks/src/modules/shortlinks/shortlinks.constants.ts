@@ -1,7 +1,7 @@
-import { Shortlink } from './shortlinks.entity'
-import { ShortlinksModule } from './shortlinks.module'
-import { ShortlinksService } from './shortlinks.service'
-import { ShortlinksController } from './shortlinks.controller'
+import { Shortlink } from './shortlinks.entity.js'
+import { ShortlinksModule } from './shortlinks.module.js'
+import { ShortlinksService } from './shortlinks.service.js'
+import { ShortlinksController } from './shortlinks.controller.js'
 
 export const E = Shortlink
 export type T = Shortlink

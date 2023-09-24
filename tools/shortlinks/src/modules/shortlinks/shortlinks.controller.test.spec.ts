@@ -1,7 +1,7 @@
 import { METHOD, Scaffold, ScaffoldDto, TestEndpoint } from '@juicyllama/core'
-import { ENDPOINT_URL, MODULE, NAME, PRIMARY_KEY, SERVICE, T } from './shortlinks.constants'
+import { ENDPOINT_URL, MODULE, NAME, PRIMARY_KEY, SERVICE, T } from './shortlinks.constants.js'
 import { faker } from '@faker-js/faker'
-import { ShortenURLDto } from './shortlinks.dto'
+import { ShortenURLDto } from './shortlinks.dto.js'
 
 describe(`${NAME} Endpoints`, () => {
 	const scaffolding = new Scaffold<T>()

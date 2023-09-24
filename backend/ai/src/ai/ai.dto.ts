@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsArray, IsBoolean, IsEnum, IsObject, IsOptional, IsString } from 'class-validator'
-import { AiSQLTypes } from './ai.enums'
+import { AiSQLTypes } from './ai.enums.js'
 import { Repository } from 'typeorm'
 
 export class AiRequest {

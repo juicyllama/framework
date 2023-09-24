@@ -1,7 +1,7 @@
 import { Scaffold, ScaffoldDto } from '@juicyllama/core'
 import { faker } from '@faker-js/faker'
-import { E, PRIMARY_KEY, T, NAME, MODULE, SERVICE } from './shortlinks.constants'
-import { ShortenURLDto } from './shortlinks.dto'
+import { E, PRIMARY_KEY, T, NAME, MODULE, SERVICE } from './shortlinks.constants.js'
+import { ShortenURLDto } from './shortlinks.dto.js'
 
 describe(`${NAME} Service`, () => {
 	const scaffolding = new Scaffold<T>()

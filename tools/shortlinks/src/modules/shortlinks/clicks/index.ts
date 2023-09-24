@@ -1,3 +1,3 @@
-export * from './clicks.module'
-export * from './clicks.service'
-export * from './clicks.entity'
+export * from './clicks.module.js'
+export * from './clicks.service.js'
+export * from './clicks.entity.js'

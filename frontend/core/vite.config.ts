@@ -9,7 +9,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@': resolve(__dirname, 'src'),
-			fs: 'browserify-fs',
+			//fs: 'browserify-fs',
 			path: 'path-browserify',
 			os: 'os-browserify',
 			crypto: 'crypto-browserify',

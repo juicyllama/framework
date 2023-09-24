@@ -1,6 +1,6 @@
-import { ShortlinkClick } from './clicks.entity'
-import { ShortlinkClicksModule } from './clicks.module'
-import { ShortlinkClicksService } from './clicks.service'
+import { ShortlinkClick } from './clicks.entity.js'
+import { ShortlinkClicksModule } from './clicks.module.js'
+import { ShortlinkClicksService } from './clicks.service.js'
 
 export const E = ShortlinkClick
 export type T = ShortlinkClick

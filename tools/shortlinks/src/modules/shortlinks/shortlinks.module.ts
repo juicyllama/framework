@@ -2,14 +2,16 @@ import { forwardRef, MiddlewareConsumer, Module } from '@nestjs/common'
 import { Env, Logger } from '@juicyllama/utils'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { AccountModule, AuthModule, BeaconModule, databaseConfig, MiddlewareAccountId, Query } from '@juicyllama/core'
-import { Shortlink } from './shortlinks.entity'
-import { ShortlinksService } from './shortlinks.service'
+import { Shortlink } from './shortlinks.entity.js'
+import { ShortlinksService } from './shortlinks.service.js'
 import Joi from 'joi'
-import config from '../../config/config'
-import { configJoi } from '../../config/config.joi'
-import { ShortlinksController } from './shortlinks.controller'
+import config from '../../config/config.js'
+import { configJoi } from '../../config/config.joi.js'
+import { ShortlinksController } from './shortlinks.controller.js'
 import { ConfigModule } from '@nestjs/config'
-import { ShortlinkClicksModule } from './clicks'
+import { ShortlinkClicksModule } from './clicks/clicks.module.js'
+import { ShortlinksRedirectService } from './shortlinks.redirect.service.js'
+import { ShortlinksShortenService } from './shortlinks.shorten.service.js'
 
 @Module({
 	imports: [
@@ -26,8 +28,8 @@ import { ShortlinkClicksModule } from './clicks'
 		forwardRef(() => ShortlinkClicksModule),
 	],
 	controllers: [ShortlinksController],
-	providers: [ShortlinksService, Logger, Query],
-	exports: [ShortlinksService],
+	providers: [ShortlinksService, ShortlinksRedirectService, ShortlinksShortenService, Logger, Query],
+	exports: [ShortlinksService, ShortlinksRedirectService, ShortlinksShortenService],
 })
 export class ShortlinksModule {
 	configure(consumer: MiddlewareConsumer) {

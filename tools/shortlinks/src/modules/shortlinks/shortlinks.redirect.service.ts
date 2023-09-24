@@ -1,85 +1,25 @@
-import {
-	BadRequestException,
-	forwardRef,
-	Inject,
-	Injectable,
-	NotFoundException,
-	Req,
-	UnprocessableEntityException,
-} from '@nestjs/common'
-import { Repository } from 'typeorm'
-import { InjectRepository } from '@nestjs/typeorm'
-import { ShortenURLDto } from './shortlinks.dto.js'
-import { nanoid } from 'nanoid'
-import { isURL } from 'class-validator'
-import { Query, BaseService, BeaconService, Account } from '@juicyllama/core'
-import { Logger } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
-import { Shortlink } from './shortlinks.entity.js'
+import { forwardRef, Inject, Injectable, NotFoundException, Req } from '@nestjs/common'
 import { ShortlinkClick, ShortlinkClicksService } from './clicks/index.js'
-
-type T = Shortlink
-const E = Shortlink
+import { ShortlinksService } from './shortlinks.service.js'
 
 @Injectable()
-export class ShortlinksService extends BaseService<T> {
+export class ShortlinksRedirectService {
 	constructor(
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
-		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
-		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
+		@Inject(forwardRef(() => ShortlinksService)) readonly shortlinksService: ShortlinksService,
 		@Inject(forwardRef(() => ShortlinkClicksService)) readonly shortlinkClicksService: ShortlinkClicksService,
-	) {
-		super(query, repository, {
-			beacon: beaconService,
-		})
-	}
-
-	async shortenUrl(data: ShortenURLDto, account: Account): Promise<T> {
-		const domain = 'tools::shortlinks::service::shortenUrl'
-
-		const { long_url } = data
-
-		if (!isURL(long_url)) {
-			throw new BadRequestException('String Must be a Valid URL')
-		}
-
-		const url_code = nanoid(10)
-		const baseURL = this.configService.get<string>('tools_shortlinks.BASE_URL_SHORTLINKS')
-
-		try {
-			const url = await this.query.findOneByWhere(this.repository, {
-				long_url: long_url,
-				account: {
-					account_id: account.account_id,
-				},
-			})
-			if (url) return url
-
-			const short_url = `${baseURL}/${url_code}`
-
-			return await this.query.create(this.repository, {
-				account: account,
-				url_code: url_code,
-				long_url: long_url,
-				short_url: short_url,
-				resource_type: data.resource_type,
-				resource_id: data.resource_id,
-			})
-		} catch (e: any) {
-			this.logger.error(`[${domain}] ${e.message}`, e)
-			throw new UnprocessableEntityException('Server Error')
-		}
-	}
+	) {}
 
 	/**
 	 * To be called in your microservice to handle the redirect
 	 */
 	async redirect(@Req() req, url_code: string) {
-		//const domain = 'tools::shortlinks::service::redirect'
+		//const domain = 'tools::shortlinks::redirect::service::redirect'
 
-		const shortlink = await this.query.findOneByWhere(this.repository, { url_code: url_code })
+		const shortlink = await this.shortlinksService.findOne({
+			where: {
+				url_code: url_code,
+			},
+		})
 
 		if (!shortlink) throw new NotFoundException('Shortlink Not Found')
 
@@ -103,7 +43,7 @@ export class ShortlinksService extends BaseService<T> {
 			click.is = userAgentIs(req.useragent)
 		}
 
-		await this.shortlinkClicksService.query.create(this.shortlinkClicksService.repository, click)
+		await this.shortlinkClicksService.create(click)
 		return shortlink
 	}
 }

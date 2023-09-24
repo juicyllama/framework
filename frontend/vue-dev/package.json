@@ -19,7 +19,7 @@
     "license": "0BSD",
     "readmeFilename": "README.md",
     "type": "module",
-    "exports": "./dist/index.js",
+    "exports": "./index.js",
     "types": "./dist/index.d.ts",
     "scripts": {
         "build": "tsc"
