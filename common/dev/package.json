@@ -28,8 +28,7 @@
 	"scripts": {
 		"build": "tsc",
 		"format": "prettier --write .",
-		"lint": "eslint --fix",
-		"test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && vitest run"
+		"lint": "eslint --fix"
 	},
 	"dependencies": {
 		"@babel/preset-typescript": "^7.22.11",

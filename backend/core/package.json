@@ -31,7 +31,7 @@
         "sandbox": "nest start --config src/sandbox/nest-cli.json --watch ",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && vitest run",
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand",
         "test:users": "pnpm run test --testPathPattern=src/modules/users/users.controller.test.spec.ts",
         "test:charts": "pnpm run test --testPathPattern=src/modules/users/users.controller.charts.test.spec.ts",
         "test:query": "pnpm run test --testPathPattern=src/utils/typeorm/Query.test.spec.ts",

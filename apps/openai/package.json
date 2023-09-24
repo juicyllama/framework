@@ -30,7 +30,7 @@
         "build": "tsc",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && vitest run",
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand",
         "test:clear": "npx jest --clearCache",
         "test:watch": "jest --watch",
         "test:cov": "jest --coverage",
