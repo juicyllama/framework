@@ -19,3 +19,8 @@ export * from './components'
 export * from './types/index'
 export * from './utils/Strings'
 export * from './utils/Color'
+export * from './utils/Dates'
+export * from './utils/Enums'
+export * from './utils/Numbers'
+
+export * from './enums/currencies'
