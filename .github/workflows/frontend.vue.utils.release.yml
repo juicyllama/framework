@@ -68,16 +68,16 @@ jobs:
                 uses: phips28/gh-action-bump-version@master
                 env:
                     GITHUB_TOKEN: ${{ secrets.GH_CI_CD_RELEASE }}
-                    PACKAGEJSON_DIR: frontend/vue-dev
+                    PACKAGEJSON_DIR: frontend/vue-utils
                 with:
                     major-wording: 'JLMAJOR'
                     minor-wording: 'feature,feat'
                     patch-wording: 'patch,fixes,fix,misc,docs,refactor'    # Providing patch-wording will override commits
-                    commit-message: 'Release Package: Vue Dev Bump Version [skip ci]'
+                    commit-message: 'Release Package: Vue Utils Bump Version [skip ci]'
                     skip-tag: true
 
             -   name: 'Authenticate with NPM'
                 run: echo -e "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
             -   name: 'Publishing package'
-                run: cd frontend/vue-dev && pnpm publish --no-git-checks --access public
+                run: cd frontend/vue-utils && pnpm publish --no-git-checks --access public
