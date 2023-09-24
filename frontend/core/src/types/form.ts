@@ -1,6 +1,5 @@
 import { CustomButton, DropdownOptions, Icon, IconSettings } from './common'
 import { QVueGlobals } from 'quasar'
-import { StatsMethods } from '@juicyllama/utils'
 import { NoticeProps } from '@juicyllama/vue-utils'
 import { ConnectAppOptions, InstalledApp } from '@/types/appstore'
 
@@ -24,7 +23,7 @@ export interface FormApiOptionsFindAll {
 
 export interface FormApiOptionsStats {
 	url: string
-	method: StatsMethods
+	method: string
 	q?: QVueGlobals
 	find?: any
 }

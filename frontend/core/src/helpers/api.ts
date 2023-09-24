@@ -10,7 +10,6 @@ import {
 	FormApiOptionsStats,
 	FormApiOptionsUpdate,
 } from '../types'
-import { StatsMethods } from '@juicyllama/utils'
 
 export async function apiRequest<T>(options: {
 	url: string
@@ -145,11 +144,11 @@ export class Api<T> {
 		})
 
 		switch (options.method) {
-			case StatsMethods.COUNT:
+			case 'COUNT':
 				return response.count
-			case StatsMethods.SUM:
+			case 'SUM':
 				return response.sum
-			case StatsMethods.AVG:
+			case 'AVG':
 				return response.avg
 		}
 	}

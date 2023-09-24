@@ -3,7 +3,7 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-v
 import Reset from '@/components/core/auth/Reset.vue'
 import { createAndInjectRouter, getRouter, mountWithMocks, waitForTimeout } from '@/../test/utils/wrapper'
 import { UserStore } from '@/store/user'
-import { OTP } from '@juicyllama/utils'
+import OTP from '@/components/core/OTP.vue'
 
 describe('Reset', () => {
 	beforeEach(() => {

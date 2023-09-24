@@ -3,7 +3,7 @@ import { USERS_ENDPOINT, USERS_PUSHER_CHANNEL, UsersService } from '@/services/u
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import { accountStore } from '@/index'
-import { Strings } from '@juicyllama/utils'
+import { Strings } from '@juicyllama/vue-utils'
 import { defaultFormSettings } from '@/components/common/form/defaults'
 
 export function usersTableSchema(

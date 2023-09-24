@@ -4,7 +4,7 @@ import { createAndInjectRouter, getRouter, mountWithMocks, waitForTimeout } from
 import { prefillFormByName } from '@/../test/utils/form'
 import { UserStore } from '@/store/user'
 import Passwordless from '@/components/core/auth/Passwordless.vue'
-import { OTP } from '@juicyllama/utils'
+import OTP from '@/components/core/OTP.vue'
 
 describe('Passwordless', () => {
 	installQuasarPlugin()

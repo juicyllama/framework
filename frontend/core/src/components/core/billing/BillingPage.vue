@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { BILLING_INVOICE_ENDPOINT, IconSettings } from '@/index'
-import { StatsMethods } from '@juicyllama/utils'
 import { invoicesTableSchema } from './billing.table.schema'
 
 const props = defineProps<{
@@ -33,12 +32,12 @@ const lastInvoiceData = ref({
 	//TODO:
 	// unable to find method to get LAST items in
 	// https://github.com/juicyllama-npm/billing/blob/main/src/modules/invoices/invoices.service.ts
-	// add StatsMethods.LIMIT ?
-	endpoint: `${BILLING_INVOICE_ENDPOINT}/stats?method=${StatsMethods.AVG}`,
+	// add LIMIT ?
+	endpoint: `${BILLING_INVOICE_ENDPOINT}/stats?method=AVG`,
 	dynamicData: true,
 })
 const avgInvoiceData = ref({
-	endpoint: `${BILLING_INVOICE_ENDPOINT}/stats?method=${StatsMethods.AVG}`,
+	endpoint: `${BILLING_INVOICE_ENDPOINT}/stats?method=AVG`,
 	dynamicData: true,
 })
 </script>
@@ -54,7 +53,7 @@ const avgInvoiceData = ref({
 			</v-col>
 			<v-col xs="12" sm="6">
 				<JLChart
-					:endpoint="`${BILLING_INVOICE_ENDPOINT}/stats?method=${StatsMethods.COUNT}`"
+					:endpoint="`${BILLING_INVOICE_ENDPOINT}/stats?method=COUNT`"
 					title="Invoice spend last 12 months"
 					dynamic-data />
 			</v-col>

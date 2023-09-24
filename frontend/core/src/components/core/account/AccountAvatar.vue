@@ -5,7 +5,7 @@ import { LogSeverity } from '../../../types/common'
 import { getCssVar, useQuasar } from 'quasar'
 import { AccountStore } from '../../../store/account'
 import { Account } from '../../../types/account'
-import { Color } from '@juicyllama/utils'
+import { Color } from '@juicyllama/vue-utils'
 
 const $q = useQuasar()
 const accountStore = AccountStore()

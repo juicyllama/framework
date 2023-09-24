@@ -1,4 +1,3 @@
-import type { SupportedCurrencies } from '@juicyllama/utils'
 import type { Role } from './role'
 import type { AuthFormState } from '../helpers/validators'
 import type { User } from './user'
@@ -17,7 +16,7 @@ export interface NewAccountDetails {
 export interface Account {
 	readonly account_id: number
 	account_name: string
-	currency: SupportedCurrencies
+	currency: string
 	company_name?: string
 	address_1?: string
 	address_2?: string

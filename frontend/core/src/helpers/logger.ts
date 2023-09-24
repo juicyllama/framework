@@ -1,4 +1,3 @@
-import { Env } from '@juicyllama/utils'
 import { LogSeverity, LogType } from '@/types'
 import { QVueGlobals } from 'quasar'
 
@@ -10,7 +9,7 @@ export function logger(options: {
 	object?: any
 	table?: object
 }) {
-	if (options.severity === LogSeverity.VERBOSE && Env.IsProd()) {
+	if (options.severity === LogSeverity.VERBOSE && import.meta.env.NODE_ENV === 'production') {
 		return
 	}
 
@@ -54,11 +53,11 @@ export function logger(options: {
 			break
 	}
 
-	if (options.object && Env.IsDev()) {
+	if (options.object && import.meta.env.NODE_ENV === 'development') {
 		console.dir(options.object)
 	}
 
-	if (options.table && Env.IsDev()) {
+	if (options.table && import.meta.env.NODE_ENV === 'development') {
 		console.table(options.table)
 	}
 }

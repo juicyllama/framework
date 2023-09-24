@@ -36,7 +36,6 @@ export default defineConfig({
 			external: [
 				/^\/@fs*/,
 				'@fortawesome/fontawesome-pro',
-				'@juicyllama/utils',
 				'@quasar/extras',
 				'chart.js',
 				'chart.js/auto',
@@ -58,7 +57,6 @@ export default defineConfig({
 				globals: {
 					vue: 'Vue',
 					pinia: 'Pinia',
-					'@juicyllama/utils': 'JLUtils',
 					'vue-router': 'vue-router',
 					'vue3-otp-input': 'vue3-otp-input',
 					'javascript-time-ago': 'javascript-time-ago',

@@ -14,12 +14,11 @@ import {
 import { useQuasar } from 'quasar'
 import { inputEmailNotRequired, inputEmailRequired, inputRequired } from '@/helpers/validators'
 import { logger } from '@/helpers/logger'
-import { Strings } from '@juicyllama/utils'
 import { pipeFormData } from '@/helpers/pipes'
 import { default as Telephone } from '@/components/common/form/plugins/Telephone.vue'
 import { default as InstalledAppButton } from '@/components/common/form/plugins/InstallApp.vue'
 import countries from '../../../assets/json/countries.json'
-import { JLNotice, NoticeType } from '@juicyllama/vue-utils'
+import { JLNotice, NoticeType, Strings } from '@juicyllama/vue-utils'
 
 const props = defineProps<{
 	options: FormSchema

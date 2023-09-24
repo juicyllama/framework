@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Strings } from '@juicyllama/utils'
+import { Strings } from '@juicyllama/vue-utils'
 import { useQuasar } from 'quasar'
 import { AvatarType, Contact, LogSeverity } from '@/types'
 import { logger } from '@/helpers'
