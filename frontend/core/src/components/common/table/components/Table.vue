@@ -16,7 +16,7 @@ import { useQuasar } from 'quasar'
 import FieldContents from '@/components/common/table/components/FieldContents.vue'
 import TableActions from '@/components/common/table/components/TableActions.vue'
 import { useRouter } from 'vue-router'
-import { Strings } from '@juicyllama/utils'
+import { Strings } from '@juicyllama/vue-utils'
 
 const props = defineProps<{
 	tableSchema: TableSchema

@@ -17,3 +17,5 @@ export { JLUtils }
 // export all components as vue plugin
 export * from './components'
 export * from './types/index'
+export * from './utils/Strings'
+export * from './utils/Color'

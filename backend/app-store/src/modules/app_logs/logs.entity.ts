@@ -34,8 +34,6 @@ export class Log extends BaseEntity {
 	@IsObject()
 	json?: any
 
-	@CreateDateColumn()
-	readonly created_at: Date
 	constructor(partial: Partial<Log>) {
 		super()
 		Object.assign(this, partial)

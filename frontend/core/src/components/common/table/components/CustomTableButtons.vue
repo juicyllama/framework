@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Strings } from '@juicyllama/utils'
+import { Strings } from '@juicyllama/vue-utils'
 import { CustomButton, TableSchema } from '../../../../types'
 
 const props = defineProps<{

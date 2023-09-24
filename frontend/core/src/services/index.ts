@@ -3,7 +3,6 @@ import { UserStore } from '@/store/user'
 import { logger } from '@/helpers/logger'
 import { token } from '@/store/token'
 import { LogSeverity } from '@/types'
-import { Env } from '@juicyllama/utils'
 
 const headers = {
 	'Content-Type': 'application/json',
@@ -36,7 +35,7 @@ instance.interceptors.response.use(
 		// Do something with response data
 
 		if (response.config.method === 'get') {
-			if (Env.IsDev()) {
+			if (import.meta.env.NODE_ENV === 'development') {
 				console.table(response.data)
 			}
 		}

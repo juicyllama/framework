@@ -18,13 +18,7 @@
     "bugs": "https://github.com/juicyllama/framework",
     "license": "0BSD",
     "readmeFilename": "README.md",
-    "main": "dist/index.js",
-    "types": "index.d.ts",
-    "scripts": {
-        "build": "tsc"
-    },
     "dependencies": {
-        "@juicyllama/utils": "workspace:*",
         "@babel/types": "^7.22.5",
         "@bugsnag/js": "^7.20.2",
         "@bugsnag/plugin-vue": "^7.19.0",

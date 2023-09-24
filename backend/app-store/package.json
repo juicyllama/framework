@@ -31,9 +31,7 @@
         "sandbox": "nest start --config src/sandbox/nest-cli.json --watch ",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand",
-        "test:watch": "jest --watch",
-        "test:cov": "jest --coverage"
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand"
     },
     "devDependencies": {
         "@juicyllama/dev": "workspace:*"

@@ -33,7 +33,6 @@
 		"test": "vitest --silent --run"
 	},
 	"dependencies": {
-		"@juicyllama/utils": "workspace:*",
 		"@juicyllama/vue-utils": "workspace:*",
 		"@juicyllama/vue-dev": "workspace:*"
 	}

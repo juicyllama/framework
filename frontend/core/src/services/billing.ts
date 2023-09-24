@@ -1,6 +1,5 @@
 import instance from './index'
 import { accountStore } from '@/index'
-import { SupportedCurrencies } from '@juicyllama/utils'
 
 export const BILLING_WALLET_ENDPOINT = '/billing/wallet'
 export const BILLING_INVOICE_ENDPOINT = 'billing/invoices'
@@ -19,7 +18,7 @@ export async function getInvoiceById(
 	return await instance.get(`${BILLING_INVOICE_ENDPOINT}/${invoice_id}?select=${select}&relations=${relations}`)
 }
 
-export async function getBalance(currency: SupportedCurrencies): Promise<number> {
+export async function getBalance(currency: string): Promise<number> {
 	instance.defaults.headers.common['account-id'] = accountStore.selected_account.account_id
 	const result = await instance.get(`${BILLING_WALLET_ENDPOINT}/balances`)
 

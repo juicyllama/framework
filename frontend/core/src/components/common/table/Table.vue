@@ -4,7 +4,6 @@ import Table from '@/components/common/table/components/Table.vue'
 import { useQuasar } from 'quasar'
 import { FindOptions, LogSeverity } from '@/types'
 import { logger, TableColumn, TableSchema } from '../../../index'
-import { StatsMethods } from '@juicyllama/utils'
 import { defineStore } from 'pinia'
 import { isEmpty, isNull, result } from 'lodash'
 import { loadPusher } from '@/plugins'
@@ -88,7 +87,7 @@ async function getData() {
 	if (props.options.functions.stats) {
 		total_rows.value = await props.options.functions.stats({
 			url: props.options.endpoint,
-			method: StatsMethods.COUNT,
+			method: 'COUNT',
 			find: useListStore.options,
 			q: $q,
 		})

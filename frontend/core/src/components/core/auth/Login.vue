@@ -9,7 +9,7 @@ import { token } from '@/store/token'
 import { goToLoginRedirect } from '@/helpers'
 import { useQuasar } from 'quasar'
 import { LogSeverity } from '@/types'
-import { Strings } from '@juicyllama/utils'
+import { Strings } from '@juicyllama/vue-utils'
 import { completeGoogleLogin, completeLinkedInLogin, completeMicrosoftLogin, completeAzureLogin } from '@/services/auth'
 
 const $q = useQuasar()

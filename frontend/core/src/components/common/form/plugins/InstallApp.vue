@@ -2,7 +2,7 @@
 import { FormField, FormFieldPluginInstallAppOptions, InstalledApp } from '@/types'
 import { JLAppStoreConnect } from '@/components/app-store'
 import { ref, Ref } from 'vue'
-import { Strings } from '@juicyllama/utils'
+import { Strings } from '@juicyllama/vue-utils'
 
 const props = defineProps<{
 	field: FormField
