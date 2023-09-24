@@ -40,6 +40,7 @@
     "dependencies": {
         "@bugsnag/js": "^7.21.0",
         "@bugsnag/plugin-express": "^7.19.0",
+        "@faker-js/faker": "^8.1.0",
         "@juicyllama/nestjs-redoc": "latest",
         "@juicyllama/utils": "workspace:^",
         "@nestjs/cache-manager": "^2.1.0",
@@ -99,8 +100,6 @@
         "typescript": "^5.2.2"
     },
     "devDependencies": {
-        "@faker-js/faker": "^8.0.2",
-        "@juicyllama/dev": "workspace:^",
-        "jest": "^29.6.4"
+        "@juicyllama/dev": "workspace:^"
     }
 }
