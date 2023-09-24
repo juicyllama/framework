@@ -38,12 +38,12 @@
         "test:e2e": "jest --config ./test/jest-e2e.json"
     },
     "devDependencies": {
-        "@juicyllama/dev": "workspace:*"
+        "@juicyllama/dev": "workspace:^"
     },
     "dependencies": {
-        "@juicyllama/billing": "workspace:*",
-        "@juicyllama/core": "workspace:*",
-        "@juicyllama/utils": "workspace:*",
+        "@juicyllama/billing": "workspace:^",
+        "@juicyllama/core": "workspace:^",
+        "@juicyllama/utils": "workspace:^",
         "@mollie/api-client": "^3.7.0"
     }
 }

@@ -48,10 +48,10 @@
         "@aws-sdk/client-sesv2": "^3.319.0",
         "@aws-sdk/client-sns": "^3.319.0",
         "@aws-sdk/lib-storage": "^3.319.0",
-        "@juicyllama/core": "workspace:*",
-        "@juicyllama/utils": "workspace:*"
+        "@juicyllama/core": "workspace:^",
+        "@juicyllama/utils": "workspace:^"
     },
     "devDependencies": {
-        "@juicyllama/dev": "workspace:*"
+        "@juicyllama/dev": "workspace:^"
     }
 }

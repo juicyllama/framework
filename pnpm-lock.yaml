@@ -11,14 +11,14 @@ importers:
   apps/apilayer:
     dependencies:
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../backend/core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
   apps/aws:
@@ -39,27 +39,27 @@ importers:
         specifier: ^3.319.0
         version: 3.414.0(@aws-sdk/client-s3@3.414.0)
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../backend/core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
   apps/everflow:
     dependencies:
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../backend/core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
   apps/google:
@@ -68,26 +68,26 @@ importers:
         specifier: ^3.3.30
         version: 3.3.38
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../backend/core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
       axios:
         specifier: ^1.4.0
         version: 1.5.0
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
   apps/mailchimp:
     dependencies:
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../backend/core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
       '@mailchimp/mailchimp_marketing':
         specifier: ^3.0.80
@@ -97,182 +97,182 @@ importers:
         version: 3.0.11
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
   apps/mollie:
     dependencies:
       '@juicyllama/billing':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../backend/billing
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../backend/core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
       '@mollie/api-client':
         specifier: ^3.7.0
         version: 3.7.0
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
   apps/openai:
     dependencies:
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../backend/core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
       openai:
         specifier: ^3.3.0
         version: 3.3.0
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
   apps/pexels:
     dependencies:
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../backend/core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
       pexels:
         specifier: ^1.4.0
         version: 1.4.0
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
   apps/scrapingbee:
     dependencies:
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../backend/core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
       scrapingbee:
         specifier: ^1.7.3
         version: 1.7.4
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
   apps/slack:
     dependencies:
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../backend/core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
       '@slack/bolt':
         specifier: latest
         version: 3.14.0
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
   apps/wise:
     dependencies:
       '@juicyllama/billing':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../backend/billing
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../backend/core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
   apps/wordpress:
     dependencies:
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../backend/core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
   apps/xero-cc:
     dependencies:
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../backend/core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
       xero-node:
         specifier: ^4.35.0
         version: 4.36.0
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
   backend/ai:
     dependencies:
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
   backend/app-store:
     dependencies:
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
     optionalDependencies:
       '@juicyllama/app-wordpress':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../apps/wordpress
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
   backend/billing:
     dependencies:
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
     optionalDependencies:
       '@juicyllama/app-xero-cc':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../apps/xero-cc
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
   backend/core:
@@ -287,7 +287,7 @@ importers:
         specifier: latest
         version: 2.3.11(@bugsnag/core@7.19.0)(express@4.18.2)(rxjs@7.8.1)(yargs@17.7.2)
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
       '@nestjs/cache-manager':
         specifier: ^2.1.0
@@ -456,7 +456,7 @@ importers:
         specifier: ^8.0.2
         version: 8.1.0
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
       jest:
         specifier: ^29.6.4
@@ -465,17 +465,17 @@ importers:
   backend/crm:
     dependencies:
       '@juicyllama/app-apilayer':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../apps/apilayer
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
   common/cli:
@@ -632,16 +632,16 @@ importers:
         version: 2.1.0
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../dev
 
   frontend/core:
     dependencies:
       '@juicyllama/vue-dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-dev
       '@juicyllama/vue-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-utils
 
   frontend/vue-dev:
@@ -818,23 +818,23 @@ importers:
   frontend/vue-utils:
     dependencies:
       '@juicyllama/vue-dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-dev
 
   tools/shortlinks:
     dependencies:
       '@juicyllama/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../backend/core
       '@juicyllama/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/utils
       nanoid:
         specifier: ^3.3.4
         version: 3.3.6
     devDependencies:
       '@juicyllama/dev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../common/dev
 
 packages:
@@ -2689,13 +2689,13 @@ packages:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  /@juicyllama/core@0.0.308(@bugsnag/core@7.19.0)(express@4.18.2)(rxjs@7.8.1)(yargs@17.7.2):
-    resolution: {integrity: sha512-pMShuFhUMI4RDen8c/KPjKjXK6AwO0s+job2oX38BestM942Au/GXij2ef6GhATkUNdaatknlkJpWBA2gJ+BVA==}
+  /@juicyllama/core@0.0.309(@bugsnag/core@7.19.0)(express@4.18.2)(rxjs@7.8.1)(yargs@17.7.2):
+    resolution: {integrity: sha512-4Gy9ZQuIQ1qbgTKCGVBSUTY7Ml3OvbbU+xiDBCaYed92Xfroziom1gdRbQGoSVXXw90evLnW+jXpDcSCRjn6OA==}
     dependencies:
       '@bugsnag/js': 7.21.0
       '@bugsnag/plugin-express': 7.19.0(@bugsnag/core@7.19.0)
       '@juicyllama/nestjs-redoc': 2.3.11(@bugsnag/core@7.19.0)(express@4.18.2)(rxjs@7.8.1)(yargs@17.7.2)
-      '@juicyllama/utils': 0.0.104
+      '@juicyllama/utils': 0.0.106
       '@nestjs/cache-manager': 2.1.0(@nestjs/common@10.2.6)(@nestjs/core@10.2.6)(cache-manager@5.2.3)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/cli': 10.1.17
       '@nestjs/common': 10.2.6(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
@@ -2795,7 +2795,7 @@ packages:
   /@juicyllama/nestjs-redoc@2.3.11(@bugsnag/core@7.19.0)(express@4.18.2)(rxjs@7.8.1)(yargs@17.7.2):
     resolution: {integrity: sha512-xDjGYhpsCoYIENQBqGwInHnAhkuITzZ0TXkxphjanjiCDnvVv0cEPBElI+llJ0ZxoNYhX8G7K8eQ9D47/ORivQ==}
     dependencies:
-      '@juicyllama/core': 0.0.308(@bugsnag/core@7.19.0)(express@4.18.2)(rxjs@7.8.1)(yargs@17.7.2)
+      '@juicyllama/core': 0.0.309(@bugsnag/core@7.19.0)(express@4.18.2)(rxjs@7.8.1)(yargs@17.7.2)
       express-basic-auth: 1.2.1
       express-handlebars: 7.1.2
     transitivePeerDependencies:
@@ -2840,8 +2840,8 @@ packages:
       - yargs
     dev: false
 
-  /@juicyllama/utils@0.0.104:
-    resolution: {integrity: sha512-YGqsiiTLCHl8b6JQ4cs0ZagNZrNLIyXz0RwqcccghalMfQR92TUFJu8o17cJcwrFnkTrAZ85zk0LqfmcqcaP8w==}
+  /@juicyllama/utils@0.0.106:
+    resolution: {integrity: sha512-+SEi6JigFxcF1P0FIQDtDFZG4znmKy0hJtEIuetQG5Ymh4hoivYXJmNAXUnA2cmTDYp014/7IKiAHwqLt6l0Lg==}
     dependencies:
       axios: 1.5.0
       dayjs: 1.11.10

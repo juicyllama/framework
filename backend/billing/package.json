@@ -35,13 +35,13 @@
 		"test:cov": "jest --coverage"
     },
     "devDependencies": {
-        "@juicyllama/dev": "workspace:*"
+        "@juicyllama/dev": "workspace:^"
     },
     "dependencies": {
-        "@juicyllama/core": "workspace:*",
-        "@juicyllama/utils": "workspace:*"
+        "@juicyllama/core": "workspace:^",
+        "@juicyllama/utils": "workspace:^"
     },
 	"optionalDependencies": {
-		"@juicyllama/app-xero-cc": "workspace:*"
+		"@juicyllama/app-xero-cc": "workspace:^"
 	}
 }

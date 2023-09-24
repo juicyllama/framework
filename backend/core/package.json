@@ -41,7 +41,7 @@
         "@bugsnag/js": "^7.21.0",
         "@bugsnag/plugin-express": "^7.19.0",
         "@juicyllama/nestjs-redoc": "latest",
-        "@juicyllama/utils": "workspace:*",
+        "@juicyllama/utils": "workspace:^",
         "@nestjs/cache-manager": "^2.1.0",
         "@nestjs/cli": "^10.1.17",
         "@nestjs/common": "^10.2.5",
@@ -99,7 +99,7 @@
     },
     "devDependencies": {
         "@faker-js/faker": "^8.0.2",
-        "@juicyllama/dev": "workspace:*",
+        "@juicyllama/dev": "workspace:^",
         "jest": "^29.6.4"
     }
 }

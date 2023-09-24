@@ -34,10 +34,10 @@
         "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand"
     },
     "dependencies": {
-        "@juicyllama/core": "workspace:*",
-        "@juicyllama/utils": "workspace:*"
+        "@juicyllama/core": "workspace:^",
+        "@juicyllama/utils": "workspace:^"
     },
     "devDependencies": {
-        "@juicyllama/dev": "workspace:*"
+        "@juicyllama/dev": "workspace:^"
     }
 }
