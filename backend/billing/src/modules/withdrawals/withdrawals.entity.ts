@@ -51,15 +51,6 @@ export class Withdrawal extends BaseEntity {
 	@IsEnum(WithdrawalStatus)
 	status?: WithdrawalStatus
 
-	@CreateDateColumn()
-	readonly created_at: Date
-
-	@UpdateDateColumn()
-	updated_at: Date
-
-	@DeleteDateColumn()
-	deleted_at: Date
-
 	constructor(partial: Partial<Wallet>) {
 		super()
 		Object.assign(this, partial)
