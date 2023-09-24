@@ -1,6 +1,6 @@
 {
 	"name": "@juicyllama/vue-utils",
-	"version": "3.0.13",
+	"version": "3.0.14",
 	"description": "Juicyllama Vue Utils",
 	"author": {
 		"name": "JuicyLlama Studio",
@@ -15,7 +15,7 @@
 		"type": "git",
 		"url": "https://github.com/juicyllama/framework/frontend/vue-utils"
 	},
-    "bugs": "https://github.com/juicyllama/framework",
+	"bugs": "https://github.com/juicyllama/framework",
 	"license": "0BSD",
 	"readmeFilename": "README.md",
 	"main": "dist/JLUtils.umd.js",
@@ -26,7 +26,7 @@
 		"types/*.d.ts"
 	],
 	"scripts": {
-        "prepare": "pnpm run build",
+		"prepare": "pnpm run build",
 		"build": "vite build && npm run build:types",
 		"build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types ",
 		"typecheck": "vue-tsc --noEmit",
