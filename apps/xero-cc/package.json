@@ -7,10 +7,10 @@
         "email": "studio@juicyllama.com",
         "url": "https://juicyllama.com"
     },
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org/"
-	},
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/juicyllama/framework/apps/xero-cc"
@@ -41,8 +41,8 @@
         "@juicyllama/dev": "workspace:^"
     },
     "dependencies": {
-        "xero-node": "^4.35.0",
         "@juicyllama/core": "workspace:^",
-        "@juicyllama/utils": "workspace:^"
+        "@juicyllama/utils": "workspace:^",
+        "xero-node": "^4.36.0"
     }
 }

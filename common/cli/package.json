@@ -7,10 +7,10 @@
         "email": "studio@juicyllama.com",
         "url": "https://juicyllama.com"
     },
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org/"
-	},
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/juicyllama/framework/common/cli"
@@ -29,10 +29,10 @@
         "start": "ts-node cli.ts"
     },
     "dependencies": {
-        "@types/node": "^20.3.1",
-        "ipt": "^3.1.1",
+        "@types/node": "^20.6.5",
+        "ipt": "^3.2.0",
         "read-pkg": "^5.2.0",
-        "simple-output": "^2.1.1",
-        "yargs": "^15.3.1"
+        "simple-output": "^2.2.1",
+        "yargs": "^15.4.1"
     }
 }
