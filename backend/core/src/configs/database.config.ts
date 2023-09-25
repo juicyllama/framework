@@ -18,7 +18,7 @@ export const DATABASE = {
 		path.resolve(process.cwd(), 'node_modules', '@juicyllama', '**', '*.entity.{ts,js}'),
 	],
 	autoLoadEntities: true,
-	synchronize: Env.IsNotProd(), //becuase TypeORM migrations are pants !!
+	synchronize: true, //becuase TypeORM migrations are pants !!
 	namingStrategy: new CustomNamingStrategy(),
 	keepConnectionAlive: true,
 	debug: Env.IsNotProd(),
