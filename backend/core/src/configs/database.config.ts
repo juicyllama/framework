@@ -18,7 +18,8 @@ export const DATABASE = {
 		path.resolve(process.cwd(), 'node_modules', '@juicyllama', '**', '*.entity.{ts,js}'),
 	],
 	autoLoadEntities: true,
-	synchronize: true, //becuase TypeORM migrations are pants !!
+	//synchronize: true, //becuase TypeORM migrations are pants !!
+	synchronize: false, //temp disable to get hive up and running
 	namingStrategy: new CustomNamingStrategy(),
 	keepConnectionAlive: true,
 	debug: Env.IsNotProd(),

@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { Enviroment } from '@juicyllama/utils'
+import { Env } from '@juicyllama/utils'
 import { NumberVerificationService } from './number.verification.service'
 import { NumberVerificationModule } from './number.verification.module'
 
@@ -9,7 +9,7 @@ describe('Number Verification Service', () => {
 	let numberVerificationService: NumberVerificationService
 
 	beforeAll(async () => {
-		if (Enviroment[process.env.NODE_ENV] !== Enviroment.test) {
+		if (Env.IsNotTest()) {
 			throw new Error(`Test suite should not be ran outside the test environment`)
 		}
 

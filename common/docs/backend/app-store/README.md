@@ -45,3 +45,11 @@ import { installAppStoreDocs } from '@juicyllama/app-store'
 //place this below the swagger setup
 redoc = installAppStoreDocs(redoc)
 ```
+
+### Parent / Child Apps
+
+Some apps are "whitelabel" or "saas" apps in which other brands use. 
+
+For exmaple, Everflow allows brands to whitelabel their app. This means many apps can be added by use the Everflow integration.
+
+For this we introduced Parent/Child apps, this is a way of you specifing in a App the parent app_id. The system will then revert back to the parent app for integration.
