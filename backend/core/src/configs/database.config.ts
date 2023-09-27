@@ -6,37 +6,35 @@ import * as path from 'path'
 import { config } from 'dotenv'
 config()
 
-export const DATABASE = {
+const DATABASE_SHARED = {
 	type: 'mysql',
 	host: process.env.MYSQL_HOSTNAME,
 	port: +process.env.MYSQL_PORT,
 	username: process.env.MYSQL_USERNAME,
 	password: process.env.MYSQL_PASSWORD,
+	autoLoadEntities: true,
+	namingStrategy: new CustomNamingStrategy(),
+	keepConnectionAlive: true,
+	charset: 'utf8mb4_0900_ai_ci'
+}
+
+export const DATABASE = {
+	...DATABASE_SHARED,
 	database: process.env.MYSQL_DB_NAME,
 	entities: [
 		path.resolve(process.cwd(), 'dist', '**', '*.entity.{ts,js}'),
 		path.resolve(process.cwd(), 'node_modules', '@juicyllama', '**', '*.entity.{ts,js}'),
 	],
-	autoLoadEntities: true,
 	//synchronize: true, //becuase TypeORM migrations are pants !!
 	synchronize: false, //temp disable to get hive up and running
-	namingStrategy: new CustomNamingStrategy(),
-	keepConnectionAlive: true,
 	debug: Env.IsNotProd(),
 }
 
 export const TEST_DATABASE = {
-	type: 'mysql',
-	host: process.env.MYSQL_HOSTNAME,
-	port: +process.env.MYSQL_PORT,
-	username: process.env.MYSQL_USERNAME,
-	password: process.env.MYSQL_PASSWORD,
+	...DATABASE_SHARED,
 	database: process.env.MYSQL_DB_TEST_NAME,
 	entities: [path.resolve(process.cwd(), '**', '*.entity.{ts,js}')],
-	autoLoadEntities: true,
 	synchronize: true,
-	namingStrategy: new CustomNamingStrategy(),
-	keepConnectionAlive: true,
 }
 
 export const databaseConfig = registerAs('database', () => {
