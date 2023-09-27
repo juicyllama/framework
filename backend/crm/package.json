@@ -42,6 +42,7 @@
     "dependencies": {
         "@juicyllama/app-apilayer": "workspace:^",
         "@juicyllama/core": "workspace:^",
+        "@juicyllama/nestjs-redoc": "workspace:^",
         "@juicyllama/utils": "workspace:^"
     }
 }

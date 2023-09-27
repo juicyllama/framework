@@ -233,6 +233,9 @@ importers:
       '@juicyllama/core':
         specifier: workspace:^
         version: link:../core
+      '@juicyllama/nestjs-redoc':
+        specifier: workspace:^
+        version: link:../../common/nestjs-redoc
       '@juicyllama/utils':
         specifier: workspace:^
         version: link:../../common/utils
@@ -246,6 +249,9 @@ importers:
       '@juicyllama/core':
         specifier: workspace:^
         version: link:../core
+      '@juicyllama/nestjs-redoc':
+        specifier: workspace:^
+        version: link:../../common/nestjs-redoc
       '@juicyllama/utils':
         specifier: workspace:^
         version: link:../../common/utils
@@ -263,6 +269,9 @@ importers:
       '@juicyllama/core':
         specifier: workspace:^
         version: link:../core
+      '@juicyllama/nestjs-redoc':
+        specifier: workspace:^
+        version: link:../../common/nestjs-redoc
       '@juicyllama/utils':
         specifier: workspace:^
         version: link:../../common/utils
@@ -473,6 +482,9 @@ importers:
       '@juicyllama/core':
         specifier: workspace:^
         version: link:../core
+      '@juicyllama/nestjs-redoc':
+        specifier: workspace:^
+        version: link:../../common/nestjs-redoc
       '@juicyllama/utils':
         specifier: workspace:^
         version: link:../../common/utils
@@ -624,15 +636,27 @@ importers:
 
   common/nestjs-redoc:
     dependencies:
-      '@juicyllama/core':
-        specifier: workspace:^
-        version: link:../../backend/core
+      '@nestjs/common':
+        specifier: latest
+        version: 10.2.6(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/core':
+        specifier: latest
+        version: 10.2.6(@nestjs/common@10.2.6)(@nestjs/platform-express@10.2.6)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/platform-express':
+        specifier: latest
+        version: 10.2.6(@nestjs/common@10.2.6)(@nestjs/core@10.2.6)
+      '@nestjs/swagger':
+        specifier: latest
+        version: 7.1.12(@nestjs/common@10.2.6)(@nestjs/core@10.2.6)(reflect-metadata@0.1.13)
       express-basic-auth:
-        specifier: ^1.2.1
+        specifier: latest
         version: 1.2.1
       express-handlebars:
-        specifier: ^7.1.2
+        specifier: latest
         version: 7.1.2
+      reflect-metadata:
+        specifier: latest
+        version: 0.1.13
     devDependencies:
       '@juicyllama/dev':
         specifier: workspace:^
@@ -845,6 +869,9 @@ importers:
       '@juicyllama/core':
         specifier: workspace:^
         version: link:../../backend/core
+      '@juicyllama/nestjs-redoc':
+        specifier: workspace:^
+        version: link:../../common/nestjs-redoc
       '@juicyllama/utils':
         specifier: workspace:^
         version: link:../../common/utils
@@ -3001,6 +3028,38 @@ packages:
       - encoding
     dev: false
 
+  /@nestjs/core@10.2.6(@nestjs/common@10.2.6)(@nestjs/platform-express@10.2.6)(reflect-metadata@0.1.13)(rxjs@7.8.1):
+    resolution: {integrity: sha512-oGQ2CoBeFRT7egG47MFqS89xlXBTIRZBkRpKRTPMftEfL1RMXhXIcIIaGfzp11wx6qxrBVxBXpVLM09oaqHpaQ==}
+    requiresBuild: true
+    peerDependencies:
+      '@nestjs/common': ^10.0.0
+      '@nestjs/microservices': ^10.0.0
+      '@nestjs/platform-express': ^10.0.0
+      '@nestjs/websockets': ^10.0.0
+      reflect-metadata: ^0.1.12
+      rxjs: ^7.1.0
+    peerDependenciesMeta:
+      '@nestjs/microservices':
+        optional: true
+      '@nestjs/platform-express':
+        optional: true
+      '@nestjs/websockets':
+        optional: true
+    dependencies:
+      '@nestjs/common': 10.2.6(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/platform-express': 10.2.6(@nestjs/common@10.2.6)(@nestjs/core@10.2.6)
+      '@nuxtjs/opencollective': 0.3.2
+      fast-safe-stringify: 2.1.1
+      iterare: 1.2.1
+      path-to-regexp: 3.2.0
+      reflect-metadata: 0.1.13
+      rxjs: 7.8.1
+      tslib: 2.6.2
+      uid: 2.0.2
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
   /@nestjs/jwt@10.1.1(@nestjs/common@10.2.6):
     resolution: {integrity: sha512-sISYylg8y1Mb7saxPx5Zh11i7v9JOh70CEC/rN6g43MrbFlJ57c1eYFrffxip1YAx3DmV4K67yXob3syKZMOew==}
     peerDependencies:
@@ -3177,6 +3236,33 @@ packages:
       '@nestjs/mapped-types': 2.0.2(@nestjs/common@10.2.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)
       class-transformer: 0.5.1
       class-validator: 0.14.0
+      js-yaml: 4.1.0
+      lodash: 4.17.21
+      path-to-regexp: 3.2.0
+      reflect-metadata: 0.1.13
+      swagger-ui-dist: 5.7.2
+    dev: false
+
+  /@nestjs/swagger@7.1.12(@nestjs/common@10.2.6)(@nestjs/core@10.2.6)(reflect-metadata@0.1.13):
+    resolution: {integrity: sha512-Q1P/IE+cws0sJeNtbs+8uDalcVylpmAnaEUFenGOa3KSNnXF/8DOE84mET/uUhFXsiz9PLHK8Hy7o7B6fRpMhg==}
+    peerDependencies:
+      '@fastify/static': ^6.0.0
+      '@nestjs/common': ^9.0.0 || ^10.0.0
+      '@nestjs/core': ^9.0.0 || ^10.0.0
+      class-transformer: '*'
+      class-validator: '*'
+      reflect-metadata: ^0.1.12
+    peerDependenciesMeta:
+      '@fastify/static':
+        optional: true
+      class-transformer:
+        optional: true
+      class-validator:
+        optional: true
+    dependencies:
+      '@nestjs/common': 10.2.6(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/core': 10.2.6(@nestjs/common@10.2.6)(@nestjs/platform-express@10.2.6)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/mapped-types': 2.0.2(@nestjs/common@10.2.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)
       js-yaml: 4.1.0
       lodash: 4.17.21
       path-to-regexp: 3.2.0

@@ -31,11 +31,15 @@
     "release:major": "release-it major --ci"
   },
   "dependencies": {
-    "@juicyllama/core": "workspace:^",
-    "express-basic-auth": "^1.2.1",
-    "express-handlebars": "^7.1.2"
+    "@nestjs/common": "latest",
+    "@nestjs/core": "latest",
+    "@nestjs/platform-express": "latest",
+    "@nestjs/swagger": "latest",
+    "express-basic-auth": "latest",
+    "express-handlebars": "latest",
+    "reflect-metadata": "latest"
   },
   "devDependencies": {
-    "@juicyllama/dev": "workspace:^",
+    "@juicyllama/dev": "workspace:^"
   }
 }
