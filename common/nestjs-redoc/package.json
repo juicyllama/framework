@@ -1,0 +1,41 @@
+{
+  "name": "@juicyllama/nestjs-redoc",
+  "version": "2.3.11",
+  "description": "NestJS ReDoc Frontend For Express",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/juicyllama-community/nestjs-redoc"
+  },
+  "bugs": "https://github.com/juicyllama-community/nestjs-redoc",
+  "author": {
+    "name": "JuicyLlama Studio",
+    "email": "studio@juicyllama.com",
+    "url": "https://juicyllama.com"
+  },
+  "main": "dist/index.js",
+  "private": false,
+  "license": "MIT",
+  "scripts": {
+    "start:dev": "tsc -w",
+    "build": "tsc",
+    "prepare": "npm run build",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "test": "jest --runInBand --detectOpenHandles --forceExit",
+    "test:clear": "npx jest --clearCache",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "release": "release-it --ci",
+    "release:minor": "release-it minor --ci",
+    "release:major": "release-it major --ci"
+  },
+  "dependencies": {
+    "@juicyllama/core": "workspace:^",
+    "express-basic-auth": "^1.2.1",
+    "express-handlebars": "^7.1.2"
+  },
+  "devDependencies": {
+    "@juicyllama/dev": "workspace:^",
+  }
+}
