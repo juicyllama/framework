@@ -13,7 +13,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/juicyllama/framework/apps/scrapingbee"
+        "url": "https://github.com/juicyllama/framework/tree/main/apps/scrapingbee"
     },
     "bugs": "https://github.com/juicyllama/framework",
     "license": "0BSD",
