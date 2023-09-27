@@ -20,7 +20,7 @@ const DATABASE_SHARED = {
 		path.resolve(process.cwd(), 'dist', '**', '*.entity.js'),
 		path.resolve(process.cwd(), 'node_modules', '@juicyllama', '**', '*.entity.js'),
 	],
-	autoLoadMigrations: false, //should be false, otherwise long running migration will cause issues with microservices booting up
+	autoLoadMigrations: Env.IsDev(), //should be false in live, otherwise long running migration will cause issues with microservices booting up
 	migrations: [path.resolve(process.cwd(), 'dist', 'db', 'migrations', '*.js')],
 }
 
