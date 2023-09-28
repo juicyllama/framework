@@ -55,8 +55,10 @@ const createRecord: Ref<boolean> = ref(false)
 const editRecord: Ref<boolean> = ref(false)
 let formFields: FormField[] = reactive(buildFormFromTableSchema())
 const editPrimaryKey: Ref<number> = ref(null)
-const tableExanded = ref(false)
-const table_toggle: Ref<string> = ref('map')
+const tableExpanded = ref(false)
+const table_toggle: Ref<string> = ref(
+	props.tableSchema?.show?.toggle_buttons[0].options?.find(button => button.default)?.value,
+)
 
 if (!props.tableSchema.find.order_by) {
 	logger({ severity: LogSeverity.ERROR, message: 'You must pass a sort-column to the table' })
@@ -246,7 +248,7 @@ const JLToQColumns = <any>computed(() => {
 })
 
 function toggleTableSize() {
-	tableExanded.value = !tableExanded.value
+	tableExpanded.value = !tableExpanded.value
 	document.getElementById('aircraft-table')?.classList.toggle('expanded')
 }
 
@@ -368,7 +370,7 @@ watch(
 						<div @click="toggleTableSize" style="cursor: pointer">
 							<q-icon
 								v-bind:name="
-									!tableExanded
+									!tableExpanded
 										? 'fa-solid fa-up-right-and-down-left-from-center'
 										: 'fa-solid fa-down-left-and-up-right-to-center'
 								"
