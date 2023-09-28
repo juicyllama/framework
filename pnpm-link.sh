@@ -3,6 +3,7 @@
 ### COMMON ###
 pnpm link --global --dir common/cli
 pnpm link --global --dir common/dev
+pnpm link --global --dir common/nestjs-redoc
 
 ### FRONTEND ###
 pnpm link --global --dir frontend/core

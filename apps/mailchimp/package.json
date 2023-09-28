@@ -13,7 +13,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/juicyllama/framework/apps/mailchimp"
+        "url": "https://github.com/juicyllama/framework/tree/main/apps/mailchimp"
     },
     "bugs": "https://github.com/juicyllama/framework",
     "license": "0BSD",

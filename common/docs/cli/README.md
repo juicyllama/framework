@@ -2,9 +2,9 @@
 
 The CLI is a command line tool to help speed up your local development on JuicyLlama projects.
 
-It helps automate common tasks such as installing new projects, starting development tasks, logging time spent on projects and more.
-
-Once installed, take a look at the [commands](/cli/commands) for a list of commands you can run.
+::: danger
+Currently only used to help speed up client project deployment, but we have plans to help build out modules we full command line interaction and much more.
+:::
 
 ## Cheatsheet
 
