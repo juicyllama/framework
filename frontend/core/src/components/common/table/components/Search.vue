@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { TableSchema } from '@juicyllama/frontend-core'
 import { Ref, ref } from 'vue'
-import { TableSchema } from '../../../../types/table'
 
 const props = defineProps<{
 	tableSchema: TableSchema
@@ -16,6 +16,7 @@ const filter: Ref<string> = ref(props.search)
 	<div class="JLTableSearch">
 		<q-input
 			class="JLInput"
+			:dark="props.tableSchema.show.search_filter.dark ?? false"
 			borderless
 			v-model="filter"
 			:placeholder="props.tableSchema.show.search_filter.placeholder ?? 'Search'"
