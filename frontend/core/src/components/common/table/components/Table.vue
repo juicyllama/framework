@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import FieldContents from '@/components/common/table/components/FieldContents.vue'
+import TableActions from '@/components/common/table/components/TableActions.vue'
+import { logger } from '@/helpers'
 import {
 	FormField,
 	FormFieldButtonType,
@@ -7,15 +10,12 @@ import {
 	TableOptions,
 	TablePosition,
 	TableSchema,
-	logger,
-} from '@juicyllama/frontend-core'
+} from '@/types'
 import { Strings } from '@juicyllama/vue-utils'
 import { useQuasar } from 'quasar'
 import { Ref, computed, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { default as JLForm } from '../../form/Form.vue'
-import FieldContents from './FieldContents.vue'
-import TableActions from './TableActions.vue'
 import { ColumnsFilter, CustomButtons, SearchFilter } from './index'
 
 const props = defineProps<{

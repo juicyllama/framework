@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { FindOptions, loadPusher, logger, LogSeverity, TableColumn, TableSchema } from '@juicyllama/frontend-core'
+import Table from '@/components/common/table/components/Table.vue'
+import { loadPusher } from '@/plugins'
+import { FindOptions, LogSeverity } from '@/types'
 import { isEmpty, isNull, result } from 'lodash'
 import { defineStore } from 'pinia'
 import { useQuasar } from 'quasar'
 import { onMounted, Ref, ref } from 'vue'
-import Table from './components/Table.vue'
+import { logger, TableColumn, TableSchema } from '../../../index'
 
 const props = defineProps<{
 	options: TableSchema
