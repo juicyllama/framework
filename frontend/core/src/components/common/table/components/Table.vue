@@ -342,6 +342,7 @@ watch(
 							v-for="toggle_button in props.tableSchema?.show?.toggle_buttons?.filter(
 								button => button.position === TablePosition.TOP_LEFT,
 							)"
+							:key="toggle_button.position"
 							class="map-filters-ground-air-toggle"
 							:options="toggle_button.options"
 							:size="'md'"
