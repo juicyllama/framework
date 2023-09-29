@@ -59,8 +59,8 @@ export interface TableSchema {
 		delete_record?: boolean
 		custom_buttons?: TableCustomButton[]
 		confirm_delete?: boolean
-		expandable: boolean
-		toggle_buttons: {
+		expandable?: boolean
+		toggle_buttons?: {
 			position: TablePosition
 			options: { label: string; value: string; default: boolean }[]
 		}[]
