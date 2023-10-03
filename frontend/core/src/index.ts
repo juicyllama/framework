@@ -5,7 +5,7 @@ import { UserStore } from './store/user'
 import instance from './services/index'
 import classes from './assets/JLCore.css'
 import { ThemeStore } from './store/theme'
-import { JLForm, JLTable, JLMenu, JLChart, JLStats, JLLogin, JLDropdownButtonMenu } from '@/components'
+import { JLForm, JLTable, JLMenu, JLChart, JLStats, JLLogin, JLDropdownButtonMenu, JLUpload } from '@/components'
 import { JLAccountProfile, JLAccountAvatar, JLAccountSwitcher, JLAccountBrand } from '@/components/core/account'
 import { JLUserAvatar, JLUserProfile, JLUserMenu } from '@/components/core/user'
 import { JLAppStoreConnect } from '@/components/app-store'
@@ -34,6 +34,7 @@ export default {
 		Vue.component('JLLogin', JLLogin)
 		Vue.component('JLForm', JLForm)
 		Vue.component('JLTable', JLTable)
+		Vue.component('JLUpload', JLUpload)
 		Vue.component('JLMenu', JLMenu)
 		Vue.component('JLDropdownButtonMenu', JLDropdownButtonMenu)
 		Vue.component('JLChart', JLChart)
@@ -79,4 +80,5 @@ export {
 	JLDropdownButtonMenu,
 	JLStats,
 	JLChart,
+	JLUpload
 }
