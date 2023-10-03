@@ -80,3 +80,14 @@ export interface TableSchema {
 		onEditFormLoad?: Function
 	}
 }
+
+export interface IFilterType {
+	label: string,
+	method: string
+}
+
+export interface IFilter {
+	label: string,
+	type: string | IFilterType,
+	value: string | number
+}
