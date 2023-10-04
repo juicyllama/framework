@@ -76,4 +76,7 @@ jobs:
                 run: pnpm run start:docker:build
 
             -   name: Test
-                run: cd backend/core && pnpm run test
+                run: |
+                    export $(grep -v '^#' .env.development)
+                    cd backend/core
+                    pnpm run test
