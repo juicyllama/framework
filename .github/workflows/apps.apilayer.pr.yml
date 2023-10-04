@@ -35,8 +35,9 @@ jobs:
                         pnpm-lock.yaml
                         pnpm-workspace.yaml
                         tsconfig.json
-                        common/utils
                         common/dev
+                        common/nestjs-redoc
+                        common/utils
                         backend/core
                         apps/apilayer
 

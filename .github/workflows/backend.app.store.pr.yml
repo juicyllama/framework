@@ -36,8 +36,8 @@ jobs:
                         pnpm-workspace.yaml
                         tsconfig.json
                         common/dev
-                        common/utils
                         common/nestjs-redoc
+                        common/utils
                         backend/core
                         backend/app-store
                         apps/wordpress
