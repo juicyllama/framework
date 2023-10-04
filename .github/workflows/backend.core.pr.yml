@@ -29,6 +29,7 @@ jobs:
                 with:
                     token: ${{ secrets.GH_CI_CD_RELEASE }}
                     sparse-checkout: |
+                        .docker
                         .env.development
                         pnpm-lock.yaml
                         pnpm-workspace.yaml
@@ -76,8 +77,4 @@ jobs:
                 run: pnpm run start:docker:build
 
             -   name: Test
-                run: |
-                    export $(grep -v '^#' .env.development)
-                    echo Connecting to DB $MYSQL_DB_TEST_NAME with  $MYSQL_HOSTNAME:$MYSQL_PORT@$MYSQL_USERNAME:$MYSQL_PASSWORD
-                    cd backend/core
-                    pnpm run test
+                run: cd backend/app-store && pnpm run test
