@@ -36,6 +36,16 @@ jobs:
                 uses: actions/checkout@v4
                 with:
                     token: ${{ secrets.GH_CI_CD_RELEASE }}
+                    sparse-checkout: |
+                        pnpm-lock.yaml
+                        pnpm-workspace.yaml
+                        tsconfig.json
+                        common/nestjs-redoc
+                        common/utils
+                        common/dev
+                        backend/core
+                        backend/crm
+                        apps/apilayer
 
             -   name: 'Install Node.js'
                 uses: actions/setup-node@v3
