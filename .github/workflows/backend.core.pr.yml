@@ -29,7 +29,10 @@ jobs:
                 with:
                     token: ${{ secrets.GH_CI_CD_RELEASE }}
                     sparse-checkout: |
+                        .env.development
                         pnpm-workspace.yaml
+                        tsconfig.json
+                        docker-compose.yml
                         common/nestjs-redoc
                         common/utils
                         common/dev
