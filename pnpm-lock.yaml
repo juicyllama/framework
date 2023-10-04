@@ -8,6 +8,52 @@ importers:
 
   .: {}
 
+  apps/apilayer:
+    dependencies:
+      '@juicyllama/core':
+        specifier: workspace:^
+        version: link:../../backend/core
+      '@juicyllama/utils':
+        specifier: workspace:^
+        version: link:../../common/utils
+    devDependencies:
+      '@juicyllama/dev':
+        specifier: workspace:^
+        version: link:../../common/dev
+
+  apps/wordpress:
+    dependencies:
+      '@juicyllama/core':
+        specifier: workspace:^
+        version: link:../../backend/core
+      '@juicyllama/utils':
+        specifier: workspace:^
+        version: link:../../common/utils
+    devDependencies:
+      '@juicyllama/dev':
+        specifier: workspace:^
+        version: link:../../common/dev
+
+  backend/app-store:
+    dependencies:
+      '@juicyllama/core':
+        specifier: workspace:^
+        version: link:../core
+      '@juicyllama/nestjs-redoc':
+        specifier: workspace:^
+        version: link:../../common/nestjs-redoc
+      '@juicyllama/utils':
+        specifier: workspace:^
+        version: link:../../common/utils
+    optionalDependencies:
+      '@juicyllama/app-wordpress':
+        specifier: workspace:^
+        version: link:../../apps/wordpress
+    devDependencies:
+      '@juicyllama/dev':
+        specifier: workspace:^
+        version: link:../../common/dev
+
   backend/core:
     dependencies:
       '@bugsnag/js':
@@ -193,6 +239,50 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
+    devDependencies:
+      '@juicyllama/dev':
+        specifier: workspace:^
+        version: link:../../common/dev
+
+  backend/crm:
+    dependencies:
+      '@juicyllama/app-apilayer':
+        specifier: workspace:^
+        version: link:../../apps/apilayer
+      '@juicyllama/core':
+        specifier: workspace:^
+        version: link:../core
+      '@juicyllama/nestjs-redoc':
+        specifier: workspace:^
+        version: link:../../common/nestjs-redoc
+      '@juicyllama/utils':
+        specifier: workspace:^
+        version: link:../../common/utils
+    devDependencies:
+      '@juicyllama/dev':
+        specifier: workspace:^
+        version: link:../../common/dev
+
+  backend/ecommerce:
+    dependencies:
+      '@juicyllama/app-store':
+        specifier: workspace:^
+        version: link:../app-store
+      '@juicyllama/core':
+        specifier: workspace:^
+        version: link:../core
+      '@juicyllama/crm':
+        specifier: workspace:^
+        version: link:../crm
+      '@juicyllama/nestjs-redoc':
+        specifier: workspace:^
+        version: link:../../common/nestjs-redoc
+      '@juicyllama/utils':
+        specifier: workspace:^
+        version: link:../../common/utils
+      '@juicyllama/websites':
+        specifier: workspace:^
+        version: link:../websites
     devDependencies:
       '@juicyllama/dev':
         specifier: workspace:^
