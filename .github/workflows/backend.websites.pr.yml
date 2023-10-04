@@ -57,7 +57,7 @@ jobs:
                         ${{ runner.os }}-pnpm-store-
 
             -   name: Install dependencies
-                run: pnpm install --no-frozen-lockfile
+                run: pnpm install --shamefully-hoist --no-frozen-lockfile
 
             -   name: Lint
                 run: cd backend/websites && pnpm run && pnpm run lint
