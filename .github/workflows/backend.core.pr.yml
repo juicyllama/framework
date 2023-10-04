@@ -28,7 +28,11 @@ jobs:
                 uses: actions/checkout@v4
                 with:
                     token: ${{ secrets.GH_CI_CD_RELEASE }}
-                    sparse-checkout: 'backend/core'
+                    sparse-checkout: 
+                        - 'backend/core'
+                        - 'common/nestjs-redoc'
+                        - 'common/utils'
+                        - 'common/dev'
 
             -   name: Install Node.js
                 uses: actions/setup-node@v3
