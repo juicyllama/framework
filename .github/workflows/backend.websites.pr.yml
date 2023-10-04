@@ -39,7 +39,7 @@ jobs:
                         common/utils
                         common/dev
                         backend/core
-                        backend/website
+                        backend/websites
 
             -   name: Install Node.js
                 uses: actions/setup-node@v3

@@ -41,7 +41,8 @@ jobs:
                         backend/app-store
                         backend/core
                         backend/crm
-                        backend/website
+                        backend/websites
+                        apps/apilayer
 
             -   name: Install Node.js
                 uses: actions/setup-node@v3
