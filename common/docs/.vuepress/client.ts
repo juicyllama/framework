@@ -1,6 +1,6 @@
 import { defineClientConfig } from '@vuepress/client'
 import {homeNavbar, homeTitle} from "../config";
-import {quasarNavbar, quasarTitle} from "../frontend/quasar/config";
+import {frontendCoreNavbar, frontendCoreTitle} from "../frontend/core/config";
 import {coreNavbar, coreTitle} from "../backend/core/config";
 import {shortlinksNavbar, shortlinksTitle} from "../tools/shortlinks/config";
 import {cliNavbar, cliTitle} from "../cli/config";
@@ -14,14 +14,16 @@ import {appStoreNavbar, appStoreTitle} from "../backend/app-store/config";
 import {aiNavbar, aiTitle} from "../backend/ai/config";
 import {appsOpenAiNavbar, appsOpenAiTitle} from "../apps/openai/config";
 import {appsPexelsNavbar, appsPexelsTitle} from "../apps/pexels/config";
+import {ecommerceNavbar, ecommerceTitle} from "../backend/ecommerce/config";
+import {websitesNavbar, websitesTitle} from "../backend/websites/config";
 
 export default defineClientConfig({
 	enhance({ app, router }) {
 		router.afterEach((to) => {
 
 			if (to.path.startsWith('/frontend/quasar')) {
-				app.config.globalProperties.$site.title = quasarTitle
-				app.config.globalProperties.$theme.navbar = quasarNavbar
+				app.config.globalProperties.$site.title = frontendCoreTitle
+				app.config.globalProperties.$theme.navbar = frontendCoreNavbar
 			}
 
 			else if (to.path.startsWith('/frontend/tests')) {
@@ -44,6 +46,16 @@ export default defineClientConfig({
 				app.config.globalProperties.$theme.navbar = aiNavbar
 			}
 
+			else if (to.path.startsWith('/backend/ecommerce')) {
+				app.config.globalProperties.$site.title = ecommerceTitle
+				app.config.globalProperties.$theme.navbar = ecommerceNavbar
+			}
+
+			else if (to.path.startsWith('/backend/websites')) {
+				app.config.globalProperties.$site.title = websitesTitle
+				app.config.globalProperties.$theme.navbar = websitesNavbar
+			}
+
 			else if (to.path.startsWith('/tools/shortlinks')) {
 				app.config.globalProperties.$site.title = shortlinksTitle
 				app.config.globalProperties.$theme.navbar = shortlinksNavbar
@@ -51,7 +63,7 @@ export default defineClientConfig({
 
 			else if (to.path.startsWith('/tools/qrcodes')) {
 				app.config.globalProperties.$site.title = qrcodesTitle
-				app.config.globalProperties.$theme.navbar = quasarNavbar
+				app.config.globalProperties.$theme.navbar = frontendCoreNavbar
 			}
 
 			else if (to.path.startsWith('/cli')) {

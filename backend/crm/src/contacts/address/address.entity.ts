@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
-import { IsString, IsEnum, MinLength, MaxLength } from 'class-validator'
+import { IsString, IsEnum, MinLength, MaxLength, IsNumber } from 'class-validator'
 import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
 import { Contact } from '../contacts.entity'
 import { ContactAddressType } from './address.enums'
@@ -44,6 +44,14 @@ export class ContactAddress extends BaseEntity {
 	@MinLength(2)
 	@MaxLength(2)
 	country_iso?: string
+
+	@Column({ type: 'decimal', precision: 10, scale: 6, default: null, nullable: true })
+	@IsNumber()
+	latitude?: number
+
+	@Column({ type: 'decimal', precision: 10, scale: 6, default: null, nullable: true })
+	@IsNumber()
+	longitude?: number
 
 	constructor(partial: Partial<ContactAddress>) {
 		super()

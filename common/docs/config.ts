@@ -62,6 +62,10 @@ export const homeNavbar = [
 				text: 'CRM',
 				link: '/backend/crm',
 			},
+			{
+				text: 'Websites',
+				link: '/backend/websites',
+			},
 		],
 	},
 	{

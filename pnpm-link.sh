@@ -16,6 +16,8 @@ pnpm link --global --dir backend/crm
 pnpm link --global --dir backend/app-store
 pnpm link --global --dir backend/ai
 pnpm link --global --dir backend/billing
+pnpm link --global --dir backend/websites
+pnpm link --global --dir backend/ecommerce
 
 ### APPS ###
 pnpm link --global --dir apps/apilayer

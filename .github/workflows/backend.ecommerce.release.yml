@@ -1,0 +1,88 @@
+#
+# GitHub Actions workflow.
+#
+# Releases the package to npm when a push into main is detected.
+# * Bump version number
+# * Release to NPM
+#
+
+name: 'Release Package: Ecommerce'
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - 'backend/ecommerce/**'
+    workflow_dispatch:
+
+
+jobs:
+
+    pr_checks:
+        uses: juicyllama/framework/.github/workflows/backend.ecommerce.pr.yml@main
+        secrets: inherit
+
+    release:
+        name: 'Release Package: Ecommerce'
+        runs-on: ubuntu-latest
+        needs:
+            - pr_checks
+        permissions:
+            contents: write
+        steps:
+
+            -   name: 'Checkout'
+                uses: actions/checkout@v4
+                with:
+                    token: ${{ secrets.GH_CI_CD_RELEASE }}
+
+            -   name: 'Install Node.js'
+                uses: actions/setup-node@v3
+                with:
+                    node-version: 19
+
+            -   name: 'FontAwesome Auth'
+                run: echo -e "shamefully-hoist=true\\n@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
+
+            -   name: 'Install pnpm'
+                uses: pnpm/action-setup@v2
+                with:
+                    version: 8
+                    run_install: false
+
+            -   name: Get pnpm store directory
+                shell: bash
+                run: |
+                    echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+            -   uses: actions/cache@v3
+                name: Setup pnpm cache
+                with:
+                    path: ${{ env.STORE_PATH }}
+                    key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+                    restore-keys: |
+                        ${{ runner.os }}-pnpm-store-
+
+            -   name: 'Install dependencies'
+                run: pnpm install --no-frozen-lockfile
+
+            -   run: git pull
+
+            -   name: 'Version Bump'
+                uses: phips28/gh-action-bump-version@master
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GH_CI_CD_RELEASE }}
+                    PACKAGEJSON_DIR: backend/ecommerce
+                with:
+                    major-wording: 'JLMAJOR'
+                    minor-wording: 'feature,feat'
+                    patch-wording: 'patch,fixes,fix,misc,docs,refactor'    # Providing patch-wording will override commits
+                    commit-message: 'Release Package: Ecommerce Bump Version [skip ci]'
+                    skip-tag: true
+
+            -   name: 'Authenticate with NPM'
+                run: echo -e "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+
+            -   name: 'Publishing package'
+                run: cd backend/ecommerce && pnpm publish --no-git-checks --access public

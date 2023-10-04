@@ -70,6 +70,8 @@
         "class-validator": "^0.14.0",
         "csv-parser": "^3.0.0",
         "dotenv": "^16.3.1",
+        "express-basic-auth": "^1.2.0",
+        "express-handlebars": "^5.3.4",
         "joi": "^17.10.2",
         "lodash": "^4.17.21",
         "module-alias": "^2.2.3",

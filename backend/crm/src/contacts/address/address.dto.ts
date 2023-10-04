@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsEnum, IsOptional, IsString, MaxLength, MinLength } from 'class-validator'
+import { IsEnum, IsOptional, IsString, MaxLength, MinLength, IsNumber } from 'class-validator'
 import { ContactAddressType } from './address.enums'
 
 export class ContactAddressDto {
@@ -39,4 +39,15 @@ export class ContactAddressDto {
 	@MinLength(2)
 	@MaxLength(2)
 	country_iso?: string
+
+	@ApiProperty({ description: 'Your contacts latitude', example: 18.48 })
+	@IsOptional()
+	@IsNumber()
+	latitude?: number
+
+	@ApiProperty({ description: 'Your contacts longitude', example: 18.48 })
+	@IsOptional()
+	@IsNumber()
+	longitude?: number
+
 }
