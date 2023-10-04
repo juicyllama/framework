@@ -78,5 +78,6 @@ jobs:
             -   name: Test
                 run: |
                     export $(grep -v '^#' .env.development)
+                    echo Connecting to DB $MYSQL_DB_TEST_NAME with  $MYSQL_HOSTNAME:$MYSQL_PORT@$MYSQL_USERNAME:$MYSQL_PASSWORD
                     cd backend/core
                     pnpm run test
