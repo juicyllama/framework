@@ -77,4 +77,4 @@ jobs:
                 run: pnpm run start:docker:build
 
             -   name: Test
-                run: cd backend/app-store && pnpm run test
+                run: cd backend/core && pnpm run test
