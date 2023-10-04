@@ -8,6 +8,19 @@ importers:
 
   .: {}
 
+  apps/apilayer:
+    dependencies:
+      '@juicyllama/core':
+        specifier: workspace:^
+        version: link:../../backend/core
+      '@juicyllama/utils':
+        specifier: workspace:^
+        version: link:../../common/utils
+    devDependencies:
+      '@juicyllama/dev':
+        specifier: workspace:^
+        version: link:../../common/dev
+
   backend/core:
     dependencies:
       '@bugsnag/js':
@@ -193,6 +206,25 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
+    devDependencies:
+      '@juicyllama/dev':
+        specifier: workspace:^
+        version: link:../../common/dev
+
+  backend/crm:
+    dependencies:
+      '@juicyllama/app-apilayer':
+        specifier: workspace:^
+        version: link:../../apps/apilayer
+      '@juicyllama/core':
+        specifier: workspace:^
+        version: link:../core
+      '@juicyllama/nestjs-redoc':
+        specifier: workspace:^
+        version: link:../../common/nestjs-redoc
+      '@juicyllama/utils':
+        specifier: workspace:^
+        version: link:../../common/utils
     devDependencies:
       '@juicyllama/dev':
         specifier: workspace:^
