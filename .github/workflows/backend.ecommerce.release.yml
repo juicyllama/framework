@@ -79,7 +79,7 @@ jobs:
                         ${{ runner.os }}-pnpm-store-
 
             -   name: 'Install dependencies'
-                run: pnpm install --shamefully-hoist --no-frozen-lockfile --no-optional
+                run: pnpm install --shamefully-hoist --no-frozen-lockfile
 
             -   run: git pull
 
