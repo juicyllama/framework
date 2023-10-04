@@ -48,6 +48,7 @@ jobs:
                         backend/crm
                         backend/websites
                         apps/apilayer
+                        apps/wordpress
 
             -   name: 'Install Node.js'
                 uses: actions/setup-node@v3

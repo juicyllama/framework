@@ -40,6 +40,7 @@ jobs:
                         common/nestjs-redoc
                         backend/core
                         backend/app-store
+                        apps/wordpress
 
 
             -   name: Install Node.js
