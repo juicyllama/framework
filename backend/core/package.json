@@ -1,7 +1,7 @@
 {
     "name": "@juicyllama/core",
     "version": "0.0.327",
-    "description": "Juicyllama NestJS Core",
+    "description": "Juicyllama Core",
     "author": {
         "name": "JuicyLlama Studio",
         "email": "studio@juicyllama.com",
