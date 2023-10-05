@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
+const LS_KEY_FOR_DATA = 'dashboard'
 
-const saved = localStorage.getItem('dashboard') || ''
+const saved = localStorage.getItem(LS_KEY_FOR_DATA) || ''
 
 export const useWidgetsStore = defineStore('counter', {
     state: () => ({
@@ -31,12 +32,10 @@ export const useWidgetsStore = defineStore('counter', {
         this.widgets.splice(index + isUp, 0, element);
       },
       clear() {
-        console.log('clear')
         this.widgets = []
       },
       add(item){
         this.widgets.push(item)
-        console.log(this.widgets)
       },
       removeByIndex(index) {
         this.widgets.splice(index, 1)

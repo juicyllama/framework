@@ -24,7 +24,7 @@
   </q-layout>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, computed } from 'vue'
 import WidgetForm from '@/components/WidgetForm.vue'
 import { useWidgetsStore } from '@/stores/widgets'

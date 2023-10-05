@@ -94,7 +94,7 @@
   </q-layout>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, computed } from 'vue'
 import WidgetForm from '@/components/WidgetForm.vue'
 import { useWidgetsStore } from '@/stores/widgets'
@@ -103,9 +103,7 @@ import JLStats from '@/components/widgets/JLStats.vue'
 import JLForm from '@/components/widgets/JLForm.vue'
 import JLTable from '@/components/widgets/JLTable.vue'
 
-const findWidgetById = (widgets, widget) => {
-    return widgets.findIndex(el => el.id === widget.id);
-  }
+const findWidgetById = (widgets, widget) => widgets.findIndex(el => el.id === widget.id);
 
 export default {
   components: {
@@ -139,6 +137,8 @@ export default {
     const widgets2 = computed(() => widgetsStore.widgets)
     const panel2 = computed(() => widgets2.value)
 
+	const LS_KEY_FOR_DATA = 'dashboard'
+
     const close = (data) => {
       showWidgetEditForm.value = false
     }
@@ -150,7 +150,7 @@ export default {
     }
 
     const saveDashboard = () => {
-      localStorage.setItem('dashboard', JSON.stringify(widgetsStore.widgets))
+      localStorage.setItem(LS_KEY_FOR_DATA, JSON.stringify(widgetsStore.widgets))
   }
 
     return {

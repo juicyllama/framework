@@ -34,15 +34,15 @@ npm install @juicyllama/frontend-core
 
 Widget system consists of two logical component modes:
 
-1. Editor - for editing existing grid and aging removing components onto it
-2. Display - another one for static displaying components from earlier created layouts
-
-`WidgetDisplayContainer` needs to be used with property `edit` set to `true` or `false`.
+1. Editor `WidgetEditorContainer` for editing existing grid and aging removing components onto it
+2. Display `WidgetDisplayContainer` another one for static displaying components from earlier created layouts.
 
 ### Widgets editing/creation component
 
-Default sizing of widgets can be as follows:
+To use editor you need to import `WidgetEditorContainer` from `@juicyllama/frontend-core`
 
+Default sizing of widgets can be as follows:
+****
 - Small (3/12 on desktop / 6/12 mobile)
 - Medium (6/12 on desktop / 12/12 mobile)
 - Large (12/12 on desktop / 12/12 mobile)
@@ -59,7 +59,7 @@ Order of placing a widget and size of a widget (S/M/L) can be edited in a visual
 
 ### Widgets display component
 
-
+To use you need to import `WidgetDisplayContainer` from `@juicyllama/frontend-core` and set value of source for widgets data.
 
 ## Styling
 
