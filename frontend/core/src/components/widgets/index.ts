@@ -1,3 +1,4 @@
-import WidgetDisplayContainer from './WidgetContainer.vue'
+import WidgetEditorContainer from './WidgetEditorContainer.vue'
+import WidgetDisplayContainer from './WidgetDisplayContainer.vue'
 
-export { WidgetDisplayContainer }
+export { WidgetEditorContainer, WidgetDisplayContainer }

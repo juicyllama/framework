@@ -5,7 +5,7 @@ import { UserStore } from './store/user'
 import instance from './services/index'
 import classes from './assets/JLCore.css'
 import { ThemeStore } from './store/theme'
-import { JLForm, JLTable, JLMenu, JLChart, JLStats, JLLogin, JLDropdownButtonMenu } from '@/components'
+import { JLForm, JLTable, JLMenu, JLChart, JLStats, JLLogin, JLDropdownButtonMenu, WidgetEditorContainer, WidgetDisplayContainer } from '@/components'
 import { JLAccountProfile, JLAccountAvatar, JLAccountSwitcher, JLAccountBrand } from '@/components/core/account'
 import { JLUserAvatar, JLUserProfile, JLUserMenu } from '@/components/core/user'
 import { JLAppStoreConnect } from '@/components/app-store'
@@ -79,4 +79,6 @@ export {
 	JLDropdownButtonMenu,
 	JLStats,
 	JLChart,
+	WidgetEditorContainer,
+	WidgetDisplayContainer
 }
