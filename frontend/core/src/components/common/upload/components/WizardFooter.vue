@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
-import { useUploaderStore } from '../stores/uploader';
+import { useUploaderStore } from '..@/store/uploader';
 const props = defineProps(['isNextActive', 'isBackActive', 'isStartActive']);
 const emit = defineEmits([
   'onNextButtonClicked',

@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { useUploaderStore } from '../stores/uploader';
+import { useUploaderStore } from '..@/store/uploader';
 
 const store = useUploaderStore();
 
