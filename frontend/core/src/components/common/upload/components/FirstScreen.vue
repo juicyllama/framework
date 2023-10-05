@@ -70,14 +70,14 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { QFile } from 'quasar';
-import { useUploaderStore } from '../stores/uploader';
-import { SourceType, SourceEntry } from '../types';
+import { useUploaderStore } from '@/store/uploader';
+import { SourceType, SourceEntry } from '@/types/upload';
 
 import { FILE_SIZE_LIMIT, ALLOW_FILE_TYPES } from '../config';
 
 const store = useUploaderStore();
 
-const encodingOptions = ['65001 - [utf-8] Unicode (UTF-8)'];
+const encodingOptions = ['[utf-8] Unicode (UTF-8)'];
 const selectedEncoding = ref<string>(encodingOptions[0]);
 
 const pagination = { rowsPerPage: 0 };

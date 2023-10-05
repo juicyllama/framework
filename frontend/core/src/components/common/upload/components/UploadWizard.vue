@@ -40,12 +40,12 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import WizardFooter from 'components/WizardFooter.vue';
-import FirstScreen from 'components/FirstScreen.vue';
-import SecondScreen from 'components/SecondScreen.vue';
-import ThirdScreen from 'components/ThirdScreen.vue';
-import FourthScreen from 'components/FourthScreen.vue';
-import FifthScreen from 'components/FifthScreen.vue';
+import WizardFooter from './WizardFooter.vue';
+import FirstScreen from './FirstScreen.vue';
+import SecondScreen from './SecondScreen.vue';
+import ThirdScreen from './ThirdScreen.vue';
+import FourthScreen from './FourthScreen.vue';
+import FifthScreen from './FifthScreen.vue';
 
 const emit = defineEmits(['update:show']);
 const props = defineProps({
