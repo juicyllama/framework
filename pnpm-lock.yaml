@@ -8,19 +8,6 @@ importers:
 
   .: {}
 
-  apps/apilayer:
-    dependencies:
-      '@juicyllama/core':
-        specifier: workspace:^
-        version: link:../../backend/core
-      '@juicyllama/utils':
-        specifier: workspace:^
-        version: link:../../common/utils
-    devDependencies:
-      '@juicyllama/dev':
-        specifier: workspace:^
-        version: link:../../common/dev
-
   backend/core:
     dependencies:
       '@bugsnag/js':
@@ -217,11 +204,8 @@ importers:
         specifier: workspace:^
         version: link:../../common/dev
 
-  backend/crm:
+  backend/websites:
     dependencies:
-      '@juicyllama/app-apilayer':
-        specifier: workspace:^
-        version: link:../../apps/apilayer
       '@juicyllama/core':
         specifier: workspace:^
         version: link:../core
