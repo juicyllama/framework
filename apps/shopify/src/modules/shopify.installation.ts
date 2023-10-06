@@ -1,6 +1,12 @@
 import { forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common'
 import { Logger } from '@juicyllama/utils'
-import { AppCategory, AppInputType, AppIntegrationType, AppsService, AppStoreIntegrationName } from '@juicyllama/app-store'
+import {
+	AppCategory,
+	AppInputType,
+	AppIntegrationType,
+	AppsService,
+	AppStoreIntegrationName,
+} from '@juicyllama/app-store'
 
 @Injectable()
 export class ShopifyInstallationService implements OnModuleInit {
@@ -10,11 +16,13 @@ export class ShopifyInstallationService implements OnModuleInit {
 	) {}
 
 	async onModuleInit() {
-		const app = await this.appsService.findOne({ where: {
-			integration_name: AppStoreIntegrationName.shopify,
-		}})
+		const app = await this.appsService.findOne({
+			where: {
+				integration_name: AppStoreIntegrationName.shopify,
+			},
+		})
 
-		if(!app){
+		if (!app) {
 			this.logger.log('Creating Shopify App')
 			await this.appsService.create({
 				name: 'Shopify',
@@ -25,19 +33,19 @@ export class ShopifyInstallationService implements OnModuleInit {
 				hexcode: '96bf48',
 				active: true,
 				hidden: false,
-				settings: [{
-					key: "SHOPIFY_SHOP_NAME", 
-					name: "Shopify Shop Name", 
-					input: {
-						type: AppInputType.text,
-						required: true
+				settings: [
+					{
+						key: 'SHOPIFY_SHOP_NAME',
+						name: 'Shopify Shop Name',
+						input: {
+							type: AppInputType.text,
+							required: true,
+						},
+						description: 'The name of the users shop. e.g. https://{shop}.myshopify.com',
+						private: false,
 					},
-					description: "The name of the users shop. e.g. https://{shop}.myshopify.com",
-					private: false,
-				}]
+				],
 			})
 		}
 	}
-
-		
 }

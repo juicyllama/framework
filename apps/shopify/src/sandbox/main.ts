@@ -18,12 +18,10 @@ async function bootstrap() {
 
 	app.useGlobalPipes(new ValidationPipe(validationPipeOptions))
 	app.useGlobalFilters(new TypeOrmFilter())
-	app.use(cookieParser());
+	app.use(cookieParser())
 
 	app.listen(process.env.PORT)
-	logger.debug(
-		`[${domain}] ${Enviroment[process.env.NODE_ENV]} server running: ${process.env.BASE_URL}`,
-	)
+	logger.debug(`[${domain}] ${Enviroment[process.env.NODE_ENV]} server running: ${process.env.BASE_URL}`)
 }
 
 try {

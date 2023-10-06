@@ -1,5 +1,5 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { Shopify, ShopifySession }from '../../config/shopify.config'
+import { Shopify, ShopifySession } from '../../config/shopify.config'
 import { Logger } from '@juicyllama/utils'
 import { ConfigService } from '@nestjs/config'
 import { InstalledApp, OauthService } from '@juicyllama/app-store'
@@ -14,17 +14,16 @@ export class ShopifyWebhooksService {
 		@Inject(forwardRef(() => OauthService)) private readonly oauthService: OauthService,
 	) {}
 
-	async createWebhook(installed_app: InstalledApp, options: ShopifyRest, data: ShopifyWebhookCreate ): Promise<any> {
-
+	async createWebhook(installed_app: InstalledApp, options: ShopifyRest, data: ShopifyWebhookCreate): Promise<any> {
 		const domain = 'app::shopify::webhook::getWebhooks'
 
 		const shopify = Shopify(this.configService.get('shopify'))
 		const oath = await this.oauthService.findOne({ where: { installed_app_id: installed_app.installed_app_id } })
 		const session = ShopifySession(installed_app, oath)
 
-		const client = new shopify.clients.Rest({    
+		const client = new shopify.clients.Rest({
 			session,
-			apiVersion: options.api_version
+			apiVersion: options.api_version,
 		})
 
 		data.address = `${data.address}?installed_app_id=${installed_app.installed_app_id}`
@@ -35,36 +34,36 @@ export class ShopifyWebhooksService {
 				webhook: {
 					format: 'json',
 					...data,
-				}
-			}
+				},
+			},
 		})
 
 		const webhook: ShopifyWebhook = response.body?.webhook
-		
+
 		this.logger.log(`[${domain}] Webhook created`, webhook)
 
 		return webhook
 	}
 
-	async getWebhooks(installed_app: InstalledApp, options: ShopifyRestListWebhooks ): Promise<any> {
+	async getWebhooks(installed_app: InstalledApp, options: ShopifyRestListWebhooks): Promise<any> {
 		const domain = 'app::shopify::webhook::getWebhooks'
 
 		const shopify = Shopify(this.configService.get('shopify'))
 		const oath = await this.oauthService.findOne({ where: { installed_app_id: installed_app.installed_app_id } })
 		const session = ShopifySession(installed_app, oath)
 
-		const client = new shopify.clients.Rest({    
+		const client = new shopify.clients.Rest({
 			session,
-			apiVersion: options.api_version
+			apiVersion: options.api_version,
 		})
 
 		const response = <any>await client.get({
 			path: 'webhooks',
-			query: <any>options
+			query: <any>options,
 		})
 
 		const webhooks: ShopifyWebhook[] = response.body?.webhooks
-		
+
 		this.logger.log(`[${domain}] ${webhooks.length} Webhooks found`)
 
 		return webhooks

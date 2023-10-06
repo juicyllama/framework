@@ -8,13 +8,12 @@ import { ShopifyOrdersCronService } from './orders.cron.service'
 @Controller('app/shopify/crons/orders')
 export class ShopifyOrdersCronController {
 	constructor(
-		@Inject(forwardRef(() => ShopifyOrdersCronService)) private readonly shopifyOrdersCronService: ShopifyOrdersCronService,
+		@Inject(forwardRef(() => ShopifyOrdersCronService))
+		private readonly shopifyOrdersCronService: ShopifyOrdersCronService,
 	) {}
-	
+
 	@Post('sync')
 	async syncOrders(): Promise<any> {
 		return await this.shopifyOrdersCronService.syncOrders()
 	}
-
-
 }

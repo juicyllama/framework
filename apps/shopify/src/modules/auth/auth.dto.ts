@@ -21,7 +21,6 @@ export class ShopifyAuthRedirectQuery {
 }
 
 export class ShopifyAuthCreateRequest {
-
 	@IsNumber()
 	installed_app_id: number //The installed_app_id for the shopify app you want to authenticate
 

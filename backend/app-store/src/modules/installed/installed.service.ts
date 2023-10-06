@@ -62,7 +62,7 @@ export class InstalledAppsService extends BaseService<T> {
 	createOauthLink(installed_app: T): string {
 		switch (installed_app.app.integration_name) {
 			case AppStoreIntegrationName.shopify:
-				return `${process.env.BASE_URL}/app/shopify/auth/install?installed_app_id=${installed_app.installed_app_id}&shop=${installed_app.settings.SHOPIFY_SHOP_NAME}`
+				return `${process.env.BASE_URL}/app/shopify/auth/install?installed_app_id=${installed_app.installed_app_id}`
 
 			default:
 				throw new BadRequestException(`${installed_app.app.integration_name} OAUTH2 LINK NOT IMPLEMENTED`)

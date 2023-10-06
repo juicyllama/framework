@@ -2,7 +2,7 @@ import { Controller, forwardRef, Inject, Get, Query, Req, Res, BadRequestExcepti
 import { ApiHideProperty } from '@nestjs/swagger'
 import { Logger } from '@juicyllama/utils'
 import { ShopifyAuthRedirectQuery } from './auth.dto'
-import { Shopify, ShopifyAuthRedirect, ShopifyAuthScopes }from '../../config/shopify.config'
+import { Shopify, ShopifyAuthRedirect, ShopifyAuthScopes } from '../../config/shopify.config'
 import { ConfigService } from '@nestjs/config'
 import { AppIntegrationStatus, InstalledAppsService, Oauth, OauthService } from '@juicyllama/app-store'
 import { AccountId, UserAuth } from '@juicyllama/core'
@@ -16,27 +16,51 @@ export class ShopifyAuthController {
 		@Inject(forwardRef(() => OauthService)) private readonly oauthService: OauthService,
 		@Inject(forwardRef(() => InstalledAppsService)) private readonly installedAppsService: InstalledAppsService,
 	) {}
-	
+
 	@UserAuth()
 	@ApiHideProperty()
 	@Get('install')
-	async install(@Req() req: any, @Query('installed_app_id') installed_app_id: number, @Query('shop') shop: string, @AccountId() account_id: string): Promise<Oauth> {
+	async install(
+		@Req() req: any,
+		@Query('installed_app_id') installed_app_id: number,
+		@AccountId() account_id: string,
+	): Promise<Oauth> {
 		const domain = 'app::shopify::auth::controller::start'
 
 		this.logger.log(`[${domain}] Install`, {
-			installed_app_id: installed_app_id, 
-			shop: shop, 
+			installed_app_id: installed_app_id,
 			account_id: account_id,
-			user: req.user
+			user: req.user,
 		})
+
+		const installed_app = await this.installedAppsService.findOne({
+			where: {
+				installed_app_id: installed_app_id,
+				account_id: account_id,
+			},
+		})
+
+		if (!installed_app) {
+			throw new BadRequestException(`Installed App not found`)
+		}
+
+		if (!installed_app.settings?.SHOPIFY_SHOP_NAME) {
+			throw new BadRequestException(`Shopify Shop Name not found in App settings`)
+		}
 
 		const state = uuidv4()
 
-		const redirect = `https://${shop}.myshopify.com/admin/oauth/authorize?client_id=${this.configService.get<string>('shopify.SHOPIFY_APP_CLIENT_ID')}&scope=${ShopifyAuthScopes.toString()}&redirect_uri=${process.env.BASE_URL}${ShopifyAuthRedirect}&state=${state}`
+		const redirect = `https://${
+			installed_app.settings.SHOPIFY_SHOP_NAME
+		}.myshopify.com/admin/oauth/authorize?client_id=${this.configService.get<string>(
+			'shopify.SHOPIFY_APP_CLIENT_ID',
+		)}&scope=${ShopifyAuthScopes.toString()}&redirect_uri=${
+			process.env.BASE_URL
+		}${ShopifyAuthRedirect}&state=${state}`
 
-		let oath = await this.oauthService.findOne({ where: { installed_app_id: installed_app_id } })
+		const oath = await this.oauthService.findOne({ where: { installed_app_id: installed_app_id } })
 
-		if(oath) {
+		if (oath) {
 			return await this.oauthService.update({
 				oauth_id: oath.oauth_id,
 				installed_app_id: installed_app_id,
@@ -58,18 +82,18 @@ export class ShopifyAuthController {
 		const domain = 'app::shopify::auth::controller::redirect'
 		this.logger.log(`[${domain}] Redirect`, query)
 
-		res.setHeader('Set-Cookie', [`app_shopify_state=${query.state}; Path=/;`]);
+		res.setHeader('Set-Cookie', [`app_shopify_state=${query.state}; Path=/;`])
 
 		const shopify = Shopify(this.configService.get('shopify'))
-			await shopify.auth.begin({
-				shop: shopify.utils.sanitizeShop(query.shop, true),
-				callbackPath: `/app/shopify/auth/complete`,
-				isOnline: false,
-				rawRequest: req,
-				rawResponse: res,
-			})
-			return
-		}
+		await shopify.auth.begin({
+			shop: shopify.utils.sanitizeShop(query.shop, true),
+			callbackPath: `/app/shopify/auth/complete`,
+			isOnline: false,
+			rawRequest: req,
+			rawResponse: res,
+		})
+		return
+	}
 
 	@ApiHideProperty()
 	@Get('complete')
@@ -81,18 +105,18 @@ export class ShopifyAuthController {
 
 		const callback = await shopify.auth.callback({
 			rawRequest: req,
-    		rawResponse: res,
+			rawResponse: res,
 		})
 
 		this.logger.log(`[${domain}] Callback`, {
 			callback: callback,
-			state: req.cookies.app_shopify_state
+			state: req.cookies.app_shopify_state,
 		})
 
 		const oath = await this.oauthService.findOne({ where: { state: req.cookies.app_shopify_state } })
 
-		if(!oath) {
-		 	throw new BadRequestException('Invalid Oauth State, please ensure you are connecting from the app.')
+		if (!oath) {
+			throw new BadRequestException('Invalid Oauth State, please ensure you are connecting from the app.')
 		}
 
 		await this.oauthService.update({
@@ -107,7 +131,7 @@ export class ShopifyAuthController {
 			installed_app_id: oath.installed_app_id,
 			integration_status: AppIntegrationStatus.CONNECTED,
 		})
-	
+
 		res.redirect(process.env.BASE_URL_APP)
 	}
 }
