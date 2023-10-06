@@ -25,6 +25,22 @@ export class ContactPhoneService extends BaseService<T> {
 		})
 	}
 
+	async create(data: DeepPartial<T>): Promise<T> {
+
+		const phone = await this.findOne({ where: {
+			contact_id: data.contact_id,
+			number: data.number,
+			country_iso: data.country_iso
+		}})
+
+		if(phone) {
+			return phone
+		}
+
+		return await super.create(data)
+	}
+
+
 	async validatePhoneNumber(phone: T): Promise<boolean> {
 		const domain = 'crm::contacts::service::validatePhoneNumber'
 
@@ -102,18 +118,14 @@ export class ContactPhoneService extends BaseService<T> {
 		for (const p in phones) {
 			let record = await this.findOne({
 				where: {
-					contact: {
-						contact_id: contact_id,
-					},
+					contact_id: contact_id,
 					number: phones[p].number,
 				},
 			})
 
 			if (!record) {
 				record = await this.create({
-					contact: {
-						contact_id: contact_id,
-					},
+					contact_id: contact_id,
 					...phones[p],
 				})
 				this.logger.verbose(`[${domain}] Phone number created`, record)
@@ -122,9 +134,7 @@ export class ContactPhoneService extends BaseService<T> {
 
 		return await this.findAll({
 			where: {
-				contact: {
-					contact_id: contact_id,
-				},
+				contact_id: contact_id,
 			},
 		})
 	}

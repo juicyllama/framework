@@ -1,4 +1,4 @@
-import { INestApplication, Logger } from '@nestjs/common'
+import { INestApplication } from '@nestjs/common'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { OpenAPIObject } from '@nestjs/swagger'
 import { Request, Response } from 'express'
@@ -8,8 +8,6 @@ import pathModule from 'path'
 import { resolve } from 'url'
 import { LogoOptions, RedocDocument, RedocOptions } from './interfaces'
 import { schema } from './model'
-
-const logger = new Logger('RedocModule')
 
 export class RedocModule {
 	/**
@@ -30,7 +28,7 @@ export class RedocModule {
 		// Validate options object
 		try {
 			if (debug) {
-				logger.verbose('Debug mode is enabled')
+				console.log('Debug mode is enabled')
 			}
 			const _options = await this.validateOptionsObject(options, document, debug)
 			const redocDocument = this.addVendorExtensions(_options, <RedocDocument>document)
@@ -39,7 +37,7 @@ export class RedocModule {
 			if (debug) {
 				console.table(options)
 				console.dir(document)
-				logger.error(error)
+				console.error(error)
 			}
 			throw error
 		}

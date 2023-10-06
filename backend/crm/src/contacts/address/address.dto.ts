@@ -3,6 +3,7 @@ import { IsEnum, IsOptional, IsString, MaxLength, MinLength, IsNumber } from 'cl
 import { ContactAddressType } from './address.enums'
 
 export class ContactAddressDto {
+
 	@ApiProperty({ description: 'The type of address', example: ContactAddressType.HOME, enum: ContactAddressType })
 	@IsEnum(ContactAddressType)
 	@IsOptional()

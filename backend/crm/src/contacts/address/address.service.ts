@@ -21,6 +21,22 @@ export class ContactAddressService extends BaseService<T> {
 		})
 	}
 
+	async create(data: DeepPartial<T>): Promise<T> {
+
+		const address = await this.findOne({ where: {
+			contact_id: data.contact_id,
+			address_1: data.address_1,
+			post_code: data.post_code,
+			country_iso: data.country_iso
+		}})
+
+		if(address) {
+			return address
+		}
+
+		return await super.create(data)
+	}
+
 	async updateAddresses(addresses: DeepPartial<T[]>, contact_id: number): Promise<T[]> {
 		const domain = 'crm::contacts::addresses::service::updateAddresses'
 
@@ -31,9 +47,7 @@ export class ContactAddressService extends BaseService<T> {
 		for (const a in addresses) {
 			let record = await this.findOne({
 				where: {
-					contact: {
-						contact_id: contact_id,
-					},
+					contact_id: contact_id,
 					address_1: addresses[a].address_1,
 					address_2: addresses[a].address_2,
 					city: addresses[a].city,
@@ -45,9 +59,7 @@ export class ContactAddressService extends BaseService<T> {
 
 			if (!record) {
 				record = await this.create({
-					contact: {
-						contact_id: contact_id,
-					},
+					contact_id: contact_id,
 					...addresses[a],
 				})
 				this.logger.verbose(`[${domain}] Social created`, record)
@@ -56,9 +68,7 @@ export class ContactAddressService extends BaseService<T> {
 
 		return await this.findAll({
 			where: {
-				contact: {
-					contact_id: contact_id,
-				},
+				contact_id: contact_id,
 			},
 		})
 	}

@@ -29,6 +29,7 @@ pnpm link --global --dir apps/mollie
 pnpm link --global --dir apps/openai
 pnpm link --global --dir apps/pexels
 pnpm link --global --dir apps/scrapingbee
+pnpm link --global --dir apps/shopify
 pnpm link --global --dir apps/slack
 pnpm link --global --dir apps/wise
 pnpm link --global --dir apps/wordpress

@@ -21,6 +21,21 @@ export class ContactEmailService extends BaseService<T> {
 		})
 	}
 
+	async create(data: DeepPartial<T>): Promise<T> {
+
+		const email = await this.findOne({ where: {
+			contact_id: data.contact_id,
+			email: data.email,
+		}})
+
+		if(email) {
+			return email
+		}
+
+		return await super.create(data)
+	}
+
+
 	async updateEmails(emails: DeepPartial<T[]>, contact_id: number): Promise<T[]> {
 		const domain = 'crm::contacts::email::service::updateEmails'
 
@@ -31,18 +46,14 @@ export class ContactEmailService extends BaseService<T> {
 		for (const e in emails) {
 			let record = await this.findOne({
 				where: {
-					contact: {
-						contact_id: contact_id,
-					},
+					contact_id: contact_id,
 					email: emails[e].email,
 				},
 			})
 
 			if (!record) {
 				record = await this.create({
-					contact: {
-						contact_id: contact_id,
-					},
+					contact_id: contact_id,
 					...emails[e],
 				})
 				this.logger.verbose(`[${domain}] Email created`, record)
@@ -51,9 +62,7 @@ export class ContactEmailService extends BaseService<T> {
 
 		return await this.findAll({
 			where: {
-				contact: {
-					contact_id: contact_id,
-				},
+				contact_id: contact_id,
 			},
 		})
 	}

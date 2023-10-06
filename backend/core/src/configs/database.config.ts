@@ -27,8 +27,8 @@ const DATABASE_SHARED = {
 export const DATABASE = {
 	...DATABASE_SHARED,
 	database: process.env.MYSQL_DB_NAME,
-	synchronize: false,
-	debug: Env.IsNotProd(),
+	synchronize: !!(Env.IsNotProd() && process.env.MYSQL_SYNC),
+	debug: !!(Env.IsNotProd() && process.env.MYSQL_DEBUG),
 }
 
 export const TEST_DATABASE = {

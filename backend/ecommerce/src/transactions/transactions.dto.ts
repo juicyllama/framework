@@ -17,15 +17,20 @@ export class TransactionDto {
 	@IsString()
 	order_number?: string
 
-	@ApiProperty({ description: 'The contact id of the shipping contact' })
+	@ApiProperty({ description: 'The contact id of the contact' })
 	@IsOptional()
 	@IsNumber()
-	shipping_contact_id?: number
+	contact_id?: number
 
-	@ApiProperty({ description: 'The contact id of the billing contact' })
+	@ApiProperty({ description: 'The address id of the shipping contact' })
 	@IsOptional()
 	@IsNumber()
-	billing_contact_id?: number
+	shipping_address_id?: number
+
+	@ApiProperty({ description: 'The address id of the billing contact' })
+	@IsOptional()
+	@IsNumber()
+	billing_address_id?: number
 
 	@ApiProperty({ description: 'The payment status of the transaction' })
 	@IsOptional()
@@ -46,6 +51,12 @@ export class TransactionDto {
 	@ApiProperty({ description: 'The subtotal of the transaction' })
 	@IsNumber()
 	subtotal_price: number
+
+	@ApiProperty({ description: 'The total shipping cost for the transaction' })
+	@IsNumber()
+	@IsOptional()
+	total_shipping?: number
+
 
 	@ApiProperty({ description: 'The total discounts of the transaction' })
 	@IsNumber()
