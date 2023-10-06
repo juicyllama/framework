@@ -16,6 +16,10 @@ export class ShopifyOrdersController {
 		@Inject(forwardRef(() => InstalledAppsService)) private readonly installedAppsService: InstalledAppsService,
 	) {}
 	
+	/**
+	 * This endpoint is used to sync orders from Shopify to the Ecommerce transactions table. It returns the transactions that were synced.
+	 */
+
 	@UserAuth()
 	@ApiHideProperty()
 	@Get('sync')
@@ -45,6 +49,10 @@ export class ShopifyOrdersController {
 			...query,
 		})
 	}
+
+	/**
+	 * This endpoint returns orders direct from shopify
+	 */
 
 	@UserAuth()
 	@ApiHideProperty()
