@@ -11,7 +11,6 @@ import { ContactsModule } from '../contacts/contacts.module'
 import { ContactPhoneService } from '../contacts/phone/phone.service'
 import { Contact } from '../contacts/contacts.entity'
 import { ContactPhone } from '../contacts/phone/phone.entity'
-import { NumberVerificationModule } from '@juicyllama/app-apilayer'
 
 @Module({
 	imports: [
@@ -27,7 +26,6 @@ import { NumberVerificationModule } from '@juicyllama/app-apilayer'
 		forwardRef(() => BeaconModule),
 		forwardRef(() => ContactsModule),
 		forwardRef(() => SettingsModule),
-		forwardRef(() => NumberVerificationModule),
 	],
 	controllers: [CRMCronsController],
 	providers: [Logger, Query, CrmCronsContactsService, ContactPhoneService],

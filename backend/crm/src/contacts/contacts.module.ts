@@ -23,7 +23,6 @@ import { ContactAddress } from './address/address.entity'
 import { ContactEmail } from './email/email.entity'
 import { ContactPhone } from './phone/phone.entity'
 import { ContactSocial } from './social/social.entity'
-import { NumberVerificationModule } from '@juicyllama/app-apilayer'
 import { ContactSocialService } from './social/social.service'
 import { ContactPhoneService } from './phone/phone.service'
 import { ContactEmailService } from './email/email.service'
@@ -46,7 +45,6 @@ import { ContactAddressService } from './address/address.service'
 		forwardRef(() => StorageModule),
 		forwardRef(() => TagsModule),
 		forwardRef(() => UsersModule),
-		forwardRef(() => NumberVerificationModule),
 	],
 	controllers: [ContactsController],
 	providers: [

@@ -4,8 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
 import { ContactPhone } from './phone.entity'
 import { ContactPhoneStatus, ContactPhoneType } from './phone.enums'
-import { NumberVerificationService } from '@juicyllama/app-apilayer'
-import { Logger } from '@juicyllama/utils'
+import { Logger, Modules } from '@juicyllama/utils'
+import { LazyModuleLoader } from '@nestjs/core'
 
 const E = ContactPhone
 type T = ContactPhone
@@ -17,8 +17,7 @@ export class ContactPhoneService extends BaseService<T> {
 		@InjectRepository(E) readonly repository: Repository<T>,
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
-		@Inject(forwardRef(() => NumberVerificationService))
-		readonly numberVerificationService: NumberVerificationService,
+		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
 	) {
 		super(query, repository, {
 			beacon: beaconService,
@@ -48,7 +47,17 @@ export class ContactPhoneService extends BaseService<T> {
 			return false
 		}
 
-		const result = await this.numberVerificationService.verify(phone.number, phone.country_iso)
+		if (!Modules.isInstalled('@juicyllama/app-apilayer')) {
+			this.logger.warn(`[${domain}] Skipping number verification as no service is installed, consider installing one of: ApiLayer`)
+			return true
+		}
+
+		//@ts-ignore
+		const { NumberVerificationModule, NumberVerificationService } = await import('@juicyllama/app-apilayer')
+		const numberVerificationModule = await this.lazyModuleLoader.load(() => NumberVerificationModule)
+		const numberVerificationService = numberVerificationModule.get(NumberVerificationService)
+
+		const result = await numberVerificationService.verify(phone.number, phone.country_iso)
 
 		if (!result) {
 			this.logger.warn(`[${domain}] ${phone.number} cannot be validated`, result)
@@ -79,7 +88,17 @@ export class ContactPhoneService extends BaseService<T> {
 			return false
 		}
 
-		const result = await this.numberVerificationService.verify(phone.number, phone.country_iso)
+		if (!Modules.isInstalled('@juicyllama/app-apilayer')) {
+			this.logger.warn(`[${domain}] Skipping number verification as no service is installed, consider installing one of: ApiLayer`)
+			return true
+		}
+
+		//@ts-ignore
+		const { NumberVerificationModule, NumberVerificationService } = await import('@juicyllama/app-apilayer')
+		const numberVerificationModule = await this.lazyModuleLoader.load(() => NumberVerificationModule)
+		const numberVerificationService = numberVerificationModule.get(NumberVerificationService)
+
+		const result = await numberVerificationService.verify(phone.number, phone.country_iso)
 
 		if (!result) {
 			this.logger.warn(`[${domain}] ${phone.number} cannot be validated`, result)

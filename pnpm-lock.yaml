@@ -503,9 +503,6 @@ importers:
 
   backend/crm:
     dependencies:
-      '@juicyllama/app-apilayer':
-        specifier: workspace:^
-        version: link:../../apps/apilayer
       '@juicyllama/core':
         specifier: workspace:^
         version: link:../core
