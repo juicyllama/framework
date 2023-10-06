@@ -1,12 +1,7 @@
 {
     "name": "@juicyllama/app-store",
-<<<<<<< HEAD
-    "version": "0.1.10",
-    "description": "Juicyllama App Store Module",
-=======
     "version": "0.1.11",
-    "description": "Juicyllama App Store Module ",
->>>>>>> e0be1c13221fd21f90ee13d15cada30aa26d654c
+    "description": "Juicyllama App Store Module",
     "author": {
         "name": "JuicyLlama Studio",
         "email": "studio@juicyllama.com",
