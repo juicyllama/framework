@@ -46,6 +46,7 @@ jobs:
                         backend/core
                         backend/crm
                         backend/ecommerce
+                        backend/websites
                         apps/shopify
 
             -   name: 'Install Node.js'

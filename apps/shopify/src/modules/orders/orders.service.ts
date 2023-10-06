@@ -18,42 +18,9 @@ export class ShopifyOrdersService {
 		@Inject(forwardRef(() => ShopifyOrdersMapperService)) private readonly mapperService: ShopifyOrdersMapperService,
 	) {}
 
-	async syncOrders(installed_app: InstalledApp, options: ShopifyRestListOrders, store?: Store ) : Promise<Transaction[]> {
-
-		const orders = await this.listOrders(installed_app, options, store)
-
-		const transactions = []
-
-		for (const order of orders) {
-			let transaction = await this.transactionsService.findOne({ where: { store_id: store.store_id, order_id: order.id.toString() } })
-
-			if (!transaction) {
-				transaction = await this.mapperService.createEcommerceTransaction(order, store.account_id, store.store_id)
-			}else{
-				transaction = await this.mapperService.updateEcommerceTransaction(transaction, order)
-			}
-			
-			transactions.push(transaction)
-		}
-
-		return transactions
-	}
-
-	async addOrder(installed_app: InstalledApp, order: ShopifyOrder): Promise<Transaction> {
-		const domain = 'app::shopify::orders::addOrder'
-
-		const store = await this.storesService.findOne({ where: { installed_app_id: installed_app.installed_app_id } })
-
-		if(!store) {
-			this.logger.error(`[${domain}] Store not found`, {
-				installed_app_id: installed_app.installed_app_id, 
-			})
-			throw new Error(`Store not found`)
-		}
-
-		return await this.mapperService.createEcommerceTransaction(order, store.account_id, store.store_id)
-
-	}
+	/**
+	 * Returns a list of orders from Shopify based on the options provided
+	 */
 
 	async listOrders(installed_app: InstalledApp, options: ShopifyRestListOrders, store?: Store ) : Promise<ShopifyOrder[]> {
 		const domain = 'app::shopify::orders::listOrders'
@@ -97,6 +64,54 @@ export class ShopifyOrdersService {
 
 		return orders
 	}
+
+	/**
+	 * Creates and returns an ecommerce transaction from a shopify order
+	 */
+
+	async addOrder(installed_app: InstalledApp, order: ShopifyOrder): Promise<Transaction> {
+		const domain = 'app::shopify::orders::addOrder'
+
+		const store = await this.storesService.findOne({ where: { installed_app_id: installed_app.installed_app_id } })
+
+		if(!store) {
+			this.logger.error(`[${domain}] Store not found`, {
+				installed_app_id: installed_app.installed_app_id, 
+			})
+			throw new Error(`Store not found`)
+		}
+
+		return await this.mapperService.createEcommerceTransaction(order, store.account_id, store.store_id)
+
+	}
+
+	/**
+	 * Creates or updates ecommerce transactions from a list of shopify orders fetched from shopify based on the options provided
+	 */
+
+	async syncOrders(installed_app: InstalledApp, options: ShopifyRestListOrders, store?: Store ) : Promise<Transaction[]> {
+
+		const orders = await this.listOrders(installed_app, options, store)
+
+		const transactions = []
+
+		for (const order of orders) {
+			let transaction = await this.transactionsService.findOne({ where: { store_id: store.store_id, order_id: order.id.toString() } })
+
+			if (!transaction) {
+				transaction = await this.mapperService.createEcommerceTransaction(order, store.account_id, store.store_id)
+			}else{
+				transaction = await this.mapperService.updateEcommerceTransaction(transaction, order)
+			}
+			
+			transactions.push(transaction)
+		}
+
+		return transactions
+	}
+
+	
+
 
 
 
