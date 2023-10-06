@@ -40,9 +40,5 @@
         "@juicyllama/core": "workspace:^",
         "@juicyllama/nestjs-redoc": "workspace:^",
         "@juicyllama/utils": "workspace:^"
-    },
-    "optionalDependencies": {
-        "@juicyllama/app-shopify": "workspace:^",
-        "@juicyllama/app-wordpress": "workspace:^"
     }
 }
