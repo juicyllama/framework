@@ -42,6 +42,7 @@ jobs:
                 with:
                     node-version: 19
 
+            -   run: git stash
             -   run: git pull --force
 
             -   name: 'Version Bump'

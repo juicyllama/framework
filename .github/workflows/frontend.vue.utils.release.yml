@@ -68,6 +68,7 @@ jobs:
             -   name: 'Install dependencies'
                 run: pnpm install --shamefully-hoist --no-frozen-lockfile
 
+            -   run: git stash
             -   run: git pull --force
 
             -   name: 'Version Bump'
