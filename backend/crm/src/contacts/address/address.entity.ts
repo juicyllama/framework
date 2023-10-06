@@ -13,7 +13,11 @@ export class ContactAddress extends BaseEntity {
 
 	@ManyToOne(() => Contact, contact => contact.contact_id, { onDelete: 'CASCADE' })
 	@JoinColumn({ name: 'contact_id' })
-	contact: Contact
+	contact?: Contact
+
+	@Column()
+	@IsNumber()
+	contact_id: number
 
 	@Column({ default: null, nullable: true })
 	@IsEnum(ContactAddressType)

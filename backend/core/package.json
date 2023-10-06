@@ -64,6 +64,7 @@
         "cache-manager-redis-store": "^3.0.1",
         "class-transformer": "^0.5.1",
         "class-validator": "^0.14.0",
+        "cookie-parser": "^1.4.6",
         "csv-parser": "^3.0.0",
         "dotenv": "^16.3.1",
         "joi": "^17.10.2",
@@ -94,7 +95,8 @@
         "supertest": "^6.3.3",
         "swagger-ui-express": "^5.0.0",
         "typeorm": "^0.3.17",
-        "typescript": "^5.2.2"
+        "typescript": "^5.2.2",
+        "uuid": "^9.0.1"
     },
     "devDependencies": {
         "@juicyllama/dev": "workspace:^"

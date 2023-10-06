@@ -5,16 +5,18 @@ import {
 	ManyToOne,
 	JoinColumn,
 	OneToMany,
+	Unique,
 } from 'typeorm'
 import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
 import { Account, BaseEntity } from '@juicyllama/core'
 import { IsNumber, IsString, IsEnum, MinLength, MaxLength, IsBoolean, IsDate } from 'class-validator'
 import { Store } from '../stores/stores.entity'
 import { TransactionDiscount } from './discounts/discounts.entity'
-import { Contact } from '@juicyllama/crm'
+import { Contact, ContactAddress } from '@juicyllama/crm'
 import { TransactionFulfillmentStatus, TransactionPaymentStatus } from './transactions.enums'
 
 @UseInterceptors(ClassSerializerInterceptor)
+@Unique('ecommerce_transactions_UNIQUE', ['store_id', 'order_id'])
 @Entity('ecommerce_transactions')
 export class Transaction extends BaseEntity {
 	@PrimaryGeneratedColumn()
@@ -36,7 +38,7 @@ export class Transaction extends BaseEntity {
 	store?: Store
 
 	@Column()
-	store_id?: number
+	store_id: number
 
 	@Column()
 	@IsString()
@@ -47,20 +49,34 @@ export class Transaction extends BaseEntity {
 	order_number?: string
 
 	@ManyToOne(() => Contact, contact => contact.contact_id, {
-		onDelete: 'CASCADE',
+		onDelete: 'SET NULL',
 	})
-	@JoinColumn({ name: 'shipping_contact_id' })
-	shipping_contact?: Contact
+	@JoinColumn({ name: 'contact_id' })
+	contact?: Contact
+	
+	@Column({ nullable: true, default: null })
+	@IsNumber()
+	contact_id?: number
 
-	shipping_contact_id?: number
-
-	@ManyToOne(() => Contact, contact => contact.contact_id, {
-		onDelete: 'CASCADE',
+	@ManyToOne(() => ContactAddress, address => address.address_id, {
+		onDelete: 'SET NULL',
 	})
-	@JoinColumn({ name: 'billing_contact_id' })
-	billing_contact?: Contact
+	@JoinColumn({ name: 'shipping_address_id' })
+	shipping_address?: ContactAddress
 
-	billing_contact_id?: number
+	@Column({ nullable: true, default: null })
+	@IsNumber()
+	shipping_address_id?: number
+
+	@ManyToOne(() => ContactAddress, address => address.address_id, {
+		onDelete: 'SET NULL',
+	})
+	@JoinColumn({ name: 'billing_address_id' })
+	billing_address?: ContactAddress
+
+	@Column({ nullable: true, default: null })
+	@IsNumber()
+	billing_address_id?: number
 
 	@Column({ default: TransactionPaymentStatus.PENDING })
 	@IsEnum(TransactionPaymentStatus)
@@ -79,6 +95,10 @@ export class Transaction extends BaseEntity {
 	@Column({ type: 'decimal', precision: 10, scale: 2, default: 0.0 })
 	@IsNumber({ maxDecimalPlaces: 2 })
 	subtotal_price: number
+
+	@Column({ type: 'decimal', precision: 10, scale: 2, default: 0.0 })
+	@IsNumber({ maxDecimalPlaces: 2 })
+	total_shipping?: number
 
 	@Column({ type: 'decimal', precision: 10, scale: 2, default: 0.0 })
 	@IsNumber({ maxDecimalPlaces: 2 })

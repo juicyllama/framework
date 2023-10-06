@@ -31,11 +31,7 @@
         "start:dev": "tsc -w",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests",
-        "test:clear": "npx jest --clearCache",
-        "test:watch": "jest --watch",
-        "test:cov": "jest --coverage",
-        "test:e2e": "jest --config ./test/jest-e2e.json"
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
     },
     "devDependencies": {
         "@juicyllama/dev": "workspace:^"

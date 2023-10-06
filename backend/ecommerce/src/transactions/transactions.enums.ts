@@ -40,12 +40,15 @@ export enum TransactionOrderBy {
 export enum TransactionRelations {
 	account = 'account',
 	store = 'store',
-	shipping_contact = 'shipping_contact',
-	billing_contact = 'billing_contact',
+	contact = 'contact',
+	shipping_address = 'shipping_address',
+	billing_address = 'billing_address',
 }
 
 export enum TransactionPaymentStatus {
 	PENDING = 'PENDING',
+	AURHORIZED = 'AURHORIZED',
+	PARTPAID = 'PARTPAID',
 	PAID = 'PAID',
 	REFUNDED = 'REFUNDED',
 	PATRIALREFUND = 'PATRIALREFUND',
@@ -57,6 +60,7 @@ export enum TransactionPaymentStatus {
 export enum TransactionFulfillmentStatus {
 	PENDING = 'PENDING',
 	PROCESSING = 'PROCESSING',
+	PARTIALLY_SHIPPED = 'PARTIALLY_SHIPPED',
 	SHIPPED = 'SHIPPED',
 	DELIVERED = 'DELIVERED',
 	CANCELLED = 'CANCELLED',
