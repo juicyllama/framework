@@ -19,7 +19,44 @@ export class ShopifyOrdersService {
 	) {}
 
 	async syncOrders(installed_app: InstalledApp, options: ShopifyRestListOrders, store?: Store ) : Promise<Transaction[]> {
-		const domain = 'app::shopify::orders::getOrders'
+
+		const orders = await this.listOrders(installed_app, options, store)
+
+		const transactions = []
+
+		for (const order of orders) {
+			let transaction = await this.transactionsService.findOne({ where: { store_id: store.store_id, order_id: order.id.toString() } })
+
+			if (!transaction) {
+				transaction = await this.mapperService.createEcommerceTransaction(order, store.account_id, store.store_id)
+			}else{
+				transaction = await this.mapperService.updateEcommerceTransaction(transaction, order)
+			}
+			
+			transactions.push(transaction)
+		}
+
+		return transactions
+	}
+
+	async addOrder(installed_app: InstalledApp, order: ShopifyOrder): Promise<Transaction> {
+		const domain = 'app::shopify::orders::addOrder'
+
+		const store = await this.storesService.findOne({ where: { installed_app_id: installed_app.installed_app_id } })
+
+		if(!store) {
+			this.logger.error(`[${domain}] Store not found`, {
+				installed_app_id: installed_app.installed_app_id, 
+			})
+			throw new Error(`Store not found`)
+		}
+
+		return await this.mapperService.createEcommerceTransaction(order, store.account_id, store.store_id)
+
+	}
+
+	async listOrders(installed_app: InstalledApp, options: ShopifyRestListOrders, store?: Store ) : Promise<ShopifyOrder[]> {
+		const domain = 'app::shopify::orders::listOrders'
 
 		const shopify = Shopify(this.configService.get('shopify'))
 		const oath = await this.oauthService.findOne({ where: { installed_app_id: installed_app.installed_app_id } })
@@ -58,37 +95,9 @@ export class ShopifyOrdersService {
 		
 		this.logger.log(`[${domain}] ${orders.length} Orders found`)
 
-		const transactions = []
-
-		for (const order of orders) {
-			let transaction = await this.transactionsService.findOne({ where: { store_id: store.store_id, order_id: order.id.toString() } })
-
-			if (!transaction) {
-				transaction = await this.mapperService.createEcommerceTransaction(order, store.account_id, store.store_id)
-			}else{
-				transaction = await this.mapperService.updateEcommerceTransaction(transaction, order)
-			}
-			
-			transactions.push(transaction)
-		}
-
-		return transactions
+		return orders
 	}
 
-	async addOrder(installed_app: InstalledApp, order: ShopifyOrder): Promise<Transaction> {
-		const domain = 'app::shopify::orders::addOrder'
 
-		const store = await this.storesService.findOne({ where: { installed_app_id: installed_app.installed_app_id } })
-
-		if(!store) {
-			this.logger.error(`[${domain}] Store not found`, {
-				installed_app_id: installed_app.installed_app_id, 
-			})
-			throw new Error(`Store not found`)
-		}
-
-		return await this.mapperService.createEcommerceTransaction(order, store.account_id, store.store_id)
-
-	}
 
 }

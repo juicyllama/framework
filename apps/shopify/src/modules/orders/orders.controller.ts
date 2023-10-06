@@ -6,7 +6,6 @@ import { AccountId, UserAuth } from '@juicyllama/core'
 import { ShopifyOrdersService } from './orders.service'
 import { ApiVersion } from '@shopify/shopify-api'
 import { Transaction } from '@juicyllama/ecommerce'
-import { ShopifyOrdersMapperService } from './orders.mapper.service'
 import { ShopifyOrder } from './orders.dto'
 
 @Controller('app/shopify/orders')
@@ -21,9 +20,9 @@ export class ShopifyOrdersController {
 	@ApiHideProperty()
 	@Get('sync')
 	async sync(@Query('installed_app_id') installed_app_id: number, @AccountId() account_id: string, @Query() query: any): Promise<Transaction[]> {
-		const domain = 'app::shopify::orders::controller::list'
+		const domain = 'app::shopify::orders::controller::sync'
 
-		this.logger.log(`[${domain}] Find Orders`, {
+		this.logger.log(`[${domain}] Sync Orders`, {
 			installed_app_id: installed_app_id, 
 			account_id: account_id,
 		})
@@ -47,36 +46,35 @@ export class ShopifyOrdersController {
 		})
 	}
 
-
+	@UserAuth()
 	@ApiHideProperty()
-	@Post('webhook/create')
-	async webhookCreate(@Query('installed_app_id') installed_app_id: number, @Body() order: ShopifyOrder): Promise<Transaction> {
-		const domain = 'app::shopify::orders::controller::webhookCreate'
+	@Get('list')
+	async list(@Query('installed_app_id') installed_app_id: number, @AccountId() account_id: string, @Query() query: any): Promise<ShopifyOrder[]> {
+		const domain = 'app::shopify::orders::controller::list'
 
-		this.logger.log(`[${domain}] New Webhook Recieved`, {
+		this.logger.log(`[${domain}] List Orders`, {
 			installed_app_id: installed_app_id, 
-			order: order,
+			account_id: account_id,
 		})
 
-		const installed_app = await this.installedAppsService.findOne({ where: { installed_app_id: installed_app_id } })
+		const installed_app = await this.installedAppsService.findOne({ where: { account_id: account_id, installed_app_id: installed_app_id } })
 
 		if(!installed_app) {
 			this.logger.error(`[${domain}] Authentication Error: Installed App not found`, {
 				installed_app_id: installed_app_id, 
+				account_id: account_id,
 			})
 			throw new BadRequestException(`Authentication Error: Installed App not found`)
-		}
+		} 
 
-		const transaction = await this.shopifyOrdersService.addOrder(installed_app, order)
+		delete query.installed_app_id
 
-		if(!transaction) {
-			this.logger.error(`[${domain}] Failed to create transaction`, {
-				installed_app_id: installed_app_id, 
-				order: order,
-			})
-			throw new BadRequestException(`Failed to create transaction`)
-		}
-
-		return transaction
+		return await this.shopifyOrdersService.listOrders(installed_app, {
+			api_version: ApiVersion.April23,
+			status: 'any',
+			...query,
+		})
 	}
+
+
 }
