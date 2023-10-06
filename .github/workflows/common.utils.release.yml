@@ -73,7 +73,7 @@ jobs:
             -   name: 'Install dependencies'
                 run: pnpm install --shamefully-hoist --no-frozen-lockfile
 
-            -   run: git pull
+            -   run: git pull --force
 
             -   name: 'Version Bump'
                 uses: phips28/gh-action-bump-version@master

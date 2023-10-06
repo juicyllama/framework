@@ -49,25 +49,10 @@ In order to save the clients auth tokens, this package extends [app store](/back
 
 It will automatically install the shopify app into the app store database when you include it in your project.
 
-
-::: danger
-
-TODO FROM HERE
-
-:::
-
 ### Modules
 
-Each endpoint (e.g. posts, users) has been separated into its own module. You can import the modules you need into your project.
 
-The following modules are currently supported:
-
-* [Catagories](/apps/wordpress/modules/categories)
-* [Posts](/apps/wordpress/modules/posts)
-* [Users](/apps/wordpress/modules/users)
-
-::: warning
-If you are missing a module, please [open an issue](https://github.com/juicyllama-npm/app-wordpress/issues) or submit a pull request.
-
-You can copy an existing module and update it to reflect another endpoint and submit the code as a pull request.
+::: danger
+- Document modules / endpoints
+- Explain how crons work
 :::

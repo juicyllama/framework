@@ -42,7 +42,7 @@ jobs:
                 with:
                     node-version: 19
 
-            -   run: git pull
+            -   run: git pull --force
 
             -   name: 'Version Bump'
                 uses: phips28/gh-action-bump-version@master
