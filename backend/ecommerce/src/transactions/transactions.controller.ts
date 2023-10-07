@@ -1,4 +1,5 @@
 import {
+	BadRequestException,
 	Body,
 	Controller,
 	forwardRef,
@@ -32,6 +33,7 @@ import {
 import { CreateTransactionDto, UpdateTransactionDto } from './transactions.dto'
 import { TransactionOrderBy, TransactionRelations, TransactionSelect } from './transactions.enums'
 import { TRANSACTION_T, TRANSACTION_E, TRANSACTION_NAME, TRANSACTION_PRIMARY_KEY, TRANSACTION_SEARCH_FIELDS, TRANSACTION_DEFAULT_ORDER_BY } from './transactions.constants'
+import { StoresService } from '../stores/stores.service'
 
 @ApiTags('Transactions')
 @UserAuth()
@@ -40,18 +42,19 @@ export class TransactionsController {
 	constructor(
 		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
 		@Inject(forwardRef(() => TransactionsService)) private readonly service: TransactionsService,
+		@Inject(forwardRef(() => StoresService)) private readonly storesService: StoresService,
 		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<TRANSACTION_T>,
 	) {}
 
 	@CreateDecorator(TRANSACTION_E, TRANSACTION_NAME)
 	async create(@Req() req, @Body() data: CreateTransactionDto, @AccountId() account_id: number): Promise<TRANSACTION_T> {
-		
-				//todo check if account has access to store_id
-		
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
+		await this.storeAuth(account_id, data.store_id)
+
 		return await crudCreate<TRANSACTION_T>({
 			service: this.service,
 			data: data,
+			account_id: account_id,
 		})
 	}
 
@@ -101,13 +104,20 @@ export class TransactionsController {
 		@Body() data: UpdateTransactionDto,
 		@Param() params,
 	): Promise<TRANSACTION_T> {
-
-		//if store_id => todo check if account has access to store_id
-
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
+		
+		const transaction = await this.service.findById(params[TRANSACTION_PRIMARY_KEY])
+
+		if(!transaction) {
+			throw new BadRequestException('Transaction not found')
+		}
+
+		await this.storeAuth(account_id, transaction.store_id)
+
 		return await crudUpdate<TRANSACTION_T>({
 			service: this.service,
 			data: data,
+			account_id: account_id,
 			primaryKey: params[TRANSACTION_PRIMARY_KEY],
 		})
 	}
@@ -121,4 +131,18 @@ export class TransactionsController {
 			account_id: account_id,
 		})
 	}
+
+	private async storeAuth(account_id: number, store_id: number) {
+		const store = await this.storesService.findOne({ 
+			where: {
+				account_id: account_id,
+				store_id: store_id
+			}
+		})
+
+		if (!store) {
+			throw new BadRequestException('Store not found')
+		}
+	}
+
 }

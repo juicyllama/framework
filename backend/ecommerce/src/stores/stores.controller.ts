@@ -49,6 +49,7 @@ export class StoresController {
 		return await crudCreate<STORE_T>({
 			service: this.service,
 			data: data,
+			account_id: account_id,
 		})
 	}
 
