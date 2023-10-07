@@ -53,7 +53,7 @@ export class WebsitesController {
 		})
 	}
 
-	@ReadManyDecorator(WEBSITES_E, WebsiteSelect, WebsiteOrderBy, WebsiteRelations)
+	@ReadManyDecorator(WEBSITES_E, WebsiteSelect, WebsiteOrderBy, WebsiteRelations, WEBSITES_NAME)
 	async findAll(@Query() query, @AccountId() account_id: number): Promise<WEBSITES_T[]> {
 		return await crudFindAll<WEBSITES_T>({
 			service: this.service,
