@@ -53,17 +53,36 @@ export class ShopifyOrdersService {
 
 		const session = ShopifySession(installed_app, oath)
 
+		const orders = <ShopifyOrder[]>[]
+		let pageInfo
+
 		const client = new shopify.clients.Rest({
 			session,
 			apiVersion: options.api_version,
 		})
 
-		const response = <any>await client.get({
+		let response = <any>await client.get({
 			path: 'orders',
 			query: <any>options,
 		})
 
-		const orders: ShopifyOrder[] = response.body?.orders
+		orders.push(...response.body.orders)
+		pageInfo = response.pageInfo
+
+		do {
+			this.logger.log(`[${domain}] ${orders.length} Orders added, fetching next page`)
+
+			response = <any>await client.get({
+				path: 'orders',
+				query: {
+					...response.pageInfo?.nextPage?.query,
+					limit: options.limit ?? 50,
+				},
+			})
+
+			orders.push(...response.body.orders)
+			pageInfo = response.pageInfo
+		} while (pageInfo?.nextPage)
 
 		this.logger.log(`[${domain}] ${orders.length} Orders found`)
 
@@ -86,7 +105,7 @@ export class ShopifyOrdersService {
 			throw new Error(`Store not found`)
 		}
 
-		return await this.mapperService.createEcommerceTransaction(order, store.account_id, store.store_id)
+		return await this.mapperService.createEcommerceTransaction(order, store, installed_app)
 	}
 
 	/**
@@ -108,11 +127,7 @@ export class ShopifyOrdersService {
 			})
 
 			if (!transaction) {
-				transaction = await this.mapperService.createEcommerceTransaction(
-					order,
-					store.account_id,
-					store.store_id,
-				)
+				transaction = await this.mapperService.createEcommerceTransaction(order, store, installed_app)
 			} else {
 				transaction = await this.mapperService.updateEcommerceTransaction(transaction, order)
 			}

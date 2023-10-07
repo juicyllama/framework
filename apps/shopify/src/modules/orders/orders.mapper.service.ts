@@ -1,6 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { ShopifyOrder, ShopifyOrderDiscountCodes } from './orders.dto'
 import {
+	Store,
 	Transaction,
 	TransactionDiscount,
 	TransactionDiscountsService,
@@ -19,6 +20,7 @@ import {
 	ContactAddress,
 } from '@juicyllama/crm'
 import { ShopifyOrderDicountCodeType, ShopifyOrderFinancialStatus, ShopifyOrderFulfillmentStatus } from './orders.enums'
+import { InstalledApp } from '@juicyllama/app-store'
 
 @Injectable()
 export class ShopifyOrdersMapperService {
@@ -32,75 +34,81 @@ export class ShopifyOrdersMapperService {
 		private readonly transactionsDiscountService: TransactionDiscountsService,
 	) {}
 
-	async createEcommerceTransaction(order: ShopifyOrder, account_id: number, store_id: number): Promise<Transaction> {
+	async createEcommerceTransaction(
+		order: ShopifyOrder,
+		store: Store,
+		installed_app: InstalledApp,
+	): Promise<Transaction> {
 		let contact: Contact
 		let shipping_address: ContactAddress
 		let billing_address: ContactAddress
 
-		if (order.email) {
-			contact = await this.contactsService.findByEmail(order.email)
+		if (!order.email) {
+			order.email = `${order.id}@${installed_app.settings.SHOPIFY_SHOP_NAME}.myshopify.com`
+		}
 
-			if (!contact) {
-				contact = await this.contactsService.create({
-					account_id: account_id,
-					first_name: order.customer?.first_name,
-					last_name: order.customer?.last_name,
-				})
-			}
+		contact = await this.contactsService.findByEmail(order.email)
 
-			await this.contactEmailService.create({
-				contact_id: contact.contact_id,
-				email: order.customer.email,
+		if (!contact) {
+			contact = await this.contactsService.create({
+				account_id: store.account_id,
+				first_name: order.customer?.first_name,
+				last_name: order.customer?.last_name,
 			})
+		}
 
-			if (order.billing_address?.phone) {
-				await this.contactPhoneService.create({
-					contact_id: contact.contact_id,
-					number: order.billing_address.phone,
-					country_iso: order.billing_address.country_code,
-				})
-			}
+		await this.contactEmailService.create({
+			contact_id: contact.contact_id,
+			email: order.email,
+		})
 
-			if (order.shipping_address?.phone) {
-				await this.contactPhoneService.create({
-					contact_id: contact.contact_id,
-					number: order.shipping_address.phone,
-					country_iso: order.shipping_address.country_code,
-				})
-			}
+		if (order.billing_address?.phone) {
+			await this.contactPhoneService.create({
+				contact_id: contact.contact_id,
+				number: order.billing_address.phone,
+				country_iso: order.billing_address.country_code,
+			})
+		}
 
-			if (order.shipping_address) {
-				shipping_address = await this.contactAddressService.create({
-					contact_id: contact.contact_id,
-					address_1: order.shipping_address.address1,
-					address_2: order.shipping_address.address2,
-					city: order.shipping_address.city,
-					state: order.shipping_address.province,
-					post_code: order.shipping_address.zip,
-					country_iso: order.shipping_address.country_code,
-					latitude: order.shipping_address.latitude,
-					longitude: order.shipping_address.longitude,
-				})
-			}
+		if (order.shipping_address?.phone) {
+			await this.contactPhoneService.create({
+				contact_id: contact.contact_id,
+				number: order.shipping_address.phone,
+				country_iso: order.shipping_address.country_code,
+			})
+		}
 
-			if (order.billing_address) {
-				billing_address = await this.contactAddressService.create({
-					contact_id: contact.contact_id,
-					address_1: order.shipping_address.address1,
-					address_2: order.shipping_address.address2,
-					city: order.shipping_address.city,
-					state: order.shipping_address.province,
-					post_code: order.shipping_address.zip,
-					country_iso: order.shipping_address.country_code,
-					latitude: order.shipping_address.latitude,
-					longitude: order.shipping_address.longitude,
-				})
-			}
+		if (order.shipping_address) {
+			shipping_address = await this.contactAddressService.create({
+				contact_id: contact.contact_id,
+				address_1: order.shipping_address.address1,
+				address_2: order.shipping_address.address2,
+				city: order.shipping_address.city,
+				state: order.shipping_address.province,
+				post_code: order.shipping_address.zip,
+				country_iso: order.shipping_address.country_code,
+				latitude: order.shipping_address.latitude,
+				longitude: order.shipping_address.longitude,
+			})
+		}
+
+		if (order.billing_address) {
+			billing_address = await this.contactAddressService.create({
+				contact_id: contact.contact_id,
+				address_1: order.shipping_address.address1,
+				address_2: order.shipping_address.address2,
+				city: order.shipping_address.city,
+				state: order.shipping_address.province,
+				post_code: order.shipping_address.zip,
+				country_iso: order.shipping_address.country_code,
+				latitude: order.shipping_address.latitude,
+				longitude: order.shipping_address.longitude,
+			})
 		}
 
 		const transaction = await this.transactionsService.create({
-			account_id: account_id,
-			store_id: store_id,
+			account_id: store.account_id,
+			store_id: store.store_id,
 			order_id: order.id.toString(),
 			order_number: order.order_number.toString(),
 			contact_id: contact?.contact_id,
@@ -127,7 +135,7 @@ export class ShopifyOrdersMapperService {
 		transaction.billing_address = billing_address
 		transaction.discounts = await this.shopifyDiscountCodesToEcommerceDicounts(
 			order.discount_codes,
-			account_id,
+			store.account_id,
 			transaction.transaction_id,
 		)
 

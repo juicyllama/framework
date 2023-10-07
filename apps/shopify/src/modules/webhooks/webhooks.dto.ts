@@ -33,11 +33,7 @@ export class ShopifyWebhook {
 export class ShopifyWebhookCreate extends PartialType(ShopifyWebhook) {}
 
 export class ShopifyRestListWebhooks extends ShopifyRestList {
-	@IsString()
-	@IsOptional()
-	address?: string
-
 	@IsEnum(ShopifyWebhooksTopics)
 	@IsOptional()
-	topic?: ShopifyWebhooksTopics
+	topic: ShopifyWebhooksTopics
 }

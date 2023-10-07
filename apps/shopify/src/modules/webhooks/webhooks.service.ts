@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config'
 import { InstalledApp, OauthService } from '@juicyllama/app-store'
 import { ShopifyRestListWebhooks, ShopifyWebhook, ShopifyWebhookCreate } from './webhooks.dto'
 import { ShopifyRest } from '../shopify.common.dto'
+import { ShopifyWebhooksTopicRoutes } from './webhooks.enums'
 
 @Injectable()
 export class ShopifyWebhooksService {
@@ -26,14 +27,15 @@ export class ShopifyWebhooksService {
 			apiVersion: options.api_version,
 		})
 
-		data.address = `${data.address}?installed_app_id=${installed_app.installed_app_id}`
-
 		const response = <any>await client.post({
 			path: 'webhooks',
 			data: {
 				webhook: {
 					format: 'json',
-					...data,
+					topic: data.topic,
+					address: `${process.env.BASE_URL_API}${ShopifyWebhooksTopicRoutes[data.topic]}?installed_app_id=${
+						installed_app.installed_app_id
+					}`,
 				},
 			},
 		})

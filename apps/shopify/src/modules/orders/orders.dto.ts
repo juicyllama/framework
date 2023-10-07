@@ -1,5 +1,6 @@
 import { IsString, IsNumber, IsOptional, IsDateString, IsBoolean, IsEnum, IsArray, IsObject } from 'class-validator'
-import { ShopifyAddress, ShopifyCustomer, ShopifyMoney, ShopifyRestList } from '../shopify.common.dto'
+import { ShopifyAddress, ShopifyMoney, ShopifyRestList } from '../shopify.common.dto'
+import { ShopifyCustomer } from '../customers/customers.dto'
 import { ShopifyOrderDicountCodeType, ShopifyOrderFinancialStatus, ShopifyOrderFulfillmentStatus } from './orders.enums'
 
 export class ShopifyOrderDiscountCodes {

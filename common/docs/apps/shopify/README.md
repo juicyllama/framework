@@ -56,3 +56,9 @@ It will automatically install the shopify app into the app store database when y
 - Document modules / endpoints
 - Explain how crons work
 :::
+
+### Webhooks
+
+::: danger
+- document supported webhooks
+:::

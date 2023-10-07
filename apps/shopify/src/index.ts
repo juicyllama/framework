@@ -30,7 +30,6 @@ export {
 	ShopifyRestList,
 	ShopifyMarketingConsent,
 	ShopifyAddress,
-	ShopifyCustomer,
 	ShopifyMoney,
 } from './modules/shopify.common.dto'
 export { ShopifyAuthRedirectQuery, ShopifyAuthCreateRequest } from './modules/auth/auth.dto'

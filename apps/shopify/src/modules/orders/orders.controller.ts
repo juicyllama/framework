@@ -1,4 +1,4 @@
-import { Controller, forwardRef, Inject, Get, Query, BadRequestException } from '@nestjs/common'
+import { Controller, forwardRef, Inject, Get, Query, BadRequestException, Body, Post } from '@nestjs/common'
 import { ApiHideProperty } from '@nestjs/swagger'
 import { Logger } from '@juicyllama/utils'
 import { InstalledAppsService } from '@juicyllama/app-store'
@@ -94,5 +94,35 @@ export class ShopifyOrdersController {
 			status: 'any',
 			...query,
 		})
+	}
+
+	/**
+	 * This endpoint returns orders direct from shopify
+	 */
+
+	@ApiHideProperty()
+	@Post('webhook/create')
+	async webhookCreate(
+		@Query('installed_app_id') installed_app_id: number,
+		@Body() data: ShopifyOrder,
+	): Promise<Transaction> {
+		const domain = 'app::shopify::orders::controller::webhookCreate'
+
+		this.logger.log(`[${domain}] Create Order Webhook`, {
+			data: data,
+		})
+
+		const installed_app = await this.installedAppsService.findOne({
+			where: { installed_app_id: installed_app_id },
+		})
+
+		if (!installed_app) {
+			this.logger.error(`[${domain}] Authentication Error: Installed App not found`, {
+				installed_app_id: installed_app_id,
+			})
+			throw new BadRequestException(`Authentication Error: Installed App not found`)
+		}
+
+		return await this.shopifyOrdersService.addOrder(installed_app, data)
 	}
 }
