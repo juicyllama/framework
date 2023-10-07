@@ -35,8 +35,8 @@ You can expose the API documentation for websites as follows
 
 ```typescript
 //main.ts
-import { installWesbitesDocs } from '@juicyllama/websites'
+import { installWebsiteDocs } from '@juicyllama/websites'
 
 //place this below the swagger setup
-redoc = installWesbitesDocs(redoc)
+redoc = installWebsiteDocs(redoc)
 ```

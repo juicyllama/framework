@@ -33,7 +33,7 @@ import { CreateWebsiteDto, UpdateWebsiteDto } from './websites.dto'
 import { WebsiteOrderBy, WebsiteRelations, WebsiteSelect } from './websites.enums'
 import { WEBSITES_T, WEBSITES_E, WEBSITES_NAME, WEBSITES_PRIMARY_KEY, WEBSITES_SEARCH_FIELDS, WEBSITES_DEFAULT_ORDER_BY } from './websites.constants'
 
-@ApiTags('Wesbites')
+@ApiTags('Websites')
 @UserAuth()
 @Controller('websites/website')
 export class WebsitesController {
