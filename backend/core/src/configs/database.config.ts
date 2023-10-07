@@ -18,10 +18,12 @@ const DATABASE_SHARED = {
 	autoLoadEntities: true,
 	entities: [
 		path.resolve(process.cwd(), 'dist', '**', '*.entity.js'),
-		path.resolve(process.cwd(), 'node_modules', '@juicyllama', '**', '*.entity.js'),
+		path.resolve(process.cwd(), 'node_modules', '@juicyllama', '**', '*.entity.{js,ts}'),
 	],
-	autoLoadMigrations: false, //should be false in live, otherwise long running migration will cause issues with microservices booting up
-	migrations: [path.resolve(process.cwd(), 'dist', 'db', 'migrations', '*.js')],
+	autoLoadMigrations: Env.IsNotProd(), //should be false in live, otherwise long running migration will cause issues with microservices booting up
+	migrations: [
+		path.resolve(process.cwd(), 'dist', 'db', 'migrations', '*.js')
+	],
 }
 
 export const DATABASE = {

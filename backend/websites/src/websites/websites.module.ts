@@ -5,6 +5,7 @@ import { WebsitesService } from './websites.service'
 import { WebsitesController } from './websites.controller'
 import { ConfigModule } from '@nestjs/config'
 import {
+	Account,
 	AccountModule,
 	AuthModule,
 	BeaconModule,
@@ -27,7 +28,7 @@ import { Website } from './websites.entity'
 		}),
 		CacheModule.registerAsync(cacheConfig()),
 		TypeOrmModule.forRoot(databaseConfig()),
-		TypeOrmModule.forFeature([Website]),
+		TypeOrmModule.forFeature([Website, Account]),
 		JwtModule.register(jwtConfig()),
 		forwardRef(() => AuthModule),
 		forwardRef(() => AccountModule),

@@ -10,7 +10,7 @@ import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
 import { Account, BaseEntity } from '@juicyllama/core'
 
 @UseInterceptors(ClassSerializerInterceptor)
-@Entity('wesbites')
+@Entity('websites')
 export class Website extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	readonly website_id: number
