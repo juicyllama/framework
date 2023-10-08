@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config'
 import { AppIntegrationStatus, InstalledAppsService, Oauth, OauthService } from '@juicyllama/app-store'
 import { AccountId, UserAuth } from '@juicyllama/core'
 import { v4 as uuidv4 } from 'uuid'
+import { StoresService } from '@juicyllama/ecommerce'
 
 @Controller('app/shopify/auth')
 export class ShopifyAuthController {
@@ -15,6 +16,7 @@ export class ShopifyAuthController {
 		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
 		@Inject(forwardRef(() => OauthService)) private readonly oauthService: OauthService,
 		@Inject(forwardRef(() => InstalledAppsService)) private readonly installedAppsService: InstalledAppsService,
+		@Inject(forwardRef(() => StoresService)) private readonly storesService: StoresService,
 	) {}
 
 	@UserAuth()
@@ -55,7 +57,7 @@ export class ShopifyAuthController {
 		}.myshopify.com/admin/oauth/authorize?client_id=${this.configService.get<string>(
 			'shopify.SHOPIFY_APP_CLIENT_ID',
 		)}&scope=${ShopifyAuthScopes.toString()}&redirect_uri=${
-			process.env.BASE_URL
+			process.env.BASE_URL_API
 		}${ShopifyAuthRedirect}&state=${state}`
 
 		const oath = await this.oauthService.findOne({ where: { installed_app_id: installed_app_id } })
@@ -127,9 +129,14 @@ export class ShopifyAuthController {
 			expires_at: callback.session.expires,
 		})
 
-		await this.installedAppsService.update({
+		const installed_app = await this.installedAppsService.update({
 			installed_app_id: oath.installed_app_id,
 			integration_status: AppIntegrationStatus.CONNECTED,
+		})
+
+		await this.storesService.create({
+			account_id: installed_app.account_id,
+			installed_app_id: installed_app.installed_app_id,
 		})
 
 		res.redirect(process.env.BASE_URL_APP)

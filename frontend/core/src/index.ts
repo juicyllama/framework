@@ -12,7 +12,6 @@ import { JLUserAvatar, JLUserProfile, JLUserMenu } from '@/components/core/user'
 import { JLAppStoreConnect } from '@/components/app-store'
 import { Plugin } from 'vue'
 
-
 let userStore
 let accountStore
 let themeStore
@@ -68,6 +67,7 @@ export * from './services/tools/index'
 export * from './services/account'
 export * from './services/auth'
 export * from './services/billing'
+export * from './services/websites/index'
 export {
 	JLLogin, JLSignup, JLPasswordless, JLResetPassword,
 	JLAccountProfile,

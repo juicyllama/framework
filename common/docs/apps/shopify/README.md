@@ -34,13 +34,13 @@ SHOPIFY_APP_CLIENT_SECRET=
 
 You should add the following URL's to your Shopify app:
 
-App URL: `${BASE_URL}/app/shopify/auth/install`
+App URL: `${BASE_URL_API}/app/shopify/auth/install`
 Allowed redirection URL(s): 
-`${BASE_URL}/app/shopify/auth/redirect`
-`${BASE_URL}/app/shopify/auth/complete`
+`${BASE_URL_API}/app/shopify/auth/redirect`
+`${BASE_URL_API}/app/shopify/auth/complete`
 
 ::: warning
-Replace `${BASE_URL}` with your actual backend URL.
+Replace `${BASE_URL_API}` with your actual backend URL.
 :::
 
 #### App Store

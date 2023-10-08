@@ -16,6 +16,7 @@ import {appsOpenAiNavbar, appsOpenAiTitle} from "../apps/openai/config";
 import {appsPexelsNavbar, appsPexelsTitle} from "../apps/pexels/config";
 import {ecommerceNavbar, ecommerceTitle} from "../backend/ecommerce/config";
 import {websitesNavbar, websitesTitle} from "../backend/websites/config";
+import {appsShopifyNavbar, appsShopifyTitle} from "../apps/shopify/config";
 
 export default defineClientConfig({
 	enhance({ app, router }) {
@@ -90,6 +91,12 @@ export default defineClientConfig({
 				app.config.globalProperties.$site.title = appsPexelsTitle
 				app.config.globalProperties.$theme.navbar = appsPexelsNavbar
 			}
+
+			else if (to.path.startsWith('/apps/shopify')) {
+				app.config.globalProperties.$site.title = appsShopifyTitle
+				app.config.globalProperties.$theme.navbar = appsShopifyNavbar
+			}
+
 
 			else if (to.path.startsWith('/apps/slack')) {
 				app.config.globalProperties.$site.title = appsSlackTitle

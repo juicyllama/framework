@@ -63,6 +63,10 @@ export const homeNavbar = [
 				link: '/backend/crm',
 			},
 			{
+				text: 'Ecommerce',
+				link: '/backend/ecommerce',
+			},
+			{
 				text: 'Websites',
 				link: '/backend/websites',
 			},
@@ -103,6 +107,10 @@ export const homeNavbar = [
 			{
 				text: 'ScrapingBee',
 				link: '/apps/scrapingbee',
+			},
+			{
+				text: 'Shopify',
+				link: '/apps/shopify',
 			},
 			{
 				text: 'Slack',

@@ -20,11 +20,11 @@ Import the module into your application:
 
 ```typescript
 //app.module.ts
-import { WesbitesModule } from '@juicyllama/websites'
+import { WebsitesModule } from '@juicyllama/websites'
 
 @Module({
 	imports: [
-		forwardRef(() => WesbitesModule),
+		forwardRef(() => WebsitesModule),
 	],
 })
 ```

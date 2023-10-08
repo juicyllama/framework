@@ -21,7 +21,7 @@ async function bootstrap() {
 	app.use(cookieParser())
 
 	app.listen(process.env.PORT)
-	logger.debug(`[${domain}] ${Enviroment[process.env.NODE_ENV]} server running: ${process.env.BASE_URL}`)
+	logger.debug(`[${domain}] ${Enviroment[process.env.NODE_ENV]} server running: ${process.env.BASE_URL_API}`)
 }
 
 try {

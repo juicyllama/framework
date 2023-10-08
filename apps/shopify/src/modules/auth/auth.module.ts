@@ -8,6 +8,7 @@ import { ShopifyAuthController } from './auth.controller'
 import { AppsModule, InstalledAppsModule, OAuthModule } from '@juicyllama/app-store'
 import { AuthModule, jwtConfig } from '@juicyllama/core'
 import { JwtModule } from '@nestjs/jwt'
+import { StoresModule } from '@juicyllama/ecommerce'
 
 @Module({
 	imports: [
@@ -21,6 +22,7 @@ import { JwtModule } from '@nestjs/jwt'
 		forwardRef(() => AppsModule),
 		forwardRef(() => OAuthModule),
 		forwardRef(() => InstalledAppsModule),
+		forwardRef(() => StoresModule),
 	],
 	controllers: [ShopifyAuthController],
 	providers: [Logger],

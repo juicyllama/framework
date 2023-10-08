@@ -30,7 +30,7 @@ export function Shopify(config: shopifyConfigDto) {
 		apiKey: config.SHOPIFY_APP_CLIENT_ID,
 		apiSecretKey: config.SHOPIFY_APP_CLIENT_SECRET,
 		scopes: ShopifyAuthScopes,
-		hostName: process.env.BASE_URL.replace(/https?:\/\//, ''),
+		hostName: process.env.BASE_URL_API.replace(/https?:\/\//, ''),
 		apiVersion: LATEST_API_VERSION,
 		isEmbeddedApp: false,
 	})
