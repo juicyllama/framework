@@ -49,7 +49,7 @@
 		</q-header>
 
 		<q-dialog v-model="showWidgetEditForm">
-			<WidgetForm @add="onAddWidget" @close="close" />
+			<WidgetForm @add="onAddorEditWidget" @close="close" />
 		</q-dialog>
 
 		<q-page-container class="JLWidget__page-container">
@@ -159,13 +159,15 @@
 </template>
 
 <script lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import WidgetForm from '@/components/WidgetForm.vue'
-import { useWidgetsStore } from '@/stores/widgets'
-import JLChart from '@/components/widgets/JLChart.vue'
-import JLStats from '@/components/widgets/JLStats.vue'
-import JLForm from '@/components/widgets/JLForm.vue'
-import JLTable from '@/components/widgets/JLTable.vue'
+import { ref, onMounted } from 'vue'
+import WidgetForm from './components/WidgetForm.vue'
+import { useWidgetsStore } from '@/store/widgets'
+import JLChart from './components/JLChart.vue'
+import JLStats from './components/JLStats.vue'
+import JLForm from './components/JLForm.vue'
+import JLTable from './components/JLTable.vue'
+import { saveWidgets } from '@/services/widgets'
+import { widgetClass } from './utils'
 
 const findWidgetById = (widgets, widget) => widgets.findIndex(el => el.id === widget.id)
 
@@ -185,15 +187,9 @@ export default {
 			JLTable,
 		}
 
-		const widgetClass = size => {
-			if (size === 'SMALL') return 'col-6 col-md-3' // (3/12 on desktop / 6/12 mobile)
-			if (size === 'MEDIUM') return 'col-12 col-md-6' // (6/12 on desktop / 12/12 mobile)
-			if (size === 'LARGE') return 'col-12' //(12/12 on desktop / 12/12 mobile)
-		}
-
 		const isDragging = ref(false)
 		const widgetsStore = useWidgetsStore()
-		const widgets2 = computed(() => widgetsStore.widgets)
+		const widgets2 = ref([])
 
 		onMounted(() => {
 			const dashboard = localStorage.getItem('dashboard')
@@ -203,21 +199,24 @@ export default {
 			}
 		})
 
-		const LS_KEY_FOR_DATA = 'dashboard'
+		//TODO: remove when API is ready
+		//const LS_KEY_FOR_DATA = 'dashboard'
 
-		const close = data => {
+		const close = () => {
 			showWidgetEditForm.value = false
 		}
-		const onShowForm = data => {
+		const onShowForm = () => {
 			showWidgetEditForm.value = true
 		}
-		const onAddWidget = data => {
+		const onAddorEditWidget = () => {
 			showWidgetEditForm.value = false
 			widgets2.value = widgetsStore.widgets
 		}
 
 		const saveDashboard = () => {
-			localStorage.setItem(LS_KEY_FOR_DATA, JSON.stringify(widgetsStore.widgets))
+			saveWidgets(widgets2.value)
+			//TODO: remove when API is ready, show notification
+			//localStorage.setItem(LS_KEY_FOR_DATA, JSON.stringify(widgetsStore.widgets))
 		}
 
 		const onDragStart = (event, widget, src) => {
@@ -243,7 +242,7 @@ export default {
 			isDragging.value = false
 			const existIndex = findWidgetById(widgets2.value, data.widget)
 			if (existIndex != -1) {
-				// делаемм ресорт
+				// do resort
 			} else {
 				widgets2.value.push(data.widget)
 			}
@@ -276,7 +275,7 @@ export default {
 			widgetClass,
 			close,
 			onShowForm,
-			onAddWidget,
+			onAddorEditWidget,
 			leftDrawerOpen,
 			search,
 			isDragging,

@@ -18,7 +18,10 @@
 				<q-input filled v-model="options.data.description" label="Widget description" />
 				<q-select v-model="options.data.content" :options="optionsContent" label="Content" />
 
-				<AdditionalSettings v-if="options.data.content !== ''" :type="options.data.content" />
+				<AdditionalSettings
+					@change="onChange"
+					v-if="options.data.content !== ''"
+					:type="options.data.content" />
 
 				<q-select v-model="options.data.size" :options="optionsSize" label="Size" />
 				<q-input filled v-model="options.data.page" label="Page to display" />
@@ -33,21 +36,11 @@
 <script setup>
 import { computed, reactive } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
-import { useWidgetsStore } from '@/stores/widgets'
+import { useWidgetsStore } from '@/store/widgets'
 import AdditionalSettings from './AdditionalSettings.vue'
-
-const EMPTY_WIDGET = {
-	content: '',
-	name: '',
-	size: '',
-	description: '',
-	page: '',
-	configs: '',
-}
+import { optionsContent, optionsSize, EMPTY_WIDGET } from './constants'
 
 const emit = defineEmits(['close', 'add'])
-const optionsContent = ['', 'JLTable', 'JLForm', 'JLStats', 'JLChart']
-const optionsSize = ['SMALL', 'MEDIUM', 'LARGE']
 
 const widgetsStore = useWidgetsStore()
 
@@ -64,6 +57,10 @@ const onSubmit = () => {
 	}
 	options.data = {}
 	emit('add')
+}
+
+const onChange = value => {
+	options.data.configs = JSON.stringify(value)
 }
 
 const isEdit = computed(() => !!widgetsStore.widgetToEdit.id)
