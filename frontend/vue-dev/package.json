@@ -64,6 +64,7 @@
         "sass": "^1.68.0",
         "ts-jest": "^29.1.1",
         "typescript": "^5.2.2",
+        "uuid": "^9.0.1",
         "vite": "^4.4.9",
         "vite-plugin-require": "^1.1.11",
         "vitest": "^0.33.0",
