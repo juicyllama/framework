@@ -54,7 +54,7 @@ export class BeaconPushService {
 			app_integration_name = 'pusher'
 			service = require('pusher')
 
-			if (table_options_account_{account_id}_websites
+			if (
 				_.isUndefined(this.configService.get<string>('beacon.PUSHER_APP_ID')) ||
 				_.isUndefined(this.configService.get<string>('beacon.PUSHER_APP_KEY')) ||
 				_.isUndefined(this.configService.get<string>('beacon.PUSHER_APP_SECRET')) ||

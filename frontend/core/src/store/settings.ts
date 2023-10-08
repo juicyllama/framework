@@ -4,9 +4,9 @@ import type { Settings } from '@/types'
 type T = Settings
 
 export const SettingsStore = defineStore('settings', {
-	state: () => (window.localStorage.getItem('settings') ? <Settings>JSON.parse(window.localStorage.getItem('settings')) : null),
+	state: () => (window.localStorage.getItem('settings') ? <T>JSON.parse(window.localStorage.getItem('settings')) : null),
 	actions: {
-		setSettings(object: Partial<Settings>): Settings {
+		setSettings(object: Partial<T>): Settings {
 			const merged: Settings = {
 				...this.$state,
 				...object,
@@ -18,7 +18,7 @@ export const SettingsStore = defineStore('settings', {
 		},
 	},
 	getters: {
-		getSettings(): Settings {
+		getSettings(): T {
 			return this.$state
 		},
 	}
