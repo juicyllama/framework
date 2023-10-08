@@ -378,11 +378,10 @@ watch(
 					<q-td
 						v-for="col in JLToQColumns"
 						:key="col.field"
-						:class="
-							JLToQColumns.map(col => col.name).includes(col.field)
+						:class="[JLToQColumns.map(col => col.name).includes(col.field)
 								? 'JLTableRowColVisible'
-								: 'JLTableRowColHide'
-						">
+								: 'JLTableRowColHide', col.field === 'action' ? 'row justify-center' : '']"
+						>
 						<div v-if="loading">
 							<q-skeleton type="rect" class="JLTableLoadingSkeleton" />
 						</div>

@@ -7,8 +7,11 @@ import { CsvService } from '../modules/csv/csv.service'
 import { DeepPartial } from 'typeorm'
 import { CrudUploadCSVResponse } from '../types/common'
 
-export async function crudCreate<T>(options: { service: any; data: any }): Promise<T> {
-	return await options.service.create(options.data)
+export async function crudCreate<T>(options: { service: any; data: any, account_id?: number }): Promise<T> {
+	return await options.service.create({
+		...options.data,
+		account_id: options.account_id ?? options.data.account_id ?? null,
+	})
 }
 
 export async function crudFindAll<T>(options: {

@@ -29,14 +29,10 @@
         "prepare": "pnpm run build",
         "build": "tsc",
         "sandbox": "nest start --config src/sandbox/nest-cli.json --watch ",
-        "start:ngrok": "~/ngrok http http://localhost:3000 -subdomain=juicyllama",
+        "sandbox:ngrok": "~/ngrok http http://localhost:3000 -domain=juicyllama",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand",
-        "test:clear": "npx jest --clearCache",
-        "test:watch": "jest --watch",
-        "test:cov": "jest --coverage",
-        "test:e2e": "jest --config ./test/jest-e2e.json"
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
     },
     "dependencies": {
         "@juicyllama/core": "workspace:^",

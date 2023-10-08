@@ -1,7 +1,7 @@
 {
     "name": "@juicyllama/core",
-    "version": "0.0.326",
-    "description": "Juicyllama NestJS Core",
+    "version": "0.0.334",
+    "description": "Juicyllama Backend Core ",
     "author": {
         "name": "JuicyLlama Studio",
         "email": "studio@juicyllama.com",
@@ -28,14 +28,10 @@
         "prebuild": "rimraf dist",
         "prepare": "pnpm run build",
         "build": "tsc",
-        "sandbox": "nest start --config src/sandbox/nest-cli.json --watch ",
+        "sandbox": "nest start --config src/sandbox/nest-cli.json --watch",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand",
-        "test:users": "pnpm run test --testPathPattern=src/modules/users/users.controller.test.spec.ts",
-        "test:charts": "pnpm run test --testPathPattern=src/modules/users/users.controller.charts.test.spec.ts",
-        "test:query": "pnpm run test --testPathPattern=src/utils/typeorm/Query.test.spec.ts",
-        "test:filtering": "pnpm run test --testPathPattern=src/utils/typeorm/Query.filtering.test.spec.ts"
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
     },
     "dependencies": {
         "@bugsnag/js": "^7.21.0",
@@ -68,6 +64,7 @@
         "cache-manager-redis-store": "^3.0.1",
         "class-transformer": "^0.5.1",
         "class-validator": "^0.14.0",
+        "cookie-parser": "^1.4.6",
         "csv-parser": "^3.0.0",
         "dotenv": "^16.3.1",
         "joi": "^17.10.2",
@@ -98,7 +95,8 @@
         "supertest": "^6.3.3",
         "swagger-ui-express": "^5.0.0",
         "typeorm": "^0.3.17",
-        "typescript": "^5.2.2"
+        "typescript": "^5.2.2",
+        "uuid": "^9.0.1"
     },
     "devDependencies": {
         "@juicyllama/dev": "workspace:^"

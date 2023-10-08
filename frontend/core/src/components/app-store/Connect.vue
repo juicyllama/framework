@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar'
-import { AppStoreIntegrationName, ConnectAppOptions, FormSchema, LogSeverity } from '@/types'
+import { ConnectAppOptions, FormSchema, LogSeverity } from '@/types'
 import { logger } from '@/helpers'
 import { APPS_ENDPOINT, AppsService, INSTALLED_APPS_ENDPOINT, InstalledAppsService } from '@/services/app-store'
 import { reactive } from 'vue'
@@ -53,6 +53,10 @@ async function install(data: any) {
 			q: $q,
 		})
 
+		if(installed_app.oauth_redirect_url){
+			window.location.href = installed_app.oauth_redirect_url
+		}
+
 		emit('installed', installed_app)
 	} catch (error) {
 		logger({
@@ -68,8 +72,8 @@ async function install(data: any) {
 <template>
 	<div id="AppStoreConnect" v-if="app[0]" class="q-ml-lg q-mr-lg q-mb-lg">
 		<q-icon
-			v-if="props.integration_name === AppStoreIntegrationName.wordpress && !props.icon?.hide"
-			name="fa-brands fa-wordpress"
+			v-if="!props.icon?.hide"
+			:name="`fa-brands fa-${props.integration_name}`"
 			:size="props.icon?.size ?? '5rem'"
 			:color="props.icon?.color ?? 'primary'"
 			class="q-mt-xl q-mb-xl" />

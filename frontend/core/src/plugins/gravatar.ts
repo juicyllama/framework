@@ -8,7 +8,7 @@ import md5 from 'md5'
  */
 export function gravatar(email: string, size: string) {
 	const hash = gravatarHash(email)
-	return `https://www.gravatar.com/avatar/${hash}?s=${size}&d=https://${import.meta.env.VITE_APP_URL}/icon.png`
+	return `https://www.gravatar.com/avatar/${hash}?s=${size}`
 }
 
 export function gravatarHash(email: string) {

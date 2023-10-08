@@ -35,6 +35,11 @@ export class InstalledApp extends BaseEntity {
 	@Column({ default: AppIntegrationStatus.DISCONNCTED })
 	readonly integration_status?: AppIntegrationStatus
 
+	// The URL to redirect to to start the OAUTH2 flow
+	@Column({ nullable: true, default: null })
+	@IsString() 
+	oauth_redirect_url?: string
+
 	@Column({ default: true })
 	@IsBoolean()
 	readonly active: boolean

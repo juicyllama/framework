@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "preserveSymlinks": true,
-        "allowJs": true,
+        //"allowJs": true,
         "module": "commonjs",
         "declaration": true,
         "removeComments": true,

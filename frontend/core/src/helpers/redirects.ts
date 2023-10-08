@@ -1,4 +1,5 @@
 import { Router, useRouter } from 'vue-router'
+import { settingsStore } from '..'
 
 export async function goTo(router?: Router, redirect?: string) {
 	if (!router) {
@@ -19,8 +20,13 @@ export async function goToLoginRedirect(router?: Router, redirect?: string) {
 		router = useRouter()
 	}
 
+	const settings = {...settingsStore?.getSettings}
+
 	if (redirect) {
 		await router.push(redirect)
+	} else if (settings?.return_path) {
+		settingsStore.setSettings({ return_path: null })
+		await router.push(settings.return_path)
 	} else {
 		await router.push(`/dashboard`)
 	}

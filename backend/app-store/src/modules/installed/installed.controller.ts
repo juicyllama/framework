@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, forwardRef, Inject, Param, Query, Req } from '@nestjs/common'
+import { BadRequestException, Body, Controller, forwardRef, Inject, Param, Query, Req, Res } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { StatsMethods, StatsResponseDto } from '@juicyllama/utils'
 import { InstalledAppsService } from './installed.service'
@@ -59,6 +59,10 @@ export class InstalledAppsController {
 			throw new BadRequestException(`No app found with that app_id`)
 		}
 
+		if(await this.service.checkRequiredSettings(data) === false) {
+			throw new BadRequestException(`Missing required settings`)
+		}
+
 		const checks = await this.service.preInstallChecks(app, data.settings)
 
 		if (checks.result === false) {
@@ -72,9 +76,16 @@ export class InstalledAppsController {
 			user_id: req.user.user_id,
 		})
 
+		installed_app.app = app
+
 		if (app.integration_type === AppIntegrationType.OAUTH2) {
-			return await this.service.createOauthLink(installed_app)
-		}
+			installed_app.oauth_redirect_url = this.service.createOauthLink(installed_app)
+
+			await this.service.update({
+				installed_app_id: installed_app.installed_app_id,
+				oauth_redirect_url: installed_app.oauth_redirect_url,
+			})
+		}	
 
 		return await this.service.removePrivateSettings(installed_app)
 	}
@@ -86,7 +97,7 @@ export class InstalledAppsController {
 		InstalledAppsRelations,
 		INSTALLED_APP_NAME,
 	)
-	async findAll(@Req() req, @AccountId() account_id: number, @Query() query): Promise<INSTALLED_APP_T[]> {
+	async findAll(@AccountId() account_id: number, @Query() query): Promise<INSTALLED_APP_T[]> {
 		const records = await crudFindAll<INSTALLED_APP_T>({
 			service: this.service,
 			tQuery: this.tQuery,
@@ -105,7 +116,6 @@ export class InstalledAppsController {
 
 	@ReadStatsDecorator(INSTALLED_APP_NAME)
 	async stats(
-		@Req() req,
 		@AccountId() account_id: number,
 		@Query() query,
 		@Query('method') method?: StatsMethods,
@@ -127,7 +137,7 @@ export class InstalledAppsController {
 		InstalledAppsRelations,
 		INSTALLED_APP_NAME,
 	)
-	async findOne(@Req() req, @Param() params, @Query() query): Promise<INSTALLED_APP_T> {
+	async findOne(@Param() params, @Query() query): Promise<INSTALLED_APP_T> {
 		const record = await crudFindOne<INSTALLED_APP_T>({
 			service: this.service,
 			query: query,
@@ -137,7 +147,7 @@ export class InstalledAppsController {
 	}
 
 	@UpdateDecorator(INSTALLED_APP_E, INSTALLED_APP_PRIMARY_KEY, INSTALLED_APP_NAME)
-	async update(@Req() req, @Body() data: UpdateInstalledAppDto, @Param() params): Promise<INSTALLED_APP_T> {
+	async update(@Body() data: UpdateInstalledAppDto, @Param() params): Promise<INSTALLED_APP_T> {
 		if (data.settings) {
 			const installed_app = await this.service.findById(params[INSTALLED_APP_PRIMARY_KEY])
 			const checks = await this.service.preInstallChecks(installed_app.app, data.settings)
@@ -156,7 +166,7 @@ export class InstalledAppsController {
 	}
 
 	@DeleteDecorator(INSTALLED_APP_E, INSTALLED_APP_PRIMARY_KEY, INSTALLED_APP_NAME)
-	async remove(@Req() req, @Param() params): Promise<INSTALLED_APP_T> {
+	async remove(@Param() params): Promise<INSTALLED_APP_T> {
 		return await crudPurge<INSTALLED_APP_T>({
 			service: this.service,
 			primaryKey: params[INSTALLED_APP_PRIMARY_KEY],

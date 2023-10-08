@@ -25,7 +25,7 @@ async function bootstrap() {
 		const swagger_document = new DocumentBuilder()
 			.setTitle(Strings.capitalize(process.env.PROJECT_NAME))
 			.setVersion(process.env.npm_package_version)
-			.addServer(process.env.BASE_URL, 'Live')
+			.addServer(process.env.BASE_URL_API, 'Live')
 			//.addServer(`https://sandbox.${process.env.BASE_URL_API.replace('https://', '')}`, 'Sandbox')
 			.addBearerAuth()
 			.build()
@@ -42,7 +42,7 @@ async function bootstrap() {
 
 	app.listen(process.env.PORT)
 	logger.debug(
-		`[${domain}] ${Enviroment[process.env.NODE_ENV]} server running: ${process.env.BASE_URL}:${process.env.PORT}`,
+		`[${domain}] ${Enviroment[process.env.NODE_ENV]} server running: ${process.env.BASE_URL_API}:${process.env.PORT}`,
 	)
 }
 

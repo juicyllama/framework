@@ -7,6 +7,7 @@ import { Env, Logger, Modules } from '@juicyllama/utils'
 import { BeaconStatus } from '../beacon.enums'
 import { ConfigService } from '@nestjs/config'
 import { Query } from '../../../utils/typeorm/Query'
+import _ from 'lodash'
 
 @Injectable()
 export class BeaconPushService {
@@ -54,11 +55,11 @@ export class BeaconPushService {
 			service = require('pusher')
 
 			if (
-				!this.configService.get<string>('beacon.PUSHER_APP_ID') ||
-				!this.configService.get<string>('beacon.PUSHER_APP_KEY') ||
-				!this.configService.get<string>('beacon.PUSHER_APP_SECRET') ||
-				!this.configService.get<string>('beacon.PUSHER_APP_CLUSTER') ||
-				!this.configService.get<string>('beacon.PUSHER_CHANNEL')
+				_.isUndefined(this.configService.get<string>('beacon.PUSHER_APP_ID')) ||
+				_.isUndefined(this.configService.get<string>('beacon.PUSHER_APP_KEY')) ||
+				_.isUndefined(this.configService.get<string>('beacon.PUSHER_APP_SECRET')) ||
+				_.isUndefined(this.configService.get<string>('beacon.PUSHER_APP_CLUSTER')) ||
+				_.isUndefined(this.configService.get<string>('beacon.PUSHER_CHANNEL'))
 			) {
 				this.logger.warn(`[${domain}] Missing pusher config details`, {
 					config: {

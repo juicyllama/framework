@@ -108,6 +108,7 @@ export enum FormFieldType {
 	PASSWORD = 'password',
 	NUMBER = 'number',
 	EMAIL = 'email',
+	URL = 'url',
 }
 
 export enum FormFieldButtonType {
