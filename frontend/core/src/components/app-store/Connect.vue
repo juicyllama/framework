@@ -53,6 +53,10 @@ async function install(data: any) {
 			q: $q,
 		})
 
+		if(installed_app.oauth_redirect_url){
+			window.location.href = installed_app.oauth_redirect_url
+		}
+
 		emit('installed', installed_app)
 	} catch (error) {
 		logger({

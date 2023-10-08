@@ -2,6 +2,7 @@ import type { App } from 'vue'
 import { AccountStore } from './store/account'
 import { token } from './store/token'
 import { UserStore } from './store/user'
+import { SettingsStore } from './store/settings'
 import instance from './services/index'
 import classes from './assets/JLCore.css'
 import { ThemeStore } from './store/theme'
@@ -15,6 +16,7 @@ import { Plugin } from 'vue'
 let userStore
 let accountStore
 let themeStore
+let settingsStore
 
 const JLCore = {
 	install(app: App, options: any) {
@@ -27,6 +29,7 @@ const JLCore = {
 		userStore = UserStore($pinia)
 		accountStore = AccountStore($pinia)
 		themeStore = ThemeStore($pinia)
+		settingsStore = SettingsStore($pinia)
 	},
 }
 
@@ -55,7 +58,7 @@ export default {
 
 export { JLCore, classes }
 export { token }
-export { userStore, accountStore, themeStore }
+export { userStore, accountStore, themeStore, settingsStore }
 export * from './components'
 export * from './types/index'
 export { instance }
