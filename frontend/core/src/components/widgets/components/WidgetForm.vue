@@ -38,7 +38,7 @@ import { computed, reactive } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { useWidgetsStore } from '@/store/widgets'
 import AdditionalSettings from './AdditionalSettings.vue'
-import { optionsContent, optionsSize, EMPTY_WIDGET } from './constants'
+import { optionsContent, optionsSize, EMPTY_WIDGET } from '../constants'
 
 const emit = defineEmits(['close', 'add'])
 
