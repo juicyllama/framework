@@ -7,16 +7,7 @@ import instance from './services/index'
 import classes from './assets/JLCore.css'
 import { ThemeStore } from './store/theme'
 import { JLLogin, JLSignup, JLPasswordless, JLResetPassword } from '@/components/core/auth'
-import {
-	JLForm,
-	JLTable,
-	JLMenu,
-	JLChart,
-	JLStats,
-	JLLogin,
-	JLDropdownButtonMenu,
-	WidgetsComponent,
-} from '@/components'
+import { JLForm, JLTable, JLMenu, JLChart, JLStats, JLDropdownButtonMenu, WidgetsComponent } from '@/components'
 import { JLAccountProfile, JLAccountAvatar, JLAccountSwitcher, JLAccountBrand } from '@/components/core/account'
 import { JLUserAvatar, JLUserProfile, JLUserMenu } from '@/components/core/user'
 import { JLAppStoreConnect } from '@/components/app-store'
