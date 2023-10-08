@@ -159,7 +159,6 @@ John1,Snow1,john@got1.com`,
 				skipResultCheck: true,
 			})
 			await unlink()
-			console.log('resres', res)
 			expect(res['affectedRows']).toEqual(2)
 		})
 

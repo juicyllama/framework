@@ -1,9 +1,9 @@
 import {extraLinks, homeLink} from "../../config";
 
-export const quasarTitle = 'JuicyLlama Quasar'
-const root = '/frontend/quasar'
+export const frontendCoreTitle = 'JuicyLlama Frontend Core'
+const root = '/frontend/core'
 
-export const quasarNavbar = [
+export const frontendCoreNavbar = [
 	homeLink,
 		{
 			text: 'Getting Started',

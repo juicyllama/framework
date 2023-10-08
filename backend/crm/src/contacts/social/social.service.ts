@@ -21,6 +21,22 @@ export class ContactSocialService extends BaseService<T> {
 		})
 	}
 
+	async create(data: DeepPartial<T>): Promise<T> {
+
+		const social = await this.findOne({ where: {
+			contact_id: data.contact_id,
+			type: data.type,
+			handle: data.handle
+		}})
+
+		if(social) {
+			return social
+		}
+
+		return await super.create(data)
+	}
+
+
 	async updateSocials(socials: DeepPartial<T[]>, contact_id: number): Promise<T[]> {
 		const domain = 'crm::contacts::socials::service::updateSocials'
 
@@ -31,9 +47,7 @@ export class ContactSocialService extends BaseService<T> {
 		for (const s in socials) {
 			let record = await this.findOne({
 				where: {
-					contact: {
-						contact_id: contact_id,
-					},
+					contact_id: contact_id,
 					type: socials[s].type,
 					handle: socials[s].handle,
 				},
@@ -41,9 +55,7 @@ export class ContactSocialService extends BaseService<T> {
 
 			if (!record) {
 				record = await this.create({
-					contact: {
-						contact_id: contact_id,
-					},
+					contact_id: contact_id,
 					...socials[s],
 				})
 				this.logger.verbose(`[${domain}] Social created`, record)
@@ -52,9 +64,7 @@ export class ContactSocialService extends BaseService<T> {
 
 		return await this.findAll({
 			where: {
-				contact: {
-					contact_id: contact_id,
-				},
+				contact_id: contact_id,
 			},
 		})
 	}

@@ -1,14 +1,14 @@
-import {forwardRef, Inject, Injectable} from '@nestjs/common'
+import {forwardRef, Inject, Injectable, BadRequestException} from '@nestjs/common'
 import {InjectRepository} from '@nestjs/typeorm'
 import {Repository} from 'typeorm'
 import {InstalledApp} from './installed.entity'
 import {BaseService, BeaconService, Query} from '@juicyllama/core'
 import {AppsService} from '../apps.service'
-import {AppIntegrationType, AppStoreIntegrationName} from '../apps.enums'
-import {Logger, Modules} from '@juicyllama/utils'
+import {AppStoreIntegrationName} from '../apps.enums'
+import {Env, Logger, Modules} from '@juicyllama/utils'
 import {App} from '../apps.entity'
-import {LazyModuleLoader} from '@nestjs/core'
-import {precheckWordpress} from "./preinstall/wordpress";
+import { CreateInstalledAppDto } from './installed.dto'
+import { WordPressService }	from './preinstall/wordpress.service'
 
 export const E = InstalledApp
 export type T = InstalledApp
@@ -20,7 +20,7 @@ export class InstalledAppsService extends BaseService<T> {
 		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
 		@Inject(forwardRef(() => AppsService)) readonly appsService: AppsService,
-		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
+		@Inject(forwardRef(() => WordPressService)) private readonly wordpressService: WordPressService,
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 	) {
 		super(query, repository, {
@@ -40,7 +40,7 @@ export class InstalledAppsService extends BaseService<T> {
 		}
 
 		const public_settings = {}
-		if (installed_app.app.integration_type === AppIntegrationType.CREDENTIALS && installed_app.app?.settings) {
+		if (installed_app.app?.settings) {
 			for (const app_creds of installed_app.app.settings) {
 				if (!app_creds.private) {
 					if (installed_app.settings && installed_app.settings[app_creds.key]) {
@@ -54,14 +54,44 @@ export class InstalledAppsService extends BaseService<T> {
 		return installed_app
 	}
 
-	//TODO implement when we have our first oauth2 app integration
-	async createOauthLink(installed_app: T): Promise<T> {
+	/**
+	 * Returns the redirection URL to kick off the OAUTH2 flow
+	 * @param installed_app 
+	 * @returns string
+	 */
+	createOauthLink(installed_app: T): string {
 		switch (installed_app.app.integration_name) {
+			case AppStoreIntegrationName.shopify:
+				return `${process.env.BASE_URL_API}/app/shopify/auth/install?installed_app_id=${installed_app.installed_app_id}`
+
 			default:
-				//throw new NotImplementedException(`${installed_app.app.integration_name} OAUTH2 LINK NOT IMPLEMENTED`)
-				return installed_app
+				throw new BadRequestException(`${installed_app.app.integration_name} OAUTH2 LINK NOT IMPLEMENTED`)
 		}
 	}
+
+	async checkRequiredSettings(installed_app: CreateInstalledAppDto): Promise<boolean> {
+
+		const app = await this.appsService.findOne({ where: { app_id: installed_app.app_id } })
+
+		if (!app) {
+			throw new BadRequestException(`No app found with that app_id`)
+		}
+
+		if (!app.settings) {
+			return true
+		}
+
+		for (const setting of app.settings) {
+			if (setting.input.required) {
+				if (!installed_app.settings || !installed_app.settings[setting.key]) {
+					return false
+				}
+			}
+		}
+
+		return true
+	}
+
 
 	//Check if app passes the installation checks
 	// result = true - all passed
@@ -73,7 +103,16 @@ export class InstalledAppsService extends BaseService<T> {
 		//ensure app is installed
 		switch (app.integration_name) {
 			case AppStoreIntegrationName.wordpress:
-				if (!Modules.isInstalled('@juicyllama/app-wordpress')) {
+				if (Env.IsProd() && !Modules.isInstalled('@juicyllama/app-wordpress')) {
+					this.logger.debug(`[${domain}][${app.integration_name}] App not installed`)
+					return {
+						result: false,
+						error: `App not installed`,
+					}
+				}
+				break
+			case AppStoreIntegrationName.shopify:
+				if (Env.IsProd() && !Modules.isInstalled('@juicyllama/app-shopify')) {
 					this.logger.debug(`[${domain}][${app.integration_name}] App not installed`)
 					return {
 						result: false,
@@ -86,7 +125,12 @@ export class InstalledAppsService extends BaseService<T> {
 		//if app can validate credentials, do so
 		switch (app.integration_name) {
 			case AppStoreIntegrationName.wordpress:
-				return await precheckWordpress(domain, app, settings)
+				return await this.wordpressService.precheckWordpress(domain, app, settings)
+			default:
+				return {
+					result: true,
+				}
+				
 		}
 	}
 }
