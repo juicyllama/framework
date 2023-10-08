@@ -1,101 +1,165 @@
 <template>
-  <q-layout view="lHh Lpr fff" class="bg-grey-1">
-    <q-header elevated class="bg-white text-grey-8" height-hint="64">
-      <q-toolbar class="JLWidget__toolbar" style="height: 64px">
+	<q-layout view="lHh Lpr fff" class="bg-grey-1">
+		<q-header elevated class="bg-white text-grey-8" height-hint="64">
+			<q-toolbar class="JLWidget__toolbar" style="height: 64px">
+				<q-toolbar-title v-if="$q.screen.gt.sm" shrink class="row items-center no-wrap">
+					<span class="q-ml-sm">Dashboard</span>
+				</q-toolbar-title>
 
-        <q-toolbar-title v-if="$q.screen.gt.sm" shrink class="row items-center no-wrap">
-          <span class="q-ml-sm">Dashboard</span>
-        </q-toolbar-title>
+				<q-space />
 
-        <q-space />
+				<q-input
+					class="JLWidget__toolbar-input"
+					dense
+					standout="bg-primary"
+					v-model="search"
+					placeholder="Search">
+					<template v-slot:prepend>
+						<q-icon v-if="search === ''" name="search" />
+						<q-icon v-else name="clear" class="cursor-pointer" @click="search = ''" />
+					</template>
+				</q-input>
 
-        <q-input class="JLWidget__toolbar-input" dense standout="bg-primary" v-model="search" placeholder="Search">
-          <template v-slot:prepend>
-            <q-icon v-if="search === ''" name="search" />
-            <q-icon v-else name="clear" class="cursor-pointer" @click="search = ''" />
-          </template>
-        </q-input>
+				<q-btn
+					v-if="$q.screen.gt.xs"
+					@click="onShowForm"
+					flat
+					dense
+					no-wrap
+					color="primary"
+					icon="add"
+					no-caps
+					label="Create"
+					class="q-ml-sm q-px-md">
+				</q-btn>
+				<q-btn
+					v-if="$q.screen.gt.xs"
+					@click="saveDashboard"
+					flat
+					dense
+					no-wrap
+					icon="save"
+					no-caps
+					label="Save page"
+					class="q-ml-sm q-px-md">
+				</q-btn>
 
-        <q-btn v-if="$q.screen.gt.xs" @click="onShowForm" flat dense no-wrap color="primary" icon="add" no-caps label="Create" class="q-ml-sm q-px-md">
-        </q-btn>
-        <q-btn v-if="$q.screen.gt.xs" @click="saveDashboard" flat dense no-wrap  icon="save" no-caps label="Save page" class="q-ml-sm q-px-md">
-        </q-btn>
+				<q-space />
+			</q-toolbar>
+		</q-header>
 
-        <q-space />
+		<q-dialog v-model="showWidgetEditForm">
+			<WidgetForm @add="onAddWidget" @close="close" />
+		</q-dialog>
 
-      </q-toolbar>
-    </q-header>
+		<q-page-container class="JLWidget__page-container">
+			<div class="row justify-center">
+				<div @dragover.prevent @drop="onDrop($event)" style="height: 80vh" class="zone2 col-12 overflow-auto">
+					<div class="row">
+						<template v-if="widgets2.length === 0">
+							<div class="col-12 text-center">
+								<div class="text-h6">Drag and drop widgets here, or press "Create"</div>
+							</div>
+						</template>
 
+						<q-card
+							:class="widgetClass(widget.size)"
+							v-for="(widget, index) in widgets2"
+							@dragover.prevent
+							:key="index"
+							class="widget"
+							@drop="resortDrop($event, widget, index)"
+							@dragstart="onDragStart($event, widget, 'zone2')"
+							draggable="true"
+							bordered>
+							<q-card-section class="q-pa-xs">
+								<div class="row no-wrap">
+									<div class="col">
+										<div class="text-h6">{{ widget.title }}</div>
+										<div class="text-subtitle2">{{ widget.description }}</div>
+									</div>
+								</div>
+							</q-card-section>
+							<component :is="comps[widget.content]" :type="widget.configs" />
+							<!-- {{ widget }} -->
+						</q-card>
+					</div>
+				</div>
+			</div>
 
-    <q-dialog v-model="showWidgetEditForm">
-     <WidgetForm @add="onAddWidget" @close="close"/>
-   </q-dialog>
+			<q-page-sticky v-if="$q.screen.gt.sm" expand position="left">
+				<div class="fit q-pt-xl q-px-sm column">
+					<q-btn
+						draggable="true"
+						@dragstart="onDragStart($event, { title: 'Table', size: 'MEDIUM', bg: '#ff0000' }, 'zone1')"
+						round
+						flat
+						color="grey-8"
+						stack
+						no-caps
+						size="26px"
+						class="JLWidget__side-btn">
+						<q-icon size="22px" name="table_rows" />
+						<div class="JLWidget__side-btn__label">Table</div>
+					</q-btn>
 
-    <q-page-container class="JLWidget__page-container">
+					<q-btn
+						draggable="true"
+						@dragstart="onDragStart($event, { title: 'Form', size: 'MEDIUM', bg: '#ff0000' }, 'zone1')"
+						round
+						flat
+						color="grey-8"
+						stack
+						no-caps
+						size="26px"
+						class="JLWidget__side-btn">
+						<q-icon size="22px" name="edit_note" />
+						<div class="JLWidget__side-btn__label">Form</div>
+					</q-btn>
 
-      <div class="row justify-center">
-        <div @dragover.prevent @drop="onDrop($event)" style="height: 80vh"  class="zone2 col-12 overflow-auto">
-          <div class="row">
-            <q-card :class="widgetClass(widget.size)" v-for="(widget, index) in panel2" @dragover.prevent :key="index"
-                  class="widget" @drop="resortDrop($event, widget, index)"
-              @dragstart="onDragStart($event, widget, 'zone2')" draggable="true" bordered>
+					<q-btn
+						draggable="true"
+						@dragstart="onDragStart($event, { title: 'Chart', size: 'MEDIUM', bg: '#ff0000' }, 'zone1')"
+						round
+						flat
+						color="grey-8"
+						stack
+						no-caps
+						size="26px"
+						class="JLWidget__side-btn">
+						<q-icon size="22px" name="insert_chart_outlined" />
+						<div class="JLWidget__side-btn__label">Chart</div>
+						<q-badge floating color="red" text-color="white" style="top: 8px; right: 16px"> 1 </q-badge>
+					</q-btn>
 
-              <q-card-section class="q-pa-xs">
-                <div class="row no-wrap">
-                    <div class="col">
-                        <div class="text-h6">{{ widget.title }}</div>
-                        <div class="text-subtitle2">{{ widget.description }}</div>
-                    </div>
-                </div>
-            </q-card-section>
-              <component :is="comps[widget.content]" :type="widget.configs"/>
-              <!-- {{ widget }} -->
-            </q-card>
-          </div>
-        </div>
-      </div>
+					<q-btn
+						draggable="true"
+						@dragstart="onDragStart($event, { title: 'Stats', size: 'SMALL', bg: '#ff0000' }, 'zone1')"
+						round
+						flat
+						color="grey-8"
+						stack
+						no-caps
+						size="26px"
+						class="JLWidget__side-btn">
+						<q-icon size="22px" name="insights" />
+						<div class="JLWidget__side-btn__label">Stats</div>
+					</q-btn>
+				</div>
+			</q-page-sticky>
+		</q-page-container>
 
-      <q-page-sticky v-if="$q.screen.gt.sm" expand position="left">
-        <div class="fit q-pt-xl q-px-sm column">
-          <q-btn draggable="true" @dragstart="onDragStart($event, {  title: 'Table',size: 'MEDIUM',bg: '#ff0000'}, 'zone1')" round flat color="grey-8" stack no-caps size="26px" class="JLWidget__side-btn">
-            <q-icon size="22px" name="table_rows" />
-            <div class="JLWidget__side-btn__label">Table</div>
-          </q-btn>
-
-          <q-btn draggable="true" @dragstart="onDragStart($event, {  title: 'Form',size: 'MEDIUM',bg: '#ff0000'}, 'zone1')" round flat color="grey-8" stack no-caps size="26px" class="JLWidget__side-btn">
-            <q-icon size="22px" name="edit_note" />
-            <div class="JLWidget__side-btn__label">Form</div>
-          </q-btn>
-
-          <q-btn draggable="true" @dragstart="onDragStart($event, {  title: 'Chart',size: 'MEDIUM',bg: '#ff0000'}, 'zone1')" round flat color="grey-8" stack no-caps size="26px" class="JLWidget__side-btn">
-            <q-icon size="22px" name="insert_chart_outlined" />
-            <div class="JLWidget__side-btn__label">Chart</div>
-            <q-badge floating color="red" text-color="white" style="top: 8px; right: 16px">
-              1
-            </q-badge>
-          </q-btn>
-
-          <q-btn draggable="true" @dragstart="onDragStart($event, {  title: 'Stats',size: 'SMALL',bg: '#ff0000'}, 'zone1')" round flat color="grey-8" stack no-caps size="26px" class="JLWidget__side-btn">
-            <q-icon size="22px" name="insights" />
-            <div class="JLWidget__side-btn__label">Stats</div>
-          </q-btn>
-        </div>
-      </q-page-sticky>
-    </q-page-container>
-
-
-    <div v-show="isDragging" class="zone3 col-12 align-self-end" @dragover.prevent @drop="onDropTrash($event)">
-      <div class="bg-error trash-container">
-        <q-icon size="32px" color="white" class="q-mt-sm" name=" delete_forever" />
-        <p class="text-white">Delete</p>
-      </div>
-    </div>
-
-  </q-layout>
+		<div v-show="isDragging" class="zone3 col-12 align-self-end" @dragover.prevent @drop="onDropTrash($event)">
+			<div class="bg-error trash-container">
+				<q-icon size="32px" color="white" class="q-mt-sm" name=" delete_forever" />
+				<p class="text-white">Delete</p>
+			</div>
+		</div>
+	</q-layout>
 </template>
 
 <script lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import WidgetForm from '@/components/WidgetForm.vue'
 import { useWidgetsStore } from '@/stores/widgets'
 import JLChart from '@/components/widgets/JLChart.vue'
@@ -103,141 +167,144 @@ import JLStats from '@/components/widgets/JLStats.vue'
 import JLForm from '@/components/widgets/JLForm.vue'
 import JLTable from '@/components/widgets/JLTable.vue'
 
-const findWidgetById = (widgets, widget) => widgets.findIndex(el => el.id === widget.id);
+const findWidgetById = (widgets, widget) => widgets.findIndex(el => el.id === widget.id)
 
 export default {
-  components: {
-    WidgetForm
-  },
-  setup () {
-    const leftDrawerOpen = ref(false)
-    const search = ref('')
-    const showWidgetEditForm = ref(false)
+	components: {
+		WidgetForm,
+	},
+	setup() {
+		const leftDrawerOpen = ref(false)
+		const search = ref('')
+		const showWidgetEditForm = ref(false)
 
-    const comps = {
-    JLChart,
-    JLStats,
-    JLForm,
-    JLTable
-}
+		const comps = {
+			JLChart,
+			JLStats,
+			JLForm,
+			JLTable,
+		}
 
-    const widgetClass = (size) => {
-      // if(isMobile.value) {
-      //     if(size === 'SMALL') return 'col-6'
-      //     return 'col-12'
-      // } else {
-          if(size === 'SMALL') return 'col-6 col-md-3' // (3/12 on desktop / 6/12 mobile)
-          if(size === 'MEDIUM') return 'col-12 col-md-6' // (6/12 on desktop / 12/12 mobile)
-          if(size === 'LARGE') return 'col-12' //(12/12 on desktop / 12/12 mobile)
-      // }
-  }
+		const widgetClass = size => {
+			if (size === 'SMALL') return 'col-6 col-md-3' // (3/12 on desktop / 6/12 mobile)
+			if (size === 'MEDIUM') return 'col-12 col-md-6' // (6/12 on desktop / 12/12 mobile)
+			if (size === 'LARGE') return 'col-12' //(12/12 on desktop / 12/12 mobile)
+		}
 
-    const isDragging = ref(false)
-    const widgetsStore = useWidgetsStore()
-    const widgets2 = computed(() => widgetsStore.widgets)
-    const panel2 = computed(() => widgets2.value)
+		const isDragging = ref(false)
+		const widgetsStore = useWidgetsStore()
+		const widgets2 = computed(() => widgetsStore.widgets)
 
-	const LS_KEY_FOR_DATA = 'dashboard'
+		onMounted(() => {
+			const dashboard = localStorage.getItem('dashboard')
+			if (dashboard) {
+				widgetsStore.widgets = JSON.parse(dashboard)
+				widgets2.value = JSON.parse(dashboard)
+			}
+		})
 
-    const close = (data) => {
-      showWidgetEditForm.value = false
-    }
-    const onShowForm = (data) => {
-      showWidgetEditForm.value = true;
-    }
-    const onAddWidget = (data) => {
-      showWidgetEditForm.value = false
-    }
+		const LS_KEY_FOR_DATA = 'dashboard'
 
-    const saveDashboard = () => {
-      localStorage.setItem(LS_KEY_FOR_DATA, JSON.stringify(widgetsStore.widgets))
-  }
+		const close = data => {
+			showWidgetEditForm.value = false
+		}
+		const onShowForm = data => {
+			showWidgetEditForm.value = true
+		}
+		const onAddWidget = data => {
+			showWidgetEditForm.value = false
+			widgets2.value = widgetsStore.widgets
+		}
 
-    return {
-      saveDashboard,
-      widgetClass,
-      close,
-      onShowForm,
-      onAddWidget,
-      panel2,
-      leftDrawerOpen,
-      search,
-      isDragging,
-      widgets2,
-      showWidgetEditForm,
-      comps
-    }
-  },
-  methods: {
-      onDragStart(event, widget, src) {
-        let data = {
-          widget,
-          src
-        }
-        if(src === 'zone1') {
-          data.widget = {
-            ...widget,
-            id: Date.now()
-           }
-        }
+		const saveDashboard = () => {
+			localStorage.setItem(LS_KEY_FOR_DATA, JSON.stringify(widgetsStore.widgets))
+		}
 
-        event.dataTransfer.setData('text/plain', JSON.stringify(data))
-        if(src === 'zone2') {
-            this.isDragging = true;
-        }
-      },
-      onDrop(event) {
-        const data = JSON.parse(event.dataTransfer.getData('text/plain'));
-        this.isDragging = false;
-        const existIndex = findWidgetById(this.widgets2, data.widget)
-        if (existIndex != -1) {
-          // делаемм ресорт
-        } else {
-          this.widgets2.push(data.widget);
-        }
-      },
-      resortDrop(event, widget2, index2) {
-        console.log(event, widget2, index2)
-        const data = JSON.parse(event.dataTransfer.getData('text/plain'));
-        if (data.src == 'zone2') {
-          const existIndex = findWidgetById(this.widgets2, data.widget)
-          this.widgets2[existIndex] = widget2
-          this.widgets2[index2] = data.widget;
-        } else {
-          this.onDrop(event);
-        }
+		const onDragStart = (event, widget, src) => {
+			let data = {
+				widget,
+				src,
+			}
+			if (src === 'zone1') {
+				data.widget = {
+					...widget,
+					id: Date.now(),
+				}
+			}
 
-      },
-      onDropTrash(event) {
-        const data = JSON.parse(event.dataTransfer.getData('text/plain'));
-        this.isDragging = false;
-        console.log(data)
-        if (data.src == 'zone2') {
-          const existIndex = findWidgetById(this.widgets2, data.widget)
-          if (existIndex != -1) {
-            const qwe = this.widgets2.splice(existIndex, 1);
-          console.log(qwe)
-          }
-        }
+			event.dataTransfer.setData('text/plain', JSON.stringify(data))
+			if (src === 'zone2') {
+				isDragging.value = true
+			}
+		}
 
-      }
-    }
+		const onDrop = event => {
+			const data = JSON.parse(event.dataTransfer.getData('text/plain'))
+			isDragging.value = false
+			const existIndex = findWidgetById(widgets2.value, data.widget)
+			if (existIndex != -1) {
+				// делаемм ресорт
+			} else {
+				widgets2.value.push(data.widget)
+			}
+		}
+
+		const resortDrop = (event, widget2, index2) => {
+			const data = JSON.parse(event.dataTransfer.getData('text/plain'))
+			if (data.src == 'zone2') {
+				const existIndex = findWidgetById(widgets2.value, data.widget)
+				widgets2.value[existIndex] = widget2
+				widgets2.value[index2] = data.widget
+			} else {
+				onDrop(event)
+			}
+		}
+
+		const onDropTrash = event => {
+			const data = JSON.parse(event.dataTransfer.getData('text/plain'))
+			isDragging.value = false
+			if (data.src == 'zone2') {
+				const existIndex = findWidgetById(widgets2.value, data.widget)
+				if (existIndex != -1) {
+					widgets2.value.splice(existIndex, 1)
+				}
+			}
+		}
+
+		return {
+			saveDashboard,
+			widgetClass,
+			close,
+			onShowForm,
+			onAddWidget,
+			leftDrawerOpen,
+			search,
+			isDragging,
+			widgets2,
+			showWidgetEditForm,
+			comps,
+			onDropTrash,
+			resortDrop,
+			onDrop,
+			onDragStart,
+		}
+	},
 }
 </script>
 
 <style>
 .trash-container {
-  justify-content: center;
-  align-items: center;
-  height: 85px;
+	justify-content: center;
+	align-items: center;
+	height: 85px;
 }
-  .widget {
-    min-height: 200px;
-  }
-  .zone3 {
-    background: rgb(248, 142, 154);
-    border: 2x solid red;
-  }
+.widget {
+	min-height: 200px;
+}
+.zone3 {
+	background: rgb(248, 142, 154);
+	border: 2x solid red;
+}
 </style>
 <style lang="sass">
 .JLWidget
