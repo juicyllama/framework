@@ -1,5 +1,5 @@
 <template>
-	<JLForm {...props.config}></JLForm>
+	<JLForm :options="props.config"></JLForm>
 </template>
 <script lang="ts" setup>
 import { JLForm } from '@/index'

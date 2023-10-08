@@ -18,10 +18,7 @@
 				<q-input filled v-model="options.data.description" label="Widget description" />
 				<q-select v-model="options.data.content" :options="optionsContent" label="Content" />
 
-				<AdditionalSettings
-					@change="onChange"
-					v-if="options.data.content !== ''"
-					:type="options.data.content" />
+				<AdditionalSettings @change="onChange" :type="options.data.content" />
 
 				<q-select v-model="options.data.size" :options="optionsSize" label="Size" />
 				<q-input filled v-model="options.data.page" label="Page to display" />
@@ -33,7 +30,7 @@
 		</q-card-section>
 	</q-card>
 </template>
-<script setup>
+<script setup lang="ts">
 import { computed, reactive } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { useWidgetsStore } from '@/store/widgets'
@@ -55,7 +52,7 @@ const onSubmit = () => {
 		widgetsStore.replace(widgetsStore.widgetToEdit.id, options.data)
 		widgetsStore.clearWidgetToEdit()
 	}
-	options.data = {}
+	options.data = EMPTY_WIDGET
 	emit('add')
 }
 
@@ -63,8 +60,17 @@ const onChange = value => {
 	options.data.configs = JSON.stringify(value)
 }
 
-const isEdit = computed(() => !!widgetsStore.widgetToEdit.id)
-const options = reactive({
+const isEdit = computed<boolean>(() => !!widgetsStore.widgetToEdit.id)
+const options = reactive<{
+	data: {
+		configs: string
+		size: string
+		description: string
+		content: string
+		name: string
+		page: string
+	}
+}>({
 	data: isEdit.value ? widgetsStore.widgetToEdit : EMPTY_WIDGET,
 })
 </script>

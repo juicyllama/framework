@@ -19,7 +19,7 @@
         </template> -->
 	</q-card>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ref, toRefs, watch } from 'vue'
 // import TableSettings from './TableSettings.vue'
 // import FormSettings from './FormSettings.vue'
