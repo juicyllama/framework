@@ -5,7 +5,8 @@ import { ConfigService } from '@nestjs/config'
 import { InstalledApp, OauthService } from '@juicyllama/app-store'
 import { ShopifyRestListWebhooks, ShopifyWebhook, ShopifyWebhookCreate } from './webhooks.dto'
 import { ShopifyRest } from '../shopify.common.dto'
-import { ShopifyWebhooksTopicRoutes } from './webhooks.enums'
+import { ShopifyWebhooksTopicRoutes, ShopifyWebhooksTopics } from './webhooks.enums'
+import { ApiVersion } from '@shopify/shopify-api'
 
 @Injectable()
 export class ShopifyWebhooksService {
@@ -15,7 +16,7 @@ export class ShopifyWebhooksService {
 		@Inject(forwardRef(() => OauthService)) private readonly oauthService: OauthService,
 	) {}
 
-	async createWebhook(installed_app: InstalledApp, options: ShopifyRest, data: ShopifyWebhookCreate): Promise<any> {
+	async createWebhook(installed_app: InstalledApp, options: ShopifyRest, data: ShopifyWebhookCreate): Promise<ShopifyWebhook> {
 		const domain = 'app::shopify::webhook::getWebhooks'
 
 		const shopify = Shopify(this.configService.get('shopify'))
@@ -47,7 +48,7 @@ export class ShopifyWebhooksService {
 		return webhook
 	}
 
-	async getWebhooks(installed_app: InstalledApp, options: ShopifyRestListWebhooks): Promise<any> {
+	async getWebhooks(installed_app: InstalledApp, options: ShopifyRestListWebhooks): Promise<ShopifyWebhook[]> {
 		const domain = 'app::shopify::webhook::getWebhooks'
 
 		const shopify = Shopify(this.configService.get('shopify'))
@@ -70,4 +71,32 @@ export class ShopifyWebhooksService {
 
 		return webhooks
 	}
+
+
+
+	/**
+	 * Helper to register all Order related webhooks for a shopify store
+	 */
+
+	async registerOrderWebhooks(installed_app: InstalledApp): Promise<ShopifyWebhook[]> {
+	
+		const topics = [
+			ShopifyWebhooksTopics['orders/create'],
+			ShopifyWebhooksTopics['orders/cancelled'],
+			ShopifyWebhooksTopics['orders/edited'],
+			ShopifyWebhooksTopics['orders/fulfilled'],
+			ShopifyWebhooksTopics['orders/paid'],
+			ShopifyWebhooksTopics['orders/partially_fulfilled'],
+			ShopifyWebhooksTopics['orders/updated'],
+		]
+
+		const results = []
+
+		for (const topic of topics) {
+			results.push(await this.createWebhook(installed_app, { api_version: ApiVersion.July23 }, { topic: topic }))
+		}
+
+		return results
+	}
+
 }

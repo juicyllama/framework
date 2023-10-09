@@ -5,7 +5,7 @@ import { InstalledAppsService, Oauth } from '@juicyllama/app-store'
 import { AccountId, UserAuth } from '@juicyllama/core'
 import { ShopifyWebhooksService } from './webhooks.service'
 import { ApiVersion } from '@shopify/shopify-api'
-import { ShopifyWebhookCreate } from './webhooks.dto'
+import { ShopifyWebhook, ShopifyWebhookCreate } from './webhooks.dto'
 
 @Controller('app/shopify/webhooks')
 export class ShopifyWebhooksController {
@@ -21,9 +21,9 @@ export class ShopifyWebhooksController {
 	@Post('create')
 	async create(
 		@Query('installed_app_id') installed_app_id: number,
-		@AccountId() account_id: string,
+		@AccountId() account_id: number,
 		@Body() data: ShopifyWebhookCreate,
-	): Promise<Oauth> {
+	): Promise<ShopifyWebhook> {
 		const domain = 'app::shopify::webhooks::controller::create'
 
 		this.logger.log(`[${domain}] Create Webhook`, {
@@ -38,7 +38,7 @@ export class ShopifyWebhooksController {
 
 		if (!installed_app) throw new Error(`[${domain}] Installed App not found`)
 
-		return await this.shopifyWebhooksService.createWebhook(installed_app, { api_version: ApiVersion.April23 }, data)
+		return await this.shopifyWebhooksService.createWebhook(installed_app, { api_version: ApiVersion.July23 }, data)
 	}
 
 	@UserAuth()
@@ -46,9 +46,9 @@ export class ShopifyWebhooksController {
 	@Get('list')
 	async list(
 		@Query('installed_app_id') installed_app_id: number,
-		@AccountId() account_id: string,
+		@AccountId() account_id: number,
 		@Query() query: any,
-	): Promise<Oauth> {
+	): Promise<ShopifyWebhook[]> {
 		const domain = 'app::shopify::webhooks::controller::list'
 
 		this.logger.log(`[${domain}] Find Webhooks`, {
@@ -65,8 +65,33 @@ export class ShopifyWebhooksController {
 		delete query.installed_app_id
 
 		return await this.shopifyWebhooksService.getWebhooks(installed_app, {
-			api_version: ApiVersion.April23,
+			api_version: ApiVersion.July23,
 			...query,
 		})
+	}
+
+
+
+	@UserAuth()
+	@ApiHideProperty()
+	@Post('register/orders/all')
+	async registerAllOrdersWebhooks(
+		@Query('installed_app_id') installed_app_id: number,
+		@AccountId() account_id: number
+	): Promise<ShopifyWebhook[]> {
+		const domain = 'app::shopify::webhooks::controller::registerAllOrdersWebhooks'
+
+		this.logger.log(`[${domain}] Register All Order Webhooks`, {
+			installed_app_id: installed_app_id,
+			account_id: account_id,
+		})
+
+		const installed_app = await this.installedAppsService.findOne({
+			where: { account_id: account_id, installed_app_id: installed_app_id },
+		})
+
+		if (!installed_app) throw new Error(`[${domain}] Installed App not found`)
+
+		return await this.shopifyWebhooksService.registerOrderWebhooks(installed_app)
 	}
 }

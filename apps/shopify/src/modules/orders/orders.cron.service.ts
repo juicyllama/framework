@@ -73,7 +73,7 @@ export class ShopifyOrdersCronService {
 							.syncOrders(
 								installed_app,
 								{
-									api_version: ApiVersion.April23,
+									api_version: ApiVersion.July23,
 									status: 'any',
 									updated_at_min:
 										installed_app.last_check_at ??

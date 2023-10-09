@@ -62,15 +62,9 @@ export { userStore, accountStore, themeStore, settingsStore }
 export * from './components'
 export * from './types/index'
 export { instance }
-export * from './plugins/index'
 export * from './helpers/index'
-export * from './services/app-store/index'
-export * from './services/crm/index'
-export * from './services/tools/index'
-export * from './services/account'
-export * from './services/auth'
-export * from './services/billing'
-export * from './services/websites/index'
+export * from './plugins/index'
+export * from './services/index.exports'
 export {
 	JLLogin, JLSignup, JLPasswordless, JLResetPassword,
 	JLAccountProfile,

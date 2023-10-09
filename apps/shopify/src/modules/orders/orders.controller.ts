@@ -25,7 +25,7 @@ export class ShopifyOrdersController {
 	@Get('sync')
 	async sync(
 		@Query('installed_app_id') installed_app_id: number,
-		@AccountId() account_id: string,
+		@AccountId() account_id: number,
 		@Query() query: any,
 	): Promise<Transaction[]> {
 		const domain = 'app::shopify::orders::controller::sync'
@@ -50,7 +50,7 @@ export class ShopifyOrdersController {
 		delete query.installed_app_id
 
 		return await this.shopifyOrdersService.syncOrders(installed_app, {
-			api_version: ApiVersion.April23,
+			api_version: ApiVersion.July23,
 			status: 'any',
 			...query,
 		})
@@ -65,7 +65,7 @@ export class ShopifyOrdersController {
 	@Get('list')
 	async list(
 		@Query('installed_app_id') installed_app_id: number,
-		@AccountId() account_id: string,
+		@AccountId() account_id: number,
 		@Query() query: any,
 	): Promise<ShopifyOrder[]> {
 		const domain = 'app::shopify::orders::controller::list'
@@ -90,7 +90,7 @@ export class ShopifyOrdersController {
 		delete query.installed_app_id
 
 		return await this.shopifyOrdersService.listOrders(installed_app, {
-			api_version: ApiVersion.April23,
+			api_version: ApiVersion.July23,
 			status: 'any',
 			...query,
 		})
@@ -101,14 +101,14 @@ export class ShopifyOrdersController {
 	 */
 
 	@ApiHideProperty()
-	@Post('webhook/create')
-	async webhookCreate(
+	@Post('webhook')
+	async webhook(
 		@Query('installed_app_id') installed_app_id: number,
 		@Body() data: ShopifyOrder,
 	): Promise<Transaction> {
-		const domain = 'app::shopify::orders::controller::webhookCreate'
+		const domain = 'app::shopify::orders::controller::webhook'
 
-		this.logger.log(`[${domain}] Create Order Webhook`, {
+		this.logger.log(`[${domain}] Order Webhook`, {
 			data: data,
 		})
 
@@ -123,6 +123,7 @@ export class ShopifyOrdersController {
 			throw new BadRequestException(`Authentication Error: Installed App not found`)
 		}
 
-		return await this.shopifyOrdersService.addOrder(installed_app, data)
+		return await this.shopifyOrdersService.addOrUpdateOrder(installed_app, data)
 	}
+
 }
