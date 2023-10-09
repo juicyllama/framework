@@ -98,7 +98,7 @@ const columns = [
 const rows = ref<SourceEntry[]>([])
 
 watch(rows, () => {
-	store.setFiles(rows.value)
+	store.setFile(rows.value)
 })
 watch(files, () => {
 	if (files.value?.length != 0) {

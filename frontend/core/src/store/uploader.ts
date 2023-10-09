@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 export const useUploaderStore = defineStore('uploader', {
 	state: () => ({
 		step: 1,
-		files: [],
+		file: {},
 		urls: [],
 		encoding: 'utf-8',
 		delimeters: {},
@@ -26,8 +26,8 @@ export const useUploaderStore = defineStore('uploader', {
 		setDelimetersData(data) {
 			this.delimeters = data
 		},
-		setFiles(files) {
-			this.files = files
+		setFile(file) {
+			this.file = file
 		},
 		setImportMode(importMode) {
 			this.importMode = importMode
