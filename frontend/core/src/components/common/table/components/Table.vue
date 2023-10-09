@@ -3,7 +3,7 @@ import { computed, reactive, ref, watch, Ref, watchEffect } from 'vue'
 import { logger } from '@/helpers'
 import { default as JLForm } from '../../form/Form.vue'
 import { SearchFilter, ColumnsFilter, CustomButtons } from './index'
-import { IColumn, IFilter } from '@/types/table'
+import { IFilter } from '@/types/table'
 import {
 	TablePosition,
 	LogSeverity,
@@ -282,8 +282,7 @@ watch(
 )
 
 const dialog = ref<boolean>(false)
-const filter = ref<string>('')
-const labels = computed(() => columns.map(el => el.label))
+const labels = computed(() => JLToQColumns.map(el => el.label))
 const activeLabels = computed<string[]>(() => activeFilters.value.map(el => el.label))
 
 const activeFilters = ref<IFilter[]>([])
@@ -292,7 +291,7 @@ const BASE_URL_REPLACE_SERVICE_CALL: string = 'URL_REPLACE_SERVICE_CALL/api/'
 const URL_REPLACE_SERVICE_CALL = ref<string>()
 const query = computed<Array<string | number>[]>(() => {
 	return activeFilters.value.map(el => {
-		const item : IColumn | undefined = columns.find(i => i.label === el.label)
+		const item = JLToQColumns.find(i => i.label === el.label)
 		const method: string = typeof el.type === 'object' ? el.type.method : ''
 		if (item && ['NULL', '!NULL'].includes(method)) return [item.name, method]
 		if (item) return [item.name, method, el.value]
@@ -300,15 +299,18 @@ const query = computed<Array<string | number>[]>(() => {
 	})
 })
 
-const onFilterChange = (data) => {
-  activeFilters.value = data
+const onFilterChange = data => {
+	activeFilters.value = data
 }
 
 watchEffect(() => {
 	if (query.value.length) {
-		URL_REPLACE_SERVICE_CALL.value = BASE_URL_REPLACE_SERVICE_CALL + query.value.reduce((acc,e,i) =>
-			`${acc}${i > 0 ? '&' : '?' }${e[0]}=${encodeURIComponent(e[1])}${e[2] ? ':' + e[2] : ''}`,
-		'')
+		URL_REPLACE_SERVICE_CALL.value =
+			BASE_URL_REPLACE_SERVICE_CALL +
+			query.value.reduce(
+				(acc, e, i) => `${acc}${i > 0 ? '&' : '?'}${e[0]}=${encodeURIComponent(e[1])}${e[2] ? ':' + e[2] : ''}`,
+				'',
+			)
 	} else {
 		URL_REPLACE_SERVICE_CALL.value = BASE_URL_REPLACE_SERVICE_CALL
 	}
@@ -317,7 +319,7 @@ watchEffect(() => {
 
 <template>
 	<div id="JLTable" class="JLTable">
-		<TableFilterDialog v-model="dialog" :labels="labels" @change="onFilterChange"/>
+		<TableFilterDialog v-model="dialog" :labels="labels" @change="onFilterChange" />
 		<q-table
 			:title="props.tableSchema.title ?? ''"
 			:rows="rows"
@@ -333,8 +335,8 @@ watchEffect(() => {
 			@request="onRequest">
 			<template v-slot:header-cell="props">
 				<q-th :props="props">
-						{{ props.col.label }}
-						<q-icon name="filter_alt" size="1.2em" color="red" v-if="activeLabels.includes(props.col.label)" />
+					{{ props.col.label }}
+					<q-icon name="filter_alt" size="1.2em" color="red" v-if="activeLabels.includes(props.col.label)" />
 				</q-th>
 			</template>
 			<template v-slot:top-left v-if="props.tableSchema.show?.table_actions !== false">
