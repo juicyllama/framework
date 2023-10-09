@@ -13,7 +13,7 @@
 				<SecondScreen v-else-if="screen === 2" />
 				<ThirdScreen v-else-if="screen === 3" />
 				<FourthScreen v-else-if="screen === 4" />
-				<FifthScreen v-else :uploadResult="uploadResult"/>
+				<FifthScreen v-else :uploadResult="uploadResult" />
 			</q-card-section>
 			<q-card-actions class="footer q-pb-none">
 				<WizardFooter
@@ -36,7 +36,10 @@ import SecondScreen from './SecondScreen.vue'
 import ThirdScreen from './ThirdScreen.vue'
 import FourthScreen from './FourthScreen.vue'
 import FifthScreen from './FifthScreen.vue'
-import {uploadFile} from '@/services/upload'
+import { uploadFile } from '@/services/upload'
+import { useUploaderStore } from '@/store/uploader'
+
+const store = useUploaderStore()
 
 const emit = defineEmits(['update:show'])
 const props = defineProps({
@@ -71,20 +74,25 @@ const onBackButtonClicked = () => {
 	screen.value--
 }
 const onStartButtonClicked = async () => {
-	// TODO, file data here
+	const form = new FormData()
+	form.append('file', store.getFile)
+	// table: store.getTable,
+	// fields: store.getFields,
+	// primaryKey: store.getPrimaryKey,
+
 	try {
-		const res = await uploadFile(fileData)
+		const res = await uploadFile(form)
 		uploadResult.value = {
 			status: 'SUCCESS',
-			details: res
+			details: res,
 		}
 	} catch (e) {
 		console.log(e)
 		uploadResult.value = {
 			status: 'ERROR',
-			details: e
+			details: e,
 		}
-	} finally
+	} finally {
 		screen.value = 5
 	}
 }

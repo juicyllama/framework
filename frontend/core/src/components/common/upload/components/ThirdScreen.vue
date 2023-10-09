@@ -56,19 +56,10 @@ const columns = [
 
 // rows in the user-selected file
 const rows = ref([
-	{ source: 'test', target: ref(''), primaryKey: ref(false) },
-	{ source: 'test1', target: ref(''), primaryKey: ref(false) },
-	{ source: 'test2', target: ref(''), primaryKey: ref(false) },
-	{ source: 'test3', target: ref(''), primaryKey: ref(false) },
-	{ source: 'test4', target: ref(''), primaryKey: ref(false) },
-	{ source: 'test5', target: ref(''), primaryKey: ref(false) },
+	// { source: 'test', target: ref(''), primaryKey: ref(false) },
 ])
 
 const tableOptions = computed(() => store.getTables)
 const selectedTable = ref('')
 const targetFieldOptions = computed(() => store.getFieldsPerTable(selectedTable.value))
-
-watch(rows, () => {
-	store.setImportMode(chosenImportMode.value)
-})
 </script>
