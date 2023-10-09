@@ -125,5 +125,4 @@ export class ShopifyOrdersController {
 
 		return await this.shopifyOrdersService.addOrUpdateOrder(installed_app, data)
 	}
-
 }

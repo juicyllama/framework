@@ -89,7 +89,6 @@ export class ShopifyOrdersService {
 		return orders
 	}
 
-
 	/**
 	 * Creates or updates ecommerce transactions from a list of shopify orders fetched from shopify based on the options provided
 	 */
@@ -120,8 +119,6 @@ export class ShopifyOrdersService {
 		return transactions
 	}
 
-
-
 	/**
 	 * Creates and returns an ecommerce transaction from a shopify order
 	 */
@@ -150,5 +147,4 @@ export class ShopifyOrdersService {
 
 		return transaction
 	}
-
 }

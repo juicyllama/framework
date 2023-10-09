@@ -1,7 +1,7 @@
 import { Controller, forwardRef, Inject, Get, Query, Body, Post } from '@nestjs/common'
 import { ApiHideProperty } from '@nestjs/swagger'
 import { Logger } from '@juicyllama/utils'
-import { InstalledAppsService, Oauth } from '@juicyllama/app-store'
+import { InstalledAppsService } from '@juicyllama/app-store'
 import { AccountId, UserAuth } from '@juicyllama/core'
 import { ShopifyWebhooksService } from './webhooks.service'
 import { ApiVersion } from '@shopify/shopify-api'
@@ -70,14 +70,12 @@ export class ShopifyWebhooksController {
 		})
 	}
 
-
-
 	@UserAuth()
 	@ApiHideProperty()
 	@Post('register/orders/all')
 	async registerAllOrdersWebhooks(
 		@Query('installed_app_id') installed_app_id: number,
-		@AccountId() account_id: number
+		@AccountId() account_id: number,
 	): Promise<ShopifyWebhook[]> {
 		const domain = 'app::shopify::webhooks::controller::registerAllOrdersWebhooks'
 

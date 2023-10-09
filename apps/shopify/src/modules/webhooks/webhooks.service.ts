@@ -16,7 +16,11 @@ export class ShopifyWebhooksService {
 		@Inject(forwardRef(() => OauthService)) private readonly oauthService: OauthService,
 	) {}
 
-	async createWebhook(installed_app: InstalledApp, options: ShopifyRest, data: ShopifyWebhookCreate): Promise<ShopifyWebhook> {
+	async createWebhook(
+		installed_app: InstalledApp,
+		options: ShopifyRest,
+		data: ShopifyWebhookCreate,
+	): Promise<ShopifyWebhook> {
 		const domain = 'app::shopify::webhook::getWebhooks'
 
 		const shopify = Shopify(this.configService.get('shopify'))
@@ -72,14 +76,11 @@ export class ShopifyWebhooksService {
 		return webhooks
 	}
 
-
-
 	/**
 	 * Helper to register all Order related webhooks for a shopify store
 	 */
 
 	async registerOrderWebhooks(installed_app: InstalledApp): Promise<ShopifyWebhook[]> {
-	
 		const topics = [
 			ShopifyWebhooksTopics['orders/create'],
 			ShopifyWebhooksTopics['orders/cancelled'],
@@ -98,5 +99,4 @@ export class ShopifyWebhooksService {
 
 		return results
 	}
-
 }
