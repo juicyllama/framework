@@ -87,7 +87,6 @@ const onUrlPromptSubmitted = () => {
 const columns = [
 	{
 		name: 'source',
-		required: true,
 		label: 'Import Source',
 		align: 'left',
 		field: 'source',

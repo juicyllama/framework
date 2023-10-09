@@ -17,7 +17,6 @@
 				class="col-9 q-mr-sm"
 				:options="fieldDelimiters"
 				v-model="chosenFieldDelimiter" />
-			<q-input class="col-2" />
 		</div>
 		<q-select
 			style="max-width: 150px"

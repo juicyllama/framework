@@ -41,7 +41,7 @@ import { useUploaderStore } from '@/store/uploader'
 
 const store = useUploaderStore()
 
-const emit = defineEmits(['update:show'])
+const emit = defineEmits(['update:show', 'update:modelValue'])
 const props = defineProps({
 	show: Boolean,
 })
@@ -75,7 +75,7 @@ const onBackButtonClicked = () => {
 }
 const onStartButtonClicked = async () => {
 	const form = new FormData()
-	form.append('file', store.getFile)
+	form.append('file', store.getFile as Blob)
 	// table: store.getTable,
 	// fields: store.getFields,
 	// primaryKey: store.getPrimaryKey,

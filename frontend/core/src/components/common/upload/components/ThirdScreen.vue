@@ -41,16 +41,21 @@ const columns = [
 		label: 'Source Field',
 		field: 'source',
 		align: 'left',
+		sortable: false,
 	},
 	{
 		name: 'target',
 		label: 'Target Field',
 		align: 'left',
+		field: 'source',
+		sortable: false,
 	},
 	{
 		name: 'primaryKey',
 		label: 'Primary Key',
 		align: 'left',
+		field: 'source',
+		sortable: false,
 	},
 ]
 

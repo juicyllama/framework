@@ -15,6 +15,9 @@ export const useUploaderStore = defineStore('uploader', {
 		getStep(state) {
 			return state.step
 		},
+		getFile(state) {
+			return state.file
+		},
 		getTables(state) {
 			return state.existingTables.map(i => i.title)
 		},
