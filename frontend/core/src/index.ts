@@ -7,7 +7,7 @@ import instance from './services/index'
 import classes from './assets/JLCore.css'
 import { ThemeStore } from './store/theme'
 import { JLLogin, JLSignup, JLPasswordless, JLResetPassword } from '@/components/core/auth'
-import { JLForm, JLTable, JLMenu, JLChart, JLStats, JLDropdownButtonMenu } from '@/components'
+import { JLForm, JLTable, JLMenu, JLChart, JLStats, JLDropdownButtonMenu, JLUsersTable } from '@/components'
 import { JLAccountProfile, JLAccountAvatar, JLAccountSwitcher, JLAccountBrand } from '@/components/core/account'
 import { JLUserAvatar, JLUserProfile, JLUserMenu } from '@/components/core/user'
 import { JLAppStoreConnect } from '@/components/app-store'
@@ -52,6 +52,7 @@ export default {
 		Vue.component('JLUserAvatar', JLUserAvatar)
 		Vue.component('JLUserProfile', JLUserProfile)
 		Vue.component('JLUserMenu', JLUserMenu)
+		Vue.component('JLUsersTable', JLUsersTable)
 		Vue.component('JLAppStoreConnect', JLAppStoreConnect)
 	},
 } as Plugin
@@ -81,4 +82,5 @@ export {
 	JLDropdownButtonMenu,
 	JLStats,
 	JLChart,
+	JLUsersTable
 }

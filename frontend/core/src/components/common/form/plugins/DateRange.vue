@@ -1,0 +1,203 @@
+<script setup lang="ts">
+import { ref, Ref } from 'vue'
+import { FormField, FormFieldPluginDateRangeOptions, FormFieldPluginDateRangeResult, FormFieldPluginDateRangeTypeOptions } from '@/types'
+import { JLDropdownButtonMenu } from '../../menu';
+
+//FIX DATES
+//TODO WRITE/READ to localStorage
+// HANDLE CUSTOM
+
+const props = defineProps<{
+	field: FormField
+}>()
+
+const emit = defineEmits(['updated'])
+
+const pluginOptions = <FormFieldPluginDateRangeOptions>props?.field?.pluginOptions
+
+const defaultDateRange: FormFieldPluginDateRangeResult = {
+	type: FormFieldPluginDateRangeTypeOptions.TODAY,
+	from: new Date(new Date().setUTCHours(0,0,0,0)),
+	to: new Date(new Date().setUTCHours(23,59,59,599)),
+}
+const date_range: Ref<FormFieldPluginDateRangeResult> = ref(defaultDateRange)
+
+if(localStorage.getItem('date_range')){	
+	date_range.value = JSON.parse(localStorage.getItem('date_range'))
+}
+
+const customDateRange: Ref<string[] | string > = ref(formatDateForRange(date_range.value))
+const showCustom: Ref<boolean> = ref(false)
+
+function formatDateForRange(date: FormFieldPluginDateRangeResult): string[] | string {
+	
+	//if same dates, return single date
+	if(new Date(date.from).toISOString().substring(0,10) === new Date(date.to).toISOString().substring(0,10)){
+		return new Date(date.from).toISOString().substring(0,10)
+	}
+	
+	return [
+		new Date(date.from).toISOString().substring(0,10), 
+		new Date(date.to).toISOString().substring(0,10),
+	]
+}
+
+function formatRangeFromDate(date: string[] | string): FormFieldPluginDateRangeResult {
+	if(typeof date === 'string'){
+		return {
+			type: FormFieldPluginDateRangeTypeOptions.CUSTOM,
+			from: new Date(date),
+			to: new Date(date),
+		}
+	}else{
+		return {
+			type: FormFieldPluginDateRangeTypeOptions.CUSTOM,
+			from: new Date(date[0]),
+			to: new Date(date[1]),
+		}
+	}
+}
+
+function popCustom(){
+	alert('Show Custom')
+	showCustom.value = true
+
+	//todo convert to UTC time
+}
+
+function updated(dates: FormFieldPluginDateRangeResult) {
+	alert(JSON.stringify(dates))
+	customDateRange.value = formatDateForRange(date_range.value)
+	localStorage.setItem('date_range', JSON.stringify(dates))
+	emit('updated', dates)
+}
+
+function updatedCustom(value: string[] | string){
+	if(value){
+		updated(formatRangeFromDate(value))
+	}	
+}
+
+</script>
+
+<template>
+	<JLDropdownButtonMenu :button="pluginOptions?.button" :menu="{
+		items: [{
+			title: 'Today',
+			function: () => {
+				const date = new Date();
+				const now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
+                date.getUTCDate(), date.getUTCHours(),
+                date.getUTCMinutes(), date.getUTCSeconds());
+				updated({
+					type: FormFieldPluginDateRangeTypeOptions.TODAY,
+					from: new Date(new Date().setUTCHours(0,0,0,0)),
+					to: new Date(now_utc)
+				})
+			}
+		},{
+			title: 'Last 24 Hours',
+			function: () =>	{
+				const date = new Date();
+				const now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
+                date.getUTCDate(), date.getUTCHours(),
+                date.getUTCMinutes(), date.getUTCSeconds());
+				const Yesterday_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
+				date.getUTCDate() - 1, date.getUTCHours(),
+				date.getUTCMinutes(), date.getUTCSeconds());
+				updated({
+					type: FormFieldPluginDateRangeTypeOptions.LAST_24_HOURS,
+					from: new Date(Yesterday_utc),
+					to: new Date(now_utc)
+				})
+			}
+		},{
+			title: 'Yesterday',
+			function: () => updated({
+				type: FormFieldPluginDateRangeTypeOptions.YESTERDAY,
+				from: new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setUTCHours(0,0,0,0)),
+				to: new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setUTCHours(23,59,59,599)),
+			})
+		},{
+			title: 'This Week',
+			function: () => {
+				const date = new Date();
+				const now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
+                date.getUTCDate(), date.getUTCHours(),
+                date.getUTCMinutes(), date.getUTCSeconds());
+
+				const monday = date.setDate(date.getDate() - (date.getDay() + 6) % 7)
+				const monday_utc = new Date(monday).setUTCHours(0,0,0,0)
+
+				updated({
+					type: FormFieldPluginDateRangeTypeOptions.THIS_WEEK,
+					from: new Date(monday_utc),
+					to: new Date(now_utc),
+				})
+			}
+		},{
+			title: 'Last Week',
+			function: () => {
+				
+				const date = new Date();
+				const monday = date.setDate(date.getDate() - (date.getDay() + 6) % 7)
+				const monday_utc = new Date(monday).setUTCHours(0,0,0,0)
+				
+				const previous_monday = new Date(monday_utc).setDate(date.getDate() - 7)
+
+				updated({
+					type: FormFieldPluginDateRangeTypeOptions.LAST_WEEK,
+					from: new Date(previous_monday),
+					to: new Date(monday_utc),
+				})
+			}
+		},{
+			title: 'This Month',
+			function: () => {
+				const date = new Date();
+				const now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
+                date.getUTCDate(), date.getUTCHours(),
+                date.getUTCMinutes(), date.getUTCSeconds());
+
+				const start_of_month = date.setDate(1)
+				const start_of_month_utc = new Date(start_of_month).setUTCHours(0,0,0,0)
+
+				updated({
+					type: FormFieldPluginDateRangeTypeOptions.THIS_MONTH,
+					from: new Date(start_of_month_utc),
+					to: new Date(now_utc),
+				})
+			}
+		},{
+			title: 'Last Month',
+			function: () => {
+
+				const date = new Date();
+				const start_of_month = date.setDate(1)
+				const start_of_month_utc = new Date(start_of_month).setUTCHours(0,0,0,0)
+				
+				const previous_month = new Date(start_of_month_utc).setMonth(date.getMonth() - 1)
+
+				updated({
+					type: FormFieldPluginDateRangeTypeOptions.LAST_MONTH,
+					from: new Date(previous_month),
+					to: new Date(start_of_month_utc),
+				})
+			}
+		},
+		{
+			title: 'Custom',
+			function: () => popCustom()
+		}]
+	}">
+	</JLDropdownButtonMenu>
+
+	<q-date 
+		v-if="showCustom" 
+		:model-value="customDateRange" 
+		@update:model-value="updatedCustom" 
+		range
+		mask="YYYY-MM-DD"
+	/>
+
+</template>
