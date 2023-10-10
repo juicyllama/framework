@@ -4,9 +4,10 @@ import { LessThan, IsNull } from 'typeorm'
 import { AppStoreIntegrationName, InstalledAppsService, AppIntegrationStatus } from '@juicyllama/app-store'
 import { CronRunner } from '@juicyllama/core'
 import { Cron, CronExpression } from '@nestjs/schedule'
-import { StoresService, TransactionsService } from '@juicyllama/ecommerce'
+import { StoresService } from '@juicyllama/ecommerce'
 import { ShopifyOrdersService } from './orders.service'
 import { ApiVersion } from '@shopify/shopify-api'
+import _ from 'lodash'
 
 @Injectable()
 export class ShopifyOrdersCronService {
@@ -15,7 +16,6 @@ export class ShopifyOrdersCronService {
 		@Inject(forwardRef(() => InstalledAppsService)) private readonly installedAppsService: InstalledAppsService,
 		@Inject(forwardRef(() => ShopifyOrdersService)) private readonly shopifyOrdersService: ShopifyOrdersService,
 		@Inject(forwardRef(() => StoresService)) private readonly storesService: StoresService,
-		@Inject(forwardRef(() => TransactionsService)) private readonly transactionsService: TransactionsService,
 	) {}
 
 	@Cron(CronExpression.EVERY_10_MINUTES, { disabled: !process.env.CRON_APP_SHOPIFY_SYNC_ORDERS })
@@ -69,16 +69,16 @@ export class ShopifyOrdersCronService {
 						}
 						const last_check_at = new Date()
 
+						const options = <any>_.omitBy({
+							api_version: ApiVersion.July23,
+							status: 'any',
+							updated_at_min: installed_app.last_check_at ?? null
+						}, _.isNil)
+
 						this.shopifyOrdersService
 							.syncOrders(
 								installed_app,
-								{
-									api_version: ApiVersion.July23,
-									status: 'any',
-									updated_at_min:
-										installed_app.last_check_at ??
-										new Date(last_check_at.getTime() - 1000 * 60 * 10), // 10 minutes ago
-								},
+								options,
 								store,
 							)
 							.then(orders => {

@@ -69,20 +69,24 @@ export class ShopifyOrdersService {
 		orders.push(...response.body.orders)
 		pageInfo = response.pageInfo
 
-		do {
-			this.logger.log(`[${domain}] ${orders.length} Orders added, fetching next page`)
+		if(pageInfo?.nextPage){
 
-			response = <any>await client.get({
-				path: 'orders',
-				query: {
-					...response.pageInfo?.nextPage?.query,
-					limit: options.limit ?? 50,
-				},
-			})
+			do {
+				this.logger.log(`[${domain}] ${orders.length} Orders added, fetching next page`)
 
-			orders.push(...response.body.orders)
-			pageInfo = response.pageInfo
-		} while (pageInfo?.nextPage)
+				response = <any>await client.get({
+					path: 'orders',
+					query: {
+						...response.pageInfo?.nextPage?.query,
+						limit: options.limit ?? 50,
+					},
+				})
+
+				orders.push(...response.body.orders)
+				pageInfo = response.pageInfo
+			} while (pageInfo?.nextPage)
+
+		}
 
 		this.logger.log(`[${domain}] ${orders.length} Orders found`)
 

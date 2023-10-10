@@ -32,22 +32,43 @@ export class ShopifyWebhooksService {
 			apiVersion: options.api_version,
 		})
 
-		const response = <any>await client.post({
-			path: 'webhooks',
-			data: {
-				webhook: {
-					format: 'json',
-					topic: data.topic,
-					address: `${process.env.BASE_URL_API}${ShopifyWebhooksTopicRoutes[data.topic]}?installed_app_id=${
-						installed_app.installed_app_id
-					}`,
+		const webhooks = await this.getWebhooks(installed_app, { api_version: options.api_version, topic: data.topic })
+		let webhook: ShopifyWebhook
+		
+		if(webhooks.length) {
+			const response = <any>await client.put({
+				path: `webhooks/${webhooks[0].id}`,
+				data: {
+					webhook: {
+						address: `${process.env.BASE_URL_API}/${ShopifyWebhooksTopicRoutes[data.topic]}?installed_app_id=${
+							installed_app.installed_app_id
+						}`,
+					}
 				},
-			},
-		})
+			})
 
-		const webhook: ShopifyWebhook = response.body?.webhook
-
-		this.logger.log(`[${domain}] Webhook created`, webhook)
+			webhook = response.body?.webhook
+	
+			this.logger.log(`[${domain}] Webhook updated`, {
+				id:  webhooks[0].id
+			})
+		}else{
+			const response = <any>await client.post({
+				path: 'webhooks',
+				data: {
+					webhook: {
+						format: 'json',
+						topic: data.topic,
+						address: `${process.env.BASE_URL_API}/${ShopifyWebhooksTopicRoutes[data.topic]}?installed_app_id=${
+							installed_app.installed_app_id
+						}`,
+					},
+				},
+			})
+		
+			webhook = response.body?.webhook
+			this.logger.log(`[${domain}] Webhook created`, webhook)
+		}
 
 		return webhook
 	}

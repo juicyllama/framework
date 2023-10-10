@@ -1,1 +1,1 @@
-export * from './shopify'
+export * from './shopify/index'
