@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref } from 'vue'
+import { ref, Ref, watch } from 'vue'
 import { FormField, FormFieldPluginDateRangeOptions, FormFieldPluginDateRangeResult, FormFieldPluginDateRangeTypeOptions } from '@/types'
 import { JLDropdownButtonMenu } from '../../menu';
 
@@ -26,23 +26,30 @@ if(localStorage.getItem('date_range')){
 	date_range.value = JSON.parse(localStorage.getItem('date_range'))
 }
 
-const customDateRange: Ref<string[] | string > = ref(formatDateForRange(date_range.value))
+const customDateRange: Ref<{from: string, to: string} | string > = ref(formatDateForRange(date_range.value))
 const showCustom: Ref<boolean> = ref(false)
 
-function formatDateForRange(date: FormFieldPluginDateRangeResult): string[] | string {
+	/**
+	 * Converts the FormFieldPluginDateRangeResult format to Q-Date format 
+	 */
+function formatDateForRange(date: FormFieldPluginDateRangeResult): {from: string, to: string} | string {
 	
 	//if same dates, return single date
 	if(new Date(date.from).toISOString().substring(0,10) === new Date(date.to).toISOString().substring(0,10)){
 		return new Date(date.from).toISOString().substring(0,10)
 	}
 	
-	return [
-		new Date(date.from).toISOString().substring(0,10), 
-		new Date(date.to).toISOString().substring(0,10),
-	]
+	return {
+		from: new Date(date.from).toISOString().substring(0,10), 
+		to: new Date(date.to).toISOString().substring(0,10),
+	}
 }
 
-function formatRangeFromDate(date: string[] | string): FormFieldPluginDateRangeResult {
+/**
+* Converts the o Q-Date format back to a FormFieldPluginDateRangeResult format 
+*/
+function formatRangeFromDate(date: {from: string, to: string} | string): FormFieldPluginDateRangeResult {
+
 	if(typeof date === 'string'){
 		return {
 			type: FormFieldPluginDateRangeTypeOptions.CUSTOM,
@@ -52,38 +59,51 @@ function formatRangeFromDate(date: string[] | string): FormFieldPluginDateRangeR
 	}else{
 		return {
 			type: FormFieldPluginDateRangeTypeOptions.CUSTOM,
-			from: new Date(date[0]),
-			to: new Date(date[1]),
+			from: new Date(date.from),
+			to: new Date(date.to),
 		}
 	}
 }
 
 function popCustom(){
-	alert('Show Custom')
 	showCustom.value = true
-
-	//todo convert to UTC time
 }
 
 function updated(dates: FormFieldPluginDateRangeResult) {
-	alert(JSON.stringify(dates))
-	customDateRange.value = formatDateForRange(date_range.value)
+	customDateRange.value = formatDateForRange(dates)
+	showCustom.value = false
 	localStorage.setItem('date_range', JSON.stringify(dates))
 	emit('updated', dates)
 }
 
-function updatedCustom(value: string[] | string){
+function updatedCustom(value: {from: string, to: string} | string){
 	if(value){
-		updated(formatRangeFromDate(value))
+		showCustom.value = false
+		localStorage.setItem('date_range', JSON.stringify(formatRangeFromDate(value)))
+		emit('updated', formatRangeFromDate(value))
 	}	
 }
+
+
+
+watch(
+	() => customDateRange.value,
+	newValue => {
+		updatedCustom(newValue)
+	},
+)
 
 </script>
 
 <template>
-	<JLDropdownButtonMenu :button="pluginOptions?.button" :menu="{
+	<JLDropdownButtonMenu 
+	auto-close
+	:button="pluginOptions?.button" 
+	:menu="{
+		selected: date_range.type,
 		items: [{
 			title: 'Today',
+			key: FormFieldPluginDateRangeTypeOptions.TODAY,
 			function: () => {
 				const date = new Date();
 				const now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
@@ -97,6 +117,7 @@ function updatedCustom(value: string[] | string){
 			}
 		},{
 			title: 'Last 24 Hours',
+			key: FormFieldPluginDateRangeTypeOptions.LAST_24_HOURS,
 			function: () =>	{
 				const date = new Date();
 				const now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
@@ -113,6 +134,7 @@ function updatedCustom(value: string[] | string){
 			}
 		},{
 			title: 'Yesterday',
+			key: FormFieldPluginDateRangeTypeOptions.YESTERDAY,
 			function: () => updated({
 				type: FormFieldPluginDateRangeTypeOptions.YESTERDAY,
 				from: new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setUTCHours(0,0,0,0)),
@@ -120,6 +142,7 @@ function updatedCustom(value: string[] | string){
 			})
 		},{
 			title: 'This Week',
+			key: FormFieldPluginDateRangeTypeOptions.THIS_WEEK,
 			function: () => {
 				const date = new Date();
 				const now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
@@ -137,6 +160,7 @@ function updatedCustom(value: string[] | string){
 			}
 		},{
 			title: 'Last Week',
+			key: FormFieldPluginDateRangeTypeOptions.LAST_WEEK,
 			function: () => {
 				
 				const date = new Date();
@@ -153,6 +177,7 @@ function updatedCustom(value: string[] | string){
 			}
 		},{
 			title: 'This Month',
+			key: FormFieldPluginDateRangeTypeOptions.THIS_MONTH,
 			function: () => {
 				const date = new Date();
 				const now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
@@ -170,6 +195,7 @@ function updatedCustom(value: string[] | string){
 			}
 		},{
 			title: 'Last Month',
+			key: FormFieldPluginDateRangeTypeOptions.LAST_MONTH,
 			function: () => {
 
 				const date = new Date();
@@ -187,6 +213,7 @@ function updatedCustom(value: string[] | string){
 		},
 		{
 			title: 'Custom',
+			key: FormFieldPluginDateRangeTypeOptions.CUSTOM,
 			function: () => popCustom()
 		}]
 	}">
@@ -194,8 +221,7 @@ function updatedCustom(value: string[] | string){
 
 	<q-date 
 		v-if="showCustom" 
-		:model-value="customDateRange" 
-		@update:model-value="updatedCustom" 
+		v-model="customDateRange" 
 		range
 		mask="YYYY-MM-DD"
 	/>

@@ -9,7 +9,7 @@ import {
 	Req,
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { StatsMethods, StatsResponseDto } from '@juicyllama/utils'
+import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto } from '@juicyllama/utils'
 import { TransactionsService } from './transactions.service'
 import {
 	Query as TQuery,
@@ -28,7 +28,9 @@ import {
 	UpdateDecorator,
 	UserAuth,
 	crudCreate,
-	UserRole
+	UserRole,
+	ReadChartsDecorator,
+	crudCharts
 } from '@juicyllama/core'
 import { CreateTransactionDto, UpdateTransactionDto } from './transactions.dto'
 import { TransactionOrderBy, TransactionRelations, TransactionSelect } from './transactions.enums'
@@ -83,6 +85,28 @@ export class TransactionsController {
 			account_id: account_id,
 			query: query,
 			method: method,
+			searchFields: TRANSACTION_SEARCH_FIELDS,
+		})
+	}
+
+	@ReadChartsDecorator(TRANSACTION_E, TransactionSelect, TRANSACTION_NAME)
+	async charts(
+		@Query() query: any,
+		@Query('search') search: string,
+		@Query('from') from: string,
+		@Query('to') to: string,
+		@Query('fields') fields: string[],
+		@Query('period') period?: ChartsPeriod,
+	): Promise<ChartsResponseDto> {
+		return await crudCharts<TRANSACTION_T>({
+			service: this.service,
+			tQuery: this.tQuery,
+			query,
+			search,
+			period,
+			fields,
+			...(from && { from: new Date(from) }),
+			...(to && { to: new Date(to) }),
 			searchFields: TRANSACTION_SEARCH_FIELDS,
 		})
 	}
