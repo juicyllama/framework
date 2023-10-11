@@ -14,16 +14,17 @@ export default registerAs(
 		},
 )
 
-export const ShopifyAuthScopes = [
-	process.env.SHOPIFY_EXTRA_SCOPES?.split(','),
-	'read_products',
-	'read_inventory',
-	'read_customers',
-	'read_orders',
-	'read_reports',
-	'read_shipping',
-	'read_returns',
-]
+export const ShopifyAuthScopes = 
+	[
+		...process.env.SHOPIFY_EXTRA_SCOPES ? process.env.SHOPIFY_EXTRA_SCOPES.split(',') : [],
+		'read_products',
+		'read_inventory',
+		'read_customers',
+		'read_orders',
+		'read_reports',
+		'read_shipping',
+		'read_returns',
+	]
 
 export const ShopifyAuthRedirect = '/app/shopify/auth/redirect'
 
