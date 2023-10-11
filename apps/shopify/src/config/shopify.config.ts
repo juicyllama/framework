@@ -15,7 +15,7 @@ export default registerAs(
 )
 
 export const ShopifyAuthScopes = [
-	...process.env.SHOPIFY_EXTRA_SCOPES?.split(','),
+	process.env.SHOPIFY_EXTRA_SCOPES?.split(','),
 	'read_products',
 	'read_inventory',
 	'read_customers',

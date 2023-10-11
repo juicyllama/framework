@@ -67,6 +67,10 @@ It will automatically install the shopify app into the app store database when y
 - Explain how crons work
 :::
 
+### Crons
+
+`CRON_APP_SHOPIFY_SYNC_ORDERS`
+
 ### Webhooks
 
 ::: danger
