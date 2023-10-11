@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import MenuItem from './components/menu-item.vue'
 import { useRoute } from 'vue-router'
 import { Menu } from '@/types/common'
