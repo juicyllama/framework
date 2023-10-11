@@ -3,10 +3,6 @@ import { ref, Ref, watch } from 'vue'
 import { FormField, FormFieldPluginDateRangeOptions, FormFieldPluginDateRangeResult, FormFieldPluginDateRangeTypeOptions } from '@/types'
 import { JLDropdownButtonMenu } from '../../menu';
 
-//FIX DATES
-//TODO WRITE/READ to localStorage
-// HANDLE CUSTOM
-
 const props = defineProps<{
 	field: FormField
 }>()
@@ -53,8 +49,8 @@ function formatRangeFromDate(date: {from: string, to: string} | string): FormFie
 	if(typeof date === 'string'){
 		return {
 			type: FormFieldPluginDateRangeTypeOptions.CUSTOM,
-			from: new Date(date),
-			to: new Date(date),
+			from: new Date(new Date(date).setUTCHours(0,0,0,0)),
+			to: new Date(new Date(date).setUTCHours(23,59,59,599)),
 		}
 	}else{
 		return {
@@ -70,10 +66,10 @@ function popCustom(){
 }
 
 function updated(dates: FormFieldPluginDateRangeResult) {
-	customDateRange.value = formatDateForRange(dates)
 	showCustom.value = false
 	localStorage.setItem('date_range', JSON.stringify(dates))
 	emit('updated', dates)
+	customDateRange.value = formatDateForRange(dates)
 }
 
 function updatedCustom(value: {from: string, to: string} | string){
@@ -83,8 +79,6 @@ function updatedCustom(value: {from: string, to: string} | string){
 		emit('updated', formatRangeFromDate(value))
 	}	
 }
-
-
 
 watch(
 	() => customDateRange.value,
