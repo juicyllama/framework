@@ -10,6 +10,7 @@
         //"verbatimModuleSyntax": true,
         "resolveJsonModule": true,
         "moduleDetection": "force",
+        //"allowJs": true,
 
         /* Strictness */
        //"strict": true, //We need to look at enabling this and fixing errors

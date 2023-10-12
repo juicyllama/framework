@@ -91,6 +91,7 @@ export class TransactionsController {
 
 	@ReadChartsDecorator(TRANSACTION_E, TransactionSelect, TRANSACTION_NAME)
 	async charts(
+
 		@Query() query: any,
 		@Query('search') search: string,
 		@Query('from') from: string,
