@@ -76,8 +76,8 @@ export const homeNavbar = [
 		text: 'Frontend',
 		children: [
 			{
-				text: 'Quasar',
-				link: '/frontend/quasar',
+				text: 'Core',
+				link: '/frontend/core',
 			},
 			{
 				text: 'Testing',

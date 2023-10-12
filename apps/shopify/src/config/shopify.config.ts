@@ -10,18 +10,21 @@ export default registerAs(
 		<any>{
 			SHOPIFY_APP_CLIENT_ID: process.env.SHOPIFY_APP_CLIENT_ID,
 			SHOPIFY_APP_CLIENT_SECRET: process.env.SHOPIFY_APP_CLIENT_SECRET,
+			SHOPIFY_EXTRA_SCOPES: process.env.SHOPIFY_EXTRA_SCOPES,
 		},
 )
 
-export const ShopifyAuthScopes = [
-	'read_products',
-	'read_inventory',
-	'read_customers',
-	'read_orders',
-	'read_reports',
-	'read_shipping',
-	'read_returns',
-]
+export const ShopifyAuthScopes = 
+	[
+		...process.env.SHOPIFY_EXTRA_SCOPES ? process.env.SHOPIFY_EXTRA_SCOPES.split(',') : [],
+		'read_products',
+		'read_inventory',
+		'read_customers',
+		'read_orders',
+		'read_reports',
+		'read_shipping',
+		'read_returns',
+	]
 
 export const ShopifyAuthRedirect = '/app/shopify/auth/redirect'
 

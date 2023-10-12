@@ -37,3 +37,4 @@ export interface InstalledApp {
 	last_check_at?: Date
 	next_check_at?: Date
 }
+

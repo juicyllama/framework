@@ -12,4 +12,5 @@ export enum StoreRelations {
 	account = 'account',
 	website = 'website',
 	installed_app = 'installed_app',
+	'installed_app.app' = 'installed_app.app',
 }
