@@ -1,5 +1,5 @@
-import { Api } from '@/helpers'
-import { EcommerceTransaction } from '@/types'
+import { Api } from '../../helpers/index'
+import { EcommerceTransaction } from '../../types'
 
 type T = EcommerceTransaction
 export const ECOMMERCE_TRANSACTIONS_ENDPOINT = '/ecommerce/transactions'

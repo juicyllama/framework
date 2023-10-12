@@ -22,7 +22,7 @@ export default defineClientConfig({
 	enhance({ app, router }) {
 		router.afterEach((to) => {
 
-			if (to.path.startsWith('/frontend/quasar')) {
+			if (to.path.startsWith('/frontend/core')) {
 				app.config.globalProperties.$site.title = frontendCoreTitle
 				app.config.globalProperties.$theme.navbar = frontendCoreNavbar
 			}
