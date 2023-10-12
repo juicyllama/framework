@@ -57,7 +57,7 @@ let formFields: FormField[] = reactive(buildFormFromTableSchema())
 const editPrimaryKey: Ref<number> = ref(null)
 const tableExpanded = ref(false)
 const table_toggle: Ref<string> = ref(
-	props.tableSchema?.show?.toggle_buttons[0].options?.find(button => button.default)?.value,
+	props.tableSchema?.show?.toggle_buttons?.[0]?.options?.find(button => button.default)?.value,
 )
 
 if (!props.tableSchema.find.order_by) {

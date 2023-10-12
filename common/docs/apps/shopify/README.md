@@ -61,7 +61,6 @@ It will automatically install the shopify app into the app store database when y
 
 ### Modules
 
-
 ::: danger
 - Document modules / endpoints
 - Explain how crons work
@@ -76,3 +75,15 @@ It will automatically install the shopify app into the app store database when y
 ::: danger
 - document supported webhooks
 :::
+
+### App Approval
+
+Due to the way Shopify apps are approved, they expect you to be able to redirect to their Oauth process right away. This does not work with our "App Store" approach.
+
+We have therefore setup a "open" approval endpoint specifically to help get your app approved.
+
+When you seek approval for your app, use this endpoint as your APP URL.
+
+`${BASE_URL_API}/app/shopify/auth/open?redirect=https://some.success/page`
+
+It will redirect them to a "success" page of your choice, which you can setup to assist with the application process. 
