@@ -34,7 +34,6 @@ SHOPIFY_APP_CLIENT_SECRET=
 
 You should add the following URL's to your Shopify app:
 
-App URL: `${BASE_URL_API}/app/shopify/auth/install`
 Allowed redirection URL(s): 
 `${BASE_URL_API}/app/shopify/auth/redirect`
 `${BASE_URL_API}/app/shopify/auth/complete`
@@ -42,6 +41,17 @@ Allowed redirection URL(s):
 ::: warning
 Replace `${BASE_URL_API}` with your actual backend URL.
 :::
+
+#### Extra Oauth Scopes
+
+You can optionally pass in additional scopes if you app has special permissions. An example is that Shopify limits order data to 60 days unless you apply for the `read_all_orders` scope. This needs to be approved by Shopify. If you app is approved for this, you can add that to the `.env` file as follows:
+
+```
+SHOPIFY_EXTRA_SCOPES=read_all_orders
+```
+
+This will then be added to the default scopes.
+
 
 #### App Store
 
@@ -51,14 +61,29 @@ It will automatically install the shopify app into the app store database when y
 
 ### Modules
 
-
 ::: danger
 - Document modules / endpoints
 - Explain how crons work
 :::
+
+### Crons
+
+`CRON_APP_SHOPIFY_SYNC_ORDERS`
 
 ### Webhooks
 
 ::: danger
 - document supported webhooks
 :::
+
+### App Approval
+
+Due to the way Shopify apps are approved, they expect you to be able to redirect to their Oauth process right away. This does not work with our "App Store" approach.
+
+We have therefore setup a "open" approval endpoint specifically to help get your app approved.
+
+When you seek approval for your app, use this endpoint as your APP URL.
+
+`${BASE_URL_API}/app/shopify/auth/open?redirect=https://some.success/page`
+
+It will redirect them to a "success" page of your choice, which you can setup to assist with the application process. 

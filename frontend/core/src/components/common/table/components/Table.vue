@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch, Ref } from 'vue'
+import FieldContents from '@/components/common/table/components/FieldContents.vue'
+import TableActions from '@/components/common/table/components/TableActions.vue'
 import { logger } from '@/helpers'
-import { default as JLForm } from '../../form/Form.vue'
-import { SearchFilter, ColumnsFilter, CustomButtons } from './index'
 import {
-	TablePosition,
-	LogSeverity,
-	TableOptions,
-	TableSchema,
 	FormField,
 	FormFieldButtonType,
 	FormFieldField,
+	LogSeverity,
+	TableOptions,
+	TablePosition,
+	TableSchema,
 } from '@/types'
-import { useQuasar } from 'quasar'
-import FieldContents from '@/components/common/table/components/FieldContents.vue'
-import TableActions from '@/components/common/table/components/TableActions.vue'
-import { useRouter } from 'vue-router'
 import { Strings } from '@juicyllama/vue-utils'
+import { useQuasar } from 'quasar'
+import { Ref, computed, reactive, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { default as JLForm } from '../../form/Form.vue'
+import { ColumnsFilter, CustomButtons, SearchFilter } from './index'
 
 const props = defineProps<{
 	tableSchema: TableSchema
@@ -44,6 +44,7 @@ const emit = defineEmits([
 	'updateFormField',
 	'deleteRecord',
 	'pluginAction',
+	'toggleButton',
 ])
 
 const $q = useQuasar()
@@ -54,6 +55,10 @@ const createRecord: Ref<boolean> = ref(false)
 const editRecord: Ref<boolean> = ref(false)
 let formFields: FormField[] = reactive(buildFormFromTableSchema())
 const editPrimaryKey: Ref<number> = ref(null)
+const tableExpanded = ref(false)
+const table_toggle: Ref<string> = ref(
+	props.tableSchema?.show?.toggle_buttons?.[0]?.options?.find(button => button.default)?.value,
+)
 
 if (!props.tableSchema.find.order_by) {
 	logger({ severity: LogSeverity.ERROR, message: 'You must pass a sort-column to the table' })
@@ -217,9 +222,9 @@ function updateFormField(value: any) {
 }
 
 const JLToQColumns = <any>computed(() => {
-	const columns = props.tableSchema.schema.filter(col => {
+	const columns = props.tableSchema.schema /* .filter(col => {
 		return props.visibleColumns?.includes(col.field)
-	})
+	}) */
 
 	for (const col in columns) {
 		columns[col].name = columns[col].field
@@ -241,6 +246,16 @@ const JLToQColumns = <any>computed(() => {
 
 	return columns
 })
+
+function toggleTableSize() {
+	tableExpanded.value = !tableExpanded.value
+	document.getElementById('aircraft-table')?.classList.toggle('expanded')
+}
+
+async function toggle_table(value: string) {
+	table_toggle.value = value
+	emit('toggleButton', value)
+}
 
 function deleteItem(row: any) {
 	if (props.tableSchema.redirects?.delete) {
@@ -285,6 +300,7 @@ watch(
 	<div id="JLTable" class="JLTable">
 		<q-table
 			:title="props.tableSchema.title ?? ''"
+			v-bind:style="props.tableSchema?.style"
 			:rows="rows"
 			:hide-header="props.tableSchema.show?.table_header === false"
 			:hide-footer="props.tableSchema.show?.table_footer === false"
@@ -314,6 +330,27 @@ watch(
 							)
 						"
 						:q="$q" />
+					<div
+						v-if="
+							!loading &&
+							props.tableSchema?.show?.toggle_buttons?.filter(
+								button => button.position === TablePosition.TOP_LEFT,
+							).length
+						"
+						style="width: 100%; z-index: 10">
+						<q-btn-toggle
+							v-for="toggle_button in props.tableSchema?.show?.toggle_buttons?.filter(
+								button => button.position === TablePosition.TOP_LEFT,
+							)"
+							:key="toggle_button.position"
+							class="map-filters-ground-air-toggle"
+							:options="toggle_button.options"
+							:size="'md'"
+							style="font-size: 12px"
+							rounded
+							v-model="table_toggle"
+							@update:model-value="toggle_table" />
+					</div>
 
 					<SearchFilter
 						v-if="!loading && props.tableSchema?.show?.search_filter?.position === TablePosition.TOP_LEFT"
@@ -330,6 +367,17 @@ watch(
 						:search="filter"
 						:table-schema="props.tableSchema"
 						@searchUpdated="searchUpdated" />
+					<div v-if="props.tableSchema?.show?.expandable">
+						<div @click="toggleTableSize" style="cursor: pointer">
+							<q-icon
+								v-bind:name="
+									!tableExpanded
+										? 'fa-solid fa-up-right-and-down-left-from-center'
+										: 'fa-solid fa-down-left-and-up-right-to-center'
+								"
+								size="xs" />
+						</div>
+					</div>
 
 					<ColumnsFilter
 						v-if="!loading && props.tableSchema?.show?.column_filter"

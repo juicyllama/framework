@@ -69,43 +69,28 @@ export class ShopifyOrdersService {
 		orders.push(...response.body.orders)
 		pageInfo = response.pageInfo
 
-		do {
-			this.logger.log(`[${domain}] ${orders.length} Orders added, fetching next page`)
+		if(pageInfo?.nextPage){
 
-			response = <any>await client.get({
-				path: 'orders',
-				query: {
-					...response.pageInfo?.nextPage?.query,
-					limit: options.limit ?? 50,
-				},
-			})
+			do {
+				this.logger.log(`[${domain}] ${orders.length} Orders added, fetching next page`)
 
-			orders.push(...response.body.orders)
-			pageInfo = response.pageInfo
-		} while (pageInfo?.nextPage)
+				response = <any>await client.get({
+					path: 'orders',
+					query: {
+						...response.pageInfo?.nextPage?.query,
+						limit: options.limit ?? 50,
+					},
+				})
+
+				orders.push(...response.body.orders)
+				pageInfo = response.pageInfo
+			} while (pageInfo?.nextPage)
+
+		}
 
 		this.logger.log(`[${domain}] ${orders.length} Orders found`)
 
 		return orders
-	}
-
-	/**
-	 * Creates and returns an ecommerce transaction from a shopify order
-	 */
-
-	async addOrder(installed_app: InstalledApp, order: ShopifyOrder): Promise<Transaction> {
-		const domain = 'app::shopify::orders::addOrder'
-
-		const store = await this.storesService.findOne({ where: { installed_app_id: installed_app.installed_app_id } })
-
-		if (!store) {
-			this.logger.error(`[${domain}] Store not found`, {
-				installed_app_id: installed_app.installed_app_id,
-			})
-			throw new Error(`Store not found`)
-		}
-
-		return await this.mapperService.createEcommerceTransaction(order, store, installed_app)
 	}
 
 	/**
@@ -136,5 +121,34 @@ export class ShopifyOrdersService {
 		}
 
 		return transactions
+	}
+
+	/**
+	 * Creates and returns an ecommerce transaction from a shopify order
+	 */
+
+	async addOrUpdateOrder(installed_app: InstalledApp, order: ShopifyOrder): Promise<Transaction> {
+		const domain = 'app::shopify::orders::addOrder'
+
+		const store = await this.storesService.findOne({ where: { installed_app_id: installed_app.installed_app_id } })
+
+		if (!store) {
+			this.logger.error(`[${domain}] Store not found`, {
+				installed_app_id: installed_app.installed_app_id,
+			})
+			throw new Error(`Store not found`)
+		}
+
+		let transaction = await this.transactionsService.findOne({
+			where: { store_id: store.store_id, order_id: order.id.toString() },
+		})
+
+		if (!transaction) {
+			transaction = await this.mapperService.createEcommerceTransaction(order, store, installed_app)
+		} else {
+			transaction = await this.mapperService.updateEcommerceTransaction(transaction, order)
+		}
+
+		return transaction
 	}
 }

@@ -6,4 +6,7 @@ export class shopifyConfigDto {
 
 	@IsString()
 	SHOPIFY_APP_CLIENT_SECRET: string
+
+	@IsString()
+	SHOPIFY_EXTRA_SCOPES: string
 }

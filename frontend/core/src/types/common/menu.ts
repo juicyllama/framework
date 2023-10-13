@@ -6,6 +6,7 @@ export interface Menu {
 		default_closed?: boolean
 		hide_expand_icon?: boolean
 	}
+	selected?: string
 }
 
 export interface MenuItems extends MenuItem {
@@ -21,10 +22,12 @@ export interface MenuItem {
 	border_color?: string
 	clickable_disabled?: boolean
 	disable?: boolean
+	key?: string
 }
 
 // This uses Quasar's Button Dropdown component https://quasar.dev/vue-components/button-dropdown/
 export interface DropdownButtonMenu {
-	button: Button
 	menu: Menu
+	button?: Button
+	autoClose?: boolean
 }

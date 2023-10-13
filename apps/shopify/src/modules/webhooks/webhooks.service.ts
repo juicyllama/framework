@@ -5,7 +5,8 @@ import { ConfigService } from '@nestjs/config'
 import { InstalledApp, OauthService } from '@juicyllama/app-store'
 import { ShopifyRestListWebhooks, ShopifyWebhook, ShopifyWebhookCreate } from './webhooks.dto'
 import { ShopifyRest } from '../shopify.common.dto'
-import { ShopifyWebhooksTopicRoutes } from './webhooks.enums'
+import { ShopifyWebhooksTopicRoutes, ShopifyWebhooksTopics } from './webhooks.enums'
+import { ApiVersion } from '@shopify/shopify-api'
 
 @Injectable()
 export class ShopifyWebhooksService {
@@ -15,7 +16,11 @@ export class ShopifyWebhooksService {
 		@Inject(forwardRef(() => OauthService)) private readonly oauthService: OauthService,
 	) {}
 
-	async createWebhook(installed_app: InstalledApp, options: ShopifyRest, data: ShopifyWebhookCreate): Promise<any> {
+	async createWebhook(
+		installed_app: InstalledApp,
+		options: ShopifyRest,
+		data: ShopifyWebhookCreate,
+	): Promise<ShopifyWebhook> {
 		const domain = 'app::shopify::webhook::getWebhooks'
 
 		const shopify = Shopify(this.configService.get('shopify'))
@@ -27,27 +32,48 @@ export class ShopifyWebhooksService {
 			apiVersion: options.api_version,
 		})
 
-		const response = <any>await client.post({
-			path: 'webhooks',
-			data: {
-				webhook: {
-					format: 'json',
-					topic: data.topic,
-					address: `${process.env.BASE_URL_API}${ShopifyWebhooksTopicRoutes[data.topic]}?installed_app_id=${
-						installed_app.installed_app_id
-					}`,
+		const webhooks = await this.getWebhooks(installed_app, { api_version: options.api_version, topic: data.topic })
+		let webhook: ShopifyWebhook
+		
+		if(webhooks.length) {
+			const response = <any>await client.put({
+				path: `webhooks/${webhooks[0].id}`,
+				data: {
+					webhook: {
+						address: `${process.env.BASE_URL_API}/${ShopifyWebhooksTopicRoutes[data.topic]}?installed_app_id=${
+							installed_app.installed_app_id
+						}`,
+					}
 				},
-			},
-		})
+			})
 
-		const webhook: ShopifyWebhook = response.body?.webhook
-
-		this.logger.log(`[${domain}] Webhook created`, webhook)
+			webhook = response.body?.webhook
+	
+			this.logger.log(`[${domain}] Webhook updated`, {
+				id:  webhooks[0].id
+			})
+		}else{
+			const response = <any>await client.post({
+				path: 'webhooks',
+				data: {
+					webhook: {
+						format: 'json',
+						topic: data.topic,
+						address: `${process.env.BASE_URL_API}/${ShopifyWebhooksTopicRoutes[data.topic]}?installed_app_id=${
+							installed_app.installed_app_id
+						}`,
+					},
+				},
+			})
+		
+			webhook = response.body?.webhook
+			this.logger.log(`[${domain}] Webhook created`, webhook)
+		}
 
 		return webhook
 	}
 
-	async getWebhooks(installed_app: InstalledApp, options: ShopifyRestListWebhooks): Promise<any> {
+	async getWebhooks(installed_app: InstalledApp, options: ShopifyRestListWebhooks): Promise<ShopifyWebhook[]> {
 		const domain = 'app::shopify::webhook::getWebhooks'
 
 		const shopify = Shopify(this.configService.get('shopify'))
@@ -69,5 +95,29 @@ export class ShopifyWebhooksService {
 		this.logger.log(`[${domain}] ${webhooks.length} Webhooks found`)
 
 		return webhooks
+	}
+
+	/**
+	 * Helper to register all Order related webhooks for a shopify store
+	 */
+
+	async registerOrderWebhooks(installed_app: InstalledApp): Promise<ShopifyWebhook[]> {
+		const topics = [
+			ShopifyWebhooksTopics['orders/create'],
+			ShopifyWebhooksTopics['orders/cancelled'],
+			ShopifyWebhooksTopics['orders/edited'],
+			ShopifyWebhooksTopics['orders/fulfilled'],
+			ShopifyWebhooksTopics['orders/paid'],
+			ShopifyWebhooksTopics['orders/partially_fulfilled'],
+			ShopifyWebhooksTopics['orders/updated'],
+		]
+
+		const results = []
+
+		for (const topic of topics) {
+			results.push(await this.createWebhook(installed_app, { api_version: ApiVersion.July23 }, { topic: topic }))
+		}
+
+		return results
 	}
 }

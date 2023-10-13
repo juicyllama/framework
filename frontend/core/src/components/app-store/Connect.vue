@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar'
-import { ConnectAppOptions, FormSchema, LogSeverity } from '@/types'
-import { logger } from '@/helpers'
+import { ConnectAppOptions, FormSchema, LogSeverity, Oauth } from '@/types'
+import { apiRequest, logger } from '@/helpers'
 import { APPS_ENDPOINT, AppsService, INSTALLED_APPS_ENDPOINT, InstalledAppsService } from '@/services/app-store'
 import { reactive } from 'vue'
 import { buildAppForm } from '@/components/app-store/appSettingsToForm'
@@ -54,7 +54,12 @@ async function install(data: any) {
 		})
 
 		if(installed_app.oauth_redirect_url){
-			window.location.href = installed_app.oauth_redirect_url
+			const oauth = <Oauth>await apiRequest<Oauth>({
+				method: 'GET',
+				url: installed_app.oauth_redirect_url,
+				q: $q,
+			})
+			window.location.href = oauth.redirect_url
 		}
 
 		emit('installed', installed_app)

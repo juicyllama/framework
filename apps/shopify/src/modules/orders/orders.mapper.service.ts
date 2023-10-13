@@ -128,6 +128,7 @@ export class ShopifyOrdersMapperService {
 			test: order.test,
 			cancelled_at: order.cancelled_at,
 			cancel_reason: order.cancel_reason,
+			created_at: order.created_at,
 		})
 
 		transaction.contact = contact

@@ -7,7 +7,16 @@ import instance from './services/index'
 import classes from './assets/JLCore.css'
 import { ThemeStore } from './store/theme'
 import { JLLogin, JLSignup, JLPasswordless, JLResetPassword } from '@/components/core/auth'
-import { JLForm, JLTable, JLMenu, JLChart, JLStats, JLDropdownButtonMenu, WidgetsComponent } from '@/components'
+import {
+	JLForm,
+	JLTable,
+	JLMenu,
+	JLChart,
+	JLStats,
+	JLDropdownButtonMenu,
+	WidgetsComponent,
+	JLUsersTable,
+} from '@/components'
 import { JLAccountProfile, JLAccountAvatar, JLAccountSwitcher, JLAccountBrand } from '@/components/core/account'
 import { JLUserAvatar, JLUserProfile, JLUserMenu } from '@/components/core/user'
 import { JLAppStoreConnect } from '@/components/app-store'
@@ -52,6 +61,7 @@ export default {
 		Vue.component('JLUserAvatar', JLUserAvatar)
 		Vue.component('JLUserProfile', JLUserProfile)
 		Vue.component('JLUserMenu', JLUserMenu)
+		Vue.component('JLUsersTable', JLUsersTable)
 		Vue.component('JLAppStoreConnect', JLAppStoreConnect)
 	},
 } as Plugin
@@ -62,15 +72,9 @@ export { userStore, accountStore, themeStore, settingsStore }
 export * from './components'
 export * from './types/index'
 export { instance }
-export * from './plugins/index'
 export * from './helpers/index'
-export * from './services/app-store/index'
-export * from './services/crm/index'
-export * from './services/tools/index'
-export * from './services/account'
-export * from './services/auth'
-export * from './services/billing'
-export * from './services/websites/index'
+export * from './plugins/index'
+export * from './services/index.exports'
 export {
 	JLLogin,
 	JLSignup,
@@ -91,4 +95,5 @@ export {
 	JLStats,
 	JLChart,
 	WidgetsComponent,
+	JLUsersTable,
 }

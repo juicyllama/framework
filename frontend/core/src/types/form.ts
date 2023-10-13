@@ -1,4 +1,4 @@
-import { CustomButton, DropdownOptions, Icon, IconSettings } from './common'
+import { Button, CustomButton, DropdownOptions, Icon, IconSettings } from './common'
 import { QVueGlobals } from 'quasar'
 import { NoticeProps } from '@juicyllama/vue-utils'
 import { ConnectAppOptions, InstalledApp } from '@/types/appstore'
@@ -68,6 +68,7 @@ export enum FormFieldPlugin {
 	TELEPHONE = 'TELEPHONE',
 	INSTALL_APP = 'INSTALL_APP',
 	NOTICE = 'NOTICE',
+	DATE_RANGE = 'DATE_RANGE',
 }
 
 export interface FormFieldPluginTelephoneOptions {
@@ -85,6 +86,28 @@ export interface FormFieldPluginTelephoneOptions {
 
 export interface FormFieldPluginTelephoneResult {
 	value: any
+}
+
+export interface FormFieldPluginDateRangeOptions {
+	button: Button
+	type: FormFieldPlugin.DATE_RANGE
+}
+
+export enum FormFieldPluginDateRangeTypeOptions {
+	TODAY = 'TODAY',
+	LAST_24_HOURS = 'LAST_24_HOURS',
+	YESTERDAY = 'YESTERDAY',
+	THIS_WEEK = 'THIS_WEEK',
+	LAST_WEEK = 'LAST_WEEK',
+	THIS_MONTH = 'THIS_MONTH',
+	LAST_MONTH = 'LAST_MONTH',
+	CUSTOM = 'CUSTOM',
+}
+
+export interface FormFieldPluginDateRangeResult {
+	type: FormFieldPluginDateRangeTypeOptions
+	from: Date
+	to: Date
 }
 
 export interface FormFieldPluginInstallAppOptions extends ConnectAppOptions {
@@ -168,7 +191,7 @@ export interface FormField {
 	field: FormFieldField
 	type?: FormFieldType
 	plugin?: FormFieldPlugin
-	pluginOptions?: FormFieldPluginTelephoneOptions | FormFieldPluginInstallAppOptions | NoticeProps
+	pluginOptions?: FormFieldPluginTelephoneOptions | FormFieldPluginInstallAppOptions | NoticeProps | FormFieldPluginDateRangeOptions
 	add?: boolean
 	edit?: boolean
 	dropdown?: DropdownOptions[]
