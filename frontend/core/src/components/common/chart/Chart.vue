@@ -20,15 +20,25 @@ import { logger } from '@/index'
 import { LogSeverity } from '@/types'
 import { loadChart } from '@/services/chart'
 
+type ChartDatasetRaw = {
+	label: string
+	data: Array<any>
+}
+
+type ChartDataRaw = {
+	datasets: ChartDatasetRaw[]
+}
+
 const props = defineProps<{
-	options: ChartUISettings
-	data: ChartData
+	options?: ChartUISettings
+	data?: any
 	type: 'pie' | 'line' | 'bar' | 'gauge'
-	endpoint: string
+	endpoint?: string
 	title: string
-	dynamicData: boolean
-	displayLegend: boolean
-	displayTooltip: boolean
+	dynamicData?: boolean
+	displayLegend?: boolean
+	displayTooltip?: boolean
+	dataMapper?: (arg0: ChartDataRaw) => any
 }>()
 
 const { type, displayLegend, title, displayTooltip } = toRefs(props)
@@ -59,7 +69,10 @@ const extendedOptions = computed(() => {
 	}
 })
 
-const dataDetails = computed<ChartData>(() => {
+const dataDetails = computed<any>(() => {
+	if (props.dataMapper) {
+		return props.dataMapper(loadedData.value as unknown as ChartDataRaw)
+	}
 	return loadedData.value
 })
 
