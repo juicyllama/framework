@@ -16,6 +16,7 @@ import {
 	JLDropdownButtonMenu,
 	WidgetsComponent,
 	JLUsersTable,
+  JLUpload,
 } from '@/components'
 import { JLAccountProfile, JLAccountAvatar, JLAccountSwitcher, JLAccountBrand } from '@/components/core/account'
 import { JLUserAvatar, JLUserProfile, JLUserMenu } from '@/components/core/user'
@@ -50,6 +51,7 @@ export default {
 		Vue.component('JLLogin', JLLogin)
 		Vue.component('JLForm', JLForm)
 		Vue.component('JLTable', JLTable)
+		Vue.component('JLUpload', JLUpload)
 		Vue.component('JLMenu', JLMenu)
 		Vue.component('JLDropdownButtonMenu', JLDropdownButtonMenu)
 		Vue.component('JLChart', JLChart)
@@ -94,6 +96,7 @@ export {
 	JLDropdownButtonMenu,
 	JLStats,
 	JLChart,
+	JLUpload,
 	WidgetsComponent,
 	JLUsersTable,
 }
