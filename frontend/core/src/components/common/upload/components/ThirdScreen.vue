@@ -30,30 +30,31 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useUploaderStore } from '@/store/uploader'
+import { QTableProps } from 'quasar';
 
 const store = useUploaderStore()
 
-const columns = [
+const columns: QTableProps['columns'] = [
 	{
 		name: 'source',
+		align: 'left',
 		label: 'Source Field',
 		field: 'source',
-		align: 'left',
 		sortable: false,
 	},
 	{
 		name: 'target',
-		label: 'Target Field',
 		align: 'left',
+		label: 'Target Field',
 		field: 'source',
 		sortable: false,
 	},
 	{
 		name: 'primaryKey',
-		label: 'Primary Key',
 		align: 'left',
+		label: 'Primary Key',
 		field: 'source',
 		sortable: false,
 	},

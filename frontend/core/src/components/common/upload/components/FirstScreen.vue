@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { QFile } from 'quasar'
+import { QFile, QTableProps } from 'quasar'
 import { useUploaderStore } from '@/store/uploader'
 import { SourceType, SourceEntry } from '@/types/upload'
 
@@ -84,11 +84,11 @@ const onUrlPromptSubmitted = () => {
 	urlInput.value = ''
 }
 
-const columns = [
+const columns: QTableProps['columns'] = [
 	{
 		name: 'source',
-		label: 'Import Source',
 		align: 'left',
+		label: 'Import Source',
 		field: 'source',
 		sortable: false,
 	},
