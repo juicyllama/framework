@@ -52,6 +52,7 @@ export default defineConfig({
 				'vue-router',
 				'vue3-otp-input',
 				'typeorm',
+				'uuid',
 			],
 			output: {
 				globals: {
