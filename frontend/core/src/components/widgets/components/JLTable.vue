@@ -1,11 +1,12 @@
 <template>
-	<JLTable {...props.config}/>
+	<JLTable :options="config as TableSchema" />
 </template>
 
 <script lang="ts" setup>
-import { JLStats } from '@/index'
+import { JLTable } from '@/index'
+import { TableSchema } from '@/types'
 
-const props = defineProps({
+defineProps({
 	config: Object,
 })
 </script>

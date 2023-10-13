@@ -1,10 +1,10 @@
 <template>
-	<JLChart {...props.config}/>
+	<JLChart {...config} />
 </template>
 <script setup lang="ts">
 import JLChart from '@/index'
 
-const props = defineProps({
+defineProps({
 	config: Object,
 })
 </script>
