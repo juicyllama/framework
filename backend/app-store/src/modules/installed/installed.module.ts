@@ -8,6 +8,7 @@ import { InstalledAppsService } from './installed.service'
 import { AppsModule } from '../apps.module'
 import { JwtModule } from '@nestjs/jwt'
 import { AuthModule, AccountModule, Query, UsersModule, jwtConfig, BeaconModule } from '@juicyllama/core'
+import { WordPressService } from './preinstall/wordpress.service'
 
 @Module({
 	imports: [
@@ -21,7 +22,7 @@ import { AuthModule, AccountModule, Query, UsersModule, jwtConfig, BeaconModule 
 		forwardRef(() => OAuthModule),
 	],
 	controllers: [InstalledAppsController],
-	providers: [InstalledAppsService, Logger, Query],
-	exports: [InstalledAppsService],
+	providers: [InstalledAppsService, WordPressService, Logger, Query],
+	exports: [InstalledAppsService, WordPressService],
 })
 export class InstalledAppsModule {}

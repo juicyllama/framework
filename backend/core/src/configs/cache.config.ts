@@ -1,6 +1,6 @@
 import { registerAs } from '@nestjs/config'
 import { ConfigService } from '@nestjs/config'
-import { CacheStore } from '@nestjs/common/cache/interfaces/cache-manager.interface'
+import { CacheStore } from '@nestjs/cache-manager'
 import { redisStore } from 'cache-manager-redis-store'
 
 export default registerAs(

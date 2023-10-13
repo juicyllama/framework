@@ -62,14 +62,22 @@ export const homeNavbar = [
 				text: 'CRM',
 				link: '/backend/crm',
 			},
+			{
+				text: 'Ecommerce',
+				link: '/backend/ecommerce',
+			},
+			{
+				text: 'Websites',
+				link: '/backend/websites',
+			},
 		],
 	},
 	{
 		text: 'Frontend',
 		children: [
 			{
-				text: 'Quasar',
-				link: '/frontend/quasar',
+				text: 'Core',
+				link: '/frontend/core',
 			},
 			{
 				text: 'Testing',
@@ -99,6 +107,10 @@ export const homeNavbar = [
 			{
 				text: 'ScrapingBee',
 				link: '/apps/scrapingbee',
+			},
+			{
+				text: 'Shopify',
+				link: '/apps/shopify',
 			},
 			{
 				text: 'Slack',

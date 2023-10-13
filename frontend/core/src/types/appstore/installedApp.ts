@@ -33,6 +33,8 @@ export interface InstalledApp {
 	readonly active: boolean
 	readonly account?: Account
 	readonly user?: User
+	readonly oauth_redirect_url?: string
 	last_check_at?: Date
 	next_check_at?: Date
 }
+

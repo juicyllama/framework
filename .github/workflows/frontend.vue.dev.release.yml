@@ -31,6 +31,11 @@ jobs:
                 uses: actions/checkout@v4
                 with:
                     token: ${{ secrets.GH_CI_CD_RELEASE }}
+                    sparse-checkout: |
+                        pnpm-lock.yaml
+                        pnpm-workspace.yaml
+                        tsconfig.json
+                        frontend/vue-dev
 
             -   name: 'Install Node.js'
                 uses: actions/setup-node@v3
@@ -60,9 +65,10 @@ jobs:
                         ${{ runner.os }}-pnpm-store-
 
             -   name: 'Install dependencies'
-                run: pnpm install --no-frozen-lockfile
+                run: pnpm install --shamefully-hoist --no-frozen-lockfile
 
-            -   run: git pull
+            -   run: git stash
+            -   run: git pull --force
 
             -   name: 'Version Bump'
                 uses: phips28/gh-action-bump-version@master

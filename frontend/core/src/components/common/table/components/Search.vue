@@ -16,6 +16,7 @@ const filter: Ref<string> = ref(props.search)
 	<div class="JLTableSearch">
 		<q-input
 			class="JLInput"
+			:dark="props.tableSchema.show.search_filter.dark ?? false"
 			borderless
 			v-model="filter"
 			:placeholder="props.tableSchema.show.search_filter.placeholder ?? 'Search'"

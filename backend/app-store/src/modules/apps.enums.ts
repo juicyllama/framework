@@ -1,4 +1,5 @@
 export enum AppStoreIntegrationName {
+	shopify = 'shopify',
 	wordpress = 'wordpress',
 }
 

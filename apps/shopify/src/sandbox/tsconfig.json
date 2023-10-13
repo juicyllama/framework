@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+      "resolveJsonModule": true,
+      "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "outDir": "./dist",
+    "baseUrl": "./."
+  },
+}

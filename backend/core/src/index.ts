@@ -1,5 +1,3 @@
-// todo move exports into index.ts folder strucutre for cleaner imports
-
 //entities
 export { FxRate } from './modules/fx/fx.entity'
 export { Tag } from './modules/tags/tags.entity'
@@ -73,9 +71,11 @@ export { CacheService } from './utils/typeorm/Cache'
 export { RmqModule } from './utils/rabbitmq/rmq.module'
 export { RmqService } from './utils/rabbitmq/rmq.service'
 
-export * from './configs'
+// Configs
+export { beaconConfig, cacheConfig, jwtConfig, mongodbConfig, typeormConfig, systemConfig, systemConfigJoi, ssoConfig, loadEnvVariables, redocConfig, joiConfigJoi, validationPipeOptions, databaseConfig, RABBITMQ, rabbitMQConfig } from './configs'
 export { MONGODB } from './constants'
 
+// Decorators
 export {
 	AccountId,
 	CreateDecorator,
@@ -91,6 +91,8 @@ export {
 	SwaggerPropertyDecorator,
 	UserAuth,
 } from './decorators'
+
+// Helpers
 export {
 	BaseEntity,
 	BaseService,
@@ -104,7 +106,11 @@ export {
 	crudPurge,
 	CronRunner,
 } from './helpers'
+
+// Middleware
 export { MiddlewareAccountId } from './middleware'
+
+// Test Helpers
 export {
 	testCleanup,
 	TestEndpoint,
@@ -114,4 +120,6 @@ export {
 	ScaffoldDto,
 	Scaffold,
 } from './test'
+
+// Types
 export { AppIntegrationName, HTTP_METHODS, METHOD, CRUD_ACTIONS, PromiseLoopOutcomes, OauthInterface } from './types'

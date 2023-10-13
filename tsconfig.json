@@ -1,20 +1,40 @@
+/* Reference: https://www.youtube.com/watch?v=eJXVEju3XLM */
+
 {
     "compilerOptions": {
+
+        /* Base Options */
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "target": "es6",
+        //"verbatimModuleSyntax": true,
+        "resolveJsonModule": true,
+        "moduleDetection": "force",
+        //"allowJs": true,
+
+        /* Strictness */
+       //"strict": true, //We need to look at enabling this and fixing errors
+        //"noUncheckedIndexedAccess": true, //We need to look at enabling this and fixing errors
+
+        /* Transpiling with typescript */
+        "module": "commonjs", //to move to NodeNext when NestJs allows
+       // "moduleResolution": "Node", //to move to NodeNext when NestJs allows
+        "sourceMap": true,
+        
+        /* MonoRepo */
+       // "composite": true,
+       // "declarationMap": true,
+
+        /* Others */
         "preserveSymlinks": true,
-        "allowJs": true,
-        "module": "commonjs",
         "declaration": true,
         "removeComments": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": true,
-        "esModuleInterop": true,
-        "target": "es6",
-        "sourceMap": true,
         "noLib": false,
-        "skipLibCheck": true,
-        "resolveJsonModule": true,
+      
         "types": [
             "node",
             "jest",

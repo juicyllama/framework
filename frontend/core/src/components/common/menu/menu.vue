@@ -22,7 +22,7 @@ const path = computed(() => route.path)
 						:disable="item.disable"
 						:tag="item.link ? 'a' : null"
 						:to="!item.clickable_disabled && item.link ? item.link : null"
-						:active="item.link === path.valueOf()">
+						:active="item.link === path.valueOf() || item.key === menu.selected">
 						<MenuItem
 							:title="item.title"
 							:icon="item.icon"
@@ -56,7 +56,7 @@ const path = computed(() => route.path)
 							:tag="item.link ? 'a' : null"
 							:to="!link.clickable_disabled && link.link ? link.link : null"
 							@click="!item.link ? item.function() : null"
-							:active="link.link === path.valueOf()">
+							:active="link.link === path.valueOf() || item.key === menu.selected">
 							<MenuItem
 								:title="link.title"
 								:icon="link.icon"

@@ -117,7 +117,17 @@ export const UserStore = defineStore('user', {
 				account_id = accountStore.getAccountId
 			}
 
+			if(!this.$state.user){
+				this.logout()
+				return false
+			}
+
 			const roles = this.$state.user.roles
+
+			if(!roles) {
+				this.logout()
+				return false
+			}
 
 			const role = roles.find(role => {
 				if (role.account_id === account_id) return role

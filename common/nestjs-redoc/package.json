@@ -21,23 +21,18 @@
     "prepare": "npm run build",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint \"src/**/*.ts\" --fix",
-    "test": "jest --runInBand --detectOpenHandles --forceExit",
-    "test:clear": "npx jest --clearCache",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "release": "release-it --ci",
-    "release:minor": "release-it minor --ci",
-    "release:major": "release-it major --ci"
+    "test": "jest --runInBand --detectOpenHandles --forceExit"
   },
   "dependencies": {
-    "@nestjs/common": "latest",
-    "@nestjs/core": "latest",
-    "@nestjs/platform-express": "latest",
-    "@nestjs/swagger": "latest",
-    "express-basic-auth": "latest",
-    "express-handlebars": "latest",
-    "reflect-metadata": "latest"
+    "@nestjs/common": "^10.2.6",
+    "@nestjs/platform-express": "^10.2.6",
+    "@nestjs/swagger": "^7.1.12",
+    "@nestjs/testing": "^10.2.6",
+    "express-basic-auth": "^1.2.0",
+    "express-handlebars": "^5.3.4",
+    "joi": "^17.10.2",
+    "reflect-metadata": "^0.1.13",
+    "supertest": "^6.3.3"
   },
   "devDependencies": {
     "@juicyllama/dev": "workspace:^"
