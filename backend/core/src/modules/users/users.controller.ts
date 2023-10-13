@@ -94,7 +94,6 @@ export class UsersController {
 
 	@ReadChartsDecorator(E, UserSelect, NAME)
 	async charts(
-		@Req() req,
 		@Query() query: any,
 		@Query('search') search: string,
 		@Query('from') from: string,
@@ -116,11 +115,12 @@ export class UsersController {
 	}
 
 	@ReadOneDecorator(E, PRIMARY_KEY, UserSelect, UserRelations, NAME)
-	async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
+	async findOne( @AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
 		const user = await crudFindOne<T>({
 			service: this.service,
 			query: query,
 			primaryKey: params[PRIMARY_KEY],
+			account_id: account_id,
 		})
 
 		delete user.password

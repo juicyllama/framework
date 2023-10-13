@@ -113,7 +113,14 @@ export class ShopifyAuthController {
 		this.logger.log(`[${domain}] Callback`, {
 			callback: callback,
 			state: req.cookies.app_shopify_state,
+			reidrect_url: req.cookies.app_shopify_redirect_url,
 		})
+
+		if(req.cookies.app_shopify_redirect_url){
+			this.logger.log(`[${domain}] Kicked off from shopify, redirecting to: ${req.cookies.app_shopify_redirect_url}`)
+			res.redirect(req.cookies.app_shopify_redirect_url)
+			return
+		}
 
 		const oath = await this.oauthService.findOne({ where: { state: req.cookies.app_shopify_state } })
 
@@ -141,4 +148,28 @@ export class ShopifyAuthController {
 
 		res.redirect(process.env.BASE_URL_APP)
 	}
+
+	/**
+	 * This endpoint is used to pass the shopify app approval process
+	 */
+	@ApiHideProperty()
+	@Get('open')
+	async open(@Query() query: ShopifyAuthRedirectQuery, @Req() req: any, @Res() res: any): Promise<void> {
+		const domain = 'app::shopify::auth::controller::redirect'
+		this.logger.log(`[${domain}] Open`, query)
+
+		res.setHeader('Set-Cookie', [`app_shopify_redirect_url=${query.redirect_url}; Path=/;`])
+	
+		const shopify = Shopify(this.configService.get('shopify'))
+		await shopify.auth.begin({
+			shop: shopify.utils.sanitizeShop(query.shop, true),
+			callbackPath: `/app/shopify/auth/complete`,
+			isOnline: false,
+			rawRequest: req,
+			rawResponse: res,
+		})
+		return
+	}
+
+
 }

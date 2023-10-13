@@ -1,11 +1,12 @@
-import { IsString, IsNumber } from 'class-validator'
+import { IsString, IsNumber, IsOptional } from 'class-validator'
 
 export class ShopifyAuthRedirectQuery {
 	@IsString()
 	hmac: string
 
 	@IsString()
-	code: string
+	@IsOptional()
+	code?: string
 
 	@IsString()
 	host: string
@@ -14,10 +15,15 @@ export class ShopifyAuthRedirectQuery {
 	shop: string
 
 	@IsString()
-	state: string
+	@IsOptional()
+	state?: string
 
 	@IsString()
 	timestamp: string
+
+	@IsString()
+	@IsOptional()
+	redirect_url?: string
 }
 
 export class ShopifyAuthCreateRequest {
