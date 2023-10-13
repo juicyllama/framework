@@ -4,6 +4,7 @@ export const optionsSize = {
 	MEDIUM: 'MEDIUM',
 	LARGE: 'LARGE',
 }
+export const optionsSizeArr = Object.values(optionsSize)
 export const EMPTY_WIDGET = {
 	content: '',
 	name: '',
@@ -11,4 +12,5 @@ export const EMPTY_WIDGET = {
 	description: '',
 	page: '',
 	configs: '',
+	id: null,
 }

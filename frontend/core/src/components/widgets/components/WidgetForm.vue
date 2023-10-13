@@ -20,7 +20,7 @@
 
 				<AdditionalSettings @change="onChange" :type="options.data.content" />
 
-				<q-select v-model="options.data.size" :options="optionsSize" label="Size" />
+				<q-select v-model="options.data.size" :options="optionsSizeArr" label="Size" />
 				<q-input filled v-model="options.data.page" label="Page to display" />
 				<q-card-actions align="right">
 					<q-btn @click="onSubmit" color="primary">{{ isEdit ? 'Save' : 'Create' }}</q-btn>
@@ -35,7 +35,7 @@ import { computed, reactive } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { useWidgetsStore } from '@/store/widgets'
 import AdditionalSettings from './AdditionalSettings.vue'
-import { optionsContent, optionsSize, EMPTY_WIDGET } from '../constants'
+import { optionsContent, optionsSizeArr, EMPTY_WIDGET } from '../constants'
 
 const emit = defineEmits(['close', 'add'])
 
@@ -56,21 +56,12 @@ const onSubmit = () => {
 	emit('add')
 }
 
-const onChange = value => {
+const onChange = (value: string): void => {
 	options.data.configs = JSON.stringify(value)
 }
 
 const isEdit = computed<boolean>(() => !!widgetsStore.widgetToEdit.id)
-const options = reactive<{
-	data: {
-		configs: string
-		size: string
-		description: string
-		content: string
-		name: string
-		page: string
-	}
-}>({
+const options = reactive<any>(() => ({
 	data: isEdit.value ? widgetsStore.widgetToEdit : EMPTY_WIDGET,
-})
+}))
 </script>
