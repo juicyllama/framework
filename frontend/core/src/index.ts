@@ -7,7 +7,17 @@ import instance from './services/index'
 import classes from './assets/JLCore.css'
 import { ThemeStore } from './store/theme'
 import { JLLogin, JLSignup, JLPasswordless, JLResetPassword } from '@/components/core/auth'
-import { JLForm, JLTable, JLMenu, JLChart, JLStats, JLDropdownButtonMenu, JLUsersTable } from '@/components'
+import {
+	JLForm,
+	JLTable,
+	JLMenu,
+	JLChart,
+	JLStats,
+	JLDropdownButtonMenu,
+	WidgetsComponent,
+	JLUsersTable,
+  JLUpload,
+} from '@/components'
 import { JLAccountProfile, JLAccountAvatar, JLAccountSwitcher, JLAccountBrand } from '@/components/core/account'
 import { JLUserAvatar, JLUserProfile, JLUserMenu } from '@/components/core/user'
 import { JLAppStoreConnect } from '@/components/app-store'
@@ -41,6 +51,7 @@ export default {
 		Vue.component('JLLogin', JLLogin)
 		Vue.component('JLForm', JLForm)
 		Vue.component('JLTable', JLTable)
+		Vue.component('JLUpload', JLUpload)
 		Vue.component('JLMenu', JLMenu)
 		Vue.component('JLDropdownButtonMenu', JLDropdownButtonMenu)
 		Vue.component('JLChart', JLChart)
@@ -67,7 +78,10 @@ export * from './helpers/index'
 export * from './plugins/index'
 export * from './services/index.exports'
 export {
-	JLLogin, JLSignup, JLPasswordless, JLResetPassword,
+	JLLogin,
+	JLSignup,
+	JLPasswordless,
+	JLResetPassword,
 	JLAccountProfile,
 	JLAccountAvatar,
 	JLAccountSwitcher,
@@ -82,5 +96,7 @@ export {
 	JLDropdownButtonMenu,
 	JLStats,
 	JLChart,
-	JLUsersTable
+	JLUpload,
+	WidgetsComponent,
+	JLUsersTable,
 }
