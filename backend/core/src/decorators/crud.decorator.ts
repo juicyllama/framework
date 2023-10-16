@@ -222,8 +222,9 @@ export function UploadFileDecorator(E) {
 	)
 }
 
-export function UploadCSVDecorator() {
+export function UploadCSVDecorator(name?: string) {
 	return applyDecorators(
+		ApiOperation({ summary: `Upload ${name ? Strings.capitalize(name): 'item'}s CSV File` }),
 		ApiConsumes('multipart/form-data'),
 		ApiQuery({
 			name: 'file',

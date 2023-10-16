@@ -180,8 +180,7 @@ export class UsersController {
 		return await this.service.uploadAvatar(user, file)
 	}
 
-	@ApiOperation({ summary: `Upload ${Strings.capitalize(NAME)}s CSV File` })
-	@UploadCSVDecorator()
+	@UploadCSVDecorator(NAME)
 	@Post(`upload_csv`)
 	async uploadCSVFile(
 		@Req() req,
