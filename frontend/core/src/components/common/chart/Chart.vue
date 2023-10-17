@@ -22,7 +22,7 @@ import { loadChart } from '@/services/chart'
 
 const props = defineProps<{
 	options?: ChartUISettings
-	data?: any
+	data?: ChartData
 	type: 'pie' | 'line' | 'bar' | 'gauge'
 	endpoint?: string
 	title: string
@@ -59,7 +59,7 @@ const extendedOptions = computed(() => {
 	}
 })
 
-const dataDetails = computed<any>(() => {
+const dataDetails = computed<ChartData>(() => {
 	return loadedData.value
 })
 
