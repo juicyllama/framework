@@ -23,6 +23,17 @@ For `value` and `delta` data consists of following fields:
 
 ## Example
 
+<!-- <ClientOnly>
+	<JLStats v-bind="{title: 'Website visitor using mobile',
+		value: {
+			value: 4964,
+			valueMeasurement: '',
+			signOnTheLeft: false,
+			valueSign: ''
+		}}"/>
+</ClientOnly> -->
+
+
 ```vue
 <script lang="ts" setup>
 import { JLStats } from '@juicyllama/frontend-core'

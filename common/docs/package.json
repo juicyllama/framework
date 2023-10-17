@@ -28,6 +28,10 @@
 	"dependencies": {
 		"@vuepress/plugin-container": "next",
 		"vue": "^3.3.4",
-		"vuepress": "next"
+		"vuepress": "next",
+		"vuepress-plugin-vue-example": "^1.1.8"
+	},
+	"devDependencies": {
+		"@vuepress/plugin-register-components": "^2.0.0-beta.67"
 	}
 }

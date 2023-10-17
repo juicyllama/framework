@@ -1,14 +1,20 @@
+// import VueExamplePlugin from 'vuepress-plugin-vue-example'
+import { registerComponentsPlugin } from '@vuepress/plugin-register-components'
+import { getDirname, path } from '@vuepress/utils'
+
 export const homeLink = {
-		text: '🏠',
-		link: '/',
-	}
+	text: '🏠',
+	link: '/',
+}
 
-export const extraLinks = [{
-	text: 'Support',
-	link: '/support',
-}]
+export const extraLinks = [
+	{
+		text: 'Support',
+		link: '/support',
+	},
+]
 
-	export const homeTitle = 'JuicyLlama Framework'
+export const homeTitle = 'JuicyLlama Framework'
 
 export const homeNavbar = [
 	homeLink,
@@ -23,8 +29,8 @@ export const homeNavbar = [
 			{
 				text: 'Commands',
 				link: '/cli/commands',
-			}
-		]
+			},
+		],
 	},
 	{
 		text: 'Common',
@@ -133,8 +139,26 @@ export const homeNavbar = [
 				text: 'Shortlinks',
 				link: '/tools/shortlinks',
 			},
-
 		],
 	},
 	...extraLinks,
 ]
+
+// export default {
+// 	plugins: [
+// 		VueExamplePlugin({
+// 			componentsPath: '../../frontend/core/src/components/common/stats/',
+// 		}),
+// 	],
+// }
+const __dirname = getDirname(import.meta.url)
+
+export default {
+	plugins: [
+		registerComponentsPlugin({
+			components: {
+				JLStats: path.resolve(__dirname, '../../frontend/core/src/components/common/stats/'),
+			},
+		}),
+	],
+}
