@@ -20,15 +20,6 @@ import { logger } from '@/index'
 import { LogSeverity } from '@/types'
 import { loadChart } from '@/services/chart'
 
-type ChartDatasetRaw = {
-	label: string
-	data: Array<any>
-}
-
-type ChartDataRaw = {
-	datasets: ChartDatasetRaw[]
-}
-
 const props = defineProps<{
 	options?: ChartUISettings
 	data?: any
