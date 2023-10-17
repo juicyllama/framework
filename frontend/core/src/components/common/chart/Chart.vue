@@ -38,7 +38,6 @@ const props = defineProps<{
 	dynamicData?: boolean
 	displayLegend?: boolean
 	displayTooltip?: boolean
-	dataMapper?: (arg0: ChartDataRaw) => any
 }>()
 
 const { type, displayLegend, title, displayTooltip } = toRefs(props)
@@ -70,9 +69,6 @@ const extendedOptions = computed(() => {
 })
 
 const dataDetails = computed<any>(() => {
-	if (props.dataMapper) {
-		return props.dataMapper(loadedData.value as unknown as ChartDataRaw)
-	}
 	return loadedData.value
 })
 
