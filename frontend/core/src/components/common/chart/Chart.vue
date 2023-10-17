@@ -21,14 +21,14 @@ import { LogSeverity } from '@/types'
 import { loadChart } from '@/services/chart'
 
 const props = defineProps<{
-	options: ChartUISettings
-	data: ChartData
+	options?: ChartUISettings
+	data?: ChartData
 	type: 'pie' | 'line' | 'bar' | 'gauge'
-	endpoint: string
+	endpoint?: string
 	title: string
-	dynamicData: boolean
-	displayLegend: boolean
-	displayTooltip: boolean
+	dynamicData?: boolean
+	displayLegend?: boolean
+	displayTooltip?: boolean
 }>()
 
 const { type, displayLegend, title, displayTooltip } = toRefs(props)
