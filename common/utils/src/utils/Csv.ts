@@ -54,7 +54,7 @@ export class Csv {
 				filePath: tempFilePath,
 				unlink: async () => {
 					fs.promises.unlink(tempFilePath)
-					fs.promises.rmdir(tempDir)
+					fs.rmSync(tempDir, { recursive: true, force: true })
 				},
 				file,
 			}
