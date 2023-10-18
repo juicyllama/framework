@@ -53,7 +53,7 @@ export class JLCache {
 			}
 
 			const queryString = Object.keys(query)
-				.map((key) => key + '=' + query[key])
+				.map(key => key + '=' + query[key])
 				.join('&')
 
 			return `route::${Enviroment[process.env.NODE_ENV]}${route}/${queryString}`

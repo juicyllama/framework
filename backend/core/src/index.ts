@@ -72,7 +72,23 @@ export { RmqModule } from './utils/rabbitmq/rmq.module'
 export { RmqService } from './utils/rabbitmq/rmq.service'
 
 // Configs
-export { beaconConfig, cacheConfig, jwtConfig, mongodbConfig, typeormConfig, systemConfig, systemConfigJoi, ssoConfig, loadEnvVariables, redocConfig, joiConfigJoi, validationPipeOptions, databaseConfig, RABBITMQ, rabbitMQConfig } from './configs'
+export {
+	beaconConfig,
+	cacheConfig,
+	jwtConfig,
+	mongodbConfig,
+	typeormConfig,
+	systemConfig,
+	systemConfigJoi,
+	ssoConfig,
+	loadEnvVariables,
+	redocConfig,
+	joiConfigJoi,
+	validationPipeOptions,
+	databaseConfig,
+	RABBITMQ,
+	rabbitMQConfig,
+} from './configs'
 export { MONGODB } from './constants'
 
 // Decorators
@@ -84,6 +100,7 @@ export {
 	ReadStatsDecorator,
 	ReadChartsDecorator,
 	UpdateDecorator,
+	UploadImageDecorator,
 	UploadFileDecorator,
 	DeleteDecorator,
 	SwaggerPropertyType,

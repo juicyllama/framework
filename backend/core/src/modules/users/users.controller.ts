@@ -6,7 +6,6 @@ import {
 	Inject,
 	Param,
 	Patch,
-	Post,
 	Query,
 	Req,
 	UploadedFile,
@@ -26,17 +25,26 @@ import {
 	ReadOneDecorator,
 	ReadStatsDecorator,
 	UpdateDecorator,
-	UploadFileDecorator,
+	UploadFileDecorator as BulkUploadDecorator,
 	UserAuth,
 } from '../../decorators'
 import { Query as TQuery } from '../../utils/typeorm/Query'
-import { CSV_FIELDS, DEFAULT_ORDER_BY, E, NAME, PRIMARY_KEY, SEARCH_FIELDS, T } from './users.constants'
-import { crudDelete, crudFindAll, crudFindOne, crudStats } from '../../helpers'
-import { ReadChartsDecorator, UploadCSVDecorator } from '../../decorators/crud.decorator'
-import { crudCharts, crudUploadCSV } from '../../helpers/crudController'
-import { CsvService } from '../csv/csv.service'
+import {
+	UPLOAD_FIELDS,
+	DEFAULT_ORDER_BY,
+	E,
+	NAME,
+	PRIMARY_KEY,
+	SEARCH_FIELDS,
+	T,
+	UPLOAD_DUPLICATE_FIELD,
+} from './users.constants'
+import { crudDelete, crudFindAll, crudStats } from '../../helpers'
+import { ReadChartsDecorator, UploadFieldsDecorator, UploadImageDecorator } from '../../decorators/crud.decorator'
+import { crudCharts, crudBulkUpload } from '../../helpers/crudController'
 import { StorageService } from '../storage/storage.service'
-import { CrudUploadCSVResponse } from '../../types/common'
+import { CrudUploadFieldsResponse, UploadFileDto } from '../../types/common'
+import { DeleteResult, InsertResult } from 'typeorm'
 
 @ApiTags(Strings.capitalize(Strings.plural(NAME)))
 @UserAuth()
@@ -48,7 +56,6 @@ export class UsersController {
 		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<T>,
 		@Inject(forwardRef(() => UsersService)) private readonly service: UsersService,
 		@Inject(forwardRef(() => StorageService)) readonly storageService: StorageService,
-		@Inject(forwardRef(() => CsvService)) private readonly csvService: CsvService,
 	) {}
 
 	@CreateDecorator(E, NAME)
@@ -59,7 +66,7 @@ export class UsersController {
 	}
 
 	@ReadManyDecorator(E, UserSelect, UserOrderBy, UserRelations, NAME)
-	async findAll(@Req() req, @AccountId() account_id: number, @Query() query): Promise<T[]> {
+	async findAll(@AccountId() account_id: number, @Query() query): Promise<T[]> {
 		const users = await crudFindAll<T>({
 			service: this.service,
 			tQuery: this.tQuery,
@@ -77,7 +84,6 @@ export class UsersController {
 
 	@ReadStatsDecorator(NAME)
 	async stats(
-		@Req() req,
 		@AccountId() account_id: number,
 		@Query() query,
 		@Query('method') method?: StatsMethods,
@@ -115,13 +121,19 @@ export class UsersController {
 	}
 
 	@ReadOneDecorator(E, PRIMARY_KEY, UserSelect, UserRelations, NAME)
-	async findOne( @AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
-		const user = await crudFindOne<T>({
-			service: this.service,
-			query: query,
-			primaryKey: params[PRIMARY_KEY],
-			account_id: account_id,
+	async findOne(@AccountId() account_id: number, @Param() params): Promise<T> {
+		const user = await this.service.findOne({
+			where: {
+				user_id: params[PRIMARY_KEY],
+				accounts: {
+					account_id: account_id,
+				},
+			},
 		})
+
+		if (!user) {
+			throw new BadRequestException(`User #${params[PRIMARY_KEY]} not found`)
+		}
 
 		delete user.password
 		return user
@@ -151,7 +163,7 @@ export class UsersController {
 	}
 
 	@ApiOperation({ summary: `Upload ${Strings.capitalize(NAME)} Avatar` })
-	@UploadFileDecorator(E)
+	@UploadImageDecorator(E)
 	@Patch(`:user_id/avatar`)
 	async uploadAvatarFile(
 		@Req() req,
@@ -180,18 +192,29 @@ export class UsersController {
 		return await this.service.uploadAvatar(user, file)
 	}
 
-	@UploadCSVDecorator(NAME)
-	@Post(`upload_csv`)
-	async uploadCSVFile(
+	@BulkUploadDecorator(UPLOAD_FIELDS, UPLOAD_DUPLICATE_FIELD)
+	async bulkUpload(
 		@Req() req,
-		@UploadedFile() file: Express.Multer.File,
+		@Body() params: UploadFileDto,
 		@AccountId() account_id: number,
-	): Promise<CrudUploadCSVResponse> {
+		@UploadedFile() file?: Express.Multer.File,
+	): Promise<InsertResult | DeleteResult> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
-		return await crudUploadCSV<T>(file, CSV_FIELDS, {
+		return await crudBulkUpload<T>({
+			fields: UPLOAD_FIELDS,
+			dedup_field: UPLOAD_DUPLICATE_FIELD,
 			service: this.service,
-			csvService: this.csvService,
+			...params,
+			file: file,
 		})
+	}
+
+	@UploadFieldsDecorator()
+	async uploadFileFields(): Promise<CrudUploadFieldsResponse> {
+		return {
+			fields: UPLOAD_FIELDS,
+			dedup_field: UPLOAD_DUPLICATE_FIELD,
+		}
 	}
 
 	@ApiOperation({ summary: `Update ${Strings.capitalize(NAME)} Role` })

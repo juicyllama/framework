@@ -1,11 +1,13 @@
 import {
 	And,
 	DeepPartial,
+	DeleteResult,
 	Equal,
 	FindManyOptions,
 	FindOneOptions,
 	FindOperator,
 	In,
+	InsertResult,
 	IsNull,
 	LessThan,
 	LessThanOrEqual,
@@ -16,13 +18,13 @@ import {
 	Repository,
 } from 'typeorm'
 import _ from 'lodash'
-import {TypeOrm} from './TypeOrm'
-import {FindOptionsWhere} from 'typeorm/find-options/FindOptionsWhere'
-import {isNil, omitBy} from 'lodash'
-import {ComparisonOperator, Enums, Env, getMySQLTimeInterval, Logger} from '@juicyllama/utils'
-import {SelectQueryBuilder} from 'typeorm/query-builder/SelectQueryBuilder'
-import {ChartOptions} from './types'
-import {ResultSetHeader} from 'mysql2'
+import { TypeOrm } from './TypeOrm'
+import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere'
+import { isNil, omitBy } from 'lodash'
+import { ComparisonOperator, Enums, Env, getMySQLTimeInterval, Logger } from '@juicyllama/utils'
+import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder'
+import { ChartOptions } from './types'
+import { ImportMode } from '../../types/common'
 
 const logger = new Logger()
 
@@ -53,20 +55,33 @@ export class Query<T> {
 		}
 	}
 
-	async bulkInsert(repository: Repository<T>, data: DeepPartial<T>[]): Promise<ResultSetHeader> {
-		const inserts: string[] = []
+	async bulk(
+		repository: Repository<T>,
+		data: DeepPartial<T>[],
+		import_mode: ImportMode,
+		dedup_field?: string,
+	): Promise<InsertResult | DeleteResult> {
+		switch (import_mode) {
+			case ImportMode.CREATE:
+				return await this.createBulkRecords(repository, data)
 
-		for (const row of data) {
-			const values = Object.values(row)
-				.map((v: string) => `'${v.replace("'", "\\'")}'`)
-				.join(', ')
-			inserts.push(`(${values})`)
+			case ImportMode.UPSERT:
+				if (!dedup_field) {
+					throw new Error('Dedup field required for update')
+				}
+
+				return await this.upsertBulkRecords(repository, data, dedup_field)
+
+			case ImportMode.DELETE:
+				if (!dedup_field) {
+					throw new Error('Dedup field required for update')
+				}
+				return await this.deleteBulkRecords(repository, data, dedup_field)
+
+			case ImportMode.REPOPULATE:
+				await this.truncate(repository)
+				return await this.createBulkRecords(repository, data)
 		}
-		return this.raw(
-			repository,
-			`INSERT INTO ${repository.metadata.tableName} (${Object.keys(data[0]).join(',')}) VALUES ` +
-				inserts.join(', '),
-		)
 	}
 
 	/**
@@ -284,6 +299,25 @@ export class Query<T> {
 		await repository.remove(record)
 	}
 
+	/**
+	 * Remove all records form a table
+	 * @param repository
+	 */
+
+	async truncate(repository: Repository<T>): Promise<void> {
+		if (Env.IsNotProd()) {
+			logger.debug(`[QUERY][TRUNCATE][${repository.metadata.tableName}]`)
+		}
+
+		const sql_delete = 'DELETE FROM ' + repository.metadata.tableName
+
+		await this.raw(repository, sql_delete)
+
+		const sql_auto_increment = 'ALTER TABLE ' + repository.metadata.tableName + ' AUTO_INCREMENT = 1'
+
+		await this.raw(repository, sql_auto_increment)
+	}
+
 	getPrimaryKey(repository: Repository<T>) {
 		return repository.metadata.columns.find(column => {
 			if (column.isPrimary) {
@@ -388,8 +422,8 @@ export class Query<T> {
 						fieldLookupWhere.length === 1
 							? fieldLookupWhere[0]
 							: fieldLookupWhere.length > 0
-								? And(...fieldLookupWhere)
-								: value // if no valid operator is found, return the value as is - backward compatibility
+							? And(...fieldLookupWhere)
+							: value // if no valid operator is found, return the value as is - backward compatibility
 				}
 			}
 		}
@@ -587,6 +621,110 @@ export class Query<T> {
 
 			return undefined
 		}
+	}
+
+	async createBulkRecords(repository: Repository<T>, data: DeepPartial<T>[]): Promise<InsertResult> {
+		return await repository.createQueryBuilder().insert().into(repository.metadata.tableName).values(data).execute()
+
+		// 	const inserts: string[] = []
+
+		// 	for (const row of data) {
+		// 		const values = Object.values(row)
+		// 			.map((v: string) => `'${v.replace("'", "\\'")}'`)
+		// 			.join(', ')
+		// 		inserts.push(`(${values})`)
+		// 	}
+
+		// 	const SQL = `INSERT INTO ${repository.metadata.tableName} (${Object.keys(data[0]).join(',')}) VALUES ` + inserts.join(', ')
+
+		// 	return await this.raw(
+		// 		repository,
+		// 		SQL,
+		// 	)
+		// }
+	}
+
+	async upsertBulkRecords(
+		repository: Repository<T>,
+		data: DeepPartial<T>[],
+		dedup_field: string,
+	): Promise<InsertResult> {
+		const fields: string[] = []
+
+		for (const field of Object.keys(data[0])) {
+			if (field === dedup_field) continue
+			fields.push(field)
+		}
+
+		return await repository
+			.createQueryBuilder()
+			.insert()
+			.into(repository.metadata.tableName)
+			.values(data)
+			.orUpdate(fields, [dedup_field])
+			.execute()
+
+		// const inserts: string[] = []
+
+		// for (const row of data) {
+		// 	const values = Object.values(row)
+		// 		.map((v: string) => `'${v.replace("'", "\\'")}'`)
+		// 		.join(', ')
+		// 	inserts.push(`(${values})`)
+		// }
+
+		// let FIELDS = ''
+
+		// for (const field of Object.keys(data[0])) {
+		// 	if(field === dedup_field) continue
+		// 	FIELDS += `${field} = new.${field}, `
+		// }
+		// FIELDS = FIELDS.slice(0, -2)
+
+		// const SQL = `INSERT INTO ${repository.metadata.tableName} (${Object.keys(data[0]).join(',')}) VALUES ` + inserts.join(', ')  + ` AS new ON DUPLICATE KEY UPDATE ${FIELDS}`
+
+		// return await this.raw(
+		// 	repository,
+		// 	SQL,
+		// )
+	}
+
+	/*
+	 * Deletes records based on deduplicate fields
+	 */
+
+	async deleteBulkRecords(
+		repository: Repository<T>,
+		data: DeepPartial<T>[],
+		dedup_field: string,
+	): Promise<DeleteResult> {
+		const records: any[] = []
+
+		for (const row of data) {
+			records.push(row[dedup_field])
+		}
+
+		return await repository
+			.createQueryBuilder()
+			.delete()
+			.from(repository.metadata.tableName)
+			.where({
+				[dedup_field]: In(records),
+			})
+			.execute()
+
+		// const records: string[] = []
+
+		// for (const row of data) {
+		// 	records.push(`'${row[dedup_field]}'`)
+		// }
+
+		// const SQL = `DELETE FROM ${repository.metadata.tableName} WHERE ${dedup_field} IN (${records.join(', ')})`
+
+		// return await this.raw(
+		// 	repository,
+		// 	SQL,
+		// )
 	}
 }
 

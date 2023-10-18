@@ -42,7 +42,7 @@ export class BeaconPushService {
 			unique: message.unique,
 		})
 
-		if(!push){
+		if (!push) {
 			this.logger.error(`[${domain}] Failed to create push`, message)
 			return false
 		}

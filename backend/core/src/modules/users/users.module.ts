@@ -13,18 +13,17 @@ import { BeaconModule } from '../beacon/beacon.module'
 import { AccountModule } from '../accounts/account.module'
 import { UsersController } from './users.controller'
 import { MiddlewareAccountId } from '../../middleware'
-import { CsvModule } from '../csv/csv.module'
+import { Account } from '../accounts/account.entity'
 
 @Module({
 	imports: [
 		JwtModule.register(jwtConfig()),
 		TypeOrmModule.forRoot(databaseConfig()),
-		TypeOrmModule.forFeature([User]),
+		TypeOrmModule.forFeature([Account, User]),
 		forwardRef(() => AuthModule),
 		forwardRef(() => AccountModule),
 		forwardRef(() => BeaconModule),
 		forwardRef(() => StorageModule),
-		forwardRef(() => CsvModule),
 	],
 	controllers: [UsersController],
 	providers: [UsersService, UsersHooks, Logger, Query],

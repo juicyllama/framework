@@ -64,10 +64,10 @@ export class Poll {
 		}
 
 		return poll()
-			.then((result) => {
+			.then(result => {
 				return result
 			})
-			.catch((error) => {
+			.catch(error => {
 				throw Error(error)
 			})
 	}
@@ -139,10 +139,10 @@ export class Poll {
 		}
 
 		return poll()
-			.then((result) => {
+			.then(result => {
 				return result
 			})
-			.catch((e) => {
+			.catch(e => {
 				logger.warn(`[${domain}][${uuid}] POLL Error: ${e.message}`, {
 					error: {
 						message: e.message,

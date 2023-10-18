@@ -14,7 +14,7 @@ export class Enums {
 		}
 
 		const arr = []
-		Object.keys(Enum).forEach((key) => {
+		Object.keys(Enum).forEach(key => {
 			arr.push({
 				[key_name]: key,
 				[pair_name]: Enum[key],
