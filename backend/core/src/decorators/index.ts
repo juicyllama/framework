@@ -6,8 +6,10 @@ export {
 	ReadStatsDecorator,
 	ReadChartsDecorator,
 	UpdateDecorator,
+	BulkUploadDecorator,
+	BulkFileUploadDecorator,
 	UploadImageDecorator,
-	BulkFileUploadDecorator as UploadFileDecorator,
+	UploadFileDecorator,
 	DeleteDecorator,
 } from './crud.decorator'
 export { SwaggerPropertyType, SwaggerPropertyReference, SwaggerPropertyDecorator } from './Swagger.decorator'

@@ -2,13 +2,13 @@ import {
 	BadRequestException,
 	Body,
 	Controller,
-	forwardRef,
-	Inject,
 	Param,
 	Patch,
 	Query,
 	Req,
 	UploadedFile,
+	forwardRef,
+	Inject,
 } from '@nestjs/common'
 import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto, Strings } from '@juicyllama/utils'
 import { CreateUserDto, UpdateUserDto } from './users.dto'
@@ -25,7 +25,7 @@ import {
 	ReadOneDecorator,
 	ReadStatsDecorator,
 	UpdateDecorator,
-	UploadFileDecorator as BulkUploadDecorator,
+	BulkUploadDecorator,
 	UserAuth,
 } from '../../decorators'
 import { Query as TQuery } from '../../utils/typeorm/Query'

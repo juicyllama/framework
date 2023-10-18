@@ -223,6 +223,14 @@ export function UploadImageDecorator(E: any) {
 	)
 }
 
+export function UploadFileDecorator(E: any) {
+	return applyDecorators(
+		ApiConsumes('multipart/form-data'),
+		UseInterceptors(FileInterceptor('file')),
+		ApiOkResponse(generateResponseObject(E, 'OK')),
+	)
+}
+
 export function BulkFileUploadDecorator(supported_fields?: string[], dedup_field?: string) {
 	return applyDecorators(
 		ApiOperation({
