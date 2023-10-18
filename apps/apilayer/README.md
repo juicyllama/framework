@@ -4,5 +4,4 @@
   </a>
 
 Visit the [JuicyLlama NestJs ApiLayer App](https://docs.juicyllama.com/apps/apilayer) to learn more.
-
 </div>

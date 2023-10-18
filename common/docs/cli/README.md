@@ -28,9 +28,13 @@ Install following packages:
 
 ```bash
 brew install jq
-npm install pnpm -g
-pnpm install npx -g
+npm i -g pnpm 
+pnpm i -g npx
+pnpm i -g ts-node
+pnpm i -g mkcert
 ```
+
+Ensure you have docker installed and running. 
 
 Optional dependencies:
 
