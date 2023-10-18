@@ -2,6 +2,9 @@ import csvParser from 'csv-parser'
 import { Readable } from 'stream'
 import * as fs from 'fs'
 import * as path from 'path'
+import { File }	from './File'
+
+const file = new File()
 
 export class Csv {
 	/**
@@ -31,13 +34,18 @@ export class Csv {
 
 	async createTempCSVFileFromString(
 		content: string,
-	): Promise<{ filePath: string; unlink: () => Promise<void>; file: Express.Multer.File }> {
+	): Promise<{ 
+		filePath: string, 
+		unlink: () => Promise<void>, 
+		file: Express.Multer.File,
+		dirPath: string,
+	}> {
 		try {
 			const tempDir = fs.mkdtempSync(path.join(fs.realpathSync('.'), 'temp-'))
 			const tempFilePath = path.join(tempDir, 'temp-file.csv')
 			await fs.promises.writeFile(tempFilePath, content, 'utf-8')
 
-			const file = {
+			const temp_file = {
 				fieldname: 'temp-file',
 				originalname: 'temp-file.csv',
 				encoding: '7bit',
@@ -52,11 +60,11 @@ export class Csv {
 
 			return {
 				filePath: tempFilePath,
+				file: temp_file,
+				dirPath: tempDir,
 				unlink: async () => {
-					fs.promises.unlink(tempFilePath)
-					fs.rmSync(tempDir, { recursive: true, force: true })
+					file.unlink(tempFilePath, tempDir)
 				},
-				file,
 			}
 		} catch (error) {
 			throw new Error(`Error creating temporary file: ${error}`)
