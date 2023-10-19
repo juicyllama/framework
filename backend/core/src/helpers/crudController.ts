@@ -1,4 +1,4 @@
-import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto, Csv, Arrays } from '@juicyllama/utils'
+import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto, Csv, Arrays, File } from '@juicyllama/utils'
 import { Query as TQuery } from '../utils/typeorm/Query'
 import { TypeOrm } from '../utils/typeorm/TypeOrm'
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common'
@@ -176,6 +176,7 @@ export async function crudBulkUpload<T>(options: {
 }): Promise<BulkUploadResponse> {
 	const arrays = new Arrays()
 	const csv = new Csv()
+	const file = new File()
 
 	if (!options.file && !options.raw) {
 		throw new BadRequestException(`Missing required field: file or raw`)
@@ -199,29 +200,29 @@ export async function crudBulkUpload<T>(options: {
 
 	switch (options.upload_type) {
 		case UploadType.CSV:
-			let csv_file: any[]
+			let content: any[]
 
 			if (options.file) {
 				if (!Boolean(options.file.mimetype.match(/(csv)/))) {
 					throw new BadRequestException(`Not a valid ${options.upload_type} file`)
 				}
-				csv_file = await csv.parseCsvFile(options.file)
+				content = await csv.parseCsvFile(options.file)
 			} else if (options.raw) {
-				const { unlink, file } = await csv.createTempCSVFileFromString(options.raw)
-				csv_file = await csv.parseCsvFile(file)
-				await unlink()
+				const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(options.raw)
+				content = await csv.parseCsvFile(csv_file)
+				await file.unlink(filePath, dirPath)
 			}
 
 			if (options.mappers) {
-				csv_file = arrays.replaceObjectKeys(csv_file, options.mappers)
+				content = arrays.replaceObjectKeys(content, options.mappers)
 			}
 
-			if (Object.keys(csv_file[0]).length !== options.fields.length) {
+			if (Object.keys(content[0]).length !== options.fields.length) {
 				throw new BadRequestException(
-					`Invalid ${options.upload_type} file. Expected ${options.fields.length} columns, got ${csv_file[0].length}`,
+					`Invalid ${options.upload_type} file. Expected ${options.fields.length} columns, got ${content[0].length}`,
 				)
 			}
-			const dtos: DeepPartial<T>[] = csv_file.map(row => {
+			const dtos: DeepPartial<T>[] = content.map(row => {
 				const dto = options.fields.reduce(
 					(dto, key) => ({
 						...dto,

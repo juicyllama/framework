@@ -2,9 +2,6 @@ import csvParser from 'csv-parser'
 import { Readable } from 'stream'
 import * as fs from 'fs'
 import * as path from 'path'
-import { File }	from './File'
-
-const file = new File()
 
 export class Csv {
 	/**
@@ -36,8 +33,7 @@ export class Csv {
 		content: string,
 	): Promise<{ 
 		filePath: string, 
-		unlink: () => Promise<void>, 
-		file: Express.Multer.File,
+		csv_file: Express.Multer.File,
 		dirPath: string,
 	}> {
 		try {
@@ -60,11 +56,8 @@ export class Csv {
 
 			return {
 				filePath: tempFilePath,
-				file: temp_file,
-				dirPath: tempDir,
-				unlink: async () => {
-					file.unlink(tempFilePath, tempDir)
-				},
+				csv_file: temp_file,
+				dirPath: tempDir
 			}
 		} catch (error) {
 			throw new Error(`Error creating temporary file: ${error}`)

@@ -23,12 +23,12 @@ describe('Query Bulk', () => {
 	
 	describe('CREATE', () => {
 		it('Upload 1 User', async () => {
-			const { unlink, file } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,last_name,email' + '\n' + 'Amy,Alsop,amy@email.com'
 			)
 			const data = await csv.parseCsvFile(file)
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
-			await unlink()
+			await file.unlink(filePath, dirPath)
 
 			expect(res.raw.affectedRows).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
@@ -44,7 +44,7 @@ describe('Query Bulk', () => {
 			)
 			const data = await csv.parseCsvFile(file)
 				const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
-				await unlink()
+				await file.unlink(filePath, dirPath)
 				expect(res.raw.affectedRows).toEqual(2)
 				const users = await scaffold.services.service.findAll({})
 				const lastUser = users.pop()
@@ -66,7 +66,7 @@ describe('Query Bulk', () => {
 				expect(e.message).toMatch('Duplicate entry')
 			}
 			
-			await unlink()
+			await file.unlink(filePath, dirPath)
 			const new_count = await scaffold.services.service.count()
 			expect(new_count).toEqual(count)
 		})
@@ -84,7 +84,7 @@ describe('Query Bulk', () => {
 				expect(e.message).toMatch('Duplicate entry')
 			}
 			
-			await unlink()
+			await file.unlink(filePath, dirPath)
 			const new_count = await scaffold.services.service.count()
 			expect(new_count).toEqual(count)
 		})
@@ -93,12 +93,12 @@ describe('Query Bulk', () => {
 
 	describe('UPSERT', () => {
 		it('Upload 1 User', async () => {
-			const { unlink, file } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,email' + '\n' + 'Erin,erin@email.com'
 			)
 			const data = await csv.parseCsvFile(file)
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
-			await unlink()
+			await file.unlink(filePath, dirPath)
 			expect(res.raw.affectedRows).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
 			const lastUser = users.pop()
@@ -112,7 +112,7 @@ describe('Query Bulk', () => {
 			)
 			const data = await csv.parseCsvFile(file)
 				const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
-				await unlink()
+				await file.unlink(filePath, dirPath)
 				expect(res.raw.affectedRows).toEqual(2)
 				const users = await scaffold.services.service.findAll({})
 				const lastUser = users.pop()
@@ -126,7 +126,7 @@ describe('Query Bulk', () => {
 			)
 			const data = await csv.parseCsvFile(file)
 				const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
-				await unlink()
+				await file.unlink(filePath, dirPath)
 				expect(res.raw.affectedRows).toEqual(2)
 				const users = await scaffold.services.service.findAll({})
 				const lastUser = users.pop()
@@ -141,7 +141,7 @@ describe('Query Bulk', () => {
 			)
 			const data = await csv.parseCsvFile(file)
 			await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
-			await unlink()	
+			await file.unlink(filePath, dirPath)	
 			const user = await scaffold.services.service.findOne({
 				where: {
 					email: "amy@email.com"
@@ -161,7 +161,7 @@ describe('Query Bulk', () => {
 			)
 			const data = await csv.parseCsvFile(file)
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
-			await unlink()
+			await file.unlink(filePath, dirPath)
 			expect(res.raw.affectedRows).toEqual(4)
 			expect(res.raw.info).toMatch('Records: 2  Duplicates: 2')
 			const new_count = await scaffold.services.service.count()
@@ -182,7 +182,7 @@ describe('Query Bulk', () => {
 			const data = await csv.parseCsvFile(file)
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
 	
-			await unlink()
+			await file.unlink(filePath, dirPath)
 			expect(res.raw.affectedRows).toEqual(3)
 			expect(res.raw.info).toMatch('Records: 2  Duplicates: 1')
 			const users = await scaffold.services.service.findAll({})
@@ -208,7 +208,7 @@ describe('Query Bulk', () => {
 			)
 			const data = await csv.parseCsvFile(file)
 			const res = <InsertResult>await scaffold.query.bulk(scaffold.repository, data, ImportMode.REPOPULATE)
-			await unlink()
+			await file.unlink(filePath, dirPath)
 			expect(res.raw.affectedRows).toEqual(3)
 			expect(res.raw.info).toEqual('Records: 3  Duplicates: 0  Warnings: 0')
 			const new_count = await scaffold.services.service.count()
@@ -226,7 +226,7 @@ describe('Query Bulk', () => {
 			)
 			const data = await csv.parseCsvFile(file)
 			const res = <DeleteResult>await scaffold.query.bulk(scaffold.repository, data, ImportMode.DELETE, UPLOAD_DUPLICATE_FIELD)
-			await unlink()
+			await file.unlink(filePath, dirPath)
 			expect(res.affected).toEqual(2)
 			const new_count = await scaffold.services.service.count()
 			expect(new_count).toEqual(1)

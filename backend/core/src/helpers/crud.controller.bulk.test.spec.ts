@@ -5,7 +5,7 @@ import { UsersModule } from '../modules/users/users.module'
 import { crudBulkUpload } from './crudController'
 import { UPLOAD_FIELDS, UPLOAD_DUPLICATE_FIELD } from '../modules/users/users.constants'
 import { ImportMode, UploadType } from '../types/common'
-import { Csv } from '@juicyllama/utils'
+import { Csv, File } from '@juicyllama/utils'
 import { InsertResult } from 'typeorm'
 
 const E = User
@@ -14,6 +14,7 @@ const MODULE = UsersModule
 const SERVICE = UsersService
 
 const csv = new Csv()
+const file = new File()
 
 /**
  * These tests focus on the validation of the controller/data, not the actual adding of data, this is tested at: Query.file.bulkInsert.spec.ts
@@ -31,13 +32,13 @@ describe('Crud Bulk Upload Controller', () => {
 	describe('Invalid File Uploads', () => {
 		it('Wrong number of field headings', async () => {
 
-			const { unlink, file } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,last_name' + '\n' + 'Test,Test,test@test.com'
 			)
 
 			try{ 
 				<InsertResult>await crudBulkUpload<T>({
-					file: file,
+					file: csv_file,
 					fields: UPLOAD_FIELDS,
 					dedup_field: UPLOAD_DUPLICATE_FIELD,
 					upload_type: UploadType.CSV,
@@ -49,18 +50,18 @@ describe('Crud Bulk Upload Controller', () => {
 			} catch(e: any) {
 				expect(e.message).toEqual(`Field 'email' doesn't have a default value`)
 			}
-			await unlink()
+			await file.unlink(filePath, dirPath)
 		})
 
 		it('Wrong number of field data', async () => {
 
-			const { unlink, file } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,last_name,email' + '\n' + 'Test,Test'
 			)
 
 			try{ 
 				<InsertResult>await crudBulkUpload<T>({
-					file: file,
+					file: csv_file,
 						fields: UPLOAD_FIELDS,
 						dedup_field: UPLOAD_DUPLICATE_FIELD,
 						upload_type: UploadType.CSV,
@@ -73,7 +74,7 @@ describe('Crud Bulk Upload Controller', () => {
 			} catch(e: any) {
 				expect(e.message).toEqual(`Invalid CSV file. Expected 3 columns, got undefined`)
 			}
-			await unlink()
+			await file.unlink(filePath, dirPath)
 		})
 
 	})
@@ -81,13 +82,13 @@ describe('Crud Bulk Upload Controller', () => {
 	describe('CSV', () => {
 		describe('CSV File Uploads', () => {
 			it('Upload 1 User', async () => {
-				const { unlink, file } = await csv.createTempCSVFileFromString(
+				const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 					'first_name,last_name,email' + '\n' + 'Test2,Test,test2@test.com'
 				)
 	
 				const res = <InsertResult>await crudBulkUpload<T>(
 					{
-						file: file,
+						file: csv_file,
 						fields: UPLOAD_FIELDS,
 						dedup_field: UPLOAD_DUPLICATE_FIELD,
 						upload_type: UploadType.CSV,
@@ -95,7 +96,7 @@ describe('Crud Bulk Upload Controller', () => {
 						service: scaffold.services.service,
 					}
 				)
-				await unlink()
+				await file.unlink(filePath, dirPath)
 				expect(res.raw.affectedRows).toEqual(1)
 				const users = await scaffold.services.service.findAll({})
 				const lastUser = users.pop()
@@ -134,13 +135,13 @@ describe('Crud Bulk Upload Controller', () => {
 	describe('Mappers', () => {
 		it('Without mappers', async () => {
 
-			const { unlink, file } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,last_name,email' + '\n' + 'Test,Test,test@test.com'
 			)
 
 			const res = <InsertResult>await crudBulkUpload<T>(
 				{
-					file: file,
+					file: csv_file,
 					fields: UPLOAD_FIELDS,
 					dedup_field: UPLOAD_DUPLICATE_FIELD,
 					upload_type: UploadType.CSV,
@@ -148,7 +149,7 @@ describe('Crud Bulk Upload Controller', () => {
 					service: scaffold.services.service,
 				}
 			)
-			await unlink()
+			await file.unlink(filePath, dirPath)
 			expect(res.raw.affectedRows).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
 			const lastUser = users.pop()
@@ -159,13 +160,13 @@ describe('Crud Bulk Upload Controller', () => {
 
 		it('With mappers', async () => {
 
-			const { unlink, file } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'fname,lname,email' + '\n' + 'Test1,Test,test1@test.com'
 			)
 
 			const res = <InsertResult>await crudBulkUpload<T>(
 				{
-					file: file,
+					file: csv_file,
 					fields: UPLOAD_FIELDS,
 					dedup_field: UPLOAD_DUPLICATE_FIELD,
 					upload_type: UploadType.CSV,
@@ -177,7 +178,7 @@ describe('Crud Bulk Upload Controller', () => {
 					}
 				}
 			)
-			await unlink()
+			await file.unlink(filePath, dirPath)
 			expect(res.raw.affectedRows).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
 			const lastUser = users.pop()
