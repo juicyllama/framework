@@ -67,7 +67,7 @@
         "cookie-parser": "^1.4.6",
         "csv-parser": "^3.0.0",
         "dotenv": "^16.3.1",
-        "joi": "^17.10.2",
+        "joi": "^17.11.0",
         "lodash": "^4.17.21",
         "module-alias": "^2.2.3",
         "mongodb": "^5.9.0",
