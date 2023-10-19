@@ -61,6 +61,15 @@ export class Query<T> {
 		import_mode: ImportMode,
 		dedup_field?: string,
 	): Promise<BulkUploadResponse> {
+
+		logger.debug(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}]`, {
+			data: {
+				records: data.length,
+				first_record: data[0],
+				last_record: data[data.length - 1],
+			}
+		})
+
 		switch (import_mode) {
 			case ImportMode.CREATE:
 				return await this.createBulkRecords(repository, data)

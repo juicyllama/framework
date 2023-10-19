@@ -102,7 +102,7 @@ export class UploadFileDto {
 		required: false,
 	})
 	@IsOptional()
-	mappers?: Object
+	mappers?: { [key: string]: string }
 }
 
 export type BulkUploadResponse = InsertResult | DeleteResult

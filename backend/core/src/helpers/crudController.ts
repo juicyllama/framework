@@ -1,4 +1,4 @@
-import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto, Csv, Arrays, File } from '@juicyllama/utils'
+import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto, Csv, File } from '@juicyllama/utils'
 import { Query as TQuery } from '../utils/typeorm/Query'
 import { TypeOrm } from '../utils/typeorm/TypeOrm'
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common'
@@ -166,7 +166,7 @@ export async function crudUpdate<T>(options: {
 export async function crudBulkUpload<T>(options: {
 	fields: string[]
 	dedup_field: string
-	mappers?: Object
+	mappers?: { [key: string]: string }
 	import_mode?: ImportMode
 	upload_type?: UploadType
 	service: any
@@ -174,7 +174,7 @@ export async function crudBulkUpload<T>(options: {
 	file?: Express.Multer.File
 	raw?: any
 }): Promise<BulkUploadResponse> {
-	const arrays = new Arrays()
+
 	const csv = new Csv()
 	const file = new File()
 
@@ -202,24 +202,32 @@ export async function crudBulkUpload<T>(options: {
 		case UploadType.CSV:
 			let content: any[]
 
+			if (options.mappers) {
+				if(typeof options.mappers === 'string') {
+					try{
+						options.mappers = JSON.parse(options.mappers)
+					}catch(e: any){
+						throw new BadRequestException(`Invalid mappers JSON`)
+					}
+				}
+			}
+
 			if (options.file) {
 				if (!Boolean(options.file.mimetype.match(/(csv)/))) {
 					throw new BadRequestException(`Not a valid ${options.upload_type} file`)
 				}
-				content = await csv.parseCsvFile(options.file)
+
+				content = await csv.parseCsvFile(options.file, options.mappers)
+
 			} else if (options.raw) {
 				const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(options.raw)
 				content = await csv.parseCsvFile(csv_file)
 				await file.unlink(filePath, dirPath)
 			}
 
-			if (options.mappers) {
-				content = arrays.replaceObjectKeys(content, options.mappers)
-			}
-
 			if (Object.keys(content[0]).length !== options.fields.length) {
 				throw new BadRequestException(
-					`Invalid ${options.upload_type} file. Expected ${options.fields.length} columns, got ${content[0].length}`,
+					`Invalid ${options.upload_type} file. Expected ${options.fields.length} columns, got ${Object.keys(content[0]).length}`,
 				)
 			}
 			const dtos: DeepPartial<T>[] = content.map(row => {
@@ -233,6 +241,7 @@ export async function crudBulkUpload<T>(options: {
 				dto['account_id'] = options.account_id
 				return <DeepPartial<T>>_.omitBy(dto, _.isEmpty) // remove empty values
 			})
+
 			try {
 				return <BulkUploadResponse>await options.service.bulk(dtos, options.import_mode, options.dedup_field)
 			} catch (e) {
