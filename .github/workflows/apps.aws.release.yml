@@ -40,6 +40,7 @@ jobs:
                         pnpm-workspace.yaml
                         tsconfig.json
                         common/dev
+                        common/nestjs-redoc
                         common/utils
                         backend/core
                         apps/aws
