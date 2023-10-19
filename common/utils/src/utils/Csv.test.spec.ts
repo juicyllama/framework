@@ -10,8 +10,8 @@ describe('CSV', () => {
 		const { filePath, dirPath } = await csv.createTempCSVFileFromString(
 			'first_name,last_name,email' + '\n' + 'John,Snow,john@got.com'
 		)
-		expect(filePath).toBeDefined()
 		await file.unlink(filePath, dirPath)
+		expect(filePath).toBeDefined()
 	})
 
 	it('parseCsvFile', async () => {
@@ -19,9 +19,31 @@ describe('CSV', () => {
 			'first_name,last_name,email' + '\n' + 'John,Snow,john@got.com'
 		)
 		const result = await csv.parseCsvFile(csv_file)
+		await file.unlink(filePath, dirPath)
 		expect(result).toBeDefined()
 		expect(result[0]).toBeDefined()
 		expect(result[0].first_name).toEqual('John')
+	})
+
+	it('parseCsvFile with headers', async () => {
+
+		const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+			'name,type' + '\n' + 'Tom,Cat' + '\n' + 'Jerry,Mouse'
+		)
+
+		const result = await csv.parseCsvFile(csv_file, { type: 'animal' })
 		await file.unlink(filePath, dirPath)
+
+		expect(result).toBeDefined()
+		expect(result[0]).toBeDefined()
+		expect(result[0].name).toBeDefined()
+		expect(result[0].type).not.toBeDefined()
+		expect(result[0].animal).toBeDefined()
+		expect(result[0].animal).toBe('Cat')
+		expect(result[1]).toBeDefined()
+		expect(result[0].name).toBeDefined()
+		expect(result[1].type).not.toBeDefined()
+		expect(result[1].animal).toBeDefined()
+		expect(result[1].animal).toBe('Mouse')	
 	})
 })

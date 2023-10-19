@@ -1,4 +1,5 @@
 import csvParser from 'csv-parser'
+import stripBom from 'strip-bom-stream'
 import { Readable } from 'stream'
 import * as fs from 'fs'
 import * as path from 'path'
@@ -10,13 +11,18 @@ export class Csv {
 	 * @returns array of objects
 	 */
 
-	async parseCsvFile(file: Express.Multer.File): Promise<any[]> {
+	async parseCsvFile(file: Express.Multer.File, mappers?: {[key: string]: string}): Promise<any[]> {
 		return new Promise((resolve, reject) => {
 			const results = []
 			const stream = Readable.from(file.buffer)
 
 			stream
-				.pipe(csvParser())
+				.pipe(stripBom())
+				.pipe(csvParser({
+					mapHeaders: ({ header }) => {
+						return mappers?.[header] ?? header
+					}
+				}))
 				.on('data', data => results.push(data))
 				.on('end', () => resolve(results))
 				.on('error', error => reject(error))
