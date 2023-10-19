@@ -70,27 +70,35 @@ export class Query<T> {
 			}
 		})
 
+		let result: BulkUploadResponse
+
 		switch (import_mode) {
 			case ImportMode.CREATE:
-				return await this.createBulkRecords(repository, data)
+				result = await this.createBulkRecords(repository, data)
 
 			case ImportMode.UPSERT:
 				if (!dedup_field) {
 					throw new Error('Dedup field required for update')
 				}
 
-				return await this.upsertBulkRecords(repository, data, dedup_field)
+				result = await this.upsertBulkRecords(repository, data, dedup_field)
 
 			case ImportMode.DELETE:
 				if (!dedup_field) {
 					throw new Error('Dedup field required for update')
 				}
-				return await this.deleteBulkRecords(repository, data, dedup_field)
+				result = await this.deleteBulkRecords(repository, data, dedup_field)
 
 			case ImportMode.REPOPULATE:
 				await this.truncate(repository)
-				return await this.createBulkRecords(repository, data)
+				result = await this.createBulkRecords(repository, data)
 		}
+
+		logger.debug(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] Result`, {
+			affected_records: ("affected_records" in result) ? result.affected_records : ("raw" in result) ? result.raw.affected_records : null,
+		})
+
+		return result
 	}
 
 	/**

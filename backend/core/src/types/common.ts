@@ -94,8 +94,8 @@ export class UploadFileDto {
 		name: 'mappers',
 		description: `If your fields do not match the database fields, you can map them here. \n Example: \n 
 		\{ 
-			first_name: "someClientFieldName", 
-			last_name: "this.could.be.anything" 
+			"someClientFieldName": "first_name", 
+			"this.could.be.anything": "last_name"
 		}\ 
 		`,
 		type: 'Object',
