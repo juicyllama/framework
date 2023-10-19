@@ -21,15 +21,11 @@
 	"bin": {
 		"jl": "./cli.ts"
 	},
-	"jl": {
-		"project_name": "jl_cli",
-		"apps": []
-	},
 	"scripts": {
 		"build": "tsc",
 		"format": "prettier --write .",
 		"lint": "eslint --fix",
-		"start": "ts-node cli.ts"
+		"start": "ts-node --esm cli.ts"
 	},
 	"dependencies": {
 		"@types/node": "^20.6.5",

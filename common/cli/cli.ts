@@ -36,8 +36,7 @@ async function runScript(script: Script) {
 async function run() {
 	cli_log(`JL Cli v${version}`)
 
-	const mainArgs = yargs(getMainArgs())
-	const argv = mainArgs.parseSync()
+	const { argv } = yargs(getMainArgs())
 
 	if (argv['_'].length > 0) {
 		await runScript(Script[argv['_'][0]])

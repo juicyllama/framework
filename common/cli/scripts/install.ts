@@ -46,7 +46,7 @@ export async function install() {
 	}
 
 	if (project.docker) {
-		await setupDocker(project)
+		await setupDocker()
 	}
 
 	if (project.apps.length) {
