@@ -35,6 +35,7 @@ describe('Crud Bulk Upload Controller', () => {
 			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,last_name' + '\n' + 'Test,Test,test@test.com'
 			)
+			await file.unlink(filePath, dirPath)
 
 			try{ 
 				<InsertResult>await crudBulkUpload<T>({
@@ -50,7 +51,6 @@ describe('Crud Bulk Upload Controller', () => {
 			} catch(e: any) {
 				expect(e.message).toEqual(`Field 'email' doesn't have a default value`)
 			}
-			await file.unlink(filePath, dirPath)
 		})
 
 		it('Wrong number of field data', async () => {
@@ -58,6 +58,7 @@ describe('Crud Bulk Upload Controller', () => {
 			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,last_name,email' + '\n' + 'Test,Test'
 			)
+			await file.unlink(filePath, dirPath)
 
 			try{ 
 				<InsertResult>await crudBulkUpload<T>({
@@ -74,7 +75,6 @@ describe('Crud Bulk Upload Controller', () => {
 			} catch(e: any) {
 				expect(e.message).toEqual(`Invalid CSV file. Expected 3 columns, got undefined`)
 			}
-			await file.unlink(filePath, dirPath)
 		})
 
 	})
@@ -85,6 +85,7 @@ describe('Crud Bulk Upload Controller', () => {
 				const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 					'first_name,last_name,email' + '\n' + 'Test2,Test,test2@test.com'
 				)
+				await file.unlink(filePath, dirPath)
 	
 				const res = <InsertResult>await crudBulkUpload<T>(
 					{
@@ -96,7 +97,6 @@ describe('Crud Bulk Upload Controller', () => {
 						service: scaffold.services.service,
 					}
 				)
-				await file.unlink(filePath, dirPath)
 				expect(res.raw.affectedRows).toEqual(1)
 				const users = await scaffold.services.service.findAll({})
 				const lastUser = users.pop()
@@ -138,6 +138,7 @@ describe('Crud Bulk Upload Controller', () => {
 			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,last_name,email' + '\n' + 'Test,Test,test@test.com'
 			)
+			await file.unlink(filePath, dirPath)
 
 			const res = <InsertResult>await crudBulkUpload<T>(
 				{
@@ -149,7 +150,6 @@ describe('Crud Bulk Upload Controller', () => {
 					service: scaffold.services.service,
 				}
 			)
-			await file.unlink(filePath, dirPath)
 			expect(res.raw.affectedRows).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
 			const lastUser = users.pop()
@@ -163,6 +163,7 @@ describe('Crud Bulk Upload Controller', () => {
 			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'fname,lname,email' + '\n' + 'Test1,Test,test1@test.com'
 			)
+			await file.unlink(filePath, dirPath)
 
 			const res = <InsertResult>await crudBulkUpload<T>(
 				{
@@ -178,7 +179,6 @@ describe('Crud Bulk Upload Controller', () => {
 					}
 				}
 			)
-			await file.unlink(filePath, dirPath)
 			expect(res.raw.affectedRows).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
 			const lastUser = users.pop()
