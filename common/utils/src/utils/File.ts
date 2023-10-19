@@ -13,12 +13,10 @@ export class File {
 
 	async unlink(filePath?: string, dirPath?: string): Promise<void> {
 		try{
-			if(filePath) {
-				fs.promises.unlink(filePath)
-			}
-	
 			if(dirPath) {
 				fs.rmSync(dirPath, { recursive: true, force: true })
+			}else if(filePath){
+				fs.promises.unlink(filePath)
 			}
 		}catch(e: any){
 			logger.warn(`[@juicyllama/utils::File::unlink] ${e.message}`, {
@@ -27,6 +25,5 @@ export class File {
 				e: e
 			})
 		}
-		
 	}
 }
