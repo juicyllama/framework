@@ -11,6 +11,7 @@ export default defineConfig({
 			'@': resolve(__dirname, 'src'),
 		},
 	},
+
 	plugins: [
 		vue({
 			template: {
@@ -20,9 +21,14 @@ export default defineConfig({
 		quasar(),
 	],
 	build: {
+		rollupInputOptions: {
+			input: resolve(__dirname, './src/app.ts') // custom main
+		},
 		sourcemap: true,
 		// Output compiled files to /dist.
 		outDir: './dist',
+		// entry: resolve(__dirname, 'src/app.ts'),
+		/*
 		lib: {
 			// Set the entry point (file that contains our components exported).
 			entry: resolve(__dirname, 'src/index.ts'),
@@ -32,6 +38,7 @@ export default defineConfig({
 			// Example: my-components-library.esm.js
 			fileName: format => `${'JLCore'}.${format}.js`,
 		},
+		*/
 		rollupOptions: {
 			external: [
 				/^\/@fs*/,
@@ -75,6 +82,6 @@ export default defineConfig({
 		coverage: { provider: 'istanbul', reporter: ['text'] },
 	},
 	optimizeDeps: {
-		exclude: ['/node_modules/@juicyllama/**/*'],
+		exclude: ['/node_modules/@juicyllama/*'],
 	},
 })

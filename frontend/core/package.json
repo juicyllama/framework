@@ -1,39 +1,54 @@
 {
-	"name": "@juicyllama/frontend-core",
-	"version": "0.1.3",
-	"description": "Juicyllama Frontend Core",
-	"author": {
-		"name": "JuicyLlama Studio",
-		"email": "studio@juicyllama.com",
-		"url": "https://juicyllama.com"
-	},
-	"publishConfig": {
-		"registry": "https://registry.npmjs.org/"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/juicyllama/framework/frontend/core"
-	},
-	"bugs": "https://github.com/juicyllama/framework",
-	"license": "0BSD",
-	"main": "dist/JLCore.umd.js",
-	"module": "dist/JLCore.es.js",
-	"types": "dist/types/index.d.ts",
-	"files": [
-		"dist",
-		"types/*.d.ts"
-	],
-	"scripts": {
-		"prepare": "pnpm run build",
-		"build": "vite build && pnpm run build:types",
-		"build:vite": "vite build",
-		"build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types ",
-		"format": "prettier --write \"src/**/*.ts\"",
-		"lint": "eslint \"**/*.{js,ts,vue}\" --quiet --fix",
-		"test": "vitest --silent --run"
-	},
-	"dependencies": {
-		"@juicyllama/vue-utils": "workspace:^",
-		"@juicyllama/vue-dev": "workspace:^"
-	}
+  "name": "@juicyllama/frontend-core",
+  "version": "0.1.3",
+  "description": "Juicyllama Frontend Core",
+  "author": {
+    "name": "JuicyLlama Studio",
+    "email": "studio@juicyllama.com",
+    "url": "https://juicyllama.com"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/juicyllama/framework/frontend/core"
+  },
+  "bugs": "https://github.com/juicyllama/framework",
+  "license": "0BSD",
+  "main": "dist/JLCore.umd.js",
+  "module": "dist/JLCore.es.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist",
+    "types/*.d.ts"
+  ],
+  "scripts": {
+    "prepare": "pnpm run build",
+    "build": "vite build && pnpm run build:types",
+    "build:vite": "vite build",
+    "app:run": "vite",
+    "build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types ",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint \"**/*.{js,ts,vue}\" --quiet --fix",
+    "test": "vitest --silent --run",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "@juicyllama/vue-dev": "workspace:^",
+    "@juicyllama/vue-utils": "workspace:^"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^7.5.0",
+    "@storybook/addon-interactions": "^7.5.0",
+    "@storybook/addon-links": "^7.5.0",
+    "@storybook/addon-onboarding": "^1.0.8",
+    "@storybook/blocks": "^7.5.0",
+    "@storybook/testing-library": "^0.2.2",
+    "@storybook/vue3": "^7.5.0",
+    "@storybook/vue3-vite": "^7.5.0",
+    "eslint-plugin-storybook": "^0.6.15",
+    "storybook": "^7.5.0"
+  }
 }

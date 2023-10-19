@@ -39,7 +39,6 @@ const router = useRouter()
 async function create(state: CreateAccount) {
 	loading.value = true
 
-
 	if (props.skip_account_name) {
 		state.account_name = `${state.first_name} ${state.last_name} project`
 	}

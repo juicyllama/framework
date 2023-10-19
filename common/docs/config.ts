@@ -1,6 +1,7 @@
 // import VueExamplePlugin from 'vuepress-plugin-vue-example'
 import { registerComponentsPlugin } from '@vuepress/plugin-register-components'
-import { getDirname, path } from '@vuepress/utils'
+import { getDirname } from '@vuepress/utils'
+import path from 'path'
 
 export const homeLink = {
 	text: '🏠',
@@ -153,12 +154,15 @@ export const homeNavbar = [
 // }
 const __dirname = getDirname(import.meta.url)
 
+console.log('__dirname!!!', __dirname)
+
 export default {
 	plugins: [
 		registerComponentsPlugin({
-			components: {
-				JLStats: path.resolve(__dirname, '../../frontend/core/src/components/common/stats/'),
-			},
+			// components: {
+			// 	JLStats: path.resolve(__dirname, '../../frontend/core/src/components/common/stats/Stats.vue'),
+			// },
+			componentsDir: path.resolve(__dirname, '../../frontend/core/src/components/common/stats'),
 		}),
 	],
 }

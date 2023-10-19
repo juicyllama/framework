@@ -4,7 +4,7 @@ import { token } from './store/token'
 import { UserStore } from './store/user'
 import { SettingsStore } from './store/settings'
 import instance from './services/index'
-import classes from './assets/JLCore.css'
+import classes from './assets/JLCore.css?inline'
 import { ThemeStore } from './store/theme'
 import { JLLogin, JLSignup, JLPasswordless, JLResetPassword } from '@/components/core/auth'
 import {

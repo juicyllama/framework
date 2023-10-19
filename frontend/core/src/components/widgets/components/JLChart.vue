@@ -1,10 +1,10 @@
 <template>
-	<JLChart {...config} />
+	<JLChart v-bind="{ ...(props.config as any) }" />
 </template>
 <script setup lang="ts">
 import JLChart from '@/index'
 
-defineProps({
+const props = defineProps({
 	config: Object,
 })
 </script>

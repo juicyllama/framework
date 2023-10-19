@@ -20,6 +20,11 @@ Based on [chartjs](https://www.chartjs.org/) library.
 
 ## Examples
 
+<ClientOnly>
+	<JLStats/>
+	<Stats/>
+</ClientOnly>
+
 ```vue
 <script lang="ts" setup>
 import { JLChart } from '@juicyllama/frontend-core'

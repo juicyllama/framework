@@ -30,6 +30,8 @@ npm install @juicyllama/core
 
 Most of the basic ones will be set up using CLI, but for using specific authentication types you'll need to provide ones from Authentication section
 
+<Stats/>
+
 ### Basic settings
 
 ```
