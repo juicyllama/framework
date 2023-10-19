@@ -37,8 +37,7 @@
         "axios": "latest",
         "dayjs": "latest",
         "showdown": "latest",
-        "csv-parser": "latest",
-        "strip-bom-stream": "latest"
+        "csv-parser": "latest"
     },
     "devDependencies": {
         "@juicyllama/dev": "workspace:^"

@@ -1,5 +1,4 @@
 import csvParser from 'csv-parser'
-import stripBom from 'strip-bom-stream'
 import { Readable } from 'stream'
 import * as fs from 'fs'
 import * as path from 'path'
@@ -17,9 +16,13 @@ export class Csv {
 			const stream = Readable.from(file.buffer)
 
 			stream
-				.pipe(stripBom())
 				.pipe(csvParser({
 					mapHeaders: ({ header }) => {
+
+						if (header.charCodeAt(0) === 0xFEFF) {
+							header = header.replace(/^\uFEFF/gm, "");
+						}
+
 						return mappers?.[header] ?? header
 					}
 				}))
