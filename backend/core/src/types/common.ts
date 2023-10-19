@@ -101,7 +101,6 @@ export class UploadFileDto {
 		type: 'Object',
 		required: false,
 	})
-	@IsEnum(ImportMode)
 	@IsOptional()
 	mappers?: Object
 }

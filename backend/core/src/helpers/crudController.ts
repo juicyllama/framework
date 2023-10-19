@@ -166,7 +166,7 @@ export async function crudUpdate<T>(options: {
 export async function crudBulkUpload<T>(options: {
 	fields: string[]
 	dedup_field: string
-	mappers?: object
+	mappers?: Object
 	import_mode?: ImportMode
 	upload_type?: UploadType
 	service: any
