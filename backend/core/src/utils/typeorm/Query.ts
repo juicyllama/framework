@@ -24,7 +24,7 @@ import { isNil, omitBy } from 'lodash'
 import { ComparisonOperator, Enums, Env, getMySQLTimeInterval, Logger } from '@juicyllama/utils'
 import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder'
 import { ChartOptions } from './types'
-import { ImportMode } from '../../types/common'
+import { ImportMode, BulkUploadResponse } from '../../types/common'
 
 const logger = new Logger()
 
@@ -60,7 +60,7 @@ export class Query<T> {
 		data: DeepPartial<T>[],
 		import_mode: ImportMode,
 		dedup_field?: string,
-	): Promise<InsertResult | DeleteResult> {
+	): Promise<BulkUploadResponse> {
 		switch (import_mode) {
 			case ImportMode.CREATE:
 				return await this.createBulkRecords(repository, data)

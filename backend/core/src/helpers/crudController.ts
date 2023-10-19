@@ -3,8 +3,8 @@ import { Query as TQuery } from '../utils/typeorm/Query'
 import { TypeOrm } from '../utils/typeorm/TypeOrm'
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common'
 import _ from 'lodash'
-import { DeepPartial, DeleteResult, InsertResult } from 'typeorm'
-import { UploadType, ImportMode } from '../types/common'
+import { DeepPartial } from 'typeorm'
+import { UploadType, ImportMode, BulkUploadResponse } from '../types/common'
 
 export async function crudCreate<T>(options: { service: any; data: any; account_id?: number }): Promise<T> {
 	return await options.service.create({
@@ -173,7 +173,7 @@ export async function crudBulkUpload<T>(options: {
 	account_id?: number
 	file?: Express.Multer.File
 	raw?: any
-}): Promise<InsertResult | DeleteResult> {
+}): Promise<BulkUploadResponse> {
 	const arrays = new Arrays()
 	const csv = new Csv()
 
@@ -233,9 +233,7 @@ export async function crudBulkUpload<T>(options: {
 				return <DeepPartial<T>>_.omitBy(dto, _.isEmpty) // remove empty values
 			})
 			try {
-				return <InsertResult | DeleteResult>(
-					await options.service.bulk(dtos, options.import_mode, options.dedup_field)
-				)
+				return <BulkUploadResponse>await options.service.bulk(dtos, options.import_mode, options.dedup_field)
 			} catch (e) {
 				throw new BadRequestException(e.message)
 			}

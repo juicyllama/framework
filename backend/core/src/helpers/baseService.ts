@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { Query } from '../utils/typeorm/Query'
-import { DeepPartial, DeleteResult, FindOneOptions, InsertResult, Repository } from 'typeorm'
+import { DeepPartial, FindOneOptions, Repository } from 'typeorm'
 import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
 import { BeaconService } from '../modules/beacon/beacon.service'
 import { Cache } from 'cache-manager'
 import { CachePeriod, JLCache, Logger } from '@juicyllama/utils'
 import { ChartOptions } from '../utils/typeorm/types'
-import { ImportMode } from '../types/common'
+import { ImportMode, BulkUploadResponse } from '../types/common'
 
 /**
  * Base service for all services
@@ -69,11 +69,7 @@ export class BaseService<T> {
 	 * @param dedup_field
 	 */
 
-	async bulk(
-		data: DeepPartial<T>[],
-		import_mode: ImportMode,
-		dedup_field?: string,
-	): Promise<InsertResult | DeleteResult> {
+	async bulk(data: DeepPartial<T>[], import_mode: ImportMode, dedup_field?: string): Promise<BulkUploadResponse> {
 		return await this.query.bulk(this.repository, data, import_mode, dedup_field)
 	}
 

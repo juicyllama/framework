@@ -43,8 +43,7 @@ import { crudDelete, crudFindAll, crudStats } from '../../helpers'
 import { ReadChartsDecorator, UploadFieldsDecorator, UploadImageDecorator } from '../../decorators/crud.decorator'
 import { crudCharts, crudBulkUpload } from '../../helpers/crudController'
 import { StorageService } from '../storage/storage.service'
-import { CrudUploadFieldsResponse, UploadFileDto } from '../../types/common'
-import { DeleteResult, InsertResult } from 'typeorm'
+import { CrudUploadFieldsResponse, UploadFileDto, BulkUploadResponse } from '../../types/common'
 
 @ApiTags(Strings.capitalize(Strings.plural(NAME)))
 @UserAuth()
@@ -198,7 +197,7 @@ export class UsersController {
 		@Body() params: UploadFileDto,
 		@AccountId() account_id: number,
 		@UploadedFile() file?: Express.Multer.File,
-	): Promise<InsertResult | DeleteResult> {
+	): Promise<BulkUploadResponse> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		return await crudBulkUpload<T>({
 			fields: UPLOAD_FIELDS,
