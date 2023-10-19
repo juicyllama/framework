@@ -231,27 +231,6 @@ export function UploadFileDecorator(E: any) {
 	)
 }
 
-export function BulkFileUploadDecorator(supported_fields?: string[], dedup_field?: string) {
-	return applyDecorators(
-		ApiOperation({
-			summary: `Bulk File Upload`,
-			description: `You can pass the following fields as part of the bulk upload: ${
-				supported_fields ? '`' + supported_fields.join('`, `') + '`' : ''
-			}. The following field will be used to deduplicate the records: ${
-				dedup_field ? '`' + dedup_field + '`' : ''
-			}. Duplicates work as follows:
-		\n - \`${ImportMode.CREATE}\` - Any duplicates found will throw an error and the import will fail
-		\n - \`${ImportMode.UPSERT}\` - Any duplicates found will be updated, any new records will be created
-		\n - \`${ImportMode.DELETE}\` - Records found based on the duplicate field will be deleted
-		`,
-		}),
-		ApiConsumes('multipart/form-data'),
-		UseInterceptors(FileInterceptor('file')),
-		ApiOkResponse({ description: 'OK' }),
-		Post(`upload/file`),
-	)
-}
-
 export function BulkUploadDecorator(supported_fields?: string[], dedup_field?: string) {
 	return applyDecorators(
 		ApiOperation({
@@ -266,6 +245,8 @@ export function BulkUploadDecorator(supported_fields?: string[], dedup_field?: s
 		\n - \`${ImportMode.DELETE}\` - Records found based on the duplicate field will be deleted
 		`,
 		}),
+		ApiConsumes('multipart/form-data'),
+		UseInterceptors(FileInterceptor('file')),
 		ApiOkResponse({ description: 'OK' }),
 		Post(`upload`),
 	)

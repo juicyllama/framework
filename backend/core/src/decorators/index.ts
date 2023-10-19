@@ -7,7 +7,6 @@ export {
 	ReadChartsDecorator,
 	UpdateDecorator,
 	BulkUploadDecorator,
-	BulkFileUploadDecorator,
 	UploadImageDecorator,
 	UploadFileDecorator,
 	DeleteDecorator,
