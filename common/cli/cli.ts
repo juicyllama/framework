@@ -37,7 +37,8 @@ async function run() {
 	cli_log(`JL Cli v${version}`)
 
 	//check if arguments were passed else run interactive mode
-	const { argv } = yargs(getMainArgs())
+	const mainArgs = yargs(getMainArgs())
+	const argv = mainArgs.parseSync()
 
 	if (argv['_'].length > 0) {
 		await runScript(Script[argv['_'][0]])

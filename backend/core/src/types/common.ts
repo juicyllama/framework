@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsEnum, IsOptional } from 'class-validator'
+import { InsertResult, DeleteResult } from 'typeorm'
 
 export enum UploadType {
 	CSV = 'CSV',
@@ -104,3 +105,5 @@ export class UploadFileDto {
 	@IsOptional()
 	mappers?: Object
 }
+
+export type BulkUploadResponse = InsertResult | DeleteResult

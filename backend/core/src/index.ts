@@ -142,4 +142,14 @@ export {
 } from './test'
 
 // Types
-export { AppIntegrationName, HTTP_METHODS, METHOD, CRUD_ACTIONS, PromiseLoopOutcomes, OauthInterface } from './types'
+export { AppIntegrationName,   
+	UploadType,
+    HTTP_METHODS, 
+    CRUD_ACTIONS, 
+    METHOD, 
+    PromiseLoopOutcomes,  
+    CrudUploadFieldsResponse,
+    UploadFileDto,
+    BulkUploadResponse,
+	OauthInterface 
+} from './types'
