@@ -28,9 +28,12 @@ describe('Query Bulk', () => {
 				'first_name,last_name,email' + '\n' + 'Amy,Alsop,amy@email.com'
 			)
 			const data = await csv.parseCsvFile(csv_file)
+			try{
+				await file.unlink(filePath, dirPath)
+			}catch(e: any){
+				scaffold.services.logger.warn(e.message)
+			}
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
-			await file.unlink(filePath, dirPath)
-
 			expect(res.raw.affectedRows).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
 			const lastUser = users.pop()
@@ -44,8 +47,12 @@ describe('Query Bulk', () => {
 				'first_name,last_name,email' + '\n' + 'Bob,Bow,bob@email.com' + '\n' + 'Claire,Cherry,claire@email.com'
 			)
 			const data = await csv.parseCsvFile(csv_file)
-				const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
+			try{
 				await file.unlink(filePath, dirPath)
+			}catch(e: any){
+				scaffold.services.logger.warn(e.message)
+			}
+				const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
 				expect(res.raw.affectedRows).toEqual(2)
 				const users = await scaffold.services.service.findAll({})
 				const lastUser = users.pop()
@@ -60,7 +67,11 @@ describe('Query Bulk', () => {
 				'first_name,last_name,email' + '\n' + 'Amy,Alsop,amy@email.com'
 			)
 			const data = await csv.parseCsvFile(csv_file)
-			await file.unlink(filePath, dirPath)
+			try{
+				await file.unlink(filePath, dirPath)
+			}catch(e: any){
+				scaffold.services.logger.warn(e.message)
+			}
 			try{
 				await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
 				expect(true).toEqual(false)
@@ -78,7 +89,11 @@ describe('Query Bulk', () => {
 				'first_name,last_name,email' + '\n' + 'Zoe,Zele,zoe@email.com' + '\n' + 'Amy,Alsop,amy@email.com' + '\n' + 'Darren,Dele,darren@email.com'
 			)
 			const data = await csv.parseCsvFile(csv_file)
-			await file.unlink(filePath, dirPath)
+			try{
+				await file.unlink(filePath, dirPath)
+			}catch(e: any){
+				scaffold.services.logger.warn(e.message)
+			}
 			try{
 				await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
 				expect(true).toEqual(false)
@@ -97,7 +112,11 @@ describe('Query Bulk', () => {
 				'first_name,email' + '\n' + 'Erin,erin@email.com'
 			)
 			const data = await csv.parseCsvFile(csv_file)
-			await file.unlink(filePath, dirPath)
+			try{
+				await file.unlink(filePath, dirPath)
+			}catch(e: any){
+				scaffold.services.logger.warn(e.message)
+			}
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
 			expect(res.raw.affectedRows).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
@@ -111,7 +130,11 @@ describe('Query Bulk', () => {
 				'first_name,email' + '\n' + 'Fred,fred@email.com' + '\n' + 'Gary,gary@email.com'
 			)
 			const data = await csv.parseCsvFile(csv_file)
-			await file.unlink(filePath, dirPath)
+			try{
+				await file.unlink(filePath, dirPath)
+			}catch(e: any){
+				scaffold.services.logger.warn(e.message)
+			}
 				const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
 				expect(res.raw.affectedRows).toEqual(2)
 				const users = await scaffold.services.service.findAll({})
@@ -125,7 +148,11 @@ describe('Query Bulk', () => {
 				'email,first_name' + '\n' + 'helen@email.com,Helen' + '\n' + 'isabel@email.com,Isabel'
 			)
 			const data = await csv.parseCsvFile(csv_file)
-			await file.unlink(filePath, dirPath)
+			try{
+				await file.unlink(filePath, dirPath)
+			}catch(e: any){
+				scaffold.services.logger.warn(e.message)
+			}
 				const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
 				expect(res.raw.affectedRows).toEqual(2)
 				const users = await scaffold.services.service.findAll({})
@@ -140,7 +167,11 @@ describe('Query Bulk', () => {
 				'first_name,email' + '\n' + 'Andy,amy@email.com'
 			)
 			const data = await csv.parseCsvFile(csv_file)
-			await file.unlink(filePath, dirPath)
+			try{
+				await file.unlink(filePath, dirPath)
+			}catch(e: any){
+				scaffold.services.logger.warn(e.message)
+			}
 			await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)	
 			const user = await scaffold.services.service.findOne({
 				where: {
@@ -160,7 +191,11 @@ describe('Query Bulk', () => {
 				'first_name,email' + '\n' + 'Amy,amy@email.com' + '\n' + 'Izzy,isabel@email.com'
 			)
 			const data = await csv.parseCsvFile(csv_file)
-			await file.unlink(filePath, dirPath)
+			try{
+				await file.unlink(filePath, dirPath)
+			}catch(e: any){
+				scaffold.services.logger.warn(e.message)
+			}
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
 			expect(res.raw.affectedRows).toEqual(4)
 			expect(res.raw.info).toMatch('Records: 2  Duplicates: 2')
@@ -180,7 +215,11 @@ describe('Query Bulk', () => {
 				'first_name,email' + '\n' + 'Amie,amy@email.com' + '\n' + 'Jon,jon@email.com'
 			)
 			const data = await csv.parseCsvFile(csv_file)
-			await file.unlink(filePath, dirPath)
+			try{
+				await file.unlink(filePath, dirPath)
+			}catch(e: any){
+				scaffold.services.logger.warn(e.message)
+			}
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
 			expect(res.raw.affectedRows).toEqual(3)
 			expect(res.raw.info).toMatch('Records: 2  Duplicates: 1')
@@ -206,7 +245,11 @@ describe('Query Bulk', () => {
 				'first_name,email' + '\n' + 'Andy,andy@email.com' + '\n' + 'Bob,bob@email.com' + '\n' + 'Claire,claire@email.com'
 			)
 			const data = await csv.parseCsvFile(csv_file)
-			await file.unlink(filePath, dirPath)
+			try{
+				await file.unlink(filePath, dirPath)
+			}catch(e: any){
+				scaffold.services.logger.warn(e.message)
+			}
 			const res = <InsertResult>await scaffold.query.bulk(scaffold.repository, data, ImportMode.REPOPULATE)
 			expect(res.raw.affectedRows).toEqual(3)
 			expect(res.raw.info).toEqual('Records: 3  Duplicates: 0  Warnings: 0')
@@ -224,7 +267,11 @@ describe('Query Bulk', () => {
 				'first_name,email' + '\n' + 'Bob,bob@email.com' + '\n' + 'Claire,claire@email.com'
 			)
 			const data = await csv.parseCsvFile(csv_file)
-			await file.unlink(filePath, dirPath)
+			try{
+				await file.unlink(filePath, dirPath)
+			}catch(e: any){
+				scaffold.services.logger.warn(e.message)
+			}
 			const res = <DeleteResult>await scaffold.query.bulk(scaffold.repository, data, ImportMode.DELETE, UPLOAD_DUPLICATE_FIELD)
 			expect(res.affected).toEqual(2)
 			const new_count = await scaffold.services.service.count()

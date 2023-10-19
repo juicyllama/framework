@@ -5,7 +5,7 @@ import { UsersModule } from '../modules/users/users.module'
 import { crudBulkUpload } from './crudController'
 import { UPLOAD_FIELDS, UPLOAD_DUPLICATE_FIELD } from '../modules/users/users.constants'
 import { ImportMode, UploadType } from '../types/common'
-import { Csv, File } from '@juicyllama/utils'
+import { Csv, File, Logger } from '@juicyllama/utils'
 import { InsertResult } from 'typeorm'
 
 const E = User
@@ -35,7 +35,11 @@ describe('Crud Bulk Upload Controller', () => {
 			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,last_name' + '\n' + 'Test,Test,test@test.com'
 			)
-			await file.unlink(filePath, dirPath)
+			try{
+				await file.unlink(filePath, dirPath)
+			}catch(e: any){
+				scaffold.services.logger.warn(e.message)
+			}
 
 			try{ 
 				<InsertResult>await crudBulkUpload<T>({
@@ -58,7 +62,11 @@ describe('Crud Bulk Upload Controller', () => {
 			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,last_name,email' + '\n' + 'Test,Test'
 			)
-			await file.unlink(filePath, dirPath)
+			try{
+				await file.unlink(filePath, dirPath)
+			}catch(e: any){
+				scaffold.services.logger.warn(e.message)
+			}
 
 			try{ 
 				<InsertResult>await crudBulkUpload<T>({
@@ -85,7 +93,11 @@ describe('Crud Bulk Upload Controller', () => {
 				const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 					'first_name,last_name,email' + '\n' + 'Test2,Test,test2@test.com'
 				)
-				await file.unlink(filePath, dirPath)
+				try{
+					await file.unlink(filePath, dirPath)
+				}catch(e: any){
+					scaffold.services.logger.warn(e.message)
+				}
 	
 				const res = <InsertResult>await crudBulkUpload<T>(
 					{
@@ -138,7 +150,11 @@ describe('Crud Bulk Upload Controller', () => {
 			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,last_name,email' + '\n' + 'Test,Test,test@test.com'
 			)
-			await file.unlink(filePath, dirPath)
+			try{
+				await file.unlink(filePath, dirPath)
+			}catch(e: any){
+				scaffold.services.logger.warn(e.message)
+			}
 
 			const res = <InsertResult>await crudBulkUpload<T>(
 				{
@@ -163,7 +179,11 @@ describe('Crud Bulk Upload Controller', () => {
 			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'fname,lname,email' + '\n' + 'Test1,Test,test1@test.com'
 			)
-			await file.unlink(filePath, dirPath)
+			try{
+				await file.unlink(filePath, dirPath)
+			}catch(e: any){
+				scaffold.services.logger.warn(e.message)
+			}
 
 			const res = <InsertResult>await crudBulkUpload<T>(
 				{
