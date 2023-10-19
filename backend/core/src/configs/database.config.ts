@@ -21,9 +21,7 @@ const DATABASE_SHARED = {
 		path.resolve(process.cwd(), 'node_modules', '@juicyllama', '**', '*.entity.{js,ts}'),
 	],
 	autoLoadMigrations: Env.IsNotProd(), //should be false in live, otherwise long running migration will cause issues with microservices booting up
-	migrations: [
-		path.resolve(process.cwd(), 'dist', 'db', 'migrations', '*.js')
-	],
+	migrations: [path.resolve(process.cwd(), 'dist', 'db', 'migrations', '*.js')],
 }
 
 export const DATABASE = {

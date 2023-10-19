@@ -22,7 +22,7 @@ import {
 	ReadOneDecorator,
 	ReadStatsDecorator,
 	UpdateDecorator,
-	UploadFileDecorator,
+	UploadImageDecorator,
 } from '../../decorators/crud.decorator'
 import { OnboardAccountDto, OnboardAdditionalAccountDto, SuccessAccountDto, UpdateAccountDto } from './account.dto'
 import { Account } from './account.entity'
@@ -132,7 +132,7 @@ export class AccountController {
 
 	@UserAuth()
 	@ApiOperation({ summary: `Upload ${Strings.capitalize(NAME)} Avatar` })
-	@UploadFileDecorator(E)
+	@UploadImageDecorator(E)
 	@Patch(`avatar`)
 	async uploadAvatarFile(
 		@Req() req,

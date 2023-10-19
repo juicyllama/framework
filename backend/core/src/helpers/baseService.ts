@@ -6,7 +6,7 @@ import { BeaconService } from '../modules/beacon/beacon.service'
 import { Cache } from 'cache-manager'
 import { CachePeriod, JLCache, Logger } from '@juicyllama/utils'
 import { ChartOptions } from '../utils/typeorm/types'
-import { ResultSetHeader } from 'mysql2'
+import { ImportMode, BulkUploadResponse } from '../types/common'
 
 /**
  * Base service for all services
@@ -62,8 +62,15 @@ export class BaseService<T> {
 		return results
 	}
 
-	async bulkInsert(data: DeepPartial<T>[]): Promise<ResultSetHeader> {
-		return await this.query.bulkInsert(this.repository, data)
+	/*
+	 * Bulk insert, upsert or delete records into the database
+	 * @param data
+	 * @param import_mode
+	 * @param dedup_field
+	 */
+
+	async bulk(data: DeepPartial<T>[], import_mode: ImportMode, dedup_field?: string): Promise<BulkUploadResponse> {
+		return await this.query.bulk(this.repository, data, import_mode, dedup_field)
 	}
 
 	/**

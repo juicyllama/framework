@@ -37,8 +37,12 @@ export async function TestEndpoint<T>(options: {
 	switch (options.type) {
 		case METHOD.CREATE:
 		case METHOD.POST:
+
+		const url = `${options.url}?${querystring.stringify(options.queryParams)}`
+		console.log('url', url)
+
 			const requestBuilder = request(options.scaffold.server)
-				.post(options.url)
+				.post(url)
 				.set(headers)
 				.send(<any>options.data)
 			if (options.attach) {
@@ -72,7 +76,7 @@ export async function TestEndpoint<T>(options: {
 		case METHOD.UPDATE:
 		case METHOD.PATCH:
 			await request(options.scaffold.server)
-				.patch(options.url)
+				.patch(`${options.url}?${querystring.stringify(options.queryParams)}`)
 				.set(headers)
 				.send(<any>options.data)
 				.then(async ({ body }) => {
@@ -100,7 +104,7 @@ export async function TestEndpoint<T>(options: {
 
 		case METHOD.PUT:
 			await request(options.scaffold.server)
-				.put(options.url)
+				.put(`${options.url}?${querystring.stringify(options.queryParams)}`)
 				.set(headers)
 				.send(<any>options.data)
 				.then(async ({ body }) => {
@@ -128,7 +132,7 @@ export async function TestEndpoint<T>(options: {
 
 		case METHOD.GET:
 			await request(options.scaffold.server)
-				.get(options.url)
+				.get(`${options.url}?${querystring.stringify(options.queryParams)}`)
 				.set(headers)
 				.then(async ({ body }) => {
 					try {
@@ -153,15 +157,9 @@ export async function TestEndpoint<T>(options: {
 			return E
 
 		case METHOD.LIST:
-			let urlWithQueryString: string
-
-			if (options.queryParams) {
-				urlWithQueryString = `${options.url}?${Object.keys(options.queryParams)
-					.map(key => `${key}=${options.queryParams[key]}`)
-					.join('&')}`
-			}
+			
 			await request(options.scaffold.server)
-				.get(urlWithQueryString ?? options.url)
+				.get(`${options.url}?${querystring.stringify(options.queryParams)}`)
 				.set(headers)
 				.then(async ({ body }) => {
 					try {
@@ -239,7 +237,7 @@ export async function TestEndpoint<T>(options: {
 
 		case METHOD.DELETE:
 			await request(options.scaffold.server)
-				.delete(options.url)
+				.delete(`${options.url}?${querystring.stringify(options.queryParams)}`)
 				.set(headers)
 				.then(async ({ body }) => {
 					try {

@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/utils",
-    "version": "0.0.110",
+    "version": "0.0.116",
     "description": "Juicyllama Utils",
     "author": {
         "name": "JuicyLlama Studio",
@@ -34,9 +34,10 @@
         "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
     },
     "dependencies": {
-        "axios": "^1.5.0",
+        "axios": "latest",
         "dayjs": "latest",
-        "showdown": "latest"
+        "showdown": "latest",
+        "csv-parser": "latest"
     },
     "devDependencies": {
         "@juicyllama/dev": "workspace:^"

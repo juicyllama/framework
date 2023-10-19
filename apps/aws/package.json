@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-aws",
-    "version": "0.0.34",
+    "version": "0.0.35",
     "description": "Juicyllama NestJs AWS App",
     "author": {
         "name": "JuicyLlama Studio",
@@ -33,11 +33,11 @@
         "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
     },
     "dependencies": {
-        "@aws-sdk/client-s3": "^3.418.0",
-        "@aws-sdk/client-secrets-manager": "^3.418.0",
-        "@aws-sdk/client-sesv2": "^3.418.0",
-        "@aws-sdk/client-sns": "^3.418.0",
-        "@aws-sdk/lib-storage": "^3.418.0",
+        "@aws-sdk/client-s3": "^3.431.0",
+        "@aws-sdk/client-secrets-manager": "^3.431.0",
+        "@aws-sdk/client-sesv2": "^3.431.0",
+        "@aws-sdk/client-sns": "^3.431.0",
+        "@aws-sdk/lib-storage": "^3.431.0",
         "@juicyllama/core": "workspace:^",
         "@juicyllama/utils": "workspace:^"
     },

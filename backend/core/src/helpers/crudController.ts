@@ -1,13 +1,12 @@
-import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto } from '@juicyllama/utils'
+import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto, Csv, File } from '@juicyllama/utils'
 import { Query as TQuery } from '../utils/typeorm/Query'
 import { TypeOrm } from '../utils/typeorm/TypeOrm'
-import { BadRequestException } from '@nestjs/common'
+import { BadRequestException, InternalServerErrorException } from '@nestjs/common'
 import _ from 'lodash'
-import { CsvService } from '../modules/csv/csv.service'
 import { DeepPartial } from 'typeorm'
-import { CrudUploadCSVResponse } from '../types/common'
+import { UploadType, ImportMode, BulkUploadResponse } from '../types/common'
 
-export async function crudCreate<T>(options: { service: any; data: any, account_id?: number }): Promise<T> {
+export async function crudCreate<T>(options: { service: any; data: any; account_id?: number }): Promise<T> {
 	return await options.service.create({
 		...options.data,
 		account_id: options.account_id ?? options.data.account_id ?? null,
@@ -164,42 +163,93 @@ export async function crudUpdate<T>(options: {
 	})
 }
 
-export async function crudUploadCSV<T>(
-	file: Express.Multer.File,
-	mappers: string[],
-	options: {
-		skip_first?: boolean
-		service: any
-		csvService: CsvService
-		account_id?: number
-	},
-): Promise<CrudUploadCSVResponse> {
-	if (!file) {
-		throw new BadRequestException(`Missing required field: file`)
+export async function crudBulkUpload<T>(options: {
+	fields: string[]
+	dedup_field: string
+	mappers?: { [key: string]: string }
+	import_mode?: ImportMode
+	upload_type?: UploadType
+	service: any
+	account_id?: number
+	file?: Express.Multer.File
+	raw?: any
+}): Promise<BulkUploadResponse> {
+
+	const csv = new Csv()
+	const file = new File()
+
+	if (!options.file && !options.raw) {
+		throw new BadRequestException(`Missing required field: file or raw`)
 	}
-	if (!Boolean(file.mimetype.match(/(csv)/))) {
-		throw new BadRequestException(`Not a valid csv file`)
+
+	if (!options.upload_type) {
+		options.upload_type = UploadType.CSV
 	}
-	const csv = await options.csvService.parseCsvFile(file)
-	if (Object.keys(csv[0]).length !== mappers.length) {
-		throw new BadRequestException(`Invalid CSV file. Expected ${mappers.length} columns, got ${csv[0].length}`)
+
+	if (!options.import_mode) {
+		options.import_mode = ImportMode.CREATE
 	}
-	const dtos: DeepPartial<T>[] = csv.map(row => {
-		const dto = mappers.reduce(
-			(dto, key) => ({
-				...dto,
-				[key]: row[key],
-			}),
-			{},
-		)
-		dto['account_id'] = options.account_id
-		return <DeepPartial<T>>_.omitBy(dto, _.isEmpty) // remove empty values
-	})
-	try {
-		const { affectedRows } = await options.service.bulkInsert(dtos)
-		return { affectedRows }
-	} catch (e) {
-		throw new BadRequestException(e.message)
+
+	if (!options.fields) {
+		throw new InternalServerErrorException(`Missing required field: fields`)
+	}
+
+	if (!options.dedup_field) {
+		throw new InternalServerErrorException(`Missing required field: dedup_field`)
+	}
+
+	switch (options.upload_type) {
+		case UploadType.CSV:
+			let content: any[]
+
+			if (options.mappers) {
+				if(typeof options.mappers === 'string') {
+					try{
+						options.mappers = JSON.parse(options.mappers)
+					}catch(e: any){
+						throw new BadRequestException(`Invalid mappers JSON`)
+					}
+				}
+			}
+
+			if (options.file) {
+				if (!Boolean(options.file.mimetype.match(/(csv)/))) {
+					throw new BadRequestException(`Not a valid ${options.upload_type} file`)
+				}
+
+				content = await csv.parseCsvFile(options.file, options.mappers)
+
+			} else if (options.raw) {
+				const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(options.raw)
+				content = await csv.parseCsvFile(csv_file)
+				await file.unlink(filePath, dirPath)
+			}
+
+			if (Object.keys(content[0]).length !== options.fields.length) {
+				throw new BadRequestException(
+					`Invalid ${options.upload_type} file. Expected ${options.fields.length} columns, got ${Object.keys(content[0]).length}`,
+				)
+			}
+			const dtos: DeepPartial<T>[] = content.map(row => {
+				const dto = options.fields.reduce(
+					(dto, key) => ({
+						...dto,
+						[key]: row[key],
+					}),
+					{},
+				)
+				dto['account_id'] = options.account_id
+				return <DeepPartial<T>>_.omitBy(dto, _.isEmpty) // remove empty values
+			})
+
+			try {
+				return <BulkUploadResponse>await options.service.bulk(dtos, options.import_mode, options.dedup_field)
+			} catch (e) {
+				throw new BadRequestException(e.message)
+			}
+
+		default:
+			throw new BadRequestException(`Not a supported file type`)
 	}
 }
 

@@ -15,6 +15,22 @@ import { redocConfig } from './redoc.config'
 import { joiConfigJoi } from './joi.config'
 import { validationPipeOptions } from './nest.config'
 import { databaseConfig } from './database.config'
-import { RABBITMQ, rabbitMQConfig} from './rabbitmq.config'
+import { RABBITMQ, rabbitMQConfig } from './rabbitmq.config'
 
-export { beaconConfig, cacheConfig, jwtConfig, mongodbConfig, typeormConfig, systemConfig, systemConfigJoi, ssoConfig, loadEnvVariables, redocConfig, joiConfigJoi, validationPipeOptions, databaseConfig, RABBITMQ, rabbitMQConfig }
+export {
+	beaconConfig,
+	cacheConfig,
+	jwtConfig,
+	mongodbConfig,
+	typeormConfig,
+	systemConfig,
+	systemConfigJoi,
+	ssoConfig,
+	loadEnvVariables,
+	redocConfig,
+	joiConfigJoi,
+	validationPipeOptions,
+	databaseConfig,
+	RABBITMQ,
+	rabbitMQConfig,
+}

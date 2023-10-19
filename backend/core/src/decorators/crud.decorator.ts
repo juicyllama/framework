@@ -10,6 +10,7 @@ import {
 	Strings,
 } from '@juicyllama/utils'
 import { FileInterceptor } from '@nestjs/platform-express'
+import { ImportMode } from '../types/common'
 
 /**
  * Update Decorator
@@ -208,7 +209,7 @@ export function UpdateDecorator(E, PRIMARY_KEY: string, name?: string) {
 	)
 }
 
-export function UploadFileDecorator(E) {
+export function UploadImageDecorator(E: any) {
 	return applyDecorators(
 		ApiConsumes('multipart/form-data'),
 		ApiQuery({
@@ -222,18 +223,43 @@ export function UploadFileDecorator(E) {
 	)
 }
 
-export function UploadCSVDecorator(name?: string) {
+export function UploadFileDecorator(E: any) {
 	return applyDecorators(
-		ApiOperation({ summary: `Upload ${name ? Strings.capitalize(name): 'item'}s CSV File` }),
 		ApiConsumes('multipart/form-data'),
-		ApiQuery({
-			name: 'file',
-			description: 'A `csv` file',
-			type: 'File',
-			required: true,
+		UseInterceptors(FileInterceptor('file')),
+		ApiOkResponse(generateResponseObject(E, 'OK')),
+	)
+}
+
+export function BulkUploadDecorator(supported_fields?: string[], dedup_field?: string) {
+	return applyDecorators(
+		ApiOperation({
+			summary: `Bulk Upload`,
+			description: `You can pass the following fields as part of the bulk upload: ${
+				supported_fields ? '`' + supported_fields.join('`, `') + '`' : ''
+			}. The following field will be used to deduplicate the records: ${
+				dedup_field ? '`' + dedup_field + '`' : ''
+			}. Duplicates work as follows:
+		\n - \`${ImportMode.CREATE}\` - Any duplicates found will throw an error and the import will fail
+		\n - \`${ImportMode.UPSERT}\` - Any duplicates found will be updated, any new records will be created
+		\n - \`${ImportMode.DELETE}\` - Records found based on the duplicate field will be deleted
+		`,
 		}),
+		ApiConsumes('multipart/form-data'),
 		UseInterceptors(FileInterceptor('file')),
 		ApiOkResponse({ description: 'OK' }),
+		Post(`upload`),
+	)
+}
+
+export function UploadFieldsDecorator() {
+	return applyDecorators(
+		ApiOperation({
+			summary: `Upload Fields`,
+			description: `This endpoint shows what fields the bulk upload supports, you should either pass these or use these as the keys in your mapper object if you are passing different values.`,
+		}),
+		ApiOkResponse({ description: 'OK' }),
+		Get(`upload/fields`),
 	)
 }
 

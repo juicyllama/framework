@@ -9,7 +9,7 @@ async function createSSL(app: App) {
 	const command = `current_dir=$PWD;cd $PWD/${app.ssl};mkcert ${app.domain};cd $current_dir;`
 	exec(command, async (error, stdout, stderr) => {
 		if (error) {
-			cli_error(`error: ${stderr}`)
+			cli_error(`error: ${stderr} (${stdout})`)
 			return
 		}
 		cli_log(`SSL certificate created for ${app.domain}`)

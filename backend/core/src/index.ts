@@ -72,7 +72,23 @@ export { RmqModule } from './utils/rabbitmq/rmq.module'
 export { RmqService } from './utils/rabbitmq/rmq.service'
 
 // Configs
-export { beaconConfig, cacheConfig, jwtConfig, mongodbConfig, typeormConfig, systemConfig, systemConfigJoi, ssoConfig, loadEnvVariables, redocConfig, joiConfigJoi, validationPipeOptions, databaseConfig, RABBITMQ, rabbitMQConfig } from './configs'
+export {
+	beaconConfig,
+	cacheConfig,
+	jwtConfig,
+	mongodbConfig,
+	typeormConfig,
+	systemConfig,
+	systemConfigJoi,
+	ssoConfig,
+	loadEnvVariables,
+	redocConfig,
+	joiConfigJoi,
+	validationPipeOptions,
+	databaseConfig,
+	RABBITMQ,
+	rabbitMQConfig,
+} from './configs'
 export { MONGODB } from './constants'
 
 // Decorators
@@ -84,7 +100,10 @@ export {
 	ReadStatsDecorator,
 	ReadChartsDecorator,
 	UpdateDecorator,
+	UploadImageDecorator,
 	UploadFileDecorator,
+	BulkUploadDecorator,
+	UploadFieldsDecorator,
 	DeleteDecorator,
 	SwaggerPropertyType,
 	SwaggerPropertyReference,
@@ -97,6 +116,7 @@ export {
 	BaseEntity,
 	BaseService,
 	crudCreate,
+	crudBulkUpload,
 	crudFindOne,
 	crudFindAll,
 	crudStats,
@@ -122,4 +142,15 @@ export {
 } from './test'
 
 // Types
-export { AppIntegrationName, HTTP_METHODS, METHOD, CRUD_ACTIONS, PromiseLoopOutcomes, OauthInterface } from './types'
+export {
+	AppIntegrationName,
+	UploadType,
+	HTTP_METHODS,
+	CRUD_ACTIONS,
+	METHOD,
+	PromiseLoopOutcomes,
+	CrudUploadFieldsResponse,
+	UploadFileDto,
+	BulkUploadResponse,
+	OauthInterface,
+} from './types'

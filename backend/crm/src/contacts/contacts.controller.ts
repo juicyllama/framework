@@ -97,7 +97,7 @@ export class ContactsController {
 	@ReadManyDecorator(E, ContactSelect, ContactOrderBy, ContactRelations)
 	@ApiQuery({ name: 'has_email', enum: ContactHasEmailFilter, required: false })
 	@ApiQuery({ name: 'has_phone', enum: ContactHasPhoneFilter, required: false })
-	async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Promise<T[]> {
+	async findAll(@Query() query, @AccountId() account_id: number): Promise<T[]> {
 		return await crudFindAll<T>({
 			service: this.service,
 			tQuery: this.tQuery,
@@ -110,7 +110,6 @@ export class ContactsController {
 
 	@ReadStatsDecorator(NAME)
 	async stats(
-		@Req() req,
 		@Query() query,
 		@AccountId() account_id: number,
 		@Query('method') method: StatsMethods,
@@ -126,7 +125,7 @@ export class ContactsController {
 	}
 
 	@ReadOneDecorator(E, PRIMARY_KEY, ContactSelect, ContactRelations, NAME)
-	async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
+	async findOne(@AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
 		return await crudFindOne<T>({
 			service: this.service,
 			query: query,
@@ -137,7 +136,6 @@ export class ContactsController {
 
 	@UpdateDecorator(E, PRIMARY_KEY, NAME)
 	async update(
-		@Req() req,
 		@AccountId() account_id: number,
 		@Body() data: UpdateContactDto,
 		@Param() params,
