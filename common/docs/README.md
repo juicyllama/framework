@@ -50,10 +50,40 @@ If you wish to contribute please read the following guides:
 
 ## Installation
 
+Follow these instructions to install the framework for the first time.
+
+### Prerequisites
+
+Before you install please make sure you have [Brew](https://docs.brew.sh/Installation) installed on your machine.
+
+You should also have [Docker](https://docs.docker.com/get-docker/) installed and running on your machine. 
+
+Install following packages:
+
 ```bash
-npm i -g pnpm
+brew install jq
+npm i -g pnpm 
+pnpm i -g npx
+pnpm i -g ts-node
+pnpm i -g mkcert
+```
+
+Optional dependencies:
+
+```bash
+brew install dopplerhq/cli/doppler
+```
+
+#### Additional Reading
+
+- [Doppler docs](https://docs.doppler.com/docs/install-cli)
+
+
+### Running the framework
+
+```bash
 git clone git@github.com:juicyllama/framework.git
 cd framework
-pnpm i --shamefully-hoist
-pnpm run link ## This will link all the modules together globally for a better development experience
+pnpm run install:framework
+pnpm run start:docker:build
 ```

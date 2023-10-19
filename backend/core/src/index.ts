@@ -103,6 +103,7 @@ export {
 	UploadImageDecorator,
 	UploadFileDecorator,
 	BulkUploadDecorator,
+	UploadFieldsDecorator,
 	DeleteDecorator,
 	SwaggerPropertyType,
 	SwaggerPropertyReference,
