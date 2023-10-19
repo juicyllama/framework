@@ -81,7 +81,7 @@ describe('Crud Bulk Upload Controller', () => {
 				expect(true).toEqual(false)
 				
 			} catch(e: any) {
-				expect(e.message).toEqual(`Invalid CSV file. Expected 3 columns, got undefined`)
+				expect(e.message).toEqual(`Invalid CSV file. Expected 3 columns, got 2`)
 			}
 		})
 

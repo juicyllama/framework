@@ -75,6 +75,7 @@ export class Query<T> {
 		switch (import_mode) {
 			case ImportMode.CREATE:
 				result = await this.createBulkRecords(repository, data)
+				break
 
 			case ImportMode.UPSERT:
 				if (!dedup_field) {
@@ -82,16 +83,19 @@ export class Query<T> {
 				}
 
 				result = await this.upsertBulkRecords(repository, data, dedup_field)
+				break
 
 			case ImportMode.DELETE:
 				if (!dedup_field) {
 					throw new Error('Dedup field required for update')
 				}
 				result = await this.deleteBulkRecords(repository, data, dedup_field)
+				break
 
 			case ImportMode.REPOPULATE:
 				await this.truncate(repository)
 				result = await this.createBulkRecords(repository, data)
+				break
 		}
 
 		logger.debug(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] Result`, {
