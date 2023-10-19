@@ -3,7 +3,7 @@ import { User } from '../../modules/users/users.entity'
 import { Scaffold, ScaffoldDto } from '../../test'
 import { UsersModule } from '../../modules/users/users.module'
 import { ImportMode } from '../../types/common'
-import { Csv } from '@juicyllama/utils'
+import { Csv, File } from '@juicyllama/utils'
 import { UPLOAD_DUPLICATE_FIELD } from '../../modules/users/users.constants'
 import { DeleteResult, InsertResult } from 'typeorm'
 
@@ -12,6 +12,7 @@ type T = User
 const MODULE = UsersModule
 const SERVICE = UsersService
 const csv = new Csv()
+const file = new File()
 
 describe('Query Bulk', () => {
 	const scaffolding = new Scaffold<T>()
@@ -26,7 +27,7 @@ describe('Query Bulk', () => {
 			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,last_name,email' + '\n' + 'Amy,Alsop,amy@email.com'
 			)
-			const data = await csv.parseCsvFile(file)
+			const data = await csv.parseCsvFile(csv_file)
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
 			await file.unlink(filePath, dirPath)
 
@@ -39,10 +40,10 @@ describe('Query Bulk', () => {
 		})
 
 		it(`Inserts two records`, async () => {
-			const { file, unlink } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,last_name,email' + '\n' + 'Bob,Bow,bob@email.com' + '\n' + 'Claire,Cherry,claire@email.com'
 			)
-			const data = await csv.parseCsvFile(file)
+			const data = await csv.parseCsvFile(csv_file)
 				const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
 				await file.unlink(filePath, dirPath)
 				expect(res.raw.affectedRows).toEqual(2)
@@ -55,10 +56,10 @@ describe('Query Bulk', () => {
 
 		it(`Inserts 0 records if duplicate is found`, async () => {
 			const count = await scaffold.services.service.count()
-			const { file, unlink } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,last_name,email' + '\n' + 'Amy,Alsop,amy@email.com'
 			)
-			const data = await csv.parseCsvFile(file)
+			const data = await csv.parseCsvFile(csv_file)
 			try{
 				await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
 				expect(true).toEqual(false)
@@ -73,10 +74,10 @@ describe('Query Bulk', () => {
 
 		it(`Inserts 0 records if duplicate is only 1 of many`, async () => {
 			const count = await scaffold.services.service.count()
-			const { file, unlink } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,last_name,email' + '\n' + 'Zoe,Zele,zoe@email.com' + '\n' + 'Amy,Alsop,amy@email.com' + '\n' + 'Darren,Dele,darren@email.com'
 			)
-			const data = await csv.parseCsvFile(file)
+			const data = await csv.parseCsvFile(csv_file)
 			try{
 				await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
 				expect(true).toEqual(false)
@@ -96,7 +97,7 @@ describe('Query Bulk', () => {
 			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,email' + '\n' + 'Erin,erin@email.com'
 			)
-			const data = await csv.parseCsvFile(file)
+			const data = await csv.parseCsvFile(csv_file)
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
 			await file.unlink(filePath, dirPath)
 			expect(res.raw.affectedRows).toEqual(1)
@@ -107,10 +108,10 @@ describe('Query Bulk', () => {
 		})
 
 		it(`Inserts two records`, async () => {
-			const { file, unlink } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,email' + '\n' + 'Fred,fred@email.com' + '\n' + 'Gary,gary@email.com'
 			)
-			const data = await csv.parseCsvFile(file)
+			const data = await csv.parseCsvFile(csv_file)
 				const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
 				await file.unlink(filePath, dirPath)
 				expect(res.raw.affectedRows).toEqual(2)
@@ -121,10 +122,10 @@ describe('Query Bulk', () => {
 		})
 
 		it(`Inserts two records (data reversed)`, async () => {
-			const { file, unlink } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'email,first_name' + '\n' + 'helen@email.com,Helen' + '\n' + 'isabel@email.com,Isabel'
 			)
-			const data = await csv.parseCsvFile(file)
+			const data = await csv.parseCsvFile(csv_file)
 				const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
 				await file.unlink(filePath, dirPath)
 				expect(res.raw.affectedRows).toEqual(2)
@@ -136,10 +137,10 @@ describe('Query Bulk', () => {
 
 		it(`Update record if duplicate found`, async () => {
 			const count = await scaffold.services.service.count()
-			const { file, unlink } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,email' + '\n' + 'Andy,amy@email.com'
 			)
-			const data = await csv.parseCsvFile(file)
+			const data = await csv.parseCsvFile(csv_file)
 			await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
 			await file.unlink(filePath, dirPath)	
 			const user = await scaffold.services.service.findOne({
@@ -156,10 +157,10 @@ describe('Query Bulk', () => {
 
 		it(`Update records if duplicates are found`, async () => {
 			const count = await scaffold.services.service.count()
-			const { file, unlink } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,email' + '\n' + 'Amy,amy@email.com' + '\n' + 'Izzy,isabel@email.com'
 			)
-			const data = await csv.parseCsvFile(file)
+			const data = await csv.parseCsvFile(csv_file)
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
 			await file.unlink(filePath, dirPath)
 			expect(res.raw.affectedRows).toEqual(4)
@@ -176,10 +177,10 @@ describe('Query Bulk', () => {
 		})
 
 		it(`Create if new and Update if duplicate`, async () => {
-			const { file, unlink } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,email' + '\n' + 'Amie,amy@email.com' + '\n' + 'Jon,jon@email.com'
 			)
-			const data = await csv.parseCsvFile(file)
+			const data = await csv.parseCsvFile(csv_file)
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
 	
 			await file.unlink(filePath, dirPath)
@@ -203,10 +204,10 @@ describe('Query Bulk', () => {
 	describe('REPOPULATE', () => {
 		it(`Repopulate table from new CSV file`, async () => {
 			const count = await scaffold.services.service.count()	
-			const { file, unlink } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,email' + '\n' + 'Andy,andy@email.com' + '\n' + 'Bob,bob@email.com' + '\n' + 'Claire,claire@email.com'
 			)
-			const data = await csv.parseCsvFile(file)
+			const data = await csv.parseCsvFile(csv_file)
 			const res = <InsertResult>await scaffold.query.bulk(scaffold.repository, data, ImportMode.REPOPULATE)
 			await file.unlink(filePath, dirPath)
 			expect(res.raw.affectedRows).toEqual(3)
@@ -221,10 +222,10 @@ describe('Query Bulk', () => {
 	describe('DELETE', () => {
 		it(`Delete records`, async () => {
 			const count = await scaffold.services.service.count()	
-			const { file, unlink } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				'first_name,email' + '\n' + 'Bob,bob@email.com' + '\n' + 'Claire,claire@email.com'
 			)
-			const data = await csv.parseCsvFile(file)
+			const data = await csv.parseCsvFile(csv_file)
 			const res = <DeleteResult>await scaffold.query.bulk(scaffold.repository, data, ImportMode.DELETE, UPLOAD_DUPLICATE_FIELD)
 			await file.unlink(filePath, dirPath)
 			expect(res.affected).toEqual(2)
