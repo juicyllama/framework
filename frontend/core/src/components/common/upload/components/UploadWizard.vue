@@ -9,7 +9,7 @@
 			</q-card-section>
 			<q-separator class="q-pa-none" />
 			<q-card-section class="q-pr-none q-pl-none">
-				<FirstScreen v-if="screen === 1" />
+				<FirstScreen v-if="screen === 1" :allowedFileType="allowedFileType" />
 				<SecondScreen v-else-if="screen === 2" />
 				<ThirdScreen v-else-if="screen === 3" />
 				<FourthScreen v-else-if="screen === 4" />
@@ -38,12 +38,12 @@ import FourthScreen from './FourthScreen.vue'
 import FifthScreen from './FifthScreen.vue'
 import { uploadFile, uploadMetadata } from '@/services/upload'
 import { useUploaderStore } from '@/store/uploader'
-import {ALLOW_FILE_TYPES} from '../config'
 const store = useUploaderStore()
 
 const emit = defineEmits(['update:show', 'update:modelValue'])
 const props = defineProps({
 	show: Boolean,
+	allowedFileType: String,
 })
 const screen = ref(1)
 const uploadResult = ref(null)
@@ -79,7 +79,7 @@ const onStartButtonClicked = async () => {
 
 	try {
 		await uploadMetadata({
-			upload_type: ALLOW_FILE_TYPES,
+			upload_type: props.allowedFileType,
 			mappers: store.mappers,
 			import_mode: store.importMode,
 		})

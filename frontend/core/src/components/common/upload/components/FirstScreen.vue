@@ -33,7 +33,7 @@
 			<q-file
 				ref="fileChooser"
 				:max-file-size="FILE_SIZE_LIMIT"
-				:accept="ALLOW_FILE_TYPES"
+				:accept="allowedFileType"
 				class="hidden"
 				v-model="file" />
 			<q-btn no-caps label="Add File..." @click="onAddFileButtonClick" class="q-mr-lg" />
@@ -55,8 +55,11 @@ import { ref, watch } from 'vue'
 import { QFile, QTableProps } from 'quasar'
 import { useUploaderStore } from '@/store/uploader'
 import { SourceType, SourceEntry } from '@/types/upload'
+import { FILE_SIZE_LIMIT } from '../config'
 
-import { FILE_SIZE_LIMIT, ALLOW_FILE_TYPES } from '../config'
+defineProps({
+	allowedFileType: String,
+})
 
 const store = useUploaderStore()
 
@@ -97,7 +100,7 @@ const rows = ref<SourceEntry[]>([])
 watch(rows, () => {
 	store.setFile(rows.value)
 })
-watch(file, (fileValue) => {
+watch(file, fileValue => {
 	if (fileValue) {
 		rows.value.push({ source: fileValue.name, file: fileValue, type: SourceType.FILE })
 	}
