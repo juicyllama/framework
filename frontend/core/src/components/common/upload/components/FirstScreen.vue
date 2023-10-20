@@ -33,11 +33,11 @@
 			<q-file
 				ref="fileChooser"
 				:max-file-size="FILE_SIZE_LIMIT"
-				:accept="allowedFileType"
+				:accept="`.${allowedFileType}`"
 				class="hidden"
 				v-model="file" />
 			<q-btn no-caps label="Add File..." @click="onAddFileButtonClick" class="q-mr-lg" />
-			<q-btn no-caps @click="onAddUrlButtonClick" label="Add URL..." />
+			<!-- <q-btn no-caps @click="onAddUrlButtonClick" label="Add URL..." /> -->
 		</div>
 	</q-card-section>
 	<q-card-section>
@@ -102,7 +102,7 @@ watch(rows, () => {
 })
 watch(file, fileValue => {
 	if (fileValue) {
-		rows.value.push({ source: fileValue.name, file: fileValue, type: SourceType.FILE })
+		rows.value = [{ source: fileValue.name, file: fileValue, type: SourceType.FILE }]
 	}
 })
 </script>
