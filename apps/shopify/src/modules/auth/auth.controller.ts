@@ -50,6 +50,26 @@ export class ShopifyAuthController {
 			throw new BadRequestException(`Shopify Shop Name not found in App settings`)
 		}
 
+		if(installed_app.settings?.SHOPIFY_ADMIN_API_ACCESS_KEY){
+			this.logger.log(`[${domain}] Skipping Oauth as SHOPIFY_ADMIN_API_ACCESS_KEY provided`)
+
+			const oath = await this.oauthService.findOne({ where: { installed_app_id: installed_app_id } })
+
+			if (oath) {
+				return await this.oauthService.update({
+					oauth_id: oath.oauth_id,
+					installed_app_id: installed_app_id,
+					access_token: installed_app.settings.SHOPIFY_ADMIN_API_ACCESS_KEY,
+				})
+			}
+
+			return await this.oauthService.create({
+				installed_app_id: installed_app_id,
+				access_token: installed_app.settings.SHOPIFY_ADMIN_API_ACCESS_KEY,
+			})
+
+		}
+
 		const state = uuidv4()
 
 		const redirect = `https://${
