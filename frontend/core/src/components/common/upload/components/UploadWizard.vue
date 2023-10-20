@@ -29,14 +29,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import WizardFooter from './WizardFooter.vue'
 import FirstScreen from './FirstScreen.vue'
 import SecondScreen from './SecondScreen.vue'
 import ThirdScreen from './ThirdScreen.vue'
 import FourthScreen from './FourthScreen.vue'
 import FifthScreen from './FifthScreen.vue'
-import { uploadFile, uploadMetadata } from '@/services/upload'
+import { uploadFile } from '@/services/upload'
 import { useUploaderStore } from '@/store/uploader'
 const store = useUploaderStore()
 
@@ -73,16 +73,30 @@ const onNextButtonClicked = () => {
 const onBackButtonClicked = () => {
 	screen.value--
 }
+
+watch(screen, () => {
+	if (screen.value === 5) {
+		onStartButtonClicked()
+	}
+})
 const onStartButtonClicked = async () => {
+	const resultingMap = {}
+	store.mappers.forEach(line => {
+		resultingMap[line.source] = line.target
+	})
+
 	const form = new FormData()
-	form.append('file', store.getFile as Blob)
+	form.append('file', store.getFile.file as Blob)
+	form.append('upload_type', props.allowedFileType)
+	form.append('mappers', resultingMap.toString())
+	form.append('import_mode', store.importMode)
 
 	try {
-		await uploadMetadata({
-			upload_type: props.allowedFileType,
-			mappers: store.mappers,
-			import_mode: store.importMode,
-		})
+		// await uploadMetadata({
+		// 	upload_type: props.allowedFileType,
+		// 	mappers: store.mappers,
+		// 	import_mode: store.importMode,
+		// })
 
 		const res = await uploadFile(form)
 		uploadResult.value = {

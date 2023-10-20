@@ -5,7 +5,7 @@ type UploadAPIResponse = {
 	data: object
 }
 
-const UPLOAD_URL = '/users/upload_csv'
+const UPLOAD_URL = '/upload'
 const UPLOAD_FIELDS = '/upload/fields'
 
 const uploadFile = async (fileData: object): Promise<UploadAPIResponse> => {

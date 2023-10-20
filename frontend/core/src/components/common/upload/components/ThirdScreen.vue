@@ -49,14 +49,14 @@ const columns: QTableProps['columns'] = [
 		name: 'target',
 		align: 'left',
 		label: 'Target Field',
-		field: 'source',
+		field: 'target',
 		sortable: false,
 	},
 	{
 		name: 'primaryKey',
 		align: 'left',
 		label: 'Primary Key',
-		field: 'source',
+		field: 'primaryKey',
 		sortable: false,
 	},
 ]
@@ -66,8 +66,8 @@ const rows = ref([])
 const targetFieldOptions = ref([])
 
 const dataMapper = data =>
-	data.map(item => ({
-		source: item,
+	data.map(sourceRow => ({
+		source: sourceRow,
 		target: ref(''),
 		primaryKey: ref(false),
 	}))
@@ -80,13 +80,41 @@ watch(
 	{ deep: true },
 )
 
+const readCSVFileHeaders = () => {
+	const file = store.getFile.file as File
+	const reader = new FileReader()
+	reader.onload = () => {
+		const text = reader.result as string
+		const headers = text.split('\n')[0].split(',')
+		rows.value = dataMapper(headers)
+	}
+	reader.readAsText(file)
+}
+
+// TODO: enable when JSON is supported
+/*
+const readJSONHeaders = () => {
+	const file = store.getFile as File
+	const reader = new FileReader()
+	reader.onload = () => {
+		const text = reader.result as string
+		const headers = Object.keys(JSON.parse(text)[0])
+		rows.value = dataMapper(headers)
+	}
+	reader.readAsText(file)
+}
+*/
 onMounted(() => {
+	readCSVFileHeaders()
 	getUploadFields().then(res => {
-		targetFieldOptions.value = dataMapper(res.data)
+		targetFieldOptions.value = res.data.map(field => ({
+			label: field,
+			value: field,
+		}))
 	})
 })
 
-//TODO: for the future case wehn multiple tables are supported
+//TODO: for the future case when multiple tables are supported
 //		currently, only one table is supported
 // const tableOptions = computed(() => store.getTables)
 // const selectedTable = ref('')

@@ -3,13 +3,13 @@ import { defineStore } from 'pinia'
 export const useUploaderStore = defineStore('uploader', {
 	state: () => ({
 		step: 1,
-		file: {},
+		file: null,
 		urls: [],
 		encoding: 'utf-8',
 		delimeters: {},
 		collumnsToPick: [],
 		importMode: '',
-		mappers: {},
+		mappers: [],
 		uploadResult: {
 			status: 'LOADING',
 		},
