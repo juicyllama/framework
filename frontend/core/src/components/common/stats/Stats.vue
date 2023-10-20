@@ -36,7 +36,7 @@ import { onMounted, ref } from 'vue'
 import Vue3autocounter from 'vue3-autocounter'
 import type { StatsDataSet } from '@/types/stats'
 
-import { logger } from '@/index'
+import { logger } from '@/helpers/logger'
 import { LogSeverity } from '@/types'
 import { loadStats } from '@/services/stats'
 
