@@ -26,7 +26,6 @@
 			hide-bottom
 			class="table"
 			virtual-scroll
-			v-model:pagination="pagination"
 			:rows-per-page-options="[0]"
 			:columns="columns"
 			:rows="rows" />
@@ -36,7 +35,7 @@
 				:max-file-size="FILE_SIZE_LIMIT"
 				:accept="ALLOW_FILE_TYPES"
 				class="hidden"
-				v-model="files" />
+				v-model="file" />
 			<q-btn no-caps label="Add File..." @click="onAddFileButtonClick" class="q-mr-lg" />
 			<q-btn no-caps @click="onAddUrlButtonClick" label="Add URL..." />
 		</div>
@@ -64,9 +63,8 @@ const store = useUploaderStore()
 const encodingOptions = ['[utf-8] Unicode (UTF-8)']
 const selectedEncoding = ref<string>(encodingOptions[0])
 
-const pagination = { rowsPerPage: 0 }
 const fileChooser = ref<QFile | null>()
-const files = ref<File[]>([])
+const file = ref<File>(null)
 const urlPrompt = ref(false)
 const urlInput = ref()
 
@@ -99,10 +97,9 @@ const rows = ref<SourceEntry[]>([])
 watch(rows, () => {
 	store.setFile(rows.value)
 })
-watch(files, () => {
-	if (files.value?.length != 0) {
-		files.value.forEach(f => rows.value.push({ source: f.name, file: f, type: SourceType.FILE }))
-		files.value = []
+watch(file, (fileValue) => {
+	if (fileValue) {
+		rows.value.push({ source: fileValue.name, file: fileValue, type: SourceType.FILE })
 	}
 })
 </script>
