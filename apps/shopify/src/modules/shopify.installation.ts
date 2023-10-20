@@ -44,6 +44,15 @@ export class ShopifyInstallationService implements OnModuleInit {
 						description: 'The name of the users shop. e.g. https://{shop}.myshopify.com',
 						private: false,
 					},
+					{
+						key: 'SHOPIFY_ADMIN_API_ACCESS_KEY',
+						name: 'Shopify Admin API Access Key',
+						input: {
+							type: AppInputType.text,
+						},
+						private: true,
+						hidden: true,
+					}
 				],
 			})
 		}

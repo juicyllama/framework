@@ -39,8 +39,6 @@ export async function TestEndpoint<T>(options: {
 		case METHOD.POST:
 
 		const url = `${options.url}?${querystring.stringify(options.queryParams)}`
-		console.log('url', url)
-
 			const requestBuilder = request(options.scaffold.server)
 				.post(url)
 				.set(headers)

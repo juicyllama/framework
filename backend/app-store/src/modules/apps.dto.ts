@@ -110,6 +110,10 @@ export class AppSettingsDto {
 	@IsOptional()
 	readonly private?: boolean
 
+	@IsBoolean()
+	@IsOptional()
+	readonly hidden?: boolean //don't show in the UI
+
 	@IsString()
 	@MaxLength(255)
 	@IsOptional()
