@@ -1,6 +1,6 @@
 <template>
 	<q-btn @click="openUpload">Upload</q-btn>
-	<UploadWizard v-model="show" :allowedFileType="allowedFileType as FILE_TYPES" />
+	<UploadWizard v-model="show" :allowedFileType="allowedFileType"/>
 </template>
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
@@ -13,7 +13,7 @@ const props = defineProps({
 })
 
 onMounted(() => {
-	if (Object.keys(FILE_TYPES).includes(props.allowedFileType)) {
+	if (!Object.keys(FILE_TYPES).includes(props.allowedFileType)) {
 		logger({ severity: LogSeverity.ERROR, message: `Invalid allowedFileType: ${props.allowedFileType}` })
 	}
 })
