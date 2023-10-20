@@ -21,7 +21,9 @@ const uploadMetadata = async (obj: object): Promise<UploadAPIResponse> => {
 	return await instance.post(UPLOAD_URL, obj)
 }
 
-const getUploadFields = async (): Promise<object> => {
+const getUploadFields = async (): Promise<{
+	data: string[]
+}> => {
 	instance.defaults.headers.common['account-id'] = accountStore.selected_account.account_id
 	return await instance.get(UPLOAD_FIELDS)
 }

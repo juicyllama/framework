@@ -38,7 +38,7 @@ import FourthScreen from './FourthScreen.vue'
 import FifthScreen from './FifthScreen.vue'
 import { uploadFile, uploadMetadata } from '@/services/upload'
 import { useUploaderStore } from '@/store/uploader'
-
+import {ALLOW_FILE_TYPES} from '../config'
 const store = useUploaderStore()
 
 const emit = defineEmits(['update:show', 'update:modelValue'])
@@ -79,10 +79,9 @@ const onStartButtonClicked = async () => {
 
 	try {
 		await uploadMetadata({
-			table: store.getTable,
-			fields: store.getFields,
-			primaryKey: store.getPrimaryKey,
-			importMode: store.importMode,
+			upload_type: ALLOW_FILE_TYPES,
+			mappers: store.mappers,
+			import_mode: store.importMode,
 		})
 
 		const res = await uploadFile(form)

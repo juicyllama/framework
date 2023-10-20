@@ -13,15 +13,24 @@
 		</p>
 	</q-card-section>
 	<q-card-section>
-		<q-linear-progress v-if="uploadResult.status === 'LOADING'" dark rounded indeterminate color="secondary" class="q-mt-sm" />
+		<q-linear-progress
+			v-if="uploadResult.status === 'LOADING'"
+			dark
+			rounded
+			indeterminate
+			color="secondary"
+			class="q-mt-sm" />
 		<template v-else>
 			<template v-if="uploadResult.status === 'ERROR'">
-				<q-banner  inline-actions class="text-white bg-red">
-				There was an error during the import process.
-				<br> / {{ uploadResult.details }}
+				<q-banner inline-actions class="text-white bg-red">
+					There was an error during the import process.
+					<br />
+					/ {{ uploadResult.details }}
 				</q-banner>
 			</template>
-			<q-banner v-else inline-actions class="text-white bg-green"> Import file was successfully uploaded. </q-banner>
+			<q-banner v-else inline-actions class="text-white bg-green">
+				Import file was successfully uploaded.
+			</q-banner>
 		</template>
 	</q-card-section>
 </template>
@@ -30,10 +39,15 @@
 import { ref, computed } from 'vue'
 import { useUploaderStore } from '@/store/uploader'
 
+type uploadResult = {
+	status: string
+	details: string
+}
+
 const totalTables = ref(1)
 const tablesCount = ref(1)
 const processed = ref(123)
 const added = ref(124)
 const store = useUploaderStore()
-const uploadResult = computed(() => store.uploadResult)
+const uploadResult = computed<uploadResult>(() => store.uploadResult as uploadResult)
 </script>

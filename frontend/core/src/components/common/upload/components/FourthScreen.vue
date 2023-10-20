@@ -33,7 +33,7 @@ const options = [
 		value: 'REPOPULATE',
 	},
 ]
-const chosenImportMode = ref('append')
+const chosenImportMode = ref('CREATE')
 
 watch(chosenImportMode, () => {
 	store.setImportMode(chosenImportMode.value)

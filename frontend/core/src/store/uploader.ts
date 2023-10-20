@@ -9,9 +9,9 @@ export const useUploaderStore = defineStore('uploader', {
 		delimeters: {},
 		collumnsToPick: [],
 		importMode: '',
-		existingTables: [],
+		mappers: {},
 		uploadResult: {
-			status: 'LOADING'
+			status: 'LOADING',
 		},
 	}),
 	getters: {
@@ -21,16 +21,13 @@ export const useUploaderStore = defineStore('uploader', {
 		getFile(state) {
 			return state.file
 		},
-		getTables(state) {
-			return state.existingTables.map(i => i.title)
-		},
-		getFieldsPerTable: state => {
-			return tableName => state.existingTables.find(i => i.tableName === tableName)
-		},
 	},
 	actions: {
 		setDelimetersData(data) {
 			this.delimeters = data
+		},
+		setFieldMappings(data) {
+			this.mappers = data
 		},
 		setFile(file) {
 			this.file = file

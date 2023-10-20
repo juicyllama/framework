@@ -6,11 +6,11 @@
 		</div>
 	</q-card-section>
 	<q-card-section>
-		<q-select :options="tableOptions" v-model="selectedTable">
+		<!-- <q-select :options="tableOptions" v-model="selectedTable">
 			<template v-slot:prepend>
 				<q-icon name="table_view" />
 			</template>
-		</q-select>
+		</q-select> -->
 		<q-table :columns="columns" :rows="rows" dense hide-bottom>
 			<template v-slot:body="props">
 				<q-tr>
@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useUploaderStore } from '@/store/uploader'
 import { QTableProps } from 'quasar'
 import { getUploadFields } from '@/services/upload'
@@ -62,30 +62,32 @@ const columns: QTableProps['columns'] = [
 ]
 
 // rows in the user-selected file
-const rows = ref([
-	// { source: 'test', target: ref(''), primaryKey: ref(false) },
-])
+const rows = ref([])
+const targetFieldOptions = ref([])
 
 const dataMapper = data =>
-	data.map(item => {
-		return {
-			source: item,
-			target: ref(''),
-			primaryKey: ref(false),
-		}
-	})
+	data.map(item => ({
+		source: item,
+		target: ref(''),
+		primaryKey: ref(false),
+	}))
 
-watch(rows, val => {
-	store.setFieldMappings(val)
-}, { deep: true })
+watch(
+	rows,
+	val => {
+		store.setFieldMappings(val)
+	},
+	{ deep: true },
+)
 
 onMounted(() => {
 	getUploadFields().then(res => {
-		rows.value = dataMapper(res.data)
+		targetFieldOptions.value = dataMapper(res.data)
 	})
 })
 
-const tableOptions = computed(() => store.getTables)
-const selectedTable = ref('')
-const targetFieldOptions = computed(() => store.getFieldsPerTable(selectedTable.value))
+//TODO: for the future case wehn multiple tables are supported
+//		currently, only one table is supported
+// const tableOptions = computed(() => store.getTables)
+// const selectedTable = ref('')
 </script>
