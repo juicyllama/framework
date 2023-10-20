@@ -36,7 +36,7 @@ import SecondScreen from './SecondScreen.vue'
 import ThirdScreen from './ThirdScreen.vue'
 import FourthScreen from './FourthScreen.vue'
 import FifthScreen from './FifthScreen.vue'
-import { uploadFile } from '@/services/upload'
+import { uploadFile, uploadMetadata } from '@/services/upload'
 import { useUploaderStore } from '@/store/uploader'
 
 const store = useUploaderStore()
@@ -76,11 +76,15 @@ const onBackButtonClicked = () => {
 const onStartButtonClicked = async () => {
 	const form = new FormData()
 	form.append('file', store.getFile as Blob)
-	// table: store.getTable,
-	// fields: store.getFields,
-	// primaryKey: store.getPrimaryKey,
 
 	try {
+		await uploadMetadata({
+			table: store.getTable,
+			fields: store.getFields,
+			primaryKey: store.getPrimaryKey,
+			importMode: store.importMode,
+		})
+
 		const res = await uploadFile(form)
 		uploadResult.value = {
 			status: 'SUCCESS',
@@ -94,6 +98,7 @@ const onStartButtonClicked = async () => {
 		}
 	} finally {
 		screen.value = 5
+		store.setUploadResult(uploadResult.value)
 	}
 }
 </script>

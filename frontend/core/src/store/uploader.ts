@@ -10,6 +10,9 @@ export const useUploaderStore = defineStore('uploader', {
 		collumnsToPick: [],
 		importMode: '',
 		existingTables: [],
+		uploadResult: {
+			status: 'LOADING'
+		},
 	}),
 	getters: {
 		getStep(state) {
@@ -31,6 +34,9 @@ export const useUploaderStore = defineStore('uploader', {
 		},
 		setFile(file) {
 			this.file = file
+		},
+		setUploadResult(data) {
+			this.uploadResult = data
 		},
 		setImportMode(importMode) {
 			this.importMode = importMode
