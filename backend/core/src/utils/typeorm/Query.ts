@@ -93,8 +93,14 @@ export class Query<T> {
 				break
 
 			case ImportMode.REPOPULATE:
+				await this.copyTable(repository)
 				await this.truncate(repository)
-				result = await this.createBulkRecords(repository, data)
+				try{
+					result = await this.createBulkRecords(repository, data)
+					await this.dropTable(repository, `${repository.metadata.tableName}_COPY`)
+				}catch(e: any){
+					await this.restoreTable(repository)
+				}
 				break
 		}
 
@@ -337,6 +343,59 @@ export class Query<T> {
 		const sql_auto_increment = 'ALTER TABLE ' + repository.metadata.tableName + ' AUTO_INCREMENT = 1'
 
 		await this.raw(repository, sql_auto_increment)
+	}
+
+	/**
+	 * Create a copy of a whole table
+	 * @param repository
+	 * @param table_name 
+	 */
+
+	async copyTable(repository: Repository<T>, table_name?: string): Promise<void> {
+		if (Env.IsNotProd()) {
+			logger.debug(`[QUERY][COPY TABLE][${repository.metadata.tableName}]`)
+		}
+
+		const sql_copy = `CREATE TABLE ${table_name ?? repository.metadata.tableName+'_COPY'} LIKE ${repository.metadata.tableName}`
+
+		await this.raw(repository, sql_copy)
+
+		const sql_refill = `INSERT INTO ${table_name ?? repository.metadata.tableName+'_COPY'} SELECT * FROM ${repository.metadata.tableName}`
+
+		await this.raw(repository, sql_refill)
+	}
+
+	/**
+	 * Restore a table from a copy
+	 * @param repository
+	 * @param table_name 
+	 */
+
+	async restoreTable(repository: Repository<T>, table_name?: string): Promise<void> {
+		if (Env.IsNotProd()) {
+			logger.debug(`[QUERY][RESTORE TABLE][${repository.metadata.tableName}]`)
+		}
+
+		const sql_rename = `RENAME TABLE ${repository.metadata.tableName} TO ${repository.metadata.tableName}_DELETE,
+		${table_name ?? repository.metadata.tableName+'_COPY'} TO ${repository.metadata.tableName}`
+		
+		await this.raw(repository, sql_rename)
+		await this.dropTable(repository, repository.metadata.tableName+'_DELETE')
+	}
+
+	/**
+	 * Drop a table 
+	 * @param repository
+	 * @param table_name 
+	 */
+
+	async dropTable(repository: Repository<T>, table_name: string): Promise<void> {
+		if (Env.IsNotProd()) {
+			logger.debug(`[QUERY][DROP TABLE][${table_name}]`)
+		}
+
+		const sql_drop = `DROP TABLE ${table_name}`
+		await this.raw(repository, sql_drop)
 	}
 
 	getPrimaryKey(repository: Repository<T>) {
@@ -646,23 +705,6 @@ export class Query<T> {
 
 	async createBulkRecords(repository: Repository<T>, data: DeepPartial<T>[]): Promise<InsertResult> {
 		return await repository.createQueryBuilder().insert().into(repository.metadata.tableName).values(data).execute()
-
-		// 	const inserts: string[] = []
-
-		// 	for (const row of data) {
-		// 		const values = Object.values(row)
-		// 			.map((v: string) => `'${v.replace("'", "\\'")}'`)
-		// 			.join(', ')
-		// 		inserts.push(`(${values})`)
-		// 	}
-
-		// 	const SQL = `INSERT INTO ${repository.metadata.tableName} (${Object.keys(data[0]).join(',')}) VALUES ` + inserts.join(', ')
-
-		// 	return await this.raw(
-		// 		repository,
-		// 		SQL,
-		// 	)
-		// }
 	}
 
 	async upsertBulkRecords(
@@ -685,29 +727,6 @@ export class Query<T> {
 			.orUpdate(fields, [dedup_field])
 			.execute()
 
-		// const inserts: string[] = []
-
-		// for (const row of data) {
-		// 	const values = Object.values(row)
-		// 		.map((v: string) => `'${v.replace("'", "\\'")}'`)
-		// 		.join(', ')
-		// 	inserts.push(`(${values})`)
-		// }
-
-		// let FIELDS = ''
-
-		// for (const field of Object.keys(data[0])) {
-		// 	if(field === dedup_field) continue
-		// 	FIELDS += `${field} = new.${field}, `
-		// }
-		// FIELDS = FIELDS.slice(0, -2)
-
-		// const SQL = `INSERT INTO ${repository.metadata.tableName} (${Object.keys(data[0]).join(',')}) VALUES ` + inserts.join(', ')  + ` AS new ON DUPLICATE KEY UPDATE ${FIELDS}`
-
-		// return await this.raw(
-		// 	repository,
-		// 	SQL,
-		// )
 	}
 
 	/*
@@ -733,19 +752,6 @@ export class Query<T> {
 				[dedup_field]: In(records),
 			})
 			.execute()
-
-		// const records: string[] = []
-
-		// for (const row of data) {
-		// 	records.push(`'${row[dedup_field]}'`)
-		// }
-
-		// const SQL = `DELETE FROM ${repository.metadata.tableName} WHERE ${dedup_field} IN (${records.join(', ')})`
-
-		// return await this.raw(
-		// 	repository,
-		// 	SQL,
-		// )
 	}
 }
 
