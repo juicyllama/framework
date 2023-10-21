@@ -16,6 +16,6 @@ import { JLUpload } from '@juicyllama/frontend-core'
 </script>
 
 <template>
-    <JLUpload :allowedFileType="'CSV'" />
+    <JLUpload :allowedFileType="'CSV'"> Upload CSV</JLUpload>
 </template>
 ```
