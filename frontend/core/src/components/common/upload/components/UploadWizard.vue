@@ -9,7 +9,7 @@
 			</q-card-section>
 			<q-separator class="q-pa-none" />
 			<q-card-section class="q-pr-none q-pl-none">
-				<FirstScreen v-if="screen === 1" :allowedFileType="allowedFileType" />
+				<FirstScreen v-if="screen === 1" />
 				<SecondScreen v-else-if="screen === 2" />
 				<ThirdScreen v-else-if="screen === 3" />
 				<FourthScreen v-else-if="screen === 4" />
@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import WizardFooter from './WizardFooter.vue'
 import FirstScreen from './FirstScreen.vue'
 import SecondScreen from './SecondScreen.vue'
@@ -68,11 +68,18 @@ const isStartButtonActive = computed(() => {
 })
 
 const onNextButtonClicked = () => {
+	if (screen.value == 1 && (!store.getFile || store.getFile.file == null)) {
+		return
+	}
 	screen.value++
 }
 const onBackButtonClicked = () => {
 	screen.value--
 }
+
+onMounted(() => {
+	store.setFileType(props.allowedFileType)
+})
 
 watch(screen, () => {
 	if (screen.value === 5) {
@@ -82,18 +89,18 @@ watch(screen, () => {
 const onStartButtonClicked = async () => {
 	const resultingMap = {}
 	store.mappers.forEach(line => {
-		resultingMap[line.source] = line.target
+		resultingMap[line.source] = line.target || line.source
 	})
 
 	const form = new FormData()
 	form.append('file', store.getFile.file as Blob)
 	form.append('upload_type', props.allowedFileType)
-	form.append('mappers', resultingMap.toString())
+	form.append('mappers', JSON.stringify(resultingMap))
 	form.append('import_mode', store.importMode)
 
 	try {
 		// await uploadMetadata({
-		// 	upload_type: props.allowedFileType,
+		// 	upload_type: props.allowedFileType, turn on the
 		// 	mappers: store.mappers,
 		// 	import_mode: store.importMode,
 		// })

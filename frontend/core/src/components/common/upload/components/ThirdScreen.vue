@@ -85,16 +85,17 @@ const readCSVFileHeaders = () => {
 	const reader = new FileReader()
 	reader.onload = () => {
 		const text = reader.result as string
-		const headers = text.split('\n')[0].split(',')
+		const headers = text
+			.split('\n')[0]
+			.split(',')
+			.map(i => i.replace(/"/g, ''))
 		rows.value = dataMapper(headers)
 	}
 	reader.readAsText(file)
 }
 
-// TODO: enable when JSON is supported
-/*
 const readJSONHeaders = () => {
-	const file = store.getFile as File
+	const file = store.getFile.file as File
 	const reader = new FileReader()
 	reader.onload = () => {
 		const text = reader.result as string
@@ -103,9 +104,17 @@ const readJSONHeaders = () => {
 	}
 	reader.readAsText(file)
 }
-*/
+
+const readFileHeaders = () => {
+	if (store.allowedFileType === 'CSV') {
+		readCSVFileHeaders()
+	} else if (store.allowedFileType === 'JSON') {
+		readJSONHeaders()
+	}
+}
+
 onMounted(() => {
-	readCSVFileHeaders()
+	readFileHeaders()
 	getUploadFields().then(res => {
 		targetFieldOptions.value = res.data.map(field => ({
 			label: field,

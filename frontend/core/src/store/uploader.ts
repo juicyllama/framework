@@ -8,6 +8,7 @@ export const useUploaderStore = defineStore('uploader', {
 		encoding: 'utf-8',
 		delimeters: {},
 		collumnsToPick: [],
+		allowedFileType: '',
 		importMode: '',
 		mappers: [],
 		uploadResult: {
@@ -28,6 +29,9 @@ export const useUploaderStore = defineStore('uploader', {
 		},
 		setFieldMappings(data) {
 			this.mappers = data
+		},
+		setFileType(fileExt) {
+			this.allowedFileType = fileExt
 		},
 		setFile(file) {
 			this.file = file

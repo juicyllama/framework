@@ -15,7 +15,6 @@ import { useUploaderStore } from '@/store/uploader'
 const store = useUploaderStore()
 
 const options = [
-	{ label: 'Append: add records to the destination table', value: 'append' },
 	{
 		label: 'Update: update records in the destination with matching records from source',
 		value: 'UPSERT',
@@ -33,7 +32,7 @@ const options = [
 		value: 'REPOPULATE',
 	},
 ]
-const chosenImportMode = ref('CREATE')
+const chosenImportMode = ref(options[0])
 
 watch(chosenImportMode, () => {
 	store.setImportMode(chosenImportMode.value)

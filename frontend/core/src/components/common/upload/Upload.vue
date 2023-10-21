@@ -1,6 +1,8 @@
 <template>
-	<q-btn @click="openUpload">Upload</q-btn>
-	<UploadWizard v-model="show" :allowedFileType="allowedFileType"/>
+	<q-btn @click="openUpload">
+		<slot />
+	</q-btn>
+	<UploadWizard v-model="show" :allowedFileType="allowedFileType" />
 </template>
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'

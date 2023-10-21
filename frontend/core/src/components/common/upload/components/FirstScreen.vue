@@ -33,7 +33,7 @@
 			<q-file
 				ref="fileChooser"
 				:max-file-size="FILE_SIZE_LIMIT"
-				:accept="`.${allowedFileType}`"
+				:accept="computedAllowedFileType"
 				class="hidden"
 				v-model="file" />
 			<q-btn no-caps label="Add File..." @click="onAddFileButtonClick" class="q-mr-lg" />
@@ -51,15 +51,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { QFile, QTableProps } from 'quasar'
 import { useUploaderStore } from '@/store/uploader'
 import { SourceType, SourceEntry } from '@/types/upload'
 import { FILE_SIZE_LIMIT } from '../config'
-
-defineProps({
-	allowedFileType: String,
-})
 
 const store = useUploaderStore()
 
@@ -72,6 +68,9 @@ const file = ref<File>(null)
 const onAddFileButtonClick = () => {
 	fileChooser.value?.pickFiles()
 }
+
+const computedAllowedFileType = computed(() => `.${store.allowedFileType}`)
+
 // TODO: if we ever want to support URL uploads, we can use this code
 /*
 const urlPrompt = ref(false)
