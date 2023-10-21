@@ -1,6 +1,6 @@
 import { currentPath, fileExists } from './files'
 import { cli_error, cli_log } from './logging'
-import { exec, spawn } from 'child_process'
+import { exec } from 'child_process'
 import { JL } from './project'
 
 async function login(project: JL): Promise<boolean> {

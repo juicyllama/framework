@@ -18,17 +18,17 @@ const DATABASE_SHARED = {
 	autoLoadEntities: true,
 	entities: [
 		path.resolve(process.cwd(), 'dist', '**', '*.entity.js'),
-		path.resolve(process.cwd(), 'node_modules', '@juicyllama', '**', '*.entity.js'),
+		path.resolve(process.cwd(), 'node_modules', '@juicyllama', '**', '*.entity.{js,ts}'),
 	],
-	autoLoadMigrations: false, //should be false in live, otherwise long running migration will cause issues with microservices booting up
+	autoLoadMigrations: Env.IsNotProd(), //should be false in live, otherwise long running migration will cause issues with microservices booting up
 	migrations: [path.resolve(process.cwd(), 'dist', 'db', 'migrations', '*.js')],
 }
 
 export const DATABASE = {
 	...DATABASE_SHARED,
 	database: process.env.MYSQL_DB_NAME,
-	synchronize: false,
-	debug: Env.IsNotProd(),
+	synchronize: !!(Env.IsNotProd() && process.env.MYSQL_SYNC),
+	debug: !!(Env.IsNotProd() && process.env.MYSQL_DEBUG),
 }
 
 export const TEST_DATABASE = {

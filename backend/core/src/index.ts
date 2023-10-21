@@ -1,5 +1,3 @@
-// todo move exports into index.ts folder strucutre for cleaner imports
-
 //entities
 export { FxRate } from './modules/fx/fx.entity'
 export { Tag } from './modules/tags/tags.entity'
@@ -73,9 +71,27 @@ export { CacheService } from './utils/typeorm/Cache'
 export { RmqModule } from './utils/rabbitmq/rmq.module'
 export { RmqService } from './utils/rabbitmq/rmq.service'
 
-export * from './configs'
+// Configs
+export {
+	beaconConfig,
+	cacheConfig,
+	jwtConfig,
+	mongodbConfig,
+	typeormConfig,
+	systemConfig,
+	systemConfigJoi,
+	ssoConfig,
+	loadEnvVariables,
+	redocConfig,
+	joiConfigJoi,
+	validationPipeOptions,
+	databaseConfig,
+	RABBITMQ,
+	rabbitMQConfig,
+} from './configs'
 export { MONGODB } from './constants'
 
+// Decorators
 export {
 	AccountId,
 	CreateDecorator,
@@ -84,17 +100,23 @@ export {
 	ReadStatsDecorator,
 	ReadChartsDecorator,
 	UpdateDecorator,
+	UploadImageDecorator,
 	UploadFileDecorator,
+	BulkUploadDecorator,
+	UploadFieldsDecorator,
 	DeleteDecorator,
 	SwaggerPropertyType,
 	SwaggerPropertyReference,
 	SwaggerPropertyDecorator,
 	UserAuth,
 } from './decorators'
+
+// Helpers
 export {
 	BaseEntity,
 	BaseService,
 	crudCreate,
+	crudBulkUpload,
 	crudFindOne,
 	crudFindAll,
 	crudStats,
@@ -104,7 +126,11 @@ export {
 	crudPurge,
 	CronRunner,
 } from './helpers'
+
+// Middleware
 export { MiddlewareAccountId } from './middleware'
+
+// Test Helpers
 export {
 	testCleanup,
 	TestEndpoint,
@@ -114,4 +140,17 @@ export {
 	ScaffoldDto,
 	Scaffold,
 } from './test'
-export { AppIntegrationName, HTTP_METHODS, METHOD, CRUD_ACTIONS, PromiseLoopOutcomes, OauthInterface } from './types'
+
+// Types
+export {
+	AppIntegrationName,
+	UploadType,
+	HTTP_METHODS,
+	CRUD_ACTIONS,
+	METHOD,
+	PromiseLoopOutcomes,
+	CrudUploadFieldsResponse,
+	UploadFileDto,
+	BulkUploadResponse,
+	OauthInterface,
+} from './types'

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { onMounted, Ref, ref } from 'vue'
 import Table from '@/components/common/table/components/Table.vue'
-import { useQuasar } from 'quasar'
-import { FindOptions, LogSeverity } from '@/types'
-import { logger, TableColumn, TableSchema } from '../../../index'
-import { defineStore } from 'pinia'
-import { isEmpty, isNull, result } from 'lodash'
 import { loadPusher } from '@/plugins'
+import { FindOptions, LogSeverity } from '@/types'
+import { isEmpty, isNull, result } from 'lodash'
+import { defineStore } from 'pinia'
+import { useQuasar } from 'quasar'
+import { onMounted, Ref, ref } from 'vue'
+import { logger, TableColumn, TableSchema } from '../../../index'
 
 const props = defineProps<{
 	options: TableSchema
@@ -22,6 +22,7 @@ const emit = defineEmits([
 	'updateFormField',
 	'deleteRecord',
 	'pluginAction',
+	'toggleButton',
 ])
 
 const $q = useQuasar()
@@ -226,6 +227,15 @@ async function searchUpdate(value: string) {
 	await getData()
 }
 
+async function tableToggled(value: string) {
+	useListStore.updateOptions({
+		...useListStore.options,
+		toggleButton: value,
+	})
+	emit('toggleButton', value)
+	await getData()
+}
+
 async function updateFormField(value: any) {
 	logger({ severity: LogSeverity.VERBOSE, message: `Updated Form field`, table: value })
 	emit('updateFormField', value)
@@ -340,7 +350,8 @@ onMounted(async () => {
 			@updateFormField="updateFormField"
 			@updateValue="updateValue"
 			@deleteRecord="deleteRecord"
-			@pluginAction="pluginAction"></Table>
+			@pluginAction="pluginAction"
+			@toggleButton="tableToggled"></Table>
 
 		<q-dialog v-model="confirm" persistent>
 			<q-card>

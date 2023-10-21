@@ -88,7 +88,7 @@ describe(`${NAME} Service`, () => {
 			try {
 				await scaffold.services.service.remove(record)
 			} catch (e) {
-				console.error(e.message, e)
+				scaffold.services.logger.error(e.message, e)
 				expect(e).toBeUndefined()
 			}
 		})

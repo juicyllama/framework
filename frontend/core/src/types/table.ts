@@ -1,4 +1,4 @@
-import { CustomButton, TablePosition, FindOptions, IconSettings } from './common'
+import { CustomButton, FindOptions, IconSettings, TablePosition } from './common'
 import { FormField } from './form'
 
 export interface TableOptions {
@@ -37,6 +37,7 @@ export interface TableCustomButton extends CustomButton {
 export interface SearchFilterOptions {
 	position: TablePosition
 	placeholder?: string
+	dark?: boolean
 }
 
 export interface TableSchema {
@@ -58,6 +59,11 @@ export interface TableSchema {
 		delete_record?: boolean
 		custom_buttons?: TableCustomButton[]
 		confirm_delete?: boolean
+		expandable?: boolean
+		toggle_buttons?: {
+			position: TablePosition
+			options: { label: string; value: string; default: boolean }[]
+		}[]
 	}
 	redirects?: {
 		add?: string
@@ -79,6 +85,7 @@ export interface TableSchema {
 		onAddFormLoad?: Function
 		onEditFormLoad?: Function
 	}
+	style?: string
 }
 
 export interface IFilterType {

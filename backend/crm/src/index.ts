@@ -10,6 +10,7 @@ import { CrmModule } from './crm.module'
 import { CrmCronsModule } from './crons/crm.crons.module'
 import { ContactsModule } from './contacts/contacts.module'
 
+
 // Controllers
 import { ContactsController } from './contacts/contacts.controller'
 import { CRMCronsController } from './crons/crm.cron.controller'
@@ -17,6 +18,10 @@ import { CRMCronsController } from './crons/crm.cron.controller'
 // Services
 import { ContactsService } from './contacts/contacts.service'
 import { CrmCronsContactsService } from './crons/crm.crons.contacts.service'
+import { ContactAddressService } from './contacts/address/address.service'
+import { ContactEmailService } from './contacts/email/email.service'
+import { ContactPhoneService } from './contacts/phone/phone.service'
+import { ContactSocialService } from './contacts/social/social.service'
 
 // Enums
 import { ContactSelect, ContactRelations, ContactOrderBy } from './contacts/contacts.enums'
@@ -61,4 +66,8 @@ export {
 	ContactAddressType,
 	ContactEmailType,
 	installCRMDocs,
+	ContactSocialService,
+	ContactPhoneService,
+	ContactEmailService,
+	ContactAddressService,
 }

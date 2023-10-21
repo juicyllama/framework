@@ -83,7 +83,7 @@ export class Env {
 		if (!options.fileName) options.fileName = '.env'
 
 		const matchedLine = Env.readEnvVars({ envPath: options.envPath, fileName: options.fileName }).find(
-			(line) => line.split('=')[0] === options.key,
+			line => line.split('=')[0] === options.key,
 		)
 		const result = matchedLine !== undefined ? matchedLine.split('=')[1] : null
 		return result.replace(/"/g, '')
@@ -98,7 +98,7 @@ export class Env {
 		if (!options.fileName) options.fileName = '.env'
 
 		const envVars = Env.readEnvVars({ envPath: options.envPath, fileName: options.fileName })
-		const targetLine = envVars.find((line) => line.split('=')[0] === options.key)
+		const targetLine = envVars.find(line => line.split('=')[0] === options.key)
 		if (targetLine !== undefined) {
 			const targetLineIndex = envVars.indexOf(targetLine)
 			envVars.splice(targetLineIndex, 1, `${options.key}="${options.value}"`)

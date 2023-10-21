@@ -1,6 +1,5 @@
 import { Scaffold, ScaffoldDto } from '@juicyllama/core'
 import { ContactPhone } from '../contacts/phone/phone.entity'
-import { CrmModule } from '../crm.module'
 import { CrmCronsContactsService } from './crm.crons.contacts.service'
 import { ContactsService } from '../contacts/contacts.service'
 import { DeepPartial } from 'typeorm'

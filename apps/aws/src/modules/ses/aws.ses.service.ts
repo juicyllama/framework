@@ -1,5 +1,5 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { Logger, Markdown } from '@juicyllama/utils'
+import { Env, Logger, Markdown } from '@juicyllama/utils'
 import { SESv2Client, SendEmailRequest, SendEmailCommand } from '@aws-sdk/client-sesv2'
 import { ConfigService } from '@nestjs/config'
 import type { BeaconMessageDto } from '@juicyllama/core'
@@ -23,6 +23,11 @@ export class AwsSesService {
 		const domain = 'app::aws::ses::AwsSecretsService::send'
 
 		this.logger.debug(`[${domain}] Send email`, message)
+
+		if (Env.IsTest()) {
+			this.logger.debug(`[${domain}] Skipping as in test mode`)
+			return true
+		}
 
 		try {
 			const client = new SESv2Client(<S3ClientConfig>{

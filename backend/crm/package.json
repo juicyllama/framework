@@ -1,16 +1,16 @@
 {
     "name": "@juicyllama/crm",
-    "version": "0.0.42",
+    "version": "0.1.3",
     "description": "Juicyllama CRM Module",
     "author": {
         "name": "JuicyLlama Studio",
         "email": "studio@juicyllama.com",
         "url": "https://juicyllama.com"
     },
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org/"
-	},
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/juicyllama/framework/tree/main/backend/crm"
@@ -30,17 +30,12 @@
         "build": "tsc",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand",
-        "test:clear": "npx jest --clearCache",
-        "test:watch": "jest --watch",
-        "test:cov": "jest --coverage",
-        "test:e2e": "jest --config ./test/jest-e2e.json"
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
     },
     "devDependencies": {
         "@juicyllama/dev": "workspace:^"
     },
     "dependencies": {
-        "@juicyllama/app-apilayer": "workspace:^",
         "@juicyllama/core": "workspace:^",
         "@juicyllama/nestjs-redoc": "workspace:^",
         "@juicyllama/utils": "workspace:^"

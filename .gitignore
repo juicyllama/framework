@@ -6,3 +6,4 @@ build
 .idea
 yarn.lock
 .DS_Store
+**/temp-*

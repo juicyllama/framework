@@ -24,7 +24,7 @@ export class Strings {
 	static replacer(template, obj) {
 		const keys = Object.keys(obj)
 		const func = Function(...keys, 'return `' + template + '`;')
-		return func(...keys.map((k) => obj[k]))
+		return func(...keys.map(k => obj[k]))
 	}
 
 	/**

@@ -1,7 +1,7 @@
-import {exec} from 'child_process'
-import {cli_error, cli_log} from "./logging";
-import {File, writeToFile} from "./files";
-import {App} from "./apps";
+import { exec } from 'child_process'
+import { cli_error, cli_log } from './logging'
+import { File, writeToFile } from './files'
+import { App } from './apps'
 
 async function writeDomain(domain: string) {
 	cli_log(`Installing ${domain} into hosts file`)
@@ -10,7 +10,6 @@ async function writeDomain(domain: string) {
 }
 
 export async function setupDomain(app: App) {
-
 	exec(`ping -c 1 "${app.domain}"`, async (error, stdout, stderr) => {
 		if (error) {
 			await writeDomain(app.domain)
@@ -18,14 +17,13 @@ export async function setupDomain(app: App) {
 		}
 		if (stderr) {
 			cli_error(`stderr: ${stderr}`)
-			return;
+			return
 		}
 
-		if(stdout.startsWith('PING')){
+		if (stdout.startsWith('PING')) {
 			return
-		}else{
+		} else {
 			await writeDomain(app.domain)
 		}
 	})
-
 }

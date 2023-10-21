@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
-import { IsString, IsEnum, MinLength, MaxLength } from 'class-validator'
+import { IsString, IsEnum, MinLength, MaxLength, IsNumber } from 'class-validator'
 import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
 import { Contact } from '../contacts.entity'
 import { ContactPhoneStatus, ContactPhoneType } from './phone.enums'
@@ -13,7 +13,11 @@ export class ContactPhone extends BaseEntity {
 
 	@ManyToOne(() => Contact, contact => contact.contact_id, { onDelete: 'CASCADE' })
 	@JoinColumn({ name: 'contact_id' })
-	contact: Contact
+	contact?: Contact
+
+	@Column()
+	@IsNumber()
+	contact_id: number
 
 	@Column({ default: null, nullable: true })
 	@IsEnum(ContactPhoneType)

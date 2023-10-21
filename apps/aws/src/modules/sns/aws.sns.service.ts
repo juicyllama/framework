@@ -3,6 +3,7 @@ import { Logger } from '@juicyllama/utils'
 import { SNSClient, PublishCommand, PublishCommandInput } from '@aws-sdk/client-sns'
 import { ConfigService } from '@nestjs/config'
 import type { BeaconMessageDto } from '@juicyllama/core'
+import { Env } from '@juicyllama/utils'
 
 @Injectable()
 export class AwsSnsService {
@@ -21,6 +22,11 @@ export class AwsSnsService {
 		const domain = 'app::aws::sns::AwsSnsService::send'
 
 		this.logger.debug(`[${domain}] Send sms`, message)
+
+		if (Env.IsTest()) {
+			this.logger.debug(`[${domain}] Skipping as in test mode`)
+			return true
+		}
 
 		try {
 			const client = new SNSClient({
