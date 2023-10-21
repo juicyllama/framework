@@ -44,11 +44,10 @@ import { IFilter } from '@/types/table'
 const props = defineProps<{
 	dialog: boolean
 	labels: string[]
+	activeFilters: IFilter[]
 }>()
 
-const emit = defineEmits(['change'])
-
-const activeFilters = ref<IFilter[]>([])
+const emit = defineEmits(['add', 'remove', 'clear'])
 
 const filterData = ref<IFilter>({
 	label: '',
@@ -66,7 +65,7 @@ const clearFilterData = () => {
 
 const clear = () => {
 	clearFilterData()
-	activeFilters.value = []
+	emit('clear')
 }
 
 const validator = computed(() => {
@@ -78,22 +77,18 @@ const validator = computed(() => {
 })
 
 const addFilter = () => {
-	// HERE CHECK IN activeFilters !!
-	if (activeLabels.value.includes(filterData.value.label)) {
-		alert('The filter in this field is already active.')
+	if (props.activeFilters.map(i => i.label).includes(filterData.value.label)) {
 		return
 	}
-	activeFilters.value.push(filterData.value)
-	emit('change', activeFilters.value)
+	emit('add', filterData.value)
 	clearFilterData()
 }
 
 const getFilterIndex = (filter: IFilter): number =>
-	activeFilters.value.findIndex(item => item.label === filter.label && item.value === filter.value)
+	props.activeFilters.findIndex(item => item.label === filter.label && item.value === filter.value)
 
 const removeFilter = (filter: IFilter) => {
 	const index: number = getFilterIndex(filter)
-	activeFilters.value.splice(index, 1)
-	emit('change', activeFilters.value)
+	emit('remove', index)
 }
 </script>

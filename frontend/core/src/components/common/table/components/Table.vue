@@ -299,8 +299,16 @@ const query = computed<Array<string | number>[]>(() => {
 	})
 })
 
-const onFilterChange = data => {
-	activeFilters.value = data
+const onClearFilters = () => {
+	activeFilters.value = []
+}
+
+const onAddFilter = data => {
+	activeFilters.value.push(data)
+}
+
+const onRemoveFilter = index => {
+	activeFilters.value.splice(index, 1)
 }
 
 watchEffect(() => {
@@ -319,7 +327,13 @@ watchEffect(() => {
 
 <template>
 	<div id="JLTable" class="JLTable">
-		<TableFilterDialog v-model="dialog" :labels="labels" @change="onFilterChange" />
+		<TableFilterDialog
+			v-model="dialog"
+			:activeFilters="activeFilters"
+			:labels="labels"
+			@clear="onClearFilters"
+			@add="onAddFilter"
+			@remove="onRemoveFilter" />
 		<q-table
 			:title="props.tableSchema.title ?? ''"
 			:rows="rows"
