@@ -6,6 +6,7 @@ import {
 	AppIntegrationType,
 	AppsService,
 	AppStoreIntegrationName,
+	AppSettingsDto
 } from '@juicyllama/app-store'
 
 @Injectable()
@@ -34,7 +35,7 @@ export class ShopifyInstallationService implements OnModuleInit {
 				active: true,
 				hidden: false,
 				settings: [
-					{
+					<AppSettingsDto>{
 						key: 'SHOPIFY_SHOP_NAME',
 						name: 'Shopify Shop Name',
 						input: {
@@ -44,15 +45,16 @@ export class ShopifyInstallationService implements OnModuleInit {
 						description: 'The name of the users shop. e.g. https://{shop}.myshopify.com',
 						private: false,
 					},
-					{
+					<AppSettingsDto>{
 						key: 'SHOPIFY_ADMIN_API_ACCESS_KEY',
 						name: 'Shopify Admin API Access Key',
+						description: 'Skip the Oauth process and use the provided Admin API Access Key',
 						input: {
 							type: AppInputType.text,
 						},
 						private: true,
 						hidden: true,
-					}
+					},
 				],
 			})
 		}

@@ -1,5 +1,5 @@
-import { Api } from '@/helpers'
-import { Website } from '@/types'
+import { Api } from '../../helpers'
+import { Website } from '../../types'
 
 type T = Website
 export const WEBSITE_ENDPOINT = '/websites/website'

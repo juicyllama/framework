@@ -1,10 +1,17 @@
 import { Controller, forwardRef, Inject, Get, Query, Req, Res, BadRequestException } from '@nestjs/common'
 import { ApiHideProperty } from '@nestjs/swagger'
-import { Logger } from '@juicyllama/utils'
+import { Logger, Strings } from '@juicyllama/utils'
 import { ShopifyAuthRedirectQuery } from './auth.dto'
 import { Shopify, ShopifyAuthRedirect, ShopifyAuthScopes } from '../../config/shopify.config'
 import { ConfigService } from '@nestjs/config'
-import { AppIntegrationStatus, InstalledAppsService, Oauth, OauthService } from '@juicyllama/app-store'
+import {
+	AppIntegrationStatus,
+	InstalledAppsService,
+	Oauth,
+	OauthService,
+	AppsService,
+	AppStoreIntegrationName,
+} from '@juicyllama/app-store'
 import { AccountId, UserAuth } from '@juicyllama/core'
 import { v4 as uuidv4 } from 'uuid'
 import { StoresService } from '@juicyllama/ecommerce'
@@ -12,6 +19,7 @@ import { StoresService } from '@juicyllama/ecommerce'
 @Controller('app/shopify/auth')
 export class ShopifyAuthController {
 	constructor(
+		@Inject(forwardRef(() => AppsService)) private readonly appsService: AppsService,
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
 		@Inject(forwardRef(() => OauthService)) private readonly oauthService: OauthService,
@@ -50,8 +58,19 @@ export class ShopifyAuthController {
 			throw new BadRequestException(`Shopify Shop Name not found in App settings`)
 		}
 
-		if(installed_app.settings?.SHOPIFY_ADMIN_API_ACCESS_KEY){
+		//Skipping Oauth as SHOPIFY_ADMIN_API_ACCESS_KEY provided
+		if (installed_app.settings?.SHOPIFY_ADMIN_API_ACCESS_KEY) {
 			this.logger.log(`[${domain}] Skipping Oauth as SHOPIFY_ADMIN_API_ACCESS_KEY provided`)
+
+			const installed_app = await this.installedAppsService.update({
+				installed_app_id: installed_app_id,
+				integration_status: AppIntegrationStatus.CONNECTED,
+			})
+
+			await this.storesService.create({
+				account_id: installed_app.account_id,
+				installed_app_id: installed_app.installed_app_id,
+			})
 
 			const oath = await this.oauthService.findOne({ where: { installed_app_id: installed_app_id } })
 
@@ -60,14 +79,15 @@ export class ShopifyAuthController {
 					oauth_id: oath.oauth_id,
 					installed_app_id: installed_app_id,
 					access_token: installed_app.settings.SHOPIFY_ADMIN_API_ACCESS_KEY,
+					redirect_url: process.env.BASE_URL_APP,
 				})
 			}
 
 			return await this.oauthService.create({
 				installed_app_id: installed_app_id,
 				access_token: installed_app.settings.SHOPIFY_ADMIN_API_ACCESS_KEY,
+				redirect_url: process.env.BASE_URL_APP,
 			})
-
 		}
 
 		const state = uuidv4()
@@ -136,12 +156,6 @@ export class ShopifyAuthController {
 			reidrect_url: req.cookies.app_shopify_redirect_url,
 		})
 
-		if(req.cookies.app_shopify_redirect_url){
-			this.logger.log(`[${domain}] Kicked off from shopify, redirecting to: ${req.cookies.app_shopify_redirect_url}`)
-			res.redirect(req.cookies.app_shopify_redirect_url)
-			return
-		}
-
 		const oath = await this.oauthService.findOne({ where: { state: req.cookies.app_shopify_state } })
 
 		if (!oath) {
@@ -166,7 +180,16 @@ export class ShopifyAuthController {
 			installed_app_id: installed_app.installed_app_id,
 		})
 
-		res.redirect(process.env.BASE_URL_APP)
+		if (req.cookies.app_shopify_redirect_url) {
+			this.logger.log(
+				`[${domain}] Kicked off from shopify, redirecting to: ${req.cookies.app_shopify_redirect_url}`,
+			)
+			res.redirect(req.cookies.app_shopify_redirect_url)
+			return
+		} else {
+			res.redirect(process.env.BASE_URL_APP)
+			return
+		}
 	}
 
 	/**
@@ -178,8 +201,38 @@ export class ShopifyAuthController {
 		const domain = 'app::shopify::auth::controller::redirect'
 		this.logger.log(`[${domain}] Open`, query)
 
+		const shop = query.shop.replace('.myshopify.com', '')
+
+		const shopify_app = await this.appsService.findOne({
+			where: {
+				integration_name: AppStoreIntegrationName.shopify,
+			},
+		})
+
+		const installed_app = await this.installedAppsService.create({
+			account_id: query?.account_id || 1,
+			app_id: shopify_app.app_id,
+			name: shop,
+			settings: {
+				SHOPIFY_SHOP_NAME: shop,
+			},
+		})
+
+		if (query.redirect_url) {
+			query.redirect_url = Strings.replacer(query.redirect_url, {
+				installed_app_id: installed_app.installed_app_id,
+			})
+		}
+
+		await this.oauthService.create({
+			installed_app_id: installed_app.installed_app_id,
+			state: query.state,
+			redirect_url: query.redirect_url,
+		})
+
 		res.setHeader('Set-Cookie', [`app_shopify_redirect_url=${query.redirect_url}; Path=/;`])
-	
+		res.setHeader('Set-Cookie', [`app_shopify_state=${query.state}; Path=/;`])
+
 		const shopify = Shopify(this.configService.get('shopify'))
 		await shopify.auth.begin({
 			shop: shopify.utils.sanitizeShop(query.shop, true),
@@ -190,6 +243,4 @@ export class ShopifyAuthController {
 		})
 		return
 	}
-
-
 }
