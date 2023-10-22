@@ -184,9 +184,17 @@ export class ShopifyAuthController {
 			this.logger.log(
 				`[${domain}] Kicked off from shopify, redirecting to: ${req.cookies.app_shopify_redirect_url}`,
 			)
-			res.redirect(req.cookies.app_shopify_redirect_url)
+
+			//clean up and redirect
+			const redirect = req.cookies.app_shopify_redirect_url
+			res.setHeader('Set-Cookie', [`app_shopify_state=deleted; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`])
+			res.setHeader('Set-Cookie', [`app_shopify_redirect_url=deleted; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`])
+			res.redirect(redirect)
 			return
 		} else {
+
+			//clean up and redirect
+			res.setHeader('Set-Cookie', [`app_shopify_state=deleted; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`])
 			res.redirect(process.env.BASE_URL_APP)
 			return
 		}
