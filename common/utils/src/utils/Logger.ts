@@ -3,6 +3,8 @@ import { Env } from './Env'
 
 /* eslint @typescript-eslint/no-var-requires: "off" */
 
+const DEFAULT_LOG_LEVEL = 3
+
 export class Logger {
 	data(key: string, value: object): void {
 		if (Env.IsNotTest()) {
@@ -23,7 +25,7 @@ export class Logger {
 		}
 		colored += `${message}\x1b[0m`
 
-		if (Env.IsNotTest() || Number(process.env.TEST_LOGGING) <= 5) {
+		if (this.getLogLevel() <= 5) {
 			console.error(colored)
 		}
 
@@ -49,7 +51,7 @@ export class Logger {
 		}
 		colored += `${message}\x1b[0m`
 
-		if (Env.IsNotTest() || Number(process.env.TEST_LOGGING) <= 4) {
+		if (this.getLogLevel() <= 4) {
 			console.warn(colored)
 		}
 	}
@@ -61,7 +63,7 @@ export class Logger {
 		}
 		colored += `${message}\x1b[0m`
 
-		if (Env.IsNotTest() || Number(process.env.TEST_LOGGING) <= 3) {
+		if (this.getLogLevel() <= 3) {
 			console.log(colored)
 		}
 	}
@@ -73,7 +75,7 @@ export class Logger {
 		}
 		colored += `${message}\x1b[0m`
 
-		if (Env.IsNotTest() || Number(process.env.TEST_LOGGING) <= 2) {
+		if (this.getLogLevel() <= 2) {
 			console.debug(colored)
 		}
 	}
@@ -85,7 +87,7 @@ export class Logger {
 		}
 		colored += `${message}\x1b[0m`
 
-		if (Number(process.env.TEST_LOGGING) <= 1) {
+		if (this.getLogLevel() <= 1) {
 			console.debug(colored)
 		}
 	}
@@ -94,6 +96,9 @@ export class Logger {
 		if (Env.IsDev()) {
 			console.table(data)
 		}
+	}
+	private getLogLevel(): number {
+		return process.env.LOG_LEVEL ? Number(process.env.LOG_LEVEL) : DEFAULT_LOG_LEVEL;
 	}
 
 	private processParams(message, optionalParams): string {
