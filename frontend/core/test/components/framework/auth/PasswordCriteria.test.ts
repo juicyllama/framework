@@ -1,7 +1,7 @@
 import { it, describe, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import PasswordCriteria from '@/components/core/auth/PasswordCriteria.vue'
-import { AuthFormState } from '@'
+import PasswordCriteria from '../../../../src/components/core/auth/PasswordCriteria.vue'
+import { AuthFormState } from '../../../../src/helpers'
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest'
 
 describe('Password Criteria', () => {

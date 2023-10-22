@@ -1,9 +1,9 @@
 import { describe, expect, it, vitest, beforeEach, test } from 'vitest'
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest'
-import { createAndInjectRouter, getRouter, mountWithMocks, waitForTimeout } from '@/../test/utils/wrapper'
-import { prefillFormByName } from '@/../test/utils/form'
-import Signup from '@/components/core/auth/Signup.vue'
-import { AccountStore } from '@/store/account'
+import { createAndInjectRouter, getRouter, mountWithMocks, waitForTimeout } from '../../../utils/wrapper'
+import { prefillFormByName } from '../../../utils/form'
+import Signup from '../../../../src/components/core/auth/Signup.vue'
+import { AccountStore } from '../../../../src/store/account'
 
 describe('Signup', () => {
 	installQuasarPlugin()
