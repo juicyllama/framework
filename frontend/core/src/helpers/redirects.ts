@@ -1,5 +1,5 @@
 import { Router, useRouter } from 'vue-router'
-import { settingsStore } from '..'
+import { settingsStore } from '../index'
 
 export async function goTo(router?: Router, redirect?: string) {
 	if (!router) {

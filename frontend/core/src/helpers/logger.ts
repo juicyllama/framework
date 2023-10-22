@@ -1,4 +1,4 @@
-import { LogSeverity, LogType } from '@/types'
+import { LogSeverity, LogType } from '../types'
 import { QVueGlobals } from 'quasar'
 
 export function logger(options: {

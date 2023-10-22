@@ -1,6 +1,6 @@
-import { logger } from '@/helpers'
-import { LogSeverity } from '@/types'
-import { userStore } from '@/index'
+import { logger } from '../helpers'
+import { LogSeverity } from '../types'
+import { userStore } from '../index'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()

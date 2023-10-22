@@ -1,4 +1,4 @@
-import { FormField, FormFieldType, LogSeverity } from '@/types'
+import { FormField, FormFieldType, LogSeverity } from '../types'
 import { logger } from './logger'
 import { isNotEmptyObject } from 'class-validator'
 
