@@ -27,8 +27,17 @@ export function buildAppForm(
 			setting.dropdown?.required ||
 			setting.checkbox?.required
 
-		const field = setting.input?.type === AppInputType.text ? FormFieldField.INPUT : null
-		const type = setting.input?.type === AppInputType.text ? FormFieldType.TEXT : null
+		let field = setting.input?.type === AppInputType.text ? FormFieldField.INPUT : null
+		
+		if(setting.hidden) {
+			field = FormFieldField.HIDDEN
+		}
+	
+		let type = setting.input?.type === AppInputType.text ? FormFieldType.TEXT : null
+		
+		if(setting.private) {
+			type = FormFieldType.PASSWORD	
+		}
 
 		fields.push({
 			key: setting.key,
