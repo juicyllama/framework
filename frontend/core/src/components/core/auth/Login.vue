@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
-import { UserStore } from '@/store/user'
+import { UserStore } from '../../../store/user'
 import AuthActions from './Actions.vue'
 import { useRouter, useRoute } from 'vue-router'
-import type { AuthFormState } from '@/helpers'
-import { validateEmail, isPasswordValid, logger } from '@/helpers'
-import { token } from '@/store/token'
-import { goToLoginRedirect } from '@/helpers'
+import type { AuthFormState } from '../../../helpers'
+import { validateEmail, isPasswordValid, logger } from '../../../helpers'
+import { token } from '../../../store/token'
+import { goToLoginRedirect } from '../../../helpers'
 import { useQuasar } from 'quasar'
-import { LogSeverity } from '@/types'
+
 import { Strings } from '@juicyllama/vue-utils'
-import { completeGoogleLogin, completeLinkedInLogin, completeMicrosoftLogin, completeAzureLogin } from '@/services/auth'
+import { completeGoogleLogin, completeLinkedInLogin, completeMicrosoftLogin, completeAzureLogin } from '../../../services/auth'
+import { LogSeverity } from '../../../types'
 
 const $q = useQuasar()
 const userStore = UserStore()

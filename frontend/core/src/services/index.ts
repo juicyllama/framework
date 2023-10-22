@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { UserStore } from '@/store/user'
-import { logger } from '@/helpers/logger'
-import { token } from '@/store/token'
-import { LogSeverity } from '@/types'
+import { UserStore } from '../store/user'
+import { logger } from '../helpers/logger'
+import { token } from '../store/token'
+import { LogSeverity } from '../types'
 
 const headers = {
 	'Content-Type': 'application/json',

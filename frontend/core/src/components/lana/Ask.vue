@@ -7,7 +7,7 @@ import { default as JLForm } from '../common/form/Form.vue'
 import { JLNotice, NoticeType } from '@juicyllama/vue-utils'
 import { Lana, LanaSuccessType } from '../../types/lana'
 import { FormField, FormFieldButtonType, FormFieldField, FormFieldType, FormSettings } from '../../types/form'
-import { defaultFormSettings } from '@/components/common/form/defaults'
+import { defaultFormSettings } from '../../components/common/form/defaults'
 
 const userStore = UserStore()
 const $q = useQuasar()

@@ -6,7 +6,7 @@ import { SettingsStore } from './store/settings'
 import instance from './services/index'
 import classes from './assets/JLCore.css'
 import { ThemeStore } from './store/theme'
-import { JLLogin, JLSignup, JLPasswordless, JLResetPassword } from '@/components/core/auth'
+import { JLLogin, JLSignup, JLPasswordless, JLResetPassword } from './components/core/auth'
 import {
 	JLForm,
 	JLTable,
@@ -16,11 +16,11 @@ import {
 	JLDropdownButtonMenu,
 	WidgetsComponent,
 	JLUsersTable,
-  JLUpload,
-} from '@/components'
-import { JLAccountProfile, JLAccountAvatar, JLAccountSwitcher, JLAccountBrand } from '@/components/core/account'
-import { JLUserAvatar, JLUserProfile, JLUserMenu } from '@/components/core/user'
-import { JLAppStoreConnect } from '@/components/app-store'
+	JLUpload,
+} from './components'
+import { JLAccountProfile, JLAccountAvatar, JLAccountSwitcher, JLAccountBrand } from './components/core/account'
+import { JLUserAvatar, JLUserProfile, JLUserMenu } from './components/core/user'
+import { JLAppStoreConnect } from './components/app-store'
 import { Plugin } from 'vue'
 
 let userStore

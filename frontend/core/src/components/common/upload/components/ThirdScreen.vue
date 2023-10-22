@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useUploaderStore } from '@/store/uploader'
+import { useUploaderStore } from '../../../../store/uploader'
 import { QTableProps } from 'quasar';
 
 const store = useUploaderStore()

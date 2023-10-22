@@ -52,10 +52,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, Ref } from 'vue'
 import { QFile, QTableProps } from 'quasar'
-import { useUploaderStore } from '@/store/uploader'
-import { SourceType, SourceEntry } from '@/types/upload'
+import { useUploaderStore } from '../../../../store/uploader'
+import { SourceType, SourceEntry } from '../../../../types/upload'
 
 import { FILE_SIZE_LIMIT, ALLOW_FILE_TYPES } from '../config'
 
@@ -64,7 +64,7 @@ const store = useUploaderStore()
 const encodingOptions = ['[utf-8] Unicode (UTF-8)']
 const selectedEncoding = ref<string>(encodingOptions[0])
 
-const pagination = { rowsPerPage: 0 }
+const pagination: Ref<{rowsPerPage: number}> = ref({ rowsPerPage: 0 })
 const fileChooser = ref<QFile | null>()
 const files = ref<File[]>([])
 const urlPrompt = ref(false)

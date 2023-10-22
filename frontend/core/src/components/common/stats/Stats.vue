@@ -34,11 +34,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import Vue3autocounter from 'vue3-autocounter'
-import type { StatsDataSet } from '@/types/stats'
+import type { StatsDataSet } from '../../../types/stats'
 
-import { logger } from '@/index'
-import { LogSeverity } from '@/types'
-import { loadStats } from '@/services/stats'
+import { logger } from '../../../index'
+import { LogSeverity } from '../../../types'
+import { loadStats } from '../../../services/stats'
 
 const props = defineProps<StatsDataSet>()
 

@@ -10,15 +10,15 @@
 <script setup lang="ts">
 import { toRefs, computed, onMounted, ref } from 'vue'
 import type { Ref } from 'vue'
-import type { ChartUISettings, ChartData } from '@/types/chart'
+import type { ChartUISettings, ChartData } from '../../../types/chart'
 import { labelsDefaultStyle } from './defaults'
 import LineChart from './components/LineChart.vue'
 import BarChart from './components/BarChart.vue'
 import PieChart from './components/PieChart.vue'
 import GaugeChart from './components/GaugeChart.vue'
-import { logger } from '@/index'
-import { LogSeverity } from '@/types'
-import { loadChart } from '@/services/chart'
+import { logger } from '../../../index'
+import { LogSeverity } from '../../../types'
+import { loadChart } from '../../../services/chart'
 
 const props = defineProps<{
 	options?: ChartUISettings

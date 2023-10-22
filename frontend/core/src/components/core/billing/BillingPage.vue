@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { BILLING_INVOICE_ENDPOINT, IconSettings } from '@/index'
+import { BILLING_INVOICE_ENDPOINT, IconSettings } from '../../../index'
 import { invoicesTableSchema } from './billing.table.schema'
 
 const props = defineProps<{

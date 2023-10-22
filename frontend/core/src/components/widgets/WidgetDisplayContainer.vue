@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { computed } from 'vue'
-import { useWidgetsStore } from '@/store/widgets'
+import { useWidgetsStore } from '../../store/widgets'
 import JLChart from './components/JLChart.vue'
 import JLStats from './components/JLStats.vue'
 import JLForm from './components/JLForm.vue'

@@ -20,7 +20,7 @@ export async function goToLoginRedirect(router?: Router, redirect?: string) {
 		router = useRouter()
 	}
 
-	const settings = {...settingsStore?.getSettings}
+	const settings = { ...settingsStore?.getSettings }
 
 	if (redirect) {
 		await router.push(redirect)

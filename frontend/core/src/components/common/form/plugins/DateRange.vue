@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, Ref, watch } from 'vue'
-import { FormField, FormFieldPluginDateRangeOptions, FormFieldPluginDateRangeResult, FormFieldPluginDateRangeTypeOptions } from '@/types'
+import { FormField, FormFieldPluginDateRangeOptions, FormFieldPluginDateRangeResult, FormFieldPluginDateRangeTypeOptions } from '../../../../types'
 import { JLDropdownButtonMenu } from '../../menu';
 
 const props = defineProps<{

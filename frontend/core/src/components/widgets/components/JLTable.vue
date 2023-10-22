@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts" setup>
-import { JLTable } from '@/index'
-import { TableSchema } from '@/types'
+import { JLTable } from '../../../index'
+import { TableSchema } from '../../../types'
 
 defineProps({
 	config: Object,
