@@ -162,7 +162,7 @@
 import { ref, onMounted } from 'vue'
 import WidgetForm from './components/WidgetForm.vue'
 import { useWidgetsStore } from '../../store/widgets'
-import JLChart from './components/JLChart.vue'
+import { JLChart } from '../../components/common/chart'
 import JLStats from './components/JLStats.vue'
 import JLForm from './components/JLForm.vue'
 import JLTable from './components/JLTable.vue'
