@@ -40,7 +40,7 @@ jobs:
             -   name: 'Install Node.js'
                 uses: actions/setup-node@v3
                 with:
-                    node-version: latest
+                    node-version: 19
 
             -   run: git stash
             -   run: git pull --force
