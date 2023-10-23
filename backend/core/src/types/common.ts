@@ -4,6 +4,7 @@ import { InsertResult, DeleteResult } from 'typeorm'
 
 export enum UploadType {
 	CSV = 'CSV',
+	JSON = 'JSON',
 }
 
 export enum HTTP_METHODS {
@@ -51,10 +52,10 @@ export enum ImportMode {
 	REPOPULATE = 'REPOPULATE',
 }
 
-export class UploadFileDto {
+export class BulkUploadDto {
 	@ApiProperty({
 		name: 'file',
-		description: 'A file, currently supports: `.csv`',
+		description: 'A file, currently supports: `.csv` `.json`',
 		type: 'File',
 		required: false,
 	})

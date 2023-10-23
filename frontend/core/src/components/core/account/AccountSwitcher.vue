@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Ref, ref, watch } from 'vue'
-import { UserStore } from '@/store/user'
-import { AccountStore } from '@/store/account'
-import type { Account, FormSettings } from '@/types'
+import { UserStore } from '../../../store/user'
+import { AccountStore } from '../../../store/account'
+import type { Account, FormSettings } from '../../../types'
 
 let accounts: Ref<Account[]> = ref([])
 let options: { label: string; value: number }[]

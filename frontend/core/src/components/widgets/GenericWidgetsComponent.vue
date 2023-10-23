@@ -2,7 +2,7 @@
 import {onMounted, ref} from 'vue'
 import WidgetDisplayContainer from './WidgetDisplayContainer.vue'
 import WidgetEditorContainer from './WidgetEditorContainer.vue'
-import {loadWidgets} from '@/services/widgets'
+import {loadWidgets} from '../../services/widgets'
 
 const props = defineProps<{
 	editable: boolean,

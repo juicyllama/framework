@@ -30,6 +30,7 @@
 </template>
 
 <script setup lang="ts">
+
 import { ref, onMounted, watch } from 'vue'
 import { useUploaderStore } from '@/store/uploader'
 import { QTableProps } from 'quasar'

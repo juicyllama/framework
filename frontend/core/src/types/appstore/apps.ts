@@ -64,6 +64,7 @@ export interface AppSettingsDto {
 	readonly checkbox?: AppCheckboxDto
 	readonly private?: boolean
 	readonly description?: string
+	readonly hidden?: boolean
 }
 
 export interface App {

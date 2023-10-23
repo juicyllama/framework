@@ -2,7 +2,7 @@
 import { AccountStore } from '../../../store/account'
 import { UserStore } from '../../../store/user'
 import { ref } from 'vue'
-import AccountAvatar from '@/components/core/account/AccountAvatar.vue'
+import AccountAvatar from '../../../components/core/account/AccountAvatar.vue'
 
 const accounts = UserStore().user.accounts
 const account_name = ref<string>(await AccountStore().getAccountName)

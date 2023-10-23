@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
-import { useWidgetsStore } from '@/store/widgets'
+import { useWidgetsStore } from '../../../store/widgets'
 import AdditionalSettings from './AdditionalSettings.vue'
 import { optionsContent, optionsSizeArr, EMPTY_WIDGET } from '../constants'
 

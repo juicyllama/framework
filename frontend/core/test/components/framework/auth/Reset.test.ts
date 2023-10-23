@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vitest } from 'vitest'
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest'
-import Reset from '@/components/core/auth/Reset.vue'
-import { createAndInjectRouter, getRouter, mountWithMocks, waitForTimeout } from '@/../test/utils/wrapper'
-import { UserStore } from '@/store/user'
+import Reset from '../../../../src/components/core/auth/Reset.vue'
+import { createAndInjectRouter, getRouter, mountWithMocks, waitForTimeout } from '../../../utils/wrapper'
+import { UserStore } from '../../../../src/store/user'
 
 describe('Reset', () => {
 	beforeEach(() => {

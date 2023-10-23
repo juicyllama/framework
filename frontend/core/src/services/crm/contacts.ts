@@ -1,7 +1,7 @@
-import { Api } from '@/helpers'
-import { Contact, FormApiOptionsCreate } from '@/types'
-import instance from '@/services'
-import { accountStore } from '@/index'
+import { Api } from '../../helpers'
+import { Contact, FormApiOptionsCreate } from '../../types'
+import instance from '../../services'
+import { accountStore } from '../../index'
 
 type T = Contact
 export const CONTACTS_ENDPOINT = '/crm/contacts'

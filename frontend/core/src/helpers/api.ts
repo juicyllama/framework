@@ -19,7 +19,7 @@ export async function apiRequest<T>(options: {
 	q?: QVueGlobals
 }): Promise<T> {
 	try {
-		const accountStore = (await import('@/index')).accountStore
+		const accountStore = (await import('../index')).accountStore
 		instance.defaults.headers.common['account-id'] = accountStore.selected_account.account_id
 
 		let response: any

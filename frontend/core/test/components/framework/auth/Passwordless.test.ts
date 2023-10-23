@@ -1,9 +1,9 @@
 import { describe, expect, it, vitest, beforeEach } from 'vitest'
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest'
-import { createAndInjectRouter, getRouter, mountWithMocks, waitForTimeout } from '@/../test/utils/wrapper'
-import { prefillFormByName } from '@/../test/utils/form'
-import { UserStore } from '@/store/user'
-import Passwordless from '@/components/core/auth/Passwordless.vue'
+import { createAndInjectRouter, getRouter, mountWithMocks, waitForTimeout } from '../../../utils/wrapper'
+import { prefillFormByName } from '../../../utils/form'
+import { UserStore } from '../../../../src/store/user'
+import Passwordless from '../../../../src/components/core/auth/Passwordless.vue'
 
 describe('Passwordless', () => {
 	installQuasarPlugin()
