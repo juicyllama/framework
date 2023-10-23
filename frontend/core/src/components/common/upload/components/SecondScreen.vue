@@ -42,7 +42,7 @@ const options = [
 		value: 'fixedWidth',
 	},
 ]
-const chosen = ref(null)
+const chosen = ref('delimited')
 
 const recordDelimiters = ['CRLF', 'CR', 'LF']
 const chosenRecordDelimiter = ref(recordDelimiters[0])

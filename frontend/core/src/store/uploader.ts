@@ -3,13 +3,17 @@ import { defineStore } from 'pinia'
 export const useUploaderStore = defineStore('uploader', {
 	state: () => ({
 		step: 1,
-		file: {},
+		file: null,
 		urls: [],
 		encoding: 'utf-8',
 		delimeters: {},
 		collumnsToPick: [],
+		allowedFileType: '',
 		importMode: '',
-		existingTables: [],
+		mappers: [],
+		uploadResult: {
+			status: 'LOADING',
+		},
 	}),
 	getters: {
 		getStep(state) {
@@ -18,19 +22,22 @@ export const useUploaderStore = defineStore('uploader', {
 		getFile(state) {
 			return state.file
 		},
-		getTables(state) {
-			return state.existingTables.map(i => i.title)
-		},
-		getFieldsPerTable: state => {
-			return tableName => state.existingTables.find(i => i.tableName === tableName)
-		},
 	},
 	actions: {
 		setDelimetersData(data) {
 			this.delimeters = data
 		},
+		setFieldMappings(data) {
+			this.mappers = data
+		},
+		setFileType(fileExt) {
+			this.allowedFileType = fileExt
+		},
 		setFile(file) {
 			this.file = file
+		},
+		setUploadResult(data) {
+			this.uploadResult = data
 		},
 		setImportMode(importMode) {
 			this.importMode = importMode

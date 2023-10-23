@@ -29,13 +29,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import WizardFooter from './WizardFooter.vue'
 import FirstScreen from './FirstScreen.vue'
 import SecondScreen from './SecondScreen.vue'
 import ThirdScreen from './ThirdScreen.vue'
 import FourthScreen from './FourthScreen.vue'
 import FifthScreen from './FifthScreen.vue'
+
 import { uploadFile } from '../../../../services/upload'
 import { useUploaderStore } from '../../../../store/uploader'
 
@@ -44,6 +45,7 @@ const store = useUploaderStore()
 const emit = defineEmits(['update:show', 'update:modelValue'])
 const props = defineProps({
 	show: Boolean,
+	allowedFileType: String,
 })
 const screen = ref(1)
 const uploadResult = ref(null)
@@ -68,19 +70,43 @@ const isStartButtonActive = computed(() => {
 })
 
 const onNextButtonClicked = () => {
+	if (screen.value == 1 && (!store.getFile || store.getFile.file == null)) {
+		return
+	}
 	screen.value++
 }
 const onBackButtonClicked = () => {
 	screen.value--
 }
+
+onMounted(() => {
+	store.setFileType(props.allowedFileType)
+})
+
+watch(screen, () => {
+	if (screen.value === 5) {
+		onStartButtonClicked()
+	}
+})
 const onStartButtonClicked = async () => {
+	const resultingMap = {}
+	store.mappers.forEach(line => {
+		resultingMap[line.source] = line.target || line.source
+	})
+
 	const form = new FormData()
-	form.append('file', store.getFile as Blob)
-	// table: store.getTable,
-	// fields: store.getFields,
-	// primaryKey: store.getPrimaryKey,
+	form.append('file', store.getFile.file as Blob)
+	form.append('upload_type', props.allowedFileType)
+	form.append('mappers', JSON.stringify(resultingMap))
+	form.append('import_mode', store.importMode)
 
 	try {
+		// await uploadMetadata({
+		// 	upload_type: props.allowedFileType, turn on the
+		// 	mappers: store.mappers,
+		// 	import_mode: store.importMode,
+		// })
+
 		const res = await uploadFile(form)
 		uploadResult.value = {
 			status: 'SUCCESS',
@@ -94,6 +120,7 @@ const onStartButtonClicked = async () => {
 		}
 	} finally {
 		screen.value = 5
+		store.setUploadResult(uploadResult.value)
 	}
 }
 </script>

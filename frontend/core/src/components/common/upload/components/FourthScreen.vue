@@ -15,25 +15,24 @@ import { useUploaderStore } from '../../../../store/uploader'
 const store = useUploaderStore()
 
 const options = [
-	{ label: 'Append: add records to the destination table', value: 'append' },
 	{
 		label: 'Update: update records in the destination with matching records from source',
-		value: 'update',
+		value: 'UPSERT',
 	},
 	{
 		label: 'Append/Update: if records exist in destination, update it. Otherwise, add it',
-		value: 'appendOrUpdate',
+		value: 'CREATE',
 	},
 	{
 		label: 'Delete: delete records in destination that match records in source',
-		value: 'delete',
+		value: 'DELETE',
 	},
 	{
 		label: 'Copy: delete all records in destination, repopulate from the source',
-		value: 'copy',
+		value: 'REPOPULATE',
 	},
 ]
-const chosenImportMode = ref('append')
+const chosenImportMode = ref(options[0])
 
 watch(chosenImportMode, () => {
 	store.setImportMode(chosenImportMode.value)

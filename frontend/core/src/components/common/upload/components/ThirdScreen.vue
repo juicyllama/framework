@@ -6,11 +6,11 @@
 		</div>
 	</q-card-section>
 	<q-card-section>
-		<q-select :options="tableOptions" v-model="selectedTable">
+		<!-- <q-select :options="tableOptions" v-model="selectedTable">
 			<template v-slot:prepend>
 				<q-icon name="table_view" />
 			</template>
-		</q-select>
+		</q-select> -->
 		<q-table :columns="columns" :rows="rows" dense hide-bottom>
 			<template v-slot:body="props">
 				<q-tr>
@@ -30,9 +30,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+
+import { ref, onMounted, watch } from 'vue'
 import { useUploaderStore } from '../../../../store/uploader'
-import { QTableProps } from 'quasar';
+import { QTableProps } from 'quasar'
+import { getUploadFields } from '../../../../services/upload'
 
 const store = useUploaderStore()
 
@@ -48,24 +50,82 @@ const columns: QTableProps['columns'] = [
 		name: 'target',
 		align: 'left',
 		label: 'Target Field',
-		field: 'source',
+		field: 'target',
 		sortable: false,
 	},
 	{
 		name: 'primaryKey',
 		align: 'left',
 		label: 'Primary Key',
-		field: 'source',
+		field: 'primaryKey',
 		sortable: false,
 	},
 ]
 
 // rows in the user-selected file
-const rows = ref([
-	// { source: 'test', target: ref(''), primaryKey: ref(false) },
-])
+const rows = ref([])
+const targetFieldOptions = ref([])
 
-const tableOptions = computed(() => store.getTables)
-const selectedTable = ref('')
-const targetFieldOptions = computed(() => store.getFieldsPerTable(selectedTable.value))
+const dataMapper = data =>
+	data.map(sourceRow => ({
+		source: sourceRow,
+		target: ref(''),
+		primaryKey: ref(false),
+	}))
+
+watch(
+	rows,
+	val => {
+		store.setFieldMappings(val)
+	},
+	{ deep: true },
+)
+
+const readCSVFileHeaders = () => {
+	const file = store.getFile.file as File
+	const reader = new FileReader()
+	reader.onload = () => {
+		const text = reader.result as string
+		const headers = text
+			.split('\n')[0]
+			.split(',')
+			.map(i => i.replace(/"/g, ''))
+		rows.value = dataMapper(headers)
+	}
+	reader.readAsText(file)
+}
+
+const readJSONHeaders = () => {
+	const file = store.getFile.file as File
+	const reader = new FileReader()
+	reader.onload = () => {
+		const text = reader.result as string
+		const headers = Object.keys(JSON.parse(text)[0])
+		rows.value = dataMapper(headers)
+	}
+	reader.readAsText(file)
+}
+
+const readFileHeaders = () => {
+	if (store.allowedFileType === 'CSV') {
+		readCSVFileHeaders()
+	} else if (store.allowedFileType === 'JSON') {
+		readJSONHeaders()
+	}
+}
+
+onMounted(() => {
+	readFileHeaders()
+	getUploadFields().then(res => {
+		targetFieldOptions.value = res.data.map(field => ({
+			label: field,
+			value: field,
+		}))
+	})
+})
+
+//TODO: for the future case when multiple tables are supported
+//		currently, only one table is supported
+// const tableOptions = computed(() => store.getTables)
+// const selectedTable = ref('')
 </script>
