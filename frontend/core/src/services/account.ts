@@ -1,7 +1,7 @@
 import instance from './index'
 import type { Account, CreateAccount, NewAccountDetails } from '../types/account'
 import { DeepPartial } from 'quasar'
-import { accountStore } from '@/index'
+import { accountStore } from '../index'
 
 export const createAccount = async (payload: CreateAccount): Promise<NewAccountDetails> => {
 	const response = await instance.post(`/account`, {

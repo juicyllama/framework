@@ -1,6 +1,6 @@
 import instance from './index'
-import type { Dashboard } from '@/types/widget'
-import { accountStore } from '@/index'
+import type { Dashboard } from '../types/widget'
+import { accountStore } from '../index'
 
 export const DASHBOARD_ENDPOINT = '/dashboards'
 export const USERS_PUSHER_CHANNEL = 'account_${account_id}_users'

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function*/
 
-import { BILLING_INVOICE_ENDPOINT, IconSettings, TableSchema } from '@/index'
+import { BILLING_INVOICE_ENDPOINT, IconSettings, TableSchema } from '../../../index'
 
 export const invoicesTableSchema = (icon?: IconSettings, visibleColumns?: string[]): TableSchema => {
 	return {

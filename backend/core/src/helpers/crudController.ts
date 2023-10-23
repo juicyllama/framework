@@ -1,4 +1,4 @@
-import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto, Csv, File } from '@juicyllama/utils'
+import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto, Csv, File, Json } from '@juicyllama/utils'
 import { Query as TQuery } from '../utils/typeorm/Query'
 import { TypeOrm } from '../utils/typeorm/TypeOrm'
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common'
@@ -174,8 +174,8 @@ export async function crudBulkUpload<T>(options: {
 	file?: Express.Multer.File
 	raw?: any
 }): Promise<BulkUploadResponse> {
-
 	const csv = new Csv()
+	const json = new Json()
 	const file = new File()
 
 	if (!options.file && !options.raw) {
@@ -198,58 +198,85 @@ export async function crudBulkUpload<T>(options: {
 		throw new InternalServerErrorException(`Missing required field: dedup_field`)
 	}
 
+	if (options.mappers) {
+		if (typeof options.mappers === 'string') {
+			try {
+				options.mappers = JSON.parse(options.mappers)
+			} catch (e: any) {
+				throw new BadRequestException(`Invalid mappers JSON`)
+			}
+		}
+	}
+
+	let content: any[]
+
 	switch (options.upload_type) {
 		case UploadType.CSV:
-			let content: any[]
-
-			if (options.mappers) {
-				if(typeof options.mappers === 'string') {
-					try{
-						options.mappers = JSON.parse(options.mappers)
-					}catch(e: any){
-						throw new BadRequestException(`Invalid mappers JSON`)
-					}
-				}
-			}
-
 			if (options.file) {
 				if (!Boolean(options.file.mimetype.match(/(csv)/))) {
 					throw new BadRequestException(`Not a valid ${options.upload_type} file`)
 				}
 
 				content = await csv.parseCsvFile(options.file, options.mappers)
-
 			} else if (options.raw) {
 				const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(options.raw)
 				content = await csv.parseCsvFile(csv_file)
 				await file.unlink(filePath, dirPath)
 			}
+			break
+		case UploadType.JSON:
+			if (options.file) {
+				if (!Boolean(options.file.mimetype.match(/(json)/))) {
+					throw new BadRequestException(`Not a valid ${options.upload_type} file`)
+				}
 
-			if (Object.keys(content[0]).length !== options.fields.length) {
-				throw new BadRequestException(
-					`Invalid ${options.upload_type} file. Expected ${options.fields.length} columns, got ${Object.keys(content[0]).length}`,
-				)
+				content = await json.parseJsonFile(options.file, options.mappers)
+			} else if (options.raw) {
+				if (typeof options.raw === 'string') {
+					try {
+						content = JSON.parse(options.raw)
+					} catch (e: any) {
+						throw new BadRequestException(`Invalid JSON`)
+					}
+				} else if (typeof options.raw === 'object') {
+					content = options.raw
+				} else {
+					throw new BadRequestException(`Invalid JSON`)
+				}
 			}
-			const dtos: DeepPartial<T>[] = content.map(row => {
-				const dto = options.fields.reduce(
-					(dto, key) => ({
-						...dto,
-						[key]: row[key],
-					}),
-					{},
-				)
-				dto['account_id'] = options.account_id
-				return <DeepPartial<T>>_.omitBy(dto, _.isEmpty) // remove empty values
-			})
-
-			try {
-				return <BulkUploadResponse>await options.service.bulk(dtos, options.import_mode, options.dedup_field)
-			} catch (e) {
-				throw new BadRequestException(e.message)
-			}
+			break
 
 		default:
 			throw new BadRequestException(`Not a supported file type`)
+	}
+
+	if (!content.length) {
+		throw new BadRequestException(`No records found in ${options.upload_type} file`)
+	}
+
+	if (Object.keys(content[0]).length !== options.fields.length) {
+		throw new BadRequestException(
+			`Invalid ${options.upload_type} file. Expected ${options.fields.length} columns, got ${
+				Object.keys(content[0]).length
+			}`,
+		)
+	}
+	const dtos: DeepPartial<T>[] = content.map(row => {
+		const dto = options.fields.reduce(
+			(dto, key) => ({
+				...dto,
+				[key]: row[key],
+			}),
+			{},
+		)
+		dto['account_id'] = options.account_id
+		return <DeepPartial<T>>_.omitBy(dto, _.isEmpty) // remove empty values
+	})
+
+	try {
+		return <BulkUploadResponse>await options.service.bulk(dtos, options.import_mode, options.dedup_field)
+	} catch (e) {
+		throw new BadRequestException(e.message)
 	}
 }
 

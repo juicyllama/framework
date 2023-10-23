@@ -1,7 +1,7 @@
 import { Button, CustomButton, DropdownOptions, Icon, IconSettings } from './common'
 import { QVueGlobals } from 'quasar'
 import { NoticeProps } from '@juicyllama/vue-utils'
-import { ConnectAppOptions, InstalledApp } from '@/types/appstore'
+import { ConnectAppOptions, InstalledApp } from '../types/appstore'
 
 export interface FormApiOptionsCreate {
 	url: string
@@ -191,7 +191,11 @@ export interface FormField {
 	field: FormFieldField
 	type?: FormFieldType
 	plugin?: FormFieldPlugin
-	pluginOptions?: FormFieldPluginTelephoneOptions | FormFieldPluginInstallAppOptions | NoticeProps | FormFieldPluginDateRangeOptions
+	pluginOptions?:
+		| FormFieldPluginTelephoneOptions
+		| FormFieldPluginInstallAppOptions
+		| NoticeProps
+		| FormFieldPluginDateRangeOptions
 	add?: boolean
 	edit?: boolean
 	dropdown?: DropdownOptions[]

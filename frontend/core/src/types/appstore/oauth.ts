@@ -9,4 +9,3 @@ export interface Oauth {
 	redirect_url?: string
 	expires_at?: Date
 }
-

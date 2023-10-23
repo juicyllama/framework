@@ -1,10 +1,10 @@
 import { describe, expect, it, vitest, beforeEach } from 'vitest'
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest'
-import { createAndInjectRouter, getRouter, mountWithMocks, waitForTimeout } from '@/../test/utils/wrapper'
-import { prefillFormByName } from '@/../test/utils/form'
-import Login from '@/components/core/auth/Login.vue'
-import { UserStore } from '@/store/auth'
-import Actions from '@/components/core/auth/Actions.vue'
+import { createAndInjectRouter, getRouter, mountWithMocks, waitForTimeout } from '../../../utils/wrapper'
+import { prefillFormByName } from '../../../../test/utils/form'
+import Login  from '../../../../src/components/core/auth/Login.vue'
+import { userStore } from '../../../../src'
+import Actions from '../../../../src/components/core/auth/Actions.vue'
 import { DOMWrapper } from '@vue/test-utils'
 
 describe('Login', () => {
@@ -90,7 +90,6 @@ describe('Login', () => {
 		expect(qInputs.length).toBe(2)
 
 		const form = wrapper.find('form')
-		const userStore = UserStore()
 		userStore.login = vitest.fn().mockImplementationOnce(() => {
 			return {
 				user_id: 1,
@@ -117,7 +116,6 @@ describe('Login', () => {
 		expect(qInputs.length).toBe(2)
 
 		const form = wrapper.find('form')
-		const userStore = UserStore()
 		userStore.login = vitest.fn().mockImplementationOnce(() => {
 			return {
 				user_id: 1,

@@ -6,7 +6,7 @@ import { AccountStore } from '../../../store/account'
 import AccountAvatar from './AccountAvatar.vue'
 import { UserStore } from '../../../store/user'
 import { FormField, FormFieldButtonType, FormFieldField, FormFieldType, FormSettings } from '../../../types/form'
-import { defaultFormSettings } from '@/components/common/form/defaults'
+import { defaultFormSettings } from '../../../components/common/form/defaults'
 
 const accountStore = AccountStore()
 const userStore = UserStore()

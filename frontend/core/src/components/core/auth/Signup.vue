@@ -2,7 +2,7 @@
 import { reactive, ref } from 'vue'
 import { validateEmail, isPasswordValid, type ValidationPassword } from '../../../helpers/validators'
 import PasswordCriteria from './PasswordCriteria.vue'
-import AuthActions from '@/components/core/auth/Actions.vue'
+import AuthActions from '../../../components/core/auth/Actions.vue'
 import type { CreateAccount } from '../../../types/account'
 import { AccountStore } from '../../../store/account'
 import { useRouter } from 'vue-router'
