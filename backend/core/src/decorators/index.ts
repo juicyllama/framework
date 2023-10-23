@@ -10,7 +10,7 @@ export {
 	UploadImageDecorator,
 	UploadFileDecorator,
 	DeleteDecorator,
-	UploadFieldsDecorator
+	UploadFieldsDecorator,
 } from './crud.decorator'
 export { SwaggerPropertyType, SwaggerPropertyReference, SwaggerPropertyDecorator } from './Swagger.decorator'
 export { UserAuth } from './UserAuth.decorator'

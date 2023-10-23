@@ -28,7 +28,7 @@
         "prebuild": "rimraf dist",
         "prepare": "pnpm run build",
         "build": "tsc",
-        "sandbox": "export $(grep -v '^#' ../../.env.development) && nest start --config src/sandbox/nest-cli.json --watch ",
+        "sandbox": "export $(grep -v '^#' ../../.env.development) && nest start --config sandbox/nest-cli.json --watch ",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"

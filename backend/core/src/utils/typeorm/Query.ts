@@ -61,13 +61,12 @@ export class Query<T> {
 		import_mode: ImportMode,
 		dedup_field?: string,
 	): Promise<BulkUploadResponse> {
-
 		logger.debug(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}]`, {
 			data: {
 				records: data.length,
 				first_record: data[0],
 				last_record: data[data.length - 1],
-			}
+			},
 		})
 
 		let result: BulkUploadResponse
@@ -95,17 +94,22 @@ export class Query<T> {
 			case ImportMode.REPOPULATE:
 				await this.copyTable(repository)
 				await this.truncate(repository)
-				try{
+				try {
 					result = await this.createBulkRecords(repository, data)
 					await this.dropTable(repository, `${repository.metadata.tableName}_COPY`)
-				}catch(e: any){
+				} catch (e: any) {
 					await this.restoreTable(repository)
 				}
 				break
 		}
 
 		logger.debug(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] Result`, {
-			affected_records: ("affected_records" in result) ? result.affected_records : ("raw" in result) ? result.raw.affected_records : null,
+			affected_records:
+				'affected_records' in result
+					? result.affected_records
+					: 'raw' in result
+					? result.raw.affected_records
+					: null,
 		})
 
 		return result
@@ -348,7 +352,7 @@ export class Query<T> {
 	/**
 	 * Create a copy of a whole table
 	 * @param repository
-	 * @param table_name 
+	 * @param table_name
 	 */
 
 	async copyTable(repository: Repository<T>, table_name?: string): Promise<void> {
@@ -356,11 +360,15 @@ export class Query<T> {
 			logger.debug(`[QUERY][COPY TABLE][${repository.metadata.tableName}]`)
 		}
 
-		const sql_copy = `CREATE TABLE ${table_name ?? repository.metadata.tableName+'_COPY'} LIKE ${repository.metadata.tableName}`
+		const sql_copy = `CREATE TABLE ${table_name ?? repository.metadata.tableName + '_COPY'} LIKE ${
+			repository.metadata.tableName
+		}`
 
 		await this.raw(repository, sql_copy)
 
-		const sql_refill = `INSERT INTO ${table_name ?? repository.metadata.tableName+'_COPY'} SELECT * FROM ${repository.metadata.tableName}`
+		const sql_refill = `INSERT INTO ${table_name ?? repository.metadata.tableName + '_COPY'} SELECT * FROM ${
+			repository.metadata.tableName
+		}`
 
 		await this.raw(repository, sql_refill)
 	}
@@ -368,7 +376,7 @@ export class Query<T> {
 	/**
 	 * Restore a table from a copy
 	 * @param repository
-	 * @param table_name 
+	 * @param table_name
 	 */
 
 	async restoreTable(repository: Repository<T>, table_name?: string): Promise<void> {
@@ -377,16 +385,16 @@ export class Query<T> {
 		}
 
 		const sql_rename = `RENAME TABLE ${repository.metadata.tableName} TO ${repository.metadata.tableName}_DELETE,
-		${table_name ?? repository.metadata.tableName+'_COPY'} TO ${repository.metadata.tableName}`
-		
+		${table_name ?? repository.metadata.tableName + '_COPY'} TO ${repository.metadata.tableName}`
+
 		await this.raw(repository, sql_rename)
-		await this.dropTable(repository, repository.metadata.tableName+'_DELETE')
+		await this.dropTable(repository, repository.metadata.tableName + '_DELETE')
 	}
 
 	/**
-	 * Drop a table 
+	 * Drop a table
 	 * @param repository
-	 * @param table_name 
+	 * @param table_name
 	 */
 
 	async dropTable(repository: Repository<T>, table_name: string): Promise<void> {
@@ -726,7 +734,6 @@ export class Query<T> {
 			.values(data)
 			.orUpdate(fields, [dedup_field])
 			.execute()
-
 	}
 
 	/*
