@@ -1,10 +1,10 @@
-import { FormFieldField, FormFieldType, FormSettings, IconSettings, TableExtraType, TableSchema } from '@/types'
-import { USERS_ENDPOINT, USERS_PUSHER_CHANNEL, UsersService } from '@/services/users'
+import { FormFieldField, FormFieldType, FormSettings, IconSettings, TableExtraType, TableSchema } from '../../../types'
+import { USERS_ENDPOINT, USERS_PUSHER_CHANNEL, UsersService } from '../../../services/users'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
-import { accountStore } from '@/index'
+import { accountStore } from '../../../index'
 import { Strings } from '@juicyllama/vue-utils'
-import { defaultFormSettings } from '@/components/common/form/defaults'
+import { defaultFormSettings } from '../../../components/common/form/defaults'
 
 export function usersTableSchema(
 	is_admin: boolean,

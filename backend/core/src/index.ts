@@ -150,7 +150,7 @@ export {
 	METHOD,
 	PromiseLoopOutcomes,
 	CrudUploadFieldsResponse,
-	UploadFileDto,
+	BulkUploadDto,
 	BulkUploadResponse,
 	OauthInterface,
 } from './types'

@@ -1,5 +1,5 @@
-import { Api } from '@/helpers'
-import { EcommerceStore } from '@/types'
+import { Api } from '../../helpers'
+import { EcommerceStore } from '../../types'
 
 type T = EcommerceStore
 export const ECOMMERCE_STORES_ENDPOINT = '/ecommerce/stores'

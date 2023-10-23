@@ -4,7 +4,7 @@ import { UserStore } from '../../../store/user'
 import { default as JLForm } from '../../common/form/Form.vue'
 import { useQuasar } from 'quasar'
 import { FormField, FormFieldButtonType, FormFieldField, FormFieldType, FormSettings } from '../../../types/form'
-import { defaultFormSettings } from '@/components/common/form/defaults'
+import { defaultFormSettings } from '../../../components/common/form/defaults'
 
 const userStore = UserStore()
 const $q = useQuasar()

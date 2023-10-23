@@ -51,11 +51,13 @@
 </template>
 
 <script setup lang="ts">
+
 import { ref, watch, computed } from 'vue'
 import { QFile, QTableProps } from 'quasar'
-import { useUploaderStore } from '@/store/uploader'
-import { SourceType, SourceEntry } from '@/types/upload'
+import { useUploaderStore } from '../../../../store/uploader'
+import { SourceType, SourceEntry } from '../../../../types/upload'
 import { FILE_SIZE_LIMIT } from '../config'
+
 
 const store = useUploaderStore()
 

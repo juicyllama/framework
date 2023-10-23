@@ -1,4 +1,4 @@
-import { AvatarOptions, IconSettings } from '@/types/common'
+import { AvatarOptions, IconSettings } from '../types/common'
 
 export enum UserSelect {
 	user_id = 'user_id',

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import type { User, UserLogin } from '@/types'
-import { UserPreferences } from '@/types'
+import type { User, UserLogin } from '../types'
+import { UserPreferences } from '../types'
 import {
 	accountAuthCheck,
 	getUser,
@@ -10,14 +10,14 @@ import {
 	resetPassword,
 	resetPasswordCode,
 	resetPasswordComplete,
-} from '@/services/auth'
-import { logger } from '@/helpers'
+} from '../services/auth'
+import { logger } from '../helpers'
 import { token } from './token'
-import { goToLogin } from '@/helpers'
-import { UsersService, USERS_ENDPOINT } from '@/services/users'
+import { goToLogin } from '../helpers'
+import { UsersService, USERS_ENDPOINT } from '../services/users'
 import { AccountStore } from './account'
 import { QVueGlobals } from 'quasar'
-import { LogSeverity } from '@/types'
+import { LogSeverity } from '../types'
 
 type T = User
 
@@ -117,14 +117,14 @@ export const UserStore = defineStore('user', {
 				account_id = accountStore.getAccountId
 			}
 
-			if(!this.$state.user){
+			if (!this.$state.user) {
 				this.logout()
 				return false
 			}
 
 			const roles = this.$state.user.roles
 
-			if(!roles) {
+			if (!roles) {
 				this.logout()
 				return false
 			}

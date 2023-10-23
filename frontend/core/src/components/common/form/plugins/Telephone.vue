@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue'
-import { FormField, FormFieldPluginTelephoneOptions, FormSchema, IconSettings } from '@/types'
+import { FormField, FormFieldPluginTelephoneOptions, FormSchema, IconSettings } from '../../../../types'
 import Vue3QTelInput from 'vue3-q-tel-input'
 
 const props = defineProps<{

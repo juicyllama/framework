@@ -1,5 +1,5 @@
 import { forwardRef, Module } from '@nestjs/common'
-import { CoreModule } from '../index'
+import { CoreModule } from '../src/index'
 
 @Module({
 	imports: [forwardRef(() => CoreModule)],

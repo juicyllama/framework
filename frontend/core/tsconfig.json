@@ -18,11 +18,8 @@
 		"lib": ["esnext", "dom"],
 		"outDir": "./dist",
 		"baseUrl": "./",
-		"paths": {
-			"@/*": ["src/*"]
-		}
 	},
-	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "tests/**/*.ts", "tests/**/*.tsx"],
+	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "tests/**/*.ts", "tests/**/*.tsx", "sandbox/**/*.ts"],
 	"exclude": ["node_modules"],
 	"lib": ["WebWorker"]
 }

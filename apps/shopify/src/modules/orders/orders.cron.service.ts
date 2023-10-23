@@ -67,57 +67,55 @@ export class ShopifyOrdersCronService {
 							})
 							rej(new Error(`Store not found for installed app ${installed_app.installed_app_id}`))
 						}
-						const last_check_at = new Date()
 
-						const options = <any>_.omitBy({
-							api_version: ApiVersion.July23,
-							status: 'any',
-							updated_at_min: installed_app.last_check_at ?? null
-						}, _.isNil)
-
-						this.shopifyOrdersService
-							.syncOrders(
-								installed_app,
-								options,
-								store,
-							)
-							.then(orders => {
-								order_count += orders.length
-
-								this.logger.log(
-									`[${domain}] ${orders.length} Orders synced for store: ${installed_app.settings.SHOPIFY_SHOP_NAME}`,
+						this.installedAppsService
+							.update({
+								installed_app_id: installed_app.installed_app_id,
+								last_check_at: new Date(),
+								next_check_at: new Date(new Date().getTime() + 1000 * 60 * 10), // 10 minutes
+							})
+							.then(() => {
+								const options = <any>_.omitBy(
 									{
-										installed_app_id: installed_app.installed_app_id,
-										account_id: installed_app.account_id,
+										api_version: ApiVersion.July23,
+										status: 'any',
+										updated_at_min: installed_app.last_check_at ?? null,
 									},
+									_.isNil,
 								)
 
-								this.installedAppsService
-									.update({
-										installed_app_id: installed_app.installed_app_id,
-										last_check_at: last_check_at,
-										next_check_at: new Date(new Date().getTime() + 1000 * 60 * 10), // 10 minutes
-									})
-									.then(() => {
+								this.shopifyOrdersService
+									.syncOrders(installed_app, options, store)
+									.then(orders => {
+										order_count += orders.length
+
+										this.logger.log(
+											`[${domain}] ${orders.length} Orders synced for store: ${installed_app.settings.SHOPIFY_SHOP_NAME}`,
+											{
+												installed_app_id: installed_app.installed_app_id,
+												account_id: installed_app.account_id,
+											},
+										)
+
 										res(`${orders.length} Orders synced`)
 									})
 									.catch(err => {
-										this.logger.warn(`[${domain}] Error updating installed app`, {
-											installed_app_id: installed_app.installed_app_id,
-											error: err,
-										})
+										this.logger.warn(
+											`[${domain}] Error syncing orders for store: ${installed_app.settings.SHOPIFY_SHOP_NAME}`,
+											{
+												installed_app_id: installed_app.installed_app_id,
+												store: store,
+												error: err,
+											},
+										)
 										rej(err)
 									})
 							})
 							.catch(err => {
-								this.logger.warn(
-									`[${domain}] Error syncing orders for store: ${installed_app.settings.SHOPIFY_SHOP_NAME}`,
-									{
-										installed_app_id: installed_app.installed_app_id,
-										store: store,
-										error: err,
-									},
-								)
+								this.logger.warn(`[${domain}] Error updating installed app`, {
+									installed_app_id: installed_app.installed_app_id,
+									error: err,
+								})
 								rej(err)
 							})
 					})

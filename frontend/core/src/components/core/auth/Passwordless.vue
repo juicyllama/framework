@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { UserStore } from '../../../store/user'
-import AuthActions from '@/components/core/auth/Actions.vue'
-import OTP from '@/components/core/auth/OTP.vue'
+import AuthActions from '../../../components/core/auth/Actions.vue'
+import OTP from '../../../components/core/auth/OTP.vue'
 import { useRouter } from 'vue-router'
 import type { AuthFormState } from '../../../helpers/validators'
 import { useQuasar } from 'quasar'

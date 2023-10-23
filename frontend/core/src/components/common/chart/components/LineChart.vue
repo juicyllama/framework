@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { ChartUISettings, ChartData } from '@/types/chart'
+import type { ChartUISettings, ChartData } from '../../../../types/chart'
 
 import {
 	Chart as ChartJS,

@@ -5,9 +5,8 @@ applications:
           phases:
             preBuild:
               commands:
-                - npm install -g pnpm
                 - echo -e "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=$FONTAWESOME_AUTH_TOKEN" > .npmrc
-                - pnpm install --shamefully-hoist
+                - npm install
             build:
               commands:
                 - npm run docs:build

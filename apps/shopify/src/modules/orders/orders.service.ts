@@ -69,8 +69,7 @@ export class ShopifyOrdersService {
 		orders.push(...response.body.orders)
 		pageInfo = response.pageInfo
 
-		if(pageInfo?.nextPage){
-
+		if (pageInfo?.nextPage) {
 			do {
 				this.logger.log(`[${domain}] ${orders.length} Orders added, fetching next page`)
 
@@ -85,7 +84,6 @@ export class ShopifyOrdersService {
 				orders.push(...response.body.orders)
 				pageInfo = response.pageInfo
 			} while (pageInfo?.nextPage)
-
 		}
 
 		this.logger.log(`[${domain}] ${orders.length} Orders found`)

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Table from '@/components/common/table/components/Table.vue'
-import { loadPusher } from '@/plugins'
-import { FindOptions, LogSeverity } from '@/types'
+import Table from '../../../components/common/table/components/Table.vue'
+import { loadPusher } from '../../../plugins'
+import { FindOptions, LogSeverity } from '../../../types'
 import { isEmpty, isNull, result } from 'lodash'
 import { defineStore } from 'pinia'
 import { useQuasar } from 'quasar'
