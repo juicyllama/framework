@@ -70,6 +70,10 @@ pnpm i -g mkcert
 
 Optional dependencies:
 
+##### Doppler
+
+If you want to use doppler for secrets management and sharing:
+
 ```bash
 brew install dopplerhq/cli/doppler
 ```
