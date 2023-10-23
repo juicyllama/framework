@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { UserStore } from '../../../store/user'
-import AuthActions from '@/components/core/auth/Actions.vue'
-import OTP from '@/components/core/auth/OTP.vue'
-import PasswordCriteria from '@/components/core/auth/PasswordCriteria.vue'
+import AuthActions from '../../../components/core/auth/Actions.vue'
+import OTP from '../../../components/core/auth/OTP.vue'
+import PasswordCriteria from '../../../components/core/auth/PasswordCriteria.vue'
 import { validateEmail, isPasswordValid } from '../../../helpers/validators'
 import type { ValidationPassword, AuthFormState } from '../../../helpers/validators'
 import { useRouter } from 'vue-router'

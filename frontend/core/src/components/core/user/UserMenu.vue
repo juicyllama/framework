@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import UserAvatar from './UserAvatar.vue'
-import { UserStore } from '@/store/user'
+import { UserStore } from '../../../store/user'
 import { JLMenu } from '../../common/menu'
-import { Menu, UserMenuOptions } from '@/types'
+import { Menu, UserMenuOptions } from '../../../types'
 import { ref } from 'vue'
 
 const userStore = UserStore()

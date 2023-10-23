@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
-import type { User, UserLogin } from '@/types'
-import { logger } from '@/helpers/logger'
-import { createAccount, getAccount, updateAccount, updateAccountAvatar } from '@/services/account'
-import type { Account, CreateAccount } from '@/types'
+import type { User, UserLogin } from '../types'
+import { logger } from '../helpers/logger'
+import { createAccount, getAccount, updateAccount, updateAccountAvatar } from '../services/account'
+import type { Account, CreateAccount } from '../types'
 import { UserStore } from './user'
-import { LogSeverity } from '@/types'
+import { LogSeverity } from '../types'
 import { QVueGlobals } from 'quasar'
-import { getUser } from '@/services/auth'
+import { getUser } from '../services/auth'
 
 export const AccountStore = defineStore('account', {
 	state: () => ({

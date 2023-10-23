@@ -36,8 +36,10 @@ import SecondScreen from './SecondScreen.vue'
 import ThirdScreen from './ThirdScreen.vue'
 import FourthScreen from './FourthScreen.vue'
 import FifthScreen from './FifthScreen.vue'
+
 import { uploadFile } from '@/services/upload'
 import { useUploaderStore } from '@/store/uploader'
+
 const store = useUploaderStore()
 
 const emit = defineEmits(['update:show', 'update:modelValue'])

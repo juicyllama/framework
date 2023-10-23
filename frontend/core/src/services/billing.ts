@@ -1,5 +1,5 @@
 import instance from './index'
-import { accountStore } from '@/index'
+import { accountStore } from '../index'
 
 export const BILLING_WALLET_ENDPOINT = '/billing/wallet'
 export const BILLING_INVOICE_ENDPOINT = 'billing/invoices'

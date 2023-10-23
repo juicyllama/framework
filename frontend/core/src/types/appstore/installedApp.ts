@@ -1,5 +1,5 @@
 import { App, AppStoreIntegrationName } from './apps'
-import { Account, User } from '@/types'
+import { Account, User } from '../../types'
 
 export enum AppScope {
 	ACCOUNT = 'ACCOUNT',
@@ -37,4 +37,3 @@ export interface InstalledApp {
 	last_check_at?: Date
 	next_check_at?: Date
 }
-

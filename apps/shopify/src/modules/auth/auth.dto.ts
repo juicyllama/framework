@@ -23,7 +23,11 @@ export class ShopifyAuthRedirectQuery {
 
 	@IsString()
 	@IsOptional()
-	redirect_url?: string
+	redirect_url?: string //if you want to redirect to a specific url after authentication
+
+	@IsNumber()
+	@IsOptional()
+	account_id?: number //if you want to assign "unknown" shopify stores to a specific account (defaults to 1)
 }
 
 export class ShopifyAuthCreateRequest {

@@ -1,7 +1,6 @@
 import csvParser from 'csv-parser'
 import { Readable } from 'stream'
-import * as fs from 'fs'
-import * as path from 'path'
+import { File } from './File'
 
 export class Csv {
 	/**
@@ -46,28 +45,19 @@ export class Csv {
 		dirPath: string,
 	}> {
 		try {
-			const tempDir = fs.mkdtempSync(path.join(fs.realpathSync('.'), 'temp-'))
-			const tempFilePath = path.join(tempDir, 'temp-file.csv')
-			await fs.promises.writeFile(tempFilePath, content, 'utf-8')
 
-			const temp_file = {
-				fieldname: 'temp-file',
-				originalname: 'temp-file.csv',
-				encoding: '7bit',
-				mimetype: 'text/csv',
-				buffer: await fs.promises.readFile(tempFilePath),
-				size: (await fs.promises.readFile(tempFilePath)).length,
-				stream: new Readable(),
-				destination: tempFilePath,
-				filename: 'temp-file.csv',
-				path: tempFilePath,
-			}
+			const file = new File()
+			const result = await file.createTempFileFromString({
+				fileName: 'temp-file.csv', 
+				content: content, 
+				mimetype: 'text/csv'})
 
 			return {
-				filePath: tempFilePath,
-				csv_file: temp_file,
-				dirPath: tempDir
+				filePath: result.filePath,
+				csv_file: result.file,
+				dirPath: result.dirPath
 			}
+
 		} catch (error) {
 			throw new Error(`Error creating temporary file: ${error}`)
 		}

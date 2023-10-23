@@ -161,12 +161,12 @@
 <script lang="ts">
 import { ref, onMounted } from 'vue'
 import WidgetForm from './components/WidgetForm.vue'
-import { useWidgetsStore } from '@/store/widgets'
-import JLChart from './components/JLChart.vue'
+import { useWidgetsStore } from '../../store/widgets'
+import { JLChart } from '../../components/common/chart'
 import JLStats from './components/JLStats.vue'
 import JLForm from './components/JLForm.vue'
 import JLTable from './components/JLTable.vue'
-import { saveWidgets } from '@/services/widgets'
+import { saveWidgets } from '../../services/widgets'
 import { widgetClass } from './utils'
 
 const findWidgetById = (widgets, widget) => widgets.findIndex(el => el.id === widget.id)

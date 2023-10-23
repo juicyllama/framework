@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { DropdownButtonMenu } from '@/types'
-import { JLMenu } from '@/components/common/menu'
+import { DropdownButtonMenu } from '../../../types'
+import { JLMenu } from '../../../components/common/menu'
 
 const props = defineProps<DropdownButtonMenu>()
 </script>

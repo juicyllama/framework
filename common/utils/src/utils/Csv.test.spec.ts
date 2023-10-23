@@ -1,5 +1,6 @@
 import { Csv } from './Csv'
 import { File } from './File'
+import { faker } from '@faker-js/faker'
 
 const csv = new Csv()
 const file = new File()
@@ -15,14 +16,20 @@ describe('CSV', () => {
 	})
 
 	it('parseCsvFile', async () => {
+
+		const first_name = faker.person.firstName()
+		const last_name = faker.person.lastName()
+		const email = faker.internet.email({firstName: first_name, lastName: last_name})
+
 		const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
-			'first_name,last_name,email' + '\n' + 'John,Snow,john@got.com'
+			`first_name,last_name,email\n${first_name},${last_name},${email}`
 		)
+
 		const result = await csv.parseCsvFile(csv_file)
 		await file.unlink(filePath, dirPath)
 		expect(result).toBeDefined()
 		expect(result[0]).toBeDefined()
-		expect(result[0].first_name).toEqual('John')
+		expect(result[0].first_name).toEqual(first_name)
 	})
 
 	it('parseCsvFile with headers', async () => {

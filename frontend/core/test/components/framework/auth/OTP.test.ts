@@ -1,6 +1,6 @@
 import { it, describe, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import OTP from '@/components/core/auth/OTP.vue'
+import OTP from '../../../../src/components/core/auth/OTP.vue'
 
 describe('OTP', () => {
 	const wrapper = mount(OTP)

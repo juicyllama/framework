@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/vue-dev",
-    "version": "0.0.48",
+    "version": "0.0.49",
     "description": "Frontend Development Dependencies",
     "author": {
         "name": "JuicyLlama Studio",
@@ -61,7 +61,7 @@
         "pusher-js": "^8.3.0",
         "quasar": "^2.12.7",
         "release-it": "^16.2.0",
-        "sass": "^1.68.0",
+        "sass": "^1.69.4",
         "ts-jest": "^29.1.1",
         "typescript": "^5.2.2",
         "uuid": "^9.0.1",
