@@ -5,6 +5,8 @@ sidebar: false
 
 # JuicyLlama Framework
 
+[JuicyLlama](https://juicyllama.com) pride ourselves on delivering rapid development projects for our clients, we do this in part via our modular development framework.
+
 ::: danger
 Our framework is currently in a beta phase while we work our way to a version 1.0.0.
 
@@ -16,8 +18,6 @@ Here is a full list of the documentatiom which still needs creating:
 
 https://github.com/orgs/juicyllama/projects/8/views/1?pane=issue&itemId=36729897
 :::
-
-[JuicyLlama](https://juicyllama.com) pride ourselves on delivering rapid development projects for our clients, we do this in part via our modular development framework.
 
 ::: tip
 We are often referred to as an application framework as we bridge the gap between development frameworks like [NestJs](https://nestjs.com/) and [Vue](https://vuejs.org) with the final applications users interact with. If you are not familiar with NestJS or Vue we recommend you read their documentation first.

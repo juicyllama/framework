@@ -34,8 +34,6 @@ jobs:
                     sparse-checkout: |
                         common/docs
 
-            -   run: mv ./common/docs ./ && rm -rf ./common
-
             -   name: 'Install Node.js'
                 uses: actions/setup-node@v3
                 with:
