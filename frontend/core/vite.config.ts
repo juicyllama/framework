@@ -6,6 +6,11 @@ import { resolve } from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
 	define: { 'process.env': process.env },
+	resolve: {
+		alias: {
+			'@': resolve(__dirname, './src'),
+		},
+	},
 	plugins: [
 		vue({
 			template: {
