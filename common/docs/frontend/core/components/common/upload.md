@@ -7,6 +7,7 @@ title: Upload
 ## Props
 
 - `allowedFileType` - file type to accept, currently supports 'CSV' or 'JSON'
+- `endpoint` - URL where data will be sent by POST
 
 ## Example
 
@@ -16,6 +17,6 @@ import { JLUpload } from '@juicyllama/frontend-core'
 </script>
 
 <template>
-    <JLUpload :allowedFileType="'CSV'"> Upload CSV</JLUpload>
+    <JLUpload :allowedFileType="'CSV'" :endpoint="'/upload'"> Upload CSV</JLUpload>
 </template>
 ```
