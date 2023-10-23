@@ -6,7 +6,7 @@ export {
 	METHOD,
 	PromiseLoopOutcomes,
 	CrudUploadFieldsResponse,
-	BulkUploadDto as UploadFileDto,
+	BulkUploadDto,
 	BulkUploadResponse,
 } from './common'
 export { OauthInterface } from './oauth.interface'
