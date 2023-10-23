@@ -32,9 +32,6 @@ jobs:
                 with:
                     token: ${{ secrets.GH_CI_CD_RELEASE }}
                     sparse-checkout: |
-                        pnpm-lock.yaml
-                        pnpm-workspace.yaml
-                        tsconfig.json
                         common/docs
 
             -   name: 'Install Node.js'
