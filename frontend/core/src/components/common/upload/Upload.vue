@@ -2,7 +2,7 @@
 	<q-btn @click="openUpload">
 		<slot />
 	</q-btn>
-	<UploadWizard v-model="show" :allowedFileType="allowedFileType" />
+	<UploadWizard v-model="show" :endpoint="endpoint" :allowedFileType="allowedFileType" />
 </template>
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
@@ -12,11 +12,15 @@ import { FILE_TYPES } from './config'
 import { logger } from '../../../helpers/logger'
 const props = defineProps({
 	allowedFileType: String,
+	endpoint: String,
 })
 
 onMounted(() => {
 	if (!Object.keys(FILE_TYPES).includes(props.allowedFileType)) {
 		logger({ severity: LogSeverity.ERROR, message: `Invalid allowedFileType: ${props.allowedFileType}` })
+	}
+	if (!props.endpoint) {
+		logger({ severity: LogSeverity.ERROR, message: `Missing 'endpoint' Upload component` })
 	}
 })
 
