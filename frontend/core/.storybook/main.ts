@@ -3,8 +3,8 @@ import { resolve } from 'path'
 import { mergeConfig } from 'vite';
 
 const config = {
-	stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|ts)'],
-	// stories: ['../src/stories/UploadButton.stories.js'],
+	// stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|ts)'],
+	stories: ['../src/stories/UploadButton.stories.js'],
 	// addons: ['@storybook/addon-links', '@storybook/addon-essentials', '@storybook/addon-interactions'],
 	typescript: { reactDocgen: false,  check: true, skipBabel: true, },
 	framework: {
