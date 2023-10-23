@@ -37,8 +37,8 @@ import ThirdScreen from './ThirdScreen.vue'
 import FourthScreen from './FourthScreen.vue'
 import FifthScreen from './FifthScreen.vue'
 
-import { uploadFile } from '@/services/upload'
-import { useUploaderStore } from '@/store/uploader'
+import { uploadFile } from '../../../../services/upload'
+import { useUploaderStore } from '../../../../store/uploader'
 
 const store = useUploaderStore()
 

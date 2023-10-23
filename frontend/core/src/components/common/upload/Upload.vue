@@ -7,9 +7,9 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import UploadWizard from './components/UploadWizard.vue'
-import { LogSeverity } from '@/types'
+import { LogSeverity } from '../../../types'
 import { FILE_TYPES } from './config'
-import { logger } from '@/helpers/logger'
+import { logger } from '../../../helpers/logger'
 const props = defineProps({
 	allowedFileType: String,
 })

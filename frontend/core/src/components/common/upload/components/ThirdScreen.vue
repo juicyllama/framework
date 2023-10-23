@@ -32,9 +32,9 @@
 <script setup lang="ts">
 
 import { ref, onMounted, watch } from 'vue'
-import { useUploaderStore } from '@/store/uploader'
+import { useUploaderStore } from '../../../../store/uploader'
 import { QTableProps } from 'quasar'
-import { getUploadFields } from '@/services/upload'
+import { getUploadFields } from '../../../../services/upload'
 
 const store = useUploaderStore()
 

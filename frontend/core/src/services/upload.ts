@@ -1,5 +1,5 @@
 import instance from './index'
-import { accountStore } from '@/index'
+import { accountStore } from '../index'
 
 type UploadAPIResponse = {
 	data: object
