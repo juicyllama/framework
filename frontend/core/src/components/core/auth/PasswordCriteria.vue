@@ -15,8 +15,8 @@ const props = defineProps<{
 			<q-icon
 				:name="
 					props.authFormState.password.valid.length
-						? 'fa-regular fa-circle-check'
-						: 'fa-regular fa-circle-xmark'
+						? 'check_circle'
+						: 'cancel'
 				"
 				:color="props.authFormState.password.valid.length ? 'positive' : 'negative'"></q-icon>
 			Must be at least 12 characters long.
@@ -25,8 +25,8 @@ const props = defineProps<{
 			<q-icon
 				:name="
 					props.authFormState.password.valid.capital
-						? 'fa-regular fa-circle-check'
-						: 'fa-regular fa-circle-xmark'
+						? 'check_circle'
+						: 'cancel'
 				"
 				:color="props.authFormState.password.valid.capital ? 'positive' : 'negative'"></q-icon>
 			Must contain at least one capital letter.
@@ -35,8 +35,8 @@ const props = defineProps<{
 			<q-icon
 				:name="
 					props.authFormState.password.valid.number
-						? 'fa-regular fa-circle-check'
-						: 'fa-regular fa-circle-xmark'
+						? 'check_circle'
+						: 'cancel'
 				"
 				:color="props.authFormState.password.valid.number ? 'positive' : 'negative'"></q-icon>
 			Must contain at least one number.
@@ -45,8 +45,8 @@ const props = defineProps<{
 			<q-icon
 				:name="
 					props.authFormState.password.valid.symbol
-						? 'fa-regular fa-circle-check'
-						: 'fa-regular fa-circle-xmark'
+						? 'check_circle'
+						: 'cancel'
 				"
 				:color="props.authFormState.password.valid.symbol ? 'positive' : 'negative'"></q-icon>
 			Must contain at least one special character: !@#$%^&*()-_+=

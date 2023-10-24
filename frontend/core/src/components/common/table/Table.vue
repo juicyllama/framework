@@ -360,8 +360,8 @@ onMounted(async () => {
 						<q-icon
 							class="JLIcon JLIconDelete"
 							size="1em"
-							:name="`${options.icon?.type ?? 'fa-duotone'} ${
-								options.icon?.icons?.delete ?? 'fa-trash'
+							:name="`${options.icon?.type} ${
+								options.icon?.icons?.delete ?? 'delete'
 							}`" />
 
 						<span class="q-ml-sm">Are you sure?</span>

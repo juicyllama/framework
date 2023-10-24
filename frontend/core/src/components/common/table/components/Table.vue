@@ -387,8 +387,8 @@ watch(
 
 					<q-btn class="JLButton JLTableAddRecord" v-if="props.tableSchema.show.add_record" @click="addItem">
 						<q-icon
-							:name="`${props.tableSchema.icon?.type ?? 'fa-duotone'} ${
-								props.tableSchema.icon?.icons?.add ?? 'fa-square-plus'
+							:name="`${props.tableSchema.icon?.type} ${
+								props.tableSchema.icon?.icons?.add ?? 'add_box'
 							}`"
 							size="medium"
 							class="JLIcon JLIconAddRecord" />

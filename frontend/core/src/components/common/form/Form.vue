@@ -287,11 +287,11 @@ if (props.options.onFormLoad) {
 					:class="`JLToggle JLToggle${Strings.capitalize(field.field)} JLToggle${Strings.capitalize(
 						field.key,
 					)}`"
-					:checked-icon="field.icon ?? 'fa-duotone fa-check'"
+					:checked-icon="field.icon ?? 'done'"
 					:color="field.settings?.color ?? 'primary'"
 					:label="!field.settings?.stack_label ? field.label : ''"
 					:disable="field.disabled"
-					:unchecked-icon="field.icon_additional ?? 'fa-duotone fa-xmark'"
+					:unchecked-icon="field.icon_additional ?? 'close'"
 					:hint="field.hint"
 					@update:modelValue="updatedField(field.key)" />
 
@@ -354,7 +354,7 @@ if (props.options.onFormLoad) {
 						<span v-else>
 							<q-icon
 								v-if="button.icon?.name"
-								:name="`${button.icon?.type ?? 'fa-duotone'} ${button.icon?.name}`"
+								:name="`${button.icon?.type} ${button.icon?.name}`"
 								:class="`JLIcon JLIcon${Strings.capitalize(field.key)} q-mr-xs`" />
 							<span v-if="button.label">{{ button.label }}</span>
 							<span v-else-if="field.label">{{ field.label }}</span>
