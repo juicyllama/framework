@@ -1,6 +1,6 @@
 {
   "name": "@juicyllama/nestjs-redoc",
-  "version": "2.3.11",
+  "version": "2.3.12",
   "description": "NestJS ReDoc Frontend For Express",
   "repository": {
     "type": "git",
