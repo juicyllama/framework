@@ -45,6 +45,10 @@ export const homeNavbar = [
 				text: 'Utils',
 				link: '/common/utils',
 			},
+			{
+				text: 'NestJs Redoc',
+				link: '/common/nestjs-redoc',
+			},
 		],
 	},
 	{

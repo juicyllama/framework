@@ -5,6 +5,7 @@ import {coreNavbar, coreTitle} from "../backend/core/config";
 import {shortlinksNavbar, shortlinksTitle} from "../tools/shortlinks/config";
 import {cliNavbar, cliTitle} from "../common/cli/config";
 import {utilsNavbar, utilsTitle} from "../common/utils/config";
+import { nestJsRedocNavbar, nestJsRedocTitle } from '../common/nestjs-redoc/config'
 import {frontendTestNavbar, frontendTestTitle} from "../frontend/tests/config";
 import {appsGoogleNavbar, appsGoogleTitle} from "../apps/google/config";
 import {appsSlackNavbar, appsSlackTitle} from "../apps/slack/config";
@@ -69,6 +70,11 @@ export default defineClientConfig({
 			else if (to.path.startsWith('/common/utils')) {
 				app.config.globalProperties.$site.title = utilsTitle
 				app.config.globalProperties.$theme.navbar = utilsNavbar
+			}
+
+			else if (to.path.startsWith('/common/nestjs-redoc')) {
+				app.config.globalProperties.$site.title = nestJsRedocTitle
+				app.config.globalProperties.$theme.navbar = nestJsRedocNavbar
 			}
 
 			else if (to.path.startsWith('/apps/google')) {

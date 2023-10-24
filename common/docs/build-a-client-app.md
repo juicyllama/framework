@@ -10,7 +10,7 @@ In this tutorial we explain how to quickly and easily deploy a client appplicati
 We have built a starter repo you can use for quickly launching a client application using our framework.
 
 ::: warning
-If you have not already [installed our framework[(/#installation)], we recommend doing that first. This will ensure your system is setup and ready for working on client projects.
+If you have not already [installed our framework](/#installation), we recommend doing that first. This will ensure your system is setup and ready for working on client projects.
 :::
 
 Once you have installed the framework, you can now install the client quickstart project
