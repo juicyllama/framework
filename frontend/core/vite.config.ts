@@ -35,7 +35,6 @@ export default defineConfig({
 		rollupOptions: {
 			external: [
 				/^\/@fs*/,
-				'@fortawesome/fontawesome-pro',
 				'@quasar/extras',
 				'chart.js',
 				'chart.js/auto',
