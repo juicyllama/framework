@@ -1,20 +1,26 @@
 import { cli_error, cli_log } from './logging'
-import { exec } from 'child_process'
+import { exec } from 'child-process-promise'
+import { JL } from '../types/project'
 
-async function build(): Promise<boolean> {
-	exec(`pnpm run start:docker:build`, async (error, stdout, stderr) => {
-		if (error) {
-			cli_error(`error: ${stderr} (${stdout})`)
-			return false
-		}
-	})
-	return true
-}
+export async function setupDocker(project: JL) {
 
-export async function setupDocker() {
-	const created = build()
+	let docker_name = project.project_name
 
-	if (created) {
-		cli_log('Docker Built')
+	if(typeof project.docker === 'string'){
+		docker_name = project.docker
 	}
+
+	cli_log(`Builing Docker ${docker_name}...`)
+
+
+	const command = `docker-compose --project-name ${docker_name} up --build --detach`
+	const result = await exec(command)
+
+	if(result.error){
+		cli_error(`error: ${result.stderr} (${result.stdout})`)
+		return
+	}
+	
+	cli_log(`Docker ${docker_name} built!`)
+	
 }

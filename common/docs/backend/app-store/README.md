@@ -18,7 +18,7 @@ Follow these instructions to use the app store in your project.
 Install the package into your project:
 
 ```bash
-npm install @juicyllama/app-store
+pnpm install @juicyllama/app-store
 ```
 
 ### Api Backend

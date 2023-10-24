@@ -7,12 +7,12 @@ Our utils module contains a number of utility functions that are used throughout
 Install the package into your project:
 
 ```bash
-npm install @juicyllama/utils
+pnpm install @juicyllama/utils
 ```
 
 ## Usage
 
-We have several times of utils, these are:
+We have several types of utils to help speed up your development, these are:
 
 * [Utils](/common/utils/utils)
 * [Assets](/common/utils/assets)

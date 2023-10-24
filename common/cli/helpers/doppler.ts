@@ -1,7 +1,7 @@
 import { currentPath, fileExists } from './files'
 import { cli_error, cli_log } from './logging'
 import { exec } from 'child_process'
-import { JL } from './project'
+import { JL } from '../types/project'
 
 async function login(project: JL): Promise<boolean> {
 	exec(`doppler login --debug`, (error, stdout, stderr) => {

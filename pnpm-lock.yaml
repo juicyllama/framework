@@ -186,7 +186,7 @@ importers:
         version: link:../../common/utils
       '@shopify/shopify-api':
         specifier: latest
-        version: 8.0.1
+        version: 8.0.2
     devDependencies:
       '@juicyllama/dev':
         specifier: workspace:^
@@ -563,6 +563,9 @@ importers:
       '@types/node':
         specifier: ^20.6.5
         version: 20.7.0
+      child-process-promise:
+        specifier: ^2.2.1
+        version: 2.2.1
       ipt:
         specifier: ^3.2.0
         version: 3.2.0
@@ -3994,8 +3997,8 @@ packages:
     engines: {node: ^14.17.0 || >=16.0.0}
     dev: false
 
-  /@shopify/shopify-api@8.0.1:
-    resolution: {integrity: sha512-Bqt6eX2IMcZLtKcefaajb9h9sqBtCMG+EH0l6v0xalckqPElQXAjg3fdSyeAZihWvqKUSVDGDDyf5gwYzfEsHQ==}
+  /@shopify/shopify-api@8.0.2:
+    resolution: {integrity: sha512-hvVLoEsYglE4GRqFhr9D6oMr2bV6tEdsD9PxuNZ6bYDptoD+kQFKsaP83jE1qtHhB3ve0DeevaVVYjS/2TU7MA==}
     dependencies:
       '@shopify/network': 3.2.1
       compare-versions: 5.0.3
@@ -4977,7 +4980,7 @@ packages:
   /@types/graceful-fs@4.1.7:
     resolution: {integrity: sha512-MhzcwU8aUygZroVwL2jeYk6JisJrPl/oov/gsgGCue9mkgl9wjGbzReYQClxiUgFDnib9FuHqTndccKeZKxTRw==}
     dependencies:
-      '@types/node': 20.7.0
+      '@types/node': 20.8.7
     dev: false
 
   /@types/har-format@1.2.13:
@@ -7375,6 +7378,14 @@ packages:
       get-func-name: 2.0.2
     dev: false
 
+  /child-process-promise@2.2.1:
+    resolution: {integrity: sha512-Fi4aNdqBsr0mv+jgWxcZ/7rAIC2mgihrptyVI4foh/rrjY/3BNjfP9+oaiFx/fzim+1ZyCNBae0DlyfQhSugog==}
+    dependencies:
+      cross-spawn: 4.0.2
+      node-version: 1.2.0
+      promise-polyfill: 6.1.0
+    dev: false
+
   /chokidar@3.5.3:
     resolution: {integrity: sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==}
     engines: {node: '>= 8.10.0'}
@@ -7992,6 +8003,13 @@ packages:
     dependencies:
       '@types/luxon': 3.3.2
       luxon: 3.3.0
+    dev: false
+
+  /cross-spawn@4.0.2:
+    resolution: {integrity: sha512-yAXz/pA1tD8Gtg2S98Ekf/sewp3Lcp3YoFKJ4Hkp5h5yLWnKVTDU0kwjKJ8NDCYcfTLfyGkzTikst+jWypT1iA==}
+    dependencies:
+      lru-cache: 4.1.5
+      which: 1.2.14
     dev: false
 
   /cross-spawn@5.1.0:
@@ -12456,6 +12474,11 @@ packages:
     resolution: {integrity: sha512-uYr7J37ae/ORWdZeQ1xxMJe3NtdmqMC/JZK+geofDrkLUApKRHPd18/TxtBOJ4A0/+uUIliorNrfYV6s1b02eQ==}
     dev: false
 
+  /node-version@1.2.0:
+    resolution: {integrity: sha512-ma6oU4Sk0qOoKEAymVoTvk8EdXEobdS7m/mAGhDJ8Rouugho48crHBORAmy5BoOcv8wraPM6xumapQp5hl4iIQ==}
+    engines: {node: '>=6.0.0'}
+    dev: false
+
   /nopt@6.0.0:
     resolution: {integrity: sha512-ZwLpbTgdhuZUnZzjd7nb1ZV+4DoiC6/sfiVKok72ym/4Tlf+DFdlHYmT2JPmcNNWV6Pi3SDf1kT+A4r9RTuT9g==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
@@ -13422,6 +13445,10 @@ packages:
 
   /promise-breaker@6.0.0:
     resolution: {integrity: sha512-BthzO9yTPswGf7etOBiHCVuugs2N01/Q/94dIPls48z2zCmrnDptUUZzfIb+41xq0MnYZ/BzmOd6ikDR4ibNZA==}
+    dev: false
+
+  /promise-polyfill@6.1.0:
+    resolution: {integrity: sha512-g0LWaH0gFsxovsU7R5LrrhHhWAWiHRnh1GPrhXnPgYsDkIqjRYUYSZEsej/wtleDrz5xVSIDbeKfidztp2XHFQ==}
     dev: false
 
   /promise.allsettled@1.0.7:

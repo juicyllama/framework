@@ -9,7 +9,7 @@ We have wrapped them into their own package to keep the dependencies of your pro
 Install the package into your project:
 
 ```bash
-npm install @juicyllama/dev
+pnpm install @juicyllama/dev
 ```
 
 This should be the only dev dependency you need to install.

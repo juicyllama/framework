@@ -1,4 +1,4 @@
-import { exec } from 'child_process'
+import { exec } from 'child-process-promise'
 import { cli_error } from './logging'
 import fs from 'fs'
 
@@ -12,14 +12,20 @@ export function fileExists(location: string): boolean {
 	return fs.existsSync(location)
 }
 
-export function writeToFile(file: File, content: string) {
-	exec(`	echo ${content} | sudo tee -a ${file} >/dev/null`, (error, stdout, stderr) => {
-		if (error) {
-			cli_error(`error: ${error.message}`)
-		}
-		if (stderr) {
-			cli_error(`stderr: ${stderr}`)
-		}
+export async function writeToFile(file: File, content: string) {
+
+	const command = `echo ${content} | sudo tee -a ${file} >/dev/null`
+	const result = await exec(command)
+
+	if(result.error){
+		cli_error(`error: ${result.error.message}`)
 		return
-	})
+	}
+
+	if(result.stderr){
+		cli_error(`stderr: ${result.stderr}`)
+		return
+	}
+	
+	return
 }

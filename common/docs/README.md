@@ -78,10 +78,7 @@ If you want to use doppler for secrets management and sharing:
 brew install dopplerhq/cli/doppler
 ```
 
-#### Additional Reading
-
-- [Doppler docs](https://docs.doppler.com/docs/install-cli)
-
+Additional Reading: [Doppler docs](https://docs.doppler.com/docs/install-cli)
 
 ### Running the framework
 
@@ -91,3 +88,11 @@ cd framework
 pnpm run install:framework
 pnpm run start:docker:build
 ```
+
+### Build a client application
+
+The real power of our framework is seen through the rapid development of client applications.
+
+Checkout the [build a client application](/build-a-client-app) walkthrough to get a solid overview of our framework in action.
+
+As our framework grows, with more applications using it, more apps added and more developers contributing, the value also increases, this network effect is the reason why we have opensourced our work. 

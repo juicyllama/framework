@@ -3,11 +3,10 @@ import {homeNavbar, homeTitle} from "../config";
 import {frontendCoreNavbar, frontendCoreTitle} from "../frontend/core/config";
 import {coreNavbar, coreTitle} from "../backend/core/config";
 import {shortlinksNavbar, shortlinksTitle} from "../tools/shortlinks/config";
-import {cliNavbar, cliTitle} from "../cli/config";
+import {cliNavbar, cliTitle} from "../common/cli/config";
 import {utilsNavbar, utilsTitle} from "../common/utils/config";
 import {frontendTestNavbar, frontendTestTitle} from "../frontend/tests/config";
 import {appsGoogleNavbar, appsGoogleTitle} from "../apps/google/config";
-import {qrcodesTitle} from "../tools/qrcodes/config";
 import {appsSlackNavbar, appsSlackTitle} from "../apps/slack/config";
 import {appsWordpressNavbar, appsWordpressTitle} from "../apps/wordpress/config";
 import {appStoreNavbar, appStoreTitle} from "../backend/app-store/config";
@@ -60,11 +59,6 @@ export default defineClientConfig({
 			else if (to.path.startsWith('/tools/shortlinks')) {
 				app.config.globalProperties.$site.title = shortlinksTitle
 				app.config.globalProperties.$theme.navbar = shortlinksNavbar
-			}
-
-			else if (to.path.startsWith('/tools/qrcodes')) {
-				app.config.globalProperties.$site.title = qrcodesTitle
-				app.config.globalProperties.$theme.navbar = frontendCoreNavbar
 			}
 
 			else if (to.path.startsWith('/cli')) {

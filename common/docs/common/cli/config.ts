@@ -1,4 +1,4 @@
-import {extraLinks, homeLink} from "../config";
+import {extraLinks, homeLink} from "../../config";
 
 export const cliTitle = 'JuicyLlama CLI'
 const root = '/cli'
