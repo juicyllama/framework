@@ -14,17 +14,17 @@ export class File {
 	 */
 
 	async unlink(filePath?: string, dirPath?: string): Promise<void> {
-		try{
-			if(dirPath) {
+		try {
+			if (dirPath) {
 				fs.rmSync(dirPath, { recursive: true, force: true })
-			}else if(filePath){
+			} else if (filePath) {
 				fs.promises.unlink(filePath)
 			}
-		}catch(e: any){
+		} catch (e: any) {
 			logger.warn(`[@juicyllama/utils::File::unlink] ${e.message}`, {
 				filePath: filePath,
 				dirPath: dirPath,
-				e: e
+				e: e,
 			})
 		}
 	}
@@ -35,10 +35,10 @@ export class File {
 	 * @returns void
 	 */
 
-	async createTempFileFromString(options: {fileName: string, mimetype: string, content: string}): Promise<{
-		filePath: string, 
-		file: Express.Multer.File,
-		dirPath: string,
+	async createTempFileFromString(options: { fileName: string; mimetype: string; content: string }): Promise<{
+		filePath: string
+		file: Express.Multer.File
+		dirPath: string
 	}> {
 		try {
 			const tempDir = fs.mkdtempSync(path.join(fs.realpathSync('.'), 'temp-'))
@@ -61,7 +61,7 @@ export class File {
 			return {
 				filePath: tempFilePath,
 				file: temp_file,
-				dirPath: tempDir
+				dirPath: tempDir,
 			}
 		} catch (error) {
 			throw new Error(`Error creating temporary file: ${error}`)

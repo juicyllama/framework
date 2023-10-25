@@ -15,20 +15,15 @@ export interface BoundingBox {
 export class Geocoding {
 	static areCoordinatesInBoundingBox(coordinates: Coordinates, boundingBox: BoundingBox): boolean {
 		// Define the bounding box polygon using the northeast and southwest coordinates
-		const bboxPolygon = turf.bboxPolygon([
-			boundingBox.west,
-			boundingBox.south,
-			boundingBox.east,
-			boundingBox.north
-		]);
+		const bboxPolygon = turf.bboxPolygon([boundingBox.west, boundingBox.south, boundingBox.east, boundingBox.north])
 
 		// Convert the target coordinates to a turf point
-		const pointToCheck = turf.point([coordinates.longitude, coordinates.latitude]);
+		const pointToCheck = turf.point([coordinates.longitude, coordinates.latitude])
 
 		// Check if the point lies within the bounding box polygon
-		const isPointInBbox = turf.booleanPointInPolygon(pointToCheck, bboxPolygon);
+		const isPointInBbox = turf.booleanPointInPolygon(pointToCheck, bboxPolygon)
 
-		return isPointInBbox;
+		return isPointInBbox
 	}
 
 	/**
@@ -48,56 +43,65 @@ export class Geocoding {
 		southwest: Coordinates,
 		expand_by_meters?: number,
 	): boolean {
-
 		if (!southwest?.longitude || !southwest?.latitude || !northeast?.longitude || !northeast?.latitude) {
 			return false
 		}
 
 		if (expand_by_meters) {
-			const expandedBoundingBox = Geocoding.expandBoundingBox(northeast, southwest, expand_by_meters);
-			northeast = expandedBoundingBox.northeast;
-			southwest = expandedBoundingBox.southwest;
+			const expandedBoundingBox = Geocoding.expandBoundingBox(northeast, southwest, expand_by_meters)
+			northeast = expandedBoundingBox.northeast
+			southwest = expandedBoundingBox.southwest
 		}
 
 		return Geocoding.areCoordinatesInBoundingBox(coordinates, {
-			north: northeast.latitude, east: northeast.longitude, south: southwest.latitude, west: southwest.longitude
-		});
+			north: northeast.latitude,
+			east: northeast.longitude,
+			south: southwest.latitude,
+			west: southwest.longitude,
+		})
 	}
 
-
-	private static expandBoundingBox(northeast: Coordinates, southwest: Coordinates, meters: number): { northeast: Coordinates, southwest: Coordinates } {
-		const originalBbox = turf.bboxPolygon([southwest.longitude, southwest.latitude, northeast.longitude, northeast.latitude]);
+	private static expandBoundingBox(
+		northeast: Coordinates,
+		southwest: Coordinates,
+		meters: number,
+	): { northeast: Coordinates; southwest: Coordinates } {
+		const originalBbox = turf.bboxPolygon([
+			southwest.longitude,
+			southwest.latitude,
+			northeast.longitude,
+			northeast.latitude,
+		])
 
 		// Buffer the bounding box
-		const bufferedBbox = turf.buffer(originalBbox, meters / 1000, { units: 'kilometers' });  // Convert meters to kilometers for turf.buffer
+		const bufferedBbox = turf.buffer(originalBbox, meters / 1000, { units: 'kilometers' }) // Convert meters to kilometers for turf.buffer
 
 		// Get the bounding box of the bufferedBbox to determine its extents
-		const bufferedBboxExtent = turf.bbox(bufferedBbox);
+		const bufferedBboxExtent = turf.bbox(bufferedBbox)
 
 		// Extract the new northeast and southwest coordinates from the buffered bounding box
 		const newNortheast: Coordinates = {
-			latitude: bufferedBboxExtent[3],  // North
-			longitude: bufferedBboxExtent[2]  // East
-		};
+			latitude: bufferedBboxExtent[3], // North
+			longitude: bufferedBboxExtent[2], // East
+		}
 
 		const newSouthwest: Coordinates = {
-			latitude: bufferedBboxExtent[1],  // South
-			longitude: bufferedBboxExtent[0]  // West
-		};
+			latitude: bufferedBboxExtent[1], // South
+			longitude: bufferedBboxExtent[0], // West
+		}
 
-		return { northeast: newNortheast, southwest: newSouthwest };
+		return { northeast: newNortheast, southwest: newSouthwest }
 	}
-
 
 	//This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
 	static distanceBetweenTwoPoints(pointA: Coordinates, pointB: Coordinates): number {
 		// Convert your coordinates to turf Point format
-		const turfPointA = turf.point([pointA.longitude, pointA.latitude]);
-		const turfPointB = turf.point([pointB.longitude, pointB.latitude]);
+		const turfPointA = turf.point([pointA.longitude, pointA.latitude])
+		const turfPointB = turf.point([pointB.longitude, pointB.latitude])
 
 		// Calculate distance using turf's distance function (this will be in kilometers by default)
-		const distance = turf.distance(turfPointA, turfPointB);
+		const distance = turf.distance(turfPointA, turfPointB)
 
-		return distance; // Returns the distance in kilometers
+		return distance // Returns the distance in kilometers
 	}
 }

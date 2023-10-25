@@ -98,7 +98,7 @@ export class Logger {
 		}
 	}
 	private getLogLevel(): number {
-		return process.env.LOG_LEVEL ? Number(process.env.LOG_LEVEL) : DEFAULT_LOG_LEVEL;
+		return process.env.LOG_LEVEL ? Number(process.env.LOG_LEVEL) : DEFAULT_LOG_LEVEL
 	}
 
 	private processParams(message, optionalParams): string {
