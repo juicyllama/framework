@@ -30,7 +30,7 @@ watchEffect(() => {
 <template>
 	<template v-if="data.loaded">
 		<section v-if="data.error">
-			<q-icon size="15" class="ml-2" name="fa-regular fa-circle-exclamation" /> Failed to load invoice data.
+			<q-icon size="15" class="ml-2" name="error" /> Failed to load invoice data.
 		</section>
 		<section v-else>
 			<!-- main page content -->

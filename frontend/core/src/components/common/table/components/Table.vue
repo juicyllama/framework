@@ -372,8 +372,8 @@ watch(
 							<q-icon
 								v-bind:name="
 									!tableExpanded
-										? 'fa-solid fa-up-right-and-down-left-from-center'
-										: 'fa-solid fa-down-left-and-up-right-to-center'
+										? 'open_in_full'
+										: 'aspect_ratio'
 								"
 								size="xs" />
 						</div>
