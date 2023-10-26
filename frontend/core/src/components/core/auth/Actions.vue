@@ -71,7 +71,7 @@ onMounted(async () => {
 					@click="router.push('/passwordless')"
 					v-if="!passwordless" />
 				<q-btn icon="asterisk" class="q-mr-xs" @click="router.push('/login')" v-if="!password" />
-				todo: add icons for social login brands
+				<!-- todo: add icons for social login brands -->
 				<q-btn class="q-mr-xs" @click="doGoogleLogin" v-if="props.google" />
 				<q-btn class="q-mr-xs" @click="doMicrosoftLogin" v-if="props.facebook" />
 				<q-btn class="q-mr-xs" @click="doLinkedinLogin" v-if="props.linkedin" />
