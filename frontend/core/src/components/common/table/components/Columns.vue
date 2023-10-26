@@ -15,8 +15,8 @@ const openColumnsFilter: Ref<boolean> = ref(false)
 <template>
 	<q-btn class="JLButton JLButtonTableColumns" @click="openColumnsFilter = !openColumnsFilter">
 		<q-icon
-			:name="`${props.tableSchema.icon?.type ?? 'fa-duotone'} ${
-				props.tableSchema.icon?.icons?.columns ?? 'fa-line-columns'
+			:name="`${props.tableSchema.icon?.type} ${
+				props.tableSchema.icon?.icons?.columns ?? 'view_column'
 			}`"
 			size="medium"
 			class="JLIcon JLIconColumns" />
