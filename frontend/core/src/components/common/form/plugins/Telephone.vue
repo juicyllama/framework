@@ -20,7 +20,7 @@ const pluginOptions = <FormFieldPluginTelephoneOptions>props.field.pluginOptions
 		:dropdown-options="pluginOptions"
 		:default-country="pluginOptions.defaultCountry"
 		v-model:tel="phone"
-		:search-icon="`${props.icon?.type ?? 'fa-duotone'} ${props.icon?.icons?.search ?? 'fa-magnifying-glass'}`"
+		:search-icon="`${props.icon?.type} ${props.icon?.icons?.search ?? 'search'}`"
 		use-icon
 		@update:tel="$emit('tel', $event)" />
 </template>

@@ -128,7 +128,7 @@ onMounted(() => {
 				:type="state.password.hidden ? 'password' : 'text'">
 				<template v-slot:append>
 					<q-icon
-						:name="state.password.hidden ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"
+						:name="state.password.hidden ? 'visibility' : 'visibility_off'"
 						class="cursor-pointer"
 						@click="state.password.hidden = !state.password.hidden"
 						size="16px" />

@@ -16,11 +16,11 @@ describe('Login', () => {
 
 	it('can toggle password shown and hidden', async () => {
 		const wrapper = mountWithMocks(Login, { propsData: { showLabels: true } })
-		const toggleWrapper = wrapper.find('.fa-eye-slash')
+		const toggleWrapper = wrapper.find('.visibility_off')
 		await toggleWrapper.trigger('click')
 
 		await waitForTimeout(() => {
-			expect(wrapper.find('.fa-eye')).toBeDefined()
+			expect(wrapper.find('.visibility')).toBeDefined()
 		})
 	})
 
@@ -35,14 +35,14 @@ describe('Login', () => {
 		let button: DOMWrapper<HTMLButtonElement> | unknown = undefined
 		await waitForTimeout(() => {
 			button = wrapper.findAll('button').find(button => {
-				return button.html().includes('fa-key')
+				return button.html().includes('key')
 			})
 		})
 		expect(button).toBeDefined()
 		await button.trigger('click')
 		await waitForTimeout(() => {
 			button = wrapper.findAll('button').find(button => {
-				return button.html().includes('fa-key')
+				return button.html().includes('key')
 			})
 		})
 		await waitForTimeout(() => {

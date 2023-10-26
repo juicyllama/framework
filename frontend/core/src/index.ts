@@ -23,6 +23,8 @@ import { JLUserAvatar, JLUserProfile, JLUserMenu } from './components/core/user'
 import { JLAppStoreConnect } from './components/app-store'
 import { Plugin } from 'vue'
 
+import '@quasar/extras/material-icons/material-icons.css'
+
 let userStore
 let accountStore
 let themeStore
