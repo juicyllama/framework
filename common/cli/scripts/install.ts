@@ -1,7 +1,7 @@
 import { cli_error, cli_log } from '../helpers/logging'
 import { setupDomain } from '../helpers/domains'
 import { setupSSL } from '../helpers/ssl'
-import { JL } from '../helpers/project'
+import { JL } from '../types/project'
 //import { setupDoppler } from '../helpers/doppler'
 //import { exec } from 'child_process'
 import { setupDocker } from '../helpers/docker'
@@ -11,26 +11,11 @@ export async function install() {
 	const json = JSON.parse(fs.readFileSync('package.json', 'utf-8'))
 	const project: JL = json.jl
 
-	// cli_log(`Running: pnpm install`)
-
-	// exec(`pnpm install --shamefully-hoist`, async (error, stdout, stderr) => {
-	// 	if (error) {
-	// 		cli_error(`error: ${stderr}`)
-	// 	}
-	// })
-
-	// cli_log(`Running: pnpm run link`)
-
-	// exec(`pnpm run link`, async (error, stdout, stderr) => {
-	// 	if (error) {
-	// 		cli_error(`error: ${stderr}`)
-	// 	}
-	// })
-
 	cli_log(`Found ${project.apps.length} apps in package.json`)
 
 	for (const app of project.apps) {
 		if (app.domain) {
+
 			await setupDomain(app)
 
 			if (app.ssl) {
@@ -46,7 +31,7 @@ export async function install() {
 	}
 
 	if (project.docker) {
-		await setupDocker()
+		await setupDocker(project)
 	}
 
 	if (project.apps.length) {

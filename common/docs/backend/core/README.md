@@ -23,7 +23,7 @@ Follow the prompts to install the framework and any modules you need.
 Alternatively you can install the modules individually via [NPM](https://www.npmjs.com/package/@juicyllama/core):
 
 ```bash
-npm install @juicyllama/core
+pnpm install @juicyllama/core
 ```
 
 ## Config .env variables

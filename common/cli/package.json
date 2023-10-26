@@ -1,6 +1,6 @@
 {
 	"name": "@juicyllama/cli",
-	"version": "1.0.12",
+	"version": "1.0.13",
 	"description": "JuicyLlama Studio CLI",
 	"author": {
 		"name": "JuicyLlama Studio",
@@ -29,6 +29,7 @@
 	},
 	"dependencies": {
 		"@types/node": "^20.6.5",
+		"child-process-promise": "^2.2.1",
 		"ipt": "^3.2.0",
 		"read-pkg": "^5.2.0",
 		"simple-output": "^2.2.1",

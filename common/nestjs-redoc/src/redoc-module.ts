@@ -1,3 +1,4 @@
+import { Logger } from '@juicyllama/utils'
 import { INestApplication } from '@nestjs/common'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { OpenAPIObject } from '@nestjs/swagger'
@@ -8,6 +9,8 @@ import pathModule from 'path'
 import { resolve } from 'url'
 import { LogoOptions, RedocDocument, RedocOptions } from './interfaces'
 import { schema } from './model'
+
+const logger = new Logger()
 
 export class RedocModule {
 	/**
@@ -25,19 +28,23 @@ export class RedocModule {
 		options: RedocOptions,
 		debug?: boolean,
 	): Promise<void> {
-		// Validate options object
+		
+		const domain = 'nestjs-redoc::setup'
+
 		try {
 			if (debug) {
-				console.log('Debug mode is enabled')
+				logger.debug(`[${domain}] Debug mode is enabled`)
 			}
 			const _options = await this.validateOptionsObject(options, document, debug)
 			const redocDocument = this.addVendorExtensions(_options, <RedocDocument>document)
 			return await this.setupExpress(path, <NestExpressApplication>app, redocDocument, _options)
 		} catch (error) {
 			if (debug) {
-				console.table(options)
-				console.dir(document)
-				console.error(error)
+				logger.error(`[${domain}] ${error.message}`, {
+					document: document,
+					options: options,
+					error: error
+				})
 			}
 			throw error
 		}
@@ -48,14 +55,18 @@ export class RedocModule {
 		document: OpenAPIObject,
 		debug?: boolean,
 	): Promise<RedocOptions> {
+
+		const domain = 'nestjs-redoc::validateOptionsObject'
+
 		try {
 			return schema(document).validateAsync(options) as RedocOptions
 		} catch (error) {
-			// Something went wrong while parsing config object
 			if (debug) {
-				console.table(options)
-				console.dir(document)
-				console.error(error)
+				logger.error(`[${domain}] ${error.message}`, {
+					document: document,
+					options: options,
+					error: error
+				})
 			}
 			throw new TypeError(error.message)
 		}

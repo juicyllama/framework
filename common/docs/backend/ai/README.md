@@ -11,7 +11,7 @@ Follow these instructions to use the AI module in your project.
 Install the package into your project:
 
 ```bash
-npm install @juicyllama/ai
+pnpm install @juicyllama/ai
 ```
 
 You will also need to install the AI engine you wish to use, we currently support:
@@ -21,7 +21,7 @@ You will also need to install the AI engine you wish to use, we currently suppor
 for example
 
 ```bash
-npm install @juicyllama/apps-openai
+pnpm install @juicyllama/apps-openai
 ```
 
 Follow the instructions to install the relevant AI engine apps you use. 

@@ -6,3 +6,7 @@ export function cli_log(message: string) {
 export function cli_error(message: string) {
 	out.node(`🦙 \x1B[0;31m${message}\x1B[0m`)
 }
+
+export function cli_success(message: string) {
+	out.node(`🦙 \x1B[0;32m${message}\x1B[0m`)
+}

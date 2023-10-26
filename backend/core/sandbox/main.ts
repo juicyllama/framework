@@ -5,7 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import 'reflect-metadata'
 import { Enviroment, Logger, Strings } from '@juicyllama/utils'
 import { RedocModule } from '@juicyllama/nestjs-redoc'
-import { redocConfig, TypeOrmFilter, validationPipeOptions } from '../src/index'
+import { redocConfig, TypeOrmFilter, validationPipeOptions } from '../index'
 import { SandboxModule } from './sandbox.module'
 
 const domain = 'main::bootstrap'

@@ -7,7 +7,7 @@ Just like the [dev](/common/dev) package for backend development, as the name su
 Install the package into your project:
 
 ```bash
-npm install @juicyllama/vue-dev
+pnpm install @juicyllama/vue-dev
 ```
 
 This should be the only dev dependency you need to install.

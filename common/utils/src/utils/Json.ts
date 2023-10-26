@@ -8,7 +8,7 @@ export class Json {
 	 * @returns json object
 	 */
 
-	async parseJsonFile(file: Express.Multer.File, mappers?: {[key: string]: string}): Promise<any[]> {
+	async parseJsonFile(file: Express.Multer.File, mappers?: { [key: string]: string }): Promise<any[]> {
 		return new Promise((resolve, reject) => {
 			const results = []
 			const stream = Readable.from(file.buffer)
@@ -26,24 +26,22 @@ export class Json {
 	 * @returns void
 	 */
 
-	async createTempJSONFileFromString(
-		content: string,
-	): Promise<{ 
-		filePath: string, 
-		json_file: Express.Multer.File,
-		dirPath: string,
+	async createTempJSONFileFromString(content: string): Promise<{
+		filePath: string
+		json_file: Express.Multer.File
+		dirPath: string
 	}> {
-
 		const file = new File()
 		const result = await file.createTempFileFromString({
-			fileName: 'temp-file.json', 
-			content: content, 
-			mimetype: 'application/json'})
+			fileName: 'temp-file.json',
+			content: content,
+			mimetype: 'application/json',
+		})
 
 		return {
 			filePath: result.filePath,
 			json_file: result.file,
-			dirPath: result.dirPath
+			dirPath: result.dirPath,
 		}
 	}
 
@@ -54,7 +52,7 @@ export class Json {
 	 * @returns object
 	 */
 
-	changeKeyValues(mappers: {[key: string]: string}, results: any[]): any[] {
+	changeKeyValues(mappers: { [key: string]: string }, results: any[]): any[] {
 		if (mappers) {
 			return results.map((result: any) => {
 				const newResult: any = {}

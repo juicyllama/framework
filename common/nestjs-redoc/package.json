@@ -1,12 +1,12 @@
 {
   "name": "@juicyllama/nestjs-redoc",
-  "version": "2.3.11",
+  "version": "2.3.12",
   "description": "NestJS ReDoc Frontend For Express",
   "repository": {
     "type": "git",
-    "url": "https://github.com/juicyllama-community/nestjs-redoc"
+    "url": "https://github.com/juicyllama/framework/tree/main/common/nestjs-redoc"
   },
-  "bugs": "https://github.com/juicyllama-community/nestjs-redoc",
+  "bugs": "https://github.com/juicyllama/framework/",
   "author": {
     "name": "JuicyLlama Studio",
     "email": "studio@juicyllama.com",
@@ -24,6 +24,7 @@
     "test": "jest --runInBand --detectOpenHandles --forceExit"
   },
   "dependencies": {
+    "@juicyllama/utils": "workspace:^",
     "@nestjs/common": "^10.2.6",
     "@nestjs/platform-express": "^10.2.6",
     "@nestjs/swagger": "^7.1.12",

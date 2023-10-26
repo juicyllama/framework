@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/utils",
-    "version": "0.0.122",
+    "version": "0.2.0",
     "description": "Juicyllama Utils",
     "author": {
         "name": "JuicyLlama Studio",
@@ -31,9 +31,11 @@
         "start:dev": "tsc -w",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests",
+        "test:geocoding": "export $(grep -v '^#' ../.env.development) && NODE_ENV=test && jest --runInBand --testPathPattern=common/utils/src/utils/Geocoding.test.spec.ts"
     },
     "dependencies": {
+        "@turf/turf": "^6.5.0",
         "axios": "latest",
         "dayjs": "latest",
         "showdown": "latest",
