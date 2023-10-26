@@ -15,7 +15,7 @@ const props = defineProps<{
 
 const extendedProps = {
 	...props.options,
-	borderRadius: 20,
+	borderRadius: 5,
 	scales: {
 		x: {
 			display: false,
@@ -33,18 +33,26 @@ const extendedProps = {
 }
 
 const dataMapper = (data, field = 'total_price') => {
-	const labels = []
 	const datasets = []
-	data.datasets.array.forEach(dataset => {
-		labels.push(dataset.label)
+	let count = 0
+	data.datasets.forEach(dataset => {
+		if (count < dataset.data.length) {
+			count = dataset.data.length
+		}
 		datasets.push({
 			data: dataset.data.map(i => i[field]),
+			label: dataset.label,
 		})
 	})
-	return {
-		labels,
+
+	const chartJSObject = {
+		labels: Array(count).fill(data.datasets[0].label),
 		datasets,
 	}
+
+	console.log(chartJSObject)
+
+	return chartJSObject
 }
 
 const mappedFields = computed<any>(() => dataMapper(props.data))

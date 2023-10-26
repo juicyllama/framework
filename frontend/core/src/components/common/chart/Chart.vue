@@ -66,8 +66,6 @@ const getData = async () => {
 	} else {
 		logger({ severity: LogSeverity.ERROR, message: `Missing 'endpoint' for isLoading data for chart` })
 	}
-
-	isLoading.value = false
 }
 
 onMounted(async () => {
