@@ -42,8 +42,5 @@
         "@juicyllama/ecommerce": "workspace:^",
         "@juicyllama/utils": "workspace:^",
         "@shopify/shopify-api": "latest"
-    },
-    "devDependencies": {
-        "@juicyllama/dev": "workspace:^"
     }
 }

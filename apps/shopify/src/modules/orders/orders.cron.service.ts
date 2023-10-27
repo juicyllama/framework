@@ -78,7 +78,7 @@ export class ShopifyOrdersCronService {
 							.update(updateRunTimes)
 							.then(() => {
 
-								this.logger.debug(`[${domain}] Installed App Runtimes Updated`, updateRunTimes)
+								this.logger.log(`[${domain}] Installed App Runtimes Updated`, updateRunTimes)
 
 								const options = <any>_.omitBy(
 									{

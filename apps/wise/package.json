@@ -38,8 +38,5 @@
         "@juicyllama/core": "workspace:^",
         "@juicyllama/billing": "workspace:^",
         "@juicyllama/utils": "workspace:^"
-    },
-    "devDependencies": {
-        "@juicyllama/dev": "workspace:^"
     }
 }

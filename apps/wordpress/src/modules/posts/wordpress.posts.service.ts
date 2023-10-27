@@ -19,7 +19,6 @@ export class WordpressPostsService {
 	constructor(
 		@Inject(forwardRef(() => Api)) private readonly api: Api,
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
 	) {}
 
 	async create(options: { data: WordpressCreatePost; config?: wordpressConfigDto }): Promise<WordpressPost> {

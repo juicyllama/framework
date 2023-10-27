@@ -25,16 +25,6 @@
   },
   "dependencies": {
     "@juicyllama/utils": "workspace:^",
-    "@nestjs/common": "^10.2.6",
-    "@nestjs/platform-express": "^10.2.6",
-    "@nestjs/swagger": "^7.1.12",
-    "@nestjs/testing": "^10.2.6",
-    "express-basic-auth": "^1.2.0",
-    "express-handlebars": "^5.3.4",
-    "joi": "^17.11.0",
-    "reflect-metadata": "^0.1.13"
-  },
-  "devDependencies": {
     "@juicyllama/dev": "workspace:^"
   }
 }

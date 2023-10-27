@@ -41,8 +41,5 @@
         "@juicyllama/nestjs-redoc": "workspace:^",
         "@juicyllama/utils": "workspace:^",
         "nanoid": "^3.3.6"
-    },
-    "devDependencies": {
-        "@juicyllama/dev": "workspace:^"
     }
 }

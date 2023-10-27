@@ -40,8 +40,5 @@
         "@aws-sdk/lib-storage": "^3.431.0",
         "@juicyllama/core": "workspace:^",
         "@juicyllama/utils": "workspace:^"
-    },
-    "devDependencies": {
-        "@juicyllama/dev": "workspace:^"
     }
 }

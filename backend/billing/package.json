@@ -34,9 +34,6 @@
 		"test:watch": "jest --watch",
 		"test:cov": "jest --coverage"
     },
-    "devDependencies": {
-        "@juicyllama/dev": "workspace:^"
-    },
     "dependencies": {
         "@juicyllama/core": "workspace:^",
         "@juicyllama/nestjs-redoc": "workspace:^",

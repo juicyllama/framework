@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref, watch } from 'vue'
+import { ref, Ref, reactive } from 'vue'
 import { FormField, FormFieldPluginDateRangeOptions, FormFieldPluginDateRangeResult, FormFieldPluginDateRangeTypeOptions } from '../../../../types'
 import { JLDropdownButtonMenu } from '../../menu';
 
@@ -16,13 +16,23 @@ const defaultDateRange: FormFieldPluginDateRangeResult = {
 	from: new Date(new Date().setUTCHours(0,0,0,0)),
 	to: new Date(new Date().setUTCHours(23,59,59,599)),
 }
-const date_range: Ref<FormFieldPluginDateRangeResult> = ref(defaultDateRange)
+
+const dates = reactive<{
+	menu: Ref<FormFieldPluginDateRangeResult>,
+	custom: Ref<{from: string, to: string} | string>,
+	output: Ref<FormFieldPluginDateRangeResult>,
+}>( {
+	menu: ref(defaultDateRange),
+	custom: ref(formatDateForRange(defaultDateRange)),
+	output: ref(defaultDateRange),
+})
 
 if(localStorage.getItem('date_range')){	
-	date_range.value = JSON.parse(localStorage.getItem('date_range'))
+	dates.menu = JSON.parse(localStorage.getItem('date_range'))
+	dates.custom = formatDateForRange(JSON.parse(localStorage.getItem('date_range')))
+	dates.output = JSON.parse(localStorage.getItem('date_range'))
 }
 
-const customDateRange: Ref<{from: string, to: string} | string > = ref(formatDateForRange(date_range.value))
 const showCustom: Ref<boolean> = ref(false)
 
 	/**
@@ -44,19 +54,19 @@ function formatDateForRange(date: FormFieldPluginDateRangeResult): {from: string
 /**
 * Converts the o Q-Date format back to a FormFieldPluginDateRangeResult format 
 */
-function formatRangeFromDate(date: {from: string, to: string} | string): FormFieldPluginDateRangeResult {
+function formatRangeFromDate(date: {from: string, to: string} | string, type?: FormFieldPluginDateRangeTypeOptions): FormFieldPluginDateRangeResult {
 
 	if(typeof date === 'string'){
 		return {
-			type: FormFieldPluginDateRangeTypeOptions.CUSTOM,
+			type: type ?? FormFieldPluginDateRangeTypeOptions.CUSTOM,
 			from: new Date(new Date(date).setUTCHours(0,0,0,0)),
 			to: new Date(new Date(date).setUTCHours(23,59,59,599)),
 		}
 	}else{
 		return {
-			type: FormFieldPluginDateRangeTypeOptions.CUSTOM,
-			from: new Date(date.from),
-			to: new Date(date.to),
+			type: type ?? FormFieldPluginDateRangeTypeOptions.CUSTOM,
+			from: new Date(new Date(date.from).setUTCHours(0,0,0,0)),
+			to: new Date(new Date(date.to).setUTCHours(23,59,59,599)),
 		}
 	}
 }
@@ -65,27 +75,35 @@ function popCustom(){
 	showCustom.value = true
 }
 
-function updated(dates: FormFieldPluginDateRangeResult) {
+function updated(updated_dates: FormFieldPluginDateRangeResult) {
 	showCustom.value = false
-	localStorage.setItem('date_range', JSON.stringify(dates))
-	emit('updated', dates)
-	customDateRange.value = formatDateForRange(dates)
+	dates.custom = formatDateForRange(updated_dates)
+	dates.menu = updated_dates
+	dates.output = updated_dates
+	localStorage.setItem('date_range', JSON.stringify(updated_dates))
+	emit('updated', updated_dates)
 }
 
-function updatedCustom(value: {from: string, to: string} | string){
-	if(value){
-		showCustom.value = false
-		localStorage.setItem('date_range', JSON.stringify(formatRangeFromDate(value)))
-		emit('updated', formatRangeFromDate(value))
-	}	
-}
+function updated_custom(range: {
+    from: {
+      year: number;
+      month: number;
+      day: number;
+    };
+    to: {
+      year: number;
+      month: number;
+      day: number;
+    };
+  }) {
 
-watch(
-	() => customDateRange.value,
-	newValue => {
-		updatedCustom(newValue)
-	},
-)
+	const updated_range = formatRangeFromDate({
+		from: `${range.from.year}-${range.from.month}-${range.from.day}`,
+		to: `${range.to.year}-${range.to.month}-${range.to.day}`,
+	}, FormFieldPluginDateRangeTypeOptions.CUSTOM)
+
+	updated(updated_range)
+}
 
 </script>
 
@@ -94,7 +112,7 @@ watch(
 	auto-close
 	:button="pluginOptions?.button" 
 	:menu="{
-		selected: date_range.type,
+		selected: dates.menu.type,
 		items: [{
 			title: 'Today',
 			key: FormFieldPluginDateRangeTypeOptions.TODAY,
@@ -215,8 +233,9 @@ watch(
 
 	<q-date 
 		v-if="showCustom" 
-		v-model="customDateRange" 
+		:model-value="dates.custom" 
 		range
+		@range-end="updated_custom"
 		mask="YYYY-MM-DD"
 	/>
 

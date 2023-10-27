@@ -39,9 +39,6 @@
         "@juicyllama/utils": "workspace:^",
         "axios": "^1.5.0"
     },
-    "devDependencies": {
-        "@juicyllama/dev": "workspace:^"
-    },
     "overrides": {
         "axios": "^1.4.0",
         "@googlemaps/google-maps-services-js": {
