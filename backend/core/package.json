@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/core",
-    "version": "0.0.352",
+    "version": "0.0.353",
     "description": "Juicyllama Backend Core",
     "author": {
         "name": "JuicyLlama Studio",
@@ -22,7 +22,7 @@
     "files": [
         "dist/**/*",
         "*.md"
-    ], 
+    ],
     "types": "dist/index.d.ts",
     "scripts": {
         "prebuild": "rimraf dist",
