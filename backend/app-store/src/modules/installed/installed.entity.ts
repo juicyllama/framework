@@ -37,7 +37,7 @@ export class InstalledApp extends BaseEntity {
 
 	// The URL to redirect to to start the OAUTH2 flow
 	@Column({ nullable: true, default: null })
-	@IsString() 
+	@IsString()
 	oauth_redirect_url?: string
 
 	@Column({ default: true })

@@ -1,8 +1,12 @@
 # NestJs Redoc
 
+::: danger
+This documenation needs moving to /backend/core/utils/redoc
+:::
+
 This is the documentation for the JuicyLlama NestJs Redoc package.
 
-::: danger
+::: warning
 This package works with Express and is not currently supporting Fastify
 :::
 
@@ -11,7 +15,7 @@ This package works with Express and is not currently supporting Fastify
 Install the package into your project:
 
 ```bash
-pnpm install @juicyllama/nestjs-redoc
+pnpm install @juicyllama/core
 ```
 
 ## Usage
@@ -20,7 +24,7 @@ pnpm install @juicyllama/nestjs-redoc
 
 ```typescript
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
-import { RedocModule, RedocOptions } from '@juicyllama/nestjs-redoc'
+import { RedocModule, RedocOptions } from '@juicyllama/core'
 
 const swagger_document = new DocumentBuilder()
   .setTitle('Look, i have a title')

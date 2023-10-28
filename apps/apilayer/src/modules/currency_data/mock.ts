@@ -1,6 +1,6 @@
-import { ApilayerCurrencyDataDto } from './apilayer.currency.data.dto'
+import { CurrencyData } from './currency.data.dto'
 
-export default <ApilayerCurrencyDataDto>{
+export default <CurrencyData>{
 	date: '2022-10-13',
 	historical: true,
 	quotes: {

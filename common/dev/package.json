@@ -1,6 +1,6 @@
 {
 	"name": "@juicyllama/dev",
-	"version": "0.0.62",
+	"version": "0.0.63",
 	"description": "Juicyllama Framework Development Dependencies",
 	"author": {
 		"name": "JuicyLlama Studio",
@@ -62,6 +62,7 @@
 		"express-basic-auth": "^1.2.1",
 		"express-handlebars": "^7.1.2",
 		"joi": "^17.11.0",
+		"jwt-simple": "^0.5.6",
 		"lodash": "^4.17.21",
 		"module-alias": "^2.2.3",
 		"mongodb": "^5.9.0",

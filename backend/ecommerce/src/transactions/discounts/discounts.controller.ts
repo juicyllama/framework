@@ -1,10 +1,4 @@
-import {
-	Controller,
-	forwardRef,
-	Inject,
-	Param,
-	Query,
-} from '@nestjs/common'
+import { Controller, forwardRef, Inject, Param, Query } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { StatsMethods, StatsResponseDto } from '@juicyllama/utils'
 import { TransactionDiscountsService } from './discounts.service'
@@ -20,7 +14,14 @@ import {
 	UserAuth,
 } from '@juicyllama/core'
 import { TransactionDiscountOrderBy, TransactionDiscountRelations, TransactionDiscountSelect } from './discounts.enums'
-import { TRANSACTION_DISCOUNT_T, TRANSACTION_DISCOUNT_E, TRANSACTION_DISCOUNT_NAME, TRANSACTION_DISCOUNT_PRIMARY_KEY, TRANSACTION_DISCOUNT_SEARCH_FIELDS, TRANSACTION_DISCOUNT_DEFAULT_ORDER_BY } from './discounts.constants'
+import {
+	TRANSACTION_DISCOUNT_T,
+	TRANSACTION_DISCOUNT_E,
+	TRANSACTION_DISCOUNT_NAME,
+	TRANSACTION_DISCOUNT_PRIMARY_KEY,
+	TRANSACTION_DISCOUNT_SEARCH_FIELDS,
+	TRANSACTION_DISCOUNT_DEFAULT_ORDER_BY,
+} from './discounts.constants'
 
 @ApiTags('Discounts')
 @UserAuth()
@@ -31,7 +32,12 @@ export class TransactionDiscountsController {
 		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<TRANSACTION_DISCOUNT_T>,
 	) {}
 
-	@ReadManyDecorator(TRANSACTION_DISCOUNT_E, TransactionDiscountSelect, TransactionDiscountOrderBy, TransactionDiscountRelations)
+	@ReadManyDecorator(
+		TRANSACTION_DISCOUNT_E,
+		TransactionDiscountSelect,
+		TransactionDiscountOrderBy,
+		TransactionDiscountRelations,
+	)
 	async findAll(@Query() query, @AccountId() account_id: number): Promise<TRANSACTION_DISCOUNT_T[]> {
 		return await crudFindAll<TRANSACTION_DISCOUNT_T>({
 			service: this.service,
@@ -59,7 +65,13 @@ export class TransactionDiscountsController {
 		})
 	}
 
-	@ReadOneDecorator(TRANSACTION_DISCOUNT_E, TRANSACTION_DISCOUNT_PRIMARY_KEY, TransactionDiscountSelect, TransactionDiscountRelations, TRANSACTION_DISCOUNT_NAME)
+	@ReadOneDecorator(
+		TRANSACTION_DISCOUNT_E,
+		TRANSACTION_DISCOUNT_PRIMARY_KEY,
+		TransactionDiscountSelect,
+		TransactionDiscountRelations,
+		TRANSACTION_DISCOUNT_NAME,
+	)
 	async findOne(@AccountId() account_id: number, @Param() params, @Query() query): Promise<TRANSACTION_DISCOUNT_T> {
 		return await crudFindOne<TRANSACTION_DISCOUNT_T>({
 			service: this.service,

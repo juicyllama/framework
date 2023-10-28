@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/crm",
-    "version": "0.1.3",
+    "version": "0.1.5",
     "description": "Juicyllama CRM Module",
     "author": {
         "name": "JuicyLlama Studio",
@@ -34,7 +34,6 @@
     },
     "dependencies": {
         "@juicyllama/core": "workspace:^",
-        "@juicyllama/nestjs-redoc": "workspace:^",
         "@juicyllama/utils": "workspace:^"
     }
 }

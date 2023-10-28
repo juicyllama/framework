@@ -56,10 +56,6 @@ import { ContactAddressService } from './address/address.service'
 		ContactEmailService,
 		ContactAddressService,
 	],
-	exports: [ContactsService,
-		ContactSocialService,
-		ContactPhoneService,
-		ContactEmailService,
-		ContactAddressService],
+	exports: [ContactsService, ContactSocialService, ContactPhoneService, ContactEmailService, ContactAddressService],
 })
 export class ContactsModule {}

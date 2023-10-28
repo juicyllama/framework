@@ -1,10 +1,4 @@
-import {
-	Column,
-	Entity,
-	PrimaryGeneratedColumn,
-	ManyToOne,
-	JoinColumn,
-} from 'typeorm'
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
 import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
 import { Account, BaseEntity } from '@juicyllama/core'
 import { Website } from '@juicyllama/websites'

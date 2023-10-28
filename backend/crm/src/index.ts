@@ -10,7 +10,6 @@ import { CrmModule } from './crm.module'
 import { CrmCronsModule } from './crons/crm.crons.module'
 import { ContactsModule } from './contacts/contacts.module'
 
-
 // Controllers
 import { ContactsController } from './contacts/contacts.controller'
 import { CRMCronsController } from './crons/crm.cron.controller'

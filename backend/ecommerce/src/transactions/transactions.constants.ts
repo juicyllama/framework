@@ -1,4 +1,4 @@
-import { Transaction } from "./transactions.entity"
+import { Transaction } from './transactions.entity'
 
 export const TRANSACTION_E = Transaction
 export type TRANSACTION_T = Transaction

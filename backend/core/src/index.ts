@@ -70,6 +70,7 @@ export { TypeOrmFilter } from './utils/typeorm/TypeOrmFilter'
 export { CacheService } from './utils/typeorm/Cache'
 export { RmqModule } from './utils/rabbitmq/rmq.module'
 export { RmqService } from './utils/rabbitmq/rmq.service'
+export * from './utils/redoc/index'
 
 // Configs
 export {

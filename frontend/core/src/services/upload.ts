@@ -7,7 +7,7 @@ type UploadAPIResponse = {
 
 const UPLOAD_FIELDS = '/upload/fields'
 
-const uploadFile = async (UPLOAD_URL:string, fileData: object): Promise<UploadAPIResponse> => {
+const uploadFile = async (UPLOAD_URL: string, fileData: object): Promise<UploadAPIResponse> => {
 	return await instance.post(UPLOAD_URL, fileData, {
 		headers: {
 			'Content-Type': 'multipart/form-data',

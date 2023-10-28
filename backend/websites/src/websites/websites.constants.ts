@@ -1,4 +1,4 @@
-import { Website } from "./websites.entity"
+import { Website } from './websites.entity'
 
 export const WEBSITES_E = Website
 export type WEBSITES_T = Website

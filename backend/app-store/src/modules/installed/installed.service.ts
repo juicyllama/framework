@@ -1,14 +1,14 @@
-import {forwardRef, Inject, Injectable, BadRequestException} from '@nestjs/common'
-import {InjectRepository} from '@nestjs/typeorm'
-import {Repository} from 'typeorm'
-import {InstalledApp} from './installed.entity'
-import {BaseService, BeaconService, Query} from '@juicyllama/core'
-import {AppsService} from '../apps.service'
-import {AppStoreIntegrationName} from '../apps.enums'
-import {Env, Logger, Modules} from '@juicyllama/utils'
-import {App} from '../apps.entity'
+import { forwardRef, Inject, Injectable, BadRequestException } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { InstalledApp } from './installed.entity'
+import { BaseService, BeaconService, Query } from '@juicyllama/core'
+import { AppsService } from '../apps.service'
+import { AppStoreIntegrationName } from '../apps.enums'
+import { Env, Logger, Modules } from '@juicyllama/utils'
+import { App } from '../apps.entity'
 import { CreateInstalledAppDto } from './installed.dto'
-import { WordPressService }	from './preinstall/wordpress.service'
+import { WordPressService } from './preinstall/wordpress.service'
 
 export const E = InstalledApp
 export type T = InstalledApp
@@ -56,7 +56,7 @@ export class InstalledAppsService extends BaseService<T> {
 
 	/**
 	 * Returns the redirection URL to kick off the OAUTH2 flow
-	 * @param installed_app 
+	 * @param installed_app
 	 * @returns string
 	 */
 	createOauthLink(installed_app: T): string {
@@ -70,7 +70,6 @@ export class InstalledAppsService extends BaseService<T> {
 	}
 
 	async checkRequiredSettings(installed_app: CreateInstalledAppDto): Promise<boolean> {
-
 		const app = await this.appsService.findOne({ where: { app_id: installed_app.app_id } })
 
 		if (!app) {
@@ -91,7 +90,6 @@ export class InstalledAppsService extends BaseService<T> {
 
 		return true
 	}
-
 
 	//Check if app passes the installation checks
 	// result = true - all passed
@@ -130,7 +128,6 @@ export class InstalledAppsService extends BaseService<T> {
 				return {
 					result: true,
 				}
-				
 		}
 	}
 }

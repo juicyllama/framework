@@ -199,4 +199,4 @@ export class AppDto {
 		required: false,
 	})
 	readonly settings?: AppSettingsDto[]
-} 
+}

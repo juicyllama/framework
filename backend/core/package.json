@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/core",
-    "version": "0.0.353",
+    "version": "0.0.355",
     "description": "Juicyllama Backend Core",
     "author": {
         "name": "JuicyLlama Studio",
@@ -34,7 +34,6 @@
         "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
     },
     "dependencies": {
-        "@juicyllama/nestjs-redoc": "workspace:^",
         "@juicyllama/utils": "workspace:^",
         "@juicyllama/dev": "workspace:^"
     }

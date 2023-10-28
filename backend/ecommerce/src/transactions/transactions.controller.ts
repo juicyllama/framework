@@ -1,13 +1,4 @@
-import {
-	BadRequestException,
-	Body,
-	Controller,
-	forwardRef,
-	Inject,
-	Param,
-	Query,
-	Req,
-} from '@nestjs/common'
+import { BadRequestException, Body, Controller, forwardRef, Inject, Param, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto } from '@juicyllama/utils'
 import { TransactionsService } from './transactions.service'
@@ -30,11 +21,18 @@ import {
 	crudCreate,
 	UserRole,
 	ReadChartsDecorator,
-	crudCharts
+	crudCharts,
 } from '@juicyllama/core'
 import { CreateTransactionDto, UpdateTransactionDto } from './transactions.dto'
 import { TransactionOrderBy, TransactionRelations, TransactionSelect } from './transactions.enums'
-import { TRANSACTION_T, TRANSACTION_E, TRANSACTION_NAME, TRANSACTION_PRIMARY_KEY, TRANSACTION_SEARCH_FIELDS, TRANSACTION_DEFAULT_ORDER_BY } from './transactions.constants'
+import {
+	TRANSACTION_T,
+	TRANSACTION_E,
+	TRANSACTION_NAME,
+	TRANSACTION_PRIMARY_KEY,
+	TRANSACTION_SEARCH_FIELDS,
+	TRANSACTION_DEFAULT_ORDER_BY,
+} from './transactions.constants'
 import { StoresService } from '../stores/stores.service'
 
 @ApiTags('Transactions')
@@ -49,7 +47,11 @@ export class TransactionsController {
 	) {}
 
 	@CreateDecorator(TRANSACTION_E, TRANSACTION_NAME)
-	async create(@Req() req, @Body() data: CreateTransactionDto, @AccountId() account_id: number): Promise<TRANSACTION_T> {
+	async create(
+		@Req() req,
+		@Body() data: CreateTransactionDto,
+		@AccountId() account_id: number,
+	): Promise<TRANSACTION_T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		await this.storeAuth(account_id, data.store_id)
 
@@ -62,7 +64,6 @@ export class TransactionsController {
 
 	@ReadManyDecorator(TRANSACTION_E, TransactionSelect, TransactionOrderBy, TransactionRelations)
 	async findAll(@Query() query, @AccountId() account_id: number): Promise<TRANSACTION_T[]> {
-	
 		return await crudFindAll<TRANSACTION_T>({
 			service: this.service,
 			tQuery: this.tQuery,
@@ -91,7 +92,6 @@ export class TransactionsController {
 
 	@ReadChartsDecorator(TRANSACTION_E, TransactionSelect, TRANSACTION_NAME)
 	async charts(
-
 		@Query() query: any,
 		@Query('search') search: string,
 		@Query('from') from: string,
@@ -130,10 +130,10 @@ export class TransactionsController {
 		@Param() params,
 	): Promise<TRANSACTION_T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
-		
+
 		const transaction = await this.service.findById(params[TRANSACTION_PRIMARY_KEY])
 
-		if(!transaction) {
+		if (!transaction) {
 			throw new BadRequestException('Transaction not found')
 		}
 
@@ -158,16 +158,15 @@ export class TransactionsController {
 	}
 
 	private async storeAuth(account_id: number, store_id: number) {
-		const store = await this.storesService.findOne({ 
+		const store = await this.storesService.findOne({
 			where: {
 				account_id: account_id,
-				store_id: store_id
-			}
+				store_id: store_id,
+			},
 		})
 
 		if (!store) {
 			throw new BadRequestException('Store not found')
 		}
 	}
-
 }

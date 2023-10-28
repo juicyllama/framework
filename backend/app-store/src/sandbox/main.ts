@@ -4,9 +4,8 @@ import { ValidationPipe } from '@nestjs/common'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import 'reflect-metadata'
 import { Enviroment, Logger, Strings } from '@juicyllama/utils'
-import { RedocModule } from '@juicyllama/nestjs-redoc'
 import { SandboxModule } from './sandbox.module'
-import { redocConfig, TypeOrmFilter, validationPipeOptions } from '@juicyllama/core'
+import { redocConfig, TypeOrmFilter, validationPipeOptions, RedocModule } from '@juicyllama/core'
 import { installAppStoreDocs } from '../docs/install'
 
 const domain = 'main::bootstrap'
@@ -42,7 +41,9 @@ async function bootstrap() {
 
 	app.listen(process.env.PORT)
 	logger.debug(
-		`[${domain}] ${Enviroment[process.env.NODE_ENV]} server running: ${process.env.BASE_URL_API}:${process.env.PORT}`,
+		`[${domain}] ${Enviroment[process.env.NODE_ENV]} server running: ${process.env.BASE_URL_API}:${
+			process.env.PORT
+		}`,
 	)
 }
 

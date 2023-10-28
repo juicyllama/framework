@@ -35,11 +35,7 @@ import { TransactionsModule } from '../transactions.module'
 		forwardRef(() => TransactionsModule),
 	],
 	controllers: [TransactionDiscountsController],
-	providers: [
-		TransactionDiscountsService,
-		Logger,
-		Query,
-	],
+	providers: [TransactionDiscountsService, Logger, Query],
 	exports: [TransactionDiscountsService],
 })
 export class TransactionDiscountsModule {}

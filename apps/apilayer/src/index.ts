@@ -1,10 +1,11 @@
 //Module
-import { NumberVerificationModule } from './modules/number_verification/number.verification.module'
+export { CurrencyDataModule } from './modules/currency_data/currency.data.module'
+export { NumberVerificationModule } from './modules/number_verification/number.verification.module'
 
 //Service
-import { NumberVerificationService } from './modules/number_verification/number.verification.service'
+export { CurrencyDataService } from './modules/currency_data/currency.data.service'
+export { NumberVerificationService } from './modules/number_verification/number.verification.service'
 
-//Entity
-import { NumberVerification } from './modules/number_verification/number.verification.entity.mongo'
-
-export { NumberVerificationModule, NumberVerificationService, NumberVerification }
+//Dto
+export { CurrencyData } from './modules/currency_data/currency.data.dto'
+export { NumberVerification } from './modules/number_verification/number.verification.dto'

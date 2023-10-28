@@ -6,25 +6,25 @@
 # * Release to NPM
 #
 
-name: 'Release Package: NestJs Redoc'
+name: 'Release Package: Data Cache'
 
 on:
     push:
         branches:
             - main
         paths:
-            - 'common/nestjs-redoc/**'
+            - 'backend/data-cache/**'
     workflow_dispatch:
 
 
 jobs:
 
     pr_checks:
-        uses: juicyllama/framework/.github/workflows/common.nestjs-redoc.pr.yml@main
+        uses: juicyllama/framework/.github/workflows/backend.data.cache.pr.yml@main
         secrets: inherit
 
     release:
-        name: 'Release Package: NestJs Redoc'
+        name: 'Release Package: Data Cache'
         runs-on: ubuntu-latest
         needs:
             - pr_checks
@@ -42,7 +42,8 @@ jobs:
                         tsconfig.json
                         common/dev
                         common/utils
-                        common/nestjs-redoc
+                        backend/core
+                        backend/data-cache
 
             -   name: 'Install Node.js'
                 uses: actions/setup-node@v3
@@ -81,16 +82,16 @@ jobs:
                 uses: phips28/gh-action-bump-version@master
                 env:
                     GITHUB_TOKEN: ${{ secrets.GH_CI_CD_RELEASE }}
-                    PACKAGEJSON_DIR: common/nestjs-redoc
+                    PACKAGEJSON_DIR: backend/data-cache
                 with:
                     major-wording: 'JLMAJOR'
                     minor-wording: 'feature,feat'
                     patch-wording: 'patch,fixes,fix,misc,docs,refactor'    # Providing patch-wording will override commits
-                    commit-message: 'Release Package: NestJs Redoc Bump Version [skip ci]'
+                    commit-message: 'Release Package: Data Cache Bump Version [skip ci]'
                     skip-tag: true
 
             -   name: 'Authenticate with NPM'
                 run: echo -e "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
             -   name: 'Publishing package'
-                run: cd common/nestjs-redoc && pnpm publish --no-git-checks --access public
+                run: cd backend/data-cache && pnpm publish --no-git-checks --access public

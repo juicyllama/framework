@@ -1,4 +1,4 @@
-import { TransactionDiscount } from "./discounts.entity"
+import { TransactionDiscount } from './discounts.entity'
 
 export const TRANSACTION_DISCOUNT_E = TransactionDiscount
 export type TRANSACTION_DISCOUNT_T = TransactionDiscount

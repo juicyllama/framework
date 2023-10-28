@@ -1,4 +1,4 @@
-import { RedocOptions } from '@juicyllama/nestjs-redoc'
+import { RedocOptions } from '@juicyllama/core'
 
 export function installAppStoreDocs(docs: RedocOptions, exclude_tags?: string[]): RedocOptions {
 	const group = 'App Store'
