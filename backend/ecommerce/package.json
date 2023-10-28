@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/ecommerce",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "Juicyllama Ecommerce Module",
     "author": {
         "name": "JuicyLlama Studio",
@@ -31,9 +31,6 @@
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
-    },
-    "devDependencies": {
-        "@juicyllama/dev": "workspace:^"
     },
     "dependencies": {
         "@juicyllama/app-store": "workspace:^",

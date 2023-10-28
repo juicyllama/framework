@@ -40,8 +40,5 @@
         "@juicyllama/core": "workspace:^",
         "@juicyllama/nestjs-redoc": "workspace:^",
         "@juicyllama/utils": "workspace:^"
-    },
-    "devDependencies": {
-        "@juicyllama/dev": "workspace:^"
     }
 }

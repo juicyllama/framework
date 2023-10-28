@@ -37,8 +37,5 @@
         "@juicyllama/utils": "workspace:^",
         "@mailchimp/mailchimp_marketing": "^3.0.80",
         "@types/mailchimp__mailchimp_marketing": "^3.0.12"
-    },
-    "devDependencies": {
-        "@juicyllama/dev": "workspace:^"
     }
 }

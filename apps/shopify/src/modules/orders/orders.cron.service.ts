@@ -68,13 +68,18 @@ export class ShopifyOrdersCronService {
 							rej(new Error(`Store not found for installed app ${installed_app.installed_app_id}`))
 						}
 
+						const updateRunTimes = {
+							installed_app_id: installed_app.installed_app_id,
+							last_check_at: new Date(),
+							next_check_at: new Date(new Date().getTime() + 1000 * 60 * 10), // 10 minutes
+						}
+
 						this.installedAppsService
-							.update({
-								installed_app_id: installed_app.installed_app_id,
-								last_check_at: new Date(),
-								next_check_at: new Date(new Date().getTime() + 1000 * 60 * 10), // 10 minutes
-							})
+							.update(updateRunTimes)
 							.then(() => {
+
+								this.logger.log(`[${domain}] Installed App Runtimes Updated`, updateRunTimes)
+
 								const options = <any>_.omitBy(
 									{
 										api_version: ApiVersion.July23,

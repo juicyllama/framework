@@ -23,3 +23,14 @@ export interface ChartOptions {
 	displayLegend?: boolean
 	displayTooltip?: boolean
 }
+
+export enum ChartsPeriod {
+	MIN = "MIN",
+	'15MIN' = "15MIN",
+	'30MIN' = "30MIN",
+	HOUR = "HOUR",
+	DAY = "DAY",
+	WEEK = "WEEK",
+	MONTH = "MONTH",
+	YEAR = "YEAR"
+}
