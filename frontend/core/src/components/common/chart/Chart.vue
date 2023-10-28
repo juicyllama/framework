@@ -67,7 +67,7 @@ const getData = async () => {
 			isLoading.value = false
 		}
 	} else {
-		logger({ severity: LogSeverity.ERROR, message: `Missing 'endpoint' for isLoading data for chart` })
+		logger({ severity: LogSeverity.ERROR, message: `Missing 'endpoint' for data for chart with dynamicData=true` })
 	}
 }
 
