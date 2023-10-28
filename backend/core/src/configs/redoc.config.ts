@@ -1,4 +1,4 @@
-import { RedocOptions } from '@juicyllama/nestjs-redoc'
+import { RedocOptions } from '../utils/redoc'
 import { Strings } from '@juicyllama/utils'
 
 export const redocConfig = <RedocOptions>{

@@ -36,7 +36,6 @@
         "@juicyllama/app-store": "workspace:^",
         "@juicyllama/core": "workspace:^",
         "@juicyllama/crm": "workspace:^",
-        "@juicyllama/nestjs-redoc": "workspace:^",
         "@juicyllama/utils": "workspace:^",
         "@juicyllama/websites": "workspace:^"
     }

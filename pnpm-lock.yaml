@@ -202,9 +202,6 @@ importers:
       '@juicyllama/core':
         specifier: workspace:^
         version: link:../core
-      '@juicyllama/nestjs-redoc':
-        specifier: workspace:^
-        version: link:../../common/nestjs-redoc
       '@juicyllama/utils':
         specifier: workspace:^
         version: link:../../common/utils
@@ -214,9 +211,6 @@ importers:
       '@juicyllama/core':
         specifier: workspace:^
         version: link:../core
-      '@juicyllama/nestjs-redoc':
-        specifier: workspace:^
-        version: link:../../common/nestjs-redoc
       '@juicyllama/utils':
         specifier: workspace:^
         version: link:../../common/utils
@@ -226,9 +220,6 @@ importers:
       '@juicyllama/core':
         specifier: workspace:^
         version: link:../core
-      '@juicyllama/nestjs-redoc':
-        specifier: workspace:^
-        version: link:../../common/nestjs-redoc
       '@juicyllama/utils':
         specifier: workspace:^
         version: link:../../common/utils
@@ -242,9 +233,6 @@ importers:
       '@juicyllama/dev':
         specifier: workspace:^
         version: link:../../common/dev
-      '@juicyllama/nestjs-redoc':
-        specifier: workspace:^
-        version: link:../../common/nestjs-redoc
       '@juicyllama/utils':
         specifier: workspace:^
         version: link:../../common/utils
@@ -254,9 +242,6 @@ importers:
       '@juicyllama/core':
         specifier: workspace:^
         version: link:../core
-      '@juicyllama/nestjs-redoc':
-        specifier: workspace:^
-        version: link:../../common/nestjs-redoc
       '@juicyllama/utils':
         specifier: workspace:^
         version: link:../../common/utils
@@ -281,9 +266,6 @@ importers:
       '@juicyllama/crm':
         specifier: workspace:^
         version: link:../crm
-      '@juicyllama/nestjs-redoc':
-        specifier: workspace:^
-        version: link:../../common/nestjs-redoc
       '@juicyllama/utils':
         specifier: workspace:^
         version: link:../../common/utils
@@ -296,9 +278,6 @@ importers:
       '@juicyllama/core':
         specifier: workspace:^
         version: link:../core
-      '@juicyllama/nestjs-redoc':
-        specifier: workspace:^
-        version: link:../../common/nestjs-redoc
       '@juicyllama/utils':
         specifier: workspace:^
         version: link:../../common/utils
@@ -609,15 +588,6 @@ importers:
         specifier: next
         version: 2.0.0-beta.67(@vuepress/client@2.0.0-beta.67)(vue@3.3.4)
 
-  common/nestjs-redoc:
-    dependencies:
-      '@juicyllama/dev':
-        specifier: workspace:^
-        version: link:../dev
-      '@juicyllama/utils':
-        specifier: workspace:^
-        version: link:../utils
-
   common/utils:
     dependencies:
       '@turf/turf':
@@ -831,9 +801,6 @@ importers:
       '@juicyllama/core':
         specifier: workspace:^
         version: link:../../backend/core
-      '@juicyllama/nestjs-redoc':
-        specifier: workspace:^
-        version: link:../../common/nestjs-redoc
       '@juicyllama/utils':
         specifier: workspace:^
         version: link:../../common/utils
