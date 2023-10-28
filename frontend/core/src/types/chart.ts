@@ -22,6 +22,7 @@ export interface ChartOptions {
 	dynamicData?: boolean
 	displayLegend?: boolean
 	displayTooltip?: boolean
+	dataMapper?: (arg0: any) => any
 }
 
 export enum ChartsPeriod {

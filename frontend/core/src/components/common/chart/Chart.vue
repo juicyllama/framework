@@ -42,6 +42,9 @@ const extendedOptions = computed(() => {
 })
 
 const dataDetails = computed<ChartData>(() => {
+	if (props.dataMapper) {
+		return props.dataMapper(loadedData.value as any)
+	}
 	return loadedData.value
 })
 
