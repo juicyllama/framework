@@ -21,13 +21,28 @@ import { TransactionDiscountsService } from './transactions/discounts/discounts.
 
 // Enums
 import { StoreSelect, StoreRelations, StoreOrderBy } from './stores/stores.enums'
-import { TransactionSelect, TransactionRelations, TransactionOrderBy, TransactionPaymentStatus, TransactionFulfillmentStatus } from './transactions/transactions.enums'
-import { TransactionDiscountSelect, TransactionDiscountRelations, TransactionDiscountOrderBy, TransactionDiscountType } from './transactions/discounts/discounts.enums'
+import {
+	TransactionSelect,
+	TransactionRelations,
+	TransactionOrderBy,
+	TransactionPaymentStatus,
+	TransactionFulfillmentStatus,
+} from './transactions/transactions.enums'
+import {
+	TransactionDiscountSelect,
+	TransactionDiscountRelations,
+	TransactionDiscountOrderBy,
+	TransactionDiscountType,
+} from './transactions/discounts/discounts.enums'
 
 // DTOs
 import { StoreDto, CreateStoreDto, UpdateStoreDto } from './stores/stores.dto'
 import { TransactionDto, CreateTransactionDto, UpdateTransactionDto } from './transactions/transactions.dto'
-import { TransactionDiscountDto, CreateTransactionDiscountDto, UpdateTransactionDiscountDto } from './transactions/discounts/discounts.dto'
+import {
+	TransactionDiscountDto,
+	CreateTransactionDiscountDto,
+	UpdateTransactionDiscountDto,
+} from './transactions/discounts/discounts.dto'
 
 //Docs
 import { installEcommerceDocs } from './docs/install'

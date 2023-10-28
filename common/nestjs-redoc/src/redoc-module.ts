@@ -28,7 +28,6 @@ export class RedocModule {
 		options: RedocOptions,
 		debug?: boolean,
 	): Promise<void> {
-		
 		const domain = 'nestjs-redoc::setup'
 
 		try {
@@ -43,7 +42,7 @@ export class RedocModule {
 				logger.error(`[${domain}] ${error.message}`, {
 					document: document,
 					options: options,
-					error: error
+					error: error,
 				})
 			}
 			throw error
@@ -55,7 +54,6 @@ export class RedocModule {
 		document: OpenAPIObject,
 		debug?: boolean,
 	): Promise<RedocOptions> {
-
 		const domain = 'nestjs-redoc::validateOptionsObject'
 
 		try {
@@ -65,7 +63,7 @@ export class RedocModule {
 				logger.error(`[${domain}] ${error.message}`, {
 					document: document,
 					options: options,
-					error: error
+					error: error,
 				})
 			}
 			throw new TypeError(error.message)

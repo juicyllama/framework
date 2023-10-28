@@ -1,0 +1,40 @@
+{
+    "name": "@juicyllama/data-cache",
+    "version": "0.0.0",
+    "description": "Juicyllama Data Cache",
+    "author": {
+        "name": "JuicyLlama Studio",
+        "email": "studio@juicyllama.com",
+        "url": "https://juicyllama.com"
+    },
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/juicyllama/framework/tree/main/backend/data-cache"
+    },
+    "bugs": "https://github.com/juicyllama/framework",
+    "license": "0BSD",
+    "readmeFilename": "README.md",
+    "main": "dist/index.js",
+    "files": [
+        "dist/**/*",
+        "*.md"
+    ],
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "prebuild": "rimraf dist",
+        "prepare": "pnpm run build",
+        "build": "tsc",
+        "start:dev": "tsc -w",
+        "format": "prettier --write \"src/**/*.ts\"",
+        "lint": "eslint \"src/**/*.ts\" --fix",
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
+    },
+    "dependencies": {
+        "@juicyllama/core": "workspace:^",
+        "@juicyllama/utils": "workspace:^"
+    }
+}

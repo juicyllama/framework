@@ -6,7 +6,7 @@ import {
 	AppIntegrationType,
 	AppsService,
 	AppStoreIntegrationName,
-	AppSettingsDto
+	AppSettingsDto,
 } from '@juicyllama/app-store'
 
 @Injectable()

@@ -30,7 +30,7 @@ import {
 	AppOrderBy,
 	AppScope,
 	AppSelect,
-	AppStoreIntegrationName
+	AppStoreIntegrationName,
 } from './modules/apps.enums'
 import { InstalledAppsOrderBy, InstalledAppsRelations, InstalledAppsSelect } from './modules/installed/installed.enums'
 
@@ -83,5 +83,5 @@ export {
 	LogsModule,
 	LogsService,
 	installAppStoreDocs,
-	AppStoreIntegrationName
+	AppStoreIntegrationName,
 }

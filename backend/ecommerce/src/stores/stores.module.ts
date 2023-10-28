@@ -37,11 +37,7 @@ import { AppsModule } from '@juicyllama/app-store'
 		forwardRef(() => AppsModule),
 	],
 	controllers: [StoresController],
-	providers: [
-		StoresService,
-		Logger,
-		Query,
-	],
+	providers: [StoresService, Logger, Query],
 	exports: [StoresService],
 })
 export class StoresModule {}

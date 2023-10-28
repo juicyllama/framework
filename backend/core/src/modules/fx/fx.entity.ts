@@ -8,7 +8,7 @@ import {
 	UpdateDateColumn,
 } from 'typeorm'
 import { IsDateString, IsNumber } from 'class-validator'
-import * as utils from '@juicyllama/utils'
+import { Dates } from '@juicyllama/utils'
 
 @Entity('fx_rates')
 @Unique(['date'])
@@ -20,7 +20,7 @@ export class FxRate {
 	@Column('date', {
 		name: 'date',
 		transformer: {
-			to: (value: Date) => utils.Dates.format(value, 'YYYY-MM-DD'),
+			to: (value: Date) => Dates.format(value, 'YYYY-MM-DD'),
 			from: (value: string) => value,
 		},
 	})

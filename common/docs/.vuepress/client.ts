@@ -17,6 +17,7 @@ import {appsPexelsNavbar, appsPexelsTitle} from "../apps/pexels/config";
 import {ecommerceNavbar, ecommerceTitle} from "../backend/ecommerce/config";
 import {websitesNavbar, websitesTitle} from "../backend/websites/config";
 import {appsShopifyNavbar, appsShopifyTitle} from "../apps/shopify/config";
+import { dataCacheTitle, dataCacheNavbar } from '../backend/data-cache/config'
 
 export default defineClientConfig({
 	enhance({ app, router }) {
@@ -45,6 +46,11 @@ export default defineClientConfig({
 			else if (to.path.startsWith('/backend/ai')) {
 				app.config.globalProperties.$site.title = aiTitle
 				app.config.globalProperties.$theme.navbar = aiNavbar
+			}
+
+			else if (to.path.startsWith('/backend/data-cache')) {
+				app.config.globalProperties.$site.title = dataCacheTitle
+				app.config.globalProperties.$theme.navbar = dataCacheNavbar
 			}
 
 			else if (to.path.startsWith('/backend/ecommerce')) {

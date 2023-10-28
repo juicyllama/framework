@@ -188,11 +188,12 @@ export class ShopifyAuthController {
 			//clean up and redirect
 			const redirect = req.cookies.app_shopify_redirect_url
 			res.setHeader('Set-Cookie', [`app_shopify_state=deleted; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`])
-			res.setHeader('Set-Cookie', [`app_shopify_redirect_url=deleted; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`])
+			res.setHeader('Set-Cookie', [
+				`app_shopify_redirect_url=deleted; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`,
+			])
 			res.redirect(redirect)
 			return
 		} else {
-
 			//clean up and redirect
 			res.setHeader('Set-Cookie', [`app_shopify_state=deleted; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`])
 			res.redirect(process.env.BASE_URL_APP)

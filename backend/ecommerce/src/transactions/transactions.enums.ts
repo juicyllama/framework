@@ -15,7 +15,7 @@ export enum TransactionSelect {
 	cancel_reason = 'cancel_reason',
 	refunded_at = 'refunded_at',
 	created_at = 'created_at',
-	updated_at = 'updated_at'
+	updated_at = 'updated_at',
 }
 
 export enum TransactionOrderBy {
@@ -34,7 +34,7 @@ export enum TransactionOrderBy {
 	cancelled_at = 'cancelled_at',
 	refunded_at = 'refunded_at',
 	created_at = 'created_at',
-	updated_at = 'updated_at'
+	updated_at = 'updated_at',
 }
 
 export enum TransactionRelations {
@@ -55,7 +55,6 @@ export enum TransactionPaymentStatus {
 	CANCELLED = 'CANCELLED',
 	CHARGEDBACK = 'CHARGEDBACK',
 }
-
 
 export enum TransactionFulfillmentStatus {
 	PENDING = 'PENDING',

@@ -22,20 +22,20 @@ export class ContactSocialService extends BaseService<T> {
 	}
 
 	async create(data: DeepPartial<T>): Promise<T> {
+		const social = await this.findOne({
+			where: {
+				contact_id: data.contact_id,
+				type: data.type,
+				handle: data.handle,
+			},
+		})
 
-		const social = await this.findOne({ where: {
-			contact_id: data.contact_id,
-			type: data.type,
-			handle: data.handle
-		}})
-
-		if(social) {
+		if (social) {
 			return social
 		}
 
 		return await super.create(data)
 	}
-
 
 	async updateSocials(socials: DeepPartial<T[]>, contact_id: number): Promise<T[]> {
 		const domain = 'crm::contacts::socials::service::updateSocials'

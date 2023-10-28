@@ -71,6 +71,10 @@ export const homeNavbar = [
 				link: '/backend/crm',
 			},
 			{
+				text: 'Data Cache',
+				link: '/backend/data-cache',
+			},
+			{
 				text: 'Ecommerce',
 				link: '/backend/ecommerce',
 			},

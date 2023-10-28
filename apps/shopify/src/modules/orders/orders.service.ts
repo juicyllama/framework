@@ -104,7 +104,7 @@ export class ShopifyOrdersService {
 
 		const transactions = []
 
-		if(orders?.length === 0) return transactions
+		if (orders?.length === 0) return transactions
 
 		for (const order of orders) {
 			let transaction = await this.transactionsService.findOne({

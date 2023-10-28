@@ -1,13 +1,10 @@
 import { IsEnum, IsNumber, MaxLength, MinLength } from 'class-validator'
 import {
 	Column,
-	CreateDateColumn,
-	DeleteDateColumn,
 	Entity,
 	JoinColumn,
 	ManyToOne,
-	PrimaryGeneratedColumn,
-	UpdateDateColumn,
+	PrimaryGeneratedColumn
 } from 'typeorm'
 import { Account, BaseEntity } from '@juicyllama/core'
 import { Wallet } from '../wallet/wallet.entity'

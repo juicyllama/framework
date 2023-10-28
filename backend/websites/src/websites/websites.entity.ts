@@ -1,10 +1,4 @@
-import {
-	Column,
-	Entity,
-	PrimaryGeneratedColumn,
-	ManyToOne,
-	JoinColumn,
-} from 'typeorm'
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
 import { IsOptional, IsString, MaxLength, MinLength, IsUrl } from 'class-validator'
 import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
 import { Account, BaseEntity } from '@juicyllama/core'
@@ -31,7 +25,7 @@ export class Website extends BaseEntity {
 	name: string
 
 	@IsString()
-  	@IsUrl()
+	@IsUrl()
 	@Column()
 	url: string
 

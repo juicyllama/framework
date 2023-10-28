@@ -16,10 +16,10 @@ import {
 	MoreThanOrEqual,
 	Not,
 	Repository,
+	FindOptionsWhere,
 } from 'typeorm'
 import _ from 'lodash'
 import { TypeOrm } from './TypeOrm'
-import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere'
 import { isNil, omitBy } from 'lodash'
 import { ComparisonOperator, Enums, Env, getMySQLTimeInterval, Logger } from '@juicyllama/utils'
 import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder'

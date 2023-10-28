@@ -1,12 +1,4 @@
-import {
-	Column,
-	Entity,
-	PrimaryGeneratedColumn,
-	ManyToOne,
-	JoinColumn,
-	OneToMany,
-	Unique,
-} from 'typeorm'
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, Unique } from 'typeorm'
 import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
 import { Account, BaseEntity } from '@juicyllama/core'
 import { IsNumber, IsString, IsEnum, MinLength, MaxLength, IsBoolean, IsDate } from 'class-validator'
@@ -53,7 +45,7 @@ export class Transaction extends BaseEntity {
 	})
 	@JoinColumn({ name: 'contact_id' })
 	contact?: Contact
-	
+
 	@Column({ nullable: true, default: null })
 	@IsNumber()
 	contact_id?: number
@@ -114,7 +106,7 @@ export class Transaction extends BaseEntity {
 
 	@Column({ type: 'decimal', precision: 10, scale: 2, default: 0.0 })
 	@IsNumber({ maxDecimalPlaces: 2 })
-	total_price: number	
+	total_price: number
 
 	@OneToMany(() => TransactionDiscount, td => td.transaction)
 	discounts?: TransactionDiscount[]

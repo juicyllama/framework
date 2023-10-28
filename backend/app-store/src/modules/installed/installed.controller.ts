@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, forwardRef, Inject, Param, Query, Req, Res } from '@nestjs/common'
+import { BadRequestException, Body, Controller, forwardRef, Inject, Param, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { StatsMethods, StatsResponseDto } from '@juicyllama/utils'
 import { InstalledAppsService } from './installed.service'
@@ -59,7 +59,7 @@ export class InstalledAppsController {
 			throw new BadRequestException(`No app found with that app_id`)
 		}
 
-		if(await this.service.checkRequiredSettings(data) === false) {
+		if ((await this.service.checkRequiredSettings(data)) === false) {
 			throw new BadRequestException(`Missing required settings`)
 		}
 
@@ -85,7 +85,7 @@ export class InstalledAppsController {
 				installed_app_id: installed_app.installed_app_id,
 				oauth_redirect_url: installed_app.oauth_redirect_url,
 			})
-		}	
+		}
 
 		return await this.service.removePrivateSettings(installed_app)
 	}

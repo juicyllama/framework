@@ -1,4 +1,4 @@
-import { NumberVerification } from './number.verification.entity.mongo'
+import { NumberVerification } from './number.verification.dto'
 
 export default <NumberVerification>{
 	carrier: 'Telefonica Moviles Espana SAU',

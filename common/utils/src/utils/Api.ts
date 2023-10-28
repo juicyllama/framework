@@ -15,13 +15,7 @@ export class Api {
 	 * @return object
 	 */
 
-	async get(
-		domain: string,
-		url: string,
-		config?: any,
-		uuid?: string,
-		interceptor?: any,
-	): Promise<any | boolean> {
+	async get(domain: string, url: string, config?: any, uuid?: string, interceptor?: any): Promise<any | boolean> {
 		if (!config) {
 			config = this.defaultConfig()
 		}
@@ -95,13 +89,7 @@ export class Api {
 	 * @return object
 	 */
 
-	async patch(
-		domain: string,
-		url: string,
-		data?: object,
-		config?: any,
-		uuid?: string,
-	): Promise<any | boolean> {
+	async patch(domain: string, url: string, data?: object, config?: any, uuid?: string): Promise<any | boolean> {
 		if (!config) {
 			config = this.defaultConfig()
 		}
@@ -127,13 +115,7 @@ export class Api {
 	 * @return object
 	 */
 
-	async put(
-		domain: string,
-		url: string,
-		data?: object,
-		config?: any,
-		uuid?: string,
-	): Promise<any | boolean> {
+	async put(domain: string, url: string, data?: object, config?: any, uuid?: string): Promise<any | boolean> {
 		if (!config) {
 			config = this.defaultConfig()
 		}

@@ -1,6 +1,6 @@
 import { IsBoolean, IsNumber, IsObject, IsString } from 'class-validator'
 
-export class ApilayerCurrencyDataDto {
+export class CurrencyData {
 	@IsString()
 	readonly date: string
 

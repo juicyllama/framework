@@ -1,4 +1,4 @@
-import { Store } from "./stores.entity"
+import { Store } from './stores.entity'
 
 export const STORE_E = Store
 export type STORE_T = Store

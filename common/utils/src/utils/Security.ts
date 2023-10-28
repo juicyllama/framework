@@ -1,5 +1,8 @@
 import { Enviroment } from '../enums/env'
 import { createHash } from 'crypto'
+import * as jwt from 'jwt-simple'
+
+const secret = 'JL@S7uD*0Su3rS$cr3t'
 
 export class Security {
 	static hashPassword(password: string): string {
@@ -31,5 +34,15 @@ export class Security {
 		}
 
 		return true
+	}
+
+	/** encode JSON to JWT using a global secret */
+	static encode(data: any): string {
+		return jwt.encode(data, secret)
+	}
+
+	/** decode JWT using a global secret  */
+	static decode(token: string): any {
+		return jwt.decode(token, secret)
 	}
 }

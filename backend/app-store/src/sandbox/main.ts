@@ -42,7 +42,9 @@ async function bootstrap() {
 
 	app.listen(process.env.PORT)
 	logger.debug(
-		`[${domain}] ${Enviroment[process.env.NODE_ENV]} server running: ${process.env.BASE_URL_API}:${process.env.PORT}`,
+		`[${domain}] ${Enviroment[process.env.NODE_ENV]} server running: ${process.env.BASE_URL_API}:${
+			process.env.PORT
+		}`,
 	)
 }
 

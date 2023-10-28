@@ -57,7 +57,6 @@ export class TransactionDto {
 	@IsOptional()
 	total_shipping?: number
 
-
 	@ApiProperty({ description: 'The total discounts of the transaction' })
 	@IsNumber()
 	@IsOptional()
@@ -95,7 +94,6 @@ export class TransactionDto {
 	@IsOptional()
 	@IsDate()
 	refunded_at?: Date
-
 }
 
 export class CreateTransactionDto extends TransactionDto {}
