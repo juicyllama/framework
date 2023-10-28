@@ -42,6 +42,9 @@ const extendedOptions = computed(() => {
 })
 
 const dataDetails = computed<ChartData>(() => {
+	if (props.dataMapper) {
+		return props.dataMapper(loadedData.value as any)
+	}
 	return loadedData.value
 })
 
@@ -64,7 +67,7 @@ const getData = async () => {
 			isLoading.value = false
 		}
 	} else {
-		logger({ severity: LogSeverity.ERROR, message: `Missing 'endpoint' for isLoading data for chart` })
+		logger({ severity: LogSeverity.ERROR, message: `Missing 'endpoint' for data for chart with dynamicData=true` })
 	}
 }
 
