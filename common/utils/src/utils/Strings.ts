@@ -7,7 +7,7 @@ export class Strings {
 	 */
 
 	static capitalize(str: string): string {
-		if (!str) {
+		if (!str || str.length < 2) {
 			return ''
 		}
 		return str.charAt(0).toUpperCase() + str.slice(1)
