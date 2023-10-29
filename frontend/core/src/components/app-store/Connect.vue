@@ -78,7 +78,7 @@ async function install(data: any) {
 	<div id="AppStoreConnect" v-if="app[0]" class="q-ml-lg q-mr-lg q-mb-lg">
 		<q-icon
 			v-if="!props.icon?.hide"
-			:name="`fa-brands fa-${props.integration_name}`"
+			:name="`fa-${props.integration_name}`"
 			:size="props.icon?.size ?? '5rem'"
 			:color="props.icon?.color ?? 'primary'"
 			class="q-mt-xl q-mb-xl" />

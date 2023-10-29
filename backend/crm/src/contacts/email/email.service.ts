@@ -22,19 +22,19 @@ export class ContactEmailService extends BaseService<T> {
 	}
 
 	async create(data: DeepPartial<T>): Promise<T> {
+		const email = await this.findOne({
+			where: {
+				contact_id: data.contact_id,
+				email: data.email,
+			},
+		})
 
-		const email = await this.findOne({ where: {
-			contact_id: data.contact_id,
-			email: data.email,
-		}})
-
-		if(email) {
+		if (email) {
 			return email
 		}
 
 		return await super.create(data)
 	}
-
 
 	async updateEmails(emails: DeepPartial<T[]>, contact_id: number): Promise<T[]> {
 		const domain = 'crm::contacts::email::service::updateEmails'

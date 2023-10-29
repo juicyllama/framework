@@ -19,7 +19,7 @@ Follow these instructions to use the shortlinks tool in your project.
 Install the package into your project:
 
 ```bash
-npm install @juicyllama/tools-shortlinks
+pnpm install @juicyllama/tools-shortlinks
 ```
 
 ### Environment Variables

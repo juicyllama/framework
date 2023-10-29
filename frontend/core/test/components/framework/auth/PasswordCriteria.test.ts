@@ -25,7 +25,7 @@ describe('Password Criteria', () => {
 				},
 			})
 			const icons = wrapper.findAll('.q-icon')
-			expect(icons[0].classes()).includes('fa-circle-xmark')
+			expect(icons[0].text()).includes('cancel')
 		})
 		it('shows check icon', () => {
 			const authFormState: AuthFormState = {
@@ -45,7 +45,7 @@ describe('Password Criteria', () => {
 				},
 			})
 			const icons = wrapper.findAll('.q-icon')
-			expect(icons[0].classes()).includes('fa-circle-check')
+			expect(icons[0].text()).includes('check_circle')
 		})
 	})
 
@@ -68,7 +68,7 @@ describe('Password Criteria', () => {
 				},
 			})
 			const icons = wrapper.findAll('.q-icon')
-			expect(icons[1].classes()).includes('fa-circle-xmark')
+			expect(icons[1].text()).includes('cancel')
 		})
 		it('shows check icon', () => {
 			const authFormState: AuthFormState = {
@@ -88,7 +88,7 @@ describe('Password Criteria', () => {
 				},
 			})
 			const icons = wrapper.findAll('.q-icon')
-			expect(icons[1].classes()).includes('fa-circle-check')
+			expect(icons[1].text()).includes('check_circle')
 		})
 	})
 
@@ -111,7 +111,7 @@ describe('Password Criteria', () => {
 				},
 			})
 			const icons = wrapper.findAll('.q-icon')
-			expect(icons[2].classes()).includes('fa-circle-xmark')
+			expect(icons[2].text()).includes('cancel')
 		})
 		it('shows check icon', () => {
 			const authFormState: AuthFormState = {
@@ -131,7 +131,7 @@ describe('Password Criteria', () => {
 				},
 			})
 			const icons = wrapper.findAll('.q-icon')
-			expect(icons[2].classes()).includes('fa-circle-check')
+			expect(icons[2].text()).includes('check_circle')
 		})
 	})
 
@@ -154,7 +154,7 @@ describe('Password Criteria', () => {
 				},
 			})
 			const icons = wrapper.findAll('.q-icon')
-			expect(icons[3].classes()).includes('fa-circle-xmark')
+			expect(icons[3].text()).includes('cancel')
 		})
 		it('shows check icon', () => {
 			const authFormState: AuthFormState = {
@@ -174,7 +174,7 @@ describe('Password Criteria', () => {
 				},
 			})
 			const icons = wrapper.findAll('.q-icon')
-			expect(icons[3].classes()).includes('fa-circle-check')
+			expect(icons[3].text()).includes('check_circle')
 		})
 	})
 })

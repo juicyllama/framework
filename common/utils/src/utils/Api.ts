@@ -15,13 +15,7 @@ export class Api {
 	 * @return object
 	 */
 
-	async get(
-		domain: string,
-		url: string,
-		config?: RawAxiosRequestConfig,
-		uuid?: string,
-		interceptor?: any,
-	): Promise<any | boolean> {
+	async get(domain: string, url: string, config?: any, uuid?: string, interceptor?: any): Promise<any | boolean> {
 		if (!config) {
 			config = this.defaultConfig()
 		}
@@ -67,7 +61,7 @@ export class Api {
 		domain: string,
 		url: string,
 		data?: object | string,
-		config?: RawAxiosRequestConfig,
+		config?: any,
 		uuid?: string,
 	): Promise<any | boolean> {
 		if (!config) {
@@ -95,13 +89,7 @@ export class Api {
 	 * @return object
 	 */
 
-	async patch(
-		domain: string,
-		url: string,
-		data?: object,
-		config?: RawAxiosRequestConfig,
-		uuid?: string,
-	): Promise<any | boolean> {
+	async patch(domain: string, url: string, data?: object, config?: any, uuid?: string): Promise<any | boolean> {
 		if (!config) {
 			config = this.defaultConfig()
 		}
@@ -127,13 +115,7 @@ export class Api {
 	 * @return object
 	 */
 
-	async put(
-		domain: string,
-		url: string,
-		data?: object,
-		config?: RawAxiosRequestConfig,
-		uuid?: string,
-	): Promise<any | boolean> {
+	async put(domain: string, url: string, data?: object, config?: any, uuid?: string): Promise<any | boolean> {
 		if (!config) {
 			config = this.defaultConfig()
 		}
@@ -157,7 +139,7 @@ export class Api {
 	 * @return object
 	 */
 
-	async delete(domain: string, url: string, config?: RawAxiosRequestConfig, uuid?: string): Promise<boolean> {
+	async delete(domain: string, url: string, config?: any, uuid?: string): Promise<boolean> {
 		if (!config) {
 			config = this.defaultConfig()
 		}

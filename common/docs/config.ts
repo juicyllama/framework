@@ -30,8 +30,8 @@ export const homeNavbar = [
 		text: 'Common',
 		children: [
 			{
-				text: 'Utils',
-				link: '/common/utils',
+				text: 'Cli',
+				link: '/common/cli',
 			},
 			{
 				text: 'Dev',
@@ -40,6 +40,14 @@ export const homeNavbar = [
 			{
 				text: 'Vue Dev',
 				link: '/common/vue-dev',
+			},
+			{
+				text: 'Utils',
+				link: '/common/utils',
+			},
+			{
+				text: 'NestJs Redoc',
+				link: '/common/nestjs-redoc',
 			},
 		],
 	},
@@ -61,6 +69,10 @@ export const homeNavbar = [
 			{
 				text: 'CRM',
 				link: '/backend/crm',
+			},
+			{
+				text: 'Data Cache',
+				link: '/backend/data-cache',
 			},
 			{
 				text: 'Ecommerce',
@@ -125,10 +137,6 @@ export const homeNavbar = [
 	{
 		text: 'Tools',
 		children: [
-			{
-				text: 'QR Codes',
-				link: '/tools/qrcodes',
-			},
 			{
 				text: 'Shortlinks',
 				link: '/tools/shortlinks',

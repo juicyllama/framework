@@ -3,11 +3,11 @@ import {homeNavbar, homeTitle} from "../config";
 import {frontendCoreNavbar, frontendCoreTitle} from "../frontend/core/config";
 import {coreNavbar, coreTitle} from "../backend/core/config";
 import {shortlinksNavbar, shortlinksTitle} from "../tools/shortlinks/config";
-import {cliNavbar, cliTitle} from "../cli/config";
+import {cliNavbar, cliTitle} from "../common/cli/config";
 import {utilsNavbar, utilsTitle} from "../common/utils/config";
+import { nestJsRedocNavbar, nestJsRedocTitle } from '../common/nestjs-redoc/config'
 import {frontendTestNavbar, frontendTestTitle} from "../frontend/tests/config";
 import {appsGoogleNavbar, appsGoogleTitle} from "../apps/google/config";
-import {qrcodesTitle} from "../tools/qrcodes/config";
 import {appsSlackNavbar, appsSlackTitle} from "../apps/slack/config";
 import {appsWordpressNavbar, appsWordpressTitle} from "../apps/wordpress/config";
 import {appStoreNavbar, appStoreTitle} from "../backend/app-store/config";
@@ -17,6 +17,7 @@ import {appsPexelsNavbar, appsPexelsTitle} from "../apps/pexels/config";
 import {ecommerceNavbar, ecommerceTitle} from "../backend/ecommerce/config";
 import {websitesNavbar, websitesTitle} from "../backend/websites/config";
 import {appsShopifyNavbar, appsShopifyTitle} from "../apps/shopify/config";
+import { dataCacheTitle, dataCacheNavbar } from '../backend/data-cache/config'
 
 export default defineClientConfig({
 	enhance({ app, router }) {
@@ -47,6 +48,11 @@ export default defineClientConfig({
 				app.config.globalProperties.$theme.navbar = aiNavbar
 			}
 
+			else if (to.path.startsWith('/backend/data-cache')) {
+				app.config.globalProperties.$site.title = dataCacheTitle
+				app.config.globalProperties.$theme.navbar = dataCacheNavbar
+			}
+
 			else if (to.path.startsWith('/backend/ecommerce')) {
 				app.config.globalProperties.$site.title = ecommerceTitle
 				app.config.globalProperties.$theme.navbar = ecommerceNavbar
@@ -62,11 +68,6 @@ export default defineClientConfig({
 				app.config.globalProperties.$theme.navbar = shortlinksNavbar
 			}
 
-			else if (to.path.startsWith('/tools/qrcodes')) {
-				app.config.globalProperties.$site.title = qrcodesTitle
-				app.config.globalProperties.$theme.navbar = frontendCoreNavbar
-			}
-
 			else if (to.path.startsWith('/cli')) {
 				app.config.globalProperties.$site.title = cliTitle
 				app.config.globalProperties.$theme.navbar = cliNavbar
@@ -75,6 +76,11 @@ export default defineClientConfig({
 			else if (to.path.startsWith('/common/utils')) {
 				app.config.globalProperties.$site.title = utilsTitle
 				app.config.globalProperties.$theme.navbar = utilsNavbar
+			}
+
+			else if (to.path.startsWith('/common/nestjs-redoc')) {
+				app.config.globalProperties.$site.title = nestJsRedocTitle
+				app.config.globalProperties.$theme.navbar = nestJsRedocNavbar
 			}
 
 			else if (to.path.startsWith('/apps/google')) {

@@ -6,6 +6,9 @@ export interface ChartUISettings {
 export interface DataSet {
 	backgroundColor: string[]
 	data: number[]
+	// Keys can be strings, numbers, or symbols.
+	// If you know it to be strings only, you can also restrict it to that.
+	[x: string]: unknown
 }
 
 export interface ChartData {
@@ -22,4 +25,16 @@ export interface ChartOptions {
 	dynamicData?: boolean
 	displayLegend?: boolean
 	displayTooltip?: boolean
+	dataMapper?: (arg0: any) => any
+}
+
+export enum ChartsPeriod {
+	MIN = 'MIN',
+	'15MIN' = '15MIN',
+	'30MIN' = '30MIN',
+	HOUR = 'HOUR',
+	DAY = 'DAY',
+	WEEK = 'WEEK',
+	MONTH = 'MONTH',
+	YEAR = 'YEAR',
 }

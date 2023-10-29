@@ -32,7 +32,7 @@ function openForm() {
 		@click="openForm">
 		<q-icon
 			v-if="pluginOptions.button?.icon?.name"
-			:name="`${pluginOptions.button?.icon?.type ?? 'fa-duotone'} ${pluginOptions.button?.icon?.name}`"
+			:name="`${pluginOptions.button?.icon?.name}`"
 			class="JLIcon" />
 		{{ pluginOptions.button?.label ?? 'Connect' }}
 	</q-btn>

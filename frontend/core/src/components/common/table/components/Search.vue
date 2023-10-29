@@ -25,8 +25,8 @@ const filter: Ref<string> = ref(props.search)
 			@keyup.enter="emit('searchUpdated', filter)">
 			<template v-slot:append>
 				<q-icon
-					:name="`${props.tableSchema.icon?.type ?? 'fa-duotone'} ${
-						props.tableSchema.icon?.icons?.search ?? 'fa-magnifying-glass'
+					:name="`${props.tableSchema.icon?.type} ${
+						props.tableSchema.icon?.icons?.search ?? 'search'
 					}`"
 					size="medium"
 					class="JLIcon JLIconSearch" />

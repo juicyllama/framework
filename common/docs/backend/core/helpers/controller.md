@@ -22,7 +22,17 @@ import {
 	crudStats,
 	crudUpdate,
 	crudDelete,
+	Query as TQuery,
+	UserAuth,
+	CreateDecorator,
+	ReadManyDecorator,
+	ReadOneDecorator,
+	ReadStatsDecorator,
+	ReadChartsDecorator,
+	UpdateDecorator,
+	DeleteDecorator,
 } from '@juicyllama/core'
+import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto } from '@juicyllama/utils'
 ```
 
 ## Methods
@@ -34,10 +44,10 @@ The following methods can be used in your application:
 Create a new object in the database.
 
 ```typescript
-@CreateDecorator(T, NAME)
+@CreateDecorator(E, NAME)
 async create(@Body() data: CreateExampleDto): Promise<T> {
-    return await crudFindAll<T>({
-        service: this.exampleService,
+    return await crudCreate<T>({
+        service: this.service,
         data: data,
 	})
 }
@@ -82,21 +92,20 @@ Get stats about the objects in the database.
 
 ```typescript
 @ReadStatsDecorator(NAME)
-async stats(
-	@Req() req,
-    @AccountId() account_id: number,
-    @Query() query,
-    @Query('method') method?: StatsMethods,
-): Promise<StatsResponseDto> {
-	return await crudStats<T>({
-		service: this.service,
-		tQuery: this.tQuery,
-		account_id: account_id,
-		query: query,
-		method: method,
-		searchFields: SEARCH_FIELDS,
-	})
-}
+	async stats(
+		@AccountId() account_id: number,
+		@Query() query,
+		@Query('method') method?: StatsMethods,
+	): Promise<StatsResponseDto> {
+		return await crudStats<T>({
+			service: this.service,
+			tQuery: this.tQuery,
+			account_id: account_id,
+			query: query,
+			method: method,
+			searchFields: SEARCH_FIELDS,
+		})
+	}
 ```
 
 
@@ -105,39 +114,50 @@ async stats(
 Get datasets for pie/line charts from the database.
 
 ```typescript
-@ReadChartsDecorator(NAME)
-async charts(
-	@Req() req,
-    @AccountId() account_id: number,
-    @Query('search') search: string,
-    @Query('from') from: string,
-        @Query('to') to: string,
-    @Query('fields') fields: string[],
-    @Query('period') period?: ChartsPeriod,
-): Promise<ChartsResponseDto> {
-	return await crudCharts<T>({
-		service: this.service,
-		tQuery: this.tQuery,
-		account_id: account_id,
-		search,
-		period,
-		fields,
-		...(from && { from: new Date(from) }),
-		...(to && { to: new Date(to) }),
-		searchFields: SEARCH_FIELDS,
-	})
-}
+	@ReadChartsDecorator(E, ExampleSelect, NAME)
+	async charts(
+		@Query() query: any,
+		@Query('search') search: string,
+		@Query('from') from: string,
+		@Query('to') to: string,
+		@Query('fields') fields: string[],
+		@Query('period') period?: ChartsPeriod,
+	): Promise<ChartsResponseDto> {
+		return await crudCharts<T>({
+			service: this.service,
+			tQuery: this.tQuery,
+			query,
+			search,
+			period,
+			fields,
+			...(from && { from: new Date(from) }),
+			...(to && { to: new Date(to) }),
+			searchFields: SEARCH_FIELDS,
+		})
+	}
 ```
+
+### Bulk Upload
+
+::: Danger
+Document here
+:::
+
+### Bulk Upload Fields
+
+::: Danger
+Document here
+:::
 
 ### Update
 
 Update an object in the database.
 
 ```typescript
-@CreateDecorator(T, NAME)
+@UpdateDecorator(E, NAME)
 async update(@Param() params, @Body() data: UpdateExampleDto): Promise<T> {
     return await crudUpdate<T>({
-        service: this.exampleService,
+        service: this.service,
 		primaryKey: params[PRIMARY_KEY],
         data: data,
 	})
@@ -149,10 +169,10 @@ async update(@Param() params, @Body() data: UpdateExampleDto): Promise<T> {
 Delete an object in the database.
 
 ```typescript
-@CreateDecorator(T, NAME)
+@DeleteDecorator(E, NAME)
 async delete(@Param() params): Promise<T> {
     return await crudDelete<T>({
-        service: this.exampleService,
+        service: this.service,
 		primaryKey: params[PRIMARY_KEY]
 	})
 }

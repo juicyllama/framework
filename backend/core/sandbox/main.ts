@@ -4,7 +4,7 @@ import { ValidationPipe } from '@nestjs/common'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import 'reflect-metadata'
 import { Enviroment, Logger, Strings } from '@juicyllama/utils'
-import { RedocModule } from '@juicyllama/nestjs-redoc'
+import { RedocModule } from '../src/utils/redoc'
 import { redocConfig, TypeOrmFilter, validationPipeOptions } from '../src/index'
 import { SandboxModule } from './sandbox.module'
 

@@ -1,9 +1,5 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import {
-	BeaconService,
-	Query,
-	BaseService,
-} from '@juicyllama/core'
+import { BeaconService, Query, BaseService } from '@juicyllama/core'
 import { Website } from './websites.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
@@ -22,5 +18,4 @@ export class WebsitesService extends BaseService<T> {
 			beacon: beaconService,
 		})
 	}
-
 }

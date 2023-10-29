@@ -135,11 +135,7 @@ export class ContactsController {
 	}
 
 	@UpdateDecorator(E, PRIMARY_KEY, NAME)
-	async update(
-		@AccountId() account_id: number,
-		@Body() data: UpdateContactDto,
-		@Param() params,
-	): Promise<T> {
+	async update(@AccountId() account_id: number, @Body() data: UpdateContactDto, @Param() params): Promise<T> {
 		const domain = 'crm::contacts::controller::update'
 
 		this.logger.log(`[${domain}] Updating contact`, data)

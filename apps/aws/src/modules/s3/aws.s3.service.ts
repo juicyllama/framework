@@ -5,10 +5,10 @@ import { awsS3Config } from './config/aws.s3.config'
 import { Logger } from '@juicyllama/utils'
 import { AwsS3Bucket, AwsS3Format } from './aws.s3.enums'
 
-const streamToString = (stream) =>
+const streamToString = stream =>
 	new Promise((resolve, reject) => {
 		const chunks = []
-		stream.on('data', (chunk) => chunks.push(chunk))
+		stream.on('data', chunk => chunks.push(chunk))
 		stream.on('error', reject)
 		stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')))
 	})

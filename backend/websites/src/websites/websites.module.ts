@@ -36,11 +36,7 @@ import { Website } from './websites.entity'
 		forwardRef(() => StorageModule),
 	],
 	controllers: [WebsitesController],
-	providers: [
-		WebsitesService,
-		Logger,
-		Query,
-	],
+	providers: [WebsitesService, Logger, Query],
 	exports: [WebsitesService],
 })
 export class WebsiteModule {}

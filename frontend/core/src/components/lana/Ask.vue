@@ -144,7 +144,7 @@ onMounted(async () => {
 						@submitted-form="submittedForm"></JLForm>
 				</div>
 				<div class="col-2">
-					<q-btn flat icon="fa-duotone fa-filter-list" @click="openLanaFilters" class="q-ml-sm" />
+					<q-btn flat icon="filter_list" @click="openLanaFilters" class="q-ml-sm" />
 				</div>
 			</div>
 
@@ -157,7 +157,7 @@ onMounted(async () => {
 			<JLNotice v-if="answer?.length" :type="NoticeType.SUCCESS" :message="answer" />
 			<div v-if="answer?.length" class="nps_faces q-mt-sm">
 				<q-icon
-					name="fa-regular fa-face-smile"
+					name="sentiment_satisfied"
 					size="1.5em"
 					:color="
 						lana.success === LanaSuccessType.USER_HAPPY ||
@@ -168,7 +168,7 @@ onMounted(async () => {
 					class="cursor-pointer"
 					@click="update({ success: LanaSuccessType.USER_HAPPY })" />
 				<q-icon
-					name="fa-regular fa-face-meh"
+					name="sentiment_neutral"
 					size="1.5em"
 					:color="
 						lana.success === LanaSuccessType.USER_NEUTRAL ||
@@ -179,7 +179,7 @@ onMounted(async () => {
 					class="on-right cursor-pointer"
 					@click="update({ success: LanaSuccessType.USER_NEUTRAL })" />
 				<q-icon
-					name="fa-regular fa-face-frown"
+					name="sentiment_dissatisfied"
 					size="1.5em"
 					:color="
 						lana.success === LanaSuccessType.USER_SAD ||

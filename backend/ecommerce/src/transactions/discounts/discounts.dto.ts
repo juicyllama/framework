@@ -19,7 +19,6 @@ export class TransactionDiscountDto {
 	@IsOptional()
 	@IsEnum(TransactionDiscountType)
 	type?: TransactionDiscountType
-
 }
 
 export class CreateTransactionDiscountDto extends TransactionDiscountDto {}

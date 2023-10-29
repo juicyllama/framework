@@ -1,4 +1,4 @@
-import { RedocOptions } from '@juicyllama/nestjs-redoc'
+import { RedocOptions } from '@juicyllama/core'
 
 export function installAiDocs(docs: RedocOptions, exclude_tags?: string[]): RedocOptions {
 	const group = 'Ai'

@@ -13,7 +13,7 @@ By default, npx will check whether command exists in `$PATH`, or in the local pr
 ### With npm
 
 ```bash
-npm install -D vitest
+pnpm install -D vitest
 ```
 
 ### or with yarn

@@ -25,7 +25,7 @@ function click(button: CustomButton) {
 			@click="click(button)">
 			<q-icon
 				v-if="button.icon?.name"
-				:name="`${button.icon?.type ?? 'fa-duotone'} ${button.icon?.name}`"
+				:name="`${button.icon?.type} ${button.icon?.name}`"
 				class="JLIcon" />
 			{{ button.label }}
 		</q-btn>

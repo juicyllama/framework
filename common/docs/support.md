@@ -1,8 +1,7 @@
-## Beta
-
-Our framework is currently in a beta phase while we work our way to a stable version 1.0.0.
-
-Feel free to create issues, discussions and/or pull requests with your contributions to any of our modules.
+---
+title: Support
+sidebar: false
+---
 
 ## Need Help?
 

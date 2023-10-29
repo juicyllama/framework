@@ -140,7 +140,7 @@ async function selectGravatar(): Promise<User> {
 									<q-btn
 										v-if="scope.canAddFiles"
 										type="a"
-										icon="fa-duotone fa-folder-arrow-up"
+										icon="open_in_browser"
 										@click="scope.pickFiles"
 										round
 										dense

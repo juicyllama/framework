@@ -1,4 +1,4 @@
-import { RedocOptions } from '@juicyllama/nestjs-redoc'
+import { RedocOptions } from '@juicyllama/core'
 
 export function installEcommerceDocs(docs: RedocOptions, exclude_tags?: string[]): RedocOptions {
 	const group = 'Ecommerce'

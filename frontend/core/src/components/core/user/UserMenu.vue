@@ -18,7 +18,7 @@ if (props?.show?.profile) {
 	userMenu.items.push({
 		title: 'Your Profile',
 		caption: '',
-		icon: `${props.icon?.type ? props.icon.type : 'fa-duotone'} fa-user`,
+		icon: `${props.icon?.type ? props.icon.type : 'person'} `,
 		link: '/profile',
 	})
 }
@@ -27,7 +27,7 @@ if (props?.show?.billing) {
 	userMenu.items.push({
 		title: 'Billing',
 		caption: '',
-		icon: `${props.icon?.type ? props.icon.type : 'fa-duotone'} fa-file-invoice`,
+		icon: `${props.icon?.type ? props.icon.type : ''} description`,
 		link: '/invoices',
 	})
 }
@@ -36,7 +36,7 @@ if (admin.value && props?.show?.admin) {
 	userMenu.items.push({
 		title: 'Admin',
 		caption: '',
-		icon: `${props.icon?.type ? props.icon.type : 'fa-duotone'} fa-cog`,
+		icon: `${props.icon?.type ? props.icon.type : ''} 'settings'`,
 		link: '/admin',
 	})
 }

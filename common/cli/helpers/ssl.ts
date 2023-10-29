@@ -1,7 +1,7 @@
 import { exec } from 'child_process'
 import { cli_error, cli_log } from './logging'
 import { currentPath, fileExists } from './files'
-import { App } from './apps'
+import { App } from '../types/apps'
 import path from 'path'
 
 async function createSSL(app: App) {
@@ -18,6 +18,7 @@ async function createSSL(app: App) {
 
 export async function setupSSL(app: App) {
 	const file = path.resolve(currentPath, app.ssl, `${app.domain}-key.pem`)
+
 	if (!fileExists(file)) {
 		await createSSL(app)
 	}

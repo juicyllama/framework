@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/ecommerce",
-    "version": "0.0.6",
+    "version": "0.0.8",
     "description": "Juicyllama Ecommerce Module",
     "author": {
         "name": "JuicyLlama Studio",
@@ -32,14 +32,10 @@
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
     },
-    "devDependencies": {
-        "@juicyllama/dev": "workspace:^"
-    },
     "dependencies": {
         "@juicyllama/app-store": "workspace:^",
         "@juicyllama/core": "workspace:^",
         "@juicyllama/crm": "workspace:^",
-        "@juicyllama/nestjs-redoc": "workspace:^",
         "@juicyllama/utils": "workspace:^",
         "@juicyllama/websites": "workspace:^"
     }

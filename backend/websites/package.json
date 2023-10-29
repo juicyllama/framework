@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/websites",
-    "version": "0.0.6",
+    "version": "0.0.8",
     "description": "Juicyllama Websites Module ",
     "author": {
         "name": "JuicyLlama Studio",
@@ -32,12 +32,8 @@
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
     },
-    "devDependencies": {
-        "@juicyllama/dev": "workspace:^"
-    },
     "dependencies": {
         "@juicyllama/core": "workspace:^",
-        "@juicyllama/nestjs-redoc": "workspace:^",
         "@juicyllama/utils": "workspace:^"
     }
 }

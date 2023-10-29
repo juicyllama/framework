@@ -42,6 +42,9 @@ const extendedOptions = computed(() => {
 })
 
 const dataDetails = computed<ChartData>(() => {
+	if (props.dataMapper) {
+		return props.dataMapper(loadedData.value as any)
+	}
 	return loadedData.value
 })
 
@@ -64,10 +67,8 @@ const getData = async () => {
 			isLoading.value = false
 		}
 	} else {
-		logger({ severity: LogSeverity.ERROR, message: `Missing 'endpoint' for isLoading data for chart` })
+		logger({ severity: LogSeverity.ERROR, message: `Missing 'endpoint' for data for chart with dynamicData=true` })
 	}
-
-	isLoading.value = false
 }
 
 onMounted(async () => {
@@ -85,7 +86,7 @@ onMounted(async () => {
 	<q-spinner v-if="isLoading" color="primary" size="3em" />
 	<template v-else>
 		<div v-if="isError">
-			<q-icon size="15" class="ml-2" name="fa-regular fa-circle-exclamation" /> Failed to load
+			<q-icon size="15" class="ml-2" name="error" /> Failed to load
 		</div>
 		<component v-else :is="comps[type]" :data="dataDetails" :options="extendedOptions" />
 	</template>

@@ -46,6 +46,7 @@ const emit = defineEmits(['update:show', 'update:modelValue'])
 const props = defineProps({
 	show: Boolean,
 	allowedFileType: String,
+	endpoint: String,
 })
 const screen = ref(1)
 const uploadResult = ref(null)
@@ -107,7 +108,7 @@ const onStartButtonClicked = async () => {
 		// 	import_mode: store.importMode,
 		// })
 
-		const res = await uploadFile(form)
+		const res = await uploadFile(props.endpoint, form)
 		uploadResult.value = {
 			status: 'SUCCESS',
 			details: res,

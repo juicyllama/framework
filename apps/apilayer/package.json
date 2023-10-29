@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-apilayer",
-    "version": "0.0.45",
+    "version": "0.0.47",
     "description": "Juicyllama ApiLayer App",
     "author": {
         "name": "JuicyLlama Studio",
@@ -36,8 +36,5 @@
     "dependencies": {
         "@juicyllama/core": "workspace:^",
         "@juicyllama/utils": "workspace:^"
-    },
-    "devDependencies": {
-        "@juicyllama/dev": "workspace:^"
     }
 }

@@ -6,7 +6,7 @@ import { TransactionDiscountsModule } from './transactions/discounts/discounts.m
 	imports: [
 		forwardRef(() => StoresModule),
 		forwardRef(() => TransactionsModule),
-		forwardRef(() => TransactionDiscountsModule)
+		forwardRef(() => TransactionDiscountsModule),
 	],
 })
 export class EcommerceModule {}

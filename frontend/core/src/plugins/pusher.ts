@@ -10,6 +10,11 @@ export const pusherCreds = {
 	PUSHER_CHANNEL: process.env.VITE_PUSHER_CHANNEL,
 }
 
+export async function startPusher() {
+	pusherCreds.PUSHER_KEY = <string>process.env.VITE_PUSHER_KEY
+	pusherCreds.PUSHER_CHANNEL = <string>process.env.VITE_PUSHER_CHANNEL
+}
+
 export async function loadPusher(event: string, callback: Function): Promise<void> {
 	const Pusher = await import('pusher-js')
 

@@ -37,8 +37,5 @@
     "dependencies": {
         "@juicyllama/core": "workspace:^",
         "@juicyllama/utils": "workspace:^"
-    },
-    "devDependencies": {
-        "@juicyllama/dev": "workspace:^"
     }
 }

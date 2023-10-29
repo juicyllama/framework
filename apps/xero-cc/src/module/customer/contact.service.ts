@@ -46,7 +46,12 @@ export class ContactService {
 
 		this.logger.debug(`[${domain}] Create xero contact - request`, account)
 		const xero = await this.authService.accessToken()
-		const response = await xero.accountingApi.createContacts('', { contacts: [accountToContact(account)] }, null,true)
+		const response = await xero.accountingApi.createContacts(
+			'',
+			{ contacts: [accountToContact(account)] },
+			null,
+			true,
+		)
 		this.logger.debug(`[${domain}] Create xero contact - response:`, response)
 
 		const xero_response_body = response?.body

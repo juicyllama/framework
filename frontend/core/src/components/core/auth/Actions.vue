@@ -66,15 +66,16 @@ onMounted(async () => {
 
 			<div class="auth_action_sso" v-if="password">
 				<q-btn
-					icon="fa-regular fa-key"
+					icon="key"
 					class="q-mr-xs button-primary"
 					@click="router.push('/passwordless')"
 					v-if="!passwordless" />
-				<q-btn icon="fa-regular fa-asterisk" class="q-mr-xs" @click="router.push('/login')" v-if="!password" />
-				<q-btn icon="fa-brands fa-google" class="q-mr-xs" @click="doGoogleLogin" v-if="props.google" />
-				<q-btn icon="fa-brands fa-microsoft" class="q-mr-xs" @click="doMicrosoftLogin" v-if="props.facebook" />
-				<q-btn icon="fa-brands fa-linkedin" class="q-mr-xs" @click="doLinkedinLogin" v-if="props.linkedin" />
-				<q-btn icon="fa-brands fa-windows" class="q-mr-xs" @click="doAzureSso" v-if="props.adazure" />
+				<q-btn icon="asterisk" class="q-mr-xs" @click="router.push('/login')" v-if="!password" />
+				<!-- todo: add icons for social login brands -->
+				<q-btn class="q-mr-xs" @click="doGoogleLogin" v-if="props.google" />
+				<q-btn class="q-mr-xs" @click="doMicrosoftLogin" v-if="props.facebook" />
+				<q-btn class="q-mr-xs" @click="doLinkedinLogin" v-if="props.linkedin" />
+				<q-btn class="q-mr-xs" @click="doAzureSso" v-if="props.adazure" />
 			</div>
 			<div class="auth_action_link" v-if="reset || passwordless">
 				<router-link to="/login"><a href="#">Back</a></router-link>

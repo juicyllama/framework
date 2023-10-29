@@ -28,15 +28,15 @@ export function buildAppForm(
 			setting.checkbox?.required
 
 		let field = setting.input?.type === AppInputType.text ? FormFieldField.INPUT : null
-		
-		if(setting.hidden) {
+
+		if (setting.hidden) {
 			field = FormFieldField.HIDDEN
 		}
-	
+
 		let type = setting.input?.type === AppInputType.text ? FormFieldType.TEXT : null
-		
-		if(setting.private) {
-			type = FormFieldType.PASSWORD	
+
+		if (setting.private) {
+			type = FormFieldType.PASSWORD
 		}
 
 		fields.push({

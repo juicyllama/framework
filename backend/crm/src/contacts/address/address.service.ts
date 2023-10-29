@@ -22,15 +22,16 @@ export class ContactAddressService extends BaseService<T> {
 	}
 
 	async create(data: DeepPartial<T>): Promise<T> {
+		const address = await this.findOne({
+			where: {
+				contact_id: data.contact_id,
+				address_1: data.address_1,
+				post_code: data.post_code,
+				country_iso: data.country_iso,
+			},
+		})
 
-		const address = await this.findOne({ where: {
-			contact_id: data.contact_id,
-			address_1: data.address_1,
-			post_code: data.post_code,
-			country_iso: data.country_iso
-		}})
-
-		if(address) {
+		if (address) {
 			return address
 		}
 
