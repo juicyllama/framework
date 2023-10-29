@@ -7,10 +7,11 @@ export class Strings {
 	 */
 
 	static capitalize(str: string): string {
-		if (!str || str.length < 2) {
+		try {
+			return str.charAt(0).toUpperCase() + str.slice(1)
+		}catch (e) {
 			return ''
 		}
-		return str.charAt(0).toUpperCase() + str.slice(1)
 	}
 
 	/**
