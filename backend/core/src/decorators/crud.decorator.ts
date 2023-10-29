@@ -334,7 +334,7 @@ function currencyFieldsDecorator(currency_field?: string, currency_fields?: stri
 
 	return [
 		ApiQuery({
-			name: 'currency',
+			name: 'convert_currencies_to',
 			description: `The currency you would like to return the results in, it will use \`${currency_field}\` and convert the values for fields: \`${currency_fields.join(
 				', ',
 			)}\``,

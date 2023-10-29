@@ -23,9 +23,9 @@ export async function crudFindAll<T>(options: {
 	order_by?: string
 	currency?: CurrencyOptions
 }): Promise<T[]> {
-	if (options.query.currency && options.currency) {
-		options.currency.currency = options.query.currency
-		delete options.query.currency
+	if (options.query.convert_currencies_to && options.currency) {
+		options.currency.currency = options.query.convert_currencies_to
+		delete options.query.convert_currencies_to
 	}
 
 	const where = options.tQuery.buildWhere({
@@ -48,9 +48,9 @@ export async function crudFindOne<T>(options: {
 }): Promise<T> {
 	const PRIMARY_KEY = TypeOrm.getPrimaryKey<T>(options.service.repository)
 
-	if (options.query.currency && options.currency) {
-		options.currency.currency = options.query.currency
-		delete options.query.currency
+	if (options.query.convert_currencies_to && options.currency) {
+		options.currency.currency = options.query.convert_currencies_to
+		delete options.query.convert_currencies_to
 	}
 
 	const where = {
@@ -119,9 +119,9 @@ export async function crudCharts<T>(options: {
 }): Promise<ChartsResponseDto> {
 	const fields = _.castArray(options.fields)
 
-	if (options.query.currency && options.currency) {
-		options.currency.currency = options.query.currency
-		delete options.query.currency
+	if (options.query.convert_currencies_to && options.currency) {
+		options.currency.currency = options.query.convert_currencies_to
+		delete options.query.convert_currencies_to
 	}
 
 	const where = options.tQuery.buildWhere({

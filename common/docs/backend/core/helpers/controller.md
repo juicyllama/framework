@@ -231,3 +231,5 @@ async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Que
 	})
 }
 ```
+
+This will expose a new option `convert_currencies_to` on the endpoint. Which will return the `CURRENCY_FIELDS` in the currency passed in the `convert_currencies_to` option. 
