@@ -36,7 +36,6 @@ describe('Transactions Currency Testing', () => {
 			})
 		})
 
-
 		it('Create a bunch of transactions', async () => {
 
 			const transactions: TRANSACTION_T[] = []

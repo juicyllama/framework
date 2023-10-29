@@ -21,6 +21,7 @@ export class WordPressService {
 		try {
 			//@ts-ignore
 			const { WordpressUsersModule, WordpressUsersService, WordpressContext } = await import(
+				//@ts-ignore
 				'@juicyllama/app-wordpress'
 			)
 			const wordpressUsersModule = await this.lazyModuleLoader.load(() => WordpressUsersModule)
