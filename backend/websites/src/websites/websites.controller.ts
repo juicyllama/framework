@@ -1,6 +1,6 @@
 import { Body, Controller, forwardRef, Inject, Param, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { StatsMethods, StatsResponseDto } from '@juicyllama/utils'
+import { StatsMethods, StatsResponseDto, Strings } from '@juicyllama/utils'
 import { WebsitesService } from './websites.service'
 import {
 	Query as TQuery,
@@ -32,7 +32,7 @@ import {
 	WEBSITES_DEFAULT_ORDER_BY,
 } from './websites.constants'
 
-@ApiTags('Websites')
+@ApiTags(Strings.capitalize(Strings.plural(WEBSITES_NAME)))
 @UserAuth()
 @Controller('websites/website')
 export class WebsitesController {
