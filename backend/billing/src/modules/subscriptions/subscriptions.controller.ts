@@ -20,7 +20,12 @@ export class SubscriptionsController {
 		@Inject(forwardRef(() => JLQuery)) private readonly query: JLQuery<T>,
 	) {}
 
-	@ReadManyDecorator(E, SubscriptionSelect, SubscriptionOrderBy, SubscriptionRelations)
+	@ReadManyDecorator({
+		entity: E,
+		selectEnum: SubscriptionSelect,
+		orderByEnum: SubscriptionOrderBy,
+		relationsEnum: SubscriptionRelations,
+	})
 	async listAll(@Req() req, @AccountId() account_id: number, @Query() query): Promise<T[]> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 

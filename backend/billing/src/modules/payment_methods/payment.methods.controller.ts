@@ -160,7 +160,12 @@ export class PaymentMethodsController {
 		return payment_method
 	}
 
-	@ReadManyDecorator(E, PaymentMethodSelect, PaymentMethodOrderBy, PaymentMethodRelations)
+	@ReadManyDecorator({
+		entity: E,
+		selectEnum: PaymentMethodSelect,
+		orderByEnum: PaymentMethodOrderBy,
+		relationsEnum: PaymentMethodRelations,
+	})
 	@ApiQuery({
 		name: 'currency',
 		description: 'The currency you are requesting data for',

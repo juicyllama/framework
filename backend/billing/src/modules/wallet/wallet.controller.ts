@@ -36,7 +36,12 @@ export class WalletController {
 		return await this.walletService.getBalances(account)
 	}
 
-	@ReadManyDecorator(E, WalletSelect, WalletOrderBy, WalletRelations)
+	@ReadManyDecorator({
+		entity: E,
+		selectEnum: WalletSelect,
+		orderByEnum: WalletOrderBy,
+		relationsEnum: WalletRelations,
+	})
 	async listAll(@Req() req, @AccountId() account_id: number, @Query() query): Promise<T[]> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 

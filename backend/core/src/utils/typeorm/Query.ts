@@ -21,9 +21,9 @@ import {
 import _ from 'lodash'
 import { TypeOrm } from './TypeOrm'
 import { isNil, omitBy } from 'lodash'
-import { ComparisonOperator, Enums, Env, getMySQLTimeInterval, Logger } from '@juicyllama/utils'
+import { ComparisonOperator, Enums, Env, getMySQLTimeInterval, Logger, SupportedCurrencies } from '@juicyllama/utils'
 import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder'
-import { ChartOptions } from './types'
+import { ChartOptions, CurrencyOptions } from '../../types/typeorm'
 import { ImportMode, BulkUploadResponse } from '../../types/common'
 
 const logger = new Logger()
@@ -122,13 +122,19 @@ export class Query<T> {
 	 * @param {string[]} [relations]
 	 */
 
-	async findOneById(repository: Repository<T>, id: number, relations?: string[]): Promise<T> {
+	async findOneById(
+		repository: Repository<T>,
+		id: number,
+		relations?: string[],
+		currency?: CurrencyOptions,
+	): Promise<T> {
 		const where = {}
 		where[this.getPrimaryKey(repository)] = id
-		return this.findOne(repository, {
+		const result = <T>await this.findOne(repository, {
 			where: where,
 			relations: relations?.length ? relations : this.getRelations(repository),
 		})
+		return <T>await this.convertCurrency<T>(result, currency)
 	}
 
 	/**
@@ -142,12 +148,14 @@ export class Query<T> {
 		repository: Repository<T>,
 		where: FindOptionsWhere<T>[] | FindOptionsWhere<T>,
 		options?: FindManyOptions,
+		currency?: CurrencyOptions,
 	): Promise<T> {
 		options = TypeOrm.findOneOptionsWrapper<T>(repository, options)
-		return this.findOne(repository, {
+		const result = <T>await this.findOne(repository, {
 			...options,
 			where: where,
 		})
+		return <T>await this.convertCurrency<T>(result, currency)
 	}
 
 	/**
@@ -156,13 +164,14 @@ export class Query<T> {
 	 * @param options
 	 */
 
-	findOne(repository: Repository<T>, options?: FindOneOptions): Promise<T> {
+	async findOne(repository: Repository<T>, options?: FindOneOptions, currency?: CurrencyOptions): Promise<T> {
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}]`, { options: options })
 		}
 
 		options = TypeOrm.findOneOptionsWrapper<T>(repository, options)
-		return repository.findOne(options)
+		const result = <T>await repository.findOne(options)
+		return <T>await this.convertCurrency<T>(result, currency)
 	}
 
 	/**
@@ -171,13 +180,14 @@ export class Query<T> {
 	 * @param options
 	 */
 
-	findAll(repository: Repository<T>, options?: FindManyOptions): Promise<T[]> {
+	async findAll(repository: Repository<T>, options?: FindManyOptions, currency?: CurrencyOptions): Promise<T[]> {
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][FIND][MANY][${repository.metadata.tableName}]`, { options: options })
 		}
 
 		options = TypeOrm.findAllOptionsWrapper<T>(repository, options)
-		return repository.find(options)
+		const result = <T[]>await repository.find(options)
+		return <T[]>await this.convertCurrency<T>(result, currency)
 	}
 
 	/**
@@ -273,7 +283,12 @@ export class Query<T> {
 	 * @param options
 	 */
 
-	async charts(repository: Repository<T>, field: string, options: ChartOptions): Promise<any> {
+	async charts(
+		repository: Repository<T>,
+		field: string,
+		options: ChartOptions,
+		currency?: CurrencyOptions,
+	): Promise<T[]> {
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][CHARTS][${repository.metadata.tableName}]`, { field, options: options })
 		}
@@ -298,7 +313,8 @@ export class Query<T> {
 		if (options.period) {
 			queryBuilder = queryBuilder.addGroupBy('time_interval')
 		}
-		return queryBuilder.getRawMany()
+		const result = <T[]>await queryBuilder.getRawMany()
+		return <T[]>await this.convertCurrency<T>(result, currency)
 	}
 
 	/**
@@ -759,6 +775,65 @@ export class Query<T> {
 				[dedup_field]: In(records),
 			})
 			.execute()
+	}
+
+	/**
+	 * Converts currency_fields to a spcific currency
+	 */
+
+	async convertCurrency<T>(result: T | T[], currency?: CurrencyOptions): Promise<T | T[]> {
+		if (
+			!currency ||
+			!currency.currency ||
+			!currency.fxService ||
+			!currency.currency_field ||
+			!currency.currency_fields.length
+		)
+			return result
+
+		const logger = new Logger()
+
+		if (Array.isArray(result)) {
+			logger.debug(`[QUERY][CONVERTCURRENCY] Converting ${result.length} Records to ${currency.currency}`, {
+				currency_field: currency.currency_field,
+				currency_fields: currency.currency_fields,
+			})
+
+			for (const r in result) {
+				if (
+					SupportedCurrencies[result[r][currency.currency_field]] !== SupportedCurrencies[currency.currency]
+				) {
+					for (const field of currency.currency_fields) {
+						result[r][field] = await currency.fxService.convert(
+							result[r][field],
+							SupportedCurrencies[result[r][currency.currency_field]],
+							SupportedCurrencies[currency.currency],
+							result[r]['created_at'] ?? new Date(),
+						)
+					}
+					result[r][currency.currency_field] = SupportedCurrencies[currency.currency]
+				}
+			}
+			return <T[]>result
+		} else {
+			logger.debug(`[QUERY][CONVERTCURRENCY] Converting record to ${currency.currency}`, {
+				currency_field: currency.currency_field,
+				currency_fields: currency.currency_fields,
+			})
+
+			if (result[currency.currency_field] != SupportedCurrencies[currency.currency]) {
+				for (const field of currency.currency_fields) {
+					result[field] = await currency.fxService.convert(
+						result[field],
+						SupportedCurrencies[field[currency.currency_field]],
+						SupportedCurrencies[currency.currency],
+						result['created_at'] ?? new Date(),
+					)
+				}
+				result[currency.currency_field] = SupportedCurrencies[currency.currency]
+			}
+			return <T>result
+		}
 	}
 }
 

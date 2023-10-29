@@ -34,7 +34,12 @@ export class InvoicesController {
 		@Inject(forwardRef(() => JLQuery)) private readonly query: JLQuery<T>,
 	) {}
 
-	@ReadManyDecorator(E, InvoiceSelect, InvoiceOrderBy, InvoiceRelations)
+	@ReadManyDecorator({
+		entity: E,
+		selectEnum: InvoiceSelect,
+		orderByEnum: InvoiceOrderBy,
+		relationsEnum: InvoiceRelations,
+	})
 	@ApiQuery({
 		name: 'currency',
 		description: 'The currency you are requesting data for',
@@ -186,7 +191,10 @@ export class InvoicesController {
 		return await this.invoicesService.downloadInvoice(user, invoice_id)
 	}
 
-	@ReadChartsDecorator(E, InvoiceSelect)
+	@ReadChartsDecorator({
+		entity: E,
+		selectEnum: InvoiceSelect,
+	})
 	async charts(
 		@Req() req,
 		@Query() query: any,

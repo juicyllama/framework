@@ -16,7 +16,6 @@ import { CreateTagDto, UpdateTagDto } from './tags.dtos'
 import { UserAuth } from '../../decorators/UserAuth.decorator'
 import { TypeOrm } from '../../utils/typeorm/TypeOrm'
 import { TagsOrderBy, TagsRelations, TagsSelect } from './tags.enum'
-import { AccountId } from '../../decorators/AccountId.decorator'
 
 const E = Tag
 type T = Tag
@@ -34,13 +33,19 @@ export class TagsController {
 	) {}
 
 	@UserAuth()
-	@CreateDecorator(E, NAME)
+	@CreateDecorator({ entity: E, name: NAME })
 	async create(@Body() data: CreateTagDto): Promise<T> {
 		return this.service.create(data.name)
 	}
 
 	@UserAuth()
-	@ReadManyDecorator(E, TagsSelect, TagsOrderBy, TagsRelations, NAME)
+	@ReadManyDecorator({
+		entity: E,
+		selectEnum: TagsSelect,
+		orderByEnum: TagsOrderBy,
+		relationsEnum: TagsRelations,
+		name: NAME,
+	})
 	async findAll(@Req() req, @Query() query): Promise<T[]> {
 		const where = this.tQuery.buildWhere({
 			repository: this.service.repository,
@@ -54,7 +59,7 @@ export class TagsController {
 	}
 
 	@UserAuth()
-	@ReadStatsDecorator(NAME)
+	@ReadStatsDecorator({ name: NAME })
 	async stats(@Req() req, @Query() query, @Query('method') method?: StatsMethods): Promise<StatsResponseDto> {
 		if (!method) {
 			method = StatsMethods.COUNT
@@ -83,8 +88,14 @@ export class TagsController {
 	}
 
 	@UserAuth()
-	@ReadOneDecorator(E, PRIMARY_KEY, TagsSelect, TagsRelations, NAME)
-	async findOne(@Req() req, @Param() params, @Query() query): Promise<T> {
+	@ReadOneDecorator({
+		entity: E,
+		primaryKey: PRIMARY_KEY,
+		selectEnum: TagsSelect,
+		relationsEnum: TagsRelations,
+		name: NAME,
+	})
+	async findOne(@Param() params, @Query() query): Promise<T> {
 		const where = {
 			[PRIMARY_KEY]: params[PRIMARY_KEY],
 		}
@@ -94,8 +105,8 @@ export class TagsController {
 	}
 
 	@UserAuth()
-	@UpdateDecorator(E, PRIMARY_KEY, NAME)
-	async update(@Req() req, @Body() data: UpdateTagDto, @AccountId() account_id: number, @Param() params): Promise<T> {
+	@UpdateDecorator({ entity: E, primaryKey: PRIMARY_KEY, name: NAME })
+	async update(@Body() data: UpdateTagDto, @Param() params): Promise<T> {
 		return await this.service.update({
 			[PRIMARY_KEY]: params[PRIMARY_KEY],
 			name: data.name,
@@ -103,8 +114,8 @@ export class TagsController {
 	}
 
 	@UserAuth()
-	@DeleteDecorator(E, PRIMARY_KEY, NAME)
-	async remove(@Req() req, @AccountId() account_id: number, @Param() params): Promise<void> {
+	@DeleteDecorator({ entity: E, primaryKey: PRIMARY_KEY, name: NAME })
+	async remove(@Param() params): Promise<void> {
 		const record = await this.service.findById(params[PRIMARY_KEY])
 		return await this.service.purge(record)
 	}

@@ -44,7 +44,7 @@ The following methods can be used in your application:
 Create a new object in the database.
 
 ```typescript
-@CreateDecorator(E, NAME)
+@CreateDecorator({entity: E, name: NAME})
 async create(@Body() data: CreateExampleDto): Promise<T> {
     return await crudCreate<T>({
         service: this.service,
@@ -58,7 +58,13 @@ async create(@Body() data: CreateExampleDto): Promise<T> {
 Find all objects in the database.
 
 ```typescript
-@ReadManyDecorator(E, ExampleSelect, ExampleOrderBy, ExampleRelations, NAME)
+@ReadManyDecorator({
+    entity: E, 
+    selectEnum: ExampleSelect, 
+    orderByEnum: ExampleOrderBy,
+    relationsEnum: ExampleRelations, 
+    name: NAME
+})
 async findAll(@AccountId() account_id: number, @Query() query): Promise<T[]> {
 	return await crudFindAll<T>({
 		service: this.service,
@@ -76,7 +82,13 @@ async findAll(@AccountId() account_id: number, @Query() query): Promise<T[]> {
 Find one object in the database.
 
 ```typescript
-@ReadOneDecorator(E, PRIMARY_KEY, ExampleSelect, ExampleRelations, NAME)
+@ReadOneDecorator({
+    entity: E, 
+    primaryKey: PRIMARY_KEY, 
+    selectEnum: ExampleSelect, 
+    relationsEnum: ExampleRelations, 
+    name: NAME
+})
 async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
 	return await crudFindOne<T>({
 		service: this.service,
@@ -91,7 +103,7 @@ async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Que
 Get stats about the objects in the database.
 
 ```typescript
-@ReadStatsDecorator(NAME)
+@ReadStatsDecorator({name: NAME})
 	async stats(
 		@AccountId() account_id: number,
 		@Query() query,
@@ -114,7 +126,11 @@ Get stats about the objects in the database.
 Get datasets for pie/line charts from the database.
 
 ```typescript
-	@ReadChartsDecorator(E, ExampleSelect, NAME)
+	@ReadChartsDecorator({
+		entity: E,
+		name: NAME, 
+		selectEnum: ExampleSelect
+	})
 	async charts(
 		@Query() query: any,
 		@Query('search') search: string,
@@ -154,7 +170,7 @@ Document here
 Update an object in the database.
 
 ```typescript
-@UpdateDecorator(E, NAME)
+@UpdateDecorator({entity: E, primaryKey: PRIMARY_KEY, name: NAME})
 async update(@Param() params, @Body() data: UpdateExampleDto): Promise<T> {
     return await crudUpdate<T>({
         service: this.service,
@@ -169,7 +185,7 @@ async update(@Param() params, @Body() data: UpdateExampleDto): Promise<T> {
 Delete an object in the database.
 
 ```typescript
-@DeleteDecorator(E, NAME)
+@DeleteDecorator({entity: E, primaryKey: PRIMARY_KEY, name: NAME})
 async delete(@Param() params): Promise<T> {
     return await crudDelete<T>({
         service: this.service,
@@ -178,3 +194,40 @@ async delete(@Param() params): Promise<T> {
 }
 ```
 
+
+## Currency Conversion
+
+The `findAll` `findOne` and `charts` endpoints support currency conversion, this means that the results will be converted into a specific currency before being returned.
+
+You can pass details into both the Decorator and the Controller as follows:
+
+```typescript
+import { FxService } from '@juicyllama/core'
+//inject FxService into the constructor
+
+const CURRENCY_FIELD = 'currency' // the field containing the current of the record
+const CURRENCY_FIELDS = ['total', 'amount'] //the fields containing amounts to be converted
+
+@ReadOneDecorator({
+    entity: E, 
+    primaryKey: PRIMARY_KEY, 
+    selectEnum: ExampleSelect, 
+    relationsEnum: ExampleRelations, 
+    name: NAME,
+	currency_field: CURRENCY_FIELD,
+	currency_fields: CURRENCY_FIELDS
+})
+async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
+	return await crudFindOne<T>({
+		service: this.service,
+		query: query,
+		primaryKey: params[PRIMARY_KEY],
+		currency: {
+			fxService: fxService, //injected in the constructor
+			currency_field: CURRENCY_FIELD,
+			currency_fields: CURRENCY_FIELDS
+			//currency is not required as it will be taken from the query param "currency" passed by the client
+		}
+	})
+}
+```

@@ -57,14 +57,20 @@ export class UsersController {
 		@Inject(forwardRef(() => StorageService)) readonly storageService: StorageService,
 	) {}
 
-	@CreateDecorator(E, NAME)
+	@CreateDecorator({ entity: E, name: NAME })
 	async create(@Req() req, @AccountId() account_id: number, @Body() data: CreateUserDto): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		const account = await this.accountService.findById(account_id)
 		return await this.service.invite(account, data)
 	}
 
-	@ReadManyDecorator(E, UserSelect, UserOrderBy, UserRelations, NAME)
+	@ReadManyDecorator({
+		entity: E,
+		selectEnum: UserSelect,
+		orderByEnum: UserOrderBy,
+		relationsEnum: UserRelations,
+		name: NAME,
+	})
 	async findAll(@AccountId() account_id: number, @Query() query): Promise<T[]> {
 		const users = await crudFindAll<T>({
 			service: this.service,
@@ -81,7 +87,7 @@ export class UsersController {
 		return users
 	}
 
-	@ReadStatsDecorator(NAME)
+	@ReadStatsDecorator({ name: NAME })
 	async stats(
 		@AccountId() account_id: number,
 		@Query() query,
@@ -97,7 +103,7 @@ export class UsersController {
 		})
 	}
 
-	@ReadChartsDecorator(E, UserSelect, NAME)
+	@ReadChartsDecorator({ entity: E, selectEnum: UserSelect, name: NAME })
 	async charts(
 		@Query() query: any,
 		@Query('search') search: string,
@@ -119,7 +125,13 @@ export class UsersController {
 		})
 	}
 
-	@ReadOneDecorator(E, PRIMARY_KEY, UserSelect, UserRelations, NAME)
+	@ReadOneDecorator({
+		entity: E,
+		selectEnum: UserSelect,
+		primaryKey: PRIMARY_KEY,
+		relationsEnum: UserRelations,
+		name: NAME,
+	})
 	async findOne(@AccountId() account_id: number, @Param() params): Promise<T> {
 		const user = await this.service.findOne({
 			where: {
@@ -138,7 +150,7 @@ export class UsersController {
 		return user
 	}
 
-	@UpdateDecorator(E, PRIMARY_KEY, NAME)
+	@UpdateDecorator({ entity: E, primaryKey: PRIMARY_KEY, name: NAME })
 	async update(
 		@Req() req,
 		@AccountId() account_id: number,
@@ -162,7 +174,7 @@ export class UsersController {
 	}
 
 	@ApiOperation({ summary: `Upload ${Strings.capitalize(NAME)} Avatar` })
-	@UploadImageDecorator(E)
+	@UploadImageDecorator({ entity: E })
 	@Patch(`:user_id/avatar`)
 	async uploadAvatarFile(
 		@Req() req,
@@ -191,7 +203,7 @@ export class UsersController {
 		return await this.service.uploadAvatar(user, file)
 	}
 
-	@BulkUploadDecorator(UPLOAD_FIELDS, UPLOAD_DUPLICATE_FIELD)
+	@BulkUploadDecorator({ supportedFields: UPLOAD_FIELDS, dedupField: UPLOAD_DUPLICATE_FIELD })
 	async bulkUpload(
 		@Req() req,
 		@Body() params: BulkUploadDto,
@@ -242,7 +254,7 @@ export class UsersController {
 		return await this.authService.assignRole(user, account, role)
 	}
 
-	@DeleteDecorator(E, PRIMARY_KEY, NAME)
+	@DeleteDecorator({ entity: E, primaryKey: PRIMARY_KEY, name: NAME })
 	async remove(@Req() req, @AccountId() account_id: number, @Param() params): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		return await crudDelete<T>({

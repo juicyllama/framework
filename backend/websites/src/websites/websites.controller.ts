@@ -42,7 +42,10 @@ export class WebsitesController {
 		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<WEBSITES_T>,
 	) {}
 
-	@CreateDecorator(WEBSITES_E, WEBSITES_NAME)
+	@CreateDecorator({
+		entity: WEBSITES_E,
+		name: WEBSITES_NAME,
+	})
 	async create(@Req() req, @Body() data: CreateWebsiteDto, @AccountId() account_id: number): Promise<WEBSITES_T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		return await crudCreate<WEBSITES_T>({
@@ -52,7 +55,13 @@ export class WebsitesController {
 		})
 	}
 
-	@ReadManyDecorator(WEBSITES_E, WebsiteSelect, WebsiteOrderBy, WebsiteRelations, WEBSITES_NAME)
+	@ReadManyDecorator({
+		entity: WEBSITES_E,
+		name: WEBSITES_NAME,
+		selectEnum: WebsiteSelect,
+		orderByEnum: WebsiteOrderBy,
+		relationsEnum: WebsiteRelations,
+	})
 	async findAll(@Query() query, @AccountId() account_id: number): Promise<WEBSITES_T[]> {
 		return await crudFindAll<WEBSITES_T>({
 			service: this.service,
@@ -64,7 +73,7 @@ export class WebsitesController {
 		})
 	}
 
-	@ReadStatsDecorator(WEBSITES_NAME)
+	@ReadStatsDecorator({ name: WEBSITES_NAME })
 	async stats(
 		@Query() query,
 		@AccountId() account_id: number,
@@ -80,7 +89,13 @@ export class WebsitesController {
 		})
 	}
 
-	@ReadOneDecorator(WEBSITES_E, WEBSITES_PRIMARY_KEY, WebsiteSelect, WebsiteRelations, WEBSITES_NAME)
+	@ReadOneDecorator({
+		entity: WEBSITES_E,
+		name: WEBSITES_NAME,
+		selectEnum: WebsiteSelect,
+		relationsEnum: WebsiteRelations,
+		primaryKey: WEBSITES_PRIMARY_KEY,
+	})
 	async findOne(@AccountId() account_id: number, @Param() params, @Query() query): Promise<WEBSITES_T> {
 		return await crudFindOne<WEBSITES_T>({
 			service: this.service,
@@ -90,7 +105,11 @@ export class WebsitesController {
 		})
 	}
 
-	@UpdateDecorator(WEBSITES_E, WEBSITES_PRIMARY_KEY, WEBSITES_NAME)
+	@UpdateDecorator({
+		entity: WEBSITES_E,
+		name: WEBSITES_NAME,
+		primaryKey: WEBSITES_PRIMARY_KEY,
+	})
 	async update(
 		@Req() req,
 		@AccountId() account_id: number,
@@ -105,7 +124,11 @@ export class WebsitesController {
 		})
 	}
 
-	@DeleteDecorator(WEBSITES_E, WEBSITES_PRIMARY_KEY, WEBSITES_NAME)
+	@DeleteDecorator({
+		entity: WEBSITES_E,
+		name: WEBSITES_NAME,
+		primaryKey: WEBSITES_PRIMARY_KEY,
+	})
 	async remove(@Req() req, @Param() params, @AccountId() account_id: number): Promise<WEBSITES_T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		return await crudDelete<WEBSITES_T>({

@@ -32,12 +32,13 @@ export class TransactionDiscountsController {
 		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<TRANSACTION_DISCOUNT_T>,
 	) {}
 
-	@ReadManyDecorator(
-		TRANSACTION_DISCOUNT_E,
-		TransactionDiscountSelect,
-		TransactionDiscountOrderBy,
-		TransactionDiscountRelations,
-	)
+	@ReadManyDecorator({
+		entity: TRANSACTION_DISCOUNT_E,
+		name: TRANSACTION_DISCOUNT_NAME,
+		selectEnum: TransactionDiscountSelect,
+		orderByEnum: TransactionDiscountOrderBy,
+		relationsEnum: TransactionDiscountRelations,
+	})
 	async findAll(@Query() query, @AccountId() account_id: number): Promise<TRANSACTION_DISCOUNT_T[]> {
 		return await crudFindAll<TRANSACTION_DISCOUNT_T>({
 			service: this.service,
@@ -49,7 +50,7 @@ export class TransactionDiscountsController {
 		})
 	}
 
-	@ReadStatsDecorator(TRANSACTION_DISCOUNT_NAME)
+	@ReadStatsDecorator({ name: TRANSACTION_DISCOUNT_NAME })
 	async stats(
 		@Query() query,
 		@AccountId() account_id: number,
@@ -65,13 +66,13 @@ export class TransactionDiscountsController {
 		})
 	}
 
-	@ReadOneDecorator(
-		TRANSACTION_DISCOUNT_E,
-		TRANSACTION_DISCOUNT_PRIMARY_KEY,
-		TransactionDiscountSelect,
-		TransactionDiscountRelations,
-		TRANSACTION_DISCOUNT_NAME,
-	)
+	@ReadOneDecorator({
+		entity: TRANSACTION_DISCOUNT_E,
+		name: TRANSACTION_DISCOUNT_NAME,
+		selectEnum: TransactionDiscountSelect,
+		relationsEnum: TransactionDiscountRelations,
+		primaryKey: TRANSACTION_DISCOUNT_PRIMARY_KEY,
+	})
 	async findOne(@AccountId() account_id: number, @Param() params, @Query() query): Promise<TRANSACTION_DISCOUNT_T> {
 		return await crudFindOne<TRANSACTION_DISCOUNT_T>({
 			service: this.service,

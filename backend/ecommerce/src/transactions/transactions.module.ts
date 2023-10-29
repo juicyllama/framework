@@ -10,6 +10,7 @@ import {
 	BeaconModule,
 	cacheConfig,
 	databaseConfig,
+	FxModule,
 	jwtConfig,
 	Query,
 } from '@juicyllama/core'
@@ -37,6 +38,7 @@ import { TransactionDiscountsModule } from './discounts/discounts.module'
 		forwardRef(() => ContactsModule),
 		forwardRef(() => StoresModule),
 		forwardRef(() => TransactionDiscountsModule),
+		forwardRef(() => FxModule),
 	],
 	controllers: [TransactionsController],
 	providers: [TransactionsService, Logger, Query],

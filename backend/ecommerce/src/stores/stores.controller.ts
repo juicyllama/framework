@@ -42,7 +42,10 @@ export class StoresController {
 		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<STORE_T>,
 	) {}
 
-	@CreateDecorator(STORE_E, STORE_NAME)
+	@CreateDecorator({
+		entity: STORE_E,
+		name: STORE_NAME,
+	})
 	async create(@Req() req, @Body() data: CreateStoreDto, @AccountId() account_id: number): Promise<STORE_T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		return await crudCreate<STORE_T>({
@@ -52,7 +55,13 @@ export class StoresController {
 		})
 	}
 
-	@ReadManyDecorator(STORE_E, StoreSelect, StoreOrderBy, StoreRelations)
+	@ReadManyDecorator({
+		entity: STORE_E,
+		name: STORE_NAME,
+		selectEnum: StoreSelect,
+		orderByEnum: StoreOrderBy,
+		relationsEnum: StoreRelations,
+	})
 	async findAll(@Query() query, @AccountId() account_id: number): Promise<STORE_T[]> {
 		return await crudFindAll<STORE_T>({
 			service: this.service,
@@ -64,7 +73,7 @@ export class StoresController {
 		})
 	}
 
-	@ReadStatsDecorator(STORE_NAME)
+	@ReadStatsDecorator({ name: STORE_NAME })
 	async stats(
 		@Query() query,
 		@AccountId() account_id: number,
@@ -80,7 +89,13 @@ export class StoresController {
 		})
 	}
 
-	@ReadOneDecorator(STORE_E, STORE_PRIMARY_KEY, StoreSelect, StoreRelations, STORE_NAME)
+	@ReadOneDecorator({
+		entity: STORE_E,
+		name: STORE_NAME,
+		selectEnum: StoreSelect,
+		relationsEnum: StoreRelations,
+		primaryKey: STORE_PRIMARY_KEY,
+	})
 	async findOne(@AccountId() account_id: number, @Param() params, @Query() query): Promise<STORE_T> {
 		return await crudFindOne<STORE_T>({
 			service: this.service,
@@ -90,7 +105,11 @@ export class StoresController {
 		})
 	}
 
-	@UpdateDecorator(STORE_E, STORE_PRIMARY_KEY, STORE_NAME)
+	@UpdateDecorator({
+		entity: STORE_E,
+		name: STORE_NAME,
+		primaryKey: STORE_PRIMARY_KEY,
+	})
 	async update(
 		@Req() req,
 		@AccountId() account_id: number,
@@ -105,7 +124,11 @@ export class StoresController {
 		})
 	}
 
-	@DeleteDecorator(STORE_E, STORE_PRIMARY_KEY, STORE_NAME)
+	@DeleteDecorator({
+		entity: STORE_E,
+		name: STORE_NAME,
+		primaryKey: STORE_PRIMARY_KEY,
+	})
 	async remove(@Req() req, @Param() params, @AccountId() account_id: number): Promise<STORE_T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		return await crudDelete<STORE_T>({

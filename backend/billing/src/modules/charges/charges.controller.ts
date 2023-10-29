@@ -21,7 +21,12 @@ export class ChargesController {
 		@Inject(forwardRef(() => JLQuery)) private readonly query: JLQuery<T>,
 	) {}
 
-	@ReadManyDecorator(E, ChargeSelect, ChargeOrderBy, ChargeRelations)
+	@ReadManyDecorator({
+		entity: E,
+		selectEnum: ChargeSelect,
+		orderByEnum: ChargeOrderBy,
+		relationsEnum: ChargeRelations,
+	})
 	@ApiQuery({
 		name: 'currency',
 		description: 'The currency you are requesting data for',

@@ -142,4 +142,12 @@ export class FxService {
 			date: date,
 		})
 	}
+
+	/**
+	 * Create a new FX rate
+	 * @param options
+	 */
+	async create(fxRate: Partial<FxRate>): Promise<FxRate> {
+		return await this.query.create(this.repository, fxRate)
+	}
 }

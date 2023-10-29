@@ -75,7 +75,12 @@ export class WithdrawalsController {
 		)
 	}
 
-	@ReadManyDecorator(E, WithdrawalSelect, WithdrawalOrderBy, WithdrawalRelations)
+	@ReadManyDecorator({
+		entity: E,
+		selectEnum: WithdrawalSelect,
+		orderByEnum: WithdrawalOrderBy,
+		relationsEnum: WithdrawalRelations,
+	})
 	@ApiQuery({
 		name: 'currency',
 		description: 'The currency you are requesting data for',
