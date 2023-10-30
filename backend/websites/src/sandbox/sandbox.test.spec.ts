@@ -1,4 +1,4 @@
-import { Website } from 'websites/websites.entity'
+import { Website } from '../websites/websites.entity'
 import { SandboxModule } from './sandbox.module'
 import { Scaffold, ScaffoldDto } from '@juicyllama/core'
 
