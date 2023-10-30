@@ -2,8 +2,7 @@
 import { Website } from './websites/websites.entity'
 
 // Modules
-import { WebsitesModule } from './websites.module'
-import { WebsiteModule } from './websites/websites.module'
+import { WebsitesModule } from './websites/websites.module'
 
 // Controllers
 import { WebsitesController } from './websites/websites.controller'
@@ -21,7 +20,6 @@ import { installWebsiteDocs } from './docs/install'
 export {
 	Website,
 	WebsitesModule,
-	WebsiteModule,
 	WebsitesController,
 	WebsitesService,
 	WebsiteDto,
