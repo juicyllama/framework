@@ -21,7 +21,7 @@ import { Fx } from '../entities/fx.entity.mongo'
 		TypeOrmModule.forFeature([NumberVerification, Fx], MONGODB),
 	],
 	controllers: [],
-	providers: [DataCacheService, Logger, Query],
+	providers: [DataCacheService, Fx, NumberVerification, Logger, Query],
 	exports: [DataCacheService, Fx, NumberVerification],
 })
 export class DataCacheModule {}
