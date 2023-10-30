@@ -1,15 +1,14 @@
+import { Website } from 'websites/websites.entity'
 import { SandboxModule } from './sandbox.module'
-import { Scaffold, ScaffoldDto } from '../test'
-import { Account } from '../modules/accounts/account.entity'
+import { Scaffold, ScaffoldDto } from '@juicyllama/core'
 
 const MODULE = SandboxModule
-type T = Account
-const E = Account
+type T = Website
+const E = Website
 
 describe(`Sandbox Fires Up`, () => {
 	const scaffolding = new Scaffold<T>()
 	let scaffold: ScaffoldDto<T>
-	let mock: Partial<T>
 
 	beforeAll(async () => {
 		scaffold = await scaffolding.up(MODULE)
