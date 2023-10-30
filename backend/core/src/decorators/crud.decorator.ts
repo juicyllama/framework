@@ -16,11 +16,14 @@ import { ImportMode } from '../types/common'
  * Create Decorator
  */
 export function CreateDecorator<T>(options: { entity: T; name: string }) {
-	return applyDecorators(
+
+	const decorators = [
 		ApiOperation({ summary: options?.name ? `Create ${Strings.capitalize(options.name)}` : 'Create' }),
 		ApiCreatedResponse(generateResponseObject(options.entity, 'Created')),
 		Post(),
-	)
+	]
+
+	return applyDecorators(...decorators)
 }
 
 /**
@@ -36,7 +39,8 @@ export function ReadManyDecorator<T>(options: {
 	currency_field?: string
 	currency_fields?: string[]
 }) {
-	return applyDecorators(
+
+	const decorators = [
 		ApiOperation({ summary: options.name ? `List ${Strings.capitalize(Strings.plural(options.name))}` : 'List' }),
 		ApiQuery({
 			name: 'select',
@@ -88,11 +92,17 @@ export function ReadManyDecorator<T>(options: {
 			type: String,
 			required: false,
 		}),
-		options.currency_field && options.currency_fields?.length ? currencyFieldsDecorator(options.currency_field, options.currency_fields) : null,
-		...generateSelectRHSFilteringAPIQueries(options.selectEnum),
-		ApiOkResponse(generateResponseObject(options.entity, 'OK')),
-		Get(),
-	)
+	]
+
+	if(options.currency_field && options.currency_fields?.length) {
+		decorators.push(currencyFieldsDecorator(options.currency_field, options.currency_fields))
+	}
+
+	decorators.push(...generateSelectRHSFilteringAPIQueries(options.selectEnum))
+	decorators.push(ApiOkResponse(generateResponseObject(options.entity, 'OK')))
+	decorators.push(Get())
+
+	return applyDecorators(...decorators)
 }
 
 export function ReadStatsDecorator(options: { name: string }) {
@@ -124,7 +134,8 @@ export function ReadChartsDecorator<T>(options: {
 	currency_field?: string
 	currency_fields?: string[]
 }) {
-	return applyDecorators(
+
+	const decorators = [
 		ApiOperation({ summary: options?.name ? `${Strings.capitalize(options.name)} Charts` : 'Charts' }),
 		ApiQuery({
 			name: 'fields',
@@ -160,12 +171,19 @@ export function ReadChartsDecorator<T>(options: {
 			description: 'Filter the results by a value',
 			type: String,
 			required: false,
-		}),
-		//options.currency_field && options.currency_fields?.length ? currencyFieldsDecorator(options.currency_field, options.currency_fields) : null,
-		...generateSelectRHSFilteringAPIQueries(options.selectEnum),
-		ApiOkResponse(generateResponseObject(ChartsResponseDto, 'OK')),
-		Get('charts'),
-	)
+		})
+	]
+
+	if(options.currency_field && options.currency_fields?.length) {
+		decorators.push(currencyFieldsDecorator(options.currency_field, options.currency_fields))
+	}
+
+	decorators.push(...generateSelectRHSFilteringAPIQueries(options.selectEnum))
+	decorators.push(ApiOkResponse(generateResponseObject(ChartsResponseDto, 'OK')))
+	decorators.push(Get('charts'))
+
+	return applyDecorators(...decorators)
+
 }
 
 export function ReadOneDecorator<T>(options: {
@@ -177,7 +195,8 @@ export function ReadOneDecorator<T>(options: {
 	currency_field?: string
 	currency_fields?: string[]
 }) {
-	return applyDecorators(
+
+	const decorators = [
 		ApiOperation({ summary: options?.name ? `Get ${Strings.capitalize(options.name)}` : 'Get' }),
 		ApiParam({
 			name: options.primaryKey,
@@ -203,19 +222,26 @@ export function ReadOneDecorator<T>(options: {
 			explode: false,
 			required: false,
 			enum: options.relationsEnum,
-		}),
-		//options.currency_field && options.currency_fields?.length ? currencyFieldsDecorator(options.currency_field, options.currency_fields) : null,
-		...generateSelectRHSFilteringAPIQueries(options.selectEnum),
-		ApiOkResponse(generateResponseObject(options.entity, 'OK')),
-		Get(`:${options.primaryKey}`),
-	)
+		})
+	]
+
+	if(options.currency_field && options.currency_fields?.length) {
+		decorators.push(currencyFieldsDecorator(options.currency_field, options.currency_fields))
+	}
+
+	decorators.push(...generateSelectRHSFilteringAPIQueries(options.selectEnum))
+	decorators.push(ApiOkResponse(generateResponseObject(options.entity, 'OK')))
+	decorators.push(Get(`:${options.primaryKey}`))
+
+	return applyDecorators(...decorators)
 }
 
 /**
  * Update Decorator
  */
 export function UpdateDecorator<T>(options: { entity: T; primaryKey: string; name: string }) {
-	return applyDecorators(
+
+	const decorators = [
 		ApiOperation({ summary: options?.name ? `Update ${Strings.capitalize(options.name)}` : 'Update' }),
 		ApiParam({
 			name: options.primaryKey,
@@ -226,11 +252,14 @@ export function UpdateDecorator<T>(options: { entity: T; primaryKey: string; nam
 		}),
 		ApiOkResponse(generateResponseObject(options.entity, 'OK')),
 		Patch(`:${options.primaryKey}`),
-	)
+	]
+
+	return applyDecorators(...decorators)
 }
 
 export function UploadImageDecorator(options: { entity: any }) {
-	return applyDecorators(
+
+	const decorators = [
 		ApiConsumes('multipart/form-data'),
 		ApiQuery({
 			name: 'file',
@@ -240,7 +269,9 @@ export function UploadImageDecorator(options: { entity: any }) {
 		}),
 		UseInterceptors(FileInterceptor('file')),
 		ApiOkResponse(generateResponseObject(options.entity, 'OK')),
-	)
+	]
+
+	return applyDecorators(...decorators)
 }
 
 export function UploadFileDecorator(options: { entity: any }) {
@@ -252,7 +283,8 @@ export function UploadFileDecorator(options: { entity: any }) {
 }
 
 export function BulkUploadDecorator(options: { supportedFields?: string[]; dedupField?: string }) {
-	return applyDecorators(
+
+	const decorators = [
 		ApiOperation({
 			summary: `Bulk Upload`,
 			description: `You can pass the following fields as part of the bulk upload: ${
@@ -269,7 +301,9 @@ export function BulkUploadDecorator(options: { supportedFields?: string[]; dedup
 		UseInterceptors(FileInterceptor('file')),
 		ApiOkResponse({ description: 'OK' }),
 		Post(`upload`),
-	)
+	]
+
+	return applyDecorators(...decorators)
 }
 
 export function UploadFieldsDecorator() {
@@ -287,7 +321,8 @@ export function UploadFieldsDecorator() {
  * Delete Decorators
  */
 export function DeleteDecorator<T>(options: { entity: T; primaryKey: string; name: string }) {
-	return applyDecorators(
+
+	const decorators = [
 		ApiOperation({ summary: options?.name ? `Delete ${Strings.capitalize(options.name)}` : 'Delete' }),
 		ApiParam({
 			name: options.primaryKey,
@@ -298,7 +333,9 @@ export function DeleteDecorator<T>(options: { entity: T; primaryKey: string; nam
 		}),
 		ApiOkResponse(generateResponseObject(options.entity, 'OK')),
 		Delete(`:${options.primaryKey}`),
-	)
+	]
+
+	return applyDecorators(...decorators)
 }
 
 function generateResponseObject(
