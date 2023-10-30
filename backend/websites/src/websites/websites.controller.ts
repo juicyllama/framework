@@ -1,6 +1,6 @@
 import { Body, Controller, forwardRef, Inject, Param, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { StatsMethods, StatsResponseDto, Strings } from '@juicyllama/utils'
+import { StatsMethods, StatsResponseDto } from '@juicyllama/utils'
 import { WebsitesService } from './websites.service'
 import {
 	Query as TQuery,
