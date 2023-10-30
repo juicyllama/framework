@@ -2,13 +2,13 @@ import { registerAs, ConfigModule } from '@nestjs/config'
 import { Security, Env } from '@juicyllama/utils'
 import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm'
 import path from 'path'
-import { MONGODB } from '@juicyllama/core'
+import { DATA_CAHCE_NAME } from '../module/data.cache.constants'
 
 export default registerAs(
 	'mongodb',
 	() =>
 		<TypeOrmModuleAsyncOptions>{
-			name: MONGODB,
+			name: DATA_CAHCE_NAME,
 			imports: [ConfigModule],
 			useFactory: async () => {
 				return {

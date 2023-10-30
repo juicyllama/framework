@@ -12,3 +12,6 @@ export { DataCacheModule } from './module/data.cache.module'
 
 // Services
 export { DataCacheService } from './module/data.cache.service'
+
+// Constants
+export { DATA_CAHCE_NAME } from './module/data.cache.constants'
