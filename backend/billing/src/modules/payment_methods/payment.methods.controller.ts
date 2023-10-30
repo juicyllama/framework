@@ -30,6 +30,7 @@ import { FindOptionsWhere, In } from 'typeorm'
 import { Query as JLQuery } from '@juicyllama/core/dist/utils/typeorm/Query'
 import { CreatePaymentMethodDto } from './payment.methods.dtos'
 import { PaymentStatus } from '../payments/payments.enums'
+import { BILLING_PAYMENT_MENTHODS_NAME } from './payment.methods.constants'
 
 const E = PaymentMethod
 type T = PaymentMethod
@@ -161,6 +162,7 @@ export class PaymentMethodsController {
 	}
 
 	@ReadManyDecorator({
+		name: BILLING_PAYMENT_MENTHODS_NAME,
 		entity: E,
 		selectEnum: PaymentMethodSelect,
 		orderByEnum: PaymentMethodOrderBy,

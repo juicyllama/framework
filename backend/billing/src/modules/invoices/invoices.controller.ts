@@ -21,7 +21,7 @@ import { StorageService } from '@juicyllama/core/dist/modules/storage/storage.se
 import { Invoice } from './invoices.entity'
 import { InvoicesService } from './invoices.service'
 import { InvoiceOrderBy, InvoiceRelations, InvoiceSelect } from './invoices.enums'
-import { T, E, SEARCH_FIELDS } from './invoices.constants'
+import { T, E, SEARCH_FIELDS, BILLING_INVOICES_NAME } from './invoices.constants'
 
 @ApiTags('Invoices')
 @UserAuth()
@@ -35,6 +35,7 @@ export class InvoicesController {
 	) {}
 
 	@ReadManyDecorator({
+		name: BILLING_INVOICES_NAME,
 		entity: E,
 		selectEnum: InvoiceSelect,
 		orderByEnum: InvoiceOrderBy,
@@ -192,6 +193,7 @@ export class InvoicesController {
 	}
 
 	@ReadChartsDecorator({
+		name: BILLING_INVOICES_NAME,
 		entity: E,
 		selectEnum: InvoiceSelect,
 	})

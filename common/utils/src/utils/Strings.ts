@@ -1,4 +1,4 @@
-import { Logger } from "./Logger"
+import { Logger } from './Logger'
 
 export class Strings {
 	/**
@@ -10,10 +10,16 @@ export class Strings {
 
 	static capitalize(str: string): string {
 		try {
+			if(typeof str !== 'string') return ''
+			if(str.length === 0) return ''
+
 			return str.charAt(0).toUpperCase() + str.slice(1)
-		}catch (e) {
+		} catch (e: any) {
 			const logger = new Logger()
-			logger.warn(`[Utils::Strings::capitalize] ${e.message}`, e)
+			logger.warn(`[Utils::Strings::capitalize] ${e.message}`, {
+				str: str,
+			})
+			logger.warn(`[Utils::Strings::capitalize] Stack Trace`, e.stack)
 			return ''
 		}
 	}

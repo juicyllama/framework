@@ -6,6 +6,7 @@ import { SubscriptionsService } from './subscriptions.service'
 import { AccountId, AuthService, ReadManyDecorator, UserAuth, UserRole } from '@juicyllama/core'
 import { Query as JLQuery } from '@juicyllama/core'
 import { SubscriptionOrderBy, SubscriptionRelations, SubscriptionSelect } from './subscriptions.enums'
+import { BILLING_SUBSCRIPTIONS_NAME } from './subscriptions.constants'
 
 const E = Subscription
 type T = Subscription
@@ -21,6 +22,7 @@ export class SubscriptionsController {
 	) {}
 
 	@ReadManyDecorator({
+		name: BILLING_SUBSCRIPTIONS_NAME,
 		entity: E,
 		selectEnum: SubscriptionSelect,
 		orderByEnum: SubscriptionOrderBy,

@@ -13,7 +13,7 @@ export class Account extends BaseEntity {
 	@IsString()
 	account_name: string
 
-	@Column({ default: SupportedCurrencies.USD })
+	@Column({ type: 'varchar', default: SupportedCurrencies.USD })
 	@IsEnum(SupportedCurrencies)
 	currency: SupportedCurrencies
 

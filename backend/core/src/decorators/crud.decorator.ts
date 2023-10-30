@@ -15,9 +15,9 @@ import { ImportMode } from '../types/common'
 /**
  * Create Decorator
  */
-export function CreateDecorator<T>(options: { entity: T; name?: string }) {
+export function CreateDecorator<T>(options: { entity: T; name: string }) {
 	return applyDecorators(
-		ApiOperation({ summary: `Create ${Strings.capitalize(options.name)}` }),
+		ApiOperation({ summary: options?.name ? `Create ${Strings.capitalize(options.name)}` : 'Create' }),
 		ApiCreatedResponse(generateResponseObject(options.entity, 'Created')),
 		Post(),
 	)
@@ -32,7 +32,7 @@ export function ReadManyDecorator<T>(options: {
 	selectEnum: any
 	orderByEnum: any
 	relationsEnum?: any
-	name?: string
+	name: string
 	currency_field?: string
 	currency_fields?: string[]
 }) {
@@ -88,14 +88,14 @@ export function ReadManyDecorator<T>(options: {
 			type: String,
 			required: false,
 		}),
-		...currencyFieldsDecorator(options.currency_field, options.currency_fields),
+		//options.currency_field && options.currency_fields?.length ? currencyFieldsDecorator(options.currency_field, options.currency_fields) : null,
 		...generateSelectRHSFilteringAPIQueries(options.selectEnum),
 		ApiOkResponse(generateResponseObject(options.entity, 'OK')),
 		Get(),
 	)
 }
 
-export function ReadStatsDecorator(options: { name?: string }) {
+export function ReadStatsDecorator(options: { name: string }) {
 	return applyDecorators(
 		ApiOperation({ summary: options?.name ? `${Strings.capitalize(options.name)} Stats` : 'Stats' }),
 		ApiQuery({
@@ -120,12 +120,12 @@ export function ReadStatsDecorator(options: { name?: string }) {
 export function ReadChartsDecorator<T>(options: {
 	entity: T
 	selectEnum: any
-	name?: string
+	name: string
 	currency_field?: string
 	currency_fields?: string[]
 }) {
 	return applyDecorators(
-		ApiOperation({ summary: options.name ? `${Strings.capitalize(options.name)} Charts` : 'Charts' }),
+		ApiOperation({ summary: options?.name ? `${Strings.capitalize(options.name)} Charts` : 'Charts' }),
 		ApiQuery({
 			name: 'fields',
 			description: `The fields by which you would like to group the data`,
@@ -161,7 +161,7 @@ export function ReadChartsDecorator<T>(options: {
 			type: String,
 			required: false,
 		}),
-		...currencyFieldsDecorator(options.currency_field, options.currency_fields),
+		//options.currency_field && options.currency_fields?.length ? currencyFieldsDecorator(options.currency_field, options.currency_fields) : null,
 		...generateSelectRHSFilteringAPIQueries(options.selectEnum),
 		ApiOkResponse(generateResponseObject(ChartsResponseDto, 'OK')),
 		Get('charts'),
@@ -173,12 +173,12 @@ export function ReadOneDecorator<T>(options: {
 	primaryKey: string
 	selectEnum: any
 	relationsEnum?: any
-	name?: string
+	name: string
 	currency_field?: string
 	currency_fields?: string[]
 }) {
 	return applyDecorators(
-		ApiOperation({ summary: `Get ${Strings.capitalize(options.name)}` }),
+		ApiOperation({ summary: options?.name ? `Get ${Strings.capitalize(options.name)}` : 'Get' }),
 		ApiParam({
 			name: options.primaryKey,
 			description: `The ${options.primaryKey} for the record you wish to return`,
@@ -204,7 +204,7 @@ export function ReadOneDecorator<T>(options: {
 			required: false,
 			enum: options.relationsEnum,
 		}),
-		...currencyFieldsDecorator(options.currency_field, options.currency_fields),
+		//options.currency_field && options.currency_fields?.length ? currencyFieldsDecorator(options.currency_field, options.currency_fields) : null,
 		...generateSelectRHSFilteringAPIQueries(options.selectEnum),
 		ApiOkResponse(generateResponseObject(options.entity, 'OK')),
 		Get(`:${options.primaryKey}`),
@@ -214,9 +214,9 @@ export function ReadOneDecorator<T>(options: {
 /**
  * Update Decorator
  */
-export function UpdateDecorator<T>(options: { entity: T; primaryKey: string; name?: string }) {
+export function UpdateDecorator<T>(options: { entity: T; primaryKey: string; name: string }) {
 	return applyDecorators(
-		ApiOperation({ summary: `Update ${Strings.capitalize(options.name)}` }),
+		ApiOperation({ summary: options?.name ? `Update ${Strings.capitalize(options.name)}` : 'Update' }),
 		ApiParam({
 			name: options.primaryKey,
 			description: `The ${options.primaryKey} for the ${options.name} you wish to return`,
@@ -286,9 +286,9 @@ export function UploadFieldsDecorator() {
 /**
  * Delete Decorators
  */
-export function DeleteDecorator<T>(options: { entity: T; primaryKey: string; name?: string }) {
+export function DeleteDecorator<T>(options: { entity: T; primaryKey: string; name: string }) {
 	return applyDecorators(
-		ApiOperation({ summary: `Delete ${Strings.capitalize(options.name)}` }),
+		ApiOperation({ summary: options?.name ? `Delete ${Strings.capitalize(options.name)}` : 'Delete' }),
 		ApiParam({
 			name: options.primaryKey,
 			description: `The ${options.primaryKey} for the ${options.name} you wish to delete`,
@@ -329,17 +329,13 @@ function generateSelectRHSFilteringAPIQueries(selectEnum: any) {
 	)
 }
 
-function currencyFieldsDecorator(currency_field?: string, currency_fields?: string[]) {
-	if (!currency_field || !currency_fields.length) return []
-
-	return [
-		ApiQuery({
-			name: 'convert_currencies_to',
-			description: `The currency you would like to return the results in, it will use \`${currency_field}\` and convert the values for fields: \`${currency_fields.join(
-				', ',
-			)}\``,
-			type: String,
-			required: false,
-		}),
-	]
+function currencyFieldsDecorator(currency_field: string, currency_fields: string[]) {
+	return ApiQuery({
+		name: 'convert_currencies_to',
+		description: `The currency you would like to return the results in, it will use \`${currency_field}\` and convert the values for fields: \`${currency_fields.join(
+			', ',
+		)}\``,
+		type: String,
+		required: false,
+	})
 }

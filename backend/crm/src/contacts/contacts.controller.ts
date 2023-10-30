@@ -99,6 +99,7 @@ export class ContactsController {
 		selectEnum: ContactSelect,
 		orderByEnum: ContactOrderBy,
 		relationsEnum: ContactRelations,
+		name: NAME,
 	})
 	@ApiQuery({ name: 'has_email', enum: ContactHasEmailFilter, required: false })
 	@ApiQuery({ name: 'has_phone', enum: ContactHasPhoneFilter, required: false })
@@ -130,6 +131,7 @@ export class ContactsController {
 	}
 
 	@ReadOneDecorator({
+		name: NAME,
 		entity: E,
 		primaryKey: PRIMARY_KEY,
 		selectEnum: ContactSelect,

@@ -3,10 +3,10 @@ import { NestFactory } from '@nestjs/core'
 import { ValidationPipe } from '@nestjs/common'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import 'reflect-metadata'
-import { Enviroment, Logger, Strings } from '@juicyllama/utils'
+import { Enviroment, Logger } from '@juicyllama/utils'
+import { RedocModule, redocConfig, TypeOrmFilter, validationPipeOptions } from '@juicyllama/core'
+import { installWebsiteDocs } from '../docs/install'
 import { SandboxModule } from './sandbox.module'
-import { redocConfig, TypeOrmFilter, validationPipeOptions, RedocModule } from '@juicyllama/core'
-import { installAppStoreDocs } from '../docs/install'
 
 const domain = 'main::bootstrap'
 const logger = new Logger()
@@ -22,7 +22,7 @@ async function bootstrap() {
 
 	try {
 		const swagger_document = new DocumentBuilder()
-			.setTitle(process.env.PROJECT_NAME ? Strings.capitalize(process.env.PROJECT_NAME) : 'API Docs')
+			.setTitle('WEBSITES SANDBOX API')
 			.setVersion(process.env.npm_package_version)
 			.addServer(process.env.BASE_URL_API, 'Live')
 			//.addServer(`https://sandbox.${process.env.BASE_URL_API.replace('https://', '')}`, 'Sandbox')
@@ -30,21 +30,15 @@ async function bootstrap() {
 			.build()
 
 		const document = SwaggerModule.createDocument(app, swagger_document)
-		logger.debug(`[${domain}] Loading Docs...`)
 		let redoc = redocConfig
-		redoc = installAppStoreDocs(redoc)
-		logger.debug(`[${domain}] ...app store loaded`)
+		redoc = installWebsiteDocs(redoc)
 		await RedocModule.setup('', app, document, redoc, true)
 	} catch (e) {
 		logger.error(`[${domain}] ${e.message}`, e)
 	}
 
 	app.listen(process.env.PORT)
-	logger.debug(
-		`[${domain}] ${Enviroment[process.env.NODE_ENV]} server running: ${process.env.BASE_URL_API}:${
-			process.env.PORT
-		}`,
-	)
+	logger.debug(`[${domain}] ${Enviroment[process.env.NODE_ENV]} server running: ${process.env.BASE_URL_API}`)
 }
 
 try {

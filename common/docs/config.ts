@@ -13,20 +13,6 @@ export const extraLinks = [{
 export const homeNavbar = [
 	homeLink,
 	{
-		text: 'CLI',
-		link: '/cli',
-		children: [
-			{
-				text: 'Setup',
-				link: '/cli/',
-			},
-			{
-				text: 'Commands',
-				link: '/cli/commands',
-			}
-		]
-	},
-	{
 		text: 'Common',
 		children: [
 			{

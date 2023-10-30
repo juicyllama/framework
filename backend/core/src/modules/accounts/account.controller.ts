@@ -57,7 +57,7 @@ export class AccountController {
 	}
 
 	@UserAuth()
-	@ApiOperation({ summary: `Create Additional ${Strings.capitalize(NAME)}` })
+	@ApiOperation({ summary: 'Create Additional Account' })
 	@Post('additional')
 	async createAdditionalAccount(@Req() req, @Body() data: OnboardAdditionalAccountDto): Promise<SuccessAccountDto> {
 		const user = await this.usersService.findById(req.user.user_id)
@@ -143,7 +143,7 @@ export class AccountController {
 	}
 
 	@UserAuth()
-	@ApiOperation({ summary: `Upload ${Strings.capitalize(NAME)} Avatar` })
+	@ApiOperation({ summary: 'Upload Account Avatar' })
 	@UploadImageDecorator({ entity: E })
 	@Patch(`avatar`)
 	async uploadAvatarFile(
@@ -163,7 +163,7 @@ export class AccountController {
 	}
 
 	@UserAuth()
-	@ApiOperation({ summary: `Transfer ${Strings.capitalize(NAME)} Ownership` })
+	@ApiOperation({ summary: 'Transfer Account Ownership' })
 	@ApiParam({ name: 'user_id', description: 'User ID to transfer ownership to' })
 	@Post(`transfer/:user_id`)
 	//transfer
@@ -182,7 +182,7 @@ export class AccountController {
 	}
 
 	@UserAuth()
-	@ApiOperation({ summary: `Close ${Strings.capitalize(NAME)}` })
+	@ApiOperation({ summary: 'Close Account' })
 	@Delete()
 	async close(@Req() req, @AccountId() account_id: number): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])

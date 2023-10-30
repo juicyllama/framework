@@ -7,6 +7,7 @@ import { AccountId, AccountService, AuthService, ReadManyDecorator, UserAuth, Us
 import { WalletOrderBy, WalletRelations, WalletSelect } from './wallet.enums'
 import { GetBalanceResponseDto } from './wallet.dto'
 import { Query as JLQuery } from '@juicyllama/core/dist/utils/typeorm/Query'
+import { BILLING_WALLET_NAME } from './wallet.constants'
 
 const E = Wallet
 type T = Wallet
@@ -37,6 +38,7 @@ export class WalletController {
 	}
 
 	@ReadManyDecorator({
+		name: BILLING_WALLET_NAME,
 		entity: E,
 		selectEnum: WalletSelect,
 		orderByEnum: WalletOrderBy,
