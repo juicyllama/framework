@@ -97,7 +97,7 @@ export function ReadManyDecorator<T>(options: {
 
 export function ReadStatsDecorator(options: { name?: string }) {
 	return applyDecorators(
-		ApiOperation({ summary: options.name ? `${Strings.capitalize(options.name)} Stats` : 'Stats' }),
+		ApiOperation({ summary: options?.name ? `${Strings.capitalize(options.name)} Stats` : 'Stats' }),
 		ApiQuery({
 			name: 'method',
 			description: `The method you would like to run, defaults to \`${StatsMethods.COUNT}\``,

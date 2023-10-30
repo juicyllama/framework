@@ -32,7 +32,7 @@ import {
 	WEBSITES_DEFAULT_ORDER_BY,
 } from './websites.constants'
 
-@ApiTags(Strings.capitalize(Strings.plural(WEBSITES_NAME)))
+@ApiTags('Websites')
 @UserAuth()
 @Controller('websites/website')
 export class WebsitesController {
