@@ -88,7 +88,7 @@ export function ReadManyDecorator<T>(options: {
 			type: String,
 			required: false,
 		}),
-		//options.currency_field && options.currency_fields?.length ? currencyFieldsDecorator(options.currency_field, options.currency_fields) : null,
+		options.currency_field && options.currency_fields?.length ? currencyFieldsDecorator(options.currency_field, options.currency_fields) : null,
 		...generateSelectRHSFilteringAPIQueries(options.selectEnum),
 		ApiOkResponse(generateResponseObject(options.entity, 'OK')),
 		Get(),
