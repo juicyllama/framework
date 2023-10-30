@@ -24,7 +24,7 @@ import { isNil, omitBy } from 'lodash'
 import { ComparisonOperator, Enums, Env, getMySQLTimeInterval, Logger, SupportedCurrencies } from '@juicyllama/utils'
 import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder'
 import { ChartOptions, CurrencyOptions } from '../../types/typeorm'
-import { ImportMode, BulkUploadResponse } from '../../types/common'
+import { ImportMode, BulkUploadResponse, ChartResult } from '../../types/common'
 
 const logger = new Logger()
 
@@ -288,7 +288,7 @@ export class Query<T> {
 		field: string,
 		options: ChartOptions,
 		currency?: CurrencyOptions,
-	): Promise<T[]> {
+	): Promise<ChartResult[]> {
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][CHARTS][${repository.metadata.tableName}]`, { field, options: options })
 		}
@@ -299,6 +299,11 @@ export class Query<T> {
 			.createQueryBuilder()
 			.select('COUNT(*)', 'count')
 			.addSelect(field)
+
+		if(currency?.currency && currency.currency_fields.includes(field)) {
+			queryBuilder = queryBuilder.addSelect(currency.currency_field)
+		}
+
 		if (options.period) {
 			queryBuilder = queryBuilder.addSelect(getMySQLTimeInterval(options.period), 'time_interval')
 		}
@@ -309,12 +314,53 @@ export class Query<T> {
 		if (options.to) {
 			queryBuilder = queryBuilder.andWhere('created_at <= :to', { to: options.to })
 		}
+
 		queryBuilder = queryBuilder.groupBy(field)
+	
 		if (options.period) {
 			queryBuilder = queryBuilder.addGroupBy('time_interval')
 		}
-		const result = <T[]>await queryBuilder.getRawMany()
-		return <T[]>await this.convertCurrency<T>(result, currency)
+
+		if(currency?.currency && currency.currency_fields.includes(field)) {
+			queryBuilder = queryBuilder.addGroupBy(currency.currency_field)
+		}
+
+		let result = <ChartResult[]>await queryBuilder.getRawMany()
+	
+		// If its a currency we should sum and convert the results
+		if(currency?.currency && currency.currency_fields.includes(field)) {
+			
+			const reduced: ChartResult[] = []
+
+			for (const r of result) {
+
+				const reducedIndex = reduced.findIndex(function (record) {
+					return (record.time_interval.toString() == r.time_interval.toString())
+				})
+
+				if(r.currency !== currency.currency) {
+					r[field] = await currency.fxService.convert(
+						r[field],
+						SupportedCurrencies[r.currency],
+						SupportedCurrencies[currency.currency],
+						r.time_interval
+					)
+				}
+
+				if (reducedIndex === -1) {
+					reduced.push({
+						count: 1,
+						[field]: Number(r[field]) * Number(r.count),
+						time_interval: r.time_interval,
+						currency: r.currency ?? null,
+					})
+				} else {
+					reduced[reducedIndex][field] += Number(r[field]) * Number(r.count)
+				}
+			}
+			return reduced
+		}
+		return result
 	}
 
 	/**

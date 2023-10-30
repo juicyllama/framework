@@ -30,5 +30,5 @@ function buildMongoURLFromAPIKey(): string {
 	const { username, password } = <{ client_id: number; username: string; password: string }>(
 		Security.decode(process.env.JUICYLLAMA_DATA_CACHE_API_KEY)
 	)
-	return `mongodb+srv://${username}:${password}@juicyllama.xcb5lth.mongodb.net/juicyllama?retryWrites=true&w=majority`
+	return `mongodb+srv://${username}:${password}@juicyllama.xcb5lth.mongodb.net/juicyllama?retryWrites=true&w=majority&ssl=true&authSource=admin`
 }

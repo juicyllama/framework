@@ -34,6 +34,34 @@ export class FxService {
 	async convert(amount: number, from: SupportedCurrencies, to: SupportedCurrencies, date?: Date): Promise<number> {
 		const domain = 'utils::fx::service::convert'
 
+		if(!amount) {
+			this.logger.error(`[${domain}] Amount is required`, {
+				amount: amount,
+				from: from,
+				to: to,
+				date: date,
+			})
+			throw new Error('Amount is required')
+		}
+		if(!from) {
+			this.logger.error(`[${domain}] From is required`, {
+				amount: amount,
+				from: from,
+				to: to,
+				date: date,
+			})
+			throw new Error('From is required')
+		}
+		if(!to) {
+			this.logger.error(`[${domain}] To is required`, {
+				amount: amount,
+				from: from,
+				to: to,
+				date: date,
+			})
+			throw new Error('To is required')
+		}
+
 		let convertResult
 
 		if (!date) {
@@ -45,7 +73,7 @@ export class FxService {
 		})
 
 		let rates = <FxRate>await this.cacheManager.get(cache_key)
-		if (rates) return calc(amount, rates[from.toString()], rates[to.toString()])
+		if (rates) return calc(amount, rates[from], rates[to])
 
 		//get rate based on date from database
 		rates = await this.query.findOne(this.repository, {
@@ -56,7 +84,7 @@ export class FxService {
 
 		if (rates) {
 			await this.cacheManager.set(cache_key, rates, CachePeriod.WEEK)
-			return calc(amount, rates[from.toString()], rates[to.toString()])
+			return calc(amount, rates[from], rates[to])
 		}
 
 		if (Modules.isInstalled('@juicyllama/data-cache')) {
@@ -74,14 +102,14 @@ export class FxService {
 				if (result) {
 					rates = await this.query.create(this.repository, result)
 					await this.cacheManager.set(cache_key, rates, CachePeriod.WEEK)
-					return calc(amount, rates[from.toString()], rates[to.toString()])
+					return calc(amount, rates[from], rates[to])
 				}
 			} catch (e: any) {
 				this.logger.error(`[${domain}] ${e.message}`, e)
 			}
 		}
 
-		if (!convertResult && Modules.isInstalled('@juicyllama/apilayer')) {
+		if (!convertResult && Modules.isInstalled('@juicyllama/app-apilayer')) {
 			//@ts-ignore
 			const { CurrencyDataModule, CurrencyDataService } = await import('@juicyllama/app-apilayer')
 			const currencyDataModule = await this.lazyModuleLoader.load(() => CurrencyDataModule)
@@ -99,7 +127,10 @@ export class FxService {
 				}
 
 				rates = await this.query.create(this.repository, create)
-				convertResult = calc(amount, rates[from.toString()], rates[to.toString()])
+				convertResult = calc(amount, rates[from], rates[to])
+			}else {
+				this.logger.error(`[${domain}] Error getting rates from apilayer`)
+				throw new Error(`Error getting rates from apilayer`)
 			}
 		} else {
 			this.logger.error(`[${domain}] No FX App Installed, options are @juicyllama/app-apilayer`)
@@ -112,7 +143,7 @@ export class FxService {
 			})
 
 			if (rates) {
-				convertResult = calc(amount, rates[from.toString()], rates[to.toString()])
+				convertResult = calc(amount, rates[from], rates[to])
 			}
 		}
 
