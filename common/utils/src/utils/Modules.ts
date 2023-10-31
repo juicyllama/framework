@@ -1,3 +1,5 @@
+import { Logger } from './Logger'
+
 export class Modules {
 	/**
 	 * Checks if a module is installed
@@ -7,14 +9,13 @@ export class Modules {
 
 	static isInstalled(name: string): boolean {
 		try {
-			const p = require.resolve(name, {
-				paths: [
-				  process.cwd()
-				],
-			  })
+			const p = require.resolve(name)
 			return !!p
-		} catch (e) {
+		} catch (e: any) {
+			const logger = new Logger()
+			logger.debug(`[utils::modules::isInstalled] ${e.message}`, e)
 			return false
 		}
 	}
+	
 }
