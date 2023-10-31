@@ -32,7 +32,7 @@ export class FxService {
 	 */
 
 	async convert(amount: number, from: SupportedCurrencies, to: SupportedCurrencies, date?: Date): Promise<number> {
-		const domain = 'utils::fx::service::convert'
+		const domain = 'core::fx::service::convert'
 
 		if(!amount) {
 			this.logger.error(`[${domain}] Amount is required`, {
