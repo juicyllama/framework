@@ -7,7 +7,11 @@ export class Modules {
 
 	static isInstalled(name: string): boolean {
 		try {
-			const p = require.resolve(name)
+			const p = require.resolve(name, {
+				paths: [
+				  process.cwd()
+				],
+			  })
 			return !!p
 		} catch (e) {
 			return false

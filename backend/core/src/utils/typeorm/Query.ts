@@ -338,10 +338,10 @@ export class Query<T> {
 					return (record.time_interval.toString() == r.time_interval.toString())
 				})
 
-				if(r.currency !== currency.currency) {
+				if(r[currency.currency_field] !== currency.currency) {
 					r[field] = await currency.fxService.convert(
 						r[field],
-						SupportedCurrencies[r.currency],
+						SupportedCurrencies[r[currency.currency_field]],
 						SupportedCurrencies[currency.currency],
 						r.time_interval
 					)

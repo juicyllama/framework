@@ -109,7 +109,7 @@ export class FxService {
 			}
 		}
 
-		if (!convertResult && Modules.isInstalled('@juicyllama/app-apilayer')) {
+		if (Modules.isInstalled('@juicyllama/app-apilayer')) {
 			//@ts-ignore
 			const { CurrencyDataModule, CurrencyDataService } = await import('@juicyllama/app-apilayer')
 			const currencyDataModule = await this.lazyModuleLoader.load(() => CurrencyDataModule)
@@ -129,12 +129,10 @@ export class FxService {
 				rates = await this.query.create(this.repository, create)
 				convertResult = calc(amount, rates[from], rates[to])
 			}else {
-				this.logger.error(`[${domain}] Error getting rates from apilayer`)
-				throw new Error(`Error getting rates from apilayer`)
+				throw new Error(`[${domain}] Error getting rates from apilayer`)
 			}
 		} else {
-			this.logger.error(`[${domain}] No FX App Installed, options are @juicyllama/app-apilayer`)
-			throw new Error(`No FX App Installed, options are @juicyllama/app-apilayer`)
+			throw new Error(`[${domain}] No FX App Installed, options are @juicyllama/app-apilayer`)
 		}
 
 		if (!convertResult) {
