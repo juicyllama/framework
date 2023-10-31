@@ -42,6 +42,10 @@ export class UsersService extends BaseService<T> {
 	}
 
 	async invite(account: Account, newUser: CreateUserDto): Promise<T> {
+
+		const userRole = newUser.role ?? UserRole.VIEWER
+		if (newUser.role) delete newUser.role
+
 		let user = await this.findOneByEmail(newUser.email)
 		if (user) {
 			const account_exists = user.accounts.find(a => a.account_id === account.account_id)
@@ -49,7 +53,7 @@ export class UsersService extends BaseService<T> {
 				user.accounts.push(account)
 				await this.usersHooks.account_added(account, user)
 				user = await this.update(user)
-				await this.authService.assignRole(user, account, UserRole.VIEWER)
+				await this.authService.assignRole(user, account, userRole)
 			}
 			return user
 		} else {
@@ -58,6 +62,7 @@ export class UsersService extends BaseService<T> {
 				accounts: [account],
 			})
 			await this.usersHooks.invited(account, user)
+			await this.authService.assignRole(user, account, userRole)
 			delete user.password
 			return user
 		}

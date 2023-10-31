@@ -119,7 +119,7 @@ export function usersTableSchema(
 				show: visibleColumns ? visibleColumns?.includes('roles') : true,
 				format: val => val[0].role,
 				form: {
-					key: 'roles',
+					key: 'role',
 					field: FormFieldField.DROPDOWN,
 					dropdown: [
 						{ value: 'ADMIN', label: 'Admin' },
