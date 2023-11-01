@@ -16,7 +16,7 @@ import { Strings } from '@juicyllama/vue-utils'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { default as JLForm } from '../../form/Form.vue'
-import { ColumnsFilter, CustomButtons, SearchFilter } from './index'
+import { ColumnsFilter, CustomButtons, TextSearchFilter } from './index'
 import { logger } from '../../../../index'
 
 const props = defineProps<{
@@ -296,7 +296,7 @@ watch(
 	},
 )
 
-const dialog = ref<boolean>(false)
+const advancedFilterDialog = ref<boolean>(false)
 const labels = computed(() => JLToQColumns.map(el => el.label))
 const activeLabels = computed<string[]>(() => activeFilters.value.map(el => el.label))
 
@@ -343,7 +343,7 @@ watchEffect(() => {
 <template>
 	<div id="JLTable" class="JLTable">
 		<TableFilterDialog
-			v-model="dialog"
+			v-model="advancedFilterDialog"
 			:activeFilters="activeFilters"
 			:labels="labels"
 			@clear="onClearFilters"
@@ -409,7 +409,7 @@ watchEffect(() => {
 							@update:model-value="toggle_table" />
 					</div>
 
-					<SearchFilter
+					<TextSearchFilter
 						v-if="!loading && props.tableSchema?.show?.search_filter?.position === TablePosition.TOP_LEFT"
 						:search="filter"
 						:table-schema="props.tableSchema"
@@ -419,11 +419,19 @@ watchEffect(() => {
 
 			<template v-slot:top-right v-if="props.tableSchema.show?.table_actions !== false">
 				<div class="JLTableTopRight">
-					<SearchFilter
+					<TextSearchFilter
 						v-if="!loading && props.tableSchema?.show?.search_filter?.position === TablePosition.TOP_RIGHT"
 						:search="filter"
 						:table-schema="props.tableSchema"
 						@searchUpdated="searchUpdated" />
+
+					<q-btn
+						v-if="!loading && props.tableSchema?.show?.advanced_filters"
+						class="q-ml-sm"
+						color="primary"
+						:label="`Filters (${activeFilters.length})`"
+						@click="advancedFilterDialog = true" />
+
 					<div v-if="props.tableSchema?.show?.expandable">
 						<div @click="toggleTableSize" style="cursor: pointer">
 							<q-icon v-bind:name="!tableExpanded ? 'open_in_full' : 'aspect_ratio'" size="xs" />

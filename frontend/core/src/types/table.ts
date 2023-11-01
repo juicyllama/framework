@@ -53,6 +53,7 @@ export interface TableSchema {
 		clickable?: boolean
 		column_filter?: boolean
 		search_filter?: SearchFilterOptions
+		advanced_filters?: boolean
 		add_record?: boolean
 		update_inline?: boolean
 		update_record?: boolean
