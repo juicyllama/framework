@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import FormFilter from './FormFilter.vue'
-import { IFilter } from '@/types/table'
+import { IFilter } from '../../../../types/table'
 
 const props = defineProps<{
 	dialog: boolean

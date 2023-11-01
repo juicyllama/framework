@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { IFilterType, IFilter } from '@/types/table'
+import { IFilterType, IFilter } from '../../../../types/table'
 interface Props {
 	filter: IFilter,
 	labels: string[],

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Ref, ref } from 'vue'
 import FieldContents from './FieldContents.vue'
 import TableActions from './TableActions.vue'
 import {
@@ -424,13 +425,7 @@ watchEffect(() => {
 						@searchUpdated="searchUpdated" />
 					<div v-if="props.tableSchema?.show?.expandable">
 						<div @click="toggleTableSize" style="cursor: pointer">
-							<q-icon
-								v-bind:name="
-									!tableExpanded
-										? 'open_in_full'
-										: 'aspect_ratio'
-								"
-								size="xs" />
+							<q-icon v-bind:name="!tableExpanded ? 'open_in_full' : 'aspect_ratio'" size="xs" />
 						</div>
 					</div>
 
@@ -442,9 +437,7 @@ watchEffect(() => {
 
 					<q-btn class="JLButton JLTableAddRecord" v-if="props.tableSchema.show.add_record" @click="addItem">
 						<q-icon
-							:name="`${props.tableSchema.icon?.type} ${
-								props.tableSchema.icon?.icons?.add ?? 'add_box'
-							}`"
+							:name="`${props.tableSchema.icon?.type} ${props.tableSchema.icon?.icons?.add ?? 'add_box'}`"
 							size="medium"
 							class="JLIcon JLIconAddRecord" />
 						Add
