@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref, ref } from 'vue'
+import { Ref, ref, reactive, computed, watch, watchEffect } from 'vue'
 import FieldContents from './FieldContents.vue'
 import TableActions from './TableActions.vue'
 import {
@@ -11,6 +11,7 @@ import {
 	TablePosition,
 	TableSchema,
 } from '../../../../types'
+import { IFilter } from '../../../../types/table'
 import { Strings } from '@juicyllama/vue-utils'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
