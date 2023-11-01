@@ -1,4 +1,4 @@
-import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto, Csv, File, Json } from '@juicyllama/utils'
+import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto, Csv, File, Json, Logger } from '@juicyllama/utils'
 import { Query as TQuery } from '../utils/typeorm/Query'
 import { TypeOrm } from '../utils/typeorm/TypeOrm'
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common'
@@ -6,6 +6,8 @@ import _ from 'lodash'
 import { DeepPartial } from 'typeorm'
 import { UploadType, ImportMode, BulkUploadResponse } from '../types/common'
 import { CurrencyOptions } from '../types'
+
+const logger = new Logger()
 
 export async function crudCreate<T>(options: { service: any; data: any; account_id?: number }): Promise<T> {
 	return await options.service.create({
@@ -197,6 +199,9 @@ export async function crudBulkUpload<T>(options: {
 	file?: Express.Multer.File
 	raw?: any
 }): Promise<BulkUploadResponse> {
+
+	const domain = 'core::helpers::crudController::crudBulkUpload'
+
 	const csv = new Csv()
 	const json = new Json()
 	const file = new File()
@@ -232,6 +237,8 @@ export async function crudBulkUpload<T>(options: {
 	}
 
 	let content: any[]
+
+	logger.debug(`[${domain}] Uploading ${options.upload_type} file`)
 
 	switch (options.upload_type) {
 		case UploadType.CSV:
@@ -284,7 +291,9 @@ export async function crudBulkUpload<T>(options: {
 			}`,
 		)
 	}
-	const dtos: DeepPartial<T>[] = content.map(row => {
+
+	logger.debug(`[${domain}] Converting file to DTO object`)
+	let dtos: DeepPartial<T>[] = content.map(row => {
 		const dto = options.fields.reduce(
 			(dto, key) => ({
 				...dto,
@@ -296,7 +305,10 @@ export async function crudBulkUpload<T>(options: {
 		return <DeepPartial<T>>_.omitBy(dto, _.isEmpty) // remove empty values
 	})
 
+	dtos = cleanDtos(dtos, options, domain)	
+
 	try {
+		logger.debug(`[${domain}] Offloading DTO to bulk service`)
 		return <BulkUploadResponse>await options.service.bulk(dtos, options.import_mode, options.dedup_field)
 	} catch (e) {
 		throw new BadRequestException(e.message)
@@ -325,4 +337,17 @@ export async function crudPurge<T>(options: { service: any; primaryKey: number; 
 	}
 
 	return await options.service.purge(record)
+}
+
+function cleanDtos<T>(dtos: DeepPartial<T>[], options: any, domain: string): DeepPartial<T>[] {
+
+	// Remove any records with duplicate dedup_field
+	const unique = _.uniqBy(dtos, options.dedup_field)
+	logger.debug(`[${domain}] Removed ${dtos.length - unique.length} records with duplicate ${options.dedup_field} field values`)
+
+	// Remove any records with no dedup_field
+	const clean = unique.filter(record => (!_.isEmpty(record) && record[options.dedup_field] && !_.isNil(record[options.dedup_field]) && !_.isEmpty(record[options.dedup_field]) && !_.isEqual(record[options.dedup_field], '')))
+	logger.debug(`[${domain}] Removed ${unique.length - clean.length} records with no value in ${options.dedup_field} field`)
+	
+	return clean
 }
