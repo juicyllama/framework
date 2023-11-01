@@ -20,7 +20,7 @@ export class AwsSesService {
 	 */
 
 	async send(message: BeaconMessageDto): Promise<boolean> {
-		const domain = 'app::aws::ses::AwsSecretsService::send'
+		const domain = 'app::aws::ses::AwsSesService::send'
 
 		this.logger.debug(`[${domain}] Send email`, message)
 
@@ -114,7 +114,7 @@ export class AwsSesService {
 	}
 
 	async mapEmailTemplate(email: BeaconMessageDto): Promise<SendEmailRequest> {
-		const domain = 'app::aws::ses::AwsSecretsService::mapEmailTemplate'
+		const domain = 'app::aws::ses::AwsSesService::mapEmailTemplate'
 		this.logger.error(`[${domain}] Not Implemented`, email)
 		return
 	}
