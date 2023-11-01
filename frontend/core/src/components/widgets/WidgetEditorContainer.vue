@@ -175,7 +175,8 @@ export default {
 	components: {
 		WidgetForm,
 	},
-	setup() {
+	props: ['endpoint', 'data'],
+	setup(props) {
 		const leftDrawerOpen = ref(false)
 		const search = ref('')
 		const showWidgetEditForm = ref(false)
@@ -214,7 +215,7 @@ export default {
 		}
 
 		const saveDashboard = () => {
-			saveWidgets(widgets2.value)
+			saveWidgets(props.endpoint, widgets2.value)
 			//TODO: remove when API is ready, show notification
 			//localStorage.setItem(LS_KEY_FOR_DATA, JSON.stringify(widgetsStore.widgets))
 		}

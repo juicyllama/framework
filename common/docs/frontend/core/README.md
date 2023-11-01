@@ -39,6 +39,11 @@ Widget system consists of two component modes:
 
 Both represented by generic `WidgetsComponent` that can accept set of props.
 
+### Props
+
+- `endpoint`, string that represents API url where to load and save widgets config
+- `data`, opposite of the `endpoint`, for loading locally available config
+
 ### Widgets editing/creation component
 
 To use editor you need to import `WidgetsComponent` from `@juicyllama/frontend-core` and pass a prop `:editable="true"` or just `editable`
