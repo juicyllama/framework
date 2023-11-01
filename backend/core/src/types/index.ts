@@ -10,3 +10,5 @@ export {
 	BulkUploadResponse,
 } from './common'
 export { OauthInterface } from './oauth.interface'
+
+export { ChartOptions, CurrencyOptions } from './typeorm'

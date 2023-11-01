@@ -22,6 +22,7 @@ import {
 	UserRole,
 	ReadChartsDecorator,
 	crudCharts,
+	FxService,
 } from '@juicyllama/core'
 import { CreateTransactionDto, UpdateTransactionDto } from './transactions.dto'
 import { TransactionOrderBy, TransactionRelations, TransactionSelect } from './transactions.enums'
@@ -32,6 +33,8 @@ import {
 	TRANSACTION_PRIMARY_KEY,
 	TRANSACTION_SEARCH_FIELDS,
 	TRANSACTION_DEFAULT_ORDER_BY,
+	TRANSACTION_CURRENCY_FIELD,
+	TRANSACTION_CURRENCY_FIELDS,
 } from './transactions.constants'
 import { StoresService } from '../stores/stores.service'
 
@@ -44,9 +47,10 @@ export class TransactionsController {
 		@Inject(forwardRef(() => TransactionsService)) private readonly service: TransactionsService,
 		@Inject(forwardRef(() => StoresService)) private readonly storesService: StoresService,
 		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<TRANSACTION_T>,
+		@Inject(forwardRef(() => FxService)) private readonly fxService: FxService,
 	) {}
 
-	@CreateDecorator(TRANSACTION_E, TRANSACTION_NAME)
+	@CreateDecorator({ entity: TRANSACTION_E, name: TRANSACTION_NAME })
 	async create(
 		@Req() req,
 		@Body() data: CreateTransactionDto,
@@ -62,7 +66,15 @@ export class TransactionsController {
 		})
 	}
 
-	@ReadManyDecorator(TRANSACTION_E, TransactionSelect, TransactionOrderBy, TransactionRelations)
+	@ReadManyDecorator({
+		entity: TRANSACTION_E,
+		name: TRANSACTION_NAME,
+		selectEnum: TransactionSelect,
+		orderByEnum: TransactionOrderBy,
+		relationsEnum: TransactionRelations,
+		currency_field: TRANSACTION_CURRENCY_FIELD,
+		currency_fields: TRANSACTION_CURRENCY_FIELDS,
+	})
 	async findAll(@Query() query, @AccountId() account_id: number): Promise<TRANSACTION_T[]> {
 		return await crudFindAll<TRANSACTION_T>({
 			service: this.service,
@@ -71,10 +83,15 @@ export class TransactionsController {
 			query: query,
 			searchFields: TRANSACTION_SEARCH_FIELDS,
 			order_by: TRANSACTION_DEFAULT_ORDER_BY,
+			currency: {
+				fxService: this.fxService,
+				currency_field: TRANSACTION_CURRENCY_FIELD,
+				currency_fields: TRANSACTION_CURRENCY_FIELDS,
+			},
 		})
 	}
 
-	@ReadStatsDecorator(TRANSACTION_NAME)
+	@ReadStatsDecorator({ name: TRANSACTION_NAME })
 	async stats(
 		@Query() query,
 		@AccountId() account_id: number,
@@ -90,7 +107,13 @@ export class TransactionsController {
 		})
 	}
 
-	@ReadChartsDecorator(TRANSACTION_E, TransactionSelect, TRANSACTION_NAME)
+	@ReadChartsDecorator({
+		entity: TRANSACTION_E,
+		name: TRANSACTION_NAME,
+		selectEnum: TransactionSelect,
+		currency_field: TRANSACTION_CURRENCY_FIELD,
+		currency_fields: TRANSACTION_CURRENCY_FIELDS,
+	})
 	async charts(
 		@Query() query: any,
 		@Query('search') search: string,
@@ -109,20 +132,42 @@ export class TransactionsController {
 			...(from && { from: new Date(from) }),
 			...(to && { to: new Date(to) }),
 			searchFields: TRANSACTION_SEARCH_FIELDS,
+			currency: {
+				fxService: this.fxService,
+				currency_field: TRANSACTION_CURRENCY_FIELD,
+				currency_fields: TRANSACTION_CURRENCY_FIELDS,
+			},
 		})
 	}
 
-	@ReadOneDecorator(TRANSACTION_E, TRANSACTION_PRIMARY_KEY, TransactionSelect, TransactionRelations, TRANSACTION_NAME)
+	@ReadOneDecorator({
+		entity: TRANSACTION_E,
+		name: TRANSACTION_NAME,
+		selectEnum: TransactionSelect,
+		relationsEnum: TransactionRelations,
+		primaryKey: TRANSACTION_PRIMARY_KEY,
+		currency_field: TRANSACTION_CURRENCY_FIELD,
+		currency_fields: TRANSACTION_CURRENCY_FIELDS,
+	})
 	async findOne(@AccountId() account_id: number, @Param() params, @Query() query): Promise<TRANSACTION_T> {
 		return await crudFindOne<TRANSACTION_T>({
 			service: this.service,
 			query: query,
 			primaryKey: params[TRANSACTION_PRIMARY_KEY],
 			account_id: account_id,
+			currency: {
+				fxService: this.fxService,
+				currency_field: TRANSACTION_CURRENCY_FIELD,
+				currency_fields: TRANSACTION_CURRENCY_FIELDS,
+			},
 		})
 	}
 
-	@UpdateDecorator(TRANSACTION_E, TRANSACTION_PRIMARY_KEY, TRANSACTION_NAME)
+	@UpdateDecorator({
+		entity: TRANSACTION_E,
+		name: TRANSACTION_NAME,
+		primaryKey: TRANSACTION_PRIMARY_KEY,
+	})
 	async update(
 		@Req() req,
 		@AccountId() account_id: number,
@@ -147,7 +192,11 @@ export class TransactionsController {
 		})
 	}
 
-	@DeleteDecorator(TRANSACTION_E, TRANSACTION_PRIMARY_KEY, TRANSACTION_NAME)
+	@DeleteDecorator({
+		entity: TRANSACTION_E,
+		name: TRANSACTION_NAME,
+		primaryKey: TRANSACTION_PRIMARY_KEY,
+	})
 	async remove(@Req() req, @Param() params, @AccountId() account_id: number): Promise<TRANSACTION_T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		return await crudDelete<TRANSACTION_T>({

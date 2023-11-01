@@ -8,8 +8,6 @@ import { AppIntegrationType } from '../apps.enums'
 import { InstalledAppsOrderBy, InstalledAppsRelations, InstalledAppsSelect } from './installed.enums'
 import {
 	AccountId,
-	AccountService,
-	AuthService,
 	CreateDecorator,
 	crudPurge,
 	crudFindAll,
@@ -23,7 +21,6 @@ import {
 	ReadStatsDecorator,
 	UpdateDecorator,
 	UserAuth,
-	UsersService,
 } from '@juicyllama/core'
 import {
 	INSTALLED_APP_DEFAULT_ORDER_BY,
@@ -39,15 +36,12 @@ import {
 @Controller('/apps/installed')
 export class InstalledAppsController {
 	constructor(
-		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
-		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
 		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<INSTALLED_APP_T>,
 		@Inject(forwardRef(() => InstalledAppsService)) private readonly service: InstalledAppsService,
 		@Inject(forwardRef(() => AppsService)) private readonly appsService: AppsService,
-		@Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,
 	) {}
 
-	@CreateDecorator(INSTALLED_APP_E, INSTALLED_APP_NAME)
+	@CreateDecorator({ entity: INSTALLED_APP_E, name: INSTALLED_APP_NAME })
 	async create(
 		@Req() req,
 		@AccountId() account_id: number,
@@ -90,13 +84,13 @@ export class InstalledAppsController {
 		return await this.service.removePrivateSettings(installed_app)
 	}
 
-	@ReadManyDecorator(
-		INSTALLED_APP_E,
-		InstalledAppsSelect,
-		InstalledAppsOrderBy,
-		InstalledAppsRelations,
-		INSTALLED_APP_NAME,
-	)
+	@ReadManyDecorator({
+		entity: INSTALLED_APP_E,
+		selectEnum: InstalledAppsSelect,
+		orderByEnum: InstalledAppsOrderBy,
+		relationsEnum: InstalledAppsRelations,
+		name: INSTALLED_APP_NAME,
+	})
 	async findAll(@AccountId() account_id: number, @Query() query): Promise<INSTALLED_APP_T[]> {
 		const records = await crudFindAll<INSTALLED_APP_T>({
 			service: this.service,
@@ -114,7 +108,7 @@ export class InstalledAppsController {
 		return records
 	}
 
-	@ReadStatsDecorator(INSTALLED_APP_NAME)
+	@ReadStatsDecorator({ name: INSTALLED_APP_NAME })
 	async stats(
 		@AccountId() account_id: number,
 		@Query() query,
@@ -130,13 +124,13 @@ export class InstalledAppsController {
 		})
 	}
 
-	@ReadOneDecorator(
-		INSTALLED_APP_E,
-		INSTALLED_APP_PRIMARY_KEY,
-		InstalledAppsSelect,
-		InstalledAppsRelations,
-		INSTALLED_APP_NAME,
-	)
+	@ReadOneDecorator({
+		entity: INSTALLED_APP_E,
+		primaryKey: INSTALLED_APP_PRIMARY_KEY,
+		selectEnum: InstalledAppsSelect,
+		relationsEnum: InstalledAppsRelations,
+		name: INSTALLED_APP_NAME,
+	})
 	async findOne(@Param() params, @Query() query): Promise<INSTALLED_APP_T> {
 		const record = await crudFindOne<INSTALLED_APP_T>({
 			service: this.service,
@@ -146,7 +140,11 @@ export class InstalledAppsController {
 		return await this.service.removePrivateSettings(record)
 	}
 
-	@UpdateDecorator(INSTALLED_APP_E, INSTALLED_APP_PRIMARY_KEY, INSTALLED_APP_NAME)
+	@UpdateDecorator({
+		entity: INSTALLED_APP_E,
+		primaryKey: INSTALLED_APP_PRIMARY_KEY,
+		name: INSTALLED_APP_NAME,
+	})
 	async update(@Body() data: UpdateInstalledAppDto, @Param() params): Promise<INSTALLED_APP_T> {
 		if (data.settings) {
 			const installed_app = await this.service.findById(params[INSTALLED_APP_PRIMARY_KEY])
@@ -165,7 +163,11 @@ export class InstalledAppsController {
 		return await this.service.removePrivateSettings(record)
 	}
 
-	@DeleteDecorator(INSTALLED_APP_E, INSTALLED_APP_PRIMARY_KEY, INSTALLED_APP_NAME)
+	@DeleteDecorator({
+		entity: INSTALLED_APP_E,
+		primaryKey: INSTALLED_APP_PRIMARY_KEY,
+		name: INSTALLED_APP_NAME,
+	})
 	async remove(@Param() params): Promise<INSTALLED_APP_T> {
 		return await crudPurge<INSTALLED_APP_T>({
 			service: this.service,

@@ -18,6 +18,7 @@ import { WalletService } from '../wallet/wallet.service'
 import { FindOptionsWhere, In } from 'typeorm'
 import { WithdrawalOrderBy, WithdrawalRelations, WithdrawalSelect } from './withdrawals.enums'
 import { Query as JLQuery } from '@juicyllama/core/dist/utils/typeorm/Query'
+import { BILLING_WITHDRAWAL_NAME } from './withdrawals.constants'
 
 const E = Withdrawal
 type T = Withdrawal
@@ -75,7 +76,13 @@ export class WithdrawalsController {
 		)
 	}
 
-	@ReadManyDecorator(E, WithdrawalSelect, WithdrawalOrderBy, WithdrawalRelations)
+	@ReadManyDecorator({
+		name: BILLING_WITHDRAWAL_NAME,
+		entity: E,
+		selectEnum: WithdrawalSelect,
+		orderByEnum: WithdrawalOrderBy,
+		relationsEnum: WithdrawalRelations,
+	})
 	@ApiQuery({
 		name: 'currency',
 		description: 'The currency you are requesting data for',

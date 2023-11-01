@@ -5,6 +5,7 @@ import { BadRequestException, InternalServerErrorException } from '@nestjs/commo
 import _ from 'lodash'
 import { DeepPartial } from 'typeorm'
 import { UploadType, ImportMode, BulkUploadResponse } from '../types/common'
+import { CurrencyOptions } from '../types'
 
 export async function crudCreate<T>(options: { service: any; data: any; account_id?: number }): Promise<T> {
 	return await options.service.create({
@@ -20,7 +21,13 @@ export async function crudFindAll<T>(options: {
 	query: any
 	searchFields?: string[]
 	order_by?: string
+	currency?: CurrencyOptions
 }): Promise<T[]> {
+	if (options.query.convert_currencies_to && options.currency) {
+		options.currency.currency = options.query.convert_currencies_to
+		delete options.query.convert_currencies_to
+	}
+
 	const where = options.tQuery.buildWhere({
 		repository: options.service.repository,
 		query: options.query,
@@ -29,7 +36,7 @@ export async function crudFindAll<T>(options: {
 	})
 
 	const sql_options = TypeOrm.findOptions<T>(options.query, where, options.order_by)
-	return await options.service.findAll(sql_options)
+	return await options.service.findAll(sql_options, options.currency)
 }
 
 export async function crudFindOne<T>(options: {
@@ -37,8 +44,14 @@ export async function crudFindOne<T>(options: {
 	query: any
 	primaryKey: number
 	account_id?: number
+	currency?: CurrencyOptions
 }): Promise<T> {
 	const PRIMARY_KEY = TypeOrm.getPrimaryKey<T>(options.service.repository)
+
+	if (options.query.convert_currencies_to && options.currency) {
+		options.currency.currency = options.query.convert_currencies_to
+		delete options.query.convert_currencies_to
+	}
 
 	const where = {
 		[PRIMARY_KEY]: options.primaryKey,
@@ -47,7 +60,7 @@ export async function crudFindOne<T>(options: {
 
 	//@ts-ignore
 	const sql_options = TypeOrm.findOneOptions<T>(options.query, where)
-	return await options.service.findOne(sql_options)
+	return await options.service.findOne(sql_options, options.currency)
 }
 
 export async function crudStats<T>(options: {
@@ -102,8 +115,14 @@ export async function crudCharts<T>(options: {
 	to?: Date
 	fields: string[]
 	searchFields: string[]
+	currency?: CurrencyOptions
 }): Promise<ChartsResponseDto> {
 	const fields = _.castArray(options.fields)
+
+	if (options.query.convert_currencies_to && options.currency) {
+		options.currency.currency = options.query.convert_currencies_to
+		delete options.query.convert_currencies_to
+	}
 
 	const where = options.tQuery.buildWhere({
 		repository: options.service.repository,
@@ -114,12 +133,16 @@ export async function crudCharts<T>(options: {
 
 	const promises = fields.map(
 		async field =>
-			await options.service.charts(field, {
-				period: options.period,
-				from: options.from,
-				to: options.to,
-				where: where,
-			}),
+			await options.service.charts(
+				field,
+				{
+					period: options.period,
+					from: options.from,
+					to: options.to,
+					where: where,
+				},
+				options.currency,
+			),
 	)
 
 	const results = await Promise.all(promises)

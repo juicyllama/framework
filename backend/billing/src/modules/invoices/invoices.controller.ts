@@ -21,7 +21,7 @@ import { StorageService } from '@juicyllama/core/dist/modules/storage/storage.se
 import { Invoice } from './invoices.entity'
 import { InvoicesService } from './invoices.service'
 import { InvoiceOrderBy, InvoiceRelations, InvoiceSelect } from './invoices.enums'
-import { T, E, SEARCH_FIELDS } from './invoices.constants'
+import { T, E, SEARCH_FIELDS, BILLING_INVOICES_NAME } from './invoices.constants'
 
 @ApiTags('Invoices')
 @UserAuth()
@@ -34,7 +34,13 @@ export class InvoicesController {
 		@Inject(forwardRef(() => JLQuery)) private readonly query: JLQuery<T>,
 	) {}
 
-	@ReadManyDecorator(E, InvoiceSelect, InvoiceOrderBy, InvoiceRelations)
+	@ReadManyDecorator({
+		name: BILLING_INVOICES_NAME,
+		entity: E,
+		selectEnum: InvoiceSelect,
+		orderByEnum: InvoiceOrderBy,
+		relationsEnum: InvoiceRelations,
+	})
 	@ApiQuery({
 		name: 'currency',
 		description: 'The currency you are requesting data for',
@@ -186,7 +192,11 @@ export class InvoicesController {
 		return await this.invoicesService.downloadInvoice(user, invoice_id)
 	}
 
-	@ReadChartsDecorator(E, InvoiceSelect)
+	@ReadChartsDecorator({
+		name: BILLING_INVOICES_NAME,
+		entity: E,
+		selectEnum: InvoiceSelect,
+	})
 	async charts(
 		@Req() req,
 		@Query() query: any,

@@ -51,13 +51,13 @@ export class AccountController {
 		@Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,
 	) {}
 
-	@CreateDecorator(SuccessAccountDto, NAME)
+	@CreateDecorator({ entity: SuccessAccountDto, name: NAME })
 	async create(@Body() data: OnboardAccountDto): Promise<SuccessAccountDto> {
 		return await this.service.onboard(data)
 	}
 
 	@UserAuth()
-	@ApiOperation({ summary: `Create Additional ${Strings.capitalize(NAME)}` })
+	@ApiOperation({ summary: 'Create Additional Account' })
 	@Post('additional')
 	async createAdditionalAccount(@Req() req, @Body() data: OnboardAdditionalAccountDto): Promise<SuccessAccountDto> {
 		const user = await this.usersService.findById(req.user.user_id)
@@ -65,7 +65,13 @@ export class AccountController {
 	}
 
 	@UserAuth()
-	@ReadManyDecorator(E, AccountSelect, AccountOrderBy, AccountRelations, NAME)
+	@ReadManyDecorator({
+		entity: E,
+		selectEnum: AccountSelect,
+		orderByEnum: AccountOrderBy,
+		relationsEnum: AccountRelations,
+		name: NAME,
+	})
 	async findAll(@Req() req, @Query() query): Promise<T[]> {
 		const where = this.tQuery.buildWhere({
 			repository: this.service.repository,
@@ -79,7 +85,7 @@ export class AccountController {
 	}
 
 	@UserAuth()
-	@ReadStatsDecorator(NAME)
+	@ReadStatsDecorator({ name: NAME })
 	async stats(@Req() req, @Query() query, @Query('method') method?: StatsMethods): Promise<StatsResponseDto> {
 		if (!method) {
 			method = StatsMethods.COUNT
@@ -108,7 +114,13 @@ export class AccountController {
 	}
 
 	@UserAuth()
-	@ReadOneDecorator(E, PRIMARY_KEY, AccountSelect, AccountRelations, NAME)
+	@ReadOneDecorator({
+		entity: E,
+		primaryKey: PRIMARY_KEY,
+		selectEnum: AccountSelect,
+		relationsEnum: AccountRelations,
+		name: NAME,
+	})
 	async findOne(@Req() req, @Param() params, @Query() query): Promise<T> {
 		await this.authService.check(req.user.user_id, params[Number(PRIMARY_KEY)])
 
@@ -121,7 +133,7 @@ export class AccountController {
 	}
 
 	@UserAuth()
-	@UpdateDecorator(E, PRIMARY_KEY, NAME)
+	@UpdateDecorator({ entity: E, primaryKey: PRIMARY_KEY, name: NAME })
 	async update(@Req() req, @Body() data: UpdateAccountDto, @AccountId() account_id: number): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		return await this.service.update({
@@ -131,8 +143,8 @@ export class AccountController {
 	}
 
 	@UserAuth()
-	@ApiOperation({ summary: `Upload ${Strings.capitalize(NAME)} Avatar` })
-	@UploadImageDecorator(E)
+	@ApiOperation({ summary: 'Upload Account Avatar' })
+	@UploadImageDecorator({ entity: E })
 	@Patch(`avatar`)
 	async uploadAvatarFile(
 		@Req() req,
@@ -151,7 +163,7 @@ export class AccountController {
 	}
 
 	@UserAuth()
-	@ApiOperation({ summary: `Transfer ${Strings.capitalize(NAME)} Ownership` })
+	@ApiOperation({ summary: 'Transfer Account Ownership' })
 	@ApiParam({ name: 'user_id', description: 'User ID to transfer ownership to' })
 	@Post(`transfer/:user_id`)
 	//transfer
@@ -170,7 +182,7 @@ export class AccountController {
 	}
 
 	@UserAuth()
-	@ApiOperation({ summary: `Close ${Strings.capitalize(NAME)}` })
+	@ApiOperation({ summary: 'Close Account' })
 	@Delete()
 	async close(@Req() req, @AccountId() account_id: number): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])

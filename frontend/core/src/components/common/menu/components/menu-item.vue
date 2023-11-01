@@ -2,6 +2,7 @@
 import { MenuItem } from '../../../../types'
 
 const props = defineProps<MenuItem>()
+defineEmits(['click'])
 </script>
 
 <template>

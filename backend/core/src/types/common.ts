@@ -107,3 +107,10 @@ export class BulkUploadDto {
 }
 
 export type BulkUploadResponse = InsertResult | DeleteResult
+
+export interface ChartResult {
+	count: number
+	[key: string]: any
+	time_interval: Date
+	currency?: string | null
+}

@@ -1,5 +1,6 @@
-import { IsString, IsBoolean, IsOptional, IsEmail, MinLength, MaxLength } from 'class-validator'
+import { IsString, IsBoolean, IsOptional, IsEmail, MinLength, MaxLength, IsEnum } from 'class-validator'
 import { ApiProperty, PartialType } from '@nestjs/swagger'
+import { UserRole } from './users.enums'
 
 export class UserDto {
 	user_id?: number
@@ -27,6 +28,7 @@ export class UserDto {
 
 	@ApiProperty({
 		example: 'richard.branson@fly.virgin.com',
+		required: true,
 	})
 	@IsString()
 	@IsEmail()
@@ -53,6 +55,18 @@ export class UserDto {
 	password_reset?: boolean
 }
 
-export class CreateUserDto extends UserDto {}
+export class CreateUserDto extends UserDto {
+
+	@ApiProperty({
+		description: 'The user role',
+		example: UserRole.MEMBER,
+		required: false,
+		enum: UserRole,
+	})
+	@IsEnum(UserRole)
+	@IsOptional()
+	role?: UserRole
+
+}
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}

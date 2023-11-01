@@ -30,6 +30,7 @@ import { FindOptionsWhere, In } from 'typeorm'
 import { Query as JLQuery } from '@juicyllama/core/dist/utils/typeorm/Query'
 import { CreatePaymentMethodDto } from './payment.methods.dtos'
 import { PaymentStatus } from '../payments/payments.enums'
+import { BILLING_PAYMENT_MENTHODS_NAME } from './payment.methods.constants'
 
 const E = PaymentMethod
 type T = PaymentMethod
@@ -160,7 +161,13 @@ export class PaymentMethodsController {
 		return payment_method
 	}
 
-	@ReadManyDecorator(E, PaymentMethodSelect, PaymentMethodOrderBy, PaymentMethodRelations)
+	@ReadManyDecorator({
+		name: BILLING_PAYMENT_MENTHODS_NAME,
+		entity: E,
+		selectEnum: PaymentMethodSelect,
+		orderByEnum: PaymentMethodOrderBy,
+		relationsEnum: PaymentMethodRelations,
+	})
 	@ApiQuery({
 		name: 'currency',
 		description: 'The currency you are requesting data for',

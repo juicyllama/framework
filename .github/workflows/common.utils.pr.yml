@@ -41,7 +41,7 @@ jobs:
             -   name: Install Node.js
                 uses: actions/setup-node@v3
                 with:
-                    node-version: 19
+                    node-version: 18.18.2
 
             -   name: Prepare
                 run: echo -e "shamefully-hoist=true\\n@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc

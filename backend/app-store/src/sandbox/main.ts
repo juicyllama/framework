@@ -22,7 +22,7 @@ async function bootstrap() {
 
 	try {
 		const swagger_document = new DocumentBuilder()
-			.setTitle(Strings.capitalize(process.env.PROJECT_NAME))
+			.setTitle(process.env.PROJECT_NAME ? Strings.capitalize(process.env.PROJECT_NAME) : 'API Docs')
 			.setVersion(process.env.npm_package_version)
 			.addServer(process.env.BASE_URL_API, 'Live')
 			//.addServer(`https://sandbox.${process.env.BASE_URL_API.replace('https://', '')}`, 'Sandbox')

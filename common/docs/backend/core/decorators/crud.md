@@ -11,7 +11,7 @@ They have the added benefit of building automated documentation for your endpoin
 Takes two arguments, the entity/dto class type and the name of the endpoint (optional).
 
 ```typescript
-@CreateDecorator(T, 'example')
+@CreateDecorator({entity: T, name: 'example'})
 ```
 
 Resulting in an `POST` endpoint `/` with documentation for type `T`.
@@ -29,7 +29,13 @@ We have three decorators for reading data:
 This decorator takes 5 arguments, the entity class, the primary key, the selectable fields enum, the relations enum and the name of the endpoint (optional).
 
 ```typescript
-@ReadOneDecorator(E, PRIMARY_KEY, ExampleSelect, ExampleRelations, NAME)
+@ReadOneDecorator({
+    entity: E, 
+    primaryKey: PRIMARY_KEY, 
+    selectEnum: ExampleSelect, 
+    relationsEnum: ExampleRelations, 
+    name: NAME
+})
 ```
 
 This results in a `GET` endpoint `/:id` with swagger documentation for returning a single entity of type `E`.
@@ -39,7 +45,13 @@ This results in a `GET` endpoint `/:id` with swagger documentation for returning
 The 5 arguments for the list decorator are the entity class, the selectable fields enum, the order by enum, the relations enum and the name of the endpoint (optional).
 
 ```typescript
-@ReadManyDecorator(E, ExampleSelect, ExampleOrderBy, ExampleRelations, NAME)
+@ReadManyDecorator({
+    entity: E, 
+    selectEnum: ExampleSelect, 
+    orderByEnum: ExampleOrderBy,
+    relationsEnum: ExampleRelations, 
+    name: NAME
+})
 ```
 
 This results in a `GET` endpoint `/` with swagger documentation for returning an array of entities of type `E`.
@@ -49,7 +61,7 @@ This results in a `GET` endpoint `/` with swagger documentation for returning an
 The stats decorator optionally takes the name of the endpoint.
 
 ```typescript
-@ReadStatsDecorator(NAME)
+@ReadStatsDecorator({name: NAME})
 ```
 
 This results in a `GET` endpoint `/stats` with swagger documentation for returning a count/sum/avg result on the database.
@@ -59,7 +71,11 @@ This results in a `GET` endpoint `/stats` with swagger documentation for returni
 The charts decorator optionally takes the name of the endpoint.
 
 ```typescript
-@ReadChartsDecorator(NAME)
+@ReadChartsDecorator({
+    entity: E,
+    name: NAME, 
+    selectEnum: ExampleSelect
+})
 ```
 
 This results in a `GET` endpoint `/charts` with swagger documentation for returning datasets for pie/line charts from the database grouped by a field and optionally by time period.
@@ -69,7 +85,7 @@ This results in a `GET` endpoint `/charts` with swagger documentation for return
 The update decorator takes the entity class, the primary key and the name of the endpoint (optional).
 
 ```typescript
-@UpdateDecorator(E, PRIMARY_KEY, NAME)
+@UpdateDecorator({entity: E, primaryKey: PRIMARY_KEY, name: NAME})
 ```
 
 This results in a `PATCH` endpoint `/:id` with swagger documentation for updating a single entity of type `E`.
@@ -79,7 +95,7 @@ This results in a `PATCH` endpoint `/:id` with swagger documentation for updatin
 The delete decorator takes the entity class, the primary key and the name of the endpoint (optional).
 
 ```typescript
-@DeleteDecorator(E, PRIMARY_KEY, NAME)
+@DeleteDecorator({entity: E, primaryKey: PRIMARY_KEY, name: NAME})
 ```
 
 This results in a `DELETE` endpoint `/:id` with swagger documentation for deleting a single entity of type `E`.

@@ -12,7 +12,7 @@ export class SuccessAccountDto {
 export class OnboardAccountDto {
 	account_id?: number
 
-	@ApiProperty({ description: 'The name of your company', example: 'Virgin' })
+	@ApiProperty({ description: 'The name of your company', example: 'Example Company Limited' })
 	@IsString()
 	@MinLength(2)
 	@MaxLength(255)
@@ -20,7 +20,7 @@ export class OnboardAccountDto {
 
 	@ApiProperty({
 		description: 'The account owners email address',
-		example: 'owner@buq.com',
+		example: 'jon.doe@example.com',
 		required: true,
 	})
 	@IsEmail()

@@ -67,7 +67,7 @@ export class ContactsController {
 		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<T>,
 	) {}
 
-	@CreateDecorator(E, NAME)
+	@CreateDecorator({ entity: E, name: NAME })
 	async create(@Req() req, @Body() data: CreateContactDto, @AccountId() account_id: number): Promise<T> {
 		const domain = 'crm::contacts::controller::create'
 
@@ -94,7 +94,13 @@ export class ContactsController {
 		return await this.service.create(contact)
 	}
 
-	@ReadManyDecorator(E, ContactSelect, ContactOrderBy, ContactRelations)
+	@ReadManyDecorator({
+		entity: E,
+		selectEnum: ContactSelect,
+		orderByEnum: ContactOrderBy,
+		relationsEnum: ContactRelations,
+		name: NAME,
+	})
 	@ApiQuery({ name: 'has_email', enum: ContactHasEmailFilter, required: false })
 	@ApiQuery({ name: 'has_phone', enum: ContactHasPhoneFilter, required: false })
 	async findAll(@Query() query, @AccountId() account_id: number): Promise<T[]> {
@@ -108,7 +114,7 @@ export class ContactsController {
 		})
 	}
 
-	@ReadStatsDecorator(NAME)
+	@ReadStatsDecorator({ name: NAME })
 	async stats(
 		@Query() query,
 		@AccountId() account_id: number,
@@ -124,7 +130,13 @@ export class ContactsController {
 		})
 	}
 
-	@ReadOneDecorator(E, PRIMARY_KEY, ContactSelect, ContactRelations, NAME)
+	@ReadOneDecorator({
+		name: NAME,
+		entity: E,
+		primaryKey: PRIMARY_KEY,
+		selectEnum: ContactSelect,
+		relationsEnum: ContactRelations,
+	})
 	async findOne(@AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
 		return await crudFindOne<T>({
 			service: this.service,
@@ -134,7 +146,7 @@ export class ContactsController {
 		})
 	}
 
-	@UpdateDecorator(E, PRIMARY_KEY, NAME)
+	@UpdateDecorator({ entity: E, primaryKey: PRIMARY_KEY, name: NAME })
 	async update(@AccountId() account_id: number, @Body() data: UpdateContactDto, @Param() params): Promise<T> {
 		const domain = 'crm::contacts::controller::update'
 
@@ -164,7 +176,7 @@ export class ContactsController {
 	//todo remove tag
 
 	@ApiOperation({ summary: 'Upload Contact Avatar', description: 'Upload Avatar Image File' })
-	@UploadFileDecorator(E)
+	@UploadFileDecorator({ entity: E })
 	@Patch(':contact_id/avatar')
 	async uploadAvatarFile(
 		@Req() req,
@@ -195,8 +207,8 @@ export class ContactsController {
 		return await this.service.findById(contact_id)
 	}
 
-	@DeleteDecorator(E, PRIMARY_KEY, NAME)
-	async remove(@Req() req, @Param() params, @AccountId() account_id: number): Promise<T> {
+	@DeleteDecorator({ entity: E, primaryKey: PRIMARY_KEY, name: NAME })
+	async remove(@Param() params, @AccountId() account_id: number): Promise<T> {
 		return await crudDelete<T>({
 			service: this.service,
 			primaryKey: params[PRIMARY_KEY],

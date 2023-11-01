@@ -3,10 +3,10 @@ import { NestFactory } from '@nestjs/core'
 import { ValidationPipe } from '@nestjs/common'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import 'reflect-metadata'
-import { Enviroment, Logger, Strings } from '@juicyllama/utils'
-import { RedocModule } from '../src/utils/redoc'
-import { redocConfig, TypeOrmFilter, validationPipeOptions } from '../src/index'
+import { Enviroment, Logger } from '@juicyllama/utils'
+import { RedocModule, redocConfig, TypeOrmFilter, validationPipeOptions } from '@juicyllama/core'
 import { SandboxModule } from './sandbox.module'
+import { installWebsiteDocs } from '../docs/install'
 
 const domain = 'main::bootstrap'
 const logger = new Logger()
@@ -22,15 +22,18 @@ async function bootstrap() {
 
 	try {
 		const swagger_document = new DocumentBuilder()
-			.setTitle(Strings.capitalize(process.env.PROJECT_NAME))
+			.setTitle('SANDBOX API')
 			.setVersion(process.env.npm_package_version)
 			.addServer(process.env.BASE_URL_API, 'Live')
-			//.addServer(`https://sandbox.${process.env.BASE_URL_API.replace('https://', '')}`, 'Sandbox')
 			.addBearerAuth()
 			.build()
 
 		const document = SwaggerModule.createDocument(app, swagger_document)
-		await RedocModule.setup('', app, document, redocConfig, true)
+
+		let redoc = redocConfig
+		redoc = installWebsiteDocs(redoc)
+
+		await RedocModule.setup('', app, document, redoc, true)
 	} catch (e) {
 		logger.error(`[${domain}] ${e.message}`, e)
 	}

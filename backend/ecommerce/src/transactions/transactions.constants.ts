@@ -6,3 +6,12 @@ export const TRANSACTION_PRIMARY_KEY = 'transaction_id'
 export const TRANSACTION_NAME = 'transaction'
 export const TRANSACTION_SEARCH_FIELDS = ['order_id', 'order_number']
 export const TRANSACTION_DEFAULT_ORDER_BY = 'created_at'
+export const TRANSACTION_CURRENCY_FIELD = 'currency'
+export const TRANSACTION_CURRENCY_FIELDS = [
+	'subtotal_price',
+	'total_shipping',
+	'total_discounts',
+	'total_tax',
+	'total_outstanding',
+	'total_price',
+]

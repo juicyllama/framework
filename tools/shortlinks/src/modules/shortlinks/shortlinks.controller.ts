@@ -19,13 +19,13 @@ export class ShortlinksController {
 		@Inject(forwardRef(() => JLQuery)) private readonly query: JLQuery<T>,
 	) {}
 
-	@CreateDecorator(E, NAME)
+	@CreateDecorator({ entity: E, name: NAME })
 	async create(@Req() req, @Body() data: ShortenURLDto, @AccountId() account_id: number): Promise<T> {
 		const account = await this.accountService.findById(account_id)
 		return await this.service.shortenUrl(data, account)
 	}
 
-	@UpdateDecorator(E, PRIMARY_KEY, NAME)
+	@UpdateDecorator({ entity: E, primaryKey: PRIMARY_KEY, name: NAME })
 	async update(
 		@Req() req,
 		@AccountId() account_id: number,

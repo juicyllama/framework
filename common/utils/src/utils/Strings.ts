@@ -1,3 +1,5 @@
+import { Logger } from './Logger'
+
 export class Strings {
 	/**
 	 * Capitalise first letter
@@ -7,10 +9,19 @@ export class Strings {
 	 */
 
 	static capitalize(str: string): string {
-		if (!str) {
+		try {
+			if(typeof str !== 'string') return ''
+			if(str.length === 0) return ''
+
+			return str.charAt(0).toUpperCase() + str.slice(1)
+		} catch (e: any) {
+			const logger = new Logger()
+			logger.warn(`[Utils::Strings::capitalize] ${e.message}`, {
+				str: str,
+			})
+			logger.warn(`[Utils::Strings::capitalize] Stack Trace`, e.stack)
 			return ''
 		}
-		return str.charAt(0).toUpperCase() + str.slice(1)
 	}
 
 	/**

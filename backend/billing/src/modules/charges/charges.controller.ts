@@ -7,6 +7,7 @@ import { AccountId, AuthService, ReadManyDecorator, UserAuth, UserRole } from '@
 import { ChargeOrderBy, ChargeRelations, ChargeSelect } from './charges.enums'
 import { Query as JLQuery } from '@juicyllama/core/dist/utils/typeorm/Query'
 import { SupportedCurrencies } from '@juicyllama/utils'
+import { BILLING_CHARGES_NAME } from './charges.constants'
 
 const E = Charge
 type T = Charge
@@ -21,7 +22,13 @@ export class ChargesController {
 		@Inject(forwardRef(() => JLQuery)) private readonly query: JLQuery<T>,
 	) {}
 
-	@ReadManyDecorator(E, ChargeSelect, ChargeOrderBy, ChargeRelations)
+	@ReadManyDecorator({
+		name: BILLING_CHARGES_NAME,
+		entity: E,
+		selectEnum: ChargeSelect,
+		orderByEnum: ChargeOrderBy,
+		relationsEnum: ChargeRelations,
+	})
 	@ApiQuery({
 		name: 'currency',
 		description: 'The currency you are requesting data for',

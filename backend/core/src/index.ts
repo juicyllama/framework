@@ -154,4 +154,9 @@ export {
 	BulkUploadDto,
 	BulkUploadResponse,
 	OauthInterface,
+	ChartOptions,
+	CurrencyOptions,
 } from './types'
+
+//Mocks
+export { fxMock } from './modules/fx/mock'

@@ -39,4 +39,4 @@ import { Website } from './websites.entity'
 	providers: [WebsitesService, Logger, Query],
 	exports: [WebsitesService],
 })
-export class WebsiteModule {}
+export class WebsitesModule {}

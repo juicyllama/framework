@@ -81,6 +81,9 @@ export const AccountStore = defineStore('account', {
 		getAccountId(state): number {
 			return state.selected_account?.account_id ?? null
 		},
+		getCurrency(state): string {
+			return state.selected_account?.currency ?? null
+		},
 		async getAccountName(state): Promise<string> {
 			if (!state.selected_account?.account_id) {
 				if (!state.selected_account?.account_id) {

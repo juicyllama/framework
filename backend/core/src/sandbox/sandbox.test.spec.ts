@@ -9,7 +9,6 @@ const E = Account
 describe(`Sandbox Fires Up`, () => {
 	const scaffolding = new Scaffold<T>()
 	let scaffold: ScaffoldDto<T>
-	let mock: Partial<T>
 
 	beforeAll(async () => {
 		scaffold = await scaffolding.up(MODULE)

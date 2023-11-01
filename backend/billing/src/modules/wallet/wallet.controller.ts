@@ -7,6 +7,7 @@ import { AccountId, AccountService, AuthService, ReadManyDecorator, UserAuth, Us
 import { WalletOrderBy, WalletRelations, WalletSelect } from './wallet.enums'
 import { GetBalanceResponseDto } from './wallet.dto'
 import { Query as JLQuery } from '@juicyllama/core/dist/utils/typeorm/Query'
+import { BILLING_WALLET_NAME } from './wallet.constants'
 
 const E = Wallet
 type T = Wallet
@@ -36,7 +37,13 @@ export class WalletController {
 		return await this.walletService.getBalances(account)
 	}
 
-	@ReadManyDecorator(E, WalletSelect, WalletOrderBy, WalletRelations)
+	@ReadManyDecorator({
+		name: BILLING_WALLET_NAME,
+		entity: E,
+		selectEnum: WalletSelect,
+		orderByEnum: WalletOrderBy,
+		relationsEnum: WalletRelations,
+	})
 	async listAll(@Req() req, @AccountId() account_id: number, @Query() query): Promise<T[]> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 
