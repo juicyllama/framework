@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-const LS_KEY_FOR_DATA = 'dashboard'
+const LS_KEY_FOR_DATA = 'dashboard-widgets'
 
 const saved = localStorage.getItem(LS_KEY_FOR_DATA) || ''
 
@@ -40,6 +40,9 @@ export const useWidgetsStore = defineStore('counter', {
 		},
 		removeByIndex(index) {
 			this.widgets.splice(index, 1)
+		},
+		setWidgets(listFromDataOrAPI) {
+			this.widgets = listFromDataOrAPI
 		},
 	},
 })
