@@ -3,7 +3,7 @@
 		<q-header elevated class="bg-white text-grey-8" height-hint="64">
 			<q-toolbar class="JLWidget__toolbar" style="height: 64px">
 				<q-toolbar-title v-if="$q.screen.gt.sm" shrink class="row items-center no-wrap">
-					<span class="q-ml-sm">Dashboard</span>
+					<span class="q-ml-sm">{{ title }}</span>
 				</q-toolbar-title>
 
 				<q-space />
@@ -287,6 +287,7 @@ export default {
 			resortDrop,
 			onDrop,
 			onDragStart,
+			title: ref('Widget editor'),
 		}
 	},
 }
