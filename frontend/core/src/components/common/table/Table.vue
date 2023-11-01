@@ -111,6 +111,25 @@ async function getData() {
 	loading.value = false
 }
 
+async function onAdvancedFilterChange(advancedFiltersValue: any) {
+	if (total_rows.value > 0) {
+		const data = await props.options.functions.findAll({
+			url: props.options.endpoint,
+			find: {
+				...useListStore.options,
+				advancedFiltersValue,
+			},
+			q: $q,
+		})
+
+		rows.value = formatFormData(data)
+	} else {
+		rows.value = []
+	}
+
+	loading.value = false
+}
+
 /**
  * Add, updates or deletes a single record in the table
  */
@@ -351,7 +370,8 @@ onMounted(async () => {
 			@updateValue="updateValue"
 			@deleteRecord="deleteRecord"
 			@pluginAction="pluginAction"
-			@toggleButton="tableToggled"></Table>
+			@toggleButton="tableToggled"
+			@advancedFilter="onAdvancedFilterChange"></Table>
 
 		<q-dialog v-model="confirm" persistent>
 			<q-card>

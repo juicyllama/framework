@@ -46,6 +46,7 @@ const emit = defineEmits([
 	'deleteRecord',
 	'pluginAction',
 	'toggleButton',
+	'advancedFilter',
 ])
 
 const $q = useQuasar()
@@ -302,9 +303,7 @@ const activeLabels = computed<string[]>(() => activeFilters.value.map(el => el.l
 
 const activeFilters = ref<IFilter[]>([])
 
-const BASE_URL_REPLACE_SERVICE_CALL: string = 'URL_REPLACE_SERVICE_CALL/api/'
-const URL_REPLACE_SERVICE_CALL = ref<string>()
-const query = computed<Array<string | number>[]>(() => {
+const perCollumnFilterQuery = computed<Array<string | number>[]>(() => {
 	return activeFilters.value.map(el => {
 		const item = JLToQColumns.find(i => i.label === el.label)
 		const method: string = typeof el.type === 'object' ? el.type.method : ''
@@ -326,18 +325,12 @@ const onRemoveFilter = index => {
 	activeFilters.value.splice(index, 1)
 }
 
-watchEffect(() => {
-	if (query.value.length) {
-		URL_REPLACE_SERVICE_CALL.value =
-			BASE_URL_REPLACE_SERVICE_CALL +
-			query.value.reduce(
-				(acc, e, i) => `${acc}${i > 0 ? '&' : '?'}${e[0]}=${encodeURIComponent(e[1])}${e[2] ? ':' + e[2] : ''}`,
-				'',
-			)
-	} else {
-		URL_REPLACE_SERVICE_CALL.value = BASE_URL_REPLACE_SERVICE_CALL
-	}
-})
+watch(
+	() => props.restart,
+	() => {
+		emit('advancedFilter', perCollumnFilterQuery.value)
+	},
+)
 </script>
 
 <template>
