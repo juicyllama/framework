@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref, ref, reactive, computed, watch, watchEffect } from 'vue'
+import { Ref, ref, reactive, computed, watch } from 'vue'
 import FieldContents from './FieldContents.vue'
 import TableActions from './TableActions.vue'
 import {
