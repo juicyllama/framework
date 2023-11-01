@@ -58,9 +58,9 @@ export class BeaconEmailService {
 
 		let service: any
 
-		if (Modules.isInstalled('@juicyllama/aws')) {
+		if (Modules.isInstalled('@juicyllama/app-aws')) {
 			//@ts-ignore
-			const { AwsSesModule, AwsSesService } = await import('@juicyllama/aws')
+			const { AwsSesModule, AwsSesService } = await import('@juicyllama/app-aws')
 
 			try {
 				const awsSesModule = await this.lazyModuleLoader.load(() => AwsSesModule)
