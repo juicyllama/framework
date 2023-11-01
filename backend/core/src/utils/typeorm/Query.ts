@@ -98,19 +98,25 @@ export class Query<T> {
 					result = await this.createBulkRecords(repository, data)
 					await this.dropTable(repository, `${repository.metadata.tableName}_COPY`)
 				} catch (e: any) {
+					logger.error(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] ${e.message}`, e.stack)
 					await this.restoreTable(repository)
 				}
 				break
 		}
 
-		logger.debug(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] Result`, {
-			affected_records:
-				'affected_records' in result
-					? result.affected_records
-					: 'raw' in result
-					? result.raw.affected_records
-					: null,
-		})
+		try{
+			logger.debug(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] Result`, {
+				affected_records:
+					'affected_records' in result
+						? result.affected_records
+						: 'raw' in result
+						? result.raw.affected_records
+						: null,
+			})
+		}catch(e: any) {
+			logger.warn(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] Issue reading result: ${e.message}`, result)
+			logger.debug(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] Result`, result)
+		}
 
 		return result
 	}
