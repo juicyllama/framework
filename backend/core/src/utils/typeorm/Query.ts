@@ -104,20 +104,7 @@ export class Query<T> {
 				break
 		}
 
-		try{
-			logger.debug(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] Result`, {
-				affected_records:
-					'affected_records' in result
-						? result.affected_records
-						: 'raw' in result
-						? result.raw.affected_records
-						: null,
-			})
-		}catch(e: any) {
-			logger.warn(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] Issue reading result: ${e.message}`, result)
-			logger.debug(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] Result`, result)
-		}
-
+		logger.debug(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] Result`, result)
 		return result
 	}
 
@@ -428,6 +415,8 @@ export class Query<T> {
 			logger.debug(`[QUERY][COPY TABLE][${repository.metadata.tableName}]`)
 		}
 
+		await this.dropTable(repository, table_name ?? repository.metadata.tableName + '_COPY')
+
 		const sql_copy = `CREATE TABLE ${table_name ?? repository.metadata.tableName + '_COPY'} LIKE ${
 			repository.metadata.tableName
 		}`
@@ -470,7 +459,7 @@ export class Query<T> {
 			logger.debug(`[QUERY][DROP TABLE][${table_name}]`)
 		}
 
-		const sql_drop = `DROP TABLE ${table_name}`
+		const sql_drop = `DROP TABLE IF EXISTS ${table_name}`
 		await this.raw(repository, sql_drop)
 	}
 
