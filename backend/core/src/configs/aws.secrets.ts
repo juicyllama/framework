@@ -4,11 +4,11 @@ export async function loadEnvVariables(SECRET_MANAGER_NAME: string, envPath: str
 	const logger = new Logger()
 
 	try {
-		if (!Modules.isInstalled('@juicyllama/aws')) {
+		if (!Modules.isInstalled('@juicyllama/app-aws')) {
 			new Error('[loadEnvVariables] AWS Module not installed')
 		}
 		//@ts-ignore
-		const { getSecret } = await import('@juicyllama/aws')
+		const { getSecret } = await import('@juicyllama/app-aws')
 		const secrets = await getSecret(SECRET_MANAGER_NAME)
 
 		if (!secrets) {

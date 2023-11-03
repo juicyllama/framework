@@ -1,4 +1,13 @@
-import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto, Csv, File, Json, Logger } from '@juicyllama/utils'
+import {
+	ChartsPeriod,
+	ChartsResponseDto,
+	StatsMethods,
+	StatsResponseDto,
+	Csv,
+	File,
+	Json,
+	Logger,
+} from '@juicyllama/utils'
 import { Query as TQuery } from '../utils/typeorm/Query'
 import { TypeOrm } from '../utils/typeorm/TypeOrm'
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common'
@@ -199,7 +208,6 @@ export async function crudBulkUpload<T>(options: {
 	file?: Express.Multer.File
 	raw?: any
 }): Promise<BulkUploadResponse> {
-
 	const domain = 'core::helpers::crudController::crudBulkUpload'
 
 	const csv = new Csv()
@@ -305,7 +313,7 @@ export async function crudBulkUpload<T>(options: {
 		return <DeepPartial<T>>_.omitBy(dto, _.isEmpty) // remove empty values
 	})
 
-	dtos = cleanDtos(dtos, options, domain)	
+	dtos = cleanDtos(dtos, options, domain)
 
 	try {
 		logger.debug(`[${domain}] Offloading DTO to bulk service`)
@@ -340,14 +348,24 @@ export async function crudPurge<T>(options: { service: any; primaryKey: number; 
 }
 
 function cleanDtos<T>(dtos: DeepPartial<T>[], options: any, domain: string): DeepPartial<T>[] {
-
 	// Remove any records with duplicate dedup_field
 	const unique = _.uniqBy(dtos, options.dedup_field)
-	logger.debug(`[${domain}] Removed ${dtos.length - unique.length} records with duplicate ${options.dedup_field} field values`)
+	logger.debug(
+		`[${domain}] Removed ${dtos.length - unique.length} records with duplicate ${options.dedup_field} field values`,
+	)
 
 	// Remove any records with no dedup_field
-	const clean = unique.filter(record => (!_.isEmpty(record) && record[options.dedup_field] && !_.isNil(record[options.dedup_field]) && !_.isEmpty(record[options.dedup_field]) && !_.isEqual(record[options.dedup_field], '')))
-	logger.debug(`[${domain}] Removed ${unique.length - clean.length} records with no value in ${options.dedup_field} field`)
-	
+	const clean = unique.filter(
+		record =>
+			!_.isEmpty(record) &&
+			record[options.dedup_field] &&
+			!_.isNil(record[options.dedup_field]) &&
+			!_.isEmpty(record[options.dedup_field]) &&
+			!_.isEqual(record[options.dedup_field], ''),
+	)
+	logger.debug(
+		`[${domain}] Removed ${unique.length - clean.length} records with no value in ${options.dedup_field} field`,
+	)
+
 	return clean
 }

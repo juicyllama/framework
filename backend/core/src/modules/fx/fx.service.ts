@@ -34,7 +34,7 @@ export class FxService {
 	async convert(amount: number, from: SupportedCurrencies, to: SupportedCurrencies, date?: Date): Promise<number> {
 		const domain = 'core::fx::service::convert'
 
-		if(!amount) {
+		if (!amount) {
 			this.logger.error(`[${domain}] Amount is required`, {
 				amount: amount,
 				from: from,
@@ -43,7 +43,7 @@ export class FxService {
 			})
 			throw new Error('Amount is required')
 		}
-		if(!from) {
+		if (!from) {
 			this.logger.error(`[${domain}] From is required`, {
 				amount: amount,
 				from: from,
@@ -52,7 +52,7 @@ export class FxService {
 			})
 			throw new Error('From is required')
 		}
-		if(!to) {
+		if (!to) {
 			this.logger.error(`[${domain}] To is required`, {
 				amount: amount,
 				from: from,
@@ -128,7 +128,7 @@ export class FxService {
 
 				rates = await this.query.create(this.repository, create)
 				convertResult = calc(amount, rates[from], rates[to])
-			}else {
+			} else {
 				throw new Error(`[${domain}] Error getting rates from apilayer`)
 			}
 		} else {

@@ -5,7 +5,6 @@ import { UsersModule } from '../../modules/users/users.module'
 import { ImportMode } from '../../types/common'
 import { Csv, File } from '@juicyllama/utils'
 import { UPLOAD_DUPLICATE_FIELD } from '../../modules/users/users.constants'
-import { DeleteResult, InsertResult } from 'typeorm'
 import { faker } from '@faker-js/faker'
 
 const E = User
@@ -49,7 +48,7 @@ describe('Query Bulk', () => {
 				scaffold.services.logger.warn(e.message)
 			}
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
-			expect(res.raw.affectedRows).toEqual(1)
+			expect(res.created).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
 			const lastUser = users.pop()
 			expect(lastUser.first_name).toEqual(first_name_shared)
@@ -75,7 +74,7 @@ describe('Query Bulk', () => {
 				scaffold.services.logger.warn(e.message)
 			}
 				const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
-				expect(res.raw.affectedRows).toEqual(2)
+				expect(res.created).toEqual(2)
 				const users = await scaffold.services.service.findAll({})
 				const lastUser = users.pop()
 				expect(lastUser.first_name).toEqual(first_name_shared_2)
@@ -83,7 +82,7 @@ describe('Query Bulk', () => {
 				expect(lastUser.email).toEqual(email_shared_2)
 		})
 
-		it(`Inserts 0 records if duplicate is found`, async () => {
+		it(`Inserts on duplicate`, async () => {
 			const count = await scaffold.services.service.count()
 			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
 				`first_name,last_name,email\n${first_name_shared},${last_name_shared},${email_shared}`
@@ -94,18 +93,14 @@ describe('Query Bulk', () => {
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
-			try{
-				await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
-				expect(true).toEqual(false)
-			}catch(e: any){
-				expect(e.message).toMatch('Duplicate entry')
-			}
 			
+			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
+			expect(res.created).toEqual(1)
 			const new_count = await scaffold.services.service.count()
 			expect(new_count).toEqual(count)
 		})
 
-		it(`Inserts 0 records if duplicate is only 1 of many`, async () => {
+		it(`Updates records even if duplicate found`, async () => {
 			const count = await scaffold.services.service.count()
 
 			const first_name_1 = faker.person.firstName()
@@ -127,14 +122,9 @@ describe('Query Bulk', () => {
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
-			try{
-				await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
-				expect(true).toEqual(false)
-			}catch(e: any){
-				expect(e.message).toMatch('Duplicate entry')
-			}
-			const new_count = await scaffold.services.service.count()
-			expect(new_count).toEqual(count)
+		
+			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
+			expect(res.created).toEqual(3)
 		})
 
 	})
@@ -157,7 +147,8 @@ describe('Query Bulk', () => {
 				scaffold.services.logger.warn(e.message)
 			}
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
-			expect(res.raw.affectedRows).toEqual(1)
+			console.log(res)
+			expect(res.created).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
 			const lastUser = users.pop()
 			expect(lastUser.first_name).toEqual(first_name)
@@ -184,7 +175,8 @@ describe('Query Bulk', () => {
 				scaffold.services.logger.warn(e.message)
 			}
 				const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
-				expect(res.raw.affectedRows).toEqual(2)
+				console.log(res)
+				expect(res.created).toEqual(2)
 				const users = await scaffold.services.service.findAll({})
 				const lastUser = users.pop()
 				expect(lastUser.first_name).toEqual(first_name_2)
@@ -212,7 +204,8 @@ describe('Query Bulk', () => {
 				scaffold.services.logger.warn(e.message)
 			}
 				const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
-				expect(res.raw.affectedRows).toEqual(2)
+				console.log(res)
+				expect(res.created).toEqual(2)
 				const users = await scaffold.services.service.findAll({})
 				const lastUser = users.pop()
 				expect(lastUser.first_name).toEqual(first_name_2)
@@ -231,7 +224,8 @@ describe('Query Bulk', () => {
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
-			await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)	
+			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)	
+console.log(res)
 			const user = await scaffold.services.service.findOne({
 				where: {
 					email: email_shared
@@ -260,9 +254,8 @@ describe('Query Bulk', () => {
 				scaffold.services.logger.warn(e.message)
 			}
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
-		
-			expect(res.raw.affectedRows).toEqual(4)
-			expect(res.raw.info).toMatch('Records: 2  Duplicates: 2')
+			console.log(res)
+			expect(res.updated).toEqual(2)
 			const new_count = await scaffold.services.service.count()
 			expect(new_count).toEqual(count)
 			const user = await scaffold.services.service.findOne({
@@ -291,8 +284,9 @@ describe('Query Bulk', () => {
 				scaffold.services.logger.warn(e.message)
 			}
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
-			expect(res.raw.affectedRows).toEqual(3)
-			expect(res.raw.info).toMatch('Records: 2  Duplicates: 1')
+			console.log(res)
+			expect(res.created).toEqual(1)
+			expect(res.updated).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
 			const lastUser = users.pop()
 			expect(lastUser.first_name).toEqual(first_name)
@@ -320,9 +314,8 @@ describe('Query Bulk', () => {
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
-			const res = <InsertResult>await scaffold.query.bulk(scaffold.repository, data, ImportMode.REPOPULATE)
-			expect(res.raw.affectedRows).toEqual(3)
-			expect(res.raw.info).toEqual('Records: 3  Duplicates: 0  Warnings: 0')
+			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.REPOPULATE)
+			expect(res.created).toEqual(3)
 			const new_count = await scaffold.services.service.count()
 			expect(new_count).toEqual(3)
 			expect(new_count).toBeLessThan(count)
@@ -342,8 +335,8 @@ describe('Query Bulk', () => {
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
-			const res = <DeleteResult>await scaffold.query.bulk(scaffold.repository, data, ImportMode.DELETE, UPLOAD_DUPLICATE_FIELD)
-			expect(res.affected).toEqual(2)
+			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.DELETE, UPLOAD_DUPLICATE_FIELD)
+			expect(res.deleted).toEqual(2)
 			const new_count = await scaffold.services.service.count()
 			expect(new_count).toEqual(1)
 			expect(new_count).toBeLessThan(count)

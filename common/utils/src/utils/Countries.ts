@@ -1,11 +1,15 @@
 import COUNTRIES from '../assets/countries.json'
+import { isNil } from 'lodash'
+import { Logger } from './Logger'
 
 export class Countries {
+
 	/**
 	 * Takes in an ISO2 country code and returns the ISO3 version
 	 */
 
 	static convertISO2ToISO3(iso2: string): string {
+		if(!iso2 || isNil(iso2)) return null
 		const ISO2toISO3 = {
 			BD: 'BGD',
 			BE: 'BEL',
@@ -258,7 +262,15 @@ export class Countries {
 			QA: 'QAT',
 			MZ: 'MOZ',
 		}
-		return ISO2toISO3[iso2]
+
+		try{
+			return ISO2toISO3[iso2]
+		}catch(e: any){
+			const logger = new Logger()
+			logger.error(`[Utils::Countries::convertISO2ToISO3] ${e.message}`, e.stack)
+			return null
+		}
+
 	}
 
 	/**
@@ -266,7 +278,15 @@ export class Countries {
 	 */
 
 	static countryNameToISO2(countryName) {
-		return COUNTRIES.find(country => country['Country Name'].toLowerCase() === countryName.toLowerCase()).ISO2
+		if(!countryName || isNil(countryName)) return null
+
+		try{
+			return COUNTRIES.find(country => country['Country Name'].toLowerCase() === countryName.toLowerCase()).ISO2
+		}catch(e: any){
+			const logger = new Logger()
+			logger.error(`[Utils::Countries::countryNameToISO2] ${e.message}`, e.stack)
+			return null
+		}
 	}
 
 	/**
@@ -275,6 +295,14 @@ export class Countries {
 	 */
 
 	static getCountry(ISO2) {
-		return COUNTRIES.find(country => country.ISO2 === ISO2)
+		if(!ISO2 || isNil(ISO2)) return null
+
+		try{
+			return COUNTRIES.find(country => country.ISO2 === ISO2)
+		}catch(e: any){
+			const logger = new Logger()
+			logger.error(`[Utils::Countries::getCountry] ${e.message}`, e.stack)
+			return null
+		}
 	}
 }
