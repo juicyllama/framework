@@ -6,7 +6,6 @@ import { crudBulkUpload } from './crudController'
 import { UPLOAD_FIELDS, UPLOAD_DUPLICATE_FIELD } from '../modules/users/users.constants'
 import { ImportMode, UploadType } from '../types/common'
 import { Csv, File, Json } from '@juicyllama/utils'
-import { InsertResult } from 'typeorm'
 import { faker } from '@faker-js/faker'
 
 const E = User
@@ -48,7 +47,7 @@ describe('Crud Bulk Upload Controller', () => {
 			}
 
 			try{ 
-				const res = <InsertResult>await crudBulkUpload<T>({
+				const res = await crudBulkUpload<T>({
 					file: csv_file,
 					fields: UPLOAD_FIELDS,
 					dedup_field: UPLOAD_DUPLICATE_FIELD,
@@ -57,7 +56,7 @@ describe('Crud Bulk Upload Controller', () => {
 					service: scaffold.services.service,
 				})
 
-				expect(res.raw).not.toBeDefined()
+				expect(res.created).toEqual(0)
 				
 			} catch(e: any) {
 				scaffold.services.logger.warn(e.message)
@@ -80,7 +79,7 @@ describe('Crud Bulk Upload Controller', () => {
 			}
 
 			try{ 
-				<InsertResult>await crudBulkUpload<T>({
+				await crudBulkUpload<T>({
 					file: csv_file,
 						fields: UPLOAD_FIELDS,
 						dedup_field: UPLOAD_DUPLICATE_FIELD,
@@ -114,7 +113,7 @@ describe('Crud Bulk Upload Controller', () => {
 					scaffold.services.logger.warn(e.message)
 				}
 	
-				const res = <InsertResult>await crudBulkUpload<T>(
+				const res = await crudBulkUpload<T>(
 					{
 						file: csv_file,
 						fields: UPLOAD_FIELDS,
@@ -124,7 +123,7 @@ describe('Crud Bulk Upload Controller', () => {
 						service: scaffold.services.service,
 					}
 				)
-				expect(res.raw.affectedRows).toEqual(1)
+				expect(res.created).toEqual(1)
 				const users = await scaffold.services.service.findAll({})
 				const lastUser = users.pop()
 				expect(lastUser.first_name).toEqual(first_name)
@@ -144,7 +143,7 @@ describe('Crud Bulk Upload Controller', () => {
 		
 
 			it('Upload 1 User', async () => {
-				const res = <InsertResult>await crudBulkUpload<T>(
+				const res = await crudBulkUpload<T>(
 					{
 						raw: string,
 						fields: UPLOAD_FIELDS,
@@ -154,7 +153,7 @@ describe('Crud Bulk Upload Controller', () => {
 						service: scaffold.services.service,
 					}
 				)
-				expect(res.raw.affectedRows).toEqual(1)
+				expect(res.created).toEqual(1)
 				const users = await scaffold.services.service.findAll({})
 				const lastUser = users.pop()
 				expect(lastUser.first_name).toEqual(first_name)
@@ -182,7 +181,7 @@ describe('Crud Bulk Upload Controller', () => {
 					scaffold.services.logger.warn(e.message)
 				}
 	
-				const res = <InsertResult>await crudBulkUpload<T>(
+				const res = await crudBulkUpload<T>(
 					{
 						file: json_file,
 						fields: UPLOAD_FIELDS,
@@ -192,7 +191,7 @@ describe('Crud Bulk Upload Controller', () => {
 						service: scaffold.services.service,
 					}
 				)
-				expect(res.raw.affectedRows).toEqual(1)
+				expect(res.created).toEqual(1)
 				const users = await scaffold.services.service.findAll({})
 				const lastUser = users.pop()
 				expect(lastUser.first_name).toEqual(first_name)
@@ -210,7 +209,7 @@ describe('Crud Bulk Upload Controller', () => {
 				const last_name = faker.person.lastName()
 				const email = faker.internet.email({firstName: first_name, lastName: last_name})
 
-				const res = <InsertResult>await crudBulkUpload<T>(
+				const res = await crudBulkUpload<T>(
 					{
 						raw: [{ "first_name": first_name, "last_name": last_name, "email": email}],
 						fields: UPLOAD_FIELDS,
@@ -220,7 +219,7 @@ describe('Crud Bulk Upload Controller', () => {
 						service: scaffold.services.service,
 					}
 				)
-				expect(res.raw.affectedRows).toEqual(1)
+				expect(res.created).toEqual(1)
 				const users = await scaffold.services.service.findAll({})
 				const lastUser = users.pop()
 				expect(lastUser.first_name).toEqual(first_name)
@@ -248,7 +247,7 @@ describe('Crud Bulk Upload Controller', () => {
 				scaffold.services.logger.warn(e.message)
 			}
 
-			const res = <InsertResult>await crudBulkUpload<T>(
+			const res = await crudBulkUpload<T>(
 				{
 					file: csv_file,
 					fields: UPLOAD_FIELDS,
@@ -258,7 +257,7 @@ describe('Crud Bulk Upload Controller', () => {
 					service: scaffold.services.service,
 				}
 			)
-			expect(res.raw.affectedRows).toEqual(1)
+			expect(res.created).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
 			const lastUser = users.pop()
 			expect(lastUser.first_name).toEqual(first_name)
@@ -283,7 +282,7 @@ describe('Crud Bulk Upload Controller', () => {
 				scaffold.services.logger.warn(e.message)
 			}
 
-			const res = <InsertResult>await crudBulkUpload<T>(
+			const res = await crudBulkUpload<T>(
 				{
 					file: csv_file,
 					fields: UPLOAD_FIELDS,
@@ -297,7 +296,7 @@ describe('Crud Bulk Upload Controller', () => {
 					}
 				}
 			)
-			expect(res.raw.affectedRows).toEqual(1)
+			expect(res.created).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
 			const lastUser = users.pop()
 			expect(lastUser.first_name).toEqual(first_name)

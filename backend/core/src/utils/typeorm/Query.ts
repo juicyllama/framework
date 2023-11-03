@@ -1,13 +1,12 @@
 import {
 	And,
 	DeepPartial,
-	DeleteResult,
 	Equal,
 	FindManyOptions,
 	FindOneOptions,
 	FindOperator,
-	In,
 	InsertResult,
+	In,
 	IsNull,
 	LessThan,
 	LessThanOrEqual,
@@ -55,6 +54,33 @@ export class Query<T> {
 		}
 	}
 
+	/**
+	 * Upsert a record
+	 * @param repository
+	 * @param data
+	 */
+
+	async upsert(repository: Repository<T>, data: DeepPartial<T>, dedup_field: string): Promise<InsertResult> {
+		if (Env.IsNotProd()) {
+			logger.debug(`[QUERY][UPSERT][${repository.metadata.tableName}]`, data)
+		}
+
+		const fields: string[] = []
+
+		for (const field of Object.keys(data)) {
+			if (field === dedup_field) continue
+			fields.push(field)
+		}
+
+		return await repository
+			.createQueryBuilder()
+			.insert()
+			.into(repository.metadata.tableName)
+			.values(data)
+			.orUpdate(fields, [dedup_field])
+			.execute()
+	}
+
 	async bulk(
 		repository: Repository<T>,
 		data: DeepPartial<T>[],
@@ -98,7 +124,10 @@ export class Query<T> {
 					result = await this.createBulkRecords(repository, data)
 					await this.dropTable(repository, `${repository.metadata.tableName}_COPY`)
 				} catch (e: any) {
-					logger.error(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] ${e.message}`, e.stack)
+					logger.error(
+						`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] ${e.message}`,
+						e.stack,
+					)
 					await this.restoreTable(repository)
 				}
 				break
@@ -293,7 +322,7 @@ export class Query<T> {
 			.select('COUNT(*)', 'count')
 			.addSelect(field)
 
-		if(currency?.currency && currency.currency_fields.includes(field)) {
+		if (currency?.currency && currency.currency_fields.includes(field)) {
 			queryBuilder = queryBuilder.addSelect(currency.currency_field)
 		}
 
@@ -309,34 +338,32 @@ export class Query<T> {
 		}
 
 		queryBuilder = queryBuilder.groupBy(field)
-	
+
 		if (options.period) {
 			queryBuilder = queryBuilder.addGroupBy('time_interval')
 		}
 
-		if(currency?.currency && currency.currency_fields.includes(field)) {
+		if (currency?.currency && currency.currency_fields.includes(field)) {
 			queryBuilder = queryBuilder.addGroupBy(currency.currency_field)
 		}
 
-		let result = <ChartResult[]>await queryBuilder.getRawMany()
-	
+		const result = <ChartResult[]>await queryBuilder.getRawMany()
+
 		// If its a currency we should sum and convert the results
-		if(currency?.currency && currency.currency_fields.includes(field)) {
-			
+		if (currency?.currency && currency.currency_fields.includes(field)) {
 			const reduced: ChartResult[] = []
 
 			for (const r of result) {
-
 				const reducedIndex = reduced.findIndex(function (record) {
-					return (record.time_interval.toString() == r.time_interval.toString())
+					return record.time_interval.toString() == r.time_interval.toString()
 				})
 
-				if(SupportedCurrencies[r[currency.currency_field]] !== SupportedCurrencies[currency.currency]) {
+				if (SupportedCurrencies[r[currency.currency_field]] !== SupportedCurrencies[currency.currency]) {
 					r[field] = await currency.fxService.convert(
 						r[field],
 						SupportedCurrencies[r[currency.currency_field]],
 						SupportedCurrencies[currency.currency],
-						r.time_interval
+						r.time_interval,
 					)
 				}
 
@@ -768,29 +795,76 @@ export class Query<T> {
 		}
 	}
 
-	async createBulkRecords(repository: Repository<T>, data: DeepPartial<T>[]): Promise<InsertResult> {
-		return await repository.createQueryBuilder().insert().into(repository.metadata.tableName).values(data).execute()
+	/**
+	 * Inserts multiple records
+	 */
+
+	async createBulkRecords(repository: Repository<T>, data: DeepPartial<T>[]): Promise<BulkUploadResponse> {
+		// due to performance issues adding thousands of records at once (with possible subscribers etc), we will insert records individually
+		const result: BulkUploadResponse = {
+			total: data.length,
+			processed: 0,
+			created: 0,
+			updated: 0,
+			deleted: 0,
+			errored: 0,
+			errors: [],
+		}
+
+		for (const record of data) {
+			try {
+				await this.create(repository, record)
+				result.created++
+			} catch (e: any) {
+				result.errored++
+				result.errors.push(e.message)
+			}
+			result.processed++
+		}
+		return result
 	}
 
 	async upsertBulkRecords(
 		repository: Repository<T>,
 		data: DeepPartial<T>[],
 		dedup_field: string,
-	): Promise<InsertResult> {
-		const fields: string[] = []
+	): Promise<BulkUploadResponse> {
+		// due to performance issues adding thousands of records at once (with possible subscribers etc), we will insert records individually
 
-		for (const field of Object.keys(data[0])) {
-			if (field === dedup_field) continue
-			fields.push(field)
+		const result: BulkUploadResponse = {
+			total: data.length,
+			processed: 0,
+			created: 0,
+			updated: 0,
+			deleted: 0,
+			errored: 0,
+			errors: [],
 		}
 
-		return await repository
-			.createQueryBuilder()
-			.insert()
-			.into(repository.metadata.tableName)
-			.values(data)
-			.orUpdate(fields, [dedup_field])
-			.execute()
+		for (const record of data) {
+			try {
+
+				const r = await this.findOne(repository, {
+					where: {
+						[dedup_field]: record[dedup_field],
+					}
+				})
+
+				await this.upsert(repository, record, dedup_field)
+
+				if (r) {
+					result.updated++
+				} else {
+					result.created++
+				}
+			} catch (e: any) {
+				result.errored++
+				result.errors.push(e.message)
+			}
+			result.processed++
+		}
+
+		return result
 	}
 
 	/*
@@ -801,21 +875,43 @@ export class Query<T> {
 		repository: Repository<T>,
 		data: DeepPartial<T>[],
 		dedup_field: string,
-	): Promise<DeleteResult> {
+	): Promise<BulkUploadResponse> {
+		const result: BulkUploadResponse = {
+			total: data.length,
+			processed: 0,
+			created: 0,
+			updated: 0,
+			deleted: 0,
+			errored: 0,
+			errors: [],
+		}
+
 		const records: any[] = []
 
 		for (const row of data) {
 			records.push(row[dedup_field])
 		}
 
-		return await repository
-			.createQueryBuilder()
-			.delete()
-			.from(repository.metadata.tableName)
-			.where({
-				[dedup_field]: In(records),
-			})
-			.execute()
+		for (const record of data) {
+			try {
+				const r = await this.findOne(repository, <any>{
+					where: {
+						[dedup_field]: record[dedup_field],
+					}
+				})
+
+				if (r) {
+					await this.purge(repository, r)
+					result.deleted++
+				}
+			} catch (e: any) {
+				result.errored++
+				result.errors.push(e.message)
+			}
+			result.processed++
+		}
+
+		return result
 	}
 
 	/**

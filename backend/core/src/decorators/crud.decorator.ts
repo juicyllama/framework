@@ -16,7 +16,6 @@ import { ImportMode } from '../types/common'
  * Create Decorator
  */
 export function CreateDecorator<T>(options: { entity: T; name: string }) {
-
 	const decorators = [
 		ApiOperation({ summary: options?.name ? `Create ${Strings.capitalize(options.name)}` : 'Create' }),
 		ApiCreatedResponse(generateResponseObject(options.entity, 'Created')),
@@ -39,7 +38,6 @@ export function ReadManyDecorator<T>(options: {
 	currency_field?: string
 	currency_fields?: string[]
 }) {
-
 	const decorators = [
 		ApiOperation({ summary: options.name ? `List ${Strings.capitalize(Strings.plural(options.name))}` : 'List' }),
 		ApiQuery({
@@ -94,7 +92,7 @@ export function ReadManyDecorator<T>(options: {
 		}),
 	]
 
-	if(options.currency_field && options.currency_fields?.length) {
+	if (options.currency_field && options.currency_fields?.length) {
 		decorators.push(currencyFieldsDecorator(options.currency_field, options.currency_fields))
 	}
 
@@ -134,7 +132,6 @@ export function ReadChartsDecorator<T>(options: {
 	currency_field?: string
 	currency_fields?: string[]
 }) {
-
 	const decorators = [
 		ApiOperation({ summary: options?.name ? `${Strings.capitalize(options.name)} Charts` : 'Charts' }),
 		ApiQuery({
@@ -171,10 +168,10 @@ export function ReadChartsDecorator<T>(options: {
 			description: 'Filter the results by a value',
 			type: String,
 			required: false,
-		})
+		}),
 	]
 
-	if(options.currency_field && options.currency_fields?.length) {
+	if (options.currency_field && options.currency_fields?.length) {
 		decorators.push(currencyFieldsDecorator(options.currency_field, options.currency_fields))
 	}
 
@@ -183,7 +180,6 @@ export function ReadChartsDecorator<T>(options: {
 	decorators.push(Get('charts'))
 
 	return applyDecorators(...decorators)
-
 }
 
 export function ReadOneDecorator<T>(options: {
@@ -195,7 +191,6 @@ export function ReadOneDecorator<T>(options: {
 	currency_field?: string
 	currency_fields?: string[]
 }) {
-
 	const decorators = [
 		ApiOperation({ summary: options?.name ? `Get ${Strings.capitalize(options.name)}` : 'Get' }),
 		ApiParam({
@@ -222,10 +217,10 @@ export function ReadOneDecorator<T>(options: {
 			explode: false,
 			required: false,
 			enum: options.relationsEnum,
-		})
+		}),
 	]
 
-	if(options.currency_field && options.currency_fields?.length) {
+	if (options.currency_field && options.currency_fields?.length) {
 		decorators.push(currencyFieldsDecorator(options.currency_field, options.currency_fields))
 	}
 
@@ -240,7 +235,6 @@ export function ReadOneDecorator<T>(options: {
  * Update Decorator
  */
 export function UpdateDecorator<T>(options: { entity: T; primaryKey: string; name: string }) {
-
 	const decorators = [
 		ApiOperation({ summary: options?.name ? `Update ${Strings.capitalize(options.name)}` : 'Update' }),
 		ApiParam({
@@ -258,7 +252,6 @@ export function UpdateDecorator<T>(options: { entity: T; primaryKey: string; nam
 }
 
 export function UploadImageDecorator(options: { entity: any }) {
-
 	const decorators = [
 		ApiConsumes('multipart/form-data'),
 		ApiQuery({
@@ -283,7 +276,6 @@ export function UploadFileDecorator(options: { entity: any }) {
 }
 
 export function BulkUploadDecorator(options: { supportedFields?: string[]; dedupField?: string }) {
-
 	const decorators = [
 		ApiOperation({
 			summary: `Bulk Upload`,
@@ -321,7 +313,6 @@ export function UploadFieldsDecorator() {
  * Delete Decorators
  */
 export function DeleteDecorator<T>(options: { entity: T; primaryKey: string; name: string }) {
-
 	const decorators = [
 		ApiOperation({ summary: options?.name ? `Delete ${Strings.capitalize(options.name)}` : 'Delete' }),
 		ApiParam({

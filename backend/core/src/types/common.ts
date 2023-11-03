@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsEnum, IsOptional } from 'class-validator'
-import { InsertResult, DeleteResult } from 'typeorm'
 
 export enum UploadType {
 	CSV = 'CSV',
@@ -106,7 +105,15 @@ export class BulkUploadDto {
 	mappers?: { [key: string]: string }
 }
 
-export type BulkUploadResponse = InsertResult | DeleteResult
+export type BulkUploadResponse = {
+	total: number
+	processed: number
+	created: number
+	updated: number
+	deleted: number
+	errored: number
+	errors?: any[]
+}
 
 export interface ChartResult {
 	count: number

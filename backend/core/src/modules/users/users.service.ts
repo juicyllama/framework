@@ -42,7 +42,6 @@ export class UsersService extends BaseService<T> {
 	}
 
 	async invite(account: Account, newUser: CreateUserDto): Promise<T> {
-
 		const userRole = newUser.role ?? UserRole.VIEWER
 		if (newUser.role) delete newUser.role
 

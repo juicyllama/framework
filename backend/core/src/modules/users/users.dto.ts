@@ -56,7 +56,6 @@ export class UserDto {
 }
 
 export class CreateUserDto extends UserDto {
-
 	@ApiProperty({
 		description: 'The user role',
 		example: UserRole.MEMBER,
@@ -66,7 +65,6 @@ export class CreateUserDto extends UserDto {
 	@IsEnum(UserRole)
 	@IsOptional()
 	role?: UserRole
-
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
