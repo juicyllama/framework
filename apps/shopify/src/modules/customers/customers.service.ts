@@ -21,7 +21,7 @@ export class ShopifyCustomersService {
 		})
 
 		//TODO
-		// delete contact data
+		// delete contact data from contacts service
 
 		return
 	}
