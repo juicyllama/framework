@@ -6,13 +6,6 @@
 		</div>
 	</q-card-section>
 	<q-card-section>
-		<p>
-			Table: {{ tablesCount }}/{{ totalTables }}<br />
-			Processed: {{ processed }}<br />
-			Added: {{ added }}<br />
-		</p>
-	</q-card-section>
-	<q-card-section>
 		<q-linear-progress
 			v-if="uploadResult.status === 'LOADING'"
 			dark
@@ -51,13 +44,17 @@ import { useUploaderStore } from '../../../../store/uploader'
 
 type uploadResult = {
 	status: string
-	details: string
+	details?: {
+		total: number
+		processed: string
+		created: string
+		updated: string
+		deleted: string
+		errored: string
+		error: string[]
+	}
 }
 
-const totalTables = ref(1)
-const tablesCount = ref(1)
-const processed = ref(123)
-const added = ref(124)
 const store = useUploaderStore()
 const uploadResult = computed<uploadResult>(() => store.uploadResult as uploadResult)
 </script>
