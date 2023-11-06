@@ -109,6 +109,7 @@ export class ShopifyOrdersMapperService {
 		const transaction = await this.transactionsService.create({
 			account_id: store.account_id,
 			store_id: store.store_id,
+			installed_app_id: installed_app.installed_app_id,
 			order_id: order.id.toString(),
 			order_number: order.order_number.toString(),
 			contact_id: contact?.contact_id,
