@@ -6,6 +6,7 @@ import { Store } from '../stores/stores.entity'
 import { TransactionDiscount } from './discounts/discounts.entity'
 import { Contact, ContactAddress } from '@juicyllama/crm'
 import { TransactionFulfillmentStatus, TransactionPaymentStatus } from './transactions.enums'
+import { InstalledApp } from '@juicyllama/app-store'
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Unique('ecommerce_transactions_UNIQUE', ['store_id', 'order_id'])
@@ -31,6 +32,15 @@ export class Transaction extends BaseEntity {
 
 	@Column()
 	store_id: number
+
+	@ManyToOne(() => InstalledApp, installed_app => installed_app.installed_app_id, {
+		onDelete: 'CASCADE',
+	})
+	@JoinColumn({ name: 'installed_app_id' })
+	installed_app?: InstalledApp
+
+	@Column()
+	installed_app_id: number
 
 	@Column()
 	@IsString()
