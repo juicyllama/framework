@@ -23,14 +23,24 @@
 		<template v-else>
 			<template v-if="uploadResult.status === 'ERROR'">
 				<q-banner inline-actions class="text-white bg-red">
-					There was an error during the import process.
+					There was one or more errors during the import process.
 					<br />
-					/ {{ uploadResult.details }}
 				</q-banner>
+				<p>
+					{{ uploadResult.details.error[0] }}
+				</p>
 			</template>
 			<q-banner v-else inline-actions class="text-white bg-green">
-				Import file was successfully uploaded.
+				Import file was successfully uploaded!
 			</q-banner>
+			<p>
+				Total processed: {{ uploadResult.details.total }}<br />
+				Processed: {{ uploadResult.details.processed }}<br />
+				Created: {{ uploadResult.details.created }}<br />
+				Updated: {{ uploadResult.details.updated }}<br />
+				Deleted: {{ uploadResult.details.deleted }}<br />
+				Errored: {{ uploadResult.details.errored }}<br />
+			</p>
 		</template>
 	</q-card-section>
 </template>
