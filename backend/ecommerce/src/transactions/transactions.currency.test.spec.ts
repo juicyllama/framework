@@ -7,6 +7,7 @@ import { STORE_T } from '../stores/stores.constants'
 import { StoresService } from '../stores/stores.service'
 import { TransactionFulfillmentStatus, TransactionPaymentStatus } from './transactions.enums'
 import { SupportedCurrencies } from '@juicyllama/utils'
+import { App, AppCategory, AppIntegrationType, AppStoreIntegrationName, AppsService, InstalledApp, InstalledAppsService } from '@juicyllama/app-store'
 
 /**
  * Tests focused around currency conversion of data
@@ -17,22 +18,48 @@ describe('Transactions Currency Testing', () => {
 	let scaffold: ScaffoldDto<TRANSACTION_T>
 
 	//extra services for testing
-	let store: STORE_T
 	let storesService: StoresService
 	let fxService: FxService
+	let appsService: AppsService
+	let installedAppsService: InstalledAppsService
 	
+	//extra veriables for testing
+	let store: STORE_T
+	let app: App
+	let installed_app: InstalledApp
 	
 	beforeAll(async () => {
 		scaffold = await scaffolding.up(TransactionsModule, TransactionsService)
 		storesService = scaffold.module.get<StoresService>(StoresService)
 		fxService = scaffold.module.get<FxService>(FxService)
+		appsService = scaffold.module.get<AppsService>(AppsService)
+		installedAppsService = scaffold.module.get<InstalledAppsService>(InstalledAppsService)
 	})
 
 	describe('Inject some transactions', () => {
 
+		it('Create a demo app', async () => {
+			app = await appsService.create({
+				name: faker.company.name(),
+				url: faker.internet.url(),
+				integration_name: AppStoreIntegrationName.shopify,
+				integration_type: AppIntegrationType.OAUTH2,
+				category: AppCategory.ecommerce
+			})
+		})
+
+		it('Create a demo installed app', async () => {
+			installed_app = await installedAppsService.create({
+				app_id: app.app_id,
+				account_id: scaffold.values.account.account_id,
+				name: faker.company.name(),
+			})
+		})
+
 		it('Create a demo store', async () => {
 			store = await storesService.create({
 				account_id: scaffold.values.account.account_id,
+				installed_app_id: installed_app.installed_app_id,
 			})
 		})
 
@@ -43,6 +70,7 @@ describe('Transactions Currency Testing', () => {
 				transactions.push(await scaffold.services.service.create({
 					account_id: scaffold.values.account.account_id,
 					store_id: store.store_id,
+					installed_app_id: installed_app.installed_app_id,
 					order_id: faker.string.numeric(10),
 					order_number: faker.string.numeric(10),
 					payment_status: TransactionPaymentStatus.PAID,
