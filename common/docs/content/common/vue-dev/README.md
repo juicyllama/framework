@@ -1,6 +1,6 @@
 # Vue Dev
 
-Just like the [dev](/common/dev) package for backend development, as the name suggests this is a wrapper for all your **frontend** dev packages. We wrapped them into their own package to keep the dependencies of your project to a minimum.
+Just like the [dev](/common/developer/contributing) package for backend development, as the name suggests this is a wrapper for all your **frontend** dev packages. We wrapped them into their own package to keep the dependencies of your project to a minimum.
 
 ## Install
 

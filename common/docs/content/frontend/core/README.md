@@ -14,7 +14,7 @@ Our frontend framework is built on top of [Quasar](https://quasar.dev) and [Vue]
 
 ## Installation
 
-If you are installing the framework for a new project we recommend using the [JuicyLlama CLI](https://github.com/juicyllama-npm/cli). Follow instructions for [installing the CLI](/cli#installation) first, then run:
+If you are installing the framework for a new project we recommend using the [JuicyLlama CLI](https://github.com/juicyllama-npm/cli). Follow instructions for [installing the CLI](/common/cli/readme#installation) first, then run:
 
 ```bash
 JL install

@@ -73,15 +73,15 @@ import { ApiTags } from '@nestjs/swagger'
 
 3. Abstracted Decorators
 
-As part of the JuicyLllama [core](../../backend/core/) package we have made available a number of abstracted decorators to handle the most common CRUD operations.
+As part of the JuicyLllama [core](/backend/core/readme) package we have made available a number of abstracted decorators to handle the most common CRUD operations.
 
-- [CRUD Decorators](../../backend/core/decorators/crud.md)
-- [Swagger Decorators](../../backend/core/decorators/swagger.md)
+- [CRUD Decorators](/backend/core/decorators/crud)
+- [Swagger Decorators](/backend/core/decorators/swagger)
 
 
 ## Example Project
 
 If you are just getting started, we recommend setting up our quickstart client project. This will get you up and running quickly adopting framework best practise.
 
-1. [Install the framework](../../README.md#installation)
-2. [Install the quickstart project](../../build-a-client-app.md)
+1. [Install the framework](/#installation)
+2. [Install the quickstart project](https://github.com/juicyllama/client-quickstart)
