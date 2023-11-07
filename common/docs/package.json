@@ -36,5 +36,9 @@
     "@pinia/nuxt": "^0.5.1",
     "@quasar/extras": "^1.16.7",
     "quasar": "^2.13.0"
+  },
+  "engines": {
+    "node": "^18.17.0",
+    "npm": "^10.2.3"
   }
 }
