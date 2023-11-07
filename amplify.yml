@@ -5,13 +5,14 @@ applications:
           phases:
             preBuild:
               commands:
-                - echo -e "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=$FONTAWESOME_AUTH_TOKEN" > .npmrc
+                - nvm use $VERSION_NODE_18
                 - npm install
             build:
               commands:
-                - npm run docs:build
+                - nvm use $VERSION_NODE_18
+                - npm run generate
           artifacts:
-            baseDirectory: .vuepress/dist
+            baseDirectory: '.output/public'
             files:
               - '**/*'
           cache:
