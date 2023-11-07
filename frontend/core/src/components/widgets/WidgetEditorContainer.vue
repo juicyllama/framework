@@ -1,6 +1,6 @@
 <template>
 	<q-layout view="lHh Lpr fff" class="bg-grey-1">
-		<q-header elevated class="bg-white text-grey-8" height-hint="64">
+		<q-header v-if="isShowHeader" elevated class="bg-white text-grey-8" height-hint="64">
 			<q-toolbar class="JLWidget__toolbar" style="height: 64px">
 				<q-toolbar-title v-if="$q.screen.gt.sm" shrink class="row items-center no-wrap">
 					<span class="q-ml-sm">{{ title }}</span>
@@ -149,6 +149,8 @@
 			</q-page-sticky>
 		</q-page-container>
 
+		<q-btn fab v-if="!isShowHeader" @click="onShowForm" icon="add" color="accent" />
+
 		<div v-show="isDragging" class="zone3 col-12 align-self-end" @dragover.prevent @drop="onDropTrash($event)">
 			<div class="bg-error trash-container">
 				<q-icon size="32px" color="white" class="q-mt-sm" name=" delete_forever" />
@@ -175,7 +177,7 @@ export default {
 	components: {
 		WidgetForm,
 	},
-	props: ['endpoint', 'data'],
+	props: ['endpoint', 'data', 'showHeader'],
 	setup(props) {
 		const leftDrawerOpen = ref(false)
 		const search = ref('')
@@ -287,6 +289,7 @@ export default {
 			resortDrop,
 			onDrop,
 			onDragStart,
+			isShowHeader: props.showHeader,
 			title: ref('Widget editor'),
 		}
 	},
