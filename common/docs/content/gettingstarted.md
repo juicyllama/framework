@@ -36,7 +36,7 @@ A small intro video to who we are:
 
 Our framework is modular, you install the modules you need into your projects. This allows you to pick and choose the modules based on the features you want.
 
-For example, if you want to build a SaaS API backend, you will likely need [@juicyllama/core](/backend/core) and [@juicyllama/billing](/backend/billing) to get started.
+For example, if you want to build a SaaS API backend, you will likely need [@juicyllama/core](/backend/core/readme) and `@juicyllama/billing` to get started.
 
 We leverage:
 
@@ -100,6 +100,6 @@ pnpm run start:docker:build
 
 The real power of our framework is seen through the rapid development of client applications.
 
-Checkout the [build a client application](/build-a-client-app) walkthrough to get a solid overview of our framework in action.
+Checkout the [build a client application](https://github.com/juicyllama/client-quickstart) walkthrough to get a solid overview of our framework in action.
 
 As our framework grows, with more applications using it, more apps added and more developers contributing, the value also increases, this network effect is the reason why we have opensourced our work.
