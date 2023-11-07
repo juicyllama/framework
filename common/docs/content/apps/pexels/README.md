@@ -28,4 +28,4 @@ PEXELS_API_KEY=your_api_key
 
 ### Methods
 
-Checkout what methods you can use [here](/apps/pexels/methods).
+Checkout what methods you can use [here](/apps/pexels/methods/readme).

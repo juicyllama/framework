@@ -8,7 +8,7 @@ Checkout the Shopify [documentation](https://shopify.dev/docs/api) for more info
 
 ### App Store
 
-In order to save the clients auth tokens, this package extends [app store](/backend/app-store).
+In order to save the clients auth tokens, this package extends [app store](/backend/app-store/readme).
 
 It will automatically install the shopify app into the app store database when you include it in your project.
 
@@ -54,7 +54,7 @@ SHOPIFY_APP_CLIENT_SECRET=
 
 You should add the following URL's to your Shopify app:
 
-Allowed redirection URL(s): 
+Allowed redirection URL(s):
 `${BASE_URL_API}/app/shopify/auth/redirect`
 `${BASE_URL_API}/app/shopify/auth/complete`
 
@@ -99,4 +99,4 @@ When you seek approval for your app, use this endpoint as your APP URL.
 
 `${BASE_URL_API}/app/shopify/auth/open?redirect=https://some.success/page`
 
-It will redirect them to a "success" page of your choice, which you can setup to assist with the application process. 
+It will redirect them to a "success" page of your choice, which you can setup to assist with the application process.

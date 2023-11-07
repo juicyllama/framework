@@ -75,13 +75,13 @@ We currently support the following apps in the app store
 |---------|-----------------------------------|
 | App    | Connection Types |
 |---------|-----------------------------------|
-| [Shopify](/apps/shopify/)  | `OAUTH2` |
-| [WordPress](/apps/wordpress) | `CREDENTIALS` |
+| [Shopify](/apps/shopify/readme)  | `OAUTH2` |
+| [WordPress](/apps/wordpress/readme) | `CREDENTIALS` |
 |---------|-----------------------------------|
 
 ### Parent / Child Apps
 
-Some apps are "whitelabel" or "saas" apps in which other brands use. 
+Some apps are "whitelabel" or "saas" apps in which other brands use.
 
 For exmaple, Everflow allows brands to whitelabel their app. This means many apps can be added by use the Everflow integration.
 

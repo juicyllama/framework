@@ -4,7 +4,7 @@ title: Table
 
 ## TableSchema
 
-This component renders a table schema, it is used by the [JLTable](/frontend/quasar/components/common/table.html) component to render the table.
+This component renders a table schema, it is used by the [JLTable](/frontend/core/components/common/table) component to render the table.
 
 ```typescript
 import type { TableSchema } from '@juicyllama/frontend-core'
