@@ -13,6 +13,7 @@ export const useUploaderStore = defineStore('uploader', {
 		mappers: [],
 		uploadResult: {
 			status: 'LOADING',
+			details: {},
 		},
 	}),
 	getters: {
