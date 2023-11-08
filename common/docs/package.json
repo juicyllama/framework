@@ -1,44 +1,44 @@
 {
-  "name": "@juicyllama/docs",
-  "type": "module",
-  "version": "0.1.4",
-  "description": "Juicyllama Docs portal",
-  "author": {
-    "name": "JuicyLlama Studio",
-    "email": "studio@juicyllama.com",
-    "url": "https://juicyllama.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/juicyllama/framework/tree/main/common/docs"
-  },
-  "bugs": "https://github.com/juicyllama/framework",
-  "readmeFilename": "README.md",
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
-  },
-  "devDependencies": {
-    "@nuxt/devtools": "latest",
-    "nuxt": "^3.8.0",
-    "nuxt-quasar-ui": "^2.0.6",
-    "nuxt-simple-sitemap": "^3.4.1",
-    "vue": "^3.3.7",
-    "vue-router": "^4.2.5"
-  },
-  "dependencies": {
-    "@juicyllama/frontend-core": "latest",
-    "@nuxt-themes/docus": "^1.15.0",
-    "@nuxt/content": "^2.9.0",
-    "@pinia/nuxt": "^0.5.1",
-    "@quasar/extras": "^1.16.7",
-    "quasar": "^2.13.0"
-  },
-  "engines": {
-    "node": "^18.17.0",
-    "npm": "^10.2.3"
-  }
+	"name": "@juicyllama/docs",
+	"type": "module",
+	"version": "0.1.4",
+	"description": "Juicyllama Docs portal",
+	"author": {
+		"name": "JuicyLlama Studio",
+		"email": "studio@juicyllama.com",
+		"url": "https://juicyllama.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/juicyllama/framework/tree/main/common/docs"
+	},
+	"bugs": "https://github.com/juicyllama/framework",
+	"readmeFilename": "README.md",
+	"scripts": {
+		"build": "nuxt build",
+		"dev": "nuxt dev",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview",
+		"postinstall": "nuxt prepare"
+	},
+	"devDependencies": {
+		"@nuxt/devtools": "latest",
+		"nuxt": "^3.8.0",
+		"nuxt-quasar-ui": "^2.0.6",
+		"nuxt-simple-sitemap": "^3.4.1",
+		"vue": "^3.3.7",
+		"vue-router": "^4.2.5"
+	},
+	"dependencies": {
+		"@juicyllama/frontend-core": "latest",
+		"@nuxt-themes/docus": "^1.15.0",
+		"@nuxt/content": "^2.9.0",
+		"@pinia/nuxt": "^0.5.1",
+		"@quasar/extras": "^1.16.7",
+		"quasar": "^2.13.0"
+	},
+	"engines": {
+		"node": "^18.0.0",
+		"npm": "^8.0.0"
+	}
 }
