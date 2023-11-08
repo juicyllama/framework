@@ -17,7 +17,7 @@ const userStore = UserStore()
 const router = useRouter()
 const route = useRoute()
 
-if($q.loading.isActive){
+if($q.loading?.isActive){
 	$q.loading.hide()
 }
 
