@@ -1,7 +1,7 @@
 {
   "name": "@juicyllama/docs",
   "type": "module",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Juicyllama Docs portal",
   "author": {
     "name": "JuicyLlama Studio",
@@ -37,8 +37,8 @@
     "@quasar/extras": "^1.16.7",
     "quasar": "^2.13.0"
   },
-	"engines": {
-		"node": "^18.0.0",
-		"npm": "^8.0.0"
-	}
+  "engines": {
+    "node": "^18.0.0",
+    "npm": "^8.0.0"
+  }
 }
