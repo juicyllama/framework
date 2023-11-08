@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { UserStore } from '../../../store/user'
 import AuthActions from './Actions.vue'
 import { useRouter, useRoute } from 'vue-router'
 import type { AuthFormState } from '../../../helpers'
 import { validateEmail, isPasswordValid, logger } from '../../../helpers'
-import { token } from '../../../store/token'
 import { goToLoginRedirect } from '../../../helpers'
 import { useQuasar } from 'quasar'
 
@@ -17,6 +16,10 @@ const $q = useQuasar()
 const userStore = UserStore()
 const router = useRouter()
 const route = useRoute()
+
+if($q.loading?.isActive){
+	$q.loading.hide()
+}
 
 const props = defineProps<{
 	google?: boolean
@@ -49,22 +52,22 @@ if (route.query.code) {
 	try {
 		switch (localStorage.getItem('OAuthType')) {
 			case 'google':
-				await completeGoogleLogin(route.query)
+				await completeGoogleLogin(route.query, $q)
 				break
 			case 'linkedin':
-				await completeLinkedInLogin(route.query)
+				await completeLinkedInLogin(route.query, $q)
 				break
 			case 'microsoft':
-				await completeMicrosoftLogin(route.query)
+				await completeMicrosoftLogin(route.query, $q)
 				break
 			case 'azure_ad':
-				await completeAzureLogin(route.query)
+				await completeAzureLogin(route.query, $q)
 				break
 			default:
 				new Error('OAuthType not found')
 		}
 
-		await router.push('/dashboard')
+		await redirect()
 	} catch (e) {
 		logger({
 			severity: LogSeverity.ERROR,
@@ -82,16 +85,20 @@ async function login(state: AuthFormState) {
 	const user = await userStore.login({ email: state.email, password: state.password.value }, $q)
 
 	if (user?.user_id) {
-		await router.push('/dashboard')
+		await redirect()
 	}
 	loading.value = false
 }
 
-onMounted(() => {
-	if (token.get()) {
+async function redirect(){
+	if(route?.query?.r){
 		goToLoginRedirect(router, <string>route?.query?.r)
 	}
-})
+	else{
+		goToLoginRedirect(router)
+	}
+}
+
 </script>
 
 <template>

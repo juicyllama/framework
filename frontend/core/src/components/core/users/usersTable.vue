@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { usersTableSchema } from '../../../components/core/users/users.table.schema'
 import { JLTable, IconSettings, userStore, FormSettings } from '../../../index'
+import { useRouter, useRoute } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
 
 const props = defineProps<{
 	formSettings?: FormSettings
@@ -12,7 +16,7 @@ const props = defineProps<{
 <template>
 	<div id="JLUsersTable">
 		<JLTable
-			:options="usersTableSchema(userStore.isAdmin(), props.icon, props.visibleColumns, props.formSettings)" />
+			:options="usersTableSchema(userStore.isAdmin(router, route), props.icon, props.visibleColumns, props.formSettings)" />
 	</div>
 </template>
 

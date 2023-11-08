@@ -3,6 +3,7 @@ import { Ref, ref, watch } from 'vue'
 import { UserStore } from '../../../store/user'
 import { AccountStore } from '../../../store/account'
 import type { Account, FormSettings } from '../../../types'
+import { useRouter } from 'vue-router'
 
 let accounts: Ref<Account[]> = ref([])
 let options: { label: string; value: number }[]
@@ -13,16 +14,17 @@ const props = defineProps<{
 
 const accountStore = AccountStore()
 const userStore = UserStore()
-
-userStore.$subscribe((mutation, state) => {
-	accounts.value = state.user.accounts
-})
+const router = useRouter()
 
 if (!userStore.user) {
-	await userStore.logout()
+	await userStore.logout(router)
 }
 
-accounts.value = userStore.user.accounts
+userStore.$subscribe((mutation, state) => {
+	accounts.value = state.user?.accounts
+})
+
+accounts.value = userStore.user?.accounts
 
 let model = ref<{ label: string; value: number }>(
 	accountStore.selected_account
@@ -36,7 +38,7 @@ let model = ref<{ label: string; value: number }>(
 		  },
 )
 
-options = userStore.user.accounts.map(account => {
+options = userStore.user?.accounts?.map(account => {
 	return {
 		label: account.account_name,
 		value: account.account_id,
@@ -44,7 +46,7 @@ options = userStore.user.accounts.map(account => {
 })
 
 watch(model, value => {
-	const account = accounts.value.find(account => {
+	const account = accounts?.value?.find(account => {
 		return account.account_id === value.value
 	})
 	const accountStore = AccountStore()
@@ -54,7 +56,7 @@ watch(model, value => {
 </script>
 
 <template>
-	<div class="JLAccountSwitcher" v-if="accounts.length > 1">
+	<div class="JLAccountSwitcher" v-if="accounts && accounts.length > 1">
 		<q-select
 			v-model="model"
 			:outlined="props.form?.field?.settings?.outlined ?? false"

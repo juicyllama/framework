@@ -4,9 +4,12 @@ import { UserStore } from '../../../store/user'
 import { JLMenu } from '../../common/menu'
 import { Menu, UserMenuOptions } from '../../../types'
 import { ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
+const router = useRouter()
+const route = useRoute()
 const userStore = UserStore()
-const admin = ref<boolean>(await userStore.isAdmin())
+const admin = ref<boolean>(await userStore.isAdmin(router, route))
 
 const props = defineProps<UserMenuOptions>()
 
@@ -42,7 +45,7 @@ if (admin.value && props?.show?.admin) {
 }
 
 function logout() {
-	userStore.logout()
+	userStore.logout(router)
 }
 </script>
 

@@ -1,9 +1,5 @@
 import { logger } from '../helpers'
 import { LogSeverity } from '../types'
-import { userStore } from '../index'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
 
 export const pusherCreds = {
 	PUSHER_KEY: process.env.VITE_PUSHER_KEY,
@@ -31,7 +27,6 @@ export async function loadPusher(event: string, callback: Function): Promise<voi
 	const pusher = new Pusher.default(pusherCreds.PUSHER_KEY, { cluster: 'eu' })
 	pusher.subscribe(pusherCreds.PUSHER_CHANNEL)
 	pusher.bind(event, async data => {
-		await userStore.accountCheck(router)
 		logger({
 			severity: LogSeverity.VERBOSE,
 			message: `New pusher event: ${event}`,

@@ -2,7 +2,7 @@
 
 ## Endpoints
 
-Once you have [installed](/tools/shortlinks#install) the shortlinks package, two new endpoint will be available in your project.
+Once you have [installed](/tools/shortlinks/readme#install) the shortlinks package, two new endpoint will be available in your project.
 
 Documentation will also be added to your project for full details on each endpoint.
 
@@ -16,7 +16,7 @@ Documentation will also be added to your project for full details on each endpoi
 
 ## Redirects
 
-Once a shortlink has been created, and the redirection [microservice](/tools/shortlinks#miscroservice) has been deployed, you can use the shortlink in your project.
+Once a shortlink has been created, and the redirection [microservice](/tools/shortlinks/readme#miscroservice) has been deployed, you can use the shortlink in your project.
 
 If a valid code is used, it will redirect the user to the url specified in the shortlink.
 
@@ -57,7 +57,7 @@ export class SmsSubscriber implements EntitySubscriberInterface<ShortlinkClick> 
 			logger.warn(`SmsSubscriber Failed: ${e.message}`, e)
 		}
 	}
-	
+
 	listenTo() {
 		return ShortlinkClick
 	}
@@ -78,15 +78,15 @@ export class SmsSubscriber implements EntitySubscriberInterface<ShortlinkClick> 
 
         switch(shortlink.resource_type) {
             case 'SMS':
-                
+
                 const newSmsClick = {
                     sms_id: shortlink.resource_id,
                     clicked: true,
                 }
-        
+
                 logger.log(`[${domain}] Creating Sms Click`, newSmsClick)
                 return await event.manager.getRepository(SmsClick).save(newSmsClick)
-                
+
             default:
                 logger.error(`[${domain}] Resource type not recognised for shortlink`, shortlink)
                 return

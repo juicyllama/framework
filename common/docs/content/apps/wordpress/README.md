@@ -21,7 +21,7 @@ WORDPRESS_APPLICATION_PASSWORD=your_wordpress_application_password
 ```
 #### App Store
 
-If you would like to allow your users to connect their own WordPress sites and perform action via their accounts, you can use the [app store](/backend/app-store) integration.
+If you would like to allow your users to connect their own WordPress sites and perform action via their accounts, you can use the [app store](/backend/app-store/readme) integration.
 
 You will need to add the app to your database:
 
@@ -39,9 +39,9 @@ Each endpoint (e.g. posts, users) has been separated into its own module. You ca
 
 The following modules are currently supported:
 
-* [Catagories](/apps/wordpress/modules/categories)
+<!-- * [Categories](/apps/wordpress/modules/categories) -->
 * [Posts](/apps/wordpress/modules/posts)
-* [Users](/apps/wordpress/modules/users)
+<!-- * [Users](/apps/wordpress/modules/users) -->
 
 ::alert{type="warning"}
 If you are missing a module, please [open an issue](https://github.com/juicyllama-npm/app-wordpress/issues) or submit a pull request.

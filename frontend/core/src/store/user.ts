@@ -1,3 +1,4 @@
+import { Router, RouteLocationNormalizedLoaded } from 'vue-router'
 import { defineStore } from 'pinia'
 import type { User, UserLogin } from '../types'
 import { UserPreferences } from '../types'
@@ -111,21 +112,26 @@ export const UserStore = defineStore('user', {
 			return await this.setUser(userData)
 		},
 
-		isAdmin(account_id?: number): boolean {
+		isAdmin(router: Router, route: RouteLocationNormalizedLoaded, account_id?: number): boolean {
 			if (!account_id) {
 				const accountStore = AccountStore()
 				account_id = accountStore.getAccountId
 			}
 
 			if (!this.$state.user) {
-				this.logout()
+
+				if(route.fullPath) {
+					router.push(`/login?r=${route.fullPath}`)
+				}else{
+					this.logout(router, '/login')
+				}				
 				return false
 			}
 
 			const roles = this.$state.user.roles
 
 			if (!roles) {
-				this.logout()
+				this.logout(router, '/login')
 				return false
 			}
 
@@ -173,13 +179,21 @@ export const UserStore = defineStore('user', {
 			}
 		},
 
-		async logout() {
+		async logout(router?: Router, redirect?: string) {
+			logger({ severity: LogSeverity.VERBOSE, message: `[Store][User][Logout] Logout User` })
 			window.localStorage.removeItem('user')
 			this.$state.user = null
 			await token.remove()
-			//const accountStore = AccountStore()
-			//await accountStore.unsetSelectedAccount()
-			await goToLogin()
+
+			if(!router) {
+				if(redirect){
+					window.location.href = redirect
+				}else{
+					window.location.href = '/'
+				}
+			}
+
+			await goToLogin(router, redirect)
 		},
 
 		async processAccessToken(access_token: string, q?: QVueGlobals): Promise<T> {
@@ -207,9 +221,10 @@ export const UserStore = defineStore('user', {
 			return user
 		},
 
-		async accountCheck() {
+		async accountCheck(router: Router, redirect: string) {
 			if (!accountAuthCheck) {
-				await this.logout()
+				logger({ severity: LogSeverity.VERBOSE, message: `[Store][User][AccountCheck] Failed` })
+				await this.logout(router, redirect)
 			}
 		},
 	},

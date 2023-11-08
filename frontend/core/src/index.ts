@@ -20,7 +20,7 @@ import {
 } from './components'
 import { JLAccountProfile, JLAccountAvatar, JLAccountSwitcher, JLAccountBrand } from './components/core/account'
 import { JLUserAvatar, JLUserProfile, JLUserMenu } from './components/core/user'
-import { JLAppStoreConnect } from './components/app-store'
+import { JLAppStoreConnect, JLOauthStart } from './components/app-store'
 import { Plugin } from 'vue'
 
 import '@quasar/extras/material-icons/material-icons.css'
@@ -67,6 +67,7 @@ export default {
 		Vue.component('JLUserMenu', JLUserMenu)
 		Vue.component('JLUsersTable', JLUsersTable)
 		Vue.component('JLAppStoreConnect', JLAppStoreConnect)
+		Vue.component('JLOauthStart', JLOauthStart)
 	},
 } as Plugin
 
@@ -94,6 +95,7 @@ export {
 	JLUserProfile,
 	JLUserMenu,
 	JLAppStoreConnect,
+	JLOauthStart,
 	JLMenu,
 	JLDropdownButtonMenu,
 	JLStats,

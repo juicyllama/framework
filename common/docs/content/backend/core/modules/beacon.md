@@ -9,7 +9,7 @@ The beacon module allows you to notify users in a multitude of different ways, i
 * Email
 * SMS
 * Instant Messaging
-* Push Notifications 
+* Push Notifications
 * In-app Notifications
 * Webhooks
 
@@ -77,7 +77,7 @@ The main method for sending notifications, this method takes a single options ob
 
 ```typescript
 await this.beaconService.notify({
-    
+
 });
 ```
 
@@ -127,5 +127,5 @@ The beacon module can integrate with the following modules:
 | Email | [app-aws]()              |
 | SMS | [app-aws]()              |
 | Push | [app-pusher]()           |
-| IM | [app-slack](/apps/slack) |
+| IM | [app-slack](/apps/slack/readme) |
 

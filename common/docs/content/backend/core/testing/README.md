@@ -39,7 +39,7 @@ You can then use the `scaffold` object to access the following (use the Scaffold
 |------------|-----------------------------------------------------------------|
 | server     | The NestJs HttpServer server instance                           |
 | module     | The TestingModule instance                                      |
-| query      | The [typeorm query helper](/utils/typeorm/query)                |
+| query      | The typeorm query helper
 | repository | The typeorm repository for the entity                           |
 | services   | A number of pre-imported services and the service you passed in |
 | values     | A number of pre-imported values you can use in your tests       |
@@ -93,7 +93,7 @@ The following properties are available:
 | scaffold    | The scaffold object                                   |
 | mock        | The data to pass to the endpoint in the body          |
 | PRIMARY_KEY | The name of the primary key for the entity            |
-| record      | An existing record to compare the resulting action to |  
+| record      | An existing record to compare the resulting action to |
 
 ## Frontend
 
