@@ -4,9 +4,10 @@ import { accountStore, logger, LogSeverity, userStore } from '../index'
 export async function AuthHook(router: Router, route: RouteLocationNormalizedLoaded) {
 	if (!userStore.user) {
 		logger({ severity: LogSeverity.VERBOSE, message: `[HOOK] Auth: failed, redirecting to /login?r=${route.fullPath}` })
-		router.push(`/login?r=${route.fullPath}`)
+		window.location.href = `/login?r=${route.fullPath}`
 	}
 	await userStore.accountCheck(router, route.fullPath)	
+
 }
 export async function GlobalSubscriptionHook(secrets: any) {
 	logger({ severity: LogSeverity.VERBOSE, message: `[HOOK] GlobalSubscription` })

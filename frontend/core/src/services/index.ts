@@ -3,10 +3,6 @@ import { UserStore } from '../store/user'
 import { logger } from '../helpers/logger'
 import { token } from '../store/token'
 import { LogSeverity } from '../types'
-import { useRouter, useRoute } from 'vue-router'
-
-const router = useRouter()
-const route = useRoute()
 
 const headers = {
 	'Content-Type': 'application/json',
@@ -53,7 +49,7 @@ instance.interceptors.response.use(
 		// Do something with response error
 		if (error.response.data.statusCode === 401) {
 			const userStore = UserStore()
-			await userStore.logout(router, route.fullPath)
+			await userStore.logout()
 		}
 		return Promise.reject(error)
 	},

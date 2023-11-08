@@ -3,10 +3,8 @@ import type { User } from '../types'
 import type { UserLogin } from '../types'
 import { logger } from '../helpers'
 import { LogSeverity } from '../types'
-import { useQuasar } from 'quasar'
+import { QVueGlobals } from 'quasar'
 import { userStore } from '../index'
-
-const $q = useQuasar()
 
 export const loginUser = async (payload: UserLogin): Promise<string> => {
 	const response = await instance.post(`auth/login`, payload)
@@ -70,22 +68,22 @@ export function azureLogin(VITE_API_BASE_URL: string) {
 	window.location.href = `${VITE_API_BASE_URL}/auth/azure_ad`
 }
 
-export async function completeGoogleLogin(params) {
+export async function completeGoogleLogin(params, q: QVueGlobals) {
 	const response = await instance.get(`auth/google/redirect`, { params: params })
-	return userStore.processAccessToken(response.data.access_token, $q)
+	return userStore.processAccessToken(response.data.access_token, q)
 }
 
-export async function completeLinkedInLogin(params) {
+export async function completeLinkedInLogin(params, q: QVueGlobals) {
 	const response = await instance.get(`auth/linkedin/redirect`, { params: params })
-	return userStore.processAccessToken(response.data.access_token, $q)
+	return userStore.processAccessToken(response.data.access_token, q)
 }
 
-export async function completeMicrosoftLogin(params) {
+export async function completeMicrosoftLogin(params, q: QVueGlobals) {
 	const response = await instance.get(`auth/microsoft/redirect`, { params: params })
-	return userStore.processAccessToken(response.data.access_token, $q)
+	return userStore.processAccessToken(response.data.access_token, q)
 }
 
-export async function completeAzureLogin(params) {
+export async function completeAzureLogin(params, q: QVueGlobals) {
 	const response = await instance.get(`auth/azure_ad/redirect`, { params: params })
-	return userStore.processAccessToken(response.data.access_token, $q)
+	return userStore.processAccessToken(response.data.access_token, q)
 }

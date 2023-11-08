@@ -17,7 +17,7 @@ const userStore = UserStore()
 const router = useRouter()
 
 if (!userStore.user) {
-	await userStore.logout(router, '/login')
+	await userStore.logout(router)
 }
 
 userStore.$subscribe((mutation, state) => {

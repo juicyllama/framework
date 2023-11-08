@@ -179,11 +179,20 @@ export const UserStore = defineStore('user', {
 			}
 		},
 
-		async logout(router: Router, redirect: string) {
+		async logout(router?: Router, redirect?: string) {
 			logger({ severity: LogSeverity.VERBOSE, message: `[Store][User][Logout] Logout User` })
 			window.localStorage.removeItem('user')
 			this.$state.user = null
 			await token.remove()
+
+			if(!router) {
+				if(redirect){
+					window.location.href = redirect
+				}else{
+					window.location.href = '/'
+				}
+			}
+
 			await goToLogin(router, redirect)
 		},
 

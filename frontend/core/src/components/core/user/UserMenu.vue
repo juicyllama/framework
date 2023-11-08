@@ -45,7 +45,7 @@ if (admin.value && props?.show?.admin) {
 }
 
 function logout() {
-	userStore.logout(router, '/login')
+	userStore.logout(router)
 }
 </script>
 
