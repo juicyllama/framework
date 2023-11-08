@@ -1,6 +1,5 @@
 import { logger } from '../helpers'
 import { LogSeverity } from '../types'
-import { userStore } from '../index'
 
 export const pusherCreds = {
 	PUSHER_KEY: process.env.VITE_PUSHER_KEY,

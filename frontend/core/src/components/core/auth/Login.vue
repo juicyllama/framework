@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { UserStore } from '../../../store/user'
 import AuthActions from './Actions.vue'
 import { useRouter, useRoute } from 'vue-router'
