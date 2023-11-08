@@ -12,7 +12,7 @@ Our backend framework is built on top of the [NestJS](https://nestjs.com/) frame
 
 ## Installation
 
-If you are installing the framework for a new project we recommend using the [JuicyLlama CLI](https://github.com/juicyllama-npm/cli). Follow instructions for [installing the CLI](/cli#installation) first, then run:
+If you are installing the framework for a new project we recommend using the [JuicyLlama CLI](https://github.com/juicyllama-npm/cli). Follow instructions for [installing the CLI](/common/cli/readme#installation) first, then run:
 
 ```bash
 JL install

@@ -14,7 +14,7 @@ This component uses pusher (if enabled on your backend application) to keep the 
 
 This component accepts the following props:
 
-- `options` - The table options, see [TableSchema](/frontend/quasar/types/table.html) for more information.
+- `options` - The table options, see [TableSchema](/frontend/core/types/table) for more information.
 - `visibleColumns` - Array of strings that enlists the collumns that will be visible
 
 ## Emits

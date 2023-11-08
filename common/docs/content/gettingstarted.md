@@ -14,7 +14,7 @@ It is being used in many production apps however things are subject to breaking 
 ::
 
 ::alert{type="warning"}
-Here is a full list of the documentatiom which still needs creating: 
+Here is a full list of the documentatiom which still needs creating:
 
 https://github.com/orgs/juicyllama/projects/8/views/1?pane=issue&itemId=36729897
 ::
@@ -36,14 +36,14 @@ A small intro video to who we are:
 
 Our framework is modular, you install the modules you need into your projects. This allows you to pick and choose the modules based on the features you want.
 
-For example, if you want to build a SaaS API backend, you will likely need [@juicyllama/core](/backend/core) and [@juicyllama/billing](/backend/billing) to get started.
+For example, if you want to build a SaaS API backend, you will likely need [@juicyllama/core](/backend/core/readme) and `@juicyllama/billing` to get started.
 
 We leverage:
 
 * [NestJS](https://nestjs.com/) for building APIs and backend applications
 * [Vue](https://vuejs.org) and [Quasar](https://quasar.dev/) for building frontend cross-platform applications
 
-We also have a number of utility / development modules that helps speed up development and provide additional functionality. For example checkout our [CLI](/cli) for local rapid development setup.
+We also have a number of utility / development modules that helps speed up development and provide additional functionality. For example checkout our [CLI](/common/cli/readme) for local rapid development setup.
 
 ## Contributing
 
@@ -63,13 +63,13 @@ Follow these instructions to install the framework for the first time.
 
 Before you install please make sure you have [Brew](https://docs.brew.sh/Installation) installed on your machine.
 
-You should also have [Docker](https://docs.docker.com/get-docker/) installed and running on your machine. 
+You should also have [Docker](https://docs.docker.com/get-docker/) installed and running on your machine.
 
 Install following packages:
 
 ```bash
 brew install jq
-npm i -g pnpm 
+npm i -g pnpm
 pnpm i -g npx
 pnpm i -g ts-node
 pnpm i -g mkcert
@@ -100,6 +100,6 @@ pnpm run start:docker:build
 
 The real power of our framework is seen through the rapid development of client applications.
 
-Checkout the [build a client application](/build-a-client-app) walkthrough to get a solid overview of our framework in action.
+Checkout the [build a client application](https://github.com/juicyllama/client-quickstart) walkthrough to get a solid overview of our framework in action.
 
-As our framework grows, with more applications using it, more apps added and more developers contributing, the value also increases, this network effect is the reason why we have opensourced our work. 
+As our framework grows, with more applications using it, more apps added and more developers contributing, the value also increases, this network effect is the reason why we have opensourced our work.
