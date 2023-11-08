@@ -17,7 +17,9 @@ const userStore = UserStore()
 const router = useRouter()
 const route = useRoute()
 
-$q.loading.hide()
+if($q.loading.isActive){
+	$q.loading.hide()
+}
 
 const props = defineProps<{
 	google?: boolean

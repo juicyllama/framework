@@ -76,7 +76,7 @@ jobs:
                 run: cd backend/app-store && pnpm run && pnpm run lint
 
             -   name: Build Docker Image
-                run: pnpm run start:docker:build
+                run: pnpm run start:docker
 
             -   name: Test
                 run: cd backend/app-store && pnpm run test

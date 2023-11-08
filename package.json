@@ -25,8 +25,7 @@
     "scripts": {
         "install:framework": "sh ./framework-install.sh",
         "link": "sh ./pnpm-link.sh",
-        "start:docker:build": "docker-compose --project-name juicyllama up --build --detach",
-        "start:docker": "docker-compose --project-name juicyllama up --detach",
+        "start:docker": "sh ./start-docker.sh",
         "lint:framework": "eslint \"**/src/**/*.ts\" --fix"
     }
 }

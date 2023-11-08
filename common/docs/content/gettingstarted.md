@@ -93,7 +93,7 @@ Additional Reading: [Doppler docs](https://docs.doppler.com/docs/install-cli)
 git clone git@github.com:juicyllama/framework.git
 cd framework
 pnpm run install:framework
-pnpm run start:docker:build
+pnpm run start:docker
 ```
 
 ### Build a client application
