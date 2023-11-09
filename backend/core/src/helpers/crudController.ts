@@ -216,7 +216,7 @@ export async function crudBulkUpload<T>(options: {
 		mappers: options.mappers,
 		import_mode: options.import_mode,
 		upload_type: options.upload_type,
-		service: options.service ? true: false,
+		service: options.service ? true : false,
 		account_id: options.account_id,
 		file: {
 			is_file: options.file ? true : false,
@@ -225,7 +225,7 @@ export async function crudBulkUpload<T>(options: {
 		},
 		raw: {
 			is_raw: options.raw ? true : false,
-		}
+		},
 	})
 
 	if (!options.file && !options.raw) {
@@ -240,14 +240,6 @@ export async function crudBulkUpload<T>(options: {
 		options.import_mode = ImportMode.CREATE
 	}
 
-	if (!options.fields) {
-		throw new InternalServerErrorException(`Missing required field: fields`)
-	}
-
-	if (!options.dedup_field) {
-		throw new InternalServerErrorException(`Missing required field: dedup_field`)
-	}
-
 	if (options.mappers) {
 		if (typeof options.mappers === 'string') {
 			try {
@@ -256,6 +248,14 @@ export async function crudBulkUpload<T>(options: {
 				throw new BadRequestException(`Invalid mappers JSON`)
 			}
 		}
+	}
+
+	if (!options.fields) {
+		throw new InternalServerErrorException(`Missing required field: fields`)
+	}
+
+	if (!options.dedup_field) {
+		throw new InternalServerErrorException(`Missing required field: dedup_field`)
 	}
 
 	const csv = new Csv()
@@ -275,7 +275,7 @@ export async function crudBulkUpload<T>(options: {
 				content = await csv.parseCsvFile(options.file, options.mappers)
 			} else if (options.raw) {
 				const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(options.raw)
-				content = await csv.parseCsvFile(csv_file)
+				content = await csv.parseCsvFile(csv_file, options.mappers)
 				await file.unlink(filePath, dirPath)
 			}
 			break
@@ -294,7 +294,7 @@ export async function crudBulkUpload<T>(options: {
 				} catch (e: any) {
 					logger.error(`[${domain}] ${e.message}`, e)
 					throw new BadRequestException(`Invalid JSON`)
-				}	
+				}
 			}
 			break
 
@@ -362,12 +362,8 @@ export async function crudPurge<T>(options: { service: any; primaryKey: number; 
 }
 
 function cleanDtos<T>(dtos: DeepPartial<T>[], options: any, domain: string): DeepPartial<T>[] {
-	// Remove any records with duplicate dedup_field
-
-console.log('pre cleanDtos', dtos)
-
 	//remove empty values
-	for(const d in dtos) {
+	for (const d in dtos) {
 		dtos[d] = <DeepPartial<T>>_.omitBy(dtos[d], _.isUndefined)
 	}
 

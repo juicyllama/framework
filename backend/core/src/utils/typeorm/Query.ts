@@ -843,11 +843,10 @@ export class Query<T> {
 
 		for (const record of data) {
 			try {
-
 				const r = await this.findOne(repository, {
 					where: {
 						[dedup_field]: record[dedup_field],
-					}
+					},
 				})
 
 				await this.upsert(repository, record, dedup_field)
@@ -897,7 +896,7 @@ export class Query<T> {
 				const r = await this.findOne(repository, <any>{
 					where: {
 						[dedup_field]: record[dedup_field],
-					}
+					},
 				})
 
 				if (r) {
