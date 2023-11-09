@@ -206,13 +206,27 @@ export async function crudBulkUpload<T>(options: {
 	service: any
 	account_id?: number
 	file?: Express.Multer.File
-	raw?: any
+	raw?: string
 }): Promise<BulkUploadResponse> {
 	const domain = 'core::helpers::crudController::crudBulkUpload'
 
-	const csv = new Csv()
-	const json = new Json()
-	const file = new File()
+	logger.debug(`[${domain}] Validating options`, {
+		fields: options.fields,
+		dedup_field: options.dedup_field,
+		mappers: options.mappers,
+		import_mode: options.import_mode,
+		upload_type: options.upload_type,
+		service: options.service ? true: false,
+		account_id: options.account_id,
+		file: {
+			is_file: options.file ? true : false,
+			filename: options.file && options.file.filename ? options.file.filename : null,
+			mimetype: options.file && options.file.mimetype ? options.file.mimetype : null,
+		},
+		raw: {
+			is_raw: options.raw ? true : false,
+		}
+	})
 
 	if (!options.file && !options.raw) {
 		throw new BadRequestException(`Missing required field: file or raw`)
@@ -244,6 +258,9 @@ export async function crudBulkUpload<T>(options: {
 		}
 	}
 
+	const csv = new Csv()
+	const json = new Json()
+	const file = new File()
 	let content: any[]
 
 	logger.debug(`[${domain}] Uploading ${options.upload_type} file`)
@@ -270,17 +287,14 @@ export async function crudBulkUpload<T>(options: {
 
 				content = await json.parseJsonFile(options.file, options.mappers)
 			} else if (options.raw) {
-				if (typeof options.raw === 'string') {
-					try {
-						content = JSON.parse(options.raw)
-					} catch (e: any) {
-						throw new BadRequestException(`Invalid JSON`)
-					}
-				} else if (typeof options.raw === 'object') {
-					content = options.raw
-				} else {
+				try {
+					const { json_file, filePath, dirPath } = await json.createTempJSONFileFromString(options.raw)
+					content = await json.parseJsonFile(json_file, options.mappers)
+					await file.unlink(filePath, dirPath)
+				} catch (e: any) {
+					logger.error(`[${domain}] ${e.message}`, e)
 					throw new BadRequestException(`Invalid JSON`)
-				}
+				}	
 			}
 			break
 
@@ -310,13 +324,13 @@ export async function crudBulkUpload<T>(options: {
 			{},
 		)
 		dto['account_id'] = options.account_id
-		return <DeepPartial<T>>_.omitBy(dto, _.isEmpty) // remove empty values
+		return <DeepPartial<T>>dto
 	})
 
 	dtos = cleanDtos(dtos, options, domain)
 
 	try {
-		logger.debug(`[${domain}] Offloading DTO to bulk service`)
+		logger.debug(`[${domain}] Offloading DTOs to bulk service`)
 		return <BulkUploadResponse>await options.service.bulk(dtos, options.import_mode, options.dedup_field)
 	} catch (e) {
 		throw new BadRequestException(e.message)
@@ -349,6 +363,14 @@ export async function crudPurge<T>(options: { service: any; primaryKey: number; 
 
 function cleanDtos<T>(dtos: DeepPartial<T>[], options: any, domain: string): DeepPartial<T>[] {
 	// Remove any records with duplicate dedup_field
+
+console.log('pre cleanDtos', dtos)
+
+	//remove empty values
+	for(const d in dtos) {
+		dtos[d] = <DeepPartial<T>>_.omitBy(dtos[d], _.isUndefined)
+	}
+
 	const unique = _.uniqBy(dtos, options.dedup_field)
 	logger.debug(
 		`[${domain}] Removed ${dtos.length - unique.length} records with duplicate ${options.dedup_field} field values`,
