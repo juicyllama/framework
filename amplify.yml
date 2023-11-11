@@ -10,9 +10,9 @@ applications:
             build:
               commands:
                 - nvm use $VERSION_NODE_18
-                - npm run generate
+                - npm run build
           artifacts:
-            baseDirectory: '.output/public'
+            baseDirectory: '.output'
             files:
               - '**/*'
           cache:

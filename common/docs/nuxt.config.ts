@@ -15,6 +15,10 @@ export default defineNuxtConfig({
       }
     }
   },
+  sourcemap: {
+    server: false,
+    client: false
+  },
   runtimeConfig: {
 	public: {
 	  siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://docs.juicyllama.com/',
