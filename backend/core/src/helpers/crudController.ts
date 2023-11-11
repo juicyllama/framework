@@ -165,7 +165,10 @@ export async function crudCharts<T>(options: {
 		}
 	})
 
+	const labels = fields.map(field => field)
+
 	return {
+		labels,
 		datasets,
 	}
 }

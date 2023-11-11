@@ -40,6 +40,7 @@ describe(`${NAME} Charts Endpoint`, () => {
 	describe('Pie', () => {
 		it('with a single record and single group field', async () => {
 			const result = await testCharts()
+			expect(result['labels'].length).toEqual(1)
 			expect(result['datasets'].length).toEqual(1)
 			expect(result['datasets'][0]['data']).toEqual([
 				{
@@ -92,6 +93,7 @@ describe(`${NAME} Charts Endpoint`, () => {
 			await userService.purge(u1)
 			await userService.purge(u2)
 
+			expect(result['labels'].length).toEqual(2)
 			expect(result['datasets'].length).toEqual(2)
 
 			expect(result['datasets'][0]['data']).toEqual([
