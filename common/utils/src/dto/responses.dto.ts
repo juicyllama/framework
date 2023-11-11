@@ -26,11 +26,6 @@ export class StatsResponseDto {
 	sum?: number
 }
 
-interface ChartCarthesianDataSetPoint {
-	x?: string
-	y?: number
-}
-
 interface ChartDataSetElement {
 	backgroundColor?: string
 	label?: string
