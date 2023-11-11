@@ -211,7 +211,7 @@ describe('Crud Bulk Upload Controller', () => {
 
 				const res = await crudBulkUpload<T>(
 					{
-						raw: [{ "first_name": first_name, "last_name": last_name, "email": email}],
+						raw: `[{ "first_name": "${first_name}", "last_name": "${last_name}", "email": "${email}"}]`,
 						fields: UPLOAD_FIELDS,
 						dedup_field: UPLOAD_DUPLICATE_FIELD,
 						upload_type: UploadType.JSON,

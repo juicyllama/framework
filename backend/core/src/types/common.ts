@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsEnum, IsOptional } from 'class-validator'
+import { IsEnum, IsOptional, IsString } from 'class-validator'
 
 export enum UploadType {
 	CSV = 'CSV',
@@ -62,11 +62,13 @@ export class BulkUploadDto {
 
 	@ApiProperty({
 		name: 'raw',
-		description: `Pass raw contents to upload, Defaults to \`${UploadType.CSV}\` string`,
-		type: 'any',
+		description: `Pass raw contents to upload as a string. If you pass a JSON string, it will be parsed to an object.`,
+		type: 'String',
 		required: false,
 	})
-	raw?: any
+	@IsOptional()
+	@IsString()
+	raw?: string
 
 	@ApiProperty({
 		name: 'upload_type',
