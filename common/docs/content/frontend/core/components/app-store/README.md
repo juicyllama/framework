@@ -14,11 +14,15 @@ Create video overview with
 
 ## Apps Component
 
-
+:::danger
+TODO Document this
+:::
 
 ## Oauth > Start
 
 To facilitate the ability for apps to be added to 3rd party app stores you will need to add a new route to your app.
+
+This route is responsable for authenticating the user and kicking off the app integration.
 
 ::: warning
 This route should be placed behind user authentication
@@ -29,11 +33,26 @@ Add the following to your `router/routes.ts` file:
 ```typescript
 import { JLOauthStart } from '@juicyllama/frontend-core'
 
-//Add into the relevent array
+//Add into the relevent routes array
 
 {
-	path: '/oauth/start',
+	path: '/oauth/start/:integration_name',
 	name: 'Oauth',
 	component: JLOauthStart,
 }
 ```
+
+## Oauth > Finish
+
+
+::: danger
+Document the finishing step (redirect back)
+:::
+
+```
+{
+				path: '/oauth/shopify',
+				name: 'Oauth Shopify',
+				component: () => import('../pages/dashboard/oauth/shopify/redirect.vue'),
+			}
+			```

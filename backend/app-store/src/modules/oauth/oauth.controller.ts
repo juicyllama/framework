@@ -4,6 +4,7 @@ import { AppsService } from '../apps.service'
 import { AppStoreIntegrationName } from '../apps.enums'
 import { ConfigService } from '@nestjs/config'
 import { ApiOperation, ApiQuery } from '@nestjs/swagger'
+import { oauthQueryMappers } from './oauth.mappers'
 
 @ApiTags('Oauth')
 @Controller('oauth')
@@ -27,6 +28,7 @@ export class OauthController {
 	async start(
 		@Res() res,
 		@Query('integration_name') integration_name: AppStoreIntegrationName,
+		@Query() query: any, //allow passthrough of query params
 	): Promise<void> {
 
 		const app = await this.appsService.findOne({
@@ -39,7 +41,10 @@ export class OauthController {
 			throw new BadRequestException(`No ${integration_name} app installed`)
 		}
 
-		res.redirect(`${this.configService.get<string>('system.BASE_URL_APP')}/oauth/start?app_id=${app.app_id}`)
+		query = oauthQueryMappers(query)
+
+		const queryParams = new URLSearchParams(query);
+		res.redirect(`${this.configService.get<string>('system.BASE_URL_APP')}/oauth/start?${queryParams}`)
 		return
 	}
 

@@ -21,7 +21,7 @@ export class ShopifyOrdersCronService {
 	@Cron(CronExpression.EVERY_10_MINUTES, { disabled: !process.env.CRON_APP_SHOPIFY_SYNC_ORDERS })
 	async cronSyncOrders() {
 		const domain = 'app::shopify::orders::crons::getOrders'
-		return await CronRunner(domain, await this.syncOrders())
+		return await CronRunner(domain, this.syncOrders())
 	}
 
 	async syncOrders(): Promise<any> {

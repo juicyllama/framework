@@ -14,7 +14,7 @@ This is a pre-build GUI you can use in your project to simplify the ability for 
 We need to document the app store frontend component
 :::
 
-[You can learn more about it here](#)
+[You can learn more about it here](../../frontend/core/components/app-store/README.md)
 
 #### 3rd Party 
 

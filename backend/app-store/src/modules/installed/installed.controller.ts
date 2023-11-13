@@ -1,9 +1,9 @@
-import { BadRequestException, Body, Controller, forwardRef, Inject, Param, Query, Req } from '@nestjs/common'
+import { BadRequestException, Body, Controller, forwardRef, Inject, Param, Query, Req, Post } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { StatsMethods, StatsResponseDto } from '@juicyllama/utils'
 import { InstalledAppsService } from './installed.service'
 import { AppsService } from '../apps.service'
-import { CreateInstalledAppDto, UpdateInstalledAppDto } from './installed.dto'
+import { CreateInstalledAppDto, InstalledAppPreCheckDto, UpdateInstalledAppDto, preInstallCheckResponse } from './installed.dto'
 import { AppIntegrationType } from '../apps.enums'
 import { InstalledAppsOrderBy, InstalledAppsRelations, InstalledAppsSelect } from './installed.enums'
 import {
@@ -41,6 +41,23 @@ export class InstalledAppsController {
 		@Inject(forwardRef(() => AppsService)) private readonly appsService: AppsService,
 	) {}
 
+
+	//todo add swagger
+	@Post('precheck')
+	async preInstallCheck(
+		@AccountId() account_id: number,
+		@Body() data: InstalledAppPreCheckDto,
+	): Promise<preInstallCheckResponse> {
+
+		const app = await this.appsService.findById(data.app_id)
+
+		if (!app) {
+			throw new BadRequestException(`No app found with that app_id`)
+		}
+
+		return await this.service.preInstallChecks(app, data.settings, account_id)
+	}
+
 	@CreateDecorator({ entity: INSTALLED_APP_E, name: INSTALLED_APP_NAME })
 	async create(
 		@Req() req,
@@ -57,7 +74,7 @@ export class InstalledAppsController {
 			throw new BadRequestException(`Missing required settings`)
 		}
 
-		const checks = await this.service.preInstallChecks(app, data.settings)
+		const checks = await this.service.preInstallChecks(app, data.settings, account_id)
 
 		if (checks.result === false) {
 			throw new BadRequestException(checks.error)
@@ -108,6 +125,8 @@ export class InstalledAppsController {
 		return records
 	}
 
+	
+
 	@ReadStatsDecorator({ name: INSTALLED_APP_NAME })
 	async stats(
 		@AccountId() account_id: number,
@@ -148,7 +167,7 @@ export class InstalledAppsController {
 	async update(@Body() data: UpdateInstalledAppDto, @Param() params): Promise<INSTALLED_APP_T> {
 		if (data.settings) {
 			const installed_app = await this.service.findById(params[INSTALLED_APP_PRIMARY_KEY])
-			const checks = await this.service.preInstallChecks(installed_app.app, data.settings)
+			const checks = await this.service.preInstallChecks(installed_app.app, data.settings, installed_app.account_id)
 
 			if (checks.result === false) {
 				throw new BadRequestException(checks.error)
@@ -174,4 +193,6 @@ export class InstalledAppsController {
 			primaryKey: params[INSTALLED_APP_PRIMARY_KEY],
 		})
 	}
+
+	
 }

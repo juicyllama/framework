@@ -20,7 +20,7 @@ export class Store extends BaseEntity {
 	account_id: number
 
 	@ManyToOne(() => Website, website => website.website_id, {
-		onDelete: 'CASCADE',
+		onDelete: 'SET NULL',
 	})
 	@JoinColumn({ name: 'website_id' })
 	website?: Website

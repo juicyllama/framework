@@ -10,17 +10,27 @@ export enum AppIntegrationStatus {
 	DISCONNCTED = 'DISCONNECTED',
 }
 
+export interface ConnectAppOptionsOverrides {
+	key: string
+	value?: string
+	hide?: boolean
+}
+
 export interface ConnectAppOptions {
 	integration_name: AppStoreIntegrationName
+	// Manipulate the icon
 	icon?: {
 		hide?: boolean
 		size?: string
 		color?: string
 	}
+	// Manipulate the connection name field
 	connection?: {
 		name?: string
 		hide?: boolean
-	}
+	},
+	// Allows user to override the default value of a field and/or hide it
+	overrides?: ConnectAppOptionsOverrides[]
 }
 
 export interface InstalledApp {
@@ -36,4 +46,9 @@ export interface InstalledApp {
 	readonly oauth_redirect_url?: string
 	last_check_at?: Date
 	next_check_at?: Date
+}
+
+export interface preInstallCheckResponse {
+	result: boolean
+	error?: string
 }

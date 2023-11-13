@@ -32,7 +32,7 @@ if (!app.length) {
 		message: `Could not find app with integration name ${props.integration_name}`,
 	})
 } else {
-	appForm.fields = buildAppForm(app[0], props.connection)
+	appForm.fields = buildAppForm(app[0], props)
 }
 
 async function install(data: any) {

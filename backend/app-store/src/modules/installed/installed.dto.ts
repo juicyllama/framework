@@ -1,5 +1,6 @@
 import { AppIntegrationStatus, AppScope } from '../apps.enums'
 import { SwaggerPropertyDecorator, SwaggerPropertyType } from '@juicyllama/core'
+import { IsNumber, IsObject } from 'class-validator'
 
 export class CreateInstalledAppDto {
 	@SwaggerPropertyDecorator({
@@ -90,4 +91,42 @@ export class UpdateInstalledAppDto {
 		example: { key: 'pair' },
 	})
 	readonly settings?: any
+}
+
+export class InstalledAppPreCheckDto {
+	@SwaggerPropertyDecorator({
+		type: SwaggerPropertyType.NUMBER,
+		description: 'The app_id for the app you wish to do the precheck for',
+		example: 1,
+		required: true,
+	})
+	@IsNumber()
+	app_id: number
+
+	@SwaggerPropertyDecorator({
+		type: SwaggerPropertyType.OBJECT,
+		description: 'The relevant key pair based on the apps settings',
+		example: { key: 'pair' },
+		required: true,
+	})
+	@IsObject()
+	settings: any
+}
+
+export class preInstallCheckResponse {
+	@SwaggerPropertyDecorator({
+		type: SwaggerPropertyType.BOOLEAN,
+		description: 'If the precheck was successful',
+		example: true,
+		required: true,
+	})
+	result: boolean
+
+	@SwaggerPropertyDecorator({
+		type: SwaggerPropertyType.STRING,
+		description: 'The error message if the precheck was unsuccessful',
+		example: 'You already have a connected app for this shop',
+		required: false,
+	})
+	error?: string
 }

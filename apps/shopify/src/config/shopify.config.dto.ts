@@ -9,4 +9,7 @@ export class shopifyConfigDto {
 
 	@IsString()
 	SHOPIFY_EXTRA_SCOPES: string
+
+	@IsString()
+	SHOPIFY_OAUTH_REDIRECT_URL?: string
 }
