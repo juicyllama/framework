@@ -1,5 +1,6 @@
 export * from './api'
 export * from './auth'
+export * from './dates'
 export * from './hooks'
 export * from './logger'
 export * from './pipes'

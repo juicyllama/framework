@@ -117,14 +117,10 @@ function updated_custom(range: {
 			title: 'Today',
 			key: FormFieldPluginDateRangeTypeOptions.TODAY,
 			function: () => {
-				const date = new Date();
-				const now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
-                date.getUTCDate(), date.getUTCHours(),
-                date.getUTCMinutes(), date.getUTCSeconds());
 				updated({
 					type: FormFieldPluginDateRangeTypeOptions.TODAY,
 					from: new Date(new Date().setUTCHours(0,0,0,0)),
-					to: new Date(now_utc)
+					to: new Date(new Date().setUTCHours(23,59,59,999))
 				})
 			}
 		},{
