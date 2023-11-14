@@ -1,16 +1,10 @@
 import { Controller, forwardRef, Inject, Get, Query, Req, Res, BadRequestException } from '@nestjs/common'
 import { ApiHideProperty } from '@nestjs/swagger'
-import { Logger, Strings } from '@juicyllama/utils'
+import { Logger } from '@juicyllama/utils'
 import { ShopifyAuthRedirectQuery } from './auth.dto'
 import { Shopify, ShopifyAuthRedirect, ShopifyAuthScopes } from '../../config/shopify.config'
 import { ConfigService } from '@nestjs/config'
-import {
-	AppIntegrationStatus,
-	InstalledAppsService,
-	Oauth,
-	OauthService,
-	AppsService,
-} from '@juicyllama/app-store'
+import { AppIntegrationStatus, InstalledAppsService, Oauth, OauthService, AppsService } from '@juicyllama/app-store'
 import { AccountId, UserAuth } from '@juicyllama/core'
 import { v4 as uuidv4 } from 'uuid'
 import { StoresService } from '@juicyllama/ecommerce'

@@ -61,11 +61,12 @@ export interface IconSettings {
 }
 
 export interface Icon {
-	name: string
+	name?: string
 	type?: string
 	size?: string
 	color?: string
 	classes?: string
+	hide?: boolean
 }
 
 export enum TablePosition {

@@ -1,5 +1,5 @@
 import { App, AppStoreIntegrationName } from './apps'
-import { Account, User } from '../../types'
+import { Account, Icon, User } from '../../types'
 
 export enum AppScope {
 	ACCOUNT = 'ACCOUNT',
@@ -16,8 +16,19 @@ export interface ConnectAppOptionsOverrides {
 	hide?: boolean
 }
 
-export interface ConnectAppOptions {
+export interface AppStoreOptions {
+	connection_screen_settings?: AppStoreConnectionScreenSettings
+	text?: {
+		classes: string
+	}
+	icon?: Icon
+}
+
+export interface ConnectAppOptions extends AppStoreConnectionScreenSettings {
 	integration_name: AppStoreIntegrationName
+}
+
+export interface AppStoreConnectionScreenSettings {
 	// Manipulate the icon
 	icon?: {
 		hide?: boolean
