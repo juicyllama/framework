@@ -286,11 +286,17 @@ export function BulkUploadDecorator(options: { supportedFields?: string[]; dedup
 			}. Duplicates work as follows:
 		\n - \`${ImportMode.CREATE}\` - Any duplicates found will throw an error and the import will fail
 		\n - \`${ImportMode.UPSERT}\` - Any duplicates found will be updated, any new records will be created
+		\n - \`${ImportMode.REPOPULATE}\` - Clears out the table and repopulates it with the new data
 		\n - \`${ImportMode.DELETE}\` - Records found based on the duplicate field will be deleted
 		`,
 		}),
 		ApiConsumes('multipart/form-data'),
-		UseInterceptors(FileInterceptor('file')),
+		UseInterceptors(FileInterceptor('file', {
+			limits: {
+				fieldSize: 1024 * 1024 * 50, // 50MB
+				fileSize: 1024 * 1024 * 50, // 50MB
+			},
+		})),
 		ApiOkResponse({ description: 'OK' }),
 		Post(`upload`),
 	]

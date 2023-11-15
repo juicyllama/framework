@@ -218,17 +218,19 @@ export async function crudBulkUpload<T>(options: {
 		upload_type: options.upload_type,
 		service: options.service ? true : false,
 		account_id: options.account_id,
-		file: {
-			is_file: options.file ? true : false,
+		file: options.file ? {
 			filename: options.file && options.file.filename ? options.file.filename : null,
 			mimetype: options.file && options.file.mimetype ? options.file.mimetype : null,
-		},
-		raw: {
-			is_raw: options.raw ? true : false,
-		},
+		} : false,
+		raw: options.raw ? {
+			length: options.raw.length,
+			start: options.raw.substring(0, 20),
+			end: options.raw.substring(options.raw.length - 20, options.raw.length),
+		} : false,
 	})
 
 	if (!options.file && !options.raw) {
+		logger.debug(`[${domain}] Missing required field: file or raw`)
 		throw new BadRequestException(`Missing required field: file or raw`)
 	}
 
@@ -245,16 +247,19 @@ export async function crudBulkUpload<T>(options: {
 			try {
 				options.mappers = JSON.parse(options.mappers)
 			} catch (e: any) {
+				logger.debug(`[${domain}] Invalid mappers JSON`)
 				throw new BadRequestException(`Invalid mappers JSON`)
 			}
 		}
 	}
 
 	if (!options.fields) {
+		logger.debug(`[${domain}] Missing required field: fields`)
 		throw new InternalServerErrorException(`Missing required field: fields`)
 	}
 
 	if (!options.dedup_field) {
+		logger.debug(`[${domain}] Missing required field: dedup_field`)
 		throw new InternalServerErrorException(`Missing required field: dedup_field`)
 	}
 
@@ -269,6 +274,7 @@ export async function crudBulkUpload<T>(options: {
 		case UploadType.CSV:
 			if (options.file) {
 				if (!Boolean(options.file.mimetype.match(/(csv)/))) {
+					logger.debug(`[${domain}] Not a valid ${options.upload_type} file`)
 					throw new BadRequestException(`Not a valid ${options.upload_type} file`)
 				}
 
@@ -282,6 +288,7 @@ export async function crudBulkUpload<T>(options: {
 		case UploadType.JSON:
 			if (options.file) {
 				if (!Boolean(options.file.mimetype.match(/(json)/))) {
+					logger.debug(`[${domain}] Not a valid ${options.upload_type} file`)
 					throw new BadRequestException(`Not a valid ${options.upload_type} file`)
 				}
 
@@ -299,14 +306,19 @@ export async function crudBulkUpload<T>(options: {
 			break
 
 		default:
+			logger.debug(`[${domain}] Not a supported file type`)
 			throw new BadRequestException(`Not a supported file type`)
 	}
 
 	if (!content.length) {
+		logger.debug(`[${domain}] No records found in ${options.upload_type} file`)
 		throw new BadRequestException(`No records found in ${options.upload_type} file`)
 	}
 
 	if (Object.keys(content[0]).length !== options.fields.length) {
+		logger.debug(`[${domain}] Invalid ${options.upload_type} file. Expected ${options.fields.length} columns, got ${
+			Object.keys(content[0]).length
+		}`)
 		throw new BadRequestException(
 			`Invalid ${options.upload_type} file. Expected ${options.fields.length} columns, got ${
 				Object.keys(content[0]).length
@@ -333,6 +345,7 @@ export async function crudBulkUpload<T>(options: {
 		logger.debug(`[${domain}] Offloading DTOs to bulk service`)
 		return <BulkUploadResponse>await options.service.bulk(dtos, options.import_mode, options.dedup_field)
 	} catch (e) {
+		logger.error(`[${domain}] ${e.message}`, e)
 		throw new BadRequestException(e.message)
 	}
 }
