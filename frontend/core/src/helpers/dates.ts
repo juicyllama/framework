@@ -6,7 +6,9 @@ export function updateFormPluginDateRange(dates: FormFieldPluginDateRangeResult)
 	const now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
 	date.getUTCDate(), date.getUTCHours(),
 	date.getUTCMinutes(), date.getUTCSeconds());
-	const yesterday_utc = new Date(now_utc).setDate(date.getDate() - 1)
+	const yesterday_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
+	date.getUTCDate() - 1, date.getUTCHours(),
+	date.getUTCMinutes(), date.getUTCSeconds());
 	const monday = date.setDate(date.getDate() - (date.getDay() + 6) % 7)
 	const monday_utc = new Date(monday).setUTCHours(0,0,0,0)
 	const previous_monday = new Date(monday_utc).setDate(date.getDate() - 7)
