@@ -57,6 +57,10 @@ export interface IconSettings {
 		delete?: string
 		search?: string
 		columns?: string
+		profile?: string
+		billing?: string
+		settings?: string
+		admin?: string
 	}
 }
 
