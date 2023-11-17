@@ -35,9 +35,8 @@ const path = computed(() => route.path)
 				<div v-else class="JLMenuMultiple">
 					<q-expansion-item
 						:default-closed="props.menu.expand?.default_closed ? props.menu.expand.default_closed : null"
-						:hide-expand-icon="
-							props.menu.expand?.hide_expand_icon ? props.menu.expand.hide_expand_icon : null
-						">
+						:hide-expand-icon="props.menu.expand?.hide_expand_icon ? props.menu.expand.hide_expand_icon : null"
+						>
 						<template v-slot:header>
 							<MenuItem
 								:title="item.title"
@@ -48,6 +47,7 @@ const path = computed(() => route.path)
 								:border_color="item.border_color" />
 						</template>
 
+			
 						<q-item
 							v-for="link in item.links"
 							:key="link.title"
@@ -65,6 +65,7 @@ const path = computed(() => route.path)
 								@click="!item.link ? item.function() : null"
 								:border_color="link.border_color" />
 						</q-item>
+				
 					</q-expansion-item>
 				</div>
 			</div>
