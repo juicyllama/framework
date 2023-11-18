@@ -6,12 +6,12 @@ applications:
             preBuild:
               commands:
                 - nvm use $VERSION_NODE_18 && node --version
-                - corepack enable && npx --yes pnpm install
+                - corepack enable && npx --yes npm install
             build:
               commands:
-                - pnpm --filter docs build
+                - npm run generate
           artifacts:
-            baseDirectory: common/docs/.amplify-hosting
+            baseDirectory: .output/public
             buildPath: /
             files:
               - '**/*'
