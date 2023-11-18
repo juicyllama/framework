@@ -6,7 +6,7 @@ applications:
             preBuild:
               commands:
                 - nvm use $VERSION_NODE_18 && node --version
-                - corepack enable && npx --yes nypm install
+                - corepack enable && npx --yes pnpm install
             build:
               commands:
                 - pnpm --filter docs build
