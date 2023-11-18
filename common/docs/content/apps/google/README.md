@@ -2,7 +2,7 @@
 
 The Google app is a wrapper around different Google APIs. It provides a consistent interface for interacting with the Google within the confines of our framework.
 
-It comes with the added benefit of leveraging a data lake (if you have one setup) to cache the results of your api calls (saving money). Along with logging and other framework standards.
+It comes with the added benefit of leveraging a data lake (if you have one setup) to cache the results of your api calls (saving money). Along with logging and other framework benefits.
 
 ::alert{type="info"}
 Contact us to learn more about our data lake solution.
