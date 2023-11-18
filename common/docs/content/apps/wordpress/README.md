@@ -30,7 +30,7 @@ You will need to add the app to your database:
 We could look to seed this as per of the app-wordpress package in the future, but for now you will need to add this manually.
 ::
 
-```mysql
+```sql
 INSERT INTO `apps` (`name`, `url`, `integration_type`, `integration_name`, `category`, `hexcode`, `active`, `hidden`, `settings`) VALUES ('WordPress', 'https://wordpress.org', 'CREDENTIALS', 'wordpress', 'cms', NULL, 1, 0, '[{\"key\": \"WORDPRESS_URL\", \"name\": \"WordPress Website URL\", \"input\": {\"type\": \"text\", \"required\": true}, \"description\": \"Your WordPress URL, including http(s):// but without a trailing slash.\"}, {\"key\": \"WORDPRESS_USERNAME\", \"name\": \"WordPress Username\", \"input\": {\"type\": \"text\", \"required\": true}, \"description\": \"Your WordPress username which can be found in the users section of your WordPress admin area.\"}, {\"key\": \"WORDPRESS_APPLICATION_PASSWORD\", \"name\": \"WordPress Application Password\", \"input\": {\"type\": \"text\", \"required\": true}, \"private\": true, \"description\": \"This is a specific application password (not your normal login password) which can be created on the user management page in the WordPress admin.\"}]');
 ```
 

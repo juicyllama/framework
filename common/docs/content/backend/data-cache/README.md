@@ -26,7 +26,7 @@ pnpm install @juicyllama/data-cache
 
 Add your API key to the `.env` file
 
-```dotenv
+```
 JUICYLLAMA_DATA_CACHE_API_KEY=YOUR_KEY
 ```
 

@@ -11,7 +11,7 @@ More dev docs on how to work with Pusher can be found on [Pusher dev portal](htt
 
 To use Pusher you need to set up the account credentials in related `.env` file:
 
-```env
+```
 PUSHER_CHANNEL=XXX
 PUSHER_KEY=YYY
 ```

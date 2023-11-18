@@ -30,7 +30,6 @@
     "@nuxt-themes/docus": "latest",
     "@pinia/nuxt": "latest",
     "@quasar/extras": "latest",
-    "pinceau": "1.0.0-beta.22",
     "nuxt": "latest",
     "nuxt-quasar-ui": "latest",
     "nuxt-simple-sitemap": "latest",
