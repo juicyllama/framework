@@ -47,11 +47,11 @@ We leverage:
 -   [NestJS](https://nestjs.com/) for building APIs and backend applications
 -   [Vue](https://vuejs.org) and [Quasar](https://quasar.dev/) for building frontend cross-platform applications
 
-We also have a number of utility / development modules that helps speed up development and provide additional functionality. For example checkout our [CLI](/common/cli/readme) for local rapid development setup.
+We also have a number of utility / development modules that helps speed up development and provide additional functionality. 
 
 ## Contributing
 
-Our framework is open source, we welcome contributions from the community. If you have a module you would like to add, please [drop us a message](/support) so we can discuss the best way to integrate it.
+Our framework is open source, we welcome contributions from the community. If you have a module you would like to add, please [open a discussion](https://github.com/juicyllama/framework/discussions) so we can discuss the best way to integrate it.
 
 If you wish to contribute please read the following guides:
 
