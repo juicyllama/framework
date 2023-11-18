@@ -32,13 +32,12 @@
     "@quasar/extras": "latest",
     "nuxt": "latest",
     "nuxt-quasar-ui": "latest",
-    "nuxt-simple-sitemap": "latest",
     "quasar": "latest",
     "vue": "latest",
     "vue-router": "latest"
   },
   "engines": {
-    "node": "^19.0.0",
+    "node": "^18.0.0",
     "npm": "^8.0.0"
   }
 }

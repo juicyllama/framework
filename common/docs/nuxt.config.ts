@@ -4,7 +4,7 @@ export default defineNuxtConfig({
 		'@nuxt/content',
 		'nuxt-quasar-ui',
 		'@pinia/nuxt',
-		'nuxt-simple-sitemap',
+		//'nuxt-simple-sitemap',
 	],
 	devtools: { enabled: true },
 	extends: '@nuxt-themes/docus',
