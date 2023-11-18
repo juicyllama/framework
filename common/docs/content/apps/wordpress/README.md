@@ -19,6 +19,7 @@ WORDPRESS_URL=https://your-wordpress-site.com
 WORDPRESS_USERNAME=your_wordpress_username
 WORDPRESS_APPLICATION_PASSWORD=your_wordpress_application_password
 ```
+
 #### App Store
 
 If you would like to allow your users to connect their own WordPress sites and perform action via their accounts, you can use the [app store](/backend/app-store/readme) integration.
@@ -40,7 +41,8 @@ Each endpoint (e.g. posts, users) has been separated into its own module. You ca
 The following modules are currently supported:
 
 <!-- * [Categories](/apps/wordpress/modules/categories) -->
-* [Posts](/apps/wordpress/modules/posts)
+
+-   [Posts](/apps/wordpress/modules/posts)
 <!-- * [Users](/apps/wordpress/modules/users) -->
 
 ::alert{type="warning"}

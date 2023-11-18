@@ -29,9 +29,7 @@ import { PlacesService } from '@juicyllama/app-google'
 
 @Injectable()
 export class AppService {
-    constructor(
-		@Inject(forwardRef(() => PlacesService)) private readonly placesService: PlacesService,
-    ) {}
+	constructor(@Inject(forwardRef(() => PlacesService)) private readonly placesService: PlacesService) {}
 }
 ```
 
@@ -42,7 +40,6 @@ The service makes available the following methods:
 ### Get Place By Id
 
 Returns the place data for a given place_id string.
-
 
 ```typescript
 // app.service.ts
@@ -287,4 +284,3 @@ console.log(place)
         "wheelchair_accessible_entrance": true
     }
 ```
-

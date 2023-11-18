@@ -10,7 +10,7 @@ This component renders a form with configurable fields that allow to create/edit
 
 This component accepts the following props:
 
-- `options` - The table options, see [FormSchema](/frontend/core/types/form) for more information.
+-   `options` - The table options, see [FormSchema](/frontend/core/types/form) for more information.
 
 ## Button on form
 
@@ -28,7 +28,7 @@ buttons: [
 
 This component emits:
 
-- `submitted-form`, when the form is submitted
+-   `submitted-form`, when the form is submitted
 
 ## Styles
 
@@ -39,30 +39,32 @@ These are [Tailwind CSS](https://tailwindcss.com/docs/reusing-styles#extracting-
 ## Examples
 
 ```vue
-<script setup lang='ts'>
-    import { JLForm } from '@juicyllama/frontend-core'
-    import type { FormField, FormFieldButtonType, FormFieldField, FormFieldType, FormSettings } from '@juicyllama/frontend-core'
+<script setup lang="ts">
+import { JLForm } from '@juicyllama/frontend-core'
+import type {
+	FormField,
+	FormFieldButtonType,
+	FormFieldField,
+	FormFieldType,
+	FormSettings,
+} from '@juicyllama/frontend-core'
 
-    const form: FormField[] = reactive([])
+const form: FormField[] = reactive([])
 
-    const options = {
-        type: 'edit',
-        name: 'account',
-        fields: form
-    }
+const options = {
+	type: 'edit',
+	name: 'account',
+	fields: form,
+}
 
-    const loaded = ref<boolean>(false)
+const loaded = ref<boolean>(false)
 
-    async function submittedForm(form) {
-        // API call
-    }
+async function submittedForm(form) {
+	// API call
+}
 </script>
 
 <template>
-    <JLForm
-    :options="options"
-    v-if="loaded"
-    @submitted-form="submittedForm"></JLForm>
+	<JLForm :options="options" v-if="loaded" @submitted-form="submittedForm"></JLForm>
 </template>
-
 ```

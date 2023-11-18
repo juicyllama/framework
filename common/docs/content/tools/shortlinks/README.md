@@ -28,7 +28,7 @@ Add the following environment variables to your project:
 
 ```bash
 # The url for your shortlink redirects
-BASE_URL_SHORTLINKS=https://redirect.url 
+BASE_URL_SHORTLINKS=https://redirect.url
 # The url to redirect users to if they use an invalid shortlink code
 BASE_URL_SHORTLINKS_INVALID=https://redirect.url
 
@@ -59,7 +59,6 @@ import { installToolsShortlinkDocs } from '@juicyllama/tools-shortlinks'
 redoc = installToolsShortlinkDocs(redoc)
 ```
 
-
 ### Miscroservice
 
 To allow the redirects to work, you will need to add a new Microservice. This will then need to be hosted online and connected to your redirection URL.
@@ -70,22 +69,21 @@ To allow the redirects to work, you will need to add a new Microservice. This wi
 // nest-cli.json
 
 {
-    "projects": {
-        "shortlinks": {
-            "type": "application",
-            "root": "apps/shortlinks",
-            "entryFile": "main",
-            "sourceRoot": "apps/shortlinks/src",
-            "compilerOptions": {
-                "plugins": ["@nestjs/swagger/plugin"],
-                "assets": ["**/*.html", "**/*.ico", "**/*.png", "**/*.json"],
-                "watchAssets": true,
-                "tsConfigPath": "apps/shortlinks/tsconfig.app.json"
-            }
-        }
-    }
+	projects: {
+		shortlinks: {
+			type: 'application',
+			root: 'apps/shortlinks',
+			entryFile: 'main',
+			sourceRoot: 'apps/shortlinks/src',
+			compilerOptions: {
+				plugins: ['@nestjs/swagger/plugin'],
+				assets: ['**/*.html', '**/*.ico', '**/*.png', '**/*.json'],
+				watchAssets: true,
+				tsConfigPath: 'apps/shortlinks/tsconfig.app.json',
+			},
+		},
+	},
 }
-
 ```
 
 2. Add the microservices main.ts file
@@ -113,7 +111,7 @@ import { ShortlinksModule } from '@juicyllama/tools-shortlinks'
 import { AppController } from './app.controller'
 
 @Module({
-    imports: [forwardRef(() => ShortlinksModule)],
+	imports: [forwardRef(() => ShortlinksModule)],
 	controllers: [AppController],
 })
 export class AppModule {}
@@ -129,9 +127,7 @@ import { ShortlinksService } from '@juicyllama/tools-shortlinks'
 
 @Controller()
 export class AppController {
-	constructor(
-		@Inject(forwardRef(() => ShortlinksService)) private readonly service: ShortlinksService,
-	) {}
+	constructor(@Inject(forwardRef(() => ShortlinksService)) private readonly service: ShortlinksService) {}
 
 	@Get()
 	async root(@Req() req, @Res() res) {
@@ -141,7 +137,7 @@ export class AppController {
 	@Get(':code')
 	async redirect(@Req() req, @Res() res, @Param('code') code: string) {
 		const url = await this.service.redirect(req, code)
-		if(!url) return res.redirect(process.env.BASE_URL_SHORTLINKS_INVALID)
+		if (!url) return res.redirect(process.env.BASE_URL_SHORTLINKS_INVALID)
 		return res.redirect(url.long_url)
 	}
 }

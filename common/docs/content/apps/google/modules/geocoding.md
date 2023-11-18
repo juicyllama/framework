@@ -29,9 +29,7 @@ import { GeocodingService } from '@juicyllama/app-google'
 
 @Injectable()
 export class AppService {
-    constructor(
-		@Inject(forwardRef(() => GeocodingService)) private readonly geocodingService: GeocodingService,
-    ) {}
+	constructor(@Inject(forwardRef(() => GeocodingService)) private readonly geocodingService: GeocodingService) {}
 }
 ```
 
@@ -134,4 +132,3 @@ console.log(geocoding)
 	]
 }
 ```
-

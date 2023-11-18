@@ -12,8 +12,8 @@ A DTO for a date range.
 import { DateRangeDto } from '@juicyllama/utils'
 
 class DateRangeDto {
-    from: Date
-    to: Date
+	from: Date
+	to: Date
 }
 ```
 
@@ -28,7 +28,7 @@ import { ErrorResponseDto } from '@juicyllama/utils'
 
 class ErrorResponseDto {
 	statusCode: number
-    error: string
+	error: string
 	message: string[]
 }
 ```

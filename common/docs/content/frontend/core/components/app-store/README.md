@@ -7,10 +7,8 @@ This frontend implementation requires the backend to be setup and running, [you 
 :::
 
 ::: danger
-Create video overview with 
+Create video overview with
 :::
-
-
 
 ## Apps Component
 
@@ -44,15 +42,15 @@ import { JLOauthStart } from '@juicyllama/frontend-core'
 
 ## Oauth > Finish
 
-
 ::: danger
 Document the finishing step (redirect back)
 :::
 
-```
+````
 {
 				path: '/oauth/shopify',
 				name: 'Oauth Shopify',
 				component: () => import('../pages/dashboard/oauth/shopify/redirect.vue'),
 			}
 			```
+````

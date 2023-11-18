@@ -6,12 +6,12 @@ title: Beacon
 
 The beacon module allows you to notify users in a multitude of different ways, including:
 
-* Email
-* SMS
-* Instant Messaging
-* Push Notifications
-* In-app Notifications
-* Webhooks
+-   Email
+-   SMS
+-   Instant Messaging
+-   Push Notifications
+-   In-app Notifications
+-   Webhooks
 
 ::alert{type="danger"}
 This module is currently in development and is limited to Email, SMS, PUSHER right now.
@@ -37,9 +37,7 @@ import { forwardRef, Module } from '@nestjs/common'
 import { BeaconModule } from '@juicyllama/core'
 
 @Module({
-  imports: [
-	  forwardRef(() => BeaconModule),
-  ],
+	imports: [forwardRef(() => BeaconModule)],
 })
 export class AppModule {}
 ```
@@ -52,9 +50,7 @@ import { BeaconService } from '@juicyllama/core'
 
 @Injectable()
 export class ExampleService {
-	constructor(
-		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
-	) {}
+	constructor(@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService) {}
 }
 ```
 
@@ -63,9 +59,8 @@ Send notifications using the service:
 ```typescript
 //example.service.ts
 
-await this.beaconService.notify(options);
+await this.beaconService.notify(options)
 ```
-
 
 ## Methods
 
@@ -76,9 +71,7 @@ The following methods are available:
 The main method for sending notifications, this method takes a single options object as a parameter which can be used to configure which types of notifications to send and their contents.
 
 ```typescript
-await this.beaconService.notify({
-
-});
+await this.beaconService.notify({})
 ```
 
 ## Examples
@@ -86,16 +79,19 @@ await this.beaconService.notify({
 ### Send an email
 
 ```typescript
+
 ```
 
 ### Send a push notification
 
 ```typescript
+
 ```
 
 ### Send a In-app notification
 
 ```typescript
+
 ```
 
 ### Send an IM
@@ -117,15 +113,13 @@ await this.beaconService.notify({
 })
 ```
 
-
 ## Integrations
 
 The beacon module can integrate with the following modules:
 
-| Method | Modules                  |
-| --- |--------------------------|
-| Email | [app-aws]()              |
-| SMS | [app-aws]()              |
-| Push | [app-pusher]()           |
-| IM | [app-slack](/apps/slack/readme) |
-
+| Method | Modules                         |
+| ------ | ------------------------------- |
+| Email  | [app-aws]()                     |
+| SMS    | [app-aws]()                     |
+| Push   | [app-pusher]()                  |
+| IM     | [app-slack](/apps/slack/readme) |

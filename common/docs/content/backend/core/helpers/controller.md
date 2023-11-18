@@ -59,10 +59,10 @@ Find all objects in the database.
 
 ```typescript
 @ReadManyDecorator({
-    entity: E, 
-    selectEnum: ExampleSelect, 
+    entity: E,
+    selectEnum: ExampleSelect,
     orderByEnum: ExampleOrderBy,
-    relationsEnum: ExampleRelations, 
+    relationsEnum: ExampleRelations,
     name: NAME
 })
 async findAll(@AccountId() account_id: number, @Query() query): Promise<T[]> {
@@ -83,10 +83,10 @@ Find one object in the database.
 
 ```typescript
 @ReadOneDecorator({
-    entity: E, 
-    primaryKey: PRIMARY_KEY, 
-    selectEnum: ExampleSelect, 
-    relationsEnum: ExampleRelations, 
+    entity: E,
+    primaryKey: PRIMARY_KEY,
+    selectEnum: ExampleSelect,
+    relationsEnum: ExampleRelations,
     name: NAME
 })
 async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
@@ -120,7 +120,6 @@ Get stats about the objects in the database.
 	}
 ```
 
-
 ### Charts
 
 Get datasets for pie/line charts from the database.
@@ -128,7 +127,7 @@ Get datasets for pie/line charts from the database.
 ```typescript
 	@ReadChartsDecorator({
 		entity: E,
-		name: NAME, 
+		name: NAME,
 		selectEnum: ExampleSelect
 	})
 	async charts(
@@ -194,7 +193,6 @@ async delete(@Param() params): Promise<T> {
 }
 ```
 
-
 ## Currency Conversion
 
 The `findAll` `findOne` and `charts` endpoints support currency conversion, this means that the results will be converted into a specific currency before being returned.
@@ -209,10 +207,10 @@ const CURRENCY_FIELD = 'currency' // the field containing the current of the rec
 const CURRENCY_FIELDS = ['total', 'amount'] //the fields containing amounts to be converted
 
 @ReadOneDecorator({
-    entity: E, 
-    primaryKey: PRIMARY_KEY, 
-    selectEnum: ExampleSelect, 
-    relationsEnum: ExampleRelations, 
+    entity: E,
+    primaryKey: PRIMARY_KEY,
+    selectEnum: ExampleSelect,
+    relationsEnum: ExampleRelations,
     name: NAME,
 	currency_field: CURRENCY_FIELD,
 	currency_fields: CURRENCY_FIELDS
@@ -232,4 +230,4 @@ async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Que
 }
 ```
 
-This will expose a new option `convert_currencies_to` on the endpoint. Which will return the `CURRENCY_FIELDS` in the currency passed in the `convert_currencies_to` option. 
+This will expose a new option `convert_currencies_to` on the endpoint. Which will return the `CURRENCY_FIELDS` in the currency passed in the `convert_currencies_to` option.

@@ -52,4 +52,4 @@ Inject the service into your application passing the Entity you wish to use
 ```typescript
 //app.service.ts
 import { DataCacheService } from '@juicyllama/data-cache'
-
+```

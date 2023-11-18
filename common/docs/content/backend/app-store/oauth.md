@@ -16,10 +16,9 @@ We need to document the app store frontend component
 
 [You can learn more about it here](../../frontend/core/components/app-store/README.md)
 
-#### 3rd Party 
+#### 3rd Party
 
 Some apps may start the Oauth flow from 3rd party app stores, in such cases we would need to authenticate the user before handing off to the install flow.
-
 
 #### API Call
 
@@ -61,4 +60,4 @@ This endpoint expects the `body` to include the install app details, you can see
 
 Each app which supported Oauth2 will be configured to redirect to the 3rd party API in order to handle the communication between the two systems, this will be built into the app module.
 
-If you are looking to create app's for the system, you can take a look at an existing OAUTH2 app to see how it works. You will also need to update the `App Store` to support the relevent redirects on install. 
+If you are looking to create app's for the system, you can take a look at an existing OAUTH2 app to see how it works. You will also need to update the `App Store` to support the relevent redirects on install.

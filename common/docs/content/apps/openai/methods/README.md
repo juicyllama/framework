@@ -10,18 +10,16 @@ import { OpenaiService } from '@juicyllama/app-openai'
 
 @Injectable()
 export class AppService {
-    constructor(
-		@Inject(forwardRef(() => OpenaiService)) private readonly openaiService: OpenaiService,
-    ) {}
-    
-    async askAQuestion() {
-        const request: CreateChatCompletionRequest = {
-			model: "text-davinci-003",
-			prompt: "Say this is a test",
+	constructor(@Inject(forwardRef(() => OpenaiService)) private readonly openaiService: OpenaiService) {}
+
+	async askAQuestion() {
+		const request: CreateChatCompletionRequest = {
+			model: 'text-davinci-003',
+			prompt: 'Say this is a test',
 			max_tokens: 7,
-			temperature: 0
+			temperature: 0,
 		}
-        const response = await this.openaiService.ask(request)
+		const response = await this.openaiService.ask(request)
 
 		// response = {
 		// 	"id": "cmpl-uqkvlQyYK7bGYrRHQ0eXlWi7",
@@ -54,27 +52,25 @@ import { OpenaiService } from '@juicyllama/app-openai'
 
 @Injectable()
 export class AppService {
-    constructor(
-		@Inject(forwardRef(() => OpenaiService)) private readonly openaiService: OpenaiService,
-    ) {}
-    
-    async getAnImage() {
-        const request: CreateImageRequest = {
-			prompt: "A cute baby sea otter"
-		}
-        const response = await this.openaiService.ask(request)
+	constructor(@Inject(forwardRef(() => OpenaiService)) private readonly openaiService: OpenaiService) {}
 
-		 // response = {
-			//  "created": 1589478378,
-			//  "data": [
-			// 	 {
-			// 		 "url": "https://..."
-			// 	 },
-			// 	 {
-			// 		 "url": "https://..."
-			// 	 }
-			//  ]
-		 // }
+	async getAnImage() {
+		const request: CreateImageRequest = {
+			prompt: 'A cute baby sea otter',
+		}
+		const response = await this.openaiService.ask(request)
+
+		// response = {
+		//  "created": 1589478378,
+		//  "data": [
+		// 	 {
+		// 		 "url": "https://..."
+		// 	 },
+		// 	 {
+		// 		 "url": "https://..."
+		// 	 }
+		//  ]
+		// }
 	}
 }
 ```

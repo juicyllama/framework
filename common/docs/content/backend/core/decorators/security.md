@@ -15,7 +15,7 @@ Your application should then get this `accountId` from the request and use it to
 ```typescript
 import { AccountId, UserAuth } from '@juicyllama/core'
 
-@Get('example') 
+@Get('example')
 @UserAuth() //see below
 example(@Req() req, @AccountId() accountId: number): Promise<T> {
     //controller code, for example lookup records by accountId
@@ -30,11 +30,11 @@ Endpoints which require user authentication can be decorated with the `@UserAuth
 
 ```typescript
 import { UserAuth } from '@juicyllama/core'
-    
-@Get('example') 
+
+@Get('example')
 @UserAuth() //see below
 example(@Req() req): Promise<T> {
-    //controller code 
+    //controller code
 }
 ```
 

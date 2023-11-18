@@ -14,8 +14,8 @@ pnpm install @juicyllama/utils
 
 We have several types of utils to help speed up your development, these are:
 
-* [Utils](/common/utils/utils)
-* [Assets](/common/utils/assets)
-* [DTOs](/common/utils/dtos)
-* [Enums](/common/utils/enums)
-* [Pusher](/common/utils/pusher)
+-   [Utils](/common/utils/utils)
+-   [Assets](/common/utils/assets)
+-   [DTOs](/common/utils/dtos)
+-   [Enums](/common/utils/enums)
+-   [Pusher](/common/utils/pusher)

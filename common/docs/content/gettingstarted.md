@@ -29,7 +29,6 @@ We work on the `client-back` principle rather than `framework-forward` which mea
 
 A small intro video to who we are:
 
-
 <iframe width="560" height="315" src="https://www.youtube.com/embed/ekqLFttBud4?si=NHw6dF6UP_tyht7x" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 ## Modules
@@ -40,8 +39,8 @@ For example, if you want to build a SaaS API backend, you will likely need [@jui
 
 We leverage:
 
-* [NestJS](https://nestjs.com/) for building APIs and backend applications
-* [Vue](https://vuejs.org) and [Quasar](https://quasar.dev/) for building frontend cross-platform applications
+-   [NestJS](https://nestjs.com/) for building APIs and backend applications
+-   [Vue](https://vuejs.org) and [Quasar](https://quasar.dev/) for building frontend cross-platform applications
 
 We also have a number of utility / development modules that helps speed up development and provide additional functionality. For example checkout our [CLI](/common/cli/readme) for local rapid development setup.
 
@@ -51,9 +50,8 @@ Our framework is open source, we welcome contributions from the community. If yo
 
 If you wish to contribute please read the following guides:
 
-* [Contributing](/developers/contributing)
-* [Code Style Guide](/developers/code-style-guide)
-
+-   [Contributing](/developers/contributing)
+-   [Code Style Guide](/developers/code-style-guide)
 
 ## Installation
 

@@ -16,7 +16,7 @@ pnpm install @juicyllama/ai
 
 You will also need to install the AI engine you wish to use, we currently support:
 
-- [OpenAI](/apps/openai/readme)
+-   [OpenAI](/apps/openai/readme)
 
 for example
 

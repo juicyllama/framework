@@ -12,22 +12,21 @@ type T = Example
 
 @Injectable()
 export class ExampleService extends BaseService<T> {
-	
-    constructor(
-        @Inject(forwardRef(() => Query)) readonly query: Query<T>,
-        @InjectRepository(E) readonly repository: Repository<T>,
-        @Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService, //optional
-        @Inject(CACHE_MANAGER) readonly cacheManager: Cache, //optional
-    ) {
-        super(query, repository, { 
-            beacon: beaconService,
-            cache: {
-                cacheManager: cacheManager,
-                field: 'name', //unique field to use for caching (use the most common lookup)
-                ttl: CachePeriod.MONTH,
-            },
-        })
-    }
+	constructor(
+		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
+		@InjectRepository(E) readonly repository: Repository<T>,
+		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService, //optional
+		@Inject(CACHE_MANAGER) readonly cacheManager: Cache, //optional
+	) {
+		super(query, repository, {
+			beacon: beaconService,
+			cache: {
+				cacheManager: cacheManager,
+				field: 'name', //unique field to use for caching (use the most common lookup)
+				ttl: CachePeriod.MONTH,
+			},
+		})
+	}
 }
 ```
 
@@ -44,21 +43,19 @@ import { ExampleService } from './example.service'
 
 @Injectable()
 export class ExampleClass {
-    constructor(
-        @Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService,
-    ) {}
-    
-    async create(): Promise<Example> {
-        return await this.exampleService.create({
-            name: 'Example',
-        })
-    }
+	constructor(@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService) {}
+
+	async create(): Promise<Example> {
+		return await this.exampleService.create({
+			name: 'Example',
+		})
+	}
 }
 ```
 
 ### FindAll
-    
-Returns all records from the database. 
+
+Returns all records from the database.
 
 ::alert{type="info"}
 This method skips the cache and returns results directly from the database.
@@ -69,15 +66,13 @@ import { ExampleService } from './example.service'
 
 @Injectable()
 export class ExampleClass {
-	constructor(
-		@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService,
-	) {}
+	constructor(@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService) {}
 
 	async findAll(): Promise<Example[]> {
 		return await this.exampleService.findAll({
 			where: {
 				name: 'Example',
-                age: 30
+				age: 30,
 			},
 		})
 	}
@@ -93,9 +88,7 @@ import { ExampleService } from './example.service'
 
 @Injectable()
 export class ExampleClass {
-	constructor(
-		@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService,
-	) {}
+	constructor(@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService) {}
 
 	async findOne(): Promise<Example> {
 		return await this.exampleService.findOne({
@@ -116,9 +109,7 @@ import { ExampleService } from './example.service'
 
 @Injectable()
 export class ExampleClass {
-	constructor(
-		@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService,
-	) {}
+	constructor(@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService) {}
 
 	async findById(): Promise<Example> {
 		return await this.exampleService.findById(1)
@@ -135,9 +126,7 @@ import { ExampleService } from './example.service'
 
 @Injectable()
 export class ExampleClass {
-	constructor(
-		@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService,
-	) {}
+	constructor(@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService) {}
 
 	async count(): Promise<StatsResponseDto> {
 		return await this.exampleService.count({
@@ -145,7 +134,7 @@ export class ExampleClass {
 				name: 'Example',
 			},
 		})
-        // { count: 1 }
+		// { count: 1 }
 	}
 }
 ```
@@ -159,9 +148,7 @@ import { ExampleService } from './example.service'
 
 @Injectable()
 export class ExampleClass {
-	constructor(
-		@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService,
-	) {}
+	constructor(@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService) {}
 
 	async sum(): Promise<StatsResponseDto> {
 		return await this.exampleService.sum('age', {
@@ -169,7 +156,7 @@ export class ExampleClass {
 				name: 'Example',
 			},
 		})
-        // { sum: 30 }
+		// { sum: 30 }
 	}
 }
 ```
@@ -183,9 +170,7 @@ import { ExampleService } from './example.service'
 
 @Injectable()
 export class ExampleClass {
-	constructor(
-		@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService,
-	) {}
+	constructor(@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService) {}
 
 	async avg(): Promise<StatsResponseDto> {
 		return await this.exampleService.avg('age', {
@@ -193,11 +178,10 @@ export class ExampleClass {
 				name: 'Example',
 			},
 		})
-        // { avg: 30 }
+		// { avg: 30 }
 	}
 }
 ```
-
 
 ### Charts
 
@@ -208,9 +192,7 @@ import { ExampleService } from './example.service'
 
 @Injectable()
 export class ExampleClass {
-	constructor(
-		@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService,
-	) {}
+	constructor(@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService) {}
 
 	async chart(): Promise<StatsResponseDto> {
 		return await this.exampleService.chart('age', {
@@ -219,7 +201,7 @@ export class ExampleClass {
 			},
 			period: ChartsPeriod.MONTH, // optional
 		})
-        // [ { count: '1', age: 30, time_interval: '2022-02-01 }, { count: '2', age: 30, time_interval: '2022-03-01 } ]
+		// [ { count: '1', age: 30, time_interval: '2022-02-01 }, { count: '2', age: 30, time_interval: '2022-03-01 } ]
 	}
 }
 ```
@@ -233,15 +215,13 @@ import { ExampleService } from './example.service'
 
 @Injectable()
 export class ExampleClass {
-    constructor(
-        @Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService,
-    ) {}
-    
-    async update(): Promise<Example> {
-        return await this.exampleService.update({
-            name: 'New Example',
-        })
-    }
+	constructor(@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService) {}
+
+	async update(): Promise<Example> {
+		return await this.exampleService.update({
+			name: 'New Example',
+		})
+	}
 }
 ```
 
@@ -254,17 +234,15 @@ import { ExampleService } from './example.service'
 
 @Injectable()
 export class ExampleClass {
-    constructor(
-        @Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService,
-    ) {}
-    
-    async remove(example: Example): Promise<Example> {
-        return await this.exampleService.remove(example)
-    }
+	constructor(@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService) {}
+
+	async remove(example: Example): Promise<Example> {
+		return await this.exampleService.remove(example)
+	}
 }
 ```
 
-### Purge 
+### Purge
 
 Performs a hard delete (removes the record from the database). If the cache is enabled, it will also remove the record from the cache. If the beacon is enabled, it will also send a push message to your frontend application.
 
@@ -273,13 +251,11 @@ import { ExampleService } from './example.service'
 
 @Injectable()
 export class ExampleClass {
-    constructor(
-        @Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService,
-    ) {}
-    
-    async purge(example: Example): Promise<void> {
-        await this.exampleService.purge(example)
-    }
+	constructor(@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService) {}
+
+	async purge(example: Example): Promise<void> {
+		await this.exampleService.purge(example)
+	}
 }
 ```
 
@@ -292,12 +268,10 @@ import { ExampleService } from './example.service'
 
 @Injectable()
 export class ExampleClass {
-    constructor(
-        @Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService,
-    ) {}
-    
-    async raw(): Promise<any> {
-        return await this.exampleService.raw('SELECT * FROM example WHERE name = "Example"')
-    }
+	constructor(@Inject(forwardRef(() => ExampleService)) private readonly exampleService: ExampleService) {}
+
+	async raw(): Promise<any> {
+		return await this.exampleService.raw('SELECT * FROM example WHERE name = "Example"')
+	}
 }
 ```

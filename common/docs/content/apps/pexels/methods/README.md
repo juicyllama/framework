@@ -10,13 +10,11 @@ import { PexelsService } from '@juicyllama/app-pexels'
 
 @Injectable()
 export class AppService {
-    constructor(
-		@Inject(forwardRef(() => PexelsService)) private readonly pexelsService: PexelsService,
-    ) {}
-    
-    async getImage() {
+	constructor(@Inject(forwardRef(() => PexelsService)) private readonly pexelsService: PexelsService) {}
+
+	async getImage() {
 		const request = {
-			query: "Brown Rocks During Golden Hour",
+			query: 'Brown Rocks During Golden Hour',
 		}
 		const response = await this.pexelsService.searchPhotos(request)
 
@@ -50,7 +48,6 @@ export class AppService {
 		// 	],
 		// 	"next_page": "https://api.pexels.com/v1/search/?page=2&per_page=1&query=nature"
 		// }
-
 	}
 }
 ```

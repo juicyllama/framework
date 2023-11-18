@@ -17,10 +17,7 @@ import { Api } from '@juicyllama/utils'
 Perform a get request with the given options:
 
 ```typescript
-const result = await Api.get(
-    'logging::domain',
-    'https://example.com',
-)
+const result = await Api.get('logging::domain', 'https://example.com')
 ```
 
 #### Post
@@ -28,13 +25,9 @@ const result = await Api.get(
 Perform a post request with the given options:
 
 ```typescript
-const result = await Api.post(
-    'logging::domain',
-    'https://example.com',
-    {
-        //data to post
-    }
-)
+const result = await Api.post('logging::domain', 'https://example.com', {
+	//data to post
+})
 ```
 
 #### Patch
@@ -42,13 +35,9 @@ const result = await Api.post(
 Perform a patch request with the given options:
 
 ```typescript
-const result = await Api.patch(
-    'logging::domain',
-    'https://example.com',
-    {
-        //data to patch
-    }
-)
+const result = await Api.patch('logging::domain', 'https://example.com', {
+	//data to patch
+})
 ```
 
 #### Put
@@ -56,13 +45,9 @@ const result = await Api.patch(
 Perform a patch request with the given options:
 
 ```typescript
-const result = await Api.put(
-    'logging::domain',
-    'https://example.com',
-    {
-        //data to put
-    }
-)
+const result = await Api.put('logging::domain', 'https://example.com', {
+	//data to put
+})
 ```
 
 #### Delete
@@ -70,10 +55,7 @@ const result = await Api.put(
 Perform a delete request with the given options:
 
 ```typescript
-const result = await Api.delete(
-    'logging::domain',
-    'https://example.com',
-)
+const result = await Api.delete('logging::domain', 'https://example.com')
 ```
 
 ## Cache
@@ -94,7 +76,7 @@ Create a cache key from the given domain and optional params:
 const domain = 'module::serivce::function'
 const params = {
 	id: 1,
-    name: 'test'
+	name: 'test',
 }
 
 const cacheKey = JLCache.CacheKey(domain, params)
@@ -200,13 +182,11 @@ const iso2 = Countries.countryNameToISO2(name)
 //iso2 = 'US'
 ```
 
-
-
 ## Dates
 
 Helper utils for working with dates
 
-[format](#format) | [formatZerolessValue](#formatZerolessValue) | [addDays](#addDays) | [addStep](#addStep) | [lastMonth](#lastMonth) |  [isBetween](#isBetween) | [nextDate](#nextDate)
+[format](#format) | [formatZerolessValue](#formatZerolessValue) | [addDays](#addDays) | [addStep](#addStep) | [lastMonth](#lastMonth) | [isBetween](#isBetween) | [nextDate](#nextDate)
 
 ```typescript
 import { Dates } from '@juicyllama/utils'
@@ -318,9 +298,9 @@ Get the key name of an enum value:
 
 ```typescript
 enum Example {
-    ONE = 1,
-    TWO = 2,
-    THREE = 3
+	ONE = 1,
+	TWO = 2,
+	THREE = 3,
 }
 const getKeyName = Enums.getKeyName(Example, 1)
 //getKeyName = 'ONE'
@@ -332,9 +312,9 @@ Convert an enum to an array:
 
 ```typescript
 enum Example {
-    ONE = 1,
-    TWO = 2,
-    THREE = 3
+	ONE = 1,
+	TWO = 2,
+	THREE = 3,
 }
 
 const enumArray = Enums.toArray(Example)
@@ -483,15 +463,15 @@ Check if coordinates are in a bounding box:
 
 ```typescript
 const coordinates = {
-  latitude: 51.5074,
-  longitude: 0.1278
+	latitude: 51.5074,
+	longitude: 0.1278,
 }
 
 const boundingBox = {
-    north: 50.5074,
-    east: 1.1275,
-    south: 52.5074,
-    west: 0.1280
+	north: 50.5074,
+	east: 1.1275,
+	south: 52.5074,
+	west: 0.128,
 }
 
 const areCoordinatesInBoundingBox = Geocoding.areCoordinatesInBoundingBox(coordinates, boundingBox)
@@ -504,18 +484,18 @@ Check if coordinates are between two points:
 
 ```typescript
 const coordinates = {
-  latitude: 51.5074,
-  longitude: 0.1278
+	latitude: 51.5074,
+	longitude: 0.1278,
 }
 
 const northeast: Coordinates = {
 	latitude: 58.565119,
-    longitude: -11.397972
+	longitude: -11.397972,
 }
 
 const southwest: Coordinates = {
 	latitude: 49.88128,
-    longitude: 3.666387
+	longitude: 3.666387,
 }
 
 const areCoordinatesBetweenTwoPoints = Geocoding.areCoordinatesBetweenTwoPoints(coordinates, northeast, southwest)
@@ -770,8 +750,8 @@ const data = await Poll.url('https://example.com')
 Poll a function:
 
 ```typescript
-const validate = (val) => {
-    val.foo === 'bar'
+const validate = val => {
+	val.foo === 'bar'
 }
 
 const func = async () => {
@@ -878,7 +858,7 @@ Replace all occurrences of a string
 ```typescript
 const template = `My name is ${name.toUpperCase()}`
 const object = {
-    name: 'John'
+	name: 'John',
 }
 const replaced = Strings.replacer(template, object)
 //replaced = 'My name is John'

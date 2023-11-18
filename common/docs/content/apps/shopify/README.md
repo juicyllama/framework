@@ -39,6 +39,7 @@ You should make sure the `cookie-parser` package is configured on your project (
 import cookieParser from 'cookie-parser'
 app.use(cookieParser());
 ```
+
 ::
 
 ##### Environment Variables
@@ -88,9 +89,10 @@ If this is not provided, we will redirect the user back to the your app's base u
 ### Modules
 
 ::alert{type="danger"}
-- Document modules / endpoints
-- Explain how crons work
-::
+
+-   Document modules / endpoints
+-   Explain how crons work
+    ::
 
 ### Crons
 
@@ -99,6 +101,6 @@ If this is not provided, we will redirect the user back to the your app's base u
 ### Webhooks
 
 ::alert{type="danger"}
-- document supported webhooks
-::
 
+-   document supported webhooks
+    ::

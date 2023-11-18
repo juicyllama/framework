@@ -7,9 +7,7 @@ Import the module into your project:
 import { WordpressPostsModule } from '@juicyllama/app-wordpress'
 
 @Module({
-	imports: [
-		WordpressPostsModule,
-	],
+	imports: [WordpressPostsModule],
 })
 export class AppModule {}
 ```
@@ -22,9 +20,9 @@ import { WordpressPostsService } from '@juicyllama/app-wordpress'
 
 @Injectable()
 export class AppService {
-    constructor(
+	constructor(
 		@Inject(forwardRef(() => WordpressPostsService)) private readonly wordpressPostsService: WordpressPostsService,
-    ) {}
+	) {}
 }
 ```
 
@@ -36,30 +34,28 @@ The following methods are available:
 
 ```typescript
 const result = await this.wordpressPostsService.create({
-    data: WordpressCreatePost,
-    config: wordpressConfigDto,
+	data: WordpressCreatePost,
+	config: wordpressConfigDto,
 })
 ```
 
 #### Example
 
 ```typescript
+const options = {
+	data: <WordpressCreatePost>{
+		title: 'Hello World',
+		content: 'This is my first post!',
+	},
+	config: <wordpressConfigDto>{
+		WORDPRESS_URL: 'https://example.com',
+		WORDPRESS_USERNAME: 'username',
+		WORDPRESS_APPLICATION_PASSWORD: 'password',
+	},
+}
 
-	const options = {
-		data: <WordpressCreatePost>{
-			title: "Hello World",
-			content: "This is my first post!",
-		},
-		config: <wordpressConfigDto> {
-			WORDPRESS_URL: "https://example.com",
-			WORDPRESS_USERNAME: "username",
-			WORDPRESS_APPLICATION_PASSWORD: "password",
-		}
-	}
-
-	const result = await this.wordpressPostsService.create(data)
-	//do your thing with the result
-
+const result = await this.wordpressPostsService.create(data)
+//do your thing with the result
 ```
 
 ### FindAll
@@ -67,7 +63,7 @@ const result = await this.wordpressPostsService.create({
 ```typescript
 const result = await this.wordpressPostsService.findAll({
 	arguments: WordpressListPosts,
-	config: wordpressConfigDto
+	config: wordpressConfigDto,
 })
 ```
 
@@ -96,6 +92,6 @@ const result = await this.wordpressPostsService.update({
 ```typescript
 const result = await this.wordpressPostsService.remove({
 	postId: number,
-    config: wordpressConfigDto
+	config: wordpressConfigDto,
 })
 ```

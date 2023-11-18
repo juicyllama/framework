@@ -27,38 +27,37 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { RedocModule, RedocOptions } from '@juicyllama/core'
 
 const swagger_document = new DocumentBuilder()
-  .setTitle('Look, i have a title')
-  .setDescription('A very nice description')
-  .setVersion(process.env.npm_package_version)
-  .setBasePath('/api/v1')
-  .build();
-const document = SwaggerModule.createDocument(app, options);
+	.setTitle('Look, i have a title')
+	.setDescription('A very nice description')
+	.setVersion(process.env.npm_package_version)
+	.setBasePath('/api/v1')
+	.build()
+const document = SwaggerModule.createDocument(app, options)
 
 const redocOptions: RedocOptions = {
-  title: 'Hello Nest',
-  logo: {
-    url: 'https://redocly.github.io/redoc/petstore-logo.png',
-    backgroundColor: '#F0F0F0',
-    altText: 'PetStore logo'
-  },
-  sortPropsAlphabetically: true,
-  hideDownloadButton: false,
-  hideHostname: false,
-  tagGroups: [
-    {
-      name: 'Core resources',
-      tags: ['cats'],
-    },
-  ],
-};
+	title: 'Hello Nest',
+	logo: {
+		url: 'https://redocly.github.io/redoc/petstore-logo.png',
+		backgroundColor: '#F0F0F0',
+		altText: 'PetStore logo',
+	},
+	sortPropsAlphabetically: true,
+	hideDownloadButton: false,
+	hideHostname: false,
+	tagGroups: [
+		{
+			name: 'Core resources',
+			tags: ['cats'],
+		},
+	],
+}
 
-await RedocModule.setup('/docs', app, document, redocOptions);
+await RedocModule.setup('/docs', app, document, redocOptions)
 ```
 
 #### Redoc Options
 
 [Click here for a full list of the redoc options you can pass.](/common/nestjs-redoc/options)
-
 
 2. Controllers
 
@@ -75,9 +74,8 @@ import { ApiTags } from '@nestjs/swagger'
 
 As part of the JuicyLllama [core](/backend/core/readme) package we have made available a number of abstracted decorators to handle the most common CRUD operations.
 
-- [CRUD Decorators](/backend/core/decorators/crud)
-- [Swagger Decorators](/backend/core/decorators/swagger)
-
+-   [CRUD Decorators](/backend/core/decorators/crud)
+-   [Swagger Decorators](/backend/core/decorators/swagger)
 
 ## Example Project
 

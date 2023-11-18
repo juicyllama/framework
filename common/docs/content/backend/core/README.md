@@ -2,9 +2,10 @@
 
 ::alert{type="danger"}
 Documentation Todo:
-- Modules
-- Utils
-::
+
+-   Modules
+-   Utils
+    ::
 
 ::alert{type="info"}
 Our backend framework is built on top of the [NestJS](https://nestjs.com/) framework, if you are not familiar with NestJs we recommend you read their documentation first.

@@ -30,10 +30,10 @@ This decorator takes 5 arguments, the entity class, the primary key, the selecta
 
 ```typescript
 @ReadOneDecorator({
-    entity: E, 
-    primaryKey: PRIMARY_KEY, 
-    selectEnum: ExampleSelect, 
-    relationsEnum: ExampleRelations, 
+    entity: E,
+    primaryKey: PRIMARY_KEY,
+    selectEnum: ExampleSelect,
+    relationsEnum: ExampleRelations,
     name: NAME
 })
 ```
@@ -46,10 +46,10 @@ The 5 arguments for the list decorator are the entity class, the selectable fiel
 
 ```typescript
 @ReadManyDecorator({
-    entity: E, 
-    selectEnum: ExampleSelect, 
+    entity: E,
+    selectEnum: ExampleSelect,
     orderByEnum: ExampleOrderBy,
-    relationsEnum: ExampleRelations, 
+    relationsEnum: ExampleRelations,
     name: NAME
 })
 ```
@@ -73,7 +73,7 @@ The charts decorator optionally takes the name of the endpoint.
 ```typescript
 @ReadChartsDecorator({
     entity: E,
-    name: NAME, 
+    name: NAME,
     selectEnum: ExampleSelect
 })
 ```
