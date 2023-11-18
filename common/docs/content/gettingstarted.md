@@ -35,7 +35,12 @@ A small intro video to who we are:
 
 Our framework is modular, you install the modules you need into your projects. This allows you to pick and choose the modules based on the features you want.
 
-For example, if you want to build a SaaS API backend, you will likely need [@juicyllama/core](/backend/core/readme) and `@juicyllama/billing` to get started.
+For example, if you want to build a SaaS API backend, you will likely need [@juicyllama/core](./backend/core/README.md) and `@juicyllama/billing` to get started.
+
+::alert{type="danger"}
+@juicyllama/billing needs documenting
+::
+
 
 We leverage:
 

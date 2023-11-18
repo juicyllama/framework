@@ -29,5 +29,16 @@ export default defineNuxtConfig({
 		public: {
 			siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://docs.juicyllama.com/'
 		}
-	}
+	},
+	content: {
+		defaultLocale: 'en',
+		experimental: {
+		  search: {
+			indexed: false
+		  }
+		},
+		highlight: {
+			preload: ['sql'],
+		  }
+	  }
 })
