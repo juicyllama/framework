@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
+    "@nuxt/eslint-config": "^0.2.0",
     "nuxt": "^3.8.0",
     "nuxt-quasar-ui": "^2.0.6",
     "nuxt-simple-sitemap": "^3.4.1",

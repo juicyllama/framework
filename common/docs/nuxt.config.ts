@@ -16,8 +16,8 @@ export default defineNuxtConfig({
     }
   },
   sourcemap: {
-    server: false,
-    client: false
+    server: true,
+    client: true
   },
   runtimeConfig: {
 	public: {

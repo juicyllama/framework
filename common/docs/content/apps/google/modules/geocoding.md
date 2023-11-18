@@ -2,7 +2,7 @@
 
 The Geocoding module provides a wrapper around the Google Maps Geocoding API.
 
-For more information about this checkout the official [Google Maps Geocoding API](https://developers.google.com/maps/documentation/geocoding/overview).
+For more information about this checkout the official (Google Maps Geocoding API)[https://developers.google.com/maps/documentation/geocoding/overview].
 
 ## Installation
 
