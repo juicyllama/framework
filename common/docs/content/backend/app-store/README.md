@@ -4,9 +4,9 @@ The app store module allows you to give your users the ability to add app integr
 
 For example, connect their WordPress site to your project and perform actions on their behalf.
 
-::: tip
+::alert{type="info"}
 Checkout our [pre-built frontend components](../../frontend/core/components/app-store/README.md) which use these modules.
-:::
+::
 
 ## Install
 

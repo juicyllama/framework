@@ -2,19 +2,19 @@
 
 We have pre-built an app store type interface to make it easier for you to allow your users to add their own apps to their accounts.
 
-::: warning
+::alert{type="warning"}
 This frontend implementation requires the backend to be setup and running, [you can learn more about this here](../../../../backend/app-store/README.md).
-:::
+::
 
-::: danger
+::alert{type="danger"}
 Create video overview with
-:::
+::
 
 ## Apps Component
 
-:::danger
+::alert{type="danger"}
 TODO Document this
-:::
+::
 
 ## Oauth > Start
 
@@ -22,9 +22,9 @@ To facilitate the ability for apps to be added to 3rd party app stores you will 
 
 This route is responsable for authenticating the user and kicking off the app integration.
 
-::: warning
+::alert{type="warning"}
 This route should be placed behind user authentication
-:::
+::
 
 Add the following to your `router/routes.ts` file:
 
@@ -42,9 +42,9 @@ import { JLOauthStart } from '@juicyllama/frontend-core'
 
 ## Oauth > Finish
 
-::: danger
+::alert{type="danger"}
 Document the finishing step (redirect back)
-:::
+::
 
 ````
 {

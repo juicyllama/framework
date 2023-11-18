@@ -10,9 +10,9 @@ Typically the Oauth process can be kicked off in a few different ways:
 
 This is a pre-build GUI you can use in your project to simplify the ability for users to add apps. This wraps around 3. via an API call and handles this on your behalf.
 
-:::danger
+::alert{type="danger"}
 We need to document the app store frontend component
-:::
+::
 
 [You can learn more about it here](../../frontend/core/components/app-store/README.md)
 
@@ -40,13 +40,13 @@ This is a great entry point for 3rd party app stores as you don't need to pass a
 
 The endpoint will authenticate the user between the backend and the frontend and handoff to the [install step](#install)
 
-:::danger
+::alert{type="danger"}
 We need to document the frontend work
-:::
+::
 
-::: warning
+::alert{type="warning"}
 Note: you will need to ensure the route is configured in your frontend app, [you can learn more about it here](#)
-:::
+::
 
 ### Install
 

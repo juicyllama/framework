@@ -5,7 +5,7 @@ applications:
           phases:
             preBuild:
               commands:
-                - nvm use $VERSION_NODE_19 && node --version
+                - nvm use $VERSION_NODE_18 && node --version
                 - corepack enable && npx --yes npm install
             build:
               commands:

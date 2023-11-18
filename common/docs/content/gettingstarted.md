@@ -50,8 +50,8 @@ Our framework is open source, we welcome contributions from the community. If yo
 
 If you wish to contribute please read the following guides:
 
--   [Contributing](/developers/contributing)
--   [Code Style Guide](/developers/code-style-guide)
+-   [Contributing](./developers/contributing)
+-   [Code Style Guide](./developers/code-style-guide)
 
 ## Installation
 
@@ -93,6 +93,8 @@ cd framework
 pnpm run install:framework
 pnpm run start:docker
 ```
+
+If you would like to contribute to our framework, you should create a folk first and clone your folked version. See [Contributing](./developers/contributing).
 
 ### Build a client application
 
