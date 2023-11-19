@@ -26,18 +26,15 @@ export class StatsResponseDto {
 	sum?: number
 }
 
-interface ChartDataSetPoint {
-	x?: string
-	y?: number
-}
-
 interface ChartDataSetElement {
 	backgroundColor?: string
 	label?: string
-	data: ChartDataSetPoint[]
+	data: number[]
 }
 
 export class ChartsResponseDto {
+	@IsArray()
+	labels?: string[]
 	@IsArray()
 	datasets?: ChartDataSetElement[]
 }
