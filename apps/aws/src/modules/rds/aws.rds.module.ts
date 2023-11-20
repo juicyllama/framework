@@ -6,7 +6,7 @@ import { AwsRdsService } from './aws.rds.service'
 import { awsConfigJoi } from '../aws.config.joi'
 import awsConfig from '../aws.nest.config'
 import { awsRdsConfigJoi } from './config/aws.rds.config.joi'
-import awsRdsConfig from './config/aws.rds.nest.config'
+import awsRdsConfig from './config/aws.rds.config'
 import { systemConfigJoi, systemConfig } from '@juicyllama/core'
 
 @Module({
