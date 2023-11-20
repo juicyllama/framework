@@ -1,6 +1,6 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Env, Logger } from '@juicyllama/utils'
-import { ExportTask, RDSClient, RDSClientConfig, StartExportTaskCommand, StartExportTaskCommandInput } from '@aws-sdk/client-rds'
+import { ExportTask, RDSClient, RDSClientConfig, StartExportTaskCommand, StartExportTaskCommandInput, DescribeExportTasksCommand, DescribeExportTasksCommandInput, DescribeExportTasksCommandOutput } from '@aws-sdk/client-rds'
 import { ConfigService } from '@nestjs/config'
 import { mockRDSExportTask } from './aws.rds.mock'
 
@@ -53,5 +53,51 @@ export class AwsRdsService {
 			)
 		}
 	}
+
+	/**
+	 * Describe Export Task
+	 *
+	 * @param {StartExportTaskCommandInput} params
+	 */
+
+	async describeExportTask(input: DescribeExportTasksCommandInput): Promise<DescribeExportTasksCommandOutput> {
+
+		const domain = 'app::aws::rds::AwsRdsService::describeExportTask'
+
+		this.logger.debug(`[${domain}] Describe Export Task`, input)
+
+		if (Env.IsTest()) {
+			this.logger.debug(`[${domain}] Skipping as in test mode`)
+			return <any>[mockRDSExportTask]
+		}
+
+		try {
+			const client = new RDSClient(<RDSClientConfig>{
+				region:
+					this.configService.get<string>('awsRds.AWS_RDS_JL_REGION') ??
+					this.configService.get<string>('aws.AWS_JL_REGION'),
+				credentials: {
+					accessKeyId: this.configService.get<string>('aws.AWS_JL_ACCESS_KEY_ID'),
+					secretAccessKey: this.configService.get<string>('aws.AWS_JL_SECRET_KEY_ID'),
+				},
+			})
+
+			const command = new DescribeExportTasksCommand(input);
+			return <DescribeExportTasksCommandOutput>await client.send(command);
+
+		} catch (e) {
+			this.logger.warn(
+				`[${domain}] Error: ${e.message}`,
+				e.response
+					? {
+							status: e.response.status,
+							data: e.response.data,
+					  }
+					: null,
+			)
+		}
+
+	}
+
 
 }
