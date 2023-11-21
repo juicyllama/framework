@@ -222,9 +222,9 @@ function updateFormField(value: any) {
 }
 
 const JLToQColumns = <any>computed(() => {
-	const columns = props.tableSchema.schema /* .filter(col => {
+	const columns = props.tableSchema.schema.filter(col => {
 		return props.visibleColumns?.includes(col.field)
-	}) */
+	})
 
 	for (const col in columns) {
 		columns[col].name = columns[col].field

@@ -17,10 +17,9 @@ You can apply this via your Module as follows
 ```typescript
 import { MiddlewareAccountId } from '@juicyllama/core'
 
-@Module({ 
-// imports 
+@Module({
+	// imports
 })
-
 export class ExampleModule {
 	configure(consumer: MiddlewareConsumer) {
 		consumer.apply(MiddlewareAccountId)

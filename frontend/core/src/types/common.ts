@@ -57,15 +57,20 @@ export interface IconSettings {
 		delete?: string
 		search?: string
 		columns?: string
+		profile?: string
+		billing?: string
+		settings?: string
+		admin?: string
 	}
 }
 
 export interface Icon {
-	name: string
+	name?: string
 	type?: string
 	size?: string
 	color?: string
 	classes?: string
+	hide?: boolean
 }
 
 export enum TablePosition {

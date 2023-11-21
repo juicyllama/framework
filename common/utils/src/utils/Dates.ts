@@ -58,11 +58,58 @@ export class Dates {
 		return String(value)
 	}
 
+	/**
+	 * Takes a date and adds additional days to it
+	 * @param date 
+	 * @param days 
+	 * @returns 
+	 */
+
 	static addDays(date: Date, days: number): Date {
 		const result = new Date(date)
 		result.setDate(result.getDate() + days)
 		return result
 	}
+
+	/**
+	 * Takes a date and subtracts days from it
+	 * @param date 
+	 * @param days 
+	 * @returns 
+	 */
+
+	static subtractDays(date: Date, days: number): Date {
+		const result = new Date(date)
+		result.setDate(result.getDate() - days)
+		return result
+	}
+
+	/**
+	 * Takes a date and adds additional hours to it
+	 * @param date 
+	 * @param hours 
+	 * @returns 
+	 */
+
+	static addHours(date: Date, hours: number): Date {
+		const result = new Date(date)
+		result.setHours(result.getHours() + hours)
+		return result
+	}
+
+	/**
+	 * Takes a date and subtracts hours from it
+	 * @param date 
+	 * @param hours 
+	 * @returns 
+	 */
+
+	static subtractHours(date: Date, hours: number): Date {
+		const result = new Date(date)
+		result.setHours(result.getHours() - hours)
+		return result
+	}
+
 
 	/**
 	 * Takes a date, adds steps to it and returns the new date

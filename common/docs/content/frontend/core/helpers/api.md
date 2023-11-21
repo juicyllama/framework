@@ -21,11 +21,11 @@ import { Api, User } from '@juicyllama/frontend-core'
 
 const api = new Api<User>()
 const user = await api.create({
-    url: '/users',
-    data: {
+	url: '/users',
+	data: {
 		name: 'John Doe',
-		email: 'john@doe.com'
-	}
+		email: 'john@doe.com',
+	},
 })
 
 // User {

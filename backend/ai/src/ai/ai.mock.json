@@ -1,0 +1,8 @@
+{
+    "ai_id": 1,
+    "request": "How much is that doggy in the window?",
+    "is_general": true,
+    "is_sql": false,
+    "app_integration_name": "openai",
+    "response": "The one with the waggley tail?"
+}

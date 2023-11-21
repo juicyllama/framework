@@ -21,7 +21,7 @@ if (props?.show?.profile) {
 	userMenu.items.push({
 		title: 'Your Profile',
 		caption: '',
-		icon: `${props.icon?.type ? props.icon.type : 'person'} `,
+		icon: `${props.icon?.icons?.profile ? props.icon.type + ' ' +  props.icon.icons.profile : 'person'} `,
 		link: '/profile',
 	})
 }
@@ -30,7 +30,7 @@ if (props?.show?.billing) {
 	userMenu.items.push({
 		title: 'Billing',
 		caption: '',
-		icon: `${props.icon?.type ? props.icon.type : ''} description`,
+		icon: `${props.icon?.icons?.billing ? props.icon.type + ' ' +  props.icon.icons.billing : 'description'} `,
 		link: '/invoices',
 	})
 }
@@ -39,7 +39,7 @@ if (admin.value && props?.show?.admin) {
 	userMenu.items.push({
 		title: 'Admin',
 		caption: '',
-		icon: `${props.icon?.type ? props.icon.type : ''} 'settings'`,
+		icon: `${props.icon?.icons?.admin ? props.icon.type + ' ' +  props.icon.icons.admin : 'settings'} `,
 		link: '/admin',
 	})
 }

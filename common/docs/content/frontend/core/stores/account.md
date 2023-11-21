@@ -14,17 +14,20 @@ The account which the user is currently acting as.
 console.log(accountStore.state.selected_account)
 
 // {
-
-
 ```
 
 ## Actions
 
 ### create
+
 ### resyncAccount
+
 ### setSelectedAccount
+
 ### unsetSelectedAccount
+
 ### update
+
 ### updateAvatar
 
 ## Getters
@@ -36,4 +39,5 @@ console.log(accountStore.state.selected_account)
 ```
 
 ### getAccountName
+
 ### getOnboardingStep

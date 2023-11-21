@@ -16,27 +16,24 @@ import { AiService } from '@juicyllama/ai'
 
 @Injectable()
 export class AppService {
-	constructor(
-		private readonly aiService: AiService,
-	) {}
+	constructor(private readonly aiService: AiService) {}
 
-    async chat(question: string){
+	async chat(question: string) {
 		const openaiOptions: CreateChatCompletionRequest = {
-			model: "text-davinci-003",
-        }
+			model: 'text-davinci-003',
+		}
 
 		const result = await this.aiService.chat({
 			question: question,
-			openaiOptions: openaiOptions
-	    })
+			openaiOptions: openaiOptions,
+		})
 
-        if(result.success === AiSuccessType.SUCCESS){
+		if (result.success === AiSuccessType.SUCCESS) {
 			return result.response
-        }else{
+		} else {
 			throw new Error(`[${result.success}] ${result.error_message}`)
 		}
 	}
-
 }
 ```
 
@@ -50,25 +47,21 @@ import { AiService } from '@juicyllama/ai'
 
 @Injectable()
 export class AppService {
-	constructor(
-		private readonly aiService: AiService,
-	) {}
+	constructor(private readonly aiService: AiService) {}
 
-    async image(image_description: string){
-		const openaiOptions: CreateImageRequest = {
-		}
+	async image(image_description: string) {
+		const openaiOptions: CreateImageRequest = {}
 
 		const result = await this.aiService.image({
 			image_description: image_description,
-			openaiOptions: openaiOptions
-	    })
+			openaiOptions: openaiOptions,
+		})
 
-        if(result.success === AiSuccessType.SUCCESS){
+		if (result.success === AiSuccessType.SUCCESS) {
 			return result.response
-        }else{
+		} else {
 			throw new Error(`[${result.success}] ${result.error_message}`)
 		}
 	}
-
 }
 ```

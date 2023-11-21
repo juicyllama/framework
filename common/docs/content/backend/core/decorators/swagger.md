@@ -14,15 +14,15 @@ import { SwaggerPropertyDecorator } from '@juicyllama/core'
 
 Provide the following optional options to the decorator:
 
-| Option | Type                                                  | Description |
-| --- |-------------------------------------------------------| --- |
-| type | [SwaggerPropertyType](#swaggerPropertyType)           | The type of the property |
-| required | boolean                                               | Is the property required |
-| hidden | boolean                                               | Should the property be hidden from the documentation |
-| description | string                                                | The description of the property |
-| example | string \| number \| boolean \| Date \| object         | An example of the property |
-| enum | any                                                   | An enum of the property |
-| ref | [SwaggerPropertyReference](#swaggerPropertyReference) | The reference to a type |
+| Option      | Type                                                  | Description                                          |
+| ----------- | ----------------------------------------------------- | ---------------------------------------------------- |
+| type        | [SwaggerPropertyType](#swaggerPropertyType)           | The type of the property                             |
+| required    | boolean                                               | Is the property required                             |
+| hidden      | boolean                                               | Should the property be hidden from the documentation |
+| description | string                                                | The description of the property                      |
+| example     | string \| number \| boolean \| Date \| object         | An example of the property                           |
+| enum        | any                                                   | An enum of the property                              |
+| ref         | [SwaggerPropertyReference](#swaggerPropertyReference) | The reference to a type                              |
 
 #### SwaggerPropertyType
 

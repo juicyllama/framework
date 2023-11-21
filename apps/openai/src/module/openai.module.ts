@@ -6,7 +6,7 @@ import { Logger } from '@juicyllama/utils'
 import { Module } from '@nestjs/common'
 import openaiConfig from '../configs/openai.config'
 import { openaiConfigJoi } from '../configs/openai.config.joi'
-import { OpenaiSqlService } from './sql/openai.sql.service'
+//import { OpenaiSqlService } from './sql/openai.sql.service'
 
 @Module({
 	imports: [
@@ -18,7 +18,7 @@ import { OpenaiSqlService } from './sql/openai.sql.service'
 		}),
 	],
 	controllers: [],
-	providers: [OpenaiService, OpenaiSqlService, Logger, Api],
+	providers: [OpenaiService, Logger, Api],
 	exports: [OpenaiService],
 })
 export class OpenaiModule {}

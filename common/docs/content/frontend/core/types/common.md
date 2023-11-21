@@ -12,15 +12,15 @@ The find options for API lookups.
 import type { FindOptions } from '@juicyllama/frontend-core'
 ```
 
-| Property | Type       | Description                |
-|----------|------------|----------------------------|
-| `limit`  | `[number]` | The limit for the find     |
-| `offset` | `[number]` | The offset for the find    |
-| `order_by` | `[string]` | The order by for the find  |
-| `order_by_type` | `[enum]` | Either `ASC` or `DESC`     |
-| `select` | `[string]` | The entity items to select |
-| `search` | `[string]` | The search for the find    |
-| `relations` | `[string]` | The relations to include   |
+| Property        | Type       | Description                |
+| --------------- | ---------- | -------------------------- |
+| `limit`         | `[number]` | The limit for the find     |
+| `offset`        | `[number]` | The offset for the find    |
+| `order_by`      | `[string]` | The order by for the find  |
+| `order_by_type` | `[enum]`   | Either `ASC` or `DESC`     |
+| `select`        | `[string]` | The entity items to select |
+| `search`        | `[string]` | The search for the find    |
+| `relations`     | `[string]` | The relations to include   |
 
 ## Buttons
 
@@ -32,12 +32,12 @@ The custom button object.
 import type { CustomButton } from '@juicyllama/frontend-core'
 ```
 
-| Property | Type       | Description                                                                                                                                                                                      |
-|----------|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `key`    | `[string]` | The key for the button                                                                                                                                                                           |
-| `label`  | `[string]` | The label for the button                                                                                                                                                                         |
-| `icon`   | `[string]` | The icon for the button                                                                                                                                                                          |
-| `action` | `[Function]` | The function to run when the button is clicked, it will output the following to the function <br/><br/> ```{data: formData, q: $q, schema: TableSchema \| FormSchema, button: CustomButton } ``` |
+| Property | Type         | Description                                                                                                                                                                                  |
+| -------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `key`    | `[string]`   | The key for the button                                                                                                                                                                       |
+| `label`  | `[string]`   | The label for the button                                                                                                                                                                     |
+| `icon`   | `[string]`   | The icon for the button                                                                                                                                                                      |
+| `action` | `[Function]` | The function to run when the button is clicked, it will output the following to the function <br/><br/> `{data: formData, q: $q, schema: TableSchema \| FormSchema, button: CustomButton } ` |
 
 ## Icons
 
@@ -50,16 +50,16 @@ import type { IconSettings } from '@juicyllama/frontend-core'
 ```
 
 | Property | Type       | Description                                          |
-|----------|------------|------------------------------------------------------|
+| -------- | ---------- | ---------------------------------------------------- |
 | `type`   | `[string]` | The icon set type                                    |
-| `icons` | `[object]` | The [icon actions](#icon-actions) for common actions |
+| `icons`  | `[object]` | The [icon actions](#icon-actions) for common actions |
 
 #### Icon Actions
 
-| Property | Type       | Description                            |
-|----------|------------|----------------------------------------|
-| `add`    | `[string]` | The icon for the add action            |
-| `edit`   | `[string]` | The icon for the edit action           |
-| `delete` | `[string]` | The icon for the delete action         |
-| `search` | `[string]` | The icon for the search action         |
-| `columns` | `[string]` | The icon for the columns action        |
+| Property  | Type       | Description                     |
+| --------- | ---------- | ------------------------------- |
+| `add`     | `[string]` | The icon for the add action     |
+| `edit`    | `[string]` | The icon for the edit action    |
+| `delete`  | `[string]` | The icon for the delete action  |
+| `search`  | `[string]` | The icon for the search action  |
+| `columns` | `[string]` | The icon for the columns action |

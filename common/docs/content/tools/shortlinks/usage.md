@@ -48,8 +48,7 @@ const logger = new Logger()
 
 @EventSubscriber()
 export class SmsSubscriber implements EntitySubscriberInterface<ShortlinkClick> {
-
-    constructor(dataSource: DataSource) {
+	constructor(dataSource: DataSource) {
 		try {
 			dataSource.subscribers.push(this)
 			logger.verbose(`SmsSubscriber: Registered`)
@@ -68,33 +67,30 @@ export class SmsSubscriber implements EntitySubscriberInterface<ShortlinkClick> 
 		const shortlink = await event.manager.getRepository(Shortlink).findOne({
 			where: {
 				shortlink_id: event.entity.shortlink_id,
-			}
+			},
 		})
 
-        if (!shortlink) {
-            logger.warn(`[${domain}] No shortlink found for click`, event.entity)
-            return
-        }
+		if (!shortlink) {
+			logger.warn(`[${domain}] No shortlink found for click`, event.entity)
+			return
+		}
 
-        switch(shortlink.resource_type) {
-            case 'SMS':
+		switch (shortlink.resource_type) {
+			case 'SMS':
+				const newSmsClick = {
+					sms_id: shortlink.resource_id,
+					clicked: true,
+				}
 
-                const newSmsClick = {
-                    sms_id: shortlink.resource_id,
-                    clicked: true,
-                }
+				logger.log(`[${domain}] Creating Sms Click`, newSmsClick)
+				return await event.manager.getRepository(SmsClick).save(newSmsClick)
 
-                logger.log(`[${domain}] Creating Sms Click`, newSmsClick)
-                return await event.manager.getRepository(SmsClick).save(newSmsClick)
-
-            default:
-                logger.error(`[${domain}] Resource type not recognised for shortlink`, shortlink)
-                return
-        }
+			default:
+				logger.error(`[${domain}] Resource type not recognised for shortlink`, shortlink)
+				return
+		}
 	}
-
 }
-
 ```
 
 ::alert{type="warning"}

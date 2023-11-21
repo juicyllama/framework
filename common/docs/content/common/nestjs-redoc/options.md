@@ -40,7 +40,6 @@ fullscreen: true
 
 Apply the properties defined in ResolvedThemeInterface to the key called "theme" in the redoc options
 
-
 ### Logo options
 
 | Option          | Description                                                                           | Type   | Example  |

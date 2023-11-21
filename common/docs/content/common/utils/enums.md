@@ -78,7 +78,7 @@ enum SubscriptionFrequency {
 ```typescript
 import { Enviroment } from '@juicyllama/utils'
 
- enum Enviroment {
+enum Enviroment {
 	production = 'production',
 	sandbox = 'sandbox',
 	development = 'development',

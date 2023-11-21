@@ -2,7 +2,7 @@
 
 The Geocoding module provides a wrapper around the Google Maps Geocoding API.
 
-For more information about this checkout the official [Google Maps Geocoding API](https://developers.google.com/maps/documentation/geocoding/overview).
+For more information about this checkout the official (Google Maps Geocoding API)[https://developers.google.com/maps/documentation/geocoding/overview].
 
 ## Installation
 
@@ -29,9 +29,7 @@ import { GeocodingService } from '@juicyllama/app-google'
 
 @Injectable()
 export class AppService {
-    constructor(
-		@Inject(forwardRef(() => GeocodingService)) private readonly geocodingService: GeocodingService,
-    ) {}
+	constructor(@Inject(forwardRef(() => GeocodingService)) private readonly geocodingService: GeocodingService) {}
 }
 ```
 
@@ -134,4 +132,3 @@ console.log(geocoding)
 	]
 }
 ```
-

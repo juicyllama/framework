@@ -26,7 +26,7 @@ pnpm install @juicyllama/data-cache
 
 Add your API key to the `.env` file
 
-```dotenv
+```
 JUICYLLAMA_DATA_CACHE_API_KEY=YOUR_KEY
 ```
 
@@ -52,4 +52,4 @@ Inject the service into your application passing the Entity you wish to use
 ```typescript
 //app.service.ts
 import { DataCacheService } from '@juicyllama/data-cache'
-
+```

@@ -16,10 +16,9 @@ export default defineAppConfig({
       footer: {
         credits:{
           icon: '',
-          href: '',
-          text: 'Built with Nuxt + Docus'
+          href: 'https://docs.juicyllama.com/',
+          text: 'JuicyLlama'
         }
       }
     }
   })
-  

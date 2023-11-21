@@ -19,33 +19,30 @@ import { JLLogin } from '@juicyllama/frontend-core'
 const google = Boolean(import.meta.env.VITE_SSO_GOOGLE)
 const facebook = Boolean(import.meta.env.VITE_SSO_FACEBOOK)
 const linkedin = Boolean(import.meta.env.VITE_SSO_LINKEDIN)
-
 </script>
 <template>
-    <JLLogin
-        :google='google'
-        :facebook='facebook'
-        :linkedin='linkedin'
-        :dense="true"
-        :lazy_rules='true'
-        class="q-mt-md"
-    > </JLLogin>
+	<JLLogin
+		:google="google"
+		:facebook="facebook"
+		:linkedin="linkedin"
+		:dense="true"
+		:lazy_rules="true"
+		class="q-mt-md">
+	</JLLogin>
 </template>
 ```
-
 
 ## SSO Options
 
 Out of the box, the login form will render the following SSO buttons in the `actions` slot, you can customize this by passing in your own actions. For example:
 
 ```vue
-
 <script lang="ts" setup>
 import { JLLogin, googleLogin } from '@juicyllama/frontend-core'
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 </script>
 
-<JLLogin  :dense="true" :lazy_rules='true' class="q-mt-md">
+<JLLogin :dense="true" :lazy_rules="true" class="q-mt-md">
 <template #header><div class="auth-before"></div></template>
                 <template #actions="{ loading }">
                   <div class="auth-reset-password">

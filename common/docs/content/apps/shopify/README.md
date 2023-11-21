@@ -39,6 +39,7 @@ You should make sure the `cookie-parser` package is configured on your project (
 import cookieParser from 'cookie-parser'
 app.use(cookieParser());
 ```
+
 ::
 
 ##### Environment Variables
@@ -53,6 +54,9 @@ SHOPIFY_APP_CLIENT_SECRET=
 ##### Shopify App Setup
 
 You should add the following URL's to your Shopify app:
+
+App URL:
+`${BASE_URL_API}/oauth/start?integration_name=shopify`
 
 Allowed redirection URL(s):
 `${BASE_URL_API}/app/shopify/auth/redirect`
@@ -72,12 +76,23 @@ SHOPIFY_EXTRA_SCOPES=read_all_orders
 
 This will then be added to the default scopes.
 
+##### Redirect after Oauth
+
+You can optionally setup a redirect URL which we will send the user to after the Oauth process commpletes, for example, you could redirect them back to your Shopify App screen or to a page on your dashboard confirming the app setup is complete. Add the following to your `.env` file:
+
+```
+SHOPIFY_OAUTH_REDIRECT_URL=https://some.url
+```
+
+If this is not provided, we will redirect the user back to the your app's base url `BASE_URL_APP`
+
 ### Modules
 
 ::alert{type="danger"}
-- Document modules / endpoints
-- Explain how crons work
-::
+
+-   Document modules / endpoints
+-   Explain how crons work
+    ::
 
 ### Crons
 
@@ -86,17 +101,6 @@ This will then be added to the default scopes.
 ### Webhooks
 
 ::alert{type="danger"}
-- document supported webhooks
-::
 
-### App Approval
-
-Due to the way Shopify apps are approved, they expect you to be able to redirect to their Oauth process right away. This does not work with our "App Store" approach.
-
-We have therefore setup a "open" approval endpoint specifically to help get your app approved.
-
-When you seek approval for your app, use this endpoint as your APP URL.
-
-`${BASE_URL_API}/app/shopify/auth/open?redirect=https://some.success/page`
-
-It will redirect them to a "success" page of your choice, which you can setup to assist with the application process.
+-   document supported webhooks
+    ::

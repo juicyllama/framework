@@ -12,10 +12,10 @@ import {
 import { JwtAuthGuard } from '@juicyllama/core'
 import { AiService } from './ai.service'
 import { Ai } from './ai.entity'
-import { AiChatRequest, AiSQLRequest } from './ai.dto'
+import { AiChatRequest } from './ai.dto'
 import { DeepPartial } from 'typeorm'
 
-@ApiTags('Lana')
+@ApiTags('Ai')
 @Controller('ai')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -39,15 +39,15 @@ export class AiController {
 		return await this.aiService.chat(data)
 	}
 
-	@ApiOperation({ summary: 'Ask', description: 'Query public/general AI models' })
-	@ApiOkResponse({
-		description: 'OK',
-		type: Ai,
-	})
-	@Post('sql')
-	async sql(@Req() req, @Body() data: AiSQLRequest): Promise<Ai> {
-		return await this.aiService.sql(data)
-	}
+	// @ApiOperation({ summary: 'Ask', description: 'Query public/general AI models' })
+	// @ApiOkResponse({
+	// 	description: 'OK',
+	// 	type: Ai,
+	// })
+	// @Post('sql')
+	// async sql(@Req() req, @Body() data: AiSQLRequest): Promise<Ai> {
+	// 	return await this.aiService.sql(data)
+	// }
 
 	@ApiOperation({
 		summary: 'Update',

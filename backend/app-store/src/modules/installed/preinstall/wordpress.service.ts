@@ -2,6 +2,7 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Logger, Modules } from '@juicyllama/utils'
 import { LazyModuleLoader } from '@nestjs/core'
 import { App } from '../../apps.entity'
+import { preInstallCheckResponse } from '../installed.dto'
 
 @Injectable()
 export class WordPressService {
@@ -10,7 +11,7 @@ export class WordPressService {
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 	) {}
 
-	async precheckWordpress(domain: string, app: App, settings: any): Promise<{ result: boolean; error?: string }> {
+	async precheckWordpress(domain: string, app: App, settings: any): Promise<preInstallCheckResponse> {
 		if (!Modules.isInstalled('@juicyllama/app-wordpress')) {
 			return {
 				result: false,

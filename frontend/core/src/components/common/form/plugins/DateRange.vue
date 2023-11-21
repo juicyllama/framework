@@ -2,6 +2,7 @@
 import { ref, Ref, reactive } from 'vue'
 import { FormField, FormFieldPluginDateRangeOptions, FormFieldPluginDateRangeResult, FormFieldPluginDateRangeTypeOptions } from '../../../../types'
 import { JLDropdownButtonMenu } from '../../menu';
+import { updateFormPluginDateRange } from '../../../../helpers'
 
 const props = defineProps<{
 	field: FormField
@@ -116,34 +117,21 @@ function updated_custom(range: {
 		items: [{
 			title: 'Today',
 			key: FormFieldPluginDateRangeTypeOptions.TODAY,
-			function: () => {
-				const date = new Date();
-				const now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
-                date.getUTCDate(), date.getUTCHours(),
-                date.getUTCMinutes(), date.getUTCSeconds());
-				updated({
-					type: FormFieldPluginDateRangeTypeOptions.TODAY,
-					from: new Date(new Date().setUTCHours(0,0,0,0)),
-					to: new Date(now_utc)
+			function: () => updated({
+					...updateFormPluginDateRange({
+						...dates.menu,
+						type: FormFieldPluginDateRangeTypeOptions.TODAY,
+					})
 				})
-			}
 		},{
 			title: 'Last 24 Hours',
 			key: FormFieldPluginDateRangeTypeOptions.LAST_24_HOURS,
-			function: () =>	{
-				const date = new Date();
-				const now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
-                date.getUTCDate(), date.getUTCHours(),
-                date.getUTCMinutes(), date.getUTCSeconds());
-				const Yesterday_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
-				date.getUTCDate() - 1, date.getUTCHours(),
-				date.getUTCMinutes(), date.getUTCSeconds());
-				updated({
-					type: FormFieldPluginDateRangeTypeOptions.LAST_24_HOURS,
-					from: new Date(Yesterday_utc),
-					to: new Date(now_utc)
+			function: () =>	updated({
+					...updateFormPluginDateRange({
+						...dates.menu,
+						type: FormFieldPluginDateRangeTypeOptions.LAST_24_HOURS,
+					})
 				})
-			}
 		},{
 			title: 'Yesterday',
 			key: FormFieldPluginDateRangeTypeOptions.YESTERDAY,
@@ -155,73 +143,39 @@ function updated_custom(range: {
 		},{
 			title: 'This Week',
 			key: FormFieldPluginDateRangeTypeOptions.THIS_WEEK,
-			function: () => {
-				const date = new Date();
-				const now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
-                date.getUTCDate(), date.getUTCHours(),
-                date.getUTCMinutes(), date.getUTCSeconds());
-
-				const monday = date.setDate(date.getDate() - (date.getDay() + 6) % 7)
-				const monday_utc = new Date(monday).setUTCHours(0,0,0,0)
-
-				updated({
-					type: FormFieldPluginDateRangeTypeOptions.THIS_WEEK,
-					from: new Date(monday_utc),
-					to: new Date(now_utc),
+			function: () => updated({
+					...updateFormPluginDateRange({
+						...dates.menu,
+						type: FormFieldPluginDateRangeTypeOptions.THIS_WEEK,
+					})
 				})
-			}
 		},{
 			title: 'Last Week',
 			key: FormFieldPluginDateRangeTypeOptions.LAST_WEEK,
-			function: () => {
-				
-				const date = new Date();
-				const monday = date.setDate(date.getDate() - (date.getDay() + 6) % 7)
-				const monday_utc = new Date(monday).setUTCHours(0,0,0,0)
-				
-				const previous_monday = new Date(monday_utc).setDate(date.getDate() - 7)
-
-				updated({
-					type: FormFieldPluginDateRangeTypeOptions.LAST_WEEK,
-					from: new Date(previous_monday),
-					to: new Date(monday_utc),
+			function: () => updated({
+					...updateFormPluginDateRange({
+						...dates.menu,
+						type: FormFieldPluginDateRangeTypeOptions.LAST_WEEK,
+					})
 				})
-			}
 		},{
 			title: 'This Month',
 			key: FormFieldPluginDateRangeTypeOptions.THIS_MONTH,
-			function: () => {
-				const date = new Date();
-				const now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
-                date.getUTCDate(), date.getUTCHours(),
-                date.getUTCMinutes(), date.getUTCSeconds());
-
-				const start_of_month = date.setDate(1)
-				const start_of_month_utc = new Date(start_of_month).setUTCHours(0,0,0,0)
-
-				updated({
-					type: FormFieldPluginDateRangeTypeOptions.THIS_MONTH,
-					from: new Date(start_of_month_utc),
-					to: new Date(now_utc),
+			function: () => updated({
+					...updateFormPluginDateRange({
+						...dates.menu,
+						type: FormFieldPluginDateRangeTypeOptions.THIS_MONTH,
+					})
 				})
-			}
 		},{
 			title: 'Last Month',
 			key: FormFieldPluginDateRangeTypeOptions.LAST_MONTH,
-			function: () => {
-
-				const date = new Date();
-				const start_of_month = date.setDate(1)
-				const start_of_month_utc = new Date(start_of_month).setUTCHours(0,0,0,0)
-				
-				const previous_month = new Date(start_of_month_utc).setMonth(date.getMonth() - 1)
-
-				updated({
-					type: FormFieldPluginDateRangeTypeOptions.LAST_MONTH,
-					from: new Date(previous_month),
-					to: new Date(start_of_month_utc),
+			function: () => updated({
+					...updateFormPluginDateRange({
+						...dates.menu,
+						type: FormFieldPluginDateRangeTypeOptions.LAST_MONTH,
+					})
 				})
-			}
 		},
 		{
 			title: 'Custom',

@@ -16,7 +16,7 @@ pnpm install @juicyllama/ai
 
 You will also need to install the AI engine you wish to use, we currently support:
 
-- [OpenAI](/apps/openai/readme)
+-   [OpenAI](../../apps/openai/readme)
 
 for example
 
@@ -51,4 +51,4 @@ import { installAiDocs } from '@juicyllama/ai'
 redoc = installAiDocs(redoc)
 ```
 
-Visit [usage](/backend/ai/usage) for more details on how to use the package.
+Visit [usage](./usage) for more details on how to use the package.

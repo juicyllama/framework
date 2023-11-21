@@ -10,7 +10,7 @@ A list of all the dailing codes for countries around the world.
 
 ```typescript
 import { dialingCodes } from '@juicyllama/utils'
-const country = dialingCodes.find((code) => code.code === '44').name
+const country = dialingCodes.find(code => code.code === '44').name
 // country = 'United Kingdom'
 
 const code = dialingCodes['US'].dialling_code
@@ -21,10 +21,10 @@ const code = dialingCodes['US'].dialling_code
 
 ```json
 {
-    "US": {
-        "name": "United States",
-        "dialling_code": "1"
-    }
+	"US": {
+		"name": "United States",
+		"dialling_code": "1"
+	}
 }
 ```
 
@@ -44,8 +44,8 @@ const fact = llamaFacts[Math.floor(Math.random() * llamaFacts.length)]
 
 ```json
 [
-    "Lama Glama is the llama’s scientific name.",
-    "A young or baby llama is called Cria.",
-    "Its predators are coyotes, mountain lions, ocelots, and humans."
+	"Lama Glama is the llama’s scientific name.",
+	"A young or baby llama is called Cria.",
+	"Its predators are coyotes, mountain lions, ocelots, and humans."
 ]
 ```

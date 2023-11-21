@@ -25,7 +25,7 @@ describe(`Example Test Suite`, () => {
 		scaffold = await scaffolding.up(MODULE, SERVICE)
 	})
 
-    // tests here
+	// tests here
 
 	afterAll(async () => {
 		await scaffolding.down(E)
@@ -36,14 +36,13 @@ describe(`Example Test Suite`, () => {
 You can then use the `scaffold` object to access the following (use the ScaffoldDto type to get intellisense):
 
 | Property   | Description                                                     |
-|------------|-----------------------------------------------------------------|
+| ---------- | --------------------------------------------------------------- |
 | server     | The NestJs HttpServer server instance                           |
 | module     | The TestingModule instance                                      |
-| query      | The typeorm query helper
+| query      | The typeorm query helper                                        |
 | repository | The typeorm repository for the entity                           |
 | services   | A number of pre-imported services and the service you passed in |
 | values     | A number of pre-imported values you can use in your tests       |
-
 
 ### Controllers
 
@@ -60,17 +59,17 @@ await TestEndpoint<T>({
 
 The following properties are available:
 
-| Property        | Description                                                                                          |
-|-----------------|------------------------------------------------------------------------------------------------------|
-| type            | The HTTP METHOD to use                                                                               |
-| scaffold        | The scaffold object                                                                                  |
-| url             | The URL to call                                                                                      |
-| data            | The data to pass to the endpoint in the body                                                         |
-| query           | An object with any query params you wish to pass                                                     |
-| PRIMARY_KEY     | The name of the primary key for the entity                                                           |
-| primaryKey      | The value of the primary key for the entity                                                          |
-| access_token    | If you wish to use a different user to the owner of the testing account                              |
-| account         | If you wish to pass make the request for different account from the account setup in the scaffolding |
+| Property            | Description                                                                                          |
+| ------------------- | ---------------------------------------------------------------------------------------------------- |
+| type                | The HTTP METHOD to use                                                                               |
+| scaffold            | The scaffold object                                                                                  |
+| url                 | The URL to call                                                                                      |
+| data                | The data to pass to the endpoint in the body                                                         |
+| query               | An object with any query params you wish to pass                                                     |
+| PRIMARY_KEY         | The name of the primary key for the entity                                                           |
+| primaryKey          | The value of the primary key for the entity                                                          |
+| access_token        | If you wish to use a different user to the owner of the testing account                              |
+| account             | If you wish to pass make the request for different account from the account setup in the scaffolding |
 | emitCheckResultKeys | An array of keys to skip validating in the response                                                  |
 
 ### Services
@@ -88,7 +87,7 @@ await TestService<T>({
 The following properties are available:
 
 | Property    | Description                                           |
-|-------------|-------------------------------------------------------|
+| ----------- | ----------------------------------------------------- |
 | type        | The METHOD to use                                     |
 | scaffold    | The scaffold object                                   |
 | mock        | The data to pass to the endpoint in the body          |

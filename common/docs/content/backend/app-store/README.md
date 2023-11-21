@@ -4,9 +4,9 @@ The app store module allows you to give your users the ability to add app integr
 
 For example, connect their WordPress site to your project and perform actions on their behalf.
 
-::: tip
+::alert{type="info"}
 Checkout our [pre-built frontend components](../../frontend/core/components/app-store/README.md) which use these modules.
-:::
+::
 
 ## Install
 
@@ -50,19 +50,18 @@ redoc = installAppStoreDocs(redoc)
 The system supports two different types of apps:
 
 |---------|-----------------------------------|
-| Type    | Description |
+| Type | Description |
 |---------|-----------------------------------|
-| CREDENTIALS  | Pass any API keys etc via the app settings or .env |
+| CREDENTIALS | Pass any API keys etc via the app settings or .env |
 | OAUTH2 | Follows the Oauth flow |
 |---------|-----------------------------------|
-
 
 #### Credentials
 
 When an app is setup as credentials it will check the following to try and find the connection settings:
 
-- Inside the `settings` of the `installed_app`
-- Inside the `.env` file
+-   Inside the `settings` of the `installed_app`
+-   Inside the `.env` file
 
 This allows both user defined and system defined apps.
 
@@ -70,18 +69,26 @@ This allows both user defined and system defined apps.
 
 To provide the easiest implementation of Oauth2 possible, we have tried to abstract this process where possible.
 
-Follow our Oauth2 process flow here to learn more about how you can install apps via Oauth and also how to build Oauth integration into our app ecosystem.
+Follow our [Oauth2 process flow here](./oauth.md) to learn more about how you can install apps via Oauth and also how to build Oauth integration into our app ecosystem.
 
 ### Supported Apps
 
 We currently support the following apps in the app store
 
 |---------|-----------------------------------|
-| App    | Connection Types |
+| App | Connection Types |
 |---------|-----------------------------------|
-| [Shopify](/apps/shopify/readme)  | `OAUTH2` |
+| [Shopify](/apps/shopify/readme) | `OAUTH2` |
 | [WordPress](/apps/wordpress/readme) | `CREDENTIALS` |
 |---------|-----------------------------------|
+
+### PreInstall Checks
+
+Apps can have pre-install checks which are ran automatically when you try to connect a new app via the installed app create endpoints.
+
+In some situations you may want to run the pre-install check before the user starts to create an app (for example via an oauth flow).
+
+You can do this by calling the installed app preinstall endpoint directly.
 
 ### Parent / Child Apps
 
