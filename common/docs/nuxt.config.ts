@@ -4,8 +4,12 @@ export default defineNuxtConfig({
 		'@nuxt/content',
 		'nuxt-quasar-ui',
 		'@pinia/nuxt',
+		'@nuxt/ui',
 		//'nuxt-simple-sitemap',
 	],
+	ui: {
+		global: true,
+	},
 	devtools: { enabled: true },
 	extends: '@nuxt-themes/docus',
 	typescript: {
@@ -36,6 +40,9 @@ export default defineNuxtConfig({
 		  search: {
 			indexed: false
 		  }
+		},
+		markdown: {
+			mdc: true,
 		},
 		highlight: {
 			preload: ['sql'],
