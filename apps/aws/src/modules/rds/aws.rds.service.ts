@@ -27,7 +27,6 @@ export class AwsRdsService {
 			return mockRDSExportTask
 		}
 
-		try {
 			const client = new RDSClient(<RDSClientConfig>{
 				region:
 					this.configService.get<string>('awsRds.AWS_RDS_JL_REGION') ??
@@ -40,18 +39,6 @@ export class AwsRdsService {
 
 			const command = new StartExportTaskCommand(params);
 			return <ExportTask>await client.send(command);
-
-		} catch (e) {
-			this.logger.warn(
-				`[${domain}] Error: ${e.message}`,
-				e.response
-					? {
-							status: e.response.status,
-							data: e.response.data,
-					  }
-					: null,
-			)
-		}
 	}
 
 	/**
@@ -71,7 +58,7 @@ export class AwsRdsService {
 			return <any>[mockRDSExportTask]
 		}
 
-		try {
+	
 			const client = new RDSClient(<RDSClientConfig>{
 				region:
 					this.configService.get<string>('awsRds.AWS_RDS_JL_REGION') ??
@@ -84,18 +71,6 @@ export class AwsRdsService {
 
 			const command = new DescribeExportTasksCommand(input);
 			return <DescribeExportTasksCommandOutput>await client.send(command);
-
-		} catch (e) {
-			this.logger.warn(
-				`[${domain}] Error: ${e.message}`,
-				e.response
-					? {
-							status: e.response.status,
-							data: e.response.data,
-					  }
-					: null,
-			)
-		}
 
 	}
 
