@@ -108,3 +108,12 @@ The real power of our framework is seen through the rapid development of client 
 Checkout the [build a client application](https://github.com/juicyllama/client-quickstart) walkthrough to get a solid overview of our framework in action.
 
 As our framework grows, with more applications using it, more apps added and more developers contributing, the value also increases, this network effect is the reason why we have opensourced our work.
+
+### Development User
+
+When you first run the application locally, it will create a default account along with an account owner you can use to authenticate with. You can use this email and password to authenticate both the API and login via the frontend.
+
+```
+jon.doe@example.com
+S7r0#gP@$s
+```

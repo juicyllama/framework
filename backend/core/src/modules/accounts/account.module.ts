@@ -15,6 +15,7 @@ import { Query } from '../../utils/typeorm/Query'
 import { AccountController } from './account.controller'
 import { StorageModule } from '../storage/storage.module'
 import { AccountHooks } from './account.hooks'
+import { AccountInstallationService } from './account.installation'
 
 @Module({
 	imports: [
@@ -29,7 +30,7 @@ import { AccountHooks } from './account.hooks'
 		forwardRef(() => UsersModule),
 	],
 	controllers: [AccountController],
-	providers: [AccountService, AccountHooks, Logger, Query],
+	providers: [AccountService, AccountInstallationService, AccountHooks, Logger, Query],
 	exports: [AccountService],
 })
 export class AccountModule {

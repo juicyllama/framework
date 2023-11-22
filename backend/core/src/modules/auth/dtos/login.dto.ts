@@ -14,7 +14,7 @@ export class LoginRequestDto {
 	@IsString()
 	@ApiProperty({
 		description: 'The users email address',
-		example: 'richard.branson@fly.virgin.com',
+		example: 'jon.doe@example.com',
 	})
 	readonly email: string
 
