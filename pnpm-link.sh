@@ -35,11 +35,3 @@ pnpm link --global --dir apps/slack
 pnpm link --global --dir apps/wise
 pnpm link --global --dir apps/wordpress
 pnpm link --global --dir apps/xero-cc
-
-### TOOLS ###
-
-# pnpm link --global @juicyllama/tools-qrcodes
-# pnpm link --global @juicyllama/tools-shortlinks
-
-
-## SETUP CLI ##
