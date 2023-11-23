@@ -10,7 +10,7 @@ describe('Password Criteria', () => {
 		it('shows error icon', () => {
 			const authFormState: AuthFormState = {
 				password: {
-					value: '!aA45678',
+					value: '!aA456',
 					valid: {
 						length: false,
 						capital: true,
