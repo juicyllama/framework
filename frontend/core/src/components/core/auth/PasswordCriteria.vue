@@ -14,11 +14,11 @@ const props = defineProps<{
 		<div>
 			<q-icon
 				:name="
-					props.authFormState.password.valid.length
+					props.authFormState.password.valid.lengthOk
 						? 'check_circle'
 						: 'cancel'
 				"
-				:color="props.authFormState.password.valid.length ? 'positive' : 'negative'"></q-icon>
+				:color="props.authFormState.password.valid.lengthOk ? 'positive' : 'negative'"></q-icon>
 			Must be at least 12 characters long.
 		</div>
 		<div>
