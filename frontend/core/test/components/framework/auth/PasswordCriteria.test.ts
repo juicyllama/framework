@@ -12,7 +12,7 @@ describe('Password Criteria', () => {
 				password: {
 					value: '!aA456',
 					valid: {
-						length: false,
+						lengthOk: false,
 						capital: true,
 						number: true,
 						symbol: true,
@@ -32,7 +32,7 @@ describe('Password Criteria', () => {
 				password: {
 					value: '!a4567891112',
 					valid: {
-						length: true,
+						lengthOk: true,
 						capital: false,
 						number: true,
 						symbol: true,
@@ -55,7 +55,7 @@ describe('Password Criteria', () => {
 				password: {
 					value: '!abcdefg45678',
 					valid: {
-						length: true,
+						lengthOk: true,
 						capital: false,
 						number: true,
 						symbol: true,
@@ -75,7 +75,7 @@ describe('Password Criteria', () => {
 				password: {
 					value: '!aA4562',
 					valid: {
-						length: false,
+						lengthOk: false,
 						capital: true,
 						number: true,
 						symbol: true,
@@ -98,7 +98,7 @@ describe('Password Criteria', () => {
 				password: {
 					value: '!aAbcdefghhjaasad',
 					valid: {
-						length: true,
+						lengthOk: true,
 						capital: true,
 						number: false,
 						symbol: true,
@@ -118,7 +118,7 @@ describe('Password Criteria', () => {
 				password: {
 					value: '!a4567891112',
 					valid: {
-						length: true,
+						lengthOk: true,
 						capital: false,
 						number: true,
 						symbol: true,
@@ -141,7 +141,7 @@ describe('Password Criteria', () => {
 				password: {
 					value: '123456789aA45678',
 					valid: {
-						length: true,
+						lengthOk: true,
 						capital: true,
 						number: true,
 						symbol: false,
@@ -161,7 +161,7 @@ describe('Password Criteria', () => {
 				password: {
 					value: 'a45678911123',
 					valid: {
-						length: true,
+						lengthOk: true,
 						capital: false,
 						number: true,
 						symbol: true,
