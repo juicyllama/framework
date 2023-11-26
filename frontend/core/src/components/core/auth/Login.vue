@@ -36,7 +36,7 @@ const state = reactive(<AuthFormState>{
 	password: {
 		value: '',
 		valid: {
-			length: false,
+			lengthOk: false,
 			capital: false,
 			number: false,
 			symbol: false,

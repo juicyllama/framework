@@ -23,7 +23,7 @@ const state = reactive(<CreateAccount>{
 		value: '',
 		confirm: '',
 		valid: {
-			length: false,
+			lengthOk: false,
 			capital: false,
 			number: false,
 			symbol: false,
