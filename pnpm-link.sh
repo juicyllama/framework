@@ -35,3 +35,7 @@ pnpm link --global --dir apps/slack
 pnpm link --global --dir apps/wise
 pnpm link --global --dir apps/wordpress
 pnpm link --global --dir apps/xero-cc
+
+# NestJS
+pnpm link --global --dir node_modules/@nestjs/core
+pnpm link --global --dir node_modules/@nestjs/typeorm
