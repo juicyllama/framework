@@ -6,7 +6,7 @@ const validateEmail = (email: string): boolean => {
 }
 
 interface PasswordValidator {
-	length: boolean
+	lengthOk: boolean
 	capital: boolean
 	number: boolean
 	symbol: boolean
@@ -31,7 +31,7 @@ interface AuthFormState {
 function validatePassword(password: ValidationPassword): PasswordValidator {
 	if (!password.value) {
 		return {
-			length: false,
+			lengthOk: false,
 			capital: false,
 			number: false,
 			symbol: false,
@@ -40,7 +40,7 @@ function validatePassword(password: ValidationPassword): PasswordValidator {
 
 	return {
 		// Test length
-		length: password.value.length >= 8,
+		lengthOk: password.value.length >= 8,
 		// Test capital
 		capital: /^(?=.*[A-Z]).*$/.test(password.value),
 		// Test number
@@ -52,7 +52,7 @@ function validatePassword(password: ValidationPassword): PasswordValidator {
 
 function isPasswordValid(password: ValidationPassword): boolean {
 	const result = validatePassword(password)
-	return result.length && result.capital && result.number && result.symbol
+	return result.lengthOk && result.capital && result.number && result.symbol
 }
 
 function inputRequired(field: FormField): ValidationRule[] {
