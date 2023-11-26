@@ -8,7 +8,7 @@ export class ContactEmailDto {
 	@IsOptional()
 	type?: ContactEmailType
 
-	@ApiProperty({ description: 'Your contacts email address', example: 'richard.branson@fly.virgin.com' })
+	@ApiProperty({ description: 'Your contacts email address', example: 'jon.doe@example.com' })
 	@IsEmail()
 	@MinLength(2)
 	@MaxLength(2)

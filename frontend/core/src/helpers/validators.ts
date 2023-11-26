@@ -40,7 +40,7 @@ function validatePassword(password: ValidationPassword): PasswordValidator {
 
 	return {
 		// Test length
-		length: password.value.length >= 12,
+		length: password.value.length >= 8,
 		// Test capital
 		capital: /^(?=.*[A-Z]).*$/.test(password.value),
 		// Test number
