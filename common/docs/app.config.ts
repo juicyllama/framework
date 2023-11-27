@@ -8,10 +8,23 @@ export default defineAppConfig({
       },
       aside: {
         level: 0,
-        exclude: []
+        exclude: [
+			'/apps/readme', '/gettingstarted',
+		],
+		openActiveMenu: true
       },
       header: {
-        logo: false
+        logo: false,
+		textLinks: [{
+			text: 'Framework',
+			href: '/gettingstarted'
+		  },{
+			text: 'Apps',
+			href: '/apps/readme'
+		  },{
+			text: 'Enterprise',
+			href: '/enterprise/readme'
+		  }],
       },
       footer: {
         credits:{
