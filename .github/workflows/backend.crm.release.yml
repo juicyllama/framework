@@ -44,7 +44,6 @@ jobs:
                         common/utils
                         backend/core
                         backend/crm
-                        apps/apilayer
 
             -   name: 'Install Node.js'
                 uses: actions/setup-node@v3
