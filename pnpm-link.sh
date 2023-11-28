@@ -36,9 +36,10 @@ pnpm link --global --dir apps/wise
 pnpm link --global --dir apps/wordpress
 pnpm link --global --dir apps/xero-cc
 
-# NestJS
+# NestJS DI
 pnpm link --global --dir node_modules/@nestjs/core
 pnpm link --global --dir node_modules/@nestjs/typeorm
+pnpm link --global --dir node_modules/typeorm
 pnpm link --global --dir node_modules/@nestjs/common
 pnpm link --global --dir node_modules/@nestjs/config
 pnpm link --global --dir node_modules/@nestjs/platform-express
