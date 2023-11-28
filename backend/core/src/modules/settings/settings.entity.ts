@@ -1,17 +1,19 @@
-import { IsDate, IsJSON, IsString, MaxLength, MinLength } from 'class-validator'
+import { IsOptional, IsNumber, IsJSON, IsString, MaxLength, MinLength } from 'class-validator'
 import {
 	Column,
-	CreateDateColumn,
-	DeleteDateColumn,
+	ManyToOne,
 	Entity,
 	PrimaryGeneratedColumn,
 	Unique,
-	UpdateDateColumn,
+	JoinColumn,
 } from 'typeorm'
+import { BaseEntity } from '../../helpers'
+import { Account } from '../accounts/account.entity'
+import { User } from '../users/users.entity'
 
 @Entity('settings')
 @Unique(['key'])
-export class Setting {
+export class Setting extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id: number
 
@@ -25,19 +27,30 @@ export class Setting {
 	@IsJSON()
 	value: any
 
-	@CreateDateColumn()
-	@IsDate()
-	readonly created_at: Date
+	@ManyToOne(() => Account, (account) => account.account_id, {
+		onDelete: 'CASCADE',
+	})
+	@JoinColumn({ name: 'account_id' })
+	account?: Account
 
-	@UpdateDateColumn()
-	@IsDate()
-	readonly updated_at: Date
+	@Column({ default: null, nullable: true })
+	@IsNumber()
+	@IsOptional()
+	account_id?: number
 
-	@DeleteDateColumn()
-	@IsDate()
-	readonly deleted_at: Date
+	@ManyToOne(() => User, (user) => user.user_id, {
+		onDelete: 'CASCADE',
+	})
+	@JoinColumn({ name: 'user_id' })
+	user?: User
+
+	@Column({ default: null, nullable: true })
+	@IsNumber()
+	@IsOptional()
+	user_id?: number
 
 	constructor(partial: Partial<Setting>) {
+		super()
 		Object.assign(this, partial)
 	}
 }

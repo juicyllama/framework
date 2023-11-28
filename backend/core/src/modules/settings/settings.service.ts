@@ -19,7 +19,7 @@ export class SettingsService {
 		@Inject(Logger) private logger: Logger,
 	) {}
 
-	async create(key: string, value: any): Promise<Setting> {
+	async create(key: string, value: any, account_id?: number, user_id?: number): Promise<Setting> {
 		if (!SettingsService.validate(value)) {
 			this.logger.error('Value must be an object')
 			throw new Error('Value must be an object')
@@ -34,6 +34,8 @@ export class SettingsService {
 		setting = await this.query.create(this.repository, {
 			key: key,
 			value: value,
+			account_id: account_id,
+			user_id: user_id,
 		})
 
 		await this.cacheManager.set(JLCache.cacheKey(cache_key, key), setting, CachePeriod.MONTH)

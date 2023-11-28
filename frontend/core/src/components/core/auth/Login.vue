@@ -127,7 +127,7 @@ async function redirect(){
 				name="password"
 				label="Password *"
 				v-model="state.password.value"
-				:rules="[val => isPasswordValid(val) || 'Password must meet all criteria.']"
+				:rules="[val => isPasswordValid(state.password) || 'Password must meet all criteria.']"
 				id="password"
 				autocomplete="current-password"
 				filled

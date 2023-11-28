@@ -20,6 +20,10 @@ export const redocConfig = <RedocOptions>{
 			name: 'Accounts',
 			tags: ['Account', 'Users'],
 		},
+		{
+			name: 'Settings',
+			tags: ['Settings'],
+		},
 	],
 	/*generateCodeSamples: {
 		languages: ['Node.js'],

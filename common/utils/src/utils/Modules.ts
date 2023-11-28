@@ -9,7 +9,7 @@ export class Modules {
 
 	static isInstalled(name: string): boolean {
 		try {
-			const p = require.resolve(name)
+			const p = require.resolve(name, { paths: require.main.paths })
 			return !!p
 		} catch (e: any) {
 			const logger = new Logger()
@@ -17,5 +17,4 @@ export class Modules {
 			return false
 		}
 	}
-	
 }
