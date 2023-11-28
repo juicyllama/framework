@@ -1,10 +1,12 @@
 # Getting Started
 
-The Shopify app is a nestjs wrapper around the [Shopify Development Ecosystem](https://shopify.dev/). It provides a consistent interface for interacting with Shopify within the confines of our framework.
+The Shopify app is a wrapper around the [Shopify Development Ecosystem](https://shopify.dev/). It provides a consistent interface for interacting with Shopify within the confines of our framework.
 
 ::alert{type="info"}
 Checkout the Shopify [documentation](https://shopify.dev/docs/api) for more information.
 ::
+
+The Shopify app sits on top of our [Ecommerce](../../backend/ecommerce/README.md) package which allows connects things like transactions automatically when you enable [crons](#crons).
 
 ### App Store
 
@@ -12,9 +14,29 @@ In order to save the clients auth tokens, this package extends [app store](/back
 
 It will automatically install the shopify app into the app store database when you include it in your project.
 
-### Integration
+### Installation
 
-#### Connecting to Shopify
+To start using the Shopify app, follow these instructions:
+
+1. Install the package
+
+```
+pnpm install @juicyllama/app-shopify
+```
+
+2. Add the module to your application
+
+```typescript
+// app.module.ts
+import { ShopifyModule } from '@juicyllama/app-shopify'
+
+@Module({
+	imports: [ShopifyModule],
+})
+export class AppModule {}
+```
+
+### Integration
 
 There are two ways to integrate with Shopify:
 
@@ -88,19 +110,35 @@ If this is not provided, we will redirect the user back to the your app's base u
 
 ### Modules
 
-::alert{type="danger"}
+Each endpoint in the Shopify API is built with it's own module, this allows you to install just the module you need, we currently support:
 
--   Document modules / endpoints
--   Explain how crons work
-    ::
+- [Auth](./modules/auth.md)
+- [Customers](./modules/customers.md)
+- [Orders](./modules/orders.md)
+- [Shop](./modules/shop.md)
 
 ### Crons
 
-`CRON_APP_SHOPIFY_SYNC_ORDERS`
+The Shopify package ships with the following crons you can enable in your `.env` file.
+
+|Cron | Description|
+|-----|---------------|
+| `CRON_APP_SHOPIFY_SYNC_ORDERS`| Monitors for new/updated transactions and creates/updates records in the transactions table|
+
 
 ### Webhooks
 
-::alert{type="danger"}
+We currently support the following webhooks, your application must register them with Shopify before they will be consumed.
 
--   document supported webhooks
-    ::
+|Webhook|Controller Route|
+|------|--------------|
+|`orders/create` | `app/shopify/orders/webhook` |
+|`orders/cancelled` | `app/shopify/orders/webhook` |
+|`orders/edited` | `app/shopify/orders/webhook` |
+|`orders/fulfilled` | `app/shopify/orders/webhook` |
+|`orders/paid` | `app/shopify/orders/webhook` |
+|`orders/partially_fulfilled` | `app/shopify/orders/webhook` |
+|`orders/updated` | `app/shopify/orders/webhook` |
+|`customers/data_request` | `app/shopify/customers/webhook/data_request` |
+|`customers/redact` | `app/shopify/customers/webhook/redact` |
+|`shop/redact` | `app/shopify/shop/webhook/redact` |
