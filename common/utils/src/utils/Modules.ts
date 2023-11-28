@@ -17,4 +17,8 @@ export class Modules {
 			return false
 		}
 	}
+
+	static load(name: string): unknown {
+		return require.main.require(name);
+	}
 }
