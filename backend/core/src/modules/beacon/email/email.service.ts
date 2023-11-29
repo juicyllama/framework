@@ -58,9 +58,8 @@ export class BeaconEmailService {
 
 		let service: any
 
-		if (Modules.isInstalled('@juicyllama/app-aws')) {
-			//@ts-ignore
-			const { AwsSesModule, AwsSesService } = Modules.load('@juicyllama/app-aws')
+		if (Modules.appAws.isInstalled) {
+			const { AwsSesModule, AwsSesService } = await Modules.appAws.load()
 
 			try {
 				const awsSesModule = await this.lazyModuleLoader.load(() => AwsSesModule)
@@ -89,7 +88,7 @@ export class BeaconEmailService {
 		}
 
 		if (!service) {
-			this.logger.error(`No email app installed, options are: @juicyllama/app-aws`)
+			this.logger.error(`No email app installed, options are: ${Modules.appAws.name}`)
 			return false
 		}
 	}

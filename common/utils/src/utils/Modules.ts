@@ -1,6 +1,20 @@
 import { Logger } from './Logger'
 
+class Module<T = any> {
+	constructor(public readonly name: string) {}
+
+	public get isInstalled() {
+		return Modules.isInstalled(this.name)
+	}
+
+	public async load() {
+		return Modules.load<T>(this.name)
+	}
+}
+
 export class Modules {
+	public static readonly appAws = new Module('@juicyllama/app-aws');
+
 	/**
 	 * Checks if a module is installed
 	 *
@@ -18,7 +32,7 @@ export class Modules {
 		}
 	}
 
-	static load(name: string): unknown {
-		return require.main.require(name);
+	static async load<T = any>(name: string): Promise<T> {
+		return require.main.require(name)
 	}
 }
