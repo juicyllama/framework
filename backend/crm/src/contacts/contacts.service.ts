@@ -122,11 +122,10 @@ export class ContactsService extends BaseService<T> {
 	async patchMailchimp(contact: T): Promise<void> {
 		const domain = 'crm::contacts::service::patchMailchimp'
 
-		if (Modules.isInstalled('@juicyllama/app-mailchimp') && contact.emails?.length) {
+		if (Modules.mailchimp.isInstalled && contact.emails?.length) {
 			this.logger.verbose(`[${domain}] Mailchimp is installed`)
 
-			//@ts-ignore
-			const { MailchimpModule, MailchimpService } = await import('@juicyllama/app-mailchimp')
+			const { MailchimpModule, MailchimpService } = await Modules.mailchimp.load()
 
 			try {
 				const mailchimpModule = await this.lazyModuleLoader.load(() => MailchimpModule)
@@ -141,11 +140,10 @@ export class ContactsService extends BaseService<T> {
 	async deleteMailchimp(contact: T): Promise<void> {
 		const domain = 'crm::contacts::service::deleteMailchimp'
 
-		if (Modules.isInstalled('@juicyllama/app-mailchimp') && contact.emails?.length) {
+		if (Modules.mailchimp.isInstalled && contact.emails?.length) {
 			this.logger.verbose(`[${domain}] Mailchimp is installed`)
 
-			//@ts-ignore
-			const { MailchimpModule, MailchimpService } = await import('@juicyllama/app-mailchimp')
+			const { MailchimpModule, MailchimpService } = await Modules.aws.load()
 
 			try {
 				const mailchimpModule = await this.lazyModuleLoader.load(() => MailchimpModule)

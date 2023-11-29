@@ -50,9 +50,8 @@ export class StorageService {
 
 		let service: any
 
-		if (Modules.isInstalled('@juicyllama/app-aws')) {
-			//@ts-ignore
-			const { AwsS3Module, AwsS3Service } = await import('@juicyllama/app-aws')
+		if (Modules.aws.isInstalled) {
+			const { AwsS3Module, AwsS3Service } = await Modules.aws.load()
 
 			try {
 				const awsS3Module = await this.lazyModuleLoader.load(() => AwsS3Module)
@@ -83,9 +82,8 @@ export class StorageService {
 
 		let service: any
 
-		if (Modules.isInstalled('@juicyllama/app-aws')) {
-			//@ts-ignore
-			const { AwsS3Module, AwsS3Service } = await import('@juicyllama/app-aws')
+		if (Modules.aws.isInstalled) {
+			const { AwsS3Module, AwsS3Service } = await Modules.aws.load()
 			const awsS3Module = await this.lazyModuleLoader.load(() => AwsS3Module)
 			service = awsS3Module.get(AwsS3Service)
 			return await service.findAll(location, permissions)
@@ -124,9 +122,8 @@ export class StorageService {
 
 		let service: any
 
-		if (Modules.isInstalled('@juicyllama/app-aws')) {
-			//@ts-ignore
-			const { AwsS3Module, AwsS3Service } = await import('@juicyllama/app-aws')
+		if (Modules.aws.isInstalled) {
+			const { AwsS3Module, AwsS3Service } = await Modules.aws.load()
 			const awsS3Module = await this.lazyModuleLoader.load(() => AwsS3Module)
 			service = awsS3Module.get(AwsS3Service)
 			file = await service.findOne(location, permissions, format)
@@ -163,9 +160,8 @@ export class StorageService {
 
 		let service: any
 
-		if (Modules.isInstalled('@juicyllama/app-aws')) {
-			//@ts-ignore
-			const { AwsS3Module, AwsS3Service } = await import('@juicyllama/app-aws')
+		if (Modules.aws.isInstalled) {
+			const { AwsS3Module, AwsS3Service } = await Modules.aws.load()
 			const awsS3Module = await this.lazyModuleLoader.load(() => AwsS3Module)
 			service = awsS3Module.get(AwsS3Service)
 			await service.remove(location, permissions)

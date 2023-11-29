@@ -12,7 +12,7 @@ export class WordPressService {
 	) {}
 
 	async precheckWordpress(domain: string, app: App, settings: any): Promise<preInstallCheckResponse> {
-		if (!Modules.isInstalled('@juicyllama/app-wordpress')) {
+		if (!Modules.wordpress.isInstalled) {
 			return {
 				result: false,
 				error: `WordPress is not installed`,
@@ -20,11 +20,7 @@ export class WordPressService {
 		}
 
 		try {
-			//@ts-ignore
-			const { WordpressUsersModule, WordpressUsersService, WordpressContext } = await import(
-				//@ts-ignore
-				'@juicyllama/app-wordpress'
-			)
+			const { WordpressUsersModule, WordpressUsersService, WordpressContext } = await Modules.wordpress.load()
 			const wordpressUsersModule = await this.lazyModuleLoader.load(() => WordpressUsersModule)
 			const wordpressUsersService = wordpressUsersModule.get(WordpressUsersService)
 

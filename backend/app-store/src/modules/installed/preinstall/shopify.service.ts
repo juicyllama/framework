@@ -13,7 +13,7 @@ export class ShopifyService {
 	) {}
 
 	async precheckShopify(domain: string, app: App, settings: any, account_id: number): Promise<preInstallCheckResponse> {
-		if (!Modules.isInstalled('@juicyllama/app-shopify')) {
+		if (!Modules.shopify.isInstalled) {
 			return {
 				result: false,
 				error: `Shopify is not installed`,

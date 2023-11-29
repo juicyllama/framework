@@ -87,9 +87,8 @@ export class FxService {
 			return calc(amount, rates[from], rates[to])
 		}
 
-		if (Modules.isInstalled('@juicyllama/data-cache')) {
-			//@ts-ignore
-			const { DataCacheModule, DataCacheService, Fx } = await import('@juicyllama/data-cache')
+		if (Modules.datacache.isInstalled) {
+			const { DataCacheModule, DataCacheService, Fx } = await Modules.datacache.load()
 
 			try {
 				const dataCacheModule = await this.lazyModuleLoader.load(() => DataCacheModule)
@@ -109,9 +108,8 @@ export class FxService {
 			}
 		}
 
-		if (Modules.isInstalled('@juicyllama/app-apilayer')) {
-			//@ts-ignore
-			const { CurrencyDataModule, CurrencyDataService } = await import('@juicyllama/app-apilayer')
+		if (Modules.apilayer.isInstalled) {
+			const { CurrencyDataModule, CurrencyDataService } = await Modules.apilayer.load()
 			const currencyDataModule = await this.lazyModuleLoader.load(() => CurrencyDataModule)
 			const currencyDataService = currencyDataModule.get(CurrencyDataService)
 
@@ -146,9 +144,8 @@ export class FxService {
 		}
 
 		if (convertResult) {
-			if (Modules.isInstalled('@juicyllama/data-cache')) {
-				//@ts-ignore
-				const { DataCacheModule, DataCacheService, Fx } = await import('@juicyllama/data-cache')
+			if (Modules.datacache.isInstalled) {
+				const { DataCacheModule, DataCacheService, Fx } = await Modules.datacache.load()
 
 				try {
 					const dataCacheModule = await this.lazyModuleLoader.load(() => DataCacheModule)
