@@ -81,7 +81,7 @@ export class AuthService extends BaseService<T> {
 		if (!['development', 'test'].includes(process.env.NODE_ENV)) {
 			let Bugsnag
 			if (Modules.bugsnag.isInstalled) {
-				Bugsnag = Modules.bugsnag.load()
+				Bugsnag = await Modules.bugsnag.load()
 				Bugsnag.setUser(user.user_id, user.email)
 			}
 		}

@@ -21,7 +21,7 @@ export class MiddlewareAccountId implements NestMiddleware {
 
 			let Bugsnag: any
 			if (Modules.bugsnag.isInstalled) {
-				Bugsnag = Modules.bugsnag.load()
+				Bugsnag = await Modules.bugsnag.load()
 				Bugsnag.addMetadata('account', await this.accountService.findById(req.query.account_id))
 				Bugsnag.addMetadata('user', req.user)
 			}

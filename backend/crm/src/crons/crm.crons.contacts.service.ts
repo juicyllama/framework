@@ -21,7 +21,7 @@ export class CrmCronsContactsService {
 			let Bugsnag: any
 
 			if (Modules.bugsnag.isInstalled) {
-				Bugsnag = Modules.bugsnag.load()
+				Bugsnag = await Modules.bugsnag.load()
 				Bugsnag.addMetadata('cron', {
 					domain: domain,
 				})
