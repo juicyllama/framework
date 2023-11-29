@@ -46,7 +46,6 @@ export class BeaconImService {
 		let service: any
 
 		if (Modules.slack.isInstalled) {
-			//@ts-ignore
 			const { SlackModule, SlackService } = await Modules.slack.load()
 
 			try {

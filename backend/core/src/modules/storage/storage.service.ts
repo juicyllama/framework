@@ -51,7 +51,6 @@ export class StorageService {
 		let service: any
 
 		if (Modules.aws.isInstalled) {
-			//@ts-ignore
 			const { AwsS3Module, AwsS3Service } = await Modules.aws.load()
 
 			try {
@@ -84,7 +83,6 @@ export class StorageService {
 		let service: any
 
 		if (Modules.aws.isInstalled) {
-			//@ts-ignore
 			const { AwsS3Module, AwsS3Service } = await Modules.aws.load()
 			const awsS3Module = await this.lazyModuleLoader.load(() => AwsS3Module)
 			service = awsS3Module.get(AwsS3Service)
@@ -125,7 +123,6 @@ export class StorageService {
 		let service: any
 
 		if (Modules.aws.isInstalled) {
-			//@ts-ignore
 			const { AwsS3Module, AwsS3Service } = await Modules.aws.load()
 			const awsS3Module = await this.lazyModuleLoader.load(() => AwsS3Module)
 			service = awsS3Module.get(AwsS3Service)
@@ -164,7 +161,6 @@ export class StorageService {
 		let service: any
 
 		if (Modules.aws.isInstalled) {
-			//@ts-ignore
 			const { AwsS3Module, AwsS3Service } = await Modules.aws.load()
 			const awsS3Module = await this.lazyModuleLoader.load(() => AwsS3Module)
 			service = awsS3Module.get(AwsS3Service)

@@ -125,7 +125,6 @@ export class ContactsService extends BaseService<T> {
 		if (Modules.mailchimp.isInstalled && contact.emails?.length) {
 			this.logger.verbose(`[${domain}] Mailchimp is installed`)
 
-			//@ts-ignore
 			const { MailchimpModule, MailchimpService } = await Modules.mailchimp.load()
 
 			try {
@@ -144,7 +143,6 @@ export class ContactsService extends BaseService<T> {
 		if (Modules.mailchimp.isInstalled && contact.emails?.length) {
 			this.logger.verbose(`[${domain}] Mailchimp is installed`)
 
-			//@ts-ignore
 			const { MailchimpModule, MailchimpService } = await Modules.aws.load()
 
 			try {

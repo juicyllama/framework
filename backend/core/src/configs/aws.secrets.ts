@@ -7,7 +7,6 @@ export async function loadEnvVariables(SECRET_MANAGER_NAME: string, envPath: str
 		if (!Modules.aws.isInstalled) {
 			new Error('[loadEnvVariables] AWS Module not installed')
 		}
-		//@ts-ignore
 		const { getSecret } = await Modules.aws.load()
 		const secrets = await getSecret(SECRET_MANAGER_NAME)
 

@@ -51,7 +51,6 @@ export class BeaconSmsService {
 		let service: any
 
 		if (Modules.aws.isInstalled) {
-			//@ts-ignore
 			const { AwsSnsModule, AwsSnsService } = await Modules.aws.load()
 
 			try {

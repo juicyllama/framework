@@ -69,7 +69,6 @@ export class InvoicesService extends BaseService<T> {
 		if (Modules.xerocc.isInstalled) {
 			this.logger.debug(`[${domain}] Xero installed, create xero invoice for #${invoice.invoice_id}`, invoice)
 
-			//@ts-ignore
 			const { XeroModule, XeroService } = await Modules.xerocc.load()
 
 			try {
@@ -135,7 +134,6 @@ export class InvoicesService extends BaseService<T> {
 		const domain = 'cron::billing::invoices::xeroAddPayment'
 
 		if (Modules.xerocc.isInstalled) {
-			//@ts-ignore
 			const { XeroModule, XeroService } = await Modules.xerocc.load()
 
 			try {

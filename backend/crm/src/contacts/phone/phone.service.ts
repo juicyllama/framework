@@ -48,7 +48,6 @@ export class ContactPhoneService extends BaseService<T> {
 		}
 
 		if (Modules.datacache.isInstalled) {
-			//@ts-ignore
 			const { DataCacheModule, DataCacheService, NumberVerification } = await Modules.datacache.load()
 
 			try {
@@ -75,7 +74,6 @@ export class ContactPhoneService extends BaseService<T> {
 		}
 
 		if (Modules.apilayer.isInstalled) {
-			//@ts-ignore
 			const { NumberVerificationModule, NumberVerificationService } = await Modules.apilayer.load()
 			const numberVerificationModule = await this.lazyModuleLoader.load(() => NumberVerificationModule)
 			const numberVerificationService = numberVerificationModule.get(NumberVerificationService)
@@ -102,7 +100,6 @@ export class ContactPhoneService extends BaseService<T> {
 			}
 
 			if (Modules.datacache.isInstalled) {
-				//@ts-ignore
 				const { DataCacheModule, DataCacheService, NumberVerification } = await Modules.datacache.load()
 
 				try {
@@ -139,7 +136,6 @@ export class ContactPhoneService extends BaseService<T> {
 			return true
 		}
 
-		//@ts-ignore
 		const { NumberVerificationModule, NumberVerificationService } = await Modules.apilayer.load()
 		const numberVerificationModule = await this.lazyModuleLoader.load(() => NumberVerificationModule)
 		const numberVerificationService = numberVerificationModule.get(NumberVerificationService)

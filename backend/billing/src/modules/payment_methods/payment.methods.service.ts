@@ -227,7 +227,6 @@ export class PaymentMethodsService extends BaseService<T> {
 		})
 
 		if (Modules.mollie.isInstalled) {
-			//@ts-ignore
 			const { MollieModule, MollieService } = await Modules.mollie.load()
 			try {
 				const mollieModule = await this.lazyModuleLoader.load(() => MollieModule)
@@ -251,7 +250,6 @@ export class PaymentMethodsService extends BaseService<T> {
 	async mollieChargeCard(payment_method: T, amount: number): Promise<void> {
 		const domain = 'billing::PaymentMethodsService::mollieChargeCard'
 		if (Modules.mollie.isInstalled) {
-			//@ts-ignore
 			const { MollieModule, MollieService } = await Modules.mollie.load()
 			try {
 				const mollieModule = await this.lazyModuleLoader.load(() => MollieModule)

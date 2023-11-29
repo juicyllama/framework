@@ -55,7 +55,6 @@ export class AiService {
 		}
 
 		if (Modules.openai.isInstalled) {
-			//@ts-ignore
 			const { OpenaiModule, OpenaiService } = await Modules.openai.load()
 			ai.app_integration_name = AppIntegrationName.openai
 

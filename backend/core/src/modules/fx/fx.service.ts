@@ -88,7 +88,6 @@ export class FxService {
 		}
 
 		if (Modules.datacache.isInstalled) {
-			//@ts-ignore
 			const { DataCacheModule, DataCacheService, Fx } = await Modules.datacache.load()
 
 			try {
@@ -110,7 +109,6 @@ export class FxService {
 		}
 
 		if (Modules.apilayer.isInstalled) {
-			//@ts-ignore
 			const { CurrencyDataModule, CurrencyDataService } = await Modules.apilayer.load()
 			const currencyDataModule = await this.lazyModuleLoader.load(() => CurrencyDataModule)
 			const currencyDataService = currencyDataModule.get(CurrencyDataService)
@@ -147,7 +145,6 @@ export class FxService {
 
 		if (convertResult) {
 			if (Modules.datacache.isInstalled) {
-				//@ts-ignore
 				const { DataCacheModule, DataCacheService, Fx } = await Modules.datacache.load()
 
 				try {
