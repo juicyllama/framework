@@ -47,9 +47,9 @@ export class ContactPhoneService extends BaseService<T> {
 			return false
 		}
 
-		if (Modules.isInstalled('@juicyllama/data-cache')) {
+		if (Modules.datacache.isInstalled) {
 			//@ts-ignore
-			const { DataCacheModule, DataCacheService, NumberVerification } = await import('@juicyllama/data-cache')
+			const { DataCacheModule, DataCacheService, NumberVerification } = await Modules.datacache.load()
 
 			try {
 				const dataCacheModule = await this.lazyModuleLoader.load(() => DataCacheModule)
@@ -74,9 +74,9 @@ export class ContactPhoneService extends BaseService<T> {
 			}
 		}
 
-		if (Modules.isInstalled('@juicyllama/app-apilayer')) {
+		if (Modules.apilayer.isInstalled) {
 			//@ts-ignore
-			const { NumberVerificationModule, NumberVerificationService } = await import('@juicyllama/app-apilayer')
+			const { NumberVerificationModule, NumberVerificationService } = await Modules.apilayer.load()
 			const numberVerificationModule = await this.lazyModuleLoader.load(() => NumberVerificationModule)
 			const numberVerificationService = numberVerificationModule.get(NumberVerificationService)
 
@@ -101,9 +101,9 @@ export class ContactPhoneService extends BaseService<T> {
 				})
 			}
 
-			if (Modules.isInstalled('@juicyllama/data-cache')) {
+			if (Modules.datacache.isInstalled) {
 				//@ts-ignore
-				const { DataCacheModule, DataCacheService, NumberVerification } = await import('@juicyllama/data-cache')
+				const { DataCacheModule, DataCacheService, NumberVerification } = await Modules.datacache.load()
 
 				try {
 					const dataCacheModule = await this.lazyModuleLoader.load(() => DataCacheModule)
@@ -117,7 +117,7 @@ export class ContactPhoneService extends BaseService<T> {
 			return result.valid
 		}
 
-		if (!Modules.isInstalled('@juicyllama/app-apilayer')) {
+		if (!Modules.apilayer.isInstalled) {
 			this.logger.warn(
 				`[${domain}] Skipping number verification as no service is installed, consider installing one of: ApiLayer`,
 			)
@@ -132,7 +132,7 @@ export class ContactPhoneService extends BaseService<T> {
 			return false
 		}
 
-		if (!Modules.isInstalled('@juicyllama/app-apilayer')) {
+		if (!Modules.apilayer.isInstalled) {
 			this.logger.warn(
 				`[${domain}] Skipping number verification as no service is installed, consider installing one of: ApiLayer`,
 			)
@@ -140,7 +140,7 @@ export class ContactPhoneService extends BaseService<T> {
 		}
 
 		//@ts-ignore
-		const { NumberVerificationModule, NumberVerificationService } = await import('@juicyllama/app-apilayer')
+		const { NumberVerificationModule, NumberVerificationService } = await Modules.apilayer.load()
 		const numberVerificationModule = await this.lazyModuleLoader.load(() => NumberVerificationModule)
 		const numberVerificationService = numberVerificationModule.get(NumberVerificationService)
 

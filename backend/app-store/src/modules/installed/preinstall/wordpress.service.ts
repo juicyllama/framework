@@ -12,7 +12,7 @@ export class WordPressService {
 	) {}
 
 	async precheckWordpress(domain: string, app: App, settings: any): Promise<preInstallCheckResponse> {
-		if (!Modules.isInstalled('@juicyllama/app-wordpress')) {
+		if (!Modules.wordpress.isInstalled) {
 			return {
 				result: false,
 				error: `WordPress is not installed`,

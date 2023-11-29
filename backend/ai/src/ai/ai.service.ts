@@ -54,9 +54,9 @@ export class AiService {
 			})
 		}
 
-		if (Modules.isInstalled('@juicyllama/app-openai')) {
+		if (Modules.openai.isInstalled) {
 			//@ts-ignore
-			const { OpenaiModule, OpenaiService } = await import('@juicyllama/app-openai')
+			const { OpenaiModule, OpenaiService } = await Modules.openai.load()
 			ai.app_integration_name = AppIntegrationName.openai
 
 			try {

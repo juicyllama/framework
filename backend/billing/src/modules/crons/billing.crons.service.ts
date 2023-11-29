@@ -49,8 +49,8 @@ export class BillingCronService {
 		if (![Enviroment.test].includes(this.configService.get('NODE_ENV'))) {
 			let Bugsnag: any
 
-			if (Modules.isInstalled('@bugsnag/js')) {
-				Bugsnag = require('@bugsnag/js')
+			if (Modules.bugsnag.isInstalled) {
+				Bugsnag = await Modules.bugsnag.load()
 				Bugsnag.addMetadata('cron', {
 					domain: domain,
 				})
@@ -122,8 +122,8 @@ export class BillingCronService {
 		if (![Enviroment.test].includes(this.configService.get('NODE_ENV'))) {
 			let Bugsnag: any
 
-			if (Modules.isInstalled('@bugsnag/js')) {
-				Bugsnag = require('@bugsnag/js')
+			if (Modules.bugsnag.isInstalled) {
+				Bugsnag = await Modules.bugsnag.load()
 				Bugsnag.addMetadata('cron', {
 					domain: domain,
 				})
@@ -214,8 +214,8 @@ export class BillingCronService {
 		if (![Enviroment.test].includes(this.configService.get('NODE_ENV'))) {
 			let Bugsnag: any
 
-			if (Modules.isInstalled('@bugsnag/js')) {
-				Bugsnag = require('@bugsnag/js')
+			if (Modules.bugsnag.isInstalled) {
+				Bugsnag = await Modules.bugsnag.load()
 				Bugsnag.addMetadata('cron', {
 					domain: domain,
 				})
@@ -277,8 +277,8 @@ export class BillingCronService {
 		if (![Enviroment.test].includes(this.configService.get('NODE_ENV'))) {
 			let Bugsnag: any
 
-			if (Modules.isInstalled('@bugsnag/js')) {
-				Bugsnag = require('@bugsnag/js')
+			if (Modules.bugsnag.isInstalled) {
+				Bugsnag = await Modules.bugsnag.load()
 				Bugsnag.addMetadata('cron', {
 					domain: domain,
 				})
@@ -359,8 +359,8 @@ export class BillingCronService {
 		if (![Enviroment.test].includes(this.configService.get('NODE_ENV'))) {
 			let Bugsnag: any
 
-			if (Modules.isInstalled('@bugsnag/js')) {
-				Bugsnag = require('@bugsnag/js')
+			if (Modules.bugsnag.isInstalled) {
+				Bugsnag = await Modules.bugsnag.load()
 				Bugsnag.addMetadata('cron', {
 					domain: domain,
 				})
@@ -430,8 +430,8 @@ export class BillingCronService {
 		if (![Enviroment.test].includes(this.configService.get('NODE_ENV'))) {
 			let Bugsnag: any
 
-			if (Modules.isInstalled('@bugsnag/js')) {
-				Bugsnag = require('@bugsnag/js')
+			if (Modules.bugsnag.isInstalled) {
+				Bugsnag = await Modules.bugsnag.load()
 				Bugsnag.addMetadata('cron', {
 					domain: domain,
 				})

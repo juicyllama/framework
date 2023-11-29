@@ -137,7 +137,7 @@ export class PaymentMethodsService extends BaseService<T> {
 
 		switch (payment_method.method) {
 			case PaymentMethodType.banktransfer:
-				if (Modules.isInstalled('@juicyllama/app-wise')) {
+				if (Modules.wise.isInstalled) {
 					/*const { MollieModule, MollieService } = await import('@juicyllama/app-mollie')
 					try {
 						const mollieModule = await this.lazyModuleLoader.load(() => MollieModule)
@@ -215,7 +215,7 @@ export class PaymentMethodsService extends BaseService<T> {
 	}
 
 	async bankInstalled(): Promise<boolean> {
-		return Modules.isInstalled('@juicyllama/app-wise')
+		return Modules.wise.isInstalled
 	}
 
 	async mollieAddCard(payment_method: PaymentMethod, description?: string): Promise<PaymentMethod> {
@@ -226,9 +226,9 @@ export class PaymentMethodsService extends BaseService<T> {
 			description: description,
 		})
 
-		if (Modules.isInstalled('@juicyllama/app-mollie')) {
+		if (Modules.mollie.isInstalled) {
 			//@ts-ignore
-			const { MollieModule, MollieService } = await import('@juicyllama/app-mollie')
+			const { MollieModule, MollieService } = await Modules.mollie.load()
 			try {
 				const mollieModule = await this.lazyModuleLoader.load(() => MollieModule)
 				const mollieService = mollieModule.get(MollieService)
@@ -250,9 +250,9 @@ export class PaymentMethodsService extends BaseService<T> {
 
 	async mollieChargeCard(payment_method: T, amount: number): Promise<void> {
 		const domain = 'billing::PaymentMethodsService::mollieChargeCard'
-		if (Modules.isInstalled('@juicyllama/app-mollie')) {
+		if (Modules.mollie.isInstalled) {
 			//@ts-ignore
-			const { MollieModule, MollieService } = await import('@juicyllama/app-mollie')
+			const { MollieModule, MollieService } = await Modules.mollie.load()
 			try {
 				const mollieModule = await this.lazyModuleLoader.load(() => MollieModule)
 				const mollieService = mollieModule.get(MollieService)

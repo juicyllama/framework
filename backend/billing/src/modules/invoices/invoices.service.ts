@@ -66,11 +66,11 @@ export class InvoicesService extends BaseService<T> {
 	async xeroCreateInvoice(invoice: T): Promise<T> {
 		const domain = 'cron::billing::invoices::xeroCreateInvoice'
 
-		if (Modules.isInstalled('@juicyllama/app-xero-cc')) {
+		if (Modules.xerocc.isInstalled) {
 			this.logger.debug(`[${domain}] Xero installed, create xero invoice for #${invoice.invoice_id}`, invoice)
 
 			//@ts-ignore
-			const { XeroModule, XeroService } = await import('@juicyllama/app-xero-cc')
+			const { XeroModule, XeroService } = await Modules.xerocc.load()
 
 			try {
 				const xeroModule = await this.lazyModuleLoader.load(() => XeroModule)
@@ -134,9 +134,9 @@ export class InvoicesService extends BaseService<T> {
 	async xeroAddPayment(invoice: T, amount: number): Promise<void> {
 		const domain = 'cron::billing::invoices::xeroAddPayment'
 
-		if (Modules.isInstalled('@juicyllama/app-xero-cc')) {
+		if (Modules.xerocc.isInstalled) {
 			//@ts-ignore
-			const { XeroModule, XeroService } = await import('@juicyllama/app-xero-cc')
+			const { XeroModule, XeroService } = await Modules.xerocc.load()
 
 			try {
 				const xeroModule = await this.lazyModuleLoader.load(() => XeroModule)

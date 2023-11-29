@@ -9,8 +9,8 @@ export class Markdown {
 	 */
 
 	async markdownToHTML(markdown: string): Promise<string> {
-		if (Modules.isInstalled('showdown')) {
-			const showdown = await import('showdown')
+		if (Modules.showdown.isInstalled) {
+			const showdown = await Modules.showdown.load()
 			const converter = new showdown.Converter()
 			return converter.makeHtml(markdown)
 		} else {
