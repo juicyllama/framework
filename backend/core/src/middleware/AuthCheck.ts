@@ -1,6 +1,6 @@
 import { forwardRef, Inject, Injectable, NestMiddleware } from '@nestjs/common'
 import { NextFunction } from 'express'
-import { Logger, Modules } from '@juicyllama/utils'
+import { Modules } from '@juicyllama/utils'
 import { AuthService } from '../modules/auth/auth.service'
 import { AccountService } from '../modules/accounts/account.service'
 
