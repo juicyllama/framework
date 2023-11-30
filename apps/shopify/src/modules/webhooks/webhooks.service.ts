@@ -1,19 +1,19 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { Shopify, ShopifySession } from '../../config/shopify.config'
-import { Logger } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
 import { InstalledApp, OauthService } from '@juicyllama/app-store'
-import { ShopifyRestListWebhooks, ShopifyWebhook, ShopifyWebhookCreate } from './webhooks.dto'
+import { Logger } from '@juicyllama/utils'
+import { ApiVersion, Shopify } from '@shopify/shopify-api'
+import { ShopifySession } from '../../config/shopify.config'
+import { InjectShopify } from '../provider/provider.constants'
 import { ShopifyRest } from '../shopify.common.dto'
+import { ShopifyRestListWebhooks, ShopifyWebhook, ShopifyWebhookCreate } from './webhooks.dto'
 import { ShopifyWebhooksTopicRoutes, ShopifyWebhooksTopics } from './webhooks.enums'
-import { ApiVersion } from '@shopify/shopify-api'
 
 @Injectable()
 export class ShopifyWebhooksService {
 	constructor(
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
 		@Inject(forwardRef(() => OauthService)) private readonly oauthService: OauthService,
+		@InjectShopify() private readonly shopify: Shopify,
 	) {}
 
 	async createWebhook(
@@ -23,11 +23,10 @@ export class ShopifyWebhooksService {
 	): Promise<ShopifyWebhook> {
 		const domain = 'app::shopify::webhook::getWebhooks'
 
-		const shopify = Shopify(this.configService.get('shopify'))
 		const oath = await this.oauthService.findOne({ where: { installed_app_id: installed_app.installed_app_id } })
 		const session = ShopifySession(installed_app, oath)
 
-		const client = new shopify.clients.Rest({
+		const client = new this.shopify.clients.Rest({
 			session,
 			apiVersion: options.api_version,
 		})
@@ -76,11 +75,10 @@ export class ShopifyWebhooksService {
 	async getWebhooks(installed_app: InstalledApp, options: ShopifyRestListWebhooks): Promise<ShopifyWebhook[]> {
 		const domain = 'app::shopify::webhook::getWebhooks'
 
-		const shopify = Shopify(this.configService.get('shopify'))
 		const oath = await this.oauthService.findOne({ where: { installed_app_id: installed_app.installed_app_id } })
 		const session = ShopifySession(installed_app, oath)
 
-		const client = new shopify.clients.Rest({
+		const client = new this.shopify.clients.Rest({
 			session,
 			apiVersion: options.api_version,
 		})

@@ -9,6 +9,7 @@ import { AppsModule, InstalledAppsModule, OAuthModule } from '@juicyllama/app-st
 import { AuthModule, jwtConfig } from '@juicyllama/core'
 import { JwtModule } from '@nestjs/jwt'
 import { StoresModule } from '@juicyllama/ecommerce'
+import { ShopifyProviderModule } from '../provider/provider.module'
 
 @Module({
 	imports: [
@@ -23,6 +24,7 @@ import { StoresModule } from '@juicyllama/ecommerce'
 		forwardRef(() => OAuthModule),
 		forwardRef(() => InstalledAppsModule),
 		forwardRef(() => StoresModule),
+		ShopifyProviderModule,
 	],
 	controllers: [ShopifyAuthController],
 	providers: [Logger],

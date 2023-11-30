@@ -17,7 +17,7 @@ export class ShopifyInstallationService implements OnModuleInit {
 	) {}
 
 	async onModuleInit() {
-		try{
+		try {
 			const app = await this.appsService.findOne({
 				where: {
 					integration_name: AppStoreIntegrationName.shopify,
@@ -59,7 +59,6 @@ export class ShopifyInstallationService implements OnModuleInit {
 					],
 				})
 			}
-
 		} catch (e: any) {
 			this.logger.error(e.message, e)
 		}

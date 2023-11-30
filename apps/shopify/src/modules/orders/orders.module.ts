@@ -1,9 +1,5 @@
 import { Module, forwardRef } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
-import { Env, Logger } from '@juicyllama/utils'
-import Joi from 'joi'
-import shopifyConfig from '../../config/shopify.config'
-import { shopifyConfigJoi } from '../../config/shopify.config.joi'
+import { Logger } from '@juicyllama/utils'
 import { InstalledAppsModule, OAuthModule } from '@juicyllama/app-store'
 import { ShopifyOrdersService } from './orders.service'
 import { ShopifyOrdersController } from './orders.controller'
@@ -13,14 +9,10 @@ import { ShopifyOrdersCronService } from './orders.cron.service'
 import { StoresModule, TransactionDiscountsModule, TransactionsModule } from '@juicyllama/ecommerce'
 import { ShopifyOrdersMapperService } from './orders.mapper.service'
 import { ContactsModule } from '@juicyllama/crm'
+import { ShopifyProviderModule } from '../provider/provider.module'
 
 @Module({
 	imports: [
-		ConfigModule.forRoot({
-			isGlobal: true,
-			load: [shopifyConfig],
-			validationSchema: Env.IsNotTest() ? Joi.object(shopifyConfigJoi) : null,
-		}),
 		ScheduleModule.forRoot(),
 		forwardRef(() => ContactsModule),
 		forwardRef(() => OAuthModule),
@@ -28,6 +20,7 @@ import { ContactsModule } from '@juicyllama/crm'
 		forwardRef(() => StoresModule),
 		forwardRef(() => TransactionsModule),
 		forwardRef(() => TransactionDiscountsModule),
+		ShopifyProviderModule,
 	],
 	controllers: [ShopifyOrdersController, ShopifyOrdersCronController],
 	providers: [ShopifyOrdersService, ShopifyOrdersCronService, ShopifyOrdersMapperService, Logger],

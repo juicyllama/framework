@@ -1,20 +1,22 @@
 import { Controller, forwardRef, Inject, Get, Query, Req, Res, BadRequestException } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { ApiHideProperty } from '@nestjs/swagger'
 import { Logger } from '@juicyllama/utils'
 import { ShopifyAuthRedirectQuery } from './auth.dto'
-import { Shopify, ShopifyAuthRedirect, ShopifyAuthScopes } from '../../config/shopify.config'
-import { ConfigService } from '@nestjs/config'
-import { AppIntegrationStatus, InstalledAppsService, Oauth, OauthService, AppsService } from '@juicyllama/app-store'
+import { ShopifyAuthRedirect, ShopifyAuthScopes } from '../../config/shopify.config'
+import { AppIntegrationStatus, InstalledAppsService, Oauth, OauthService } from '@juicyllama/app-store'
 import { AccountId, UserAuth } from '@juicyllama/core'
 import { v4 as uuidv4 } from 'uuid'
 import { StoresService } from '@juicyllama/ecommerce'
+import { InjectShopify } from '../provider/provider.constants'
+import { Shopify } from '@shopify/shopify-api'
 
 @Controller('app/shopify/auth')
 export class ShopifyAuthController {
 	constructor(
-		@Inject(forwardRef(() => AppsService)) private readonly appsService: AppsService,
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		private readonly configService: ConfigService,
+		@InjectShopify() private readonly shopify: Shopify,
 		@Inject(forwardRef(() => OauthService)) private readonly oauthService: OauthService,
 		@Inject(forwardRef(() => InstalledAppsService)) private readonly installedAppsService: InstalledAppsService,
 		@Inject(forwardRef(() => StoresService)) private readonly storesService: StoresService,
@@ -119,9 +121,8 @@ export class ShopifyAuthController {
 
 		res.setHeader('Set-Cookie', [`app_shopify_state=${query.state}; Path=/;`])
 
-		const shopify = Shopify(this.configService.get('shopify'))
-		await shopify.auth.begin({
-			shop: shopify.utils.sanitizeShop(query.shop, true),
+		await this.shopify.auth.begin({
+			shop: this.shopify.utils.sanitizeShop(query.shop, true),
 			callbackPath: `/app/shopify/auth/complete`,
 			isOnline: false,
 			rawRequest: req,
@@ -136,9 +137,7 @@ export class ShopifyAuthController {
 		const domain = 'app::shopify::auth::controller::complete'
 		this.logger.log(`[${domain}] Complete`, query)
 
-		const shopify = Shopify(this.configService.get('shopify'))
-
-		const callback = await shopify.auth.callback({
+		const callback = await this.shopify.auth.callback({
 			rawRequest: req,
 			rawResponse: res,
 		})
