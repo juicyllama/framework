@@ -1,26 +1,13 @@
-import { Module, forwardRef } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
-import { Env, Logger } from '@juicyllama/utils'
-import Joi from 'joi'
-import shopifyConfig from '../../config/shopify.config'
-import { shopifyConfigJoi } from '../../config/shopify.config.joi'
 import { InstalledAppsModule } from '@juicyllama/app-store'
-import { ShopifyShopService } from './shop.service'
-import { ShopifyShopController } from './shop.controller'
-import { ScheduleModule } from '@nestjs/schedule'
 import { StoresModule } from '@juicyllama/ecommerce'
+import { Logger } from '@juicyllama/utils'
+import { Module } from '@nestjs/common'
+import { ScheduleModule } from '@nestjs/schedule'
+import { ShopifyShopController } from './shop.controller'
+import { ShopifyShopService } from './shop.service'
 
 @Module({
-	imports: [
-		ConfigModule.forRoot({
-			isGlobal: true,
-			load: [shopifyConfig],
-			validationSchema: Env.IsNotTest() ? Joi.object(shopifyConfigJoi) : null,
-		}),
-		ScheduleModule.forRoot(),
-		forwardRef(() => InstalledAppsModule),
-		forwardRef(() => StoresModule),
-	],
+	imports: [ScheduleModule.forRoot(), InstalledAppsModule, StoresModule],
 	controllers: [ShopifyShopController],
 	providers: [ShopifyShopService, Logger],
 	exports: [ShopifyShopService],

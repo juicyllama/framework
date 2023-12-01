@@ -1,25 +1,25 @@
-import { Controller, forwardRef, Inject, Get, Query, Req, Res, BadRequestException } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
-import { ApiHideProperty } from '@nestjs/swagger'
-import { Logger } from '@juicyllama/utils'
-import { ShopifyAuthRedirectQuery } from './auth.dto'
-import { ShopifyAuthRedirect, ShopifyAuthScopes } from '../../config/shopify.config'
 import { AppIntegrationStatus, InstalledAppsService, Oauth, OauthService } from '@juicyllama/app-store'
 import { AccountId, UserAuth } from '@juicyllama/core'
-import { v4 as uuidv4 } from 'uuid'
 import { StoresService } from '@juicyllama/ecommerce'
-import { InjectShopify } from '../provider/provider.constants'
+import { Logger } from '@juicyllama/utils'
+import { Controller, Get, Query, Req, Res, BadRequestException } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { ApiHideProperty } from '@nestjs/swagger'
 import { Shopify } from '@shopify/shopify-api'
+import { v4 as uuidv4 } from 'uuid'
+import { ShopifyAuthRedirect, ShopifyAuthScopes } from '../../config/shopify.config'
+import { InjectShopify } from '../provider/provider.constants'
+import { ShopifyAuthRedirectQuery } from './auth.dto'
 
 @Controller('app/shopify/auth')
 export class ShopifyAuthController {
 	constructor(
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		private readonly logger: Logger,
 		private readonly configService: ConfigService,
 		@InjectShopify() private readonly shopify: Shopify,
-		@Inject(forwardRef(() => OauthService)) private readonly oauthService: OauthService,
-		@Inject(forwardRef(() => InstalledAppsService)) private readonly installedAppsService: InstalledAppsService,
-		@Inject(forwardRef(() => StoresService)) private readonly storesService: StoresService,
+		private readonly oauthService: OauthService,
+		private readonly installedAppsService: InstalledAppsService,
+		private readonly storesService: StoresService,
 	) {}
 
 	@UserAuth()
@@ -145,7 +145,7 @@ export class ShopifyAuthController {
 		this.logger.log(`[${domain}] Callback`, {
 			callback: callback,
 			state: req.cookies.app_shopify_state,
-			reidrect_url: req.cookies.app_shopify_redirect_url,
+			redirect_url: req.cookies.app_shopify_redirect_url,
 		})
 
 		const oath = await this.oauthService.findOne({ where: { state: req.cookies.app_shopify_state } })

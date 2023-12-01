@@ -1,7 +1,7 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { InstalledApp, OauthService } from '@juicyllama/app-store'
 import { Store, StoresService, Transaction, TransactionsService } from '@juicyllama/ecommerce'
 import { Logger } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
 import { Shopify } from '@shopify/shopify-api'
 import { ShopifySession } from '../../config/shopify.config'
 import { InjectShopify } from '../provider/provider.constants'
@@ -11,12 +11,11 @@ import { ShopifyOrdersMapperService } from './orders.mapper.service'
 @Injectable()
 export class ShopifyOrdersService {
 	constructor(
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		private readonly logger: Logger,
 		@InjectShopify() private readonly shopify: Shopify,
-		@Inject(forwardRef(() => OauthService)) private readonly oauthService: OauthService,
-		@Inject(forwardRef(() => TransactionsService)) private readonly transactionsService: TransactionsService,
-		@Inject(forwardRef(() => StoresService)) private readonly storesService: StoresService,
-		@Inject(forwardRef(() => ShopifyOrdersMapperService))
+		private readonly oauthService: OauthService,
+		private readonly transactionsService: TransactionsService,
+		private readonly storesService: StoresService,
 		private readonly mapperService: ShopifyOrdersMapperService,
 	) {}
 

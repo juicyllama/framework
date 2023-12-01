@@ -1,21 +1,21 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { Logger } from '@juicyllama/utils'
-import { LessThan, IsNull } from 'typeorm'
 import { AppStoreIntegrationName, InstalledAppsService, AppIntegrationStatus } from '@juicyllama/app-store'
 import { CronRunner } from '@juicyllama/core'
-import { Cron, CronExpression } from '@nestjs/schedule'
 import { StoresService } from '@juicyllama/ecommerce'
-import { ShopifyOrdersService } from './orders.service'
+import { Logger } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
+import { Cron, CronExpression } from '@nestjs/schedule'
 import { ApiVersion } from '@shopify/shopify-api'
 import _ from 'lodash'
+import { LessThan, IsNull } from 'typeorm'
+import { ShopifyOrdersService } from './orders.service'
 
 @Injectable()
 export class ShopifyOrdersCronService {
 	constructor(
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => InstalledAppsService)) private readonly installedAppsService: InstalledAppsService,
-		@Inject(forwardRef(() => ShopifyOrdersService)) private readonly shopifyOrdersService: ShopifyOrdersService,
-		@Inject(forwardRef(() => StoresService)) private readonly storesService: StoresService,
+		private readonly logger: Logger,
+		private readonly installedAppsService: InstalledAppsService,
+		private readonly shopifyOrdersService: ShopifyOrdersService,
+		private readonly storesService: StoresService,
 	) {}
 
 	@Cron(CronExpression.EVERY_10_MINUTES, { disabled: !process.env.CRON_APP_SHOPIFY_SYNC_ORDERS })

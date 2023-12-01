@@ -1,6 +1,6 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { InstalledApp, OauthService } from '@juicyllama/app-store'
 import { Logger } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
 import { ApiVersion, Shopify } from '@shopify/shopify-api'
 import { ShopifySession } from '../../config/shopify.config'
 import { InjectShopify } from '../provider/provider.constants'
@@ -11,8 +11,8 @@ import { ShopifyWebhooksTopicRoutes, ShopifyWebhooksTopics } from './webhooks.en
 @Injectable()
 export class ShopifyWebhooksService {
 	constructor(
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => OauthService)) private readonly oauthService: OauthService,
+		private readonly logger: Logger,
+		private readonly oauthService: OauthService,
 		@InjectShopify() private readonly shopify: Shopify,
 	) {}
 

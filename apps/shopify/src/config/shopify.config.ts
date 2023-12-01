@@ -1,8 +1,8 @@
+import { InstalledApp, Oauth } from '@juicyllama/app-store'
 import { registerAs } from '@nestjs/config'
 import '@shopify/shopify-api/adapters/node'
 import { shopifyApi, LATEST_API_VERSION, Session } from '@shopify/shopify-api'
 import { shopifyConfigDto } from './shopify.config.dto'
-import { InstalledApp, Oauth } from '@juicyllama/app-store'
 
 export default registerAs(
 	'shopify',

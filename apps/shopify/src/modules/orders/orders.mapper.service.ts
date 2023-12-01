@@ -1,5 +1,12 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { ShopifyOrder, ShopifyOrderDiscountCodes } from './orders.dto'
+import { InstalledApp } from '@juicyllama/app-store'
+import {
+	ContactsService,
+	ContactEmailService,
+	ContactAddressService,
+	ContactPhoneService,
+	Contact,
+	ContactAddress,
+} from '@juicyllama/crm'
 import {
 	Store,
 	Transaction,
@@ -11,26 +18,18 @@ import {
 	TransactionsService,
 	UpdateTransactionDto,
 } from '@juicyllama/ecommerce'
-import {
-	ContactsService,
-	ContactEmailService,
-	ContactAddressService,
-	ContactPhoneService,
-	Contact,
-	ContactAddress,
-} from '@juicyllama/crm'
+import { Injectable } from '@nestjs/common'
+import { ShopifyOrder, ShopifyOrderDiscountCodes } from './orders.dto'
 import { ShopifyOrderDicountCodeType, ShopifyOrderFinancialStatus, ShopifyOrderFulfillmentStatus } from './orders.enums'
-import { InstalledApp } from '@juicyllama/app-store'
 
 @Injectable()
 export class ShopifyOrdersMapperService {
 	constructor(
-		@Inject(forwardRef(() => ContactsService)) private readonly contactsService: ContactsService,
-		@Inject(forwardRef(() => ContactEmailService)) private readonly contactEmailService: ContactEmailService,
-		@Inject(forwardRef(() => ContactAddressService)) private readonly contactAddressService: ContactAddressService,
-		@Inject(forwardRef(() => ContactPhoneService)) private readonly contactPhoneService: ContactPhoneService,
-		@Inject(forwardRef(() => TransactionsService)) private readonly transactionsService: TransactionsService,
-		@Inject(forwardRef(() => TransactionDiscountsService))
+		private readonly contactsService: ContactsService,
+		private readonly contactEmailService: ContactEmailService,
+		private readonly contactAddressService: ContactAddressService,
+		private readonly contactPhoneService: ContactPhoneService,
+		private readonly transactionsService: TransactionsService,
 		private readonly transactionsDiscountService: TransactionDiscountsService,
 	) {}
 
