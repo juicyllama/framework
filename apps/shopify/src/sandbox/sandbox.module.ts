@@ -2,8 +2,8 @@ import { databaseConfig } from '@juicyllama/core'
 import { Env } from '@juicyllama/utils'
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
+import { ScheduleModule } from '@nestjs/schedule'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import Joi from 'joi'
 import shopifyConfig from '../config/shopify.config'
 import { shopifyConfigJoi } from '../config/shopify.config.joi'
 import { ShopifyModule } from '../modules/shopify.module'
@@ -14,9 +14,10 @@ import { ShopifyModule } from '../modules/shopify.module'
 		ConfigModule.forRoot({
 			isGlobal: true,
 			load: [shopifyConfig],
-			validationSchema: Env.IsNotTest() ? Joi.object(shopifyConfigJoi) : null,
+			validationSchema: Env.IsNotTest() ? shopifyConfigJoi : null,
 		}),
 		TypeOrmModule.forRoot(databaseConfig()),
+		ScheduleModule.forRoot(),
 	],
 })
 export class SandboxModule {}
