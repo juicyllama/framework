@@ -3,7 +3,6 @@ import { ContactsModule } from '@juicyllama/crm'
 import { StoresModule, TransactionDiscountsModule, TransactionsModule } from '@juicyllama/ecommerce'
 import { Logger } from '@juicyllama/utils'
 import { Module } from '@nestjs/common'
-import { ScheduleModule } from '@nestjs/schedule'
 import { ShopifyProviderModule } from '../provider/provider.module'
 import { ShopifyOrdersController } from './orders.controller'
 import { ShopifyOrdersCronController } from './orders.cron.controller'
@@ -13,7 +12,6 @@ import { ShopifyOrdersService } from './orders.service'
 
 @Module({
 	imports: [
-		ScheduleModule.forRoot(),
 		ContactsModule,
 		OAuthModule,
 		InstalledAppsModule,
