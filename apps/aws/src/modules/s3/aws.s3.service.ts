@@ -3,7 +3,7 @@ import { DeleteObjectCommand, GetObjectCommand, ListObjectsCommand, S3Client } f
 import { Upload } from '@aws-sdk/lib-storage'
 import { awsS3Config } from './config/aws.s3.config'
 import { Logger } from '@juicyllama/utils'
-import { AwsS3Bucket, AwsS3Format } from './aws.s3.enums'
+import { AwsS3Bucket, AwsS3BucketType, AwsS3Format, AwsS3FormatType } from './aws.s3.enums'
 
 const streamToString = stream =>
 	new Promise((resolve, reject) => {
@@ -29,24 +29,24 @@ export class AwsS3Service {
 	async create(
 		location: string,
 		bucket: AwsS3Bucket,
-		format: AwsS3Format = AwsS3Format.JSON,
+		format: AwsS3Format = AwsS3FormatType.JSON,
 		file: any,
 	): Promise<any> {
 		const domain = 'app::aws::s3::AwsSecretsService::create'
 
-		this.logger.debug(`[${domain}][${awsS3Config().s3buckets[bucket].bucket}] create: ${location}`)
+		this.logger.debug(`[${domain}][${this.getBucket(bucket)}] create: ${location}`)
 
 		switch (format) {
-			case AwsS3Format.JSON:
+			case AwsS3FormatType.JSON:
 				file = Buffer.from(JSON.stringify(file))
 				break
 		}
 
 		try {
-			const client = new S3Client(awsS3Config().s3buckets[bucket].client)
+			const client = new S3Client(awsS3Config().client)
 
 			const params = {
-				Bucket: awsS3Config().s3buckets[bucket].bucket,
+				Bucket: this.getBucket(bucket),
 				Key: location,
 				Body: file,
 			}
@@ -83,11 +83,11 @@ export class AwsS3Service {
 	async findAll(location: string, bucket: AwsS3Bucket): Promise<any> {
 		const domain = 'app::aws::s3::AwsSecretsService::findAll'
 
-		this.logger.debug(`[${domain}][${awsS3Config().s3buckets[bucket].bucket}] ${location}`)
+		this.logger.debug(`[${domain}][${this.getBucket(bucket)}] ${location}`)
 
-		const client = new S3Client(awsS3Config().s3buckets[bucket].client)
+		const client = new S3Client(awsS3Config().client)
 		const command = new ListObjectsCommand({
-			Bucket: awsS3Config().s3buckets[bucket].bucket,
+			Bucket: this.getBucket(bucket),
 			Prefix: location,
 		})
 		const data = await client.send(command)
@@ -102,7 +102,7 @@ export class AwsS3Service {
 			}
 		}
 
-		this.logger.debug(`[${domain}][${bucket}] ${files.length} files found`)
+		this.logger.debug(`[${domain}][${this.getBucket(bucket)}] ${files.length} files found`)
 		return files
 	}
 
@@ -115,15 +115,15 @@ export class AwsS3Service {
 	 * @param {string} [uuid] optional debugging pass through
 	 */
 
-	async findOne(location: string, bucket: AwsS3Bucket, format: AwsS3Format = AwsS3Format.JSON): Promise<any> {
+	async findOne(location: string, bucket: AwsS3Bucket, format: AwsS3Format = AwsS3FormatType.JSON): Promise<any> {
 		const domain = 'app::aws::s3::AwsSecretsService::findOne'
 
-		this.logger.debug(`[${domain}][${awsS3Config().s3buckets[bucket].bucket}] ${location}`)
+		this.logger.debug(`[${domain}][${this.getBucket(bucket)}] ${location}`)
 
-		const client = new S3Client(awsS3Config().s3buckets[bucket].client)
+		const client = new S3Client(awsS3Config().client)
 
 		const command = new GetObjectCommand({
-			Bucket: awsS3Config().s3buckets[bucket].bucket,
+			Bucket: this.getBucket(bucket),
 			Key: location,
 		})
 
@@ -150,13 +150,13 @@ export class AwsS3Service {
 		this.logger.debug(`[${domain}] File found`)
 
 		switch (format) {
-			case AwsS3Format.JSON:
+			case AwsS3FormatType.JSON:
 				try {
 					result = JSON.parse(result.toString())
 				} catch (e) {
 					this.logger.error(`[${domain}] ${e.message}`, {
 						location: location,
-						bucket: bucket,
+						bucket: this.getBucket(bucket),
 						format: format,
 					})
 					return false
@@ -176,14 +176,24 @@ export class AwsS3Service {
 	async remove(location: string, bucket: AwsS3Bucket): Promise<any> {
 		const domain = 'app::aws::s3::AwsSecretsService::remove'
 
-		this.logger.debug(`[${domain}][${awsS3Config().s3buckets[bucket].bucket}] ${location}`)
+		this.logger.debug(`[${domain}][${this.getBucket(bucket)}] ${location}`)
 
-		const client = new S3Client(awsS3Config().s3buckets[bucket].client)
+		const client = new S3Client(awsS3Config().client)
 		const command = new DeleteObjectCommand({
-			Bucket: awsS3Config().s3buckets[bucket].bucket,
+			Bucket: this.getBucket(bucket),
 			Key: location,
 		})
 
 		return await client.send(command)
+	}
+
+	private getBucket(bucket: AwsS3Bucket): string {
+		if (bucket === AwsS3BucketType.PUBLIC) {
+			return awsS3Config().s3buckets[AwsS3BucketType.PUBLIC]
+		}else if (bucket === AwsS3BucketType.PRIVATE) {
+			return awsS3Config().s3buckets[AwsS3BucketType.PRIVATE]
+		}else{
+			return bucket
+		}
 	}
 }
