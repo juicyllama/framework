@@ -109,6 +109,10 @@ Checkout the [build a client application](https://github.com/juicyllama/client-q
 
 As our framework grows, with more applications using it, more apps added and more developers contributing, the value also increases, this network effect is the reason why we have opensourced our work.
 
+### Postman Collection
+
+You can access our [postman collection for the framework here](https://www.postman.com/juicyllama/workspace/framework/overview). This is a set of pre-build endpoints you can call on your local installation. 
+
 ### Development User
 
 When you first run the application locally, it will create a default account along with an account owner you can use to authenticate with. You can use this email and password to authenticate both the API and login via the frontend.

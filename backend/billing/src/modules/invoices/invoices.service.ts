@@ -9,7 +9,7 @@ import {
 	BaseService,
 	Query,
 	StorageService,
-	StorageFileType,
+	StorageType,
 } from '@juicyllama/core'
 
 import { Invoice } from './invoices.entity'
@@ -147,7 +147,7 @@ export class InvoicesService extends BaseService<T> {
 	}
 
 	async downloadInvoice(user, invoice_id): Promise<T> {
-		const file = await this.storageService.read(`invoices/${user.user_id}/${invoice_id}`, StorageFileType.PUBLIC)
+		const file = await this.storageService.read(`invoices/${user.user_id}/${invoice_id}`, StorageType.PUBLIC)
 		return file
 	}
 }

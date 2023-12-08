@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
 import { Query } from '../../utils/typeorm/Query'
 import { StorageService } from '../storage/storage.service'
-import { StorageFileFormat, StorageFileType } from '../storage/storage.enums'
+import { StorageFileFormat, StorageType } from '../storage/storage.enums'
 import { AuthService } from '../auth/auth.service'
 import { UsersService } from '../users/users.service'
 import { UserRole } from '../users/users.enums'
@@ -122,12 +122,12 @@ export class AccountService extends BaseService<T> {
 	}
 
 	async uploadAvatar(account: T, file: Express.Multer.File): Promise<T> {
-		const result = await this.storageService.write(
-			`accounts/${account.account_id}/avatar/${file.originalname}`,
-			StorageFileType.PUBLIC,
-			StorageFileFormat.Express_Multer_File,
-			file,
-		)
+		const result = await this.storageService.write({
+			location: `accounts/${account.account_id}/avatar/${file.originalname}`,
+			permissions: StorageType.PUBLIC,
+			format: StorageFileFormat.Express_Multer_File,
+			file: file,
+		})
 
 		if (result?.Location) {
 			account.avatar_image_url = result.Location

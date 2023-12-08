@@ -16,18 +16,22 @@ export class StorageService {
 	/**
 	 * Writes a file to storage
 	 *
-	 * @param {String} location where in the file should be saved
-	 * @param {StorageFileType} permissions the type of file
-	 * @param {StorageFileFormat} format the file format we are working with
-	 * @param {any} file the file contents to create (blob, json etc)
+	 * @param {
+	 *  	{String} location where in the file should be saved
+	 *  	{StorageFileType} permissions the type of file
+	 *  	{StorageFileFormat} format the file format we are working with
+	 *  	{any} file the file contents to create (blob, json etc)
+	 * 		{object} params additional params to pass to the s3 client
+	 * } options
 	 */
 
-	async write(
+	async write(options: {
 		location: string,
 		permissions: StorageFileType,
-		format: StorageFileFormat = StorageFileFormat.BLOB,
+		format?: StorageFileFormat,
 		file: any,
-	): Promise<any> {
+		params?: object
+	}): Promise<any> {
 		const domain = 'common::storage::write'
 
 		if (Enviroment.test === Enviroment[process.env.NODE_ENV]) {
@@ -35,18 +39,18 @@ export class StorageService {
 			return
 		}
 
-		this.logger.debug(`[${domain}] Create File: ${location}`)
+		this.logger.debug(`[${domain}] Create File: ${options.location}`)
 
-		if (format === StorageFileFormat.Express_Multer_File) {
+		if (options.format && options.format === StorageFileFormat.Express_Multer_File) {
 			//convert to blob
-			file = <Express.Multer.File>file
-			file = file.buffer
-			format = StorageFileFormat.BLOB
+			options.file = <Express.Multer.File>options.file
+			options.file = options.file.buffer
+			options.format = StorageFileFormat.BLOB
 		}
 
-		const cache_key = JLCache.cacheKey(domain, { location: location, permissions: permissions })
+		const cache_key = JLCache.cacheKey(domain, { location: options.location, permissions: options.permissions })
 		await this.cacheManager.del(cache_key)
-		await this.cacheManager.set(cache_key, file, CachePeriod.MONTH)
+		await this.cacheManager.set(cache_key, options.file, CachePeriod.MONTH)
 
 		let service: any
 
@@ -56,7 +60,13 @@ export class StorageService {
 			try {
 				const awsS3Module = await this.lazyModuleLoader.load(() => AwsS3Module)
 				service = awsS3Module.get(AwsS3Service)
-				return await service.create(location, permissions, format, file)
+				return await service.create({
+					location: options.location, 
+					bucket: options.permissions, 
+					format: options.format ?? StorageFileFormat.BLOB, 
+					file: options.file,
+					params: options.params
+				})
 			} catch (e: any) {
 				this.logger.error(`[${domain}] ${e.message}`, e)
 			}
@@ -71,8 +81,10 @@ export class StorageService {
 	/**
 	 * List files
 	 *
-	 * @param {String} location where in the bucket to store the file
-	 * @param {StorageFileType} permissions the type of file
+	 * @param {
+	 *  	{String} location where in the file should be saved
+	 *  	{StorageFileType} permissions the type of file
+	 * } options
 	 */
 
 	async list(location: string, permissions: StorageFileType): Promise<any> {
@@ -86,7 +98,7 @@ export class StorageService {
 			const { AwsS3Module, AwsS3Service } = await Modules.aws.load()
 			const awsS3Module = await this.lazyModuleLoader.load(() => AwsS3Module)
 			service = awsS3Module.get(AwsS3Service)
-			return await service.findAll(location, permissions)
+			return await service.findAll({location: location, bucket: permissions})
 		}
 
 		if (!service) {
@@ -98,9 +110,11 @@ export class StorageService {
 	/**
 	 * Return a file
 	 *
-	 * @param {String} location where in the bucket to store the file
-	 * @param {StorageFileType} permissions the type of file
-	 * @param {StorageFileFormat} format the file format we are working with
+	 * @param {
+	 *  	{String} location where in the file should be saved
+	 *  	{StorageFileType} permissions the type of file
+	 *  	{StorageFileFormat} format the file format we are working with
+	 * } options
 	 */
 
 	async read(
@@ -126,7 +140,7 @@ export class StorageService {
 			const { AwsS3Module, AwsS3Service } = await Modules.aws.load()
 			const awsS3Module = await this.lazyModuleLoader.load(() => AwsS3Module)
 			service = awsS3Module.get(AwsS3Service)
-			file = await service.findOne(location, permissions, format)
+			file = await service.findOne({location: location, bucket: permissions, format: format})
 		}
 
 		if (!service) {
@@ -146,8 +160,10 @@ export class StorageService {
 	/**
 	 * Deletes a file
 	 *
-	 * @param {String} location where in the file is stored
-	 * @param {StorageFileType} permissions the type of file
+	 * @param {
+	 *  	{String} location where in the file should be saved
+	 *  	{StorageFileType} permissions the type of file
+	 * } options
 	 */
 
 	async del(location: string, permissions: StorageFileType): Promise<any> {
@@ -164,7 +180,7 @@ export class StorageService {
 			const { AwsS3Module, AwsS3Service } = await Modules.aws.load()
 			const awsS3Module = await this.lazyModuleLoader.load(() => AwsS3Module)
 			service = awsS3Module.get(AwsS3Service)
-			await service.remove(location, permissions)
+			await service.remove({location: location, bucket: permissions})
 			return true
 		}
 

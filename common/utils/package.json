@@ -37,9 +37,10 @@
     "dependencies": {
         "@turf/turf": "^6.5.0",
         "axios": "latest",
-        "dayjs": "latest",
-        "showdown": "latest",
-        "csv-parser": "latest"
+        "csv-parser": "3.0.0",
+        "dayjs": "1.11.10",
+        "parquetjs": "0.11.2",
+        "showdown": "2.1.0"
     },
     "devDependencies": {
         "@juicyllama/dev": "workspace:^"

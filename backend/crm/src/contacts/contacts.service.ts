@@ -6,7 +6,7 @@ import {
 	StorageService,
 	UserAvatarType,
 	StorageFileFormat,
-	StorageFileType,
+	StorageType,
 	BaseService,
 } from '@juicyllama/core'
 import { Contact } from './contacts.entity'
@@ -102,12 +102,12 @@ export class ContactsService extends BaseService<T> {
 	 */
 
 	async uploadAvatar(contact: T, file: Express.Multer.File): Promise<T> {
-		const result = await this.storageService.write(
-			`account/${contact.account.account_id}/contacts/${contact.contact_id}/avatars/${file.originalname}`,
-			StorageFileType.PUBLIC,
-			StorageFileFormat.Express_Multer_File,
-			file,
-		)
+		const result = await this.storageService.write({
+			location: `account/${contact.account.account_id}/contacts/${contact.contact_id}/avatars/${file.originalname}`,
+			permissions: StorageType.PUBLIC,
+			format: StorageFileFormat.Express_Multer_File,
+			file: file,
+	})
 
 		if (result?.Location) {
 			contact = await this.query.update(this.repository, {

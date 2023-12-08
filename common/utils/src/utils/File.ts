@@ -1,7 +1,9 @@
 import * as fs from 'fs'
 import * as path from 'path'
+import * as crypto from 'crypto'
 import { Logger } from './Logger'
 import { Readable } from 'stream'
+import { Random } from './Random'
 
 const logger = new Logger()
 
@@ -67,4 +69,43 @@ export class File {
 			throw new Error(`Error creating temporary file: ${error}`)
 		}
 	}
+
+
+	/**
+	 * Create a temporary file from a string, useful for testing
+	 * @param content string
+	 * @returns void
+	 */
+
+	async createTempFilePath(fileName?: string): Promise<{
+		filePath: string
+		dirPath: string
+		fileName: string
+	}> {
+		try {
+			const tempDir = fs.mkdtempSync(path.join(fs.realpathSync('.'), 'temp-'))
+			if(!fileName){
+				fileName = Random.String(10)
+			}
+			
+			return {
+				filePath: path.join(tempDir, fileName),
+				dirPath: tempDir,
+				fileName: fileName,
+			}	
+		} catch (error) {
+			throw new Error(`Error creating temporary file path: ${error}`)
+		}
+	}
+
+	/**
+	 * Get the md5Checksum of a file
+	 */
+
+	md5Checksum(file: Buffer): string {
+		const hash = crypto.createHash('md5');
+		hash.update(file);
+		return hash.digest('base64');
+	}
+
 }

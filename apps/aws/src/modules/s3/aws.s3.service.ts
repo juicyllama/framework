@@ -1,9 +1,10 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { DeleteObjectCommand, GetObjectCommand, ListObjectsCommand, S3Client } from '@aws-sdk/client-s3'
-import { Upload } from '@aws-sdk/lib-storage'
+import { DeleteObjectCommand, GetObjectCommand, ListObjectsCommand, S3Client, PutObjectCommandInput } from '@aws-sdk/client-s3'
+import { Upload, Configuration } from '@aws-sdk/lib-storage'
+import { getApplyMd5BodyChecksumPlugin } from '@smithy/middleware-apply-body-checksum'
 import { awsS3Config } from './config/aws.s3.config'
 import { Logger } from '@juicyllama/utils'
-import { AwsS3Bucket, AwsS3BucketType, AwsS3Format, AwsS3FormatType } from './aws.s3.enums'
+import { AwsS3Bucket, AwsS3BucketType, AwsS3Format } from './aws.s3.enums'
 
 const streamToString = stream =>
 	new Promise((resolve, reject) => {
@@ -20,43 +21,67 @@ export class AwsS3Service {
 	/**
 	 * Writes the content to S3
 	 *
-	 * @param {String} location where in the bucket to store the file
-	 * @param {AwsS3Bucket} bucket the bucket to access
-	 * @param {AwsS3Format} format the file format we are working with
-	 * @param {any} file the file contents to create (blob, json etc)
+	 * @param {
+	 * 		{String} location where in the bucket to store the file
+	 * 		{AwsS3Bucket} bucket the bucket to access
+	 * 		{AwsS3Format} format the file format we are working with
+	 * 		{any} file the file contents to create (blob, json etc)
+	 * 		{object} params additional params to pass to the s3 client
+	 * } options
 	 */
 
-	async create(
+	async create(options: {
 		location: string,
 		bucket: AwsS3Bucket,
-		format: AwsS3Format = AwsS3FormatType.JSON,
+		format?: AwsS3Format,
 		file: any,
+		params?: PutObjectCommandInput,
+		sizing?: Configuration
+	}
 	): Promise<any> {
 		const domain = 'app::aws::s3::AwsSecretsService::create'
 
-		this.logger.debug(`[${domain}][${this.getBucket(bucket)}] create: ${location}`)
+		this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}] create: ${options.location}`)
 
-		switch (format) {
-			case AwsS3FormatType.JSON:
-				file = Buffer.from(JSON.stringify(file))
-				break
+		if(options.format){
+			switch (options.format) {
+				case AwsS3Format.JSON:
+					options.file = Buffer.from(JSON.stringify(options.file))
+					break
+			}
 		}
 
 		try {
 			const client = new S3Client(awsS3Config().client)
+			//bug fix for aws s3 checksum on large files: https://github.com/aws/aws-sdk-js-v3/issues/4321
+			client.middlewareStack.use(getApplyMd5BodyChecksumPlugin(client.config))
 
 			const params = {
-				Bucket: this.getBucket(bucket),
-				Key: location,
-				Body: file,
+				Bucket: this.getBucket(options.bucket),
+				Key: options.location,
+				Body: options.file,
+				...options.params
+			}
+
+			if(!options.sizing){
+				options.sizing = <Configuration>{
+				queueSize: 4,
+				partSize: 1024 * 1024 * 5, 
+				leavePartsOnError: false,
+				}
 			}
 
 			const upload = new Upload({
 				client,
 				params,
+				...options.sizing
 			})
 
-			return upload.done()
+			upload.on("httpUploadProgress", (progress) => {
+				this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}] Progress: `, progress)	
+			  });
+
+			return await upload.done()
 		} catch (e) {
 			this.logger.warn(
 				`[${domain}] Error: ${e.message}`,
@@ -64,8 +89,7 @@ export class AwsS3Service {
 					? {
 							status: e.response.status,
 							data: e.response.data,
-							location: location,
-							bucket: bucket,
+							options: options,
 					  }
 					: null,
 			)
@@ -75,20 +99,22 @@ export class AwsS3Service {
 
 	/**
 	 * List files in a s3 directory
-	 *
-	 * @param {String} location where in the bucket to store the file
-	 * @param {AwsS3Bucket} bucket the bucket to access
+	 * 
+	 * @param {
+	 * 		{String} location where in the bucket to store the file
+	 * 		{AwsS3Bucket} bucket the bucket to access
+	 * } options
 	 */
 
-	async findAll(location: string, bucket: AwsS3Bucket): Promise<any> {
+	async findAll(options: {location: string, bucket: AwsS3Bucket}): Promise<any> {
 		const domain = 'app::aws::s3::AwsSecretsService::findAll'
 
-		this.logger.debug(`[${domain}][${this.getBucket(bucket)}] ${location}`)
+		this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}] ${options.location}`)
 
 		const client = new S3Client(awsS3Config().client)
 		const command = new ListObjectsCommand({
-			Bucket: this.getBucket(bucket),
-			Prefix: location,
+			Bucket: this.getBucket(options.bucket),
+			Prefix: options.location,
 		})
 		const data = await client.send(command)
 
@@ -97,34 +123,35 @@ export class AwsS3Service {
 		if (data && data.Contents) {
 			for (const file of data.Contents) {
 				let fileName = file.Key
-				fileName = fileName.replace(location, '')
+				fileName = fileName.replace(options.location, '')
 				files.push(fileName)
 			}
 		}
 
-		this.logger.debug(`[${domain}][${this.getBucket(bucket)}] ${files.length} files found`)
+		this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}] ${files.length} files found`)
 		return files
 	}
 
 	/**
 	 * Return the content from S3
-	 *
-	 * @param {String} location where in the bucket to store the file
-	 * @param {AwsS3Bucket} bucket the bucket to access
-	 * @param {AwsS3Format} format the file format we are working with
-	 * @param {string} [uuid] optional debugging pass through
+	 * 
+	 * @param {
+	 * 		{String} location where in the bucket to store the file
+	 * 		{AwsS3Bucket} bucket the bucket to access
+	 * 		{AwsS3Format} format the file format we are working with
+	 * } options
 	 */
 
-	async findOne(location: string, bucket: AwsS3Bucket, format: AwsS3Format = AwsS3FormatType.JSON): Promise<any> {
+	async findOne(options: { location: string, bucket: AwsS3Bucket, format: AwsS3Format}): Promise<any> {
 		const domain = 'app::aws::s3::AwsSecretsService::findOne'
 
-		this.logger.debug(`[${domain}][${this.getBucket(bucket)}] ${location}`)
+		this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}] ${options.location}`)
 
 		const client = new S3Client(awsS3Config().client)
 
 		const command = new GetObjectCommand({
-			Bucket: this.getBucket(bucket),
-			Key: location,
+			Bucket: this.getBucket(options.bucket),
+			Key: options.location,
 		})
 
 		let result
@@ -139,8 +166,7 @@ export class AwsS3Service {
 					? {
 							status: e.response.status,
 							data: e.response.data,
-							location: location,
-							bucket: bucket,
+							options: options,
 					  }
 					: null,
 			)
@@ -149,18 +175,20 @@ export class AwsS3Service {
 
 		this.logger.debug(`[${domain}] File found`)
 
-		switch (format) {
-			case AwsS3FormatType.JSON:
-				try {
-					result = JSON.parse(result.toString())
-				} catch (e) {
-					this.logger.error(`[${domain}] ${e.message}`, {
-						location: location,
-						bucket: this.getBucket(bucket),
-						format: format,
-					})
-					return false
-				}
+		if(options.format){
+			switch (options.format) {
+				case AwsS3Format.JSON:
+					try {
+						result = JSON.parse(result.toString())
+					} catch (e) {
+						this.logger.error(`[${domain}] ${e.message}`, {
+							location: options.location,
+							bucket: this.getBucket(options.bucket),
+							format: options.format,
+						})
+						return false
+					}
+			}
 		}
 
 		return result
@@ -168,20 +196,22 @@ export class AwsS3Service {
 
 	/**
 	 * Deletes the content to S3
-	 *
-	 * @param {String} location where in the bucket to store the file
-	 * @param {AwsS3Bucket} bucket the bucket to access
+	 * 
+	 * @param {
+	 * 		{String} location where in the bucket to store the file
+	 * 		{AwsS3Bucket} bucket the bucket to access
+	 * } options
 	 */
 
-	async remove(location: string, bucket: AwsS3Bucket): Promise<any> {
+	async remove(options: {location: string, bucket: AwsS3Bucket}): Promise<any> {
 		const domain = 'app::aws::s3::AwsSecretsService::remove'
 
-		this.logger.debug(`[${domain}][${this.getBucket(bucket)}] ${location}`)
+		this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}] ${options.location}`)
 
 		const client = new S3Client(awsS3Config().client)
 		const command = new DeleteObjectCommand({
-			Bucket: this.getBucket(bucket),
-			Key: location,
+			Bucket: this.getBucket(options.bucket),
+			Key: options.location,
 		})
 
 		return await client.send(command)

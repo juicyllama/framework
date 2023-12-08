@@ -1,4 +1,4 @@
-import { Logger, Stopwatch } from '@juicyllama/utils'
+import { Dates, Logger, Stopwatch } from '@juicyllama/utils'
 
 export async function CronRunner(
 	domain: string,
@@ -21,13 +21,16 @@ export async function CronRunner(
 	}
 
 	const time = stopwatch.stop()
+	const date = new Date()
+	date.setSeconds(date.getSeconds() + time)
+	const friendlyTime = Dates.ahead(date)
 
 	const output = {
-		stopwatch: time + ' seconds',
+		stopwatch: friendlyTime,
 		result: cron_result,
 	}
 
 	logger.debug(`[${domain}][CRON_FINISH]`, output)
-	logger.debug(`[CRON_PERFORMANCE][${domain}] ${time} seconds`)
+	logger.debug(`[CRON_PERFORMANCE][${domain}] ${friendlyTime}`)
 	return output
 }

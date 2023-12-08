@@ -700,33 +700,7 @@ export class Query<T> {
 		return omitBy(options, isNil)
 	}
 
-	/**
-	 * Returns unique key fields for the given repository
-	 */
-
-	getUniqueKeyFields(repository: Repository<T>): string[] {
-		const uniques: string[] = []
-
-		if (repository.metadata.indices.length) {
-			if (repository.metadata.indices[0]?.columnNamesWithOrderingMap) {
-				for (const [key] of Object.entries(repository.metadata.indices[0]?.columnNamesWithOrderingMap)) {
-					uniques.push(key)
-				}
-			}
-		}
-
-		if (uniques.length) {
-			return uniques
-		}
-
-		const unqiueKeys: string[] = repository.metadata.uniques.map(e => e.givenColumnNames[0])
-		if (unqiueKeys.length) {
-			return unqiueKeys
-		}
-
-		return []
-	}
-
+	
 	/**
 	 * Duplicate key error
 	 */
@@ -745,7 +719,7 @@ export class Query<T> {
 
 			const uniqueKeyWhere = {}
 
-			for (const key of this.getUniqueKeyFields(repository)) {
+			for (const key of TypeOrm.getUniqueKeyFields(repository)) {
 				uniqueKeyWhere[key] = data[key]
 			}
 
@@ -777,7 +751,7 @@ export class Query<T> {
 
 			const uniqueKeyWhere = {}
 
-			for (const key of this.getUniqueKeyFields(repository)) {
+			for (const key of TypeOrm.getUniqueKeyFields(repository)) {
 				uniqueKeyWhere[key] = data[key]
 			}
 

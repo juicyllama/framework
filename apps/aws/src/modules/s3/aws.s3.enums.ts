@@ -7,11 +7,8 @@ export enum AwsS3BucketType {
 
 }
 
-export type AwsS3Format = AwsS3FormatType.BLOB | AwsS3FormatType.JSON | AwsS3FormatType.CSV | string
-
-export enum AwsS3FormatType {
+export enum AwsS3Format {
 	BLOB = 'BLOB',
 	JSON = 'JSON',
 	CSV = 'CSV',
-	PARQUET = 'PARQUET',
 }
