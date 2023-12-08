@@ -5,7 +5,7 @@ import { Logger } from '@juicyllama/utils'
 import { Controller, Get, Query, BadRequestException, Body, Post } from '@nestjs/common'
 import { ApiHideProperty } from '@nestjs/swagger'
 import { ApiVersion } from '@shopify/shopify-api'
-import { ShopifyOrder } from './orders.dto'
+import { ShopifyOrder, ShopifyQueryListOrders } from './orders.dto'
 import { ShopifyOrdersService } from './orders.service'
 
 @Controller('app/shopify/orders')
@@ -25,7 +25,7 @@ export class ShopifyOrdersController {
 	@Get('sync')
 	async sync(
 		@AccountId() account_id: number,
-		@Query() { installed_app_id, ...query }: { installed_app_id: number; [key: string]: any },
+		@Query() { installed_app_id, ...query }: ShopifyQueryListOrders,
 	): Promise<Transaction[]> {
 		const domain = 'app::shopify::orders::controller::sync'
 
@@ -62,7 +62,7 @@ export class ShopifyOrdersController {
 	@Get('list')
 	async list(
 		@AccountId() account_id: number,
-		@Query() { installed_app_id, ...query }: { installed_app_id: number; [key: string]: any },
+		@Query() { installed_app_id, ...query }: ShopifyQueryListOrders,
 	): Promise<ShopifyOrder[]> {
 		const domain = 'app::shopify::orders::controller::list'
 
