@@ -45,7 +45,7 @@ For example, if you want to build a SaaS API backend, you will likely need [@jui
 We leverage:
 
 -   [NestJS](https://nestjs.com/) for building APIs and backend applications
--   [Vue](https://vuejs.org) and [Quasar](https://quasar.dev/) for building frontend cross-platform applications
+-   [Vue](https://vuejs.org), [Quasar](https://quasar.dev/) and [Tailwindcss](https://tailwindcss.com/) for building frontend cross-platform applications
 
 We also have a number of utility / development modules that helps speed up development and provide additional functionality. 
 
