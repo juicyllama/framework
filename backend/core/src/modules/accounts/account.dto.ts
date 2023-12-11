@@ -121,7 +121,7 @@ export class AccountDto {
 	@MaxLength(255)
 	company_name?: string
 
-	@ApiProperty({ description: 'Company Registered Address Line 1', example: "1 Some Street" })
+	@ApiProperty({ description: 'Company Registered Address Line 1', example: '1 Some Street' })
 	@IsString()
 	@IsOptional()
 	@MaxLength(255)

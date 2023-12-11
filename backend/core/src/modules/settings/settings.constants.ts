@@ -1,4 +1,4 @@
-import { Setting } from "./settings.entity"
+import { Setting } from './settings.entity'
 
 export const SETTINGS_E = Setting
 export type SETTINGS_T = Setting

@@ -1,7 +1,7 @@
 import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common'
 import { BeaconService } from '../beacon/beacon.service'
 import { Account } from './account.entity'
-import { Logger, SupportedCurrencies, Random, Strings } from '@juicyllama/utils'
+import { Logger, SupportedCurrencies, Random } from '@juicyllama/utils'
 import { BaseService } from '../../helpers/baseService'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
@@ -46,7 +46,7 @@ export class AccountService extends BaseService<T> {
 	async onboard(data: OnboardAccountDto): Promise<SuccessAccountDto> {
 		const domain = 'core::account::service::onboard'
 
-		if(!data.account_name) {
+		if (!data.account_name) {
 			data.account_name = Random.Words(' ', 3, 'noun', 'capitalize')
 		}
 
@@ -61,11 +61,10 @@ export class AccountService extends BaseService<T> {
 		let user = await this.usersService.findOneByEmail(data.owners_email)
 
 		if (!user) {
-
 			let password_reset = false
 
-			if(!data.owners_password) {
-				data.owners_password = Random.Password(16)		
+			if (!data.owners_password) {
+				data.owners_password = Random.Password(16)
 				password_reset = true
 			}
 
@@ -81,11 +80,10 @@ export class AccountService extends BaseService<T> {
 			user = await this.authService.assignRole(user, account, UserRole.OWNER)
 			this.logger.debug(`[${domain}] New account owner created`, user)
 
-			if(password_reset){
+			if (password_reset) {
 				await this.accountHooks.TempPassowrd(user, data.owners_password)
 				this.logger.debug(`[${domain}] Temporary password email to owner`)
 			}
-
 		} else {
 			this.logger.debug(`[${domain}] New account created by existing user`, user)
 			user.accounts.push(account)

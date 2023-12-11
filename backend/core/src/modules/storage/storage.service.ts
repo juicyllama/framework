@@ -26,10 +26,10 @@ export class StorageService {
 	 */
 
 	async write(options: {
-		location: string,
-		permissions: StorageFileType,
-		format?: StorageFileFormat,
-		file: any,
+		location: string
+		permissions: StorageFileType
+		format?: StorageFileFormat
+		file: any
 		params?: object
 	}): Promise<any> {
 		const domain = 'common::storage::write'
@@ -61,11 +61,11 @@ export class StorageService {
 				const awsS3Module = await this.lazyModuleLoader.load(() => AwsS3Module)
 				service = awsS3Module.get(AwsS3Service)
 				return await service.create({
-					location: options.location, 
-					bucket: options.permissions, 
-					format: options.format ?? StorageFileFormat.BLOB, 
+					location: options.location,
+					bucket: options.permissions,
+					format: options.format ?? StorageFileFormat.BLOB,
 					file: options.file,
-					params: options.params
+					params: options.params,
 				})
 			} catch (e: any) {
 				this.logger.error(`[${domain}] ${e.message}`, e)
@@ -98,7 +98,7 @@ export class StorageService {
 			const { AwsS3Module, AwsS3Service } = await Modules.aws.load()
 			const awsS3Module = await this.lazyModuleLoader.load(() => AwsS3Module)
 			service = awsS3Module.get(AwsS3Service)
-			return await service.findAll({location: location, bucket: permissions})
+			return await service.findAll({ location: location, bucket: permissions })
 		}
 
 		if (!service) {
@@ -140,7 +140,7 @@ export class StorageService {
 			const { AwsS3Module, AwsS3Service } = await Modules.aws.load()
 			const awsS3Module = await this.lazyModuleLoader.load(() => AwsS3Module)
 			service = awsS3Module.get(AwsS3Service)
-			file = await service.findOne({location: location, bucket: permissions, format: format})
+			file = await service.findOne({ location: location, bucket: permissions, format: format })
 		}
 
 		if (!service) {
@@ -180,7 +180,7 @@ export class StorageService {
 			const { AwsS3Module, AwsS3Service } = await Modules.aws.load()
 			const awsS3Module = await this.lazyModuleLoader.load(() => AwsS3Module)
 			service = awsS3Module.get(AwsS3Service)
-			await service.remove({location: location, bucket: permissions})
+			await service.remove({ location: location, bucket: permissions })
 			return true
 		}
 

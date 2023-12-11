@@ -119,7 +119,6 @@ export class TypeOrm {
 		return options
 	}
 
-
 	/** Returns the table name of a given repository */
 
 	static getTableName<T>(repository: Repository<T>) {
@@ -192,9 +191,4 @@ export class TypeOrm {
 
 		return []
 	}
-
-	
-
-
-	
 }

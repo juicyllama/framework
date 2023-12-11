@@ -291,12 +291,14 @@ export function BulkUploadDecorator(options: { supportedFields?: string[]; dedup
 		`,
 		}),
 		ApiConsumes('multipart/form-data'),
-		UseInterceptors(FileInterceptor('file', {
-			limits: {
-				fieldSize: 1024 * 1024 * 50, // 50MB
-				fileSize: 1024 * 1024 * 50, // 50MB
-			},
-		})),
+		UseInterceptors(
+			FileInterceptor('file', {
+				limits: {
+					fieldSize: 1024 * 1024 * 50, // 50MB
+					fileSize: 1024 * 1024 * 50, // 50MB
+				},
+			}),
+		),
 		ApiOkResponse({ description: 'OK' }),
 		Post(`upload`),
 	]

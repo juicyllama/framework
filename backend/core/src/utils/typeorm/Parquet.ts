@@ -5,29 +5,25 @@ import { Repository, ColumnType } from 'typeorm'
 const logger = new Logger()
 
 export class TypemOrmParquet {
-	
 	/**
 	 * Generate a parquet schema from a TypeORM repository
 	 */
 
 	static schema<T>(repository: Repository<T>, skipColumns: string[]): any {
-
 		const schema = {}
 
 		const fields = TypeOrm.getColumnNames(repository)
 
 		for (const field of fields) {
-
-			if(skipColumns.includes(field)) continue
+			if (skipColumns.includes(field)) continue
 
 			schema[field] = {
 				type: this.type(TypeOrm.getColumnType(repository, field)),
-				optional: TypeOrm.isColumnNullable(repository, field)
+				optional: TypeOrm.isColumnNullable(repository, field),
 			}
 		}
 
 		return schema
-
 	}
 
 	/**
@@ -35,20 +31,19 @@ export class TypemOrmParquet {
 	 */
 
 	static type(type: ColumnType): string {
-	
 		switch (type) {
 			case 'int':
 			case 'int8':
 			case 'bigint':
 				return 'INT64'
-				
+
 			case 'number':
 			case 'int2':
 			case 'int4':
 			case 'smallint':
 			case 'integer':
 				return 'INT32'
-		
+
 			case 'decimal':
 			case 'numeric':
 			case 'money':
@@ -59,7 +54,7 @@ export class TypemOrmParquet {
 			case 'float4':
 			case 'float8':
 				return 'FLOAT'
-	
+
 			case 'varchar':
 			case 'character':
 			case 'char':
@@ -71,17 +66,16 @@ export class TypemOrmParquet {
 			case 'timestamp':
 			case 'date':
 				return 'UTF8'
-			
+
 			case 'boolean':
 			case 'bool':
 				return 'BOOLEAN'
-				
+
 			case 'json':
 			case 'jsonb':
 				return 'JSON'
-		
-			default:
 
+			default:
 				if (typeof type === 'function') {
 					switch (type.name) {
 						case 'Number':
@@ -89,19 +83,15 @@ export class TypemOrmParquet {
 						case 'String':
 							return 'UTF8'
 						default:
-							logger.warn(`[@juicyllama/core::utils::TypeORM::Parquet::type] Unknown function type: ${type}` )
+							logger.warn(
+								`[@juicyllama/core::utils::TypeORM::Parquet::type] Unknown function type: ${type}`,
+							)
 							return 'UTF8'
 					}
 				}
 
-				logger.warn(`[@juicyllama/core::utils::TypeORM::Parquet::type] Unknown type: ${type}` )
+				logger.warn(`[@juicyllama/core::utils::TypeORM::Parquet::type] Unknown type: ${type}`)
 				return 'UTF8'
 		}
-
-
-
-				
-
 	}
-	
 }

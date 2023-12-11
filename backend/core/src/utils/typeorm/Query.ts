@@ -600,8 +600,8 @@ export class Query<T> {
 						fieldLookupWhere.length === 1
 							? fieldLookupWhere[0]
 							: fieldLookupWhere.length > 0
-							? And(...fieldLookupWhere)
-							: value // if no valid operator is found, return the value as is - backward compatibility
+							  ? And(...fieldLookupWhere)
+							  : value // if no valid operator is found, return the value as is - backward compatibility
 				}
 			}
 		}
@@ -706,7 +706,6 @@ export class Query<T> {
 		return omitBy(options, isNil)
 	}
 
-	
 	/**
 	 * Duplicate key error
 	 */
@@ -738,8 +737,8 @@ export class Query<T> {
 				data: data,
 				error: {
 					message: e.message,
-					stack: e.stack
-				}
+					stack: e.stack,
+				},
 			})
 
 			return undefined
@@ -773,8 +772,8 @@ export class Query<T> {
 				data: data,
 				error: {
 					message: e.message,
-					stack: e.stack
-				}
+					stack: e.stack,
+				},
 			})
 
 			return undefined

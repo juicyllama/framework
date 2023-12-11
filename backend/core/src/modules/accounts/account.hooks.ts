@@ -33,7 +33,9 @@ export class AccountHooks {
 
 	async TempPassowrd(owner: User, password: string): Promise<void> {
 		const subject = `🔑 Temporary Password`
-		const markdown = `${owner.first_name ?? 'Hello'}, we have automatically created you a temporary password: <strong>${password}</strong> <br /><br />Please login and change your password as soon as possible.`
+		const markdown = `${
+			owner.first_name ?? 'Hello'
+		}, we have automatically created you a temporary password: <strong>${password}</strong> <br /><br />Please login and change your password as soon as possible.`
 		await this.beaconService.notify({
 			methods: {
 				email: true,
