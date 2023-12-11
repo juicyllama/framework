@@ -93,6 +93,17 @@ export class Logger {
 		}
 	}
 
+	status(): void {
+		this.log(`--------- Logging Status ---------`)
+		this.log(`LOG_LEVEL=${this.getLogLevel()}`)
+		this.error(`This is an error`)
+		this.warn(`This is a warning`)
+		this.log(`This is a log`)
+		this.debug(`This is a debug`)
+		this.verbose(`This is a verbose`)
+		this.log(`------- Logging Status End -------`)
+	}
+
 	table(data: any): void {
 		if (Env.IsDev()) {
 			console.table(data)
