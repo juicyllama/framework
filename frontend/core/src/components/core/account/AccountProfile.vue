@@ -5,7 +5,7 @@ import { useQuasar } from 'quasar'
 import { AccountStore } from '../../../store/account'
 import AccountAvatar from './AccountAvatar.vue'
 import { UserStore } from '../../../store/user'
-import { FormField, FormFieldButtonType, FormFieldField, FormFieldType, FormSettings } from '../../../types/form'
+import { FormField, FormFieldButtonType, FormFieldField, FormFieldType, FormViewSettings } from '../../../types/form'
 import { defaultFormSettings } from '../../../components/common/form/defaults'
 import { useRouter, useRoute } from 'vue-router'
 
@@ -16,7 +16,7 @@ const userStore = UserStore()
 const $q = useQuasar()
 
 const props = defineProps<{
-	formSettings?: FormSettings
+	formSettings?: FormViewSettings
 }>()
 
 const form: FormField[] = reactive([])
@@ -32,7 +32,7 @@ function createForm() {
 			field: FormFieldField.INPUT,
 			type: FormFieldType.TEXT,
 			required: true,
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -42,7 +42,7 @@ function createForm() {
 			field: FormFieldField.INPUT,
 			type: FormFieldType.TEXT,
 			required: false,
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -52,7 +52,7 @@ function createForm() {
 			field: FormFieldField.INPUT,
 			type: FormFieldType.TEXT,
 			required: false,
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -62,7 +62,7 @@ function createForm() {
 			field: FormFieldField.INPUT,
 			type: FormFieldType.TEXT,
 			required: false,
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -76,7 +76,7 @@ function createForm() {
 				tablet: 6,
 				desktop: 6,
 			},
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -90,7 +90,7 @@ function createForm() {
 				tablet: 6,
 				desktop: 6,
 			},
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -104,7 +104,7 @@ function createForm() {
 				tablet: 6,
 				desktop: 6,
 			},
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -118,7 +118,7 @@ function createForm() {
 				tablet: 6,
 				desktop: 6,
 			},
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -132,7 +132,7 @@ function createForm() {
 				tablet: 6,
 				desktop: 6,
 			},
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -146,7 +146,7 @@ function createForm() {
 				tablet: 6,
 				desktop: 6,
 			},
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -156,7 +156,7 @@ function createForm() {
 			field: FormFieldField.INPUT,
 			type: FormFieldType.TEXT,
 			required: false,
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{

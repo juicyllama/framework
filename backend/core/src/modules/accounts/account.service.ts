@@ -1,7 +1,7 @@
 import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common'
 import { BeaconService } from '../beacon/beacon.service'
 import { Account } from './account.entity'
-import { Logger, SupportedCurrencies } from '@juicyllama/utils'
+import { Logger, SupportedCurrencies, Random, Strings } from '@juicyllama/utils'
 import { BaseService } from '../../helpers/baseService'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
@@ -46,6 +46,10 @@ export class AccountService extends BaseService<T> {
 	async onboard(data: OnboardAccountDto): Promise<SuccessAccountDto> {
 		const domain = 'core::account::service::onboard'
 
+		if(!data.account_name) {
+			data.account_name = Random.Words(' ', 3, 'noun', 'capitalize')
+		}
+
 		const account_data = {
 			account_name: data.account_name,
 			currency:
@@ -57,17 +61,31 @@ export class AccountService extends BaseService<T> {
 		let user = await this.usersService.findOneByEmail(data.owners_email)
 
 		if (!user) {
+
+			let password_reset = false
+
+			if(!data.owners_password) {
+				data.owners_password = Random.Password(16)		
+				password_reset = true
+			}
+
 			const onboardOwner = {
 				email: data.owners_email,
 				password: data.owners_password,
 				first_name: data.owners_first_name,
 				last_name: data.owners_last_name,
-				password_reset: false,
+				password_reset: password_reset,
 				accounts: [account],
 			}
 			user = await this.usersService.create(onboardOwner)
 			user = await this.authService.assignRole(user, account, UserRole.OWNER)
 			this.logger.debug(`[${domain}] New account owner created`, user)
+
+			if(password_reset){
+				await this.accountHooks.TempPassowrd(user, data.owners_password)
+				this.logger.debug(`[${domain}] Temporary password email to owner`)
+			}
+
 		} else {
 			this.logger.debug(`[${domain}] New account created by existing user`, user)
 			user.accounts.push(account)
@@ -146,12 +164,10 @@ export class AccountService extends BaseService<T> {
 		const old_owner_role = await this.authService.assignRole(old_owner, account, UserRole.ADMIN)
 		return !!(new_owner_role.user_id && old_owner_role.user_id)
 	}
-	async getOwner(account) {
+	async getOwner(account_id: number): Promise<User> {
 		const role = await this.authService.findOne({
 			where: {
-				account: {
-					account_id: account.account_id,
-				},
+				account_id: account_id,
 				role: UserRole.OWNER,
 			},
 		})

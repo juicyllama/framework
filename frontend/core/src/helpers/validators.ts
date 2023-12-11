@@ -23,7 +23,7 @@ interface ValidationPassword {
 interface AuthFormState {
 	name?: string
 	stage?: number
-	email?: string
+	email: string
 	code?: string
 	password?: ValidationPassword
 }

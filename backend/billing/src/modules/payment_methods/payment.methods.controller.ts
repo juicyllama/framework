@@ -13,11 +13,9 @@ import {
 	Req,
 	Res,
 } from '@nestjs/common'
-import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { ApiHeader, ApiHideProperty, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
-import { Cache } from 'cache-manager'
 import { AccountId, AccountService, AuthService, ReadManyDecorator, UserAuth, UserRole } from '@juicyllama/core'
-import { CachePeriod, Logger, SupportedCurrencies } from '@juicyllama/utils'
+import { Logger, SupportedCurrencies } from '@juicyllama/utils'
 import { PaymentMethodsService } from './payment.methods.service'
 import { PaymentMethod } from './payment.methods.entity'
 import {
@@ -34,7 +32,6 @@ import { BILLING_PAYMENT_MENTHODS_NAME } from './payment.methods.constants'
 
 const E = PaymentMethod
 type T = PaymentMethod
-const cache_key = 'redirect_url'
 
 @ApiTags('Payment Methods')
 @Controller('billing/payment/methods')
@@ -44,7 +41,6 @@ export class PaymentMethodsController {
 		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
 		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
 		@Inject(forwardRef(() => PaymentMethodsService)) private readonly paymentMethodsService: PaymentMethodsService,
-		@Inject(CACHE_MANAGER) private cacheManager: Cache,
 		@Inject(forwardRef(() => JLQuery)) private readonly query: JLQuery<T>,
 	) {}
 
@@ -55,7 +51,6 @@ export class PaymentMethodsController {
 	@ApiHideProperty()
 	@Get('redirect/:account_id/:ext_payment_method_id/:payment_status')
 	async addRedirect(
-		@Req() req,
 		@Res() res: any,
 		@Param('account_id') account_id: number,
 		@Param('ext_payment_method_id') ext_payment_method_id: number,
@@ -63,12 +58,10 @@ export class PaymentMethodsController {
 	): Promise<void> {
 		const domain = 'billing::PaymentMethodsController::addRedirect'
 
-		const payment_method = await this.paymentMethodsService.findOne({
+		let payment_method = await this.paymentMethodsService.findOne({
 			where: {
-				account: {
-					account_id: account_id,
-				},
-				status: PaymentMethodStatus.pending,
+				account_id: account_id,
+				app_payment_method_id: ext_payment_method_id,
 			},
 			order: {
 				created_at: 'DESC',
@@ -76,10 +69,14 @@ export class PaymentMethodsController {
 		})
 
 		if (!payment_method) {
-			this.logger.error(`[${domain}] Payment method not found`, {
-				account_id: account_id,
-				ext_payment_method_id: ext_payment_method_id,
-				payment_status: payment_status,
+			payment_method = await this.paymentMethodsService.findOne({
+				where: {
+					account_id: account_id,
+					status: PaymentMethodStatus.pending,
+				},
+				order: {
+					created_at: 'DESC',
+				},
 			})
 		}
 
@@ -104,12 +101,13 @@ export class PaymentMethodsController {
 			}
 		}
 
-		const redirect_url = <string>await this.cacheManager.get(cache_key)
-		if (redirect_url) {
-			res.redirect(`${redirect_url}?status=${payment_status}`)
-		} else {
-			res.redirect(`${process.env.APP_BASE_URL}?status=${payment_status}`)
-		}
+		this.logger.error(`[${domain}] Payment method not found`, {
+			account_id: account_id,
+			app_payment_method_id: ext_payment_method_id,
+			payment_status: payment_status,
+		})
+
+		res.redirect(payment_method.client_redirect_url)
 	}
 
 	@ApiOperation({
@@ -126,15 +124,9 @@ export class PaymentMethodsController {
 	async create(
 		@Req() req,
 		@AccountId() account_id: number,
-		@Body()
-		data: {
-			payment_method: CreatePaymentMethodDto
-			description?: string
-		},
+		@Body() data: CreatePaymentMethodDto,
 	): Promise<T> {
 		const domain = 'billing::PaymentMethodsController::create'
-
-		await this.cacheManager.set(cache_key, data.payment_method.redirect_url, CachePeriod.DAY)
 
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 
@@ -146,6 +138,7 @@ export class PaymentMethodsController {
 				account: account,
 				method: data.payment_method.method,
 				currency: data.payment_method.currency,
+				client_redirect_url: data.payment_method.redirect_url,
 			},
 			description: data.description,
 		})

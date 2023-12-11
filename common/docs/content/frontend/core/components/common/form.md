@@ -46,7 +46,6 @@ import type {
 	FormFieldButtonType,
 	FormFieldField,
 	FormFieldType,
-	FormSettings,
 } from '@juicyllama/frontend-core'
 
 const form: FormField[] = reactive([])

@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { usersTableSchema } from '../../../components/core/users/users.table.schema'
-import { JLTable, IconSettings, userStore, FormSettings } from '../../../index'
+import { JLTable, IconSettings, userStore, FormViewSettings } from '../../../index'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
 const route = useRoute()
 
 const props = defineProps<{
-	formSettings?: FormSettings
+	formSettings?: FormViewSettings
 	visibleColumns: string[]
 	icon: IconSettings
 }>()

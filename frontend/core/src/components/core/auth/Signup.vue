@@ -6,12 +6,12 @@ import AuthActions from '../../../components/core/auth/Actions.vue'
 import type { CreateAccount } from '../../../types/account'
 import { AccountStore } from '../../../store/account'
 import { useRouter } from 'vue-router'
+import { FormViewSettings, FormViewDesignSettings } from '../../../types'
 
 const props = defineProps<{
-	dense?: boolean
 	skip_account_name?: boolean
 	success_redirect?: string
-	lazy_rules?: boolean
+	settings?: FormViewSettings
 }>()
 
 const state = reactive(<CreateAccount>{
@@ -38,7 +38,6 @@ const router = useRouter()
 
 async function create(state: CreateAccount) {
 	loading.value = true
-
 
 	if (props.skip_account_name) {
 		state.account_name = `${state.first_name} ${state.last_name} project`

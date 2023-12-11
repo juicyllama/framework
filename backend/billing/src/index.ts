@@ -60,6 +60,7 @@ import { WithdrawalSelect, WithdrawalOrderBy, WithdrawalRelations } from './modu
 // DTOs
 import { PricingDto } from './modules/billing.dto'
 import {
+	PaymentMethodDetails,
 	CreatePaymentMethodDto,
 	PaymentMethodBankTransferDetails,
 	PaymentMethodCreditCardDetails,
@@ -117,6 +118,7 @@ export {
 	PaymentMethodSelect,
 	PaymentMethodOrderBy,
 	PaymentMethodRelations,
+	PaymentMethodDetails,
 	PaymentMethodType,
 	SubscriptionOrderBy,
 	SubscriptionRelations,

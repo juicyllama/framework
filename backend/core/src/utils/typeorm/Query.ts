@@ -48,8 +48,14 @@ export class Query<T> {
 
 		try {
 			const record = repository.create(data)
-			return await repository.save(record)
-		} catch (e) {
+			const result = await repository.save(record)
+
+			if (Env.IsNotProd()) {
+				logger.debug(`[QUERY][CREATE][${repository.metadata.tableName}] Result`, result)
+			}
+
+			return result
+		} catch (e: any) {
 			return await this.handleCreateError(e, repository, data)
 		}
 	}
@@ -725,12 +731,15 @@ export class Query<T> {
 
 			return this.findOne(repository, { where: uniqueKeyWhere })
 		} else {
-			logger.error(`[SQL][CREATE] ${e.message}`, {
+			logger.error(`[SQL][CREATE] Error: ${e.message}`, {
 				repository: {
 					tableName: repository.metadata.tableName,
 				},
 				data: data,
-				error: e,
+				error: {
+					message: e.message,
+					stack: e.stack
+				}
 			})
 
 			return undefined
@@ -762,7 +771,10 @@ export class Query<T> {
 					tableName: repository.metadata.tableName,
 				},
 				data: data,
-				error: e,
+				error: {
+					message: e.message,
+					stack: e.stack
+				}
 			})
 
 			return undefined

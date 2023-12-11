@@ -30,7 +30,7 @@ export class MollieService {
 			{
 				amount: 0.0,
 				currency: account.currency,
-				customer: mollie_customer,
+				mollie_customer_id: mollie_customer.mollie_customer_id,
 			},
 			description,
 		)
@@ -55,9 +55,7 @@ export class MollieService {
 
 		return await this.mandateService.findAll({
 			where: {
-				customer: {
-					mollie_customer_id: mollie_customer.mollie_customer_id,
-				},
+				mollie_customer_id: mollie_customer.mollie_customer_id,
 			},
 		})
 	}
