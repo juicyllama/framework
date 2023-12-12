@@ -5,6 +5,7 @@ export default defineNuxtConfig({
 		'nuxt-quasar-ui',
 		'@pinia/nuxt',
 		'@nuxt/ui',
+		'nuxt-icon'
 		//'nuxt-simple-sitemap',
 	],
 	ui: {
@@ -47,5 +48,6 @@ export default defineNuxtConfig({
 		highlight: {
 			preload: ['sql'],
 		  }
-	  }
+	},
+	css: ["~/assets/main.css"],
 })

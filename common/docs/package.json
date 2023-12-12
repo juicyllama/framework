@@ -32,6 +32,7 @@
     "@pinia/nuxt": "latest",
     "@quasar/extras": "latest",
     "nuxt": "latest",
+    "nuxt-icon": "^0.6.7",
     "nuxt-quasar-ui": "latest",
     "quasar": "latest",
     "vue": "latest",
