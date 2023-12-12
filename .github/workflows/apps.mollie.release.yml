@@ -43,6 +43,7 @@ jobs:
                         common/utils
                         backend/core
                         backend/billing
+                        apps/xero-cc
                         apps/mollie
 
             -   name: 'Install Node.js'
