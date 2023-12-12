@@ -10,7 +10,7 @@
 	</div>
 	<Integrations />
 	<Reviews />
-	<Footer />
+	<!-- <Footer /> -->
 </template>
 
 <script setup>

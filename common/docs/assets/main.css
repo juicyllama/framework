@@ -2,9 +2,17 @@
 
 :root {
   --ui-bg: 255 255 255;
+  --q-primary: #42dd82;
+  --color-primary-DEFAULT: #42dd82;
 }
 html.dark {
   --ui-bg: 18 18 18;
+  --q-primary: #42dd82;
+  --color-primary-DEFAULT: #42dd82;
+}
+
+::selection {
+  background-color: #b5cadc !important;
 }
 
 body,
