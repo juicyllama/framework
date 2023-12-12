@@ -135,15 +135,17 @@ export class ShopifyOrdersCronService {
 			shopifyPromises.push(shopifyPromise)
 		}
 
-		await Promise.all(shopifyPromises)
+		const promiseResults = await Promise.allSettled(shopifyPromises)
 
 		return {
 			shopify: {
 				installed_apps: installed_apps.length,
 				orders: order_count,
-				success: shopifyPromises.filter(o => o.status === 'fulfilled').length,
-				failed: shopifyPromises.filter(o => o.status === 'rejected').length,
-				failures: shopifyPromises.filter(o => o.status === 'rejected'),
+				success: promiseResults.filter(o => o.status === 'fulfilled').length,
+				failed: promiseResults.filter(o => o.status === 'rejected').length,
+				failures: promiseResults
+					.filter(o => o.status === 'rejected')
+					.map((rej: PromiseRejectedResult) => rej.reason),
 			},
 		}
 	}
