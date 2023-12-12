@@ -44,6 +44,8 @@ jobs:
                         common/utils
                         backend/core
                         backend/billing
+                        apps/mollie
+                        apps/xero-cc
 
             -   name: 'Install Node.js'
                 uses: actions/setup-node@v3

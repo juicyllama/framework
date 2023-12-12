@@ -39,7 +39,6 @@ export class PaymentsService extends BaseService<T> {
 	}
 
 	async create(data: DeepPartial<T>): Promise<T> {
-
 		const payment = await this.query.create(this.repository, data)
 
 		if (!payment?.payment_id) {
