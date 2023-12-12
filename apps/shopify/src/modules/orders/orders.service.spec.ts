@@ -296,7 +296,152 @@ describe('Shopify OrdersService', () => {
 			expect(logger.log).toHaveBeenNthCalledWith(2, '[app::shopify::orders::listOrders] 2 Orders found')
 		})
 	})
-	describe('syncOrders', () => {})
+	describe('syncOrders', () => {
+		it('should return an empty transactions array when no orders', async () => {
+			oauthService.findOne.mockResolvedValueOnce({
+				oauth_id: 12,
+				access_token: 'access_token',
+				installed_app: installedApp,
+			})
+			storesService.findOne.mockResolvedValueOnce({
+				account_id: 12,
+				store_id: 24,
+			})
+			getMock.mockResolvedValueOnce({
+				body: {
+					orders: [],
+				},
+			})
+			expect(await service.syncOrders(installedApp, { api_version: LATEST_API_VERSION })).toEqual([])
+			expect(transactionService.findOne).toHaveBeenCalledTimes(0)
+			expect(mapperService.createEcommerceTransaction).toHaveBeenCalledTimes(0)
+			expect(mapperService.updateEcommerceTransaction).toHaveBeenCalledTimes(0)
+		})
+		it('should handle two orders, one to create the transaction, one to update', async () => {
+			oauthService.findOne.mockResolvedValueOnce({
+				oauth_id: 12,
+				access_token: 'access_token',
+				installed_app: installedApp,
+			})
+			const now = new Date()
+			getMock.mockResolvedValueOnce({
+				body: {
+					orders: [
+						{
+							id: 1,
+							admin_graphql_api_id: 1,
+							app_id: 1234,
+							buyer_accepts_marketing: true,
+							checkout_id: 2,
+							created_at: now,
+							currency: 'USD',
+							name: 'Test Order',
+							number: 5,
+							taxes_included: true,
+							test: true,
+							subtotal_price: 50,
+							total_outstanding: 50,
+							total_price: 50,
+							total_tax: 0,
+							updated_at: now,
+						},
+						{
+							id: 2,
+							admin_graphql_api_id: 2,
+							app_id: 1234,
+							buyer_accepts_marketing: true,
+							checkout_id: 2,
+							created_at: now,
+							currency: 'USD',
+							name: 'Test Order',
+							number: 5,
+							taxes_included: true,
+							test: true,
+							subtotal_price: 50,
+							total_outstanding: 50,
+							total_price: 50,
+							total_tax: 0,
+							updated_at: now,
+						},
+					],
+				},
+			})
+			transactionService.findOne.mockResolvedValueOnce(null as unknown as Transaction).mockResolvedValueOnce({
+				account_id: 2,
+				store_id: 2,
+				order_id: '2',
+				installed_app_id: installedApp.installed_app_id,
+				currency: 'USD',
+				transaction_id: 2,
+				fulfillment_status: TransactionFulfillmentStatus.SHIPPED,
+				payment_status: TransactionPaymentStatus.AURHORIZED,
+				subtotal_price: 0,
+				total_price: 0,
+				total_tax: 0,
+			})
+			mapperService.createEcommerceTransaction.mockResolvedValueOnce({
+				account_id: 1,
+				store_id: 1,
+				order_id: '1',
+				installed_app_id: installedApp.installed_app_id,
+				currency: 'USD',
+				transaction_id: 1,
+				fulfillment_status: TransactionFulfillmentStatus.SHIPPED,
+				payment_status: TransactionPaymentStatus.AURHORIZED,
+				subtotal_price: 0,
+				total_price: 0,
+				total_tax: 0,
+			})
+			mapperService.updateEcommerceTransaction.mockResolvedValueOnce({
+				account_id: 2,
+				store_id: 2,
+				order_id: '2',
+				installed_app_id: installedApp.installed_app_id,
+				currency: 'USD',
+				transaction_id: 2,
+				fulfillment_status: TransactionFulfillmentStatus.SHIPPED,
+				payment_status: TransactionPaymentStatus.AURHORIZED,
+				subtotal_price: 2,
+				total_price: 2,
+				total_tax: 0,
+			})
+			expect(
+				await service.syncOrders(
+					installedApp,
+					{ api_version: LATEST_API_VERSION },
+					{ store_id: 24, account_id: 12 },
+				),
+			).toEqual([
+				{
+					account_id: 1,
+					store_id: 1,
+					order_id: '1',
+					installed_app_id: installedApp.installed_app_id,
+					currency: 'USD',
+					transaction_id: 1,
+					fulfillment_status: TransactionFulfillmentStatus.SHIPPED,
+					payment_status: TransactionPaymentStatus.AURHORIZED,
+					subtotal_price: 0,
+					total_price: 0,
+					total_tax: 0,
+				},
+				{
+					account_id: 2,
+					store_id: 2,
+					order_id: '2',
+					installed_app_id: installedApp.installed_app_id,
+					currency: 'USD',
+					transaction_id: 2,
+					fulfillment_status: TransactionFulfillmentStatus.SHIPPED,
+					payment_status: TransactionPaymentStatus.AURHORIZED,
+					subtotal_price: 2,
+					total_price: 2,
+					total_tax: 0,
+				},
+			])
+			expect(transactionService.findOne).toHaveBeenCalledTimes(2)
+		})
+	})
 	describe('addOrUpdateOrder', () => {
 		const order = {
 			id: 2,
