@@ -147,31 +147,22 @@ export class ShopifyOrdersMapperService {
 		let has_changed = false
 		const changed: UpdateTransactionDto = {}
 
-		if (
-			transaction.payment_status !==
-			this.shopifyOrderFinancialStatusToEcommerceTransactionStatus(order.financial_status)
-		) {
-			changed.payment_status = this.shopifyOrderFinancialStatusToEcommerceTransactionStatus(
-				order.financial_status,
-			)
+		const newPaymentStatus = this.shopifyOrderFinancialStatusToEcommerceTransactionStatus(order.financial_status)
+		if (transaction.payment_status !== newPaymentStatus) {
+			changed.payment_status = newPaymentStatus
 			has_changed = true
 		}
 
-		if (
-			transaction.fulfillment_status !==
-			this.shopifyOrderFulfillmentStatusToEcommerceTransactionStatus(order.fulfillment_status)
-		) {
-			changed.fulfillment_status = this.shopifyOrderFulfillmentStatusToEcommerceTransactionStatus(
-				order.fulfillment_status,
-			)
+		const newFulfillmentStatus = this.shopifyOrderFulfillmentStatusToEcommerceTransactionStatus(
+			order.fulfillment_status,
+		)
+		if (transaction.fulfillment_status !== newFulfillmentStatus) {
+			changed.fulfillment_status = newFulfillmentStatus
 			has_changed = true
 		}
-
-		if (
-			order.total_shipping_price_set?.shop_money?.amount &&
-			Number(transaction.total_shipping) !== Number(order.total_shipping_price_set.shop_money.amount)
-		) {
-			changed.total_shipping = Number(order.total_shipping_price_set?.shop_money?.amount)
+		const orderTotal = Number(order.total_shipping_price_set?.shop_money?.amount ?? '0')
+		if (order.total_shipping_price_set?.shop_money?.amount && Number(transaction.total_shipping) !== orderTotal) {
+			changed.total_shipping = orderTotal
 			has_changed = true
 		}
 
