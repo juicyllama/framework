@@ -122,6 +122,23 @@ describe('OrdersCronService', () => {
 				},
 			})
 		})
+		it('should log a warn based on an error from storeService', async () => {
+			installedAppsService.findAll.mockResolvedValueOnce([installedApp])
+			storesService.findOne.mockRejectedValueOnce(new Error('StoreService rejection'))
+			expect(await service.syncOrders()).toEqual({
+				shopify: {
+					installed_apps: 1,
+					orders: 0,
+					success: 0,
+					failed: 1,
+					failures: [new Error('StoreService rejection')],
+				},
+			})
+			expect(logger.warn).toHaveBeenCalledWith(`[${domain}] Error looking up store`, {
+				installed_app_id: 1,
+				error: new Error('StoreService rejection'),
+			})
+		})
 		it('should report a missing store', async () => {
 			installedAppsService.findAll.mockResolvedValueOnce([installedApp])
 			storesService.findOne.mockResolvedValueOnce(null as unknown as Store)
