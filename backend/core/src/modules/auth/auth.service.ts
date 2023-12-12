@@ -117,7 +117,7 @@ export class AuthService extends BaseService<T> {
 				'Your verification code is invalid or expired, please generate a new verification code',
 			)
 		}
-		user.password = data.newPassword
+		user.password = data.password
 		user.password_reset = false
 
 		await this.usersService.update(user)

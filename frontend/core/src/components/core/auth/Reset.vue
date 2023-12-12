@@ -6,18 +6,28 @@ import OTP from '../../../components/core/auth/OTP.vue'
 import PasswordCriteria from '../../../components/core/auth/PasswordCriteria.vue'
 import { validateEmail, isPasswordValid } from '../../../helpers/validators'
 import type { ValidationPassword, AuthFormState } from '../../../helpers/validators'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useQuasar } from 'quasar'
-import { FormViewSettings, FormViewDesignSettings } from '../../../types'
+import { FormViewSettings, FormViewDesignSettings, LogSeverity } from '../../../types'
+import { logger } from '../../../helpers/logger'
 
 const $q = useQuasar()
 const userStore = UserStore()
 
 const router = useRouter()
+const route = useRoute()
 
 const props = defineProps<{
 	settings?: FormViewSettings
 }>()
+
+if(route.query.message){
+	logger({
+		severity: LogSeverity.WARN,
+		message: <string>route.query.message,
+		q: $q,
+	})
+}
 
 const state = reactive(<AuthFormState>{
 	stage: 0,
@@ -35,6 +45,14 @@ const state = reactive(<AuthFormState>{
 		validated: false,
 	},
 })
+
+if(route.query.email){
+	state.email = <string>route.query.email
+}
+
+if(route.query.code){
+	state.code = <string>route.query.code
+}
 
 const loading = ref(false)
 

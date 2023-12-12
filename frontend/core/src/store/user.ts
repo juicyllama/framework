@@ -49,13 +49,13 @@ export const UserStore = defineStore('user', {
 			return merged
 		},
 
-		async login(data: UserLogin, q?: QVueGlobals): Promise<User> {
+		async login(data: UserLogin, q?: QVueGlobals, router?: Router): Promise<User> {
 			try {
-				const access_token = await loginUser(data)
-				logger({ severity: LogSeverity.VERBOSE, message: `User access token: ${access_token}` })
+				const access_token = await loginUser(data, q, router)
+				if(!access_token) return
 				return await this.processAccessToken(access_token, q)
 			} catch (e: any) {
-				logger({ severity: LogSeverity.ERROR, message: e.message })
+				logger({ severity: LogSeverity.ERROR, message: e.message, q: q })
 			}
 		},
 
@@ -99,12 +99,9 @@ export const UserStore = defineStore('user', {
 		},
 
 		async resetComplete(email: string, code: string, password: string, q?: QVueGlobals): Promise<T> {
-			try {
+			console.log(email, code, password)
 				const access_token = await resetPasswordComplete(email, code, password)
 				return await this.processAccessToken(access_token, q)
-			} catch (e: any) {
-				logger({ severity: LogSeverity.ERROR, message: e.message })
-			}
 		},
 
 		async getUser(): Promise<T> {

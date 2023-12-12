@@ -3,6 +3,7 @@ import { UserStore } from '../store/user'
 import { logger } from '../helpers/logger'
 import { token } from '../store/token'
 import { LogSeverity } from '../types'
+import { useQuasar } from 'quasar'
 
 const headers = {
 	'Content-Type': 'application/json',
@@ -47,11 +48,25 @@ instance.interceptors.response.use(
 		logger({ severity: LogSeverity.ERROR, message: `${error.message}` })
 		// Any status codes that falls outside the range of 2xx cause this function to trigger
 		// Do something with response error
-		if (error.response.data.statusCode === 401) {
-			const userStore = UserStore()
-			await userStore.logout()
+
+		switch(error.response.data.statusCode){
+			case 401:
+				const userStore = UserStore()
+				await userStore.logout()
+				break
+
+			case 403:
+				return {
+					data: {
+						error: {
+							message: error.response.data.message,
+							status: error.response.data.statusCode,
+						},
+					}
+				}
+			default:
+				return Promise.reject(error)
 		}
-		return Promise.reject(error)
 	},
 )
 

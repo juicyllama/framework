@@ -2,7 +2,7 @@
 import { reactive, ref } from 'vue'
 import { UserStore } from '../../../store/user'
 import AuthActions from './Actions.vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute, Router } from 'vue-router'
 import type { AuthFormState } from '../../../helpers'
 import { validateEmail, isPasswordValid, logger } from '../../../helpers'
 import { goToLoginRedirect } from '../../../helpers'
@@ -76,11 +76,11 @@ if (route.query.code) {
 	}
 }
 
-async function login(state: AuthFormState) {
+async function login(state: AuthFormState, router: Router) {
 	loading.value = true
 	state.email = state.email.trim()
 	state.password.value = state.password.value.trim()
-	const user = await userStore.login({ email: state.email, password: state.password.value }, $q)
+	const user = await userStore.login({ email: state.email, password: state.password.value }, $q, router)
 
 	if (user?.user_id) {
 		await redirect()
@@ -100,7 +100,7 @@ async function redirect(){
 </script>
 
 <template>
-	<q-form autofocus @submit="login(state)">
+	<q-form autofocus @submit="login(state, router)">
 		<slot name="header">
 			<q-card-section class="mobile-hide">
 				<div class="text-h6">Login</div>
