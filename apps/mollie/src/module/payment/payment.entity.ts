@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { IsDate, IsEnum, IsNumber, IsString, MaxLength } from 'class-validator'
+import { IsDate, IsEnum, IsNumber, IsString, MaxLength, IsOptional } from 'class-validator'
 import { MollieCustomer } from '../customer/customer.entity'
 import { MollieMandate } from '../mandate/mandate.entity'
 import { SupportedCurrencies } from '@juicyllama/utils'
@@ -48,8 +48,9 @@ export class MolliePayment extends BaseEntity {
 	@JoinColumn({ name: 'mollie_mandate_id' })
 	mandate?: MollieMandate
 
-	@Column()
+	@Column({ default: null, nullable: true})
 	@IsNumber()
+	@IsOptional()
 	mollie_mandate_id?: number
 
 	@Column({ default: null, nullable: true })

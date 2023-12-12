@@ -3,14 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { LazyModuleLoader } from '@nestjs/core'
 import { DeepPartial, Repository } from 'typeorm'
 import { Logger, Modules } from '@juicyllama/utils'
-import {
-	AccountService,
-	AppIntegrationName,
-	BaseService,
-	Query,
-	StorageService,
-	StorageType,
-} from '@juicyllama/core'
+import { AccountService, AppIntegrationName, BaseService, Query, StorageService, StorageType } from '@juicyllama/core'
 
 import { Invoice } from './invoices.entity'
 import { toXeroInvoice } from './invoice.mapper.xero'
