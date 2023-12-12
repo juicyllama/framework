@@ -71,6 +71,7 @@ export interface Icon {
 	color?: string
 	classes?: string
 	hide?: boolean
+	after?: boolean // if true, the button will be added after the label
 }
 
 export enum TablePosition {

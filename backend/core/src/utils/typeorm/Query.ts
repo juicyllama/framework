@@ -48,8 +48,14 @@ export class Query<T> {
 
 		try {
 			const record = repository.create(data)
-			return await repository.save(record)
-		} catch (e) {
+			const result = await repository.save(record)
+
+			if (Env.IsNotProd()) {
+				logger.debug(`[QUERY][CREATE][${repository.metadata.tableName}] Result`, result)
+			}
+
+			return result
+		} catch (e: any) {
 			return await this.handleCreateError(e, repository, data)
 		}
 	}
@@ -594,8 +600,8 @@ export class Query<T> {
 						fieldLookupWhere.length === 1
 							? fieldLookupWhere[0]
 							: fieldLookupWhere.length > 0
-							? And(...fieldLookupWhere)
-							: value // if no valid operator is found, return the value as is - backward compatibility
+							  ? And(...fieldLookupWhere)
+							  : value // if no valid operator is found, return the value as is - backward compatibility
 				}
 			}
 		}
@@ -701,33 +707,6 @@ export class Query<T> {
 	}
 
 	/**
-	 * Returns unique key fields for the given repository
-	 */
-
-	getUniqueKeyFields(repository: Repository<T>): string[] {
-		const uniques: string[] = []
-
-		if (repository.metadata.indices.length) {
-			if (repository.metadata.indices[0]?.columnNamesWithOrderingMap) {
-				for (const [key] of Object.entries(repository.metadata.indices[0]?.columnNamesWithOrderingMap)) {
-					uniques.push(key)
-				}
-			}
-		}
-
-		if (uniques.length) {
-			return uniques
-		}
-
-		const unqiueKeys: string[] = repository.metadata.uniques.map(e => e.givenColumnNames[0])
-		if (unqiueKeys.length) {
-			return unqiueKeys
-		}
-
-		return []
-	}
-
-	/**
 	 * Duplicate key error
 	 */
 
@@ -745,18 +724,21 @@ export class Query<T> {
 
 			const uniqueKeyWhere = {}
 
-			for (const key of this.getUniqueKeyFields(repository)) {
+			for (const key of TypeOrm.getUniqueKeyFields(repository)) {
 				uniqueKeyWhere[key] = data[key]
 			}
 
 			return this.findOne(repository, { where: uniqueKeyWhere })
 		} else {
-			logger.error(`[SQL][CREATE] ${e.message}`, {
+			logger.error(`[SQL][CREATE] Error: ${e.message}`, {
 				repository: {
 					tableName: repository.metadata.tableName,
 				},
 				data: data,
-				error: e,
+				error: {
+					message: e.message,
+					stack: e.stack,
+				},
 			})
 
 			return undefined
@@ -777,7 +759,7 @@ export class Query<T> {
 
 			const uniqueKeyWhere = {}
 
-			for (const key of this.getUniqueKeyFields(repository)) {
+			for (const key of TypeOrm.getUniqueKeyFields(repository)) {
 				uniqueKeyWhere[key] = data[key]
 			}
 
@@ -788,7 +770,10 @@ export class Query<T> {
 					tableName: repository.metadata.tableName,
 				},
 				data: data,
-				error: e,
+				error: {
+					message: e.message,
+					stack: e.stack,
+				},
 			})
 
 			return undefined

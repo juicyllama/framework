@@ -10,7 +10,7 @@ import { Enviroment, Logger } from '@juicyllama/utils'
 import Joi from 'joi'
 import { moillieConfigJoi } from '../../config/mollie.config.joi'
 import { PaymentController } from './payment.controller'
-import { Query } from '@juicyllama/core'
+import { AccountModule, Query } from '@juicyllama/core'
 import { PaymentsModule } from '@juicyllama/billing'
 
 @Module({
@@ -21,6 +21,7 @@ import { PaymentsModule } from '@juicyllama/billing'
 			load: [mollieConfig],
 			validationSchema: process.env.NODE_ENV !== Enviroment.test ? Joi.object(moillieConfigJoi) : null,
 		}),
+		forwardRef(() => AccountModule),
 		forwardRef(() => CustomerModule),
 		forwardRef(() => MandateModule),
 		forwardRef(() => PaymentsModule),

@@ -7,7 +7,7 @@ export class UserDto {
 
 	@ApiProperty({
 		description: 'The users first name',
-		example: 'Richard',
+		example: 'Jon',
 		required: false,
 	})
 	@IsString()
@@ -17,7 +17,7 @@ export class UserDto {
 	first_name?: string
 
 	@ApiProperty({
-		example: 'Branson',
+		example: 'Doe',
 		required: false,
 	})
 	@IsString()
@@ -27,7 +27,7 @@ export class UserDto {
 	last_name?: string
 
 	@ApiProperty({
-		example: 'richard.branson@fly.virgin.com',
+		example: 'jon.doe@example.com',
 		required: true,
 	})
 	@IsString()

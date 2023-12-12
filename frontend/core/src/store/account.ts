@@ -78,6 +78,9 @@ export const AccountStore = defineStore('account', {
 		},
 	},
 	getters: {
+		getAccount(state): Account {
+			return state.selected_account
+		},
 		getAccountId(state): number {
 			return state.selected_account?.account_id ?? null
 		},

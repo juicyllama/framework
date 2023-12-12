@@ -1,7 +1,7 @@
 # Getting Started
 
 ::alert{type="info"}
-Our frontend framework is built on top of [Quasar](https://quasar.dev) and [Vue](https://vuejs.org) frameworks. If you are not familiar with Vue or Quasar, we recommend you read their documentation first.
+Our frontend framework is built on top of [Quasar](https://quasar.dev), [Vue](https://vuejs.org) and [Tailwindcss](https://tailwindcss.com) frameworks. If you are not familiar with these, we recommend you read their documentation first.
 ::
 
 ## Installation

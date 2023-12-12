@@ -10,8 +10,8 @@ export class Logger {
 		if (Env.IsNotTest()) {
 			let Bugsnag: any
 
-			if (Modules.isInstalled('@bugsnag/js')) {
-				Bugsnag = require('@bugsnag/js')
+			if (Modules.bugsnag.isInstalled) {
+				Bugsnag = Modules.bugsnag.load()
 				Bugsnag.addMetadata(key, value)
 			}
 		}
@@ -36,9 +36,10 @@ export class Logger {
 				case 'Unexpected token o in JSON at position 1SyntaxError: Unexpected token o in JSON at position 1':
 					break
 				default:
-					if (Modules.isInstalled('@bugsnag/js')) {
-						const Bugsnag = require('@bugsnag/js')
-						Bugsnag.notify(new Error(message))
+					if (Modules.bugsnag.isInstalled) {
+						Modules.bugsnag.load().then((Bugsnag)=> {
+							Bugsnag.notify(new Error(message))
+						})
 					}
 			}
 		}
@@ -92,6 +93,17 @@ export class Logger {
 		}
 	}
 
+	status(): void {
+		this.log(`--------- Logging Status ---------`)
+		this.log(`LOG_LEVEL=${this.getLogLevel()}`)
+		this.error(`This is an error`)
+		this.warn(`This is a warning`)
+		this.log(`This is a log`)
+		this.debug(`This is a debug`)
+		this.verbose(`This is a verbose`)
+		this.log(`------- Logging Status End -------`)
+	}
+
 	table(data: any): void {
 		if (Env.IsDev()) {
 			console.table(data)
@@ -124,9 +136,10 @@ export class Logger {
 			}
 		} catch (e) {
 			this.error(e.message)
-			if (Modules.isInstalled('@bugsnag/js')) {
-				const Bugsnag = require('@bugsnag/js')
-				Bugsnag.notify(new Error(e))
+			if (Modules.bugsnag.isInstalled) {
+				Modules.bugsnag.load().then((Bugsnag) => {
+					Bugsnag.notify(new Error(e))
+				})
 			}
 		}
 

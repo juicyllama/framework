@@ -39,10 +39,27 @@ export class PaymentsService extends BaseService<T> {
 	}
 
 	async create(data: DeepPartial<T>): Promise<T> {
-		const payment = await super.create(data)
-		const owner = await this.accountService.getOwner(payment.account)
+
+		console.log('6.1.3.1', data)
+
+		const payment = await this.query.create(this.repository, data)
+
+		if(!payment?.payment_id){
+			throw new BadRequestException(`Payment not created`)
+		}
+
+		console.log('6.1.3.2', payment)
+	
+		const owner = await this.accountService.getOwner(payment.account_id)
+
+		console.log('6.1.3.3', owner)
+	
 		await this.sendBeaconOnCreate(payment, owner)
+
+		console.log('6.1.3.4', owner)
+
 		return payment
+		
 	}
 
 	async allocateFunds(payment: T, invoice: Invoice, amount: number): Promise<T> {
@@ -72,69 +89,80 @@ export class PaymentsService extends BaseService<T> {
 		return await this.query.raw(this.repository, sql)
 	}
 
-	async paymentResponse(
+	async paymentResponse(options: {	
+		account_id: number,
 		app_integration_name: AppIntegrationName,
-		app_payment_method_id: number,
 		app_payment_id: number,
 		amount: number,
 		currency: SupportedCurrencies,
 		payment_status: PaymentStatus,
-		payment_type: PaymentType = PaymentType.payment,
-	): Promise<void> {
+		payment_type?: PaymentType,
+	}): Promise<void> {
 		const domain = 'billing::payments::paymentResponse'
+
+		if(!options.payment_type){
+			options.payment_type = PaymentType.payment
+		}
 
 		let payment_method = await this.paymentMethodsService.findOne({
 			where: {
-				app_payment_method_id: app_payment_method_id,
+				account_id: options.account_id,
+				app_integration_name: options.app_integration_name,
+			},
+			order: {
+				created_at: 'DESC',
 			},
 		})
 
 		if (!payment_method) {
 			this.logger.error(
-				`[${domain}] Payment method not found for app_payment_method_id: ${app_payment_method_id}`,
+				`[${domain}] Payment method not found`, {
+					account_id: options.account_id,
+					app_integration_name: options.app_integration_name,
+				}
 			)
 			return
 		}
 
 		const payment = await this.findOne({
 			where: {
-				payment_method: {
-					payment_method_id: payment_method.payment_method_id,
-				},
-				app_payment_id: app_payment_id,
+				payment_method_id: payment_method.payment_method_id,
+				app_payment_id: options.app_payment_id,
 			},
 		})
 
 		if (payment) {
-			this.logger.log(`[${domain}] Payment already exists for app_payment_id: ${app_payment_id}, skipping...`)
+			this.logger.log(`[${domain}] Payment already exists for app_payment_id: ${options.app_payment_id}, skipping...`)
 			return
 		}
 
-		switch (payment_type) {
+		switch (options.payment_type) {
 			case PaymentType.payment:
-				switch (payment_status) {
+				switch (options.payment_status) {
 					case PaymentStatus.success:
-						await this.create({
-							account: payment_method.account,
-							amount: amount,
-							currency: currency,
-							payment_method: payment_method,
-							app_payment_id: app_payment_id,
-							type: payment_type,
-							method: payment_method.method,
-						})
+
+					await this.create({
+						account_id: options.account_id,
+						amount: options.amount,
+						currency: options.currency,
+						payment_method_id: payment_method.payment_method_id,
+						app_payment_id: options.app_payment_id,
+						type: options.payment_type,
+						method: payment_method.method,
+					})
 
 						payment_method = await this.paymentMethodsService.successfulPayment(payment_method)
 						return
 
 					case PaymentStatus.declined:
 						await this.handleDeclinedPayment(
+							options.account_id,
 							payment_method,
-							app_payment_id,
-							amount,
-							currency,
-							payment_status,
-							payment_type,
+							options.app_payment_id,
+							options.amount,
+							options.currency,
+							options.payment_status,
+							options.payment_type,
 						)
 						return
 
@@ -143,36 +171,37 @@ export class PaymentsService extends BaseService<T> {
 						return
 				}
 
-				return
-
 			case PaymentType.dispute:
 			case PaymentType.refund:
 				//todo handle
 
-				this.logger.error(`[${domain}] Payment Type: ${payment_type} not implemented`, {
-					app_payment_method_id: app_payment_method_id,
-					app_payment_id: app_payment_id,
-					amount: amount,
-					currency: currency,
-					payment_status: payment_status,
-					payment_type: payment_type,
+				this.logger.error(`[${domain}] Payment Type: ${options.payment_type} not implemented`, {
+					account_id: options.account_id,
+					app_payment_method_id: payment_method.app_payment_method_id,
+					app_payment_id: options.app_payment_id,
+					amount: options.amount,
+					currency: options.currency,
+					payment_status: options.payment_status,
+					payment_type: options.payment_type,
 				})
-				throw new NotImplementedException(`Payment Type: ${payment_type} not implemented`)
+				throw new NotImplementedException(`Payment Type: ${options.payment_type} not implemented`)
 
 			default:
-				this.logger.error(`[${domain}] Unknown payment type: ${payment_type}`, {
-					app_payment_method_id: app_payment_method_id,
-					app_payment_id: app_payment_id,
-					amount: amount,
-					currency: currency,
-					payment_status: payment_status,
-					payment_type: payment_type,
+				this.logger.error(`[${domain}] Unknown payment type: ${options.payment_type}`, {
+					account_id: options.account_id,
+					app_payment_method_id: payment_method.app_payment_method_id,
+					app_payment_id: options.app_payment_id,
+					amount: options.amount,
+					currency: options.currency,
+					payment_status: options.payment_status,
+					payment_type: options.payment_type,
 				})
 				return
 		}
 	}
 
 	async handleDeclinedPayment(
+		account_id: number,
 		payment_method: PaymentMethod,
 		app_payment_id: number,
 		amount: number,
@@ -182,12 +211,13 @@ export class PaymentsService extends BaseService<T> {
 	): Promise<void> {
 		const domain = 'billing::payments::handleDeclinedPayment'
 
-		const owner = await this.accountService.getOwner(payment_method.account)
+		const owner = await this.accountService.getOwner(account_id)
 
 		await this.sendBeaconOnDecline(payment_method, owner, amount, currency)
 
 		if (payment_method.attempts >= 5) {
 			this.logger.log(`[${domain}] Disabling payment method as 5 declined attempts`, {
+				account_id: account_id,
 				payment_method: payment_method,
 				app_payment_id: app_payment_id,
 				amount: amount,

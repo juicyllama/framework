@@ -45,9 +45,8 @@ export class BeaconImService {
 
 		let service: any
 
-		if (Modules.isInstalled('@juicyllama/app-slack')) {
-			//@ts-ignore
-			const { SlackModule, SlackService } = await import('@juicyllama/app-slack')
+		if (Modules.slack.isInstalled) {
+			const { SlackModule, SlackService } = await Modules.slack.load()
 
 			try {
 				const slackModule = await this.lazyModuleLoader.load(() => SlackModule)

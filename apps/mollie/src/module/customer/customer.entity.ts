@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
-import { IsDate, IsString } from 'class-validator'
+import { IsDate, IsString, IsNumber } from 'class-validator'
 import { Account, BaseEntity } from '@juicyllama/core'
 
 @Entity('apps_mollie_customers')
@@ -16,7 +16,11 @@ export class MollieCustomer extends BaseEntity {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn({ name: 'account_id' })
-	account: Account
+	account?: Account
+
+	@Column()
+	@IsNumber()
+	account_id: number
 
 	@Column({ default: null, nullable: true })
 	@IsDate()

@@ -5,6 +5,7 @@ export enum AppIntegrationType {
 }
 
 export enum AppStoreIntegrationName {
+	mollie = 'mollie',
 	shopify = 'shopify',
 	wordpress = 'wordpress',
 }

@@ -14,17 +14,17 @@ export class Role extends BaseEntity {
 
 	@ManyToOne(() => User, user => user.user_id, { onDelete: 'CASCADE' })
 	@JoinColumn({ name: 'user_id' })
-	user: User
+	user?: User
 
 	@Column()
-	user_id?: number
+	user_id: number
 
 	@ManyToOne(() => Account, account => account.account_id, { onDelete: 'CASCADE' })
 	@JoinColumn({ name: 'account_id' })
-	account: Account
+	account?: Account
 
 	@Column()
-	account_id?: number
+	account_id: number
 
 	@IsEnum(UserRole)
 	@Column({ default: UserRole.MEMBER })

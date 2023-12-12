@@ -80,8 +80,8 @@ export class AuthService extends BaseService<T> {
 		const payload = await this.constructLoginPayload(user)
 		if (!['development', 'test'].includes(process.env.NODE_ENV)) {
 			let Bugsnag
-			if (Modules.isInstalled('@bugsnag/js')) {
-				Bugsnag = require('@bugsnag/js')
+			if (Modules.bugsnag.isInstalled) {
+				Bugsnag = await Modules.bugsnag.load()
 				Bugsnag.setUser(user.user_id, user.email)
 			}
 		}

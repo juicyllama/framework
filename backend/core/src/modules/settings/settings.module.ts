@@ -8,6 +8,7 @@ import { databaseConfig } from '../../configs'
 import cacheConfig from '../../configs/cache.config'
 import { ConfigModule } from '@nestjs/config'
 import { Query } from '../../utils/typeorm/Query'
+import { SettingsController } from './settings.controller'
 
 @Module({
 	imports: [
@@ -20,7 +21,7 @@ import { Query } from '../../utils/typeorm/Query'
 		TypeOrmModule.forRoot(databaseConfig()),
 		TypeOrmModule.forFeature([Setting]),
 	],
-	controllers: [],
+	controllers: [SettingsController],
 	providers: [SettingsService, Logger, Query],
 	exports: [SettingsService],
 })

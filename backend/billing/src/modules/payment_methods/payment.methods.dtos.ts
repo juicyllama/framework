@@ -58,7 +58,7 @@ export class PaymentMethodBankTransferDetails {
 		| PaymentMethodBankTransferUSDDetails
 }
 
-export class CreatePaymentMethodDto {
+export class PaymentMethodDetails {
 	@ApiProperty({
 		description: 'The payment method you want to create',
 		enum: PaymentMethodType,
@@ -82,3 +82,16 @@ export class CreatePaymentMethodDto {
 	@IsString()
 	redirect_url: string
 }
+
+
+export class CreatePaymentMethodDto {
+	
+	@IsObject()
+	payment_method: PaymentMethodDetails
+
+	@ApiProperty({ description: 'A description of the payment method', example: 'My first payment method' })
+	@IsString()
+	description?: string
+
+}
+

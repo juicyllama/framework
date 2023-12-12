@@ -1,4 +1,4 @@
-import { MoreThan, Repository } from 'typeorm'
+import { MoreThan, Repository, ColumnType } from 'typeorm'
 import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere'
 import { isNil, omitBy } from 'lodash'
@@ -119,11 +119,76 @@ export class TypeOrm {
 		return options
 	}
 
+	/** Returns the table name of a given repository */
+
+	static getTableName<T>(repository: Repository<T>) {
+		return repository.metadata.tableName
+	}
+
+	/**
+	 * Returns the primary key of the given repository
+	 */
+
 	static getPrimaryKey<T>(repository: Repository<T>) {
 		return repository.metadata.columns.find(column => {
 			if (column.isPrimary) {
 				return column
 			}
 		}).propertyName
+	}
+
+	/**
+	 * Returns a unique list of column names for the given repository
+	 */
+
+	static getColumnNames<T>(repository: Repository<T>): string[] {
+		const columns = repository.metadata.columns.map(column => {
+			return column.propertyName
+		})
+
+		return columns
+	}
+
+	/**
+	 * Return the column type for the given column name
+	 */
+
+	static getColumnType<T>(repository: Repository<T>, column: string): ColumnType {
+		return repository.metadata.columns.find(e => e.propertyName === column).type
+	}
+
+	/**
+	 * Return true if column can be null
+	 */
+
+	static isColumnNullable<T>(repository: Repository<T>, column: string): boolean {
+		return repository.metadata.columns.find(e => e.propertyName === column).isNullable
+	}
+
+	/**
+	 * Returns unique key fields for the given repository
+	 */
+
+	static getUniqueKeyFields<T>(repository: Repository<T>): string[] {
+		const uniques: string[] = []
+
+		if (repository.metadata.indices.length) {
+			if (repository.metadata.indices[0]?.columnNamesWithOrderingMap) {
+				for (const [key] of Object.entries(repository.metadata.indices[0]?.columnNamesWithOrderingMap)) {
+					uniques.push(key)
+				}
+			}
+		}
+
+		if (uniques.length) {
+			return uniques
+		}
+
+		const unqiueKeys: string[] = repository.metadata.uniques.map(e => e.givenColumnNames[0])
+		if (unqiueKeys.length) {
+			return unqiueKeys
+		}
+
+		return []
 	}
 }

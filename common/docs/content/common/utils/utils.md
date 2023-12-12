@@ -644,7 +644,7 @@ import { Modules } from '@juicyllama/utils'
 Check if a module is installed:
 
 ```typescript
-const isInstalled = Modules.isInstalled('react')
+const isInstalled = await Modules.slack.isInstalled
 //isInstalled = true
 ```
 

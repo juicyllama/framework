@@ -11,21 +11,22 @@ export async function setupDocker(project: JL) {
 
 	cli_log(`Building Docker ${docker_name}...`)
 
-	const command1 = `docker kill $(docker ps -q) 2>/dev/null`
-	const result1 = await exec(command1)
-
-	if (result1.stderr) {
-		cli_error(`error: ${result1.stderr} (${result1.stdout})`)
-		return
+	try{
+		const command1 = `docker kill $(docker ps -q) 2>/dev/null`
+		await exec(command1)
+	}
+	catch (e: any) {
+		//cli_error(`error: ${e}`)
 	}
 
-	const command2 = `docker compose --project-name ${docker_name} up --build --detach`
-	const result2 = await exec(command2)
+	try{
+		const command2 = `docker compose --project-name ${docker_name} up --build --detach`
+		await exec(command2)
 
-	if (result2.stderr) {
-		cli_error(`error: ${result2.stderr} (${result2.stdout})`)
+		cli_log(`Docker ${docker_name} built!`)
+	}
+	catch (e: any) {
+		cli_error(`error: ${e}`)
 		return
 	}
-
-	cli_log(`Docker ${docker_name} built!`)
 }

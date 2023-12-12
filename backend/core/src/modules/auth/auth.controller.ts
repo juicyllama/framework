@@ -26,7 +26,7 @@ export class AuthController {
 		description:
 			'Posting the users email and password if successfully authenticated will return a token. Pass this bearer token in the `Authorization header (Authorization: Bearer {TOKEN})` to access restricted endpoints.',
 	})
-	@ApiQuery({ name: 'email', required: true, type: String, example: 'richard.branson@fly.virgin.com' })
+	@ApiQuery({ name: 'email', required: true, type: String, example: 'jon.doe@example.com' })
 	@ApiQuery({ name: 'password', required: true, type: String, example: 'S7r0#gP@$s' })
 	@ApiOkResponse({
 		description: 'OK',

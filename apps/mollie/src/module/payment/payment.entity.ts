@@ -38,11 +38,19 @@ export class MolliePayment extends BaseEntity {
 	@JoinColumn({ name: 'mollie_customer_id' })
 	customer?: MollieCustomer
 
+	@Column()
+	@IsNumber()
+	mollie_customer_id: number
+
 	@ManyToOne(() => MollieMandate, mandate => mandate.mollie_mandate_id, {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn({ name: 'mollie_mandate_id' })
 	mandate?: MollieMandate
+
+	@Column()
+	@IsNumber()
+	mollie_mandate_id?: number
 
 	@Column({ default: null, nullable: true })
 	@IsDate()
