@@ -1,5 +1,12 @@
 import { AppScope, Oauth, OauthService } from '@juicyllama/app-store'
-import { Store, StoresService, TransactionsService } from '@juicyllama/ecommerce'
+import {
+	Store,
+	StoresService,
+	Transaction,
+	TransactionFulfillmentStatus,
+	TransactionPaymentStatus,
+	TransactionsService,
+} from '@juicyllama/ecommerce'
 import { Env, Logger } from '@juicyllama/utils'
 import { Test } from '@nestjs/testing'
 import { LATEST_API_VERSION, Shopify } from '@shopify/shopify-api'
@@ -96,7 +103,7 @@ describe('Shopify OrdersService', () => {
 		expect(service).toBeDefined()
 	})
 
-	describe('list orders', () => {
+	describe('listOrders', () => {
 		it('should throw an error on no Oauth', async () => {
 			oauthService.findOne.mockResolvedValueOnce(null as unknown as Promise<Oauth>)
 			await expect(service.listOrders(installedApp, { api_version: LATEST_API_VERSION })).rejects.toThrow(
@@ -290,5 +297,69 @@ describe('Shopify OrdersService', () => {
 		})
 	})
 	describe('syncOrders', () => {})
-	describe('addOrUpdateOrder', () => {})
+	describe('addOrUpdateOrder', () => {
+		const order = {
+			id: 2,
+			admin_graphql_api_id: '2',
+			app_id: 1234,
+			buyer_accepts_marketing: true,
+			checkout_id: 2,
+			created_at: new Date(),
+			currency: 'USD',
+			name: 'Test Order',
+			number: 5,
+			taxes_included: true,
+			test: true,
+			subtotal_price: 50,
+			total_outstanding: 50,
+			total_price: 50,
+			total_tax: 0,
+			updated_at: new Date(),
+			confirmed: true,
+		}
+
+		const transaction = {
+			account_id: 5,
+			store_id: 3,
+			order_id: '2',
+			installed_app_id: installedApp.installed_app_id,
+			currency: 'USD',
+			transaction_id: 1,
+			fulfillment_status: TransactionFulfillmentStatus.SHIPPED,
+			payment_status: TransactionPaymentStatus.AURHORIZED,
+			subtotal_price: 0,
+			total_price: 0,
+			total_tax: 0,
+		}
+
+		it('should throw an error when there is no found shop', async () => {
+			storesService.findOne.mockResolvedValueOnce(null as unknown as Store)
+			await expect(service.addOrUpdateOrder(installedApp, order)).rejects.toThrow(new Error('Store not found'))
+			expect(logger.error).toHaveBeenNthCalledWith(1, '[app::shopify::orders::addOrder] Store not found', {
+				installed_app_id: installedApp.installed_app_id,
+			})
+		})
+		it('should run the createEcommerceTransaction method', async () => {
+			storesService.findOne.mockResolvedValueOnce({
+				account_id: 5,
+				store_id: 3,
+			})
+			transactionService.findOne.mockResolvedValueOnce(null as unknown as Transaction)
+			mapperService.createEcommerceTransaction.mockResolvedValueOnce(transaction)
+			expect(await service.addOrUpdateOrder(installedApp, order)).toEqual(transaction)
+			expect(mapperService.createEcommerceTransaction).toHaveBeenCalledTimes(1)
+			expect(mapperService.updateEcommerceTransaction).toHaveBeenCalledTimes(0)
+		})
+		it('should run the updateEcommerceTransaction method', async () => {
+			storesService.findOne.mockResolvedValueOnce({
+				account_id: 5,
+				store_id: 3,
+			})
+			transactionService.findOne.mockResolvedValueOnce(transaction)
+			mapperService.updateEcommerceTransaction.mockResolvedValueOnce(transaction)
+			expect(await service.addOrUpdateOrder(installedApp, order)).toEqual(transaction)
+			expect(mapperService.createEcommerceTransaction).toHaveBeenCalledTimes(0)
+			expect(mapperService.updateEcommerceTransaction).toHaveBeenCalledTimes(1)
+		})
+	})
 })
