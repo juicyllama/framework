@@ -136,6 +136,9 @@ export class AuthService extends BaseService<T> {
 		return !!user.user_id
 	}
 	async validateVerificationCode(data): Promise<SuccessResponseDto> {
+		if(!data.email) {
+			throw new BadRequestException('Email is required')
+		}
 		const user = await this.usersService.findOneByEmail(data.email)
 		this.handleUserNotFoundException(user)
 		const verificationCode = await this.getValidationCode(user)
