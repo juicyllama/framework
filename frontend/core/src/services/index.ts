@@ -3,7 +3,6 @@ import { UserStore } from '../store/user'
 import { logger } from '../helpers/logger'
 import { token } from '../store/token'
 import { LogSeverity } from '../types'
-import { useQuasar } from 'quasar'
 
 const headers = {
 	'Content-Type': 'application/json',
@@ -51,10 +50,23 @@ instance.interceptors.response.use(
 
 		switch(error.response.data.statusCode){
 			case 401:
-				const userStore = UserStore()
-				await userStore.logout()
-				break
 
+				//if route is /login return error otherwise logout
+				if(window.location.pathname === '/login') {
+					return {
+						data: {
+							error: {
+								message: 'Login failed, please try again!',
+							},
+						}
+					}
+				}else{
+					const userStore = UserStore()
+					await userStore.logout()
+				}
+
+				break
+			
 			case 403:
 				return {
 					data: {

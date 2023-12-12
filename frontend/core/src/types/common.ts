@@ -61,6 +61,13 @@ export interface IconSettings {
 		billing?: string
 		settings?: string
 		admin?: string
+		home: string
+		menu_seperator: string
+		mobile_nav: string
+		success: string
+		error: string
+		warning: string
+		info: string
 	}
 }
 
