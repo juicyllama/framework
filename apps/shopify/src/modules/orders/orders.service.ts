@@ -52,7 +52,7 @@ export class ShopifyOrdersService {
 
 		const session = ShopifySession(installed_app, oath)
 
-		const orders = <ShopifyOrder[]>[]
+		const orders: ShopifyOrder[] = []
 		let pageInfo
 
 		const client = new this.shopify.clients.Rest({
