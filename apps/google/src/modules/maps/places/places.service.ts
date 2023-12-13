@@ -62,6 +62,9 @@ export class PlacesService {
 
 		this.logger.debug(`[${domain}] Adding result into the data lake, calling API`, place)
 
+		if (result && place) {
+			await this.query.purge(this.repository, result);
+		}
 		return await this.query.create(this.repository, place)
 	}
 }
