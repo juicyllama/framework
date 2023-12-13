@@ -4,11 +4,15 @@
   --q-primary: #f3c614;
   --color-primary-DEFAULT: #f3c614;
   --color-primary-hover: #e0b10e;
+  --typography-font-display: 'Nunito', 'Montserrat', sans-serif;
+  --typography-font-body: 'Nunito', 'Montserrat', sans-serif;
 }
 html.dark {
   --q-primary: #e0b10e;
   --color-primary-DEFAULT: #e0b10e;
   --color-primary-hover: #f3c614;
+  --typography-font-display: 'Nunito', 'Montserrat', sans-serif;
+  --typography-font-body: 'Nunito', 'Montserrat', sans-serif;
 }
 
 ::selection {
@@ -29,6 +33,42 @@ p a:hover {
   color: var(--color-primary-hover);
 }
 
+.app--main-menu a:hover {
+  color: var(--color-primary-hover);
+}
+
+.button-primary {
+  font-size: 1rem;
+  background-color: var(--color-primary-DEFAULT);
+  color: black;
+  cursor: pointer;
+  padding: 0.6rem 1rem 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border-color: var(--color-primary-DEFAULT);
+  border-style: solid;
+  border-width: 2px;
+}
+
+.button-primary:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.button-secondary {
+  font-size: 1rem;
+  border-color: black;
+  border-style: solid;
+  border-width: 2px;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  padding: 0.6rem 1rem 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.button-secondary:hover {
+  background-color: oldlace;
+}
 
 @media (min-width: 640px) {
   .sm\:text-4xl {

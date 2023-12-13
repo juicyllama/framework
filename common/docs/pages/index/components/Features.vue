@@ -17,7 +17,7 @@
 								<a href="#" class="focus:outline-none" color="primary" orientation="vertical" tabindex="-1"><span
 										class="absolute inset-0"></span></a>
 								<div class="mb-2 pointer-events-none">
-									<Icon :name="`i-ph:${item.icon}`" class="w-8 h-8 flex-shrink-0 text-gray-900 dark:text-white" />
+									<Icon :name="`ph:${item.icon}`" class="w-8 h-8 flex-shrink-0 text-gray-900 dark:text-white" />
 								</div>
 								<p class="text-gray-900 dark:text-white text-base font-bold truncate" v-html="item.title"></p>
 								<p class="text-[15px] text-gray-500 dark:text-gray-400 mt-1" v-html="item.text"></p>

@@ -10,6 +10,7 @@ export default defineNuxtConfig({
 	],
 	ui: {
 		global: true,
+		icons: 'all'
 	},
 	devtools: { enabled: true },
 	extends: '@nuxt-themes/docus',

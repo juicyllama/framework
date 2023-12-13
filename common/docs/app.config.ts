@@ -2,8 +2,8 @@
 //https://docus.dev/introduction/configuration
 export default defineAppConfig({
 	docus: {
-		title: 'juicyllama',
-		description: 'The best place to start your documentation.',
+		title: 'Docs :: JuicyLlama Rapid Development Framework',
+		description: 'Developer portal for working with our open source framework',
 		image: 'https://juicyllama.com/assets/images/icon.png',
 		socials: {
 			github: 'juicyllama/framework',
@@ -33,6 +33,11 @@ export default defineAppConfig({
 				icon: '',
 				href: 'https://docs.juicyllama.com/',
 				text: 'JuicyLlama'
+			}
+		},
+		head: {
+			templateParams: {
+				separator: '::',
 			}
 		}
 	}

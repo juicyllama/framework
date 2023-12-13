@@ -12,13 +12,13 @@
 					<a type="button"
 						class="focus:outline-none focus-visible:outline-0 disabled:cursor-not-allowed disabled:opacity-75 flex-shrink-0 font-medium rounded-md text-sm gap-x-2 px-3 py-2 shadow-sm text-white dark:text-gray-900 bg-gray-900 hover:bg-gray-800 disabled:bg-gray-900 dark:bg-white dark:hover:bg-gray-100 dark:disabled:bg-white focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 inline-flex items-center"
 						href="/modules">
-						<Icon name="i-ph:puzzle-piece-duotone" class="flex-shrink-0 h-5 w-5" />
+						<Icon name="ph:puzzle-piece-duotone" class="flex-shrink-0 h-5 w-5" />
 						<span class="">Explore Nuxt Modules</span>
 					</a>
 					<a type="button"
 						class="focus:outline-none focus-visible:outline-0 disabled:cursor-not-allowed disabled:opacity-75 flex-shrink-0 font-medium rounded-md text-sm gap-x-2 px-3 py-2 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 text-gray-700 dark:text-gray-200 bg-gray-50 hover:bg-gray-100 disabled:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700/50 dark:disabled:bg-gray-800 focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 inline-flex items-center"
 						href="/docs/guide/concepts/modules">
-						<Icon name="i-ph:info-duotone" class="flex-shrink-0 h-5 w-5" />
+						<Icon name="ph:info-duotone" class="flex-shrink-0 h-5 w-5" />
 						<span class="">Learn about Modules</span>
 					</a>
 				</div>
