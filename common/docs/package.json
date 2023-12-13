@@ -1,39 +1,43 @@
 {
-  "name": "@juicyllama/docs",
-  "type": "module",
-  "version": "0.1.37",
-  "description": "Juicyllama Docs portal",
-  "author": {
-    "name": "JuicyLlama Studio",
-    "email": "studio@juicyllama.com",
-    "url": "https://juicyllama.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/juicyllama/framework/tree/main/common/docs"
-  },
-  "bugs": "https://github.com/juicyllama/framework",
-  "readmeFilename": "README.md",
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "format": "prettier --write --ignore-path .gitignore \"**/*.{js,vue,json,md}\""
-  },
-  "dependencies": {
-    "@juicyllama/frontend-core": "latest",
-    "@nuxt/content": "latest",
-    "@nuxt/devtools": "latest",
-    "@nuxt/eslint-config": "latest",
-    "@nuxt-themes/docus": "latest",
-    "@pinia/nuxt": "latest",
-    "@quasar/extras": "latest",
-    "nuxt": "latest",
-    "nuxt-quasar-ui": "latest",
-    "quasar": "latest",
-    "vue": "latest",
-    "vue-router": "latest"
-  }
+	"name": "@juicyllama/docs",
+	"type": "module",
+	"version": "0.1.37",
+	"description": "Juicyllama Docs portal",
+	"author": {
+		"name": "JuicyLlama Studio",
+		"email": "studio@juicyllama.com",
+		"url": "https://juicyllama.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/juicyllama/framework/tree/main/common/docs"
+	},
+	"bugs": "https://github.com/juicyllama/framework",
+	"readmeFilename": "README.md",
+	"scripts": {
+		"build": "nuxt build",
+		"dev": "nuxt dev",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview",
+		"postinstall": "nuxt prepare",
+		"format": "prettier --write --ignore-path .gitignore \"**/*.{js,vue,json,md}\""
+	},
+	"dependencies": {
+		"@juicyllama/frontend-core": "latest",
+		"@nuxt-themes/docus": "github:shershen08/docus#jl-flavour-features",
+		"@nuxt/content": "2.8.0",
+		"@nuxt/devtools": "latest",
+		"@nuxt/eslint-config": "latest",
+		"@nuxt/ui": "2.10.0",
+		"@nuxt/ui-pro": "^0.6.1",
+		"@nuxtjs/google-fonts": "3.1.1",
+		"@pinia/nuxt": "latest",
+		"@quasar/extras": "latest",
+		"nuxt": "latest",
+		"nuxt-icon": "^0.6.7",
+		"nuxt-quasar-ui": "latest",
+		"quasar": "latest",
+		"vue": "latest",
+		"vue-router": "latest"
+	}
 }
