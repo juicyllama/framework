@@ -1,5 +1,5 @@
 import { SupportedCurrencies } from '@juicyllama/utils'
-import { Scaffold, ScaffoldDto } from '@juicyllama/core'
+import { AppIntegrationName, Scaffold, ScaffoldDto } from '@juicyllama/core'
 import { faker } from '@faker-js/faker'
 import { MockPaymentMethodCCRequest } from '../../test/mocks'
 import { ChargesService } from '../charges/charges.service'
@@ -75,15 +75,15 @@ describe('Balance Cron', () => {
 		})
 
 		it('Fake a payment success response', async () => {
-			await paymentsService.paymentResponse(
-				payment_method.app_integration_name,
-				1,
-				123456,
-				100,
-				SupportedCurrencies.USD,
-				PaymentStatus.success,
-				PaymentType.payment,
-			)
+			await paymentsService.paymentResponse({
+				account_id: scaffold.values.account.account_id,
+				app_integration_name: AppIntegrationName.mollie,
+				app_payment_id: 123456,
+				amount: 100,
+				currency: SupportedCurrencies.USD,
+				payment_status: PaymentStatus.success,
+				payment_type: PaymentType.payment
+			})
 		})
 
 		it('Check the wallet is now at zero', async () => {

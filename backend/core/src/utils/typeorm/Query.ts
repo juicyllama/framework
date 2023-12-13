@@ -199,7 +199,11 @@ export class Query<T> {
 
 		options = TypeOrm.findOneOptionsWrapper<T>(repository, options)
 		const result = <T>await repository.findOne(options)
-		return <T>await this.convertCurrency<T>(result, currency)
+		const convertedResult = <T>await this.convertCurrency<T>(result, currency)
+		if (Env.IsNotProd()) {
+			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}] Result`, convertedResult)
+		}
+		return convertedResult
 	}
 
 	/**

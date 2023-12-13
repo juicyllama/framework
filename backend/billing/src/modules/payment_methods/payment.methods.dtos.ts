@@ -83,15 +83,11 @@ export class PaymentMethodDetails {
 	redirect_url: string
 }
 
-
 export class CreatePaymentMethodDto {
-	
 	@IsObject()
 	payment_method: PaymentMethodDetails
 
 	@ApiProperty({ description: 'A description of the payment method', example: 'My first payment method' })
 	@IsString()
 	description?: string
-
 }
-

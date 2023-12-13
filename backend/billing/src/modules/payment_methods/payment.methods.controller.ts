@@ -121,11 +121,7 @@ export class PaymentMethodsController {
 	})
 	@UserAuth()
 	@Post()
-	async create(
-		@Req() req,
-		@AccountId() account_id: number,
-		@Body() data: CreatePaymentMethodDto,
-	): Promise<T> {
+	async create(@Req() req, @AccountId() account_id: number, @Body() data: CreatePaymentMethodDto): Promise<T> {
 		const domain = 'billing::PaymentMethodsController::create'
 
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])

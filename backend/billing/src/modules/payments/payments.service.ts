@@ -39,27 +39,15 @@ export class PaymentsService extends BaseService<T> {
 	}
 
 	async create(data: DeepPartial<T>): Promise<T> {
-
-		console.log('6.1.3.1', data)
-
 		const payment = await this.query.create(this.repository, data)
 
-		if(!payment?.payment_id){
+		if (!payment?.payment_id) {
 			throw new BadRequestException(`Payment not created`)
 		}
 
-		console.log('6.1.3.2', payment)
-	
 		const owner = await this.accountService.getOwner(payment.account_id)
-
-		console.log('6.1.3.3', owner)
-	
 		await this.sendBeaconOnCreate(payment, owner)
-
-		console.log('6.1.3.4', owner)
-
 		return payment
-		
 	}
 
 	async allocateFunds(payment: T, invoice: Invoice, amount: number): Promise<T> {
@@ -89,18 +77,18 @@ export class PaymentsService extends BaseService<T> {
 		return await this.query.raw(this.repository, sql)
 	}
 
-	async paymentResponse(options: {	
-		account_id: number,
-		app_integration_name: AppIntegrationName,
-		app_payment_id: number,
-		amount: number,
-		currency: SupportedCurrencies,
-		payment_status: PaymentStatus,
-		payment_type?: PaymentType,
+	async paymentResponse(options: {
+		account_id: number
+		app_integration_name: AppIntegrationName
+		app_payment_id: number
+		amount: number
+		currency: SupportedCurrencies
+		payment_status: PaymentStatus
+		payment_type?: PaymentType
 	}): Promise<void> {
 		const domain = 'billing::payments::paymentResponse'
 
-		if(!options.payment_type){
+		if (!options.payment_type) {
 			options.payment_type = PaymentType.payment
 		}
 
@@ -115,12 +103,10 @@ export class PaymentsService extends BaseService<T> {
 		})
 
 		if (!payment_method) {
-			this.logger.error(
-				`[${domain}] Payment method not found`, {
-					account_id: options.account_id,
-					app_integration_name: options.app_integration_name,
-				}
-			)
+			this.logger.error(`[${domain}] Payment method not found`, {
+				account_id: options.account_id,
+				app_integration_name: options.app_integration_name,
+			})
 			return
 		}
 
@@ -132,7 +118,9 @@ export class PaymentsService extends BaseService<T> {
 		})
 
 		if (payment) {
-			this.logger.log(`[${domain}] Payment already exists for app_payment_id: ${options.app_payment_id}, skipping...`)
+			this.logger.log(
+				`[${domain}] Payment already exists for app_payment_id: ${options.app_payment_id}, skipping...`,
+			)
 			return
 		}
 
@@ -140,16 +128,15 @@ export class PaymentsService extends BaseService<T> {
 			case PaymentType.payment:
 				switch (options.payment_status) {
 					case PaymentStatus.success:
-
-					await this.create({
-						account_id: options.account_id,
-						amount: options.amount,
-						currency: options.currency,
-						payment_method_id: payment_method.payment_method_id,
-						app_payment_id: options.app_payment_id,
-						type: options.payment_type,
-						method: payment_method.method,
-					})
+						await this.create({
+							account_id: options.account_id,
+							amount: options.amount,
+							currency: options.currency,
+							payment_method_id: payment_method.payment_method_id,
+							app_payment_id: options.app_payment_id,
+							type: options.payment_type,
+							method: payment_method.method,
+						})
 
 						payment_method = await this.paymentMethodsService.successfulPayment(payment_method)
 						return
@@ -247,7 +234,7 @@ export class PaymentsService extends BaseService<T> {
 				},
 				communication: {
 					email: {
-						to: payment.account.finance_email
+						to: payment.account?.finance_email
 							? {
 									name: payment.account.account_name,
 									email: payment.account.finance_email,

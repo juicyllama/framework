@@ -117,7 +117,7 @@ export class AuthService extends BaseService<T> {
 				'Your verification code is invalid or expired, please generate a new verification code',
 			)
 		}
-		user.password = data.newPassword
+		user.password = data.password
 		user.password_reset = false
 
 		await this.usersService.update(user)
@@ -136,6 +136,9 @@ export class AuthService extends BaseService<T> {
 		return !!user.user_id
 	}
 	async validateVerificationCode(data): Promise<SuccessResponseDto> {
+		if(!data.email) {
+			throw new BadRequestException('Email is required')
+		}
 		const user = await this.usersService.findOneByEmail(data.email)
 		this.handleUserNotFoundException(user)
 		const verificationCode = await this.getValidationCode(user)

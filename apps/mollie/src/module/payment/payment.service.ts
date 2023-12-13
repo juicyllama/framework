@@ -288,7 +288,7 @@ export class PaymentService extends BaseService<T> {
 			currency: payment.currency,
 			payment_status: molliePaymentStatus(payment.status),
 			payment_type: payment.amount >= 0 ? PaymentType.payment : PaymentType.refund,
-	})
+		})
 
 		this.logger.verbose(`[${domain}] Pushing payment response`, {
 			account_id: payment.customer.account_id,

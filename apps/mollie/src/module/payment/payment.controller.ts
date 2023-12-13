@@ -19,9 +19,7 @@ export class PaymentController {
 	@Get('redirect/:id')
 	async addRedirect(@Param('id') id: number, @Res() res: any): Promise<void> {
 		let payment = await this.paymentService.findById(id)
-		console.log('presysnc', payment)
 		payment = await this.paymentService.syncPayment(payment)
-		console.log('postsync', payment)
 		const mollie_customer = await this.customerService.findById(payment.mollie_customer_id)
 		res.redirect(
 			`${process.env.BASE_URL_API}/billing/payment/methods/redirect/${mollie_customer.account_id}/${

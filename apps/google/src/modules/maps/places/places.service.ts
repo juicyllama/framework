@@ -10,6 +10,7 @@ import { googlePlaceDetailsToEntity } from './places.mapper'
 import { Client } from '@googlemaps/google-maps-services-js'
 
 type PLACES_T = GoogleMapsPlace
+const CACHE_DAYS = 3
 
 @Injectable()
 export class PlacesService {
@@ -37,7 +38,7 @@ export class PlacesService {
 
 		if (result) {
 			const cachedDate = new Date()
-			cachedDate.setDate(cachedDate.getDate() - 365)
+			cachedDate.setDate(cachedDate.getDate() - CACHE_DAYS)
 
 			// if the number is cached and is not older than cachedDate
 			if (cachedDate < result.created_at) {

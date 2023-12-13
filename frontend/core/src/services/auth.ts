@@ -5,10 +5,27 @@ import { logger } from '../helpers'
 import { LogSeverity } from '../types'
 import { QVueGlobals } from 'quasar'
 import { userStore } from '../index'
+import { Router } from 'vue-router'
 
-export const loginUser = async (payload: UserLogin): Promise<string> => {
+export async function loginUser(payload: UserLogin, q: QVueGlobals, router?: Router): Promise<string> {
 	const response = await instance.post(`auth/login`, payload)
-	return response.data.access_token
+
+	if(response.data.error) {
+		switch(response.data.error.message) {
+			case 'Password requires changing':
+				await router.push('/reset?email=' + payload.email+'&message='+response.data.error.message)
+				return
+			default:
+				throw new Error(response.data.error.message)
+		}
+	}
+	else if(response.data.access_token){
+		return response.data.access_token
+	}
+	else {
+		throw new Error('Unknown error')
+	}
+	
 }
 
 export const passwordlessLogin = async (email: string): Promise<void> => {
@@ -29,7 +46,7 @@ export const resetPasswordCode = async (email: string, code: string): Promise<vo
 }
 
 export const resetPasswordComplete = async (email: string, code: string, pass: string): Promise<string> => {
-	const response = await instance.patch(`auth/password-reset/complete`, { email: email, code: code, password: pass })
+	const response = await instance.post(`auth/password-reset/complete`, { email: email, code: code, password: pass })
 	return response.data.access_token
 }
 
