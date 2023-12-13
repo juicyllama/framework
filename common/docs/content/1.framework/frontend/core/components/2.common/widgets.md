@@ -1,4 +1,4 @@
-# JLWidgets
+# Widgets
 
 Widget system consists of two component modes:
 

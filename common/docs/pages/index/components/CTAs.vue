@@ -20,35 +20,5 @@
 			</div>
 		</div>
 
-
-
-
-
-
-## Who are JuicyLlama
-
-A small intro video to who we are:
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/ekqLFttBud4?si=NHw6dF6UP_tyht7x" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
-## Modules
-
-
-
-For example, if you want to build a SaaS API backend, you will likely need [@juicyllama/core](./backend/core/README.md) and `@juicyllama/billing` to get started.
-
-::alert{type="danger"}
-@juicyllama/billing needs documenting
-::
-
-
-We leverage:
-
--   [NestJS](https://nestjs.com/) for building APIs and backend applications
--   [Vue](https://vuejs.org), [Quasar](https://quasar.dev/) and [Tailwindcss](https://tailwindcss.com/) for building frontend cross-platform applications
-
-We also have a number of utility / development modules that helps speed up development and provide additional functionality. 
-
-
 	</div>
 </template>

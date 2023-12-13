@@ -1,5 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+	extends: ['@nuxt-themes/docus'],
+	colorMode: {
+		preference: 'black',
+	},
 	modules: [
 		'@nuxt/content',
 		'@nuxtjs/google-fonts',
@@ -13,7 +17,6 @@ export default defineNuxtConfig({
 		icons: 'all'
 	},
 	devtools: { enabled: true },
-	extends: '@nuxt-themes/docus',
 	typescript: {
 		tsConfig: {
 			compilerOptions: {

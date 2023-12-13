@@ -6,6 +6,9 @@
   --color-primary-hover: #e0b10e;
   --typography-font-display: 'Nunito', 'Montserrat', sans-serif;
   --typography-font-body: 'Nunito', 'Montserrat', sans-serif;
+  --card-backgound-color: white;
+  --card-backgound-border: #00000010 1px solid;
+  --card-backgound-color-hover: #f3c61410;
 }
 html.dark {
   --q-primary: #e0b10e;
@@ -13,6 +16,9 @@ html.dark {
   --color-primary-hover: #f3c614;
   --typography-font-display: 'Nunito', 'Montserrat', sans-serif;
   --typography-font-body: 'Nunito', 'Montserrat', sans-serif;
+  --card-backgound-color: black;
+  --card-backgound-border: #00000080 1px solid;
+  --card-backgound-color-hover: #f3c61410;
 }
 
 ::selection {
@@ -84,3 +90,12 @@ p a:hover {
   }
 }
 
+.card {
+  border-radius: 0.5rem;
+  background-color: var(--card-backgound-color);
+  border: var(--card-backgound-border)
+}
+
+.card:hover {
+  background-color: var(--card-backgound-color-hover)
+}

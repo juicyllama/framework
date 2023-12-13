@@ -6,9 +6,22 @@ export default defineAppConfig({
 		description: 'Developer portal for working with our open source framework',
 		image: 'https://juicyllama.com/assets/images/icon.png',
 		socials: {
+			web: {
+				label: 'Wesbite',
+				href: 'https://juicyllama.com',
+				icon: 'ph:monitor'
+			},
 			github: 'juicyllama/framework',
-			discord: 'https://discord.com/invite/KGv76Q9S3s',
-			postman: 'https://www.postman.com/juicyllama/workspace/framework/overview',
+			discord: {
+				label: 'Discord',
+				href: 'https://discord.com/invite/KGv76Q9S3s',
+				icon: 'ph:discord-logo'
+			},
+			postman: {
+				label: 'Postman',
+				href: 'https://www.postman.com/juicyllama/workspace/framework/overview',
+				icon: 'devicon-plain:postman'
+			},
 			youtube: 'https://www.youtube.com/@juicyllama-studio'
 		},
 		aside: {
@@ -20,13 +33,6 @@ export default defineAppConfig({
 		},
 		header: {
 			logo: true,
-			textLinks: [{
-				text: 'Framework',
-				href: '/gettingstarted'
-			}, {
-				text: 'Apps',
-				href: '/apps/readme'
-			}],
 		},
 		footer: {
 			credits: {

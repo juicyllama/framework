@@ -15,12 +15,12 @@
 		<div class="mt-10 flex flex-wrap gap-x-6 gap-y-3 justify-center">
 			<a type="button"
 				class="button-primary"
-				href="/gettingstarted">
+				href="/framework">
 				<Icon name="ph:rocket-launch-duotone" class="flex-shrink-0 h-6 w-6" /> Get Started
 			</a>
 			<a type="button"
 				class="button-secondary"
-				href="/gettingstarted#build-a-client-application"
+				href="/framework#build-a-client-application"
 				>
 				<Icon name="ph:video-duotone" class="flex-shrink-0 h-6 w-6" /> Quickstart App
 			</a>
