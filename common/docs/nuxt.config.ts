@@ -2,11 +2,11 @@
 export default defineNuxtConfig({
 	modules: [
 		'@nuxt/content',
+		'@nuxtjs/google-fonts',
 		'nuxt-quasar-ui',
 		'@pinia/nuxt',
 		'@nuxt/ui',
 		'nuxt-icon'
-		//'nuxt-simple-sitemap',
 	],
 	ui: {
 		global: true,
@@ -49,5 +49,9 @@ export default defineNuxtConfig({
 			preload: ['sql'],
 		  }
 	},
-	css: ["~/assets/main.css"],
+	googleFonts: {
+		families: {
+		  Nunito:  [400, 500, 600, 700, 800, 900],
+		}
+	  },
 })

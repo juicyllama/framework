@@ -1,0 +1,46 @@
+
+
+:root {
+  --q-primary: #f3c614;
+  --color-primary-DEFAULT: #f3c614;
+  --color-primary-hover: #e0b10e;
+}
+html.dark {
+  --q-primary: #e0b10e;
+  --color-primary-DEFAULT: #e0b10e;
+  --color-primary-hover: #f3c614;
+}
+
+::selection {
+  background-color: #b5cadc !important;
+}
+
+body,
+html {
+  font-family: 'Nunito', 'Montserrat', sans-serif;
+  font-style: normal;
+}
+
+p a {
+  color: var(--color-primary-DEFAULT);
+}
+
+p a:hover {
+  color: var(--color-primary-hover);
+}
+
+
+@media (min-width: 640px) {
+  .sm\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:text-5xl {
+    font-size: 3rem;
+    line-height: 1;
+  }
+}
+

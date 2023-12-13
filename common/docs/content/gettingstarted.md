@@ -3,52 +3,6 @@ title: Home
 sidebar: false
 ---
 
-# JuicyLlama Framework
-
-[JuicyLlama](https://juicyllama.com) pride ourselves on delivering rapid development projects for our clients, we do this in part via our modular development framework.
-
-::alert{type="danger"}
-Our framework is currently in a beta phase while we work our way to a version 1.0.0.
-
-It is being used in many production apps however things are subject to breaking changes.
-::
-
-::alert{type="warning"}
-Here is a full list of the documentatiom which still needs creating:
-
-https://github.com/orgs/juicyllama/projects/8/views/1?pane=issue&itemId=36729897
-::
-
-::alert{type="info"}
-We are often referred to as an application framework as we bridge the gap between development frameworks like [NestJs](https://nestjs.com/) and [Vue](https://vuejs.org) with the final applications users interact with. If you are not familiar with NestJS or Vue we recommend you read their documentation first.
-::
-
-We work on the `client-back` principle rather than `framework-forward` which means we focus our efforts on building features which are useful to our clients and then package them up into modules for reuse. This allows us to spend maximum time focused on delivering high value features and less time on stuff that may rarely get used.
-
-## Who are JuicyLlama
-
-A small intro video to who we are:
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/ekqLFttBud4?si=NHw6dF6UP_tyht7x" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
-## Modules
-
-Our framework is modular, you install the modules you need into your projects. This allows you to pick and choose the modules based on the features you want.
-
-For example, if you want to build a SaaS API backend, you will likely need [@juicyllama/core](./backend/core/README.md) and `@juicyllama/billing` to get started.
-
-::alert{type="danger"}
-@juicyllama/billing needs documenting
-::
-
-
-We leverage:
-
--   [NestJS](https://nestjs.com/) for building APIs and backend applications
--   [Vue](https://vuejs.org), [Quasar](https://quasar.dev/) and [Tailwindcss](https://tailwindcss.com/) for building frontend cross-platform applications
-
-We also have a number of utility / development modules that helps speed up development and provide additional functionality. 
-
 ## Contributing
 
 Our framework is open source, we welcome contributions from the community. If you have a module you would like to add, please [open a discussion](https://github.com/juicyllama/framework/discussions) so we can discuss the best way to integrate it.

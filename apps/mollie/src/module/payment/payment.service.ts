@@ -134,7 +134,7 @@ export class PaymentService extends BaseService<T> {
 					apiKey: this.configService.get<string>('mollie.MOLLIE_API_KEY'),
 				})
 				mollie_response = await mollieClient.payments.get(payment.ext_payment_id)
-				this.logger.debug(`Get mollie payment response: `, mollie_response))
+				this.logger.debug(`Get mollie payment response: `, mollie_response)
 			}
 		} catch (e) {
 			this.logger.error(`Error: ${e.message}`, {
