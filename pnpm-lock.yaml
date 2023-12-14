@@ -8,6 +8,18 @@ importers:
 
   .: {}
 
+  apps/ahrefs:
+    dependencies:
+      '@juicyllama/app-store':
+        specifier: workspace:^
+        version: link:../../backend/app-store
+      '@juicyllama/core':
+        specifier: workspace:^
+        version: link:../../backend/core
+      '@juicyllama/utils':
+        specifier: workspace:^
+        version: link:../../common/utils
+
   apps/apilayer:
     dependencies:
       '@juicyllama/core':
@@ -184,6 +196,9 @@ importers:
 
   apps/wordpress:
     dependencies:
+      '@juicyllama/app-store':
+        specifier: workspace:^
+        version: link:../../backend/app-store
       '@juicyllama/core':
         specifier: workspace:^
         version: link:../../backend/core
@@ -612,6 +627,9 @@ importers:
       '@nuxt/ui-pro':
         specifier: ^0.6.1
         version: 0.6.1(nuxt@3.8.2)(rollup@3.29.4)(vite@4.5.1)(vue@3.3.11)
+      '@nuxtjs/color-mode':
+        specifier: ^3.3.2
+        version: 3.3.2(rollup@3.29.4)
       '@nuxtjs/google-fonts':
         specifier: 3.1.1
         version: 3.1.1(rollup@3.29.4)
