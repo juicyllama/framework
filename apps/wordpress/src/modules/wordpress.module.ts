@@ -8,6 +8,7 @@ import { WordpressPostsModule } from './posts/wordpress.posts.module'
 import { WordpressUsersModule } from './users/wordpress.users.module'
 import { WordpressCategoriesModule } from './categories/wordpress.categories.module'
 import { WordpressMediaModule } from './media/wordpress.media.module'
+import { WordpressInstallationService } from './wordpress.installation'
 
 @Module({
 	imports: [
@@ -21,5 +22,6 @@ import { WordpressMediaModule } from './media/wordpress.media.module'
 		forwardRef(() => WordpressCategoriesModule),
 		forwardRef(() => WordpressMediaModule),
 	],
+	providers: [WordpressInstallationService]
 })
 export class WordpressModule {}

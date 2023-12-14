@@ -1,5 +1,6 @@
 <script setup>
-const links = ['apilayer', 'amazon', 'everflow', 'google', 'mailchimp', 'mollie', 'openai', 'pexels', 'scrapingbee', 'shopify', 'slack', 'wise', 'wordpress', 'xero']
+import Apps from '../../../assets/json/apps.json'
+const links = Apps.map(app => app.key)
 </script>
 
 <template>

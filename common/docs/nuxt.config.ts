@@ -2,7 +2,8 @@
 export default defineNuxtConfig({
 	extends: ['@nuxt-themes/docus'],
 	colorMode: {
-		preference: 'black',
+		preference: 'dark', // default value of $colorMode.preference
+    	fallback: 'dark', // fallback value if not system preference found
 	},
 	modules: [
 		'@nuxt/content',
@@ -10,7 +11,8 @@ export default defineNuxtConfig({
 		'nuxt-quasar-ui',
 		'@pinia/nuxt',
 		'@nuxt/ui',
-		'nuxt-icon'
+		'nuxt-icon',
+		'@nuxtjs/color-mode'
 	],
 	ui: {
 		global: true,
