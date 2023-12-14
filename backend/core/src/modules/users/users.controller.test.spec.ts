@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { Csv, File, Json } from '@juicyllama/utils'
+import { Csv, File } from '@juicyllama/utils'
 import { MockUserRequest, Scaffold, ScaffoldDto, TestEndpoint } from '../../test'
 import { BulkUploadResponse, METHOD } from '../../types'
 import { AuthService } from '../auth/auth.service'
@@ -10,8 +10,6 @@ import { UsersService } from './users.service'
 
 const csv = new Csv()
 const file = new File()
-const json = new Json()
-
 
 const E = User
 type T = User
