@@ -215,6 +215,8 @@ export const UserStore = defineStore('user', {
 
 			logger({ severity: LogSeverity.LOG, message: `Login Successful`, q: q })
 
+			await this.setUser(user)
+
 			return user
 		},
 

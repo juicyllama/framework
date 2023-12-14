@@ -99,9 +99,17 @@ export async function apiRequest<T>(options: {
 }
 
 export class Api<T> {
+	url: string
+	constructor(url?: string) {
+		if (url){
+			this.url = url;
+		}
+	}
+
 	async create(options: FormApiOptionsCreate): Promise<T> {
+		if(!this.url && !options.url) throw new Error('No url provided')
 		return await apiRequest<T>({
-			url: options.url,
+			url: options.url ?? this.url,
 			method: 'POST',
 			data: options.data,
 			q: options.q,
@@ -109,52 +117,67 @@ export class Api<T> {
 	}
 
 	async post(options: FormApiOptionsCreate): Promise<T> {
-		return this.create(options)
+		if(!this.url && !options.url) throw new Error('No url provided')
+		return this.create({
+			url: this.url,
+			...options
+		})
 	}
 
-	async findOne(options: FormApiOptionsFindOne): Promise<T> {
-		let url = options.url
-		if (options.record_id) url = url + `/${options.record_id}`
+	async findOne(options?: FormApiOptionsFindOne): Promise<T> {
+		if(!this.url && !options.url) throw new Error('No url provided')
+		let url = options?.url ?? this.url
+		if (options?.record_id) url = url + `/${options?.record_id}`
 		return await apiRequest<T>({
 			url: url,
 			method: 'GET',
-			q: options.q,
+			q: options?.q,
 		})
 	}
 
-	async findAll(options: FormApiOptionsFindAll): Promise<T[]> {
+	async findAll(options?: FormApiOptionsFindAll): Promise<T[]> {
+		if(!this.url && !options?.url) throw new Error('No url provided')
 		return await apiRequest<T[]>({
-			url: options.url,
+			url: options?.url ?? this.url,
 			method: 'GET',
-			params: options.find,
-			q: options.q,
+			params: options?.find,
+			q: options?.q,
 		})
 	}
 
-	async get(options: FormApiOptionsFindAll): Promise<T[]> {
-		return this.findAll(options)
+	async get(options?: FormApiOptionsFindAll): Promise<T[]> {
+		if(!this.url && !options?.url) throw new Error('No url provided')
+		return this.findAll({
+			url: this.url,
+			...options
+		})
 	}
 
-	async stats(options: FormApiOptionsStats): Promise<number> {
+	async stats(options?: FormApiOptionsStats): Promise<number> {
+		if(!this.url && !options?.url) throw new Error('No url provided')
+
 		const response = await apiRequest<StatsResponse>({
-			url: options.url + '/stats',
+			url: (options?.url ?? this.url) + '/stats',
 			method: 'GET',
-			params: options.find,
-			q: options.q,
+			params: options?.find,
+			q: options?.q,
 		})
 
+		if(!options?.method) return response.count
+		
 		switch (options.method) {
-			case 'COUNT':
-				return response.count
 			case 'SUM':
 				return response.sum
 			case 'AVG':
 				return response.avg
+			case 'COUNT':
+				return response.count
 		}
 	}
 
 	async update(options: FormApiOptionsUpdate): Promise<T> {
-		let url = options.url
+		if(!this.url && !options.url) throw new Error('No url provided')
+		let url = options.url ?? this.url
 		if (options.record_id) url = url + `/${options.record_id}`
 
 		return await apiRequest<T>({
@@ -166,12 +189,17 @@ export class Api<T> {
 	}
 
 	async patch(options: FormApiOptionsUpdate): Promise<T> {
-		return this.update(options)
+		if(!this.url && !options.url) throw new Error('No url provided')
+		return this.update({
+			url: this.url,
+			...options
+		})
 	}
 
 	async delete(options: FormApiOptionsDelete): Promise<T> {
+		if(!this.url && !options.url) throw new Error('No url provided')
 		return await apiRequest<T>({
-			url: options.url + `/${options.record_id}`,
+			url: options.url ?? this.url + `/${options.record_id}`,
 			method: 'DELETE',
 			q: options.q,
 		})
