@@ -1,21 +1,21 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { Shopify, ShopifySession } from '../../config/shopify.config'
-import { Logger } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
 import { InstalledApp, OauthService } from '@juicyllama/app-store'
-import { ShopifyOrder, ShopifyRestListOrders } from './orders.dto'
 import { Store, StoresService, Transaction, TransactionsService } from '@juicyllama/ecommerce'
+import { Logger } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
+import { Shopify } from '@shopify/shopify-api'
+import { ShopifySession } from '../../config/shopify.config'
+import { InjectShopify } from '../provider/provider.constants'
+import { ShopifyOrder, ShopifyRestListOrders } from './orders.dto'
 import { ShopifyOrdersMapperService } from './orders.mapper.service'
 
 @Injectable()
 export class ShopifyOrdersService {
 	constructor(
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
-		@Inject(forwardRef(() => OauthService)) private readonly oauthService: OauthService,
-		@Inject(forwardRef(() => TransactionsService)) private readonly transactionsService: TransactionsService,
-		@Inject(forwardRef(() => StoresService)) private readonly storesService: StoresService,
-		@Inject(forwardRef(() => ShopifyOrdersMapperService))
+		private readonly logger: Logger,
+		@InjectShopify() private readonly shopify: Shopify,
+		private readonly oauthService: OauthService,
+		private readonly transactionsService: TransactionsService,
+		private readonly storesService: StoresService,
 		private readonly mapperService: ShopifyOrdersMapperService,
 	) {}
 
@@ -30,7 +30,6 @@ export class ShopifyOrdersService {
 	): Promise<ShopifyOrder[]> {
 		const domain = 'app::shopify::orders::listOrders'
 
-		const shopify = Shopify(this.configService.get('shopify'))
 		const oath = await this.oauthService.findOne({ where: { installed_app_id: installed_app.installed_app_id } })
 
 		if (!oath) {
@@ -53,10 +52,10 @@ export class ShopifyOrdersService {
 
 		const session = ShopifySession(installed_app, oath)
 
-		const orders = <ShopifyOrder[]>[]
+		const orders: ShopifyOrder[] = []
 		let pageInfo
 
-		const client = new shopify.clients.Rest({
+		const client = new this.shopify.clients.Rest({
 			session,
 			apiVersion: options.api_version,
 		})

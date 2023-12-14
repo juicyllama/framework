@@ -1,19 +1,19 @@
-import { Controller, forwardRef, Inject, Get, Query, Body, Post } from '@nestjs/common'
-import { ApiHideProperty } from '@nestjs/swagger'
-import { Logger } from '@juicyllama/utils'
 import { InstalledAppsService } from '@juicyllama/app-store'
 import { AccountId, UserAuth } from '@juicyllama/core'
-import { ShopifyWebhooksService } from './webhooks.service'
+import { Logger } from '@juicyllama/utils'
+import { Controller, Get, Query, Body, Post } from '@nestjs/common'
+import { ApiHideProperty } from '@nestjs/swagger'
 import { ApiVersion } from '@shopify/shopify-api'
 import { ShopifyWebhook, ShopifyWebhookCreate } from './webhooks.dto'
+import { ShopifyWebhooksTopics } from './webhooks.enums'
+import { ShopifyWebhooksService } from './webhooks.service'
 
 @Controller('app/shopify/webhooks')
 export class ShopifyWebhooksController {
 	constructor(
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => ShopifyWebhooksService))
+		private readonly logger: Logger,
 		private readonly shopifyWebhooksService: ShopifyWebhooksService,
-		@Inject(forwardRef(() => InstalledAppsService)) private readonly installedAppsService: InstalledAppsService,
+		private readonly installedAppsService: InstalledAppsService,
 	) {}
 
 	@UserAuth()
@@ -45,9 +45,13 @@ export class ShopifyWebhooksController {
 	@ApiHideProperty()
 	@Get('list')
 	async list(
-		@Query('installed_app_id') installed_app_id: number,
 		@AccountId() account_id: number,
-		@Query() query: any,
+		@Query()
+		{
+			installed_app_id,
+			topic,
+			...query
+		}: { installed_app_id: number; topic: ShopifyWebhooksTopics; [key: string]: any },
 	): Promise<ShopifyWebhook[]> {
 		const domain = 'app::shopify::webhooks::controller::list'
 
@@ -62,10 +66,9 @@ export class ShopifyWebhooksController {
 
 		if (!installed_app) throw new Error(`[${domain}] Installed App not found`)
 
-		delete query.installed_app_id
-
 		return await this.shopifyWebhooksService.getWebhooks(installed_app, {
 			api_version: ApiVersion.July23,
+			topic,
 			...query,
 		})
 	}
