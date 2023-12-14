@@ -10,11 +10,10 @@ export class AccountHooks {
 
 	/**
 	 * Send a new account opening notification to the account owner if !BEACON_DISABLE_ACCOUNT_CREATION
-	 * @param account 
-	 * @param owner 
+	 * @param account
+	 * @param owner
 	 */
 	async Created(account: Account, owner: User): Promise<void> {
-
 		if (process.env.BEACON_DISABLE_ACCOUNT_CREATION) {
 			return
 		}

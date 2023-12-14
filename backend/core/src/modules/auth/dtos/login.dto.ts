@@ -28,7 +28,6 @@ export class LoginRequestDto {
 }
 
 export class ValidateCodeDto {
-
 	@IsEmail()
 	@IsString()
 	@ApiProperty({
@@ -36,7 +35,7 @@ export class ValidateCodeDto {
 		example: 'jon.doe@example.com',
 	})
 	readonly email: string
-	
+
 	@IsString()
 	@IsNotEmpty()
 	readonly code: string

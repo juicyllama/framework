@@ -604,8 +604,8 @@ export class Query<T> {
 						fieldLookupWhere.length === 1
 							? fieldLookupWhere[0]
 							: fieldLookupWhere.length > 0
-							  ? And(...fieldLookupWhere)
-							  : value // if no valid operator is found, return the value as is - backward compatibility
+							? And(...fieldLookupWhere)
+							: value // if no valid operator is found, return the value as is - backward compatibility
 				}
 			}
 		}
@@ -798,11 +798,13 @@ export class Query<T> {
 			deleted: 0,
 			errored: 0,
 			errors: [],
+			ids: [],
 		}
 
 		for (const record of data) {
 			try {
-				await this.create(repository, record)
+				const entity = await this.create(repository, record)
+				result.ids.push(entity[this.getPrimaryKey(repository)])
 				result.created++
 			} catch (e: any) {
 				result.errored++
@@ -828,6 +830,7 @@ export class Query<T> {
 			deleted: 0,
 			errored: 0,
 			errors: [],
+			ids: [],
 		}
 
 		for (const record of data) {
@@ -838,13 +841,14 @@ export class Query<T> {
 					},
 				})
 
-				await this.upsert(repository, record, dedup_field)
+				const entity = await this.upsert(repository, record, dedup_field)
 
 				if (r) {
 					result.updated++
 				} else {
 					result.created++
 				}
+				result.ids.push(entity[this.getPrimaryKey(repository)])
 			} catch (e: any) {
 				result.errored++
 				result.errors.push(e.message)

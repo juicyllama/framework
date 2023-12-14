@@ -211,13 +211,25 @@ export class UsersController {
 		@UploadedFile() file?: Express.Multer.File,
 	): Promise<BulkUploadResponse> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
-		return await crudBulkUpload<T>({
+		const res = await crudBulkUpload<T>({
 			fields: UPLOAD_FIELDS,
 			dedup_field: UPLOAD_DUPLICATE_FIELD,
 			service: this.service,
 			...params,
 			file: file,
 		})
+		const users = await this.service.findAll({
+			where: {
+				user_id: res.ids,
+			},
+		})
+		const account = await this.accountService.findById(account_id)
+		await Promise.all(
+			users.map(async user => {
+				await this.service.invite(account, user)
+			}),
+		)
+		return res
 	}
 
 	@UploadFieldsDecorator()
