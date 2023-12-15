@@ -135,7 +135,7 @@ describe('Auth Endpoints', () => {
 				.send({
 					email: scaffold.values.owner.email,
 					code: code,
-					newPassword: new_password,
+					password: new_password,
 				})
 				.then(async ({ body }) => {
 					try {

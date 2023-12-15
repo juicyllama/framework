@@ -19,10 +19,9 @@ export class Payment extends BaseEntity {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn({ name: 'account_id' })
-	readonly account?: Account
+	account?: Account
 
 	@Column()
-	@IsNumber()
 	account_id: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
@@ -37,7 +36,7 @@ export class Payment extends BaseEntity {
 
 	@ManyToOne(() => PaymentMethod, payment_method => payment_method, { cascade: true })
 	@JoinColumn({ name: 'payment_method_id' })
-	readonly payment_method?: PaymentMethod
+	payment_method?: PaymentMethod
 
 	@Column()
 	@IsNumber()

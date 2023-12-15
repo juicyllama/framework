@@ -1,16 +1,16 @@
 {
     "name": "@juicyllama/app-mollie",
-    "version": "0.0.42",
+    "version": "0.0.44",
     "description": "Juicyllama NestJs Mollie App",
     "author": {
         "name": "JuicyLlama Studio",
         "email": "studio@juicyllama.com",
         "url": "https://juicyllama.com"
     },
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org/"
-	},
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/juicyllama/framework/tree/main/apps/mollie"

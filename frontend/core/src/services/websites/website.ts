@@ -5,4 +5,8 @@ type T = Website
 export const WEBSITE_ENDPOINT = '/websites/website'
 export const WEBSITE_PUSHER_EVENT = 'account_${account_id}_websites'
 
-export class WebsiteService extends Api<T> {}
+export class WebsiteService extends Api<T> {
+    constructor() {
+        super(WEBSITE_ENDPOINT)
+    }
+}

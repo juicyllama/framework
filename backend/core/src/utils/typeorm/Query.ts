@@ -48,8 +48,14 @@ export class Query<T> {
 
 		try {
 			const record = repository.create(data)
-			return await repository.save(record)
-		} catch (e) {
+			const result = await repository.save(record)
+
+			if (Env.IsNotProd()) {
+				logger.debug(`[QUERY][CREATE][${repository.metadata.tableName}] Result`, result)
+			}
+
+			return result
+		} catch (e: any) {
 			return await this.handleCreateError(e, repository, data)
 		}
 	}
@@ -193,7 +199,11 @@ export class Query<T> {
 
 		options = TypeOrm.findOneOptionsWrapper<T>(repository, options)
 		const result = <T>await repository.findOne(options)
-		return <T>await this.convertCurrency<T>(result, currency)
+		const convertedResult = <T>await this.convertCurrency<T>(result, currency)
+		if (Env.IsNotProd()) {
+			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}] Result`, convertedResult)
+		}
+		return convertedResult
 	}
 
 	/**
@@ -701,33 +711,6 @@ export class Query<T> {
 	}
 
 	/**
-	 * Returns unique key fields for the given repository
-	 */
-
-	getUniqueKeyFields(repository: Repository<T>): string[] {
-		const uniques: string[] = []
-
-		if (repository.metadata.indices.length) {
-			if (repository.metadata.indices[0]?.columnNamesWithOrderingMap) {
-				for (const [key] of Object.entries(repository.metadata.indices[0]?.columnNamesWithOrderingMap)) {
-					uniques.push(key)
-				}
-			}
-		}
-
-		if (uniques.length) {
-			return uniques
-		}
-
-		const unqiueKeys: string[] = repository.metadata.uniques.map(e => e.givenColumnNames[0])
-		if (unqiueKeys.length) {
-			return unqiueKeys
-		}
-
-		return []
-	}
-
-	/**
 	 * Duplicate key error
 	 */
 
@@ -745,18 +728,21 @@ export class Query<T> {
 
 			const uniqueKeyWhere = {}
 
-			for (const key of this.getUniqueKeyFields(repository)) {
+			for (const key of TypeOrm.getUniqueKeyFields(repository)) {
 				uniqueKeyWhere[key] = data[key]
 			}
 
 			return this.findOne(repository, { where: uniqueKeyWhere })
 		} else {
-			logger.error(`[SQL][CREATE] ${e.message}`, {
+			logger.error(`[SQL][CREATE] Error: ${e.message}`, {
 				repository: {
 					tableName: repository.metadata.tableName,
 				},
 				data: data,
-				error: e,
+				error: {
+					message: e.message,
+					stack: e.stack,
+				},
 			})
 
 			return undefined
@@ -777,7 +763,7 @@ export class Query<T> {
 
 			const uniqueKeyWhere = {}
 
-			for (const key of this.getUniqueKeyFields(repository)) {
+			for (const key of TypeOrm.getUniqueKeyFields(repository)) {
 				uniqueKeyWhere[key] = data[key]
 			}
 
@@ -788,7 +774,10 @@ export class Query<T> {
 					tableName: repository.metadata.tableName,
 				},
 				data: data,
-				error: e,
+				error: {
+					message: e.message,
+					stack: e.stack,
+				},
 			})
 
 			return undefined
@@ -809,11 +798,13 @@ export class Query<T> {
 			deleted: 0,
 			errored: 0,
 			errors: [],
+			ids: [],
 		}
 
 		for (const record of data) {
 			try {
-				await this.create(repository, record)
+				const entity = await this.create(repository, record)
+				result.ids.push(entity[this.getPrimaryKey(repository)])
 				result.created++
 			} catch (e: any) {
 				result.errored++
@@ -839,6 +830,7 @@ export class Query<T> {
 			deleted: 0,
 			errored: 0,
 			errors: [],
+			ids: [],
 		}
 
 		for (const record of data) {
@@ -849,13 +841,14 @@ export class Query<T> {
 					},
 				})
 
-				await this.upsert(repository, record, dedup_field)
+				const entity = await this.upsert(repository, record, dedup_field)
 
 				if (r) {
 					result.updated++
 				} else {
 					result.created++
 				}
+				result.ids.push(entity[this.getPrimaryKey(repository)])
 			} catch (e: any) {
 				result.errored++
 				result.errors.push(e.message)

@@ -1,6 +1,6 @@
 import { IsString, IsUrl } from 'class-validator'
 
-export class shopifyConfigDto {
+export class ShopifyConfigDto {
 	@IsUrl()
 	SHOPIFY_APP_CLIENT_ID: string
 

@@ -6,7 +6,7 @@ import {
 	StorageService,
 	UserAvatarType,
 	StorageFileFormat,
-	StorageFileType,
+	StorageType,
 	BaseService,
 } from '@juicyllama/core'
 import { Contact } from './contacts.entity'
@@ -102,12 +102,12 @@ export class ContactsService extends BaseService<T> {
 	 */
 
 	async uploadAvatar(contact: T, file: Express.Multer.File): Promise<T> {
-		const result = await this.storageService.write(
-			`account/${contact.account.account_id}/contacts/${contact.contact_id}/avatars/${file.originalname}`,
-			StorageFileType.PUBLIC,
-			StorageFileFormat.Express_Multer_File,
-			file,
-		)
+		const result = await this.storageService.write({
+			location: `account/${contact.account.account_id}/contacts/${contact.contact_id}/avatars/${file.originalname}`,
+			permissions: StorageType.PUBLIC,
+			format: StorageFileFormat.Express_Multer_File,
+			file: file,
+	})
 
 		if (result?.Location) {
 			contact = await this.query.update(this.repository, {
@@ -122,11 +122,10 @@ export class ContactsService extends BaseService<T> {
 	async patchMailchimp(contact: T): Promise<void> {
 		const domain = 'crm::contacts::service::patchMailchimp'
 
-		if (Modules.isInstalled('@juicyllama/app-mailchimp') && contact.emails?.length) {
+		if (Modules.mailchimp.isInstalled && contact.emails?.length) {
 			this.logger.verbose(`[${domain}] Mailchimp is installed`)
 
-			//@ts-ignore
-			const { MailchimpModule, MailchimpService } = await import('@juicyllama/app-mailchimp')
+			const { MailchimpModule, MailchimpService } = await Modules.mailchimp.load()
 
 			try {
 				const mailchimpModule = await this.lazyModuleLoader.load(() => MailchimpModule)
@@ -141,11 +140,10 @@ export class ContactsService extends BaseService<T> {
 	async deleteMailchimp(contact: T): Promise<void> {
 		const domain = 'crm::contacts::service::deleteMailchimp'
 
-		if (Modules.isInstalled('@juicyllama/app-mailchimp') && contact.emails?.length) {
+		if (Modules.mailchimp.isInstalled && contact.emails?.length) {
 			this.logger.verbose(`[${domain}] Mailchimp is installed`)
 
-			//@ts-ignore
-			const { MailchimpModule, MailchimpService } = await import('@juicyllama/app-mailchimp')
+			const { MailchimpModule, MailchimpService } = await Modules.aws.load()
 
 			try {
 				const mailchimpModule = await this.lazyModuleLoader.load(() => MailchimpModule)

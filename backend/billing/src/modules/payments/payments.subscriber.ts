@@ -25,7 +25,7 @@ export class PaymentsSubscriber implements EntitySubscriberInterface<Payment> {
 		const last_transaction = await event.manager.getRepository(Wallet).findOne({
 			where: {
 				account: {
-					account_id: event.entity.account.account_id,
+					account_id: event.entity.account_id,
 				},
 				currency: event.entity.currency,
 			},
@@ -47,7 +47,7 @@ export class PaymentsSubscriber implements EntitySubscriberInterface<Payment> {
 		)
 
 		const value = {
-			account: event.entity.account,
+			account_id: event.entity.account_id,
 			credit_balance: event.entity.amount,
 			payment: event.entity,
 			currency: event.entity.currency,

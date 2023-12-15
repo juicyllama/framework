@@ -90,6 +90,7 @@ export class AuthController {
 	})
 	@Post('password-reset/complete')
 	async completePasswordReset(@Body() data: CompletePasswordResetDto): Promise<LoginResponseDto> {
+		console.log(data)
 		return this.authService.completePasswordReset(data)
 	}
 

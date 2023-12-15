@@ -1,12 +1,5 @@
 import { IsOptional, IsNumber, IsJSON, IsString, MaxLength, MinLength } from 'class-validator'
-import {
-	Column,
-	ManyToOne,
-	Entity,
-	PrimaryGeneratedColumn,
-	Unique,
-	JoinColumn,
-} from 'typeorm'
+import { Column, ManyToOne, Entity, PrimaryGeneratedColumn, Unique, JoinColumn } from 'typeorm'
 import { BaseEntity } from '../../helpers'
 import { Account } from '../accounts/account.entity'
 import { User } from '../users/users.entity'
@@ -27,7 +20,7 @@ export class Setting extends BaseEntity {
 	@IsJSON()
 	value: any
 
-	@ManyToOne(() => Account, (account) => account.account_id, {
+	@ManyToOne(() => Account, account => account.account_id, {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn({ name: 'account_id' })
@@ -38,7 +31,7 @@ export class Setting extends BaseEntity {
 	@IsOptional()
 	account_id?: number
 
-	@ManyToOne(() => User, (user) => user.user_id, {
+	@ManyToOne(() => User, user => user.user_id, {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn({ name: 'user_id' })

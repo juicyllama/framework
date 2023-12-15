@@ -1,0 +1,43 @@
+{
+    "name": "@juicyllama/app-ahrefs",
+    "version": "0.1.0",
+    "description": "Juicyllama Ahrefs App ",
+    "author": {
+        "name": "JuicyLlama Studio",
+        "email": "studio@juicyllama.com",
+        "url": "https://juicyllama.com"
+    },
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/juicyllama/framework/tree/main/apps/ahrefs"
+    },
+    "bugs": "https://github.com/juicyllama/framework",
+    "license": "0BSD",
+    "readmeFilename": "README.md",
+    "main": "dist/index.js",
+    "files": [
+        "dist/**/*",
+        "*.md"
+    ],
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "prebuild": "rimraf dist",
+        "prepare": "pnpm run build",
+        "build": "tsc",
+        "sandbox": "export $(grep -v '^#' ../../.env.development) && BASE_URL_API=https://juicyllama.ngrok.io && nest start --config src/sandbox/nest-cli.json --watch ",
+        "sandbox:ngrok": "~/ngrok http http://localhost:3000 --subdomain=juicyllama",
+        "start:dev": "tsc -w",
+        "format": "prettier --write \"src/**/*.ts\"",
+        "lint": "eslint \"src/**/*.ts\" --fix",
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
+    },
+    "dependencies": {
+        "@juicyllama/app-store": "workspace:^",
+        "@juicyllama/core": "workspace:^",
+        "@juicyllama/utils": "workspace:^"
+    }
+}
