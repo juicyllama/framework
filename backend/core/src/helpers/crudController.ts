@@ -218,15 +218,19 @@ export async function crudBulkUpload<T>(options: {
 		upload_type: options.upload_type,
 		service: options.service ? true : false,
 		account_id: options.account_id,
-		file: options.file ? {
-			filename: options.file && options.file.filename ? options.file.filename : null,
-			mimetype: options.file && options.file.mimetype ? options.file.mimetype : null,
-		} : false,
-		raw: options.raw ? {
-			length: options.raw.length,
-			start: options.raw.substring(0, 20),
-			end: options.raw.substring(options.raw.length - 20, options.raw.length),
-		} : false,
+		file: options.file
+			? {
+					filename: options.file && options.file.filename ? options.file.filename : null,
+					mimetype: options.file && options.file.mimetype ? options.file.mimetype : null,
+			  }
+			: false,
+		raw: options.raw
+			? {
+					length: options.raw.length,
+					start: options.raw.substring(0, 20),
+					end: options.raw.substring(options.raw.length - 20, options.raw.length),
+			  }
+			: false,
 	})
 
 	if (!options.file && !options.raw) {
@@ -316,9 +320,11 @@ export async function crudBulkUpload<T>(options: {
 	}
 
 	if (Object.keys(content[0]).length !== options.fields.length) {
-		logger.debug(`[${domain}] Invalid ${options.upload_type} file. Expected ${options.fields.length} columns, got ${
-			Object.keys(content[0]).length
-		}`)
+		logger.debug(
+			`[${domain}] Invalid ${options.upload_type} file. Expected ${options.fields.length} columns, got ${
+				Object.keys(content[0]).length
+			}`,
+		)
 		throw new BadRequestException(
 			`Invalid ${options.upload_type} file. Expected ${options.fields.length} columns, got ${
 				Object.keys(content[0]).length

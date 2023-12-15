@@ -4,39 +4,39 @@ import { NoticeProps } from '@juicyllama/vue-utils'
 import { ConnectAppOptions, InstalledApp } from '../types/appstore'
 
 export interface FormApiOptionsCreate {
-	url: string
+	url?: string
 	data: any
 	q?: QVueGlobals
 }
 
 export interface FormApiOptionsFindOne {
-	url: string
+	url?: string
 	q?: QVueGlobals
 	record_id?: number
 }
 
 export interface FormApiOptionsFindAll {
-	url: string
+	url?: string
 	q?: QVueGlobals
 	find?: any
 }
 
 export interface FormApiOptionsStats {
-	url: string
+	url?: string
 	method: string
 	q?: QVueGlobals
 	find?: any
 }
 
 export interface FormApiOptionsUpdate {
-	url: string
+	url?: string
 	data: any
 	q?: QVueGlobals
 	record_id?: number
 }
 
 export interface FormApiOptionsDelete {
-	url: string
+	url?: string
 	q?: QVueGlobals
 	record_id: number
 }
@@ -151,23 +151,31 @@ export interface FormCustomButton extends CustomButton {
 	type?: FormFieldButtonType
 }
 
+export enum FormViewDesignSettings {
+	OUTLINED = 'outlined',
+	FILLED = 'filled',
+	STANDOUT = 'standout',
+	BORDERLESS = 'borderless',
+	ROUNDED = 'rounded',
+	ROUNDED_FILLED = 'rounded filled',
+	ROUNDED_OUTLINED = 'rounded outlined',
+	ROUNDED_STANDOUT = 'rounded standout',
+	SQUARE = 'square',
+	SQUARE_FILLED = 'square filled',
+	SQUARE_OUTLINED = 'square outlined',
+	SQUARE_STANDOUT = 'square standout',
+}
+
 export interface FormViewSettings {
 	lazy_rules?: any
 	counter?: boolean
-	outlined?: boolean
 	dense?: boolean
 	hideBottomSpace?: boolean
 	color?: string
 	no_error_icon?: boolean
 	stack_label?: boolean
 	icon?: Icon
-	filled?: boolean
-}
-
-export interface FormSettings {
-	field: {
-		settings: FormViewSettings
-	}
+	design?: FormViewDesignSettings
 }
 
 export interface FormField {
@@ -202,6 +210,8 @@ export interface FormField {
 	loading?: boolean
 	buttons?: FormCustomButton[]
 	settings?: FormViewSettings
+	error?: string
+	classes?: string
 }
 
 export interface FormSchema {

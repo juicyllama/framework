@@ -69,7 +69,11 @@ export class PaymentMethod extends BaseEntity {
 
 	@Column({ default: null, nullable: true })
 	@IsString()
-	redirect_url?: string
+	redirect_url?: string // Used by the payment gateway (e.g. 3DS)
+
+	@Column({ default: null, nullable: true })
+	@IsString()
+	client_redirect_url?: string // To redirect the client to after a payment has been made
 
 	constructor(partial: Partial<PaymentMethod>) {
 		super()

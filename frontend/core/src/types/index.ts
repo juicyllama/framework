@@ -1,6 +1,7 @@
 export * from './appstore'
 export * from './account'
 export * from './apps'
+export * from './billing'
 export * from './common'
 export * from './crm'
 export * from './tools'

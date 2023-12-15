@@ -20,7 +20,7 @@ export class CompletePasswordResetDto {
 	@IsString()
 	@MinLength(8)
 	@MaxLength(50)
-	newPassword: string
+	readonly password: string
 }
 
 export class InitiateResetPasswordDto {

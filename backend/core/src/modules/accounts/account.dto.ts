@@ -16,7 +16,8 @@ export class OnboardAccountDto {
 	@IsString()
 	@MinLength(2)
 	@MaxLength(255)
-	account_name: string
+	@IsOptional()
+	account_name?: string
 
 	@ApiProperty({
 		description: 'The account owners email address',
@@ -31,10 +32,11 @@ export class OnboardAccountDto {
 	@IsString()
 	@MinLength(8)
 	@MaxLength(50)
+	@IsOptional()
 	@ApiProperty({
 		example: 'S7r0#gP@$s',
 		description:
-			'Only provide this for new users, existing users will use their existing password and this will be ignored',
+			'Only provide this for new users, existing users will use their existing password and this will be ignored. If not provided a random password will be generated and emailed to the user.',
 	})
 	owners_password?: string
 
@@ -119,7 +121,7 @@ export class AccountDto {
 	@MaxLength(255)
 	company_name?: string
 
-	@ApiProperty({ description: 'Company Registered Address Line 1', example: "1 Some Street" })
+	@ApiProperty({ description: 'Company Registered Address Line 1', example: '1 Some Street' })
 	@IsString()
 	@IsOptional()
 	@MaxLength(255)

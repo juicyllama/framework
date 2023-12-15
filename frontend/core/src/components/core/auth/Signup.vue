@@ -6,12 +6,12 @@ import AuthActions from '../../../components/core/auth/Actions.vue'
 import type { CreateAccount } from '../../../types/account'
 import { AccountStore } from '../../../store/account'
 import { useRouter } from 'vue-router'
+import { FormViewSettings, FormViewDesignSettings } from '../../../types'
 
 const props = defineProps<{
-	dense?: boolean
 	skip_account_name?: boolean
 	success_redirect?: string
-	lazy_rules?: boolean
+	settings?: FormViewSettings
 }>()
 
 const state = reactive(<CreateAccount>{
@@ -39,7 +39,6 @@ const router = useRouter()
 async function create(state: CreateAccount) {
 	loading.value = true
 
-
 	if (props.skip_account_name) {
 		state.account_name = `${state.first_name} ${state.last_name} project`
 	}
@@ -64,60 +63,156 @@ async function create(state: CreateAccount) {
 		<q-card-section class="column auth-field-container">
 			<q-input
 				v-if="!props.skip_account_name"
-				:dense="props?.dense ?? false"
 				name="account-name"
-				label="Account Name"
 				v-model="state.account_name"
 				:rules="[val => (val && val.length > 0) || 'Account name must be filled in.']"
-				:lazy-rules="props?.lazy_rules ?? false"></q-input>
+				:label="!props.settings?.stack_label ? 'Account Name' : null"
+				:dense="props.settings?.dense"
+				:counter="props.settings?.counter"
+				:hide-bottom-space="props.settings?.hideBottomSpace"
+				:lazy-rules="props.settings?.lazy_rules"
+				:outlined="props.settings?.design === FormViewDesignSettings.OUTLINED"
+				:filled="props.settings?.design === FormViewDesignSettings.FILLED"
+				:standout="props.settings?.design === FormViewDesignSettings.STANDOUT"
+				:borderless="props.settings?.design === FormViewDesignSettings.BORDERLESS"
+				:rounded="props.settings?.design === FormViewDesignSettings.ROUNDED"
+				:rounded-filled="props.settings?.design === FormViewDesignSettings.ROUNDED_FILLED"
+				:rounded-outlined="props.settings?.design === FormViewDesignSettings.ROUNDED_OUTLINED"
+				:rounded-standout="props.settings?.design === FormViewDesignSettings.ROUNDED_STANDOUT"
+				:square="props.settings?.design === FormViewDesignSettings.SQUARE"
+				:square-filled="props.settings?.design === FormViewDesignSettings.SQUARE_FILLED"
+				:square-outlined="props.settings?.design === FormViewDesignSettings.SQUARE_OUTLINED"
+				:square-standout="props.settings?.design === FormViewDesignSettings.SQUARE_STANDOUT"
+				:no-error-icon="props.settings?.no_error_icon"
+				></q-input>
 			<q-input
 				autocomplete="given-name"
 				name="given-name"
-				:dense="props?.dense ?? false"
-				label="First Name *"
 				v-model="state.first_name"
 				:rules="[val => (val && val.length > 0) || 'First name must be filled in.']"
-				:lazy-rules="props?.lazy_rules ?? false"></q-input>
+				:label="!props.settings?.stack_label ? 'First Name *' : null"
+				:dense="props.settings?.dense"
+				:counter="props.settings?.counter"
+				:hide-bottom-space="props.settings?.hideBottomSpace"
+				:lazy-rules="props.settings?.lazy_rules"
+				:outlined="props.settings?.design === FormViewDesignSettings.OUTLINED"
+				:filled="props.settings?.design === FormViewDesignSettings.FILLED"
+				:standout="props.settings?.design === FormViewDesignSettings.STANDOUT"
+				:borderless="props.settings?.design === FormViewDesignSettings.BORDERLESS"
+				:rounded="props.settings?.design === FormViewDesignSettings.ROUNDED"
+				:rounded-filled="props.settings?.design === FormViewDesignSettings.ROUNDED_FILLED"
+				:rounded-outlined="props.settings?.design === FormViewDesignSettings.ROUNDED_OUTLINED"
+				:rounded-standout="props.settings?.design === FormViewDesignSettings.ROUNDED_STANDOUT"
+				:square="props.settings?.design === FormViewDesignSettings.SQUARE"
+				:square-filled="props.settings?.design === FormViewDesignSettings.SQUARE_FILLED"
+				:square-outlined="props.settings?.design === FormViewDesignSettings.SQUARE_OUTLINED"
+				:square-standout="props.settings?.design === FormViewDesignSettings.SQUARE_STANDOUT"
+				:no-error-icon="props.settings?.no_error_icon"
+				></q-input>
 			<q-input
-				:dense="props?.dense ?? false"
 				autocomplete="family-name"
 				name="family-name"
-				label="Last Name *"
 				v-model="state.last_name"
 				:rules="[val => (val && val.length > 0) || 'Last name must be filled in.']"
-				:lazy-rules="props?.lazy_rules ?? false"></q-input>
+				:label="!props.settings?.stack_label ? 'Last Name *' : null"
+				:dense="props.settings?.dense"
+				:counter="props.settings?.counter"
+				:hide-bottom-space="props.settings?.hideBottomSpace"
+				:lazy-rules="props.settings?.lazy_rules"
+				:outlined="props.settings?.design === FormViewDesignSettings.OUTLINED"
+				:filled="props.settings?.design === FormViewDesignSettings.FILLED"
+				:standout="props.settings?.design === FormViewDesignSettings.STANDOUT"
+				:borderless="props.settings?.design === FormViewDesignSettings.BORDERLESS"
+				:rounded="props.settings?.design === FormViewDesignSettings.ROUNDED"
+				:rounded-filled="props.settings?.design === FormViewDesignSettings.ROUNDED_FILLED"
+				:rounded-outlined="props.settings?.design === FormViewDesignSettings.ROUNDED_OUTLINED"
+				:rounded-standout="props.settings?.design === FormViewDesignSettings.ROUNDED_STANDOUT"
+				:square="props.settings?.design === FormViewDesignSettings.SQUARE"
+				:square-filled="props.settings?.design === FormViewDesignSettings.SQUARE_FILLED"
+				:square-outlined="props.settings?.design === FormViewDesignSettings.SQUARE_OUTLINED"
+				:square-standout="props.settings?.design === FormViewDesignSettings.SQUARE_STANDOUT"
+				:no-error-icon="props.settings?.no_error_icon"
+				></q-input>
 			<q-input
-				:dense="props?.dense ?? false"
 				autocomplete="email"
 				id="email"
 				name="email"
-				label="Email *"
 				v-model="state.email"
 				:rules="[val => validateEmail(val) || 'Must be a valid email.']"
-				:lazy-rules="props?.lazy_rules ?? false"></q-input>
-			<PasswordCriteria :authFormState="state" :lazy-rules="props?.lazy_rules ?? false"></PasswordCriteria>
+				:label="!props.settings?.stack_label ? 'Email Address *' : null"
+				:dense="props.settings?.dense"
+				:counter="props.settings?.counter"
+				:hide-bottom-space="props.settings?.hideBottomSpace"
+				:lazy-rules="props.settings?.lazy_rules"
+				:outlined="props.settings?.design === FormViewDesignSettings.OUTLINED"
+				:filled="props.settings?.design === FormViewDesignSettings.FILLED"
+				:standout="props.settings?.design === FormViewDesignSettings.STANDOUT"
+				:borderless="props.settings?.design === FormViewDesignSettings.BORDERLESS"
+				:rounded="props.settings?.design === FormViewDesignSettings.ROUNDED"
+				:rounded-filled="props.settings?.design === FormViewDesignSettings.ROUNDED_FILLED"
+				:rounded-outlined="props.settings?.design === FormViewDesignSettings.ROUNDED_OUTLINED"
+				:rounded-standout="props.settings?.design === FormViewDesignSettings.ROUNDED_STANDOUT"
+				:square="props.settings?.design === FormViewDesignSettings.SQUARE"
+				:square-filled="props.settings?.design === FormViewDesignSettings.SQUARE_FILLED"
+				:square-outlined="props.settings?.design === FormViewDesignSettings.SQUARE_OUTLINED"
+				:square-standout="props.settings?.design === FormViewDesignSettings.SQUARE_STANDOUT"
+				:no-error-icon="props.settings?.no_error_icon"
+				></q-input>
+			<PasswordCriteria :authFormState="state" :lazy-rules="props?.settings?.lazy_rules ?? false"></PasswordCriteria>
 			<q-input
 				autocomplete="new-password"
 				id="password"
 				name="password"
-				:dense="props?.dense ?? false"
-				label="Password *"
 				v-model="state.password.value"
 				type="password"
 				:rules="[val => isPasswordValid(state.password) || 'Password must meet all criteria.']"
-				:lazy-rules="props?.lazy_rules ?? false">
+				:label="!props.settings?.stack_label ? 'Password *' : null"
+				:dense="props.settings?.dense"
+				:counter="props.settings?.counter"
+				:hide-bottom-space="props.settings?.hideBottomSpace"
+				:lazy-rules="props.settings?.lazy_rules"
+				:outlined="props.settings?.design === FormViewDesignSettings.OUTLINED"
+				:filled="props.settings?.design === FormViewDesignSettings.FILLED"
+				:standout="props.settings?.design === FormViewDesignSettings.STANDOUT"
+				:borderless="props.settings?.design === FormViewDesignSettings.BORDERLESS"
+				:rounded="props.settings?.design === FormViewDesignSettings.ROUNDED"
+				:rounded-filled="props.settings?.design === FormViewDesignSettings.ROUNDED_FILLED"
+				:rounded-outlined="props.settings?.design === FormViewDesignSettings.ROUNDED_OUTLINED"
+				:rounded-standout="props.settings?.design === FormViewDesignSettings.ROUNDED_STANDOUT"
+				:square="props.settings?.design === FormViewDesignSettings.SQUARE"
+				:square-filled="props.settings?.design === FormViewDesignSettings.SQUARE_FILLED"
+				:square-outlined="props.settings?.design === FormViewDesignSettings.SQUARE_OUTLINED"
+				:square-standout="props.settings?.design === FormViewDesignSettings.SQUARE_STANDOUT"
+				:no-error-icon="props.settings?.no_error_icon"
+				>
 			</q-input>
 			<q-input
 				autocomplete="new-password"
 				id="confirm-password"
 				name="confirm-password"
-				:dense="props?.dense ?? false"
-				label="Confirm Password *"
 				v-model="state.password.confirm"
 				:disable="!isPasswordValid(state.password)"
 				type="password"
 				:rules="[val => (val && val === state.password.value) || 'Must match password.']"
-				:lazy-rules="props?.lazy_rules ?? false">
+				:label="!props.settings?.stack_label ? 'Confirm Password *' : null"
+				:dense="props.settings?.dense"
+				:counter="props.settings?.counter"
+				:hide-bottom-space="props.settings?.hideBottomSpace"
+				:lazy-rules="props.settings?.lazy_rules"
+				:outlined="props.settings?.design === FormViewDesignSettings.OUTLINED"
+				:filled="props.settings?.design === FormViewDesignSettings.FILLED"
+				:standout="props.settings?.design === FormViewDesignSettings.STANDOUT"
+				:borderless="props.settings?.design === FormViewDesignSettings.BORDERLESS"
+				:rounded="props.settings?.design === FormViewDesignSettings.ROUNDED"
+				:rounded-filled="props.settings?.design === FormViewDesignSettings.ROUNDED_FILLED"
+				:rounded-outlined="props.settings?.design === FormViewDesignSettings.ROUNDED_OUTLINED"
+				:rounded-standout="props.settings?.design === FormViewDesignSettings.ROUNDED_STANDOUT"
+				:square="props.settings?.design === FormViewDesignSettings.SQUARE"
+				:square-filled="props.settings?.design === FormViewDesignSettings.SQUARE_FILLED"
+				:square-outlined="props.settings?.design === FormViewDesignSettings.SQUARE_OUTLINED"
+				:square-standout="props.settings?.design === FormViewDesignSettings.SQUARE_STANDOUT"
+				:no-error-icon="props.settings?.no_error_icon"
+				>
 			</q-input>
 		</q-card-section>
 		<slot name="actions" :loading="loading">

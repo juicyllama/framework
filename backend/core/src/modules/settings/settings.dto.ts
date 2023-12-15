@@ -19,12 +19,9 @@ export class SettingsDto {
 	})
 	@IsJSON()
 	value: any
-
-
 }
 
 export class CreateSettingsDto extends SettingsDto {
-
 	@ApiProperty({
 		description: 'The user_id for the setting if assigned to a specific user',
 		example: 1,
@@ -33,11 +30,9 @@ export class CreateSettingsDto extends SettingsDto {
 	@IsNumber()
 	@IsOptional()
 	user_id?: number
-
 }
 
 export class UpdateSettingsDto {
-
 	@ApiProperty({
 		description: 'The json data for the key',
 		example: '{"some":"json"}',
@@ -45,5 +40,4 @@ export class UpdateSettingsDto {
 	})
 	@IsJSON()
 	value: any
-
 }

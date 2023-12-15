@@ -9,29 +9,19 @@ import {
 	forwardRef,
 	Inject,
 	Query,
-	Delete
+	Delete,
 } from '@nestjs/common'
 import { CreateSettingsDto, UpdateSettingsDto } from './settings.dto'
 import { ApiQuery, ApiParam, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { SettingsService } from './settings.service'
-import {
-	AccountId,
-	CreateDecorator,
-	UserAuth,
-} from '../../decorators'
-import {
-	SETTINGS_E,
-	SETTINGS_T,
-	SETTINGS_NAME
-} from './settings.constants'
+import { AccountId, CreateDecorator, UserAuth } from '../../decorators'
+import { SETTINGS_E, SETTINGS_T, SETTINGS_NAME } from './settings.constants'
 
 @ApiTags('Settings')
 @UserAuth()
 @Controller(`/settings`)
 export class SettingsController {
-	constructor(
-		@Inject(forwardRef(() => SettingsService)) private readonly service: SettingsService,
-	) {}
+	constructor(@Inject(forwardRef(() => SettingsService)) private readonly service: SettingsService) {}
 
 	@CreateDecorator({ entity: SETTINGS_E, name: SETTINGS_NAME })
 	async create(@AccountId() account_id: number, @Body() data: CreateSettingsDto): Promise<SETTINGS_T> {
@@ -55,18 +45,17 @@ export class SettingsController {
 	})
 	@Get(':key')
 	async findValueByKey(@AccountId() account_id: number, @Param('key') key, @Query('user_id') user_id): Promise<any> {
-		
 		const setting = await this.service.findOne(key)
 
 		if (!setting) {
 			throw new BadRequestException(`Setting with key: ${key} not found`)
 		}
 
-		if(setting.user_id && setting.user_id !== user_id) {
+		if (setting.user_id && setting.user_id !== user_id) {
 			throw new BadRequestException(`Setting with key: ${key} not found`)
 		}
 
-		if(setting.account_id && setting.account_id !== account_id) {
+		if (setting.account_id && setting.account_id !== account_id) {
 			throw new BadRequestException(`Setting with key: ${key} not found`)
 		}
 
@@ -94,11 +83,11 @@ export class SettingsController {
 			throw new BadRequestException(`Setting with key: ${key} not found`)
 		}
 
-		if(setting.user_id && setting.user_id !== req.user.user_id) {
+		if (setting.user_id && setting.user_id !== req.user.user_id) {
 			throw new BadRequestException(`Setting with key: ${key} not found`)
 		}
 
-		if(setting.account_id && setting.account_id !== account_id) {
+		if (setting.account_id && setting.account_id !== account_id) {
 			throw new BadRequestException(`Setting with key: ${key} not found`)
 		}
 
@@ -114,27 +103,22 @@ export class SettingsController {
 		example: 'something::unique::key',
 	})
 	@Delete(':key')
-	async delete(
-		@Req() req,
-		@AccountId() account_id: number,
-		@Param('key') key,
-	): Promise<SETTINGS_T> {
+	async delete(@Req() req, @AccountId() account_id: number, @Param('key') key): Promise<SETTINGS_T> {
 		const setting = await this.service.findOne(key)
 
 		if (!setting) {
 			throw new BadRequestException(`Setting with key: ${key} not found`)
 		}
 
-		if(setting.user_id && setting.user_id !== req.user.user_id) {
+		if (setting.user_id && setting.user_id !== req.user.user_id) {
 			throw new BadRequestException(`Setting with key: ${key} not found`)
 		}
 
-		if(setting.account_id && setting.account_id !== account_id) {
+		if (setting.account_id && setting.account_id !== account_id) {
 			throw new BadRequestException(`Setting with key: ${key} not found`)
 		}
 
 		await this.service.purge(key)
 		return setting
 	}
-
 }

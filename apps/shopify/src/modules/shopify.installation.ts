@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common'
+import { Injectable, OnModuleInit } from '@nestjs/common'
 import { Logger } from '@juicyllama/utils'
 import {
 	AppCategory,
@@ -12,12 +12,12 @@ import {
 @Injectable()
 export class ShopifyInstallationService implements OnModuleInit {
 	constructor(
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => AppsService)) private readonly appsService: AppsService,
+		private readonly logger: Logger,
+		private readonly appsService: AppsService,
 	) {}
 
 	async onModuleInit() {
-		try{
+		try {
 			const app = await this.appsService.findOne({
 				where: {
 					integration_name: AppStoreIntegrationName.shopify,
@@ -59,7 +59,6 @@ export class ShopifyInstallationService implements OnModuleInit {
 					],
 				})
 			}
-
 		} catch (e: any) {
 			this.logger.error(e.message, e)
 		}

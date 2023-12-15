@@ -16,6 +16,11 @@ describe('Dates', () => {
 			const format = Dates.format(new Date('2020-01-01'), 'MMM Do YYYY')
 			expect(format).toEqual('Jan 1st 2020')
 		})
+
+		it('ISO', async () => {
+			const format = Dates.format(new Date('2020-01-01'), 'iso')
+			expect(format).toEqual('2020-01-01T00:00:00.000Z')
+		})
 	})
 
 	describe('Mins Ago', () => {

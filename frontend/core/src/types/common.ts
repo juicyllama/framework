@@ -61,6 +61,13 @@ export interface IconSettings {
 		billing?: string
 		settings?: string
 		admin?: string
+		home: string
+		menu_seperator: string
+		mobile_nav: string
+		success: string
+		error: string
+		warning: string
+		info: string
 	}
 }
 
@@ -71,6 +78,7 @@ export interface Icon {
 	color?: string
 	classes?: string
 	hide?: boolean
+	after?: boolean // if true, the button will be added after the label
 }
 
 export enum TablePosition {

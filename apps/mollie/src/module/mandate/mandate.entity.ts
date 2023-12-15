@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { IsDate, IsEnum, IsObject, IsString } from 'class-validator'
+import { IsDate, IsEnum, IsObject, IsString, IsNumber } from 'class-validator'
 import { MollieCustomer } from '../customer/customer.entity'
 import { MandateMethod, MandateStatus } from '@mollie/api-client'
 import { MandateDetails } from '@mollie/api-client/dist/types/src/data/customers/mandates/data'
@@ -30,7 +30,11 @@ export class MollieMandate extends BaseEntity {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn({ name: 'mollie_customer_id' })
-	customer: MollieCustomer
+	customer?: MollieCustomer
+
+	@Column()
+	@IsNumber()
+	mollie_customer_id: number
 
 	@Column({ default: null, nullable: true })
 	@IsDate()

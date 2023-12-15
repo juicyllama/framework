@@ -6,9 +6,14 @@ import OTP from '../../../components/core/auth/OTP.vue'
 import { useRouter } from 'vue-router'
 import type { AuthFormState } from '../../../helpers/validators'
 import { useQuasar } from 'quasar'
+import { FormViewSettings, FormViewDesignSettings } from '../../../types'
 
 const $q = useQuasar()
 const userStore = UserStore()
+
+const props = defineProps<{
+	settings?: FormViewSettings
+}>()
 
 const state = reactive(<AuthFormState>{
 	email: '',
@@ -51,10 +56,29 @@ async function processCode(code) {
 		<q-card-section class="column q-gutter-md">
 			<q-input
 				name="email"
-				label="Email *"
 				v-model="state.email"
 				:rules="[val => validateEmail(val) || 'Must be a valid email.']"
-				autocomplete></q-input>
+				autocomplete
+				:label="!props.settings?.stack_label ? 'Email Address *' : null"
+				:dense="props.settings?.dense"
+				:counter="props.settings?.counter"
+				:hide-bottom-space="props.settings?.hideBottomSpace"
+				:lazy-rules="props.settings?.lazy_rules"
+				:outlined="props.settings?.design === FormViewDesignSettings.OUTLINED"
+				:filled="props.settings?.design === FormViewDesignSettings.FILLED"
+				:standout="props.settings?.design === FormViewDesignSettings.STANDOUT"
+				:borderless="props.settings?.design === FormViewDesignSettings.BORDERLESS"
+				:rounded="props.settings?.design === FormViewDesignSettings.ROUNDED"
+				:rounded-filled="props.settings?.design === FormViewDesignSettings.ROUNDED_FILLED"
+				:rounded-outlined="props.settings?.design === FormViewDesignSettings.ROUNDED_OUTLINED"
+				:rounded-standout="props.settings?.design === FormViewDesignSettings.ROUNDED_STANDOUT"
+				:square="props.settings?.design === FormViewDesignSettings.SQUARE"
+				:square-filled="props.settings?.design === FormViewDesignSettings.SQUARE_FILLED"
+				:square-outlined="props.settings?.design === FormViewDesignSettings.SQUARE_OUTLINED"
+				:square-standout="props.settings?.design === FormViewDesignSettings.SQUARE_STANDOUT"
+				:no-error-icon="props.settings?.no_error_icon"
+				
+				></q-input>
 		</q-card-section>
 		<slot name="actions" :loading="loading">
 			<AuthActions submit_label="Send Code" :loading="loading"></AuthActions>

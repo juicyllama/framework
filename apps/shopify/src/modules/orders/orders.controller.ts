@@ -1,19 +1,19 @@
-import { Controller, forwardRef, Inject, Get, Query, BadRequestException, Body, Post } from '@nestjs/common'
-import { ApiHideProperty } from '@nestjs/swagger'
-import { Logger } from '@juicyllama/utils'
 import { InstalledAppsService } from '@juicyllama/app-store'
 import { AccountId, UserAuth } from '@juicyllama/core'
-import { ShopifyOrdersService } from './orders.service'
-import { ApiVersion } from '@shopify/shopify-api'
 import { Transaction } from '@juicyllama/ecommerce'
-import { ShopifyOrder } from './orders.dto'
+import { Logger } from '@juicyllama/utils'
+import { Controller, Get, Query, BadRequestException, Body, Post } from '@nestjs/common'
+import { ApiHideProperty } from '@nestjs/swagger'
+import { ApiVersion } from '@shopify/shopify-api'
+import { ShopifyOrder, ShopifyQueryListOrders } from './orders.dto'
+import { ShopifyOrdersService } from './orders.service'
 
 @Controller('app/shopify/orders')
 export class ShopifyOrdersController {
 	constructor(
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => ShopifyOrdersService)) private readonly shopifyOrdersService: ShopifyOrdersService,
-		@Inject(forwardRef(() => InstalledAppsService)) private readonly installedAppsService: InstalledAppsService,
+		private readonly logger: Logger,
+		private readonly shopifyOrdersService: ShopifyOrdersService,
+		private readonly installedAppsService: InstalledAppsService,
 	) {}
 
 	/**
@@ -24,9 +24,8 @@ export class ShopifyOrdersController {
 	@ApiHideProperty()
 	@Get('sync')
 	async sync(
-		@Query('installed_app_id') installed_app_id: number,
 		@AccountId() account_id: number,
-		@Query() query: any,
+		@Query() { installed_app_id, ...query }: ShopifyQueryListOrders,
 	): Promise<Transaction[]> {
 		const domain = 'app::shopify::orders::controller::sync'
 
@@ -47,8 +46,6 @@ export class ShopifyOrdersController {
 			throw new BadRequestException(`Authentication Error: Installed App not found`)
 		}
 
-		delete query.installed_app_id
-
 		return await this.shopifyOrdersService.syncOrders(installed_app, {
 			api_version: ApiVersion.July23,
 			status: 'any',
@@ -64,9 +61,8 @@ export class ShopifyOrdersController {
 	@ApiHideProperty()
 	@Get('list')
 	async list(
-		@Query('installed_app_id') installed_app_id: number,
 		@AccountId() account_id: number,
-		@Query() query: any,
+		@Query() { installed_app_id, ...query }: ShopifyQueryListOrders,
 	): Promise<ShopifyOrder[]> {
 		const domain = 'app::shopify::orders::controller::list'
 
@@ -86,8 +82,6 @@ export class ShopifyOrdersController {
 			})
 			throw new BadRequestException(`Authentication Error: Installed App not found`)
 		}
-
-		delete query.installed_app_id
 
 		return await this.shopifyOrdersService.listOrders(installed_app, {
 			api_version: ApiVersion.July23,

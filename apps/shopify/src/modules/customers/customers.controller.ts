@@ -1,16 +1,16 @@
-import { Controller, forwardRef, Inject, Query, Body, Post } from '@nestjs/common'
-import { ApiHideProperty } from '@nestjs/swagger'
-import { Logger } from '@juicyllama/utils'
 import { InstalledAppsService } from '@juicyllama/app-store'
 import { Transaction } from '@juicyllama/ecommerce'
+import { Logger } from '@juicyllama/utils'
+import { Controller, Query, Body, Post } from '@nestjs/common'
+import { ApiHideProperty } from '@nestjs/swagger'
 import { ShopifyCustomersService } from './customers.service'
 
 @Controller('app/shopify/customers')
 export class ShopifyCustomersController {
 	constructor(
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => ShopifyCustomersService)) private readonly shopifyShopService: ShopifyCustomersService,
-		@Inject(forwardRef(() => InstalledAppsService)) private readonly installedAppsService: InstalledAppsService,
+		private readonly logger: Logger,
+		private readonly shopifyShopService: ShopifyCustomersService,
+		private readonly installedAppsService: InstalledAppsService,
 	) {}
 
 	/**

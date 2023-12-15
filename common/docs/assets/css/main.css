@@ -1,0 +1,101 @@
+
+
+:root {
+  --q-primary: #f3c614;
+  --color-primary-DEFAULT: #f3c614;
+  --color-primary-hover: #e0b10e;
+  --typography-font-display: 'Nunito', 'Montserrat', sans-serif;
+  --typography-font-body: 'Nunito', 'Montserrat', sans-serif;
+  --card-backgound-color: white;
+  --card-backgound-border: #00000010 1px solid;
+  --card-backgound-color-hover: #f3c61410;
+}
+html.dark {
+  --q-primary: #e0b10e;
+  --color-primary-DEFAULT: #e0b10e;
+  --color-primary-hover: #f3c614;
+  --typography-font-display: 'Nunito', 'Montserrat', sans-serif;
+  --typography-font-body: 'Nunito', 'Montserrat', sans-serif;
+  --card-backgound-color: black;
+  --card-backgound-border: #00000080 1px solid;
+  --card-backgound-color-hover: #f3c61410;
+}
+
+::selection {
+  background-color: #b5cadc !important;
+}
+
+body,
+html {
+  font-family: 'Nunito', 'Montserrat', sans-serif;
+  font-style: normal;
+}
+
+p a {
+  color: var(--color-primary-DEFAULT);
+}
+
+p a:hover {
+  color: var(--color-primary-hover);
+}
+
+.app--main-menu a:hover {
+  color: var(--color-primary-hover);
+}
+
+.button-primary {
+  font-size: 1rem;
+  background-color: var(--color-primary-DEFAULT);
+  color: black;
+  cursor: pointer;
+  padding: 0.6rem 1rem 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border-color: var(--color-primary-DEFAULT);
+  border-style: solid;
+  border-width: 2px;
+}
+
+.button-primary:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.button-secondary {
+  font-size: 1rem;
+  border-color: black;
+  border-style: solid;
+  border-width: 2px;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  padding: 0.6rem 1rem 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.button-secondary:hover {
+  background-color: oldlace;
+}
+
+@media (min-width: 640px) {
+  .sm\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:text-5xl {
+    font-size: 3rem;
+    line-height: 1;
+  }
+}
+
+.card {
+  border-radius: 0.5rem;
+  background-color: var(--card-backgound-color);
+  border: var(--card-backgound-border)
+}
+
+.card:hover {
+  background-color: var(--card-backgound-color-hover)
+}

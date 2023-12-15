@@ -51,7 +51,7 @@ describe('Account Service', () => {
 
 	describe('GetOwner', () => {
 		it('Return the owner of the account', async () => {
-			const result = await scaffold.services.service.getOwner(record)
+			const result = await scaffold.services.service.getOwner(record.account_id)
 			expect(result).toBeDefined()
 			expect(result.email).toBeDefined()
 		})
@@ -68,7 +68,7 @@ describe('Account Service', () => {
 			newOwner = await scaffold.services.authService.assignRole(newOwner, <Account>record, UserRole.ADMIN)
 			await scaffold.services.service.transfer(record, owner, newOwner)
 
-			const result = await scaffold.services.service.getOwner(record)
+			const result = await scaffold.services.service.getOwner(record.account_id)
 			expect(result.email).toBe(mock.email)
 		})
 	})

@@ -115,6 +115,7 @@ export type BulkUploadResponse = {
 	deleted: number
 	errored: number
 	errors?: any[]
+	ids?: number[]
 }
 
 export interface ChartResult {

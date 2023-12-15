@@ -1,5 +1,5 @@
 <template>
-	<main>
+	<UContainer class="min-h-screen flex items-center">
 		<ContentDoc />
-	</main>
+	</UContainer>
 </template>

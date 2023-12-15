@@ -1,4 +1,4 @@
-import { LogSeverity, LogType } from '../types'
+import { IconSettings, LogSeverity, LogType } from '../types'
 import { QVueGlobals } from 'quasar'
 
 export function logger(options: {
@@ -8,6 +8,7 @@ export function logger(options: {
 	timeout?: number
 	object?: any
 	table?: object
+	icon?: IconSettings
 }) {
 	if (options.severity === LogSeverity.VERBOSE && import.meta.env.NODE_ENV === 'production') {
 		return
@@ -30,11 +31,29 @@ export function logger(options: {
 			break
 	}
 
+	let icon: string
+
+	switch (options.severity) {
+		case LogSeverity.LOG:
+			icon = options.icon?.icons?.success ?? 'check'
+			break
+		case LogSeverity.ERROR:
+			icon = options.icon?.icons?.error ?? 'error'
+			break
+		case LogSeverity.WARN:
+			icon = options.icon?.icons?.warning ?? 'warning'
+			break
+		case LogSeverity.VERBOSE:
+			icon = options.icon?.icons?.info ?? 'info'
+			break
+	}
+
 	if (options.q) {
 		options.q.notify({
 			message: options.message,
 			type: type,
 			timeout: options.timeout ?? 10000,
+			icon: icon,
 		})
 	}
 

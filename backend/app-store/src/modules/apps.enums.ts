@@ -1,4 +1,6 @@
 export enum AppStoreIntegrationName {
+	ahrefs = 'ahrefs',
+	mollie = 'mollie',
 	shopify = 'shopify',
 	wordpress = 'wordpress',
 }
@@ -25,6 +27,7 @@ export enum AppCategory {
 	cms = 'cms',
 	ecommerce = 'ecommerce',
 	payments = 'payments',
+	seo = 'seo',
 }
 
 export enum AppInputType {

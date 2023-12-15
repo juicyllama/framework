@@ -34,7 +34,10 @@ export const AccountStore = defineStore('account', {
 				logger({ severity: LogSeverity.ERROR, message: e.message })
 			}
 		},
-		async resyncAccount(account_id: number): Promise<Account> {
+		async resyncAccount(account_id?: number): Promise<Account> {
+			if (!account_id) {
+				account_id = await this.getAccountId
+			}
 			const result = await getAccount(account_id)
 			if (result?.account_id) {
 				this.setSelectedAccount(result)
@@ -78,6 +81,9 @@ export const AccountStore = defineStore('account', {
 		},
 	},
 	getters: {
+		getAccount(state): Account {
+			return state.selected_account
+		},
 		getAccountId(state): number {
 			return state.selected_account?.account_id ?? null
 		},

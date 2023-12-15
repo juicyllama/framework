@@ -7,6 +7,7 @@ import {
 	FormFieldField,
 	FormFieldPlugin,
 	FormFieldType,
+	FormViewDesignSettings,
 	FormSchema,
 	InstalledApp,
 	LogSeverity,
@@ -152,10 +153,9 @@ if (props.options.onFormLoad) {
 					:placeholder="field.placeholder"
 					:input-class="`JLInput JLInput${Strings.capitalize(field.field)} JLInput${Strings.capitalize(
 						field.key,
-					)}`"
+					)} ${field.classes}`"
 					:dense="field.settings?.dense"
 					:counter="field.settings?.counter"
-					:outlined="field.settings?.outlined"
 					:hide-bottom-space="field.settings?.hideBottomSpace"
 					:lazy-rules="field.settings?.lazy_rules"
 					:rules="
@@ -171,11 +171,23 @@ if (props.options.onFormLoad) {
 					:loading="field.loading"
 					:disable="field.disabled"
 					:hint="field.hint"
+					:outlined="field.settings?.design === FormViewDesignSettings.OUTLINED"
+					:filled="field.settings?.design === FormViewDesignSettings.FILLED"
+					:standout="field.settings?.design === FormViewDesignSettings.STANDOUT"
+					:borderless="field.settings?.design === FormViewDesignSettings.BORDERLESS"
+					:rounded="field.settings?.design === FormViewDesignSettings.ROUNDED"
+					:rounded-filled="field.settings?.design === FormViewDesignSettings.ROUNDED_FILLED"
+					:rounded-outlined="field.settings?.design === FormViewDesignSettings.ROUNDED_OUTLINED"
+					:rounded-standout="field.settings?.design === FormViewDesignSettings.ROUNDED_STANDOUT"
+					:square="field.settings?.design === FormViewDesignSettings.SQUARE"
+					:square-filled="field.settings?.design === FormViewDesignSettings.SQUARE_FILLED"
+					:square-outlined="field.settings?.design === FormViewDesignSettings.SQUARE_OUTLINED"
+					:square-standout="field.settings?.design === FormViewDesignSettings.SQUARE_STANDOUT"
 					:no-error-icon="field.settings?.no_error_icon"
 					@keyup.enter="updatedField(field.key)"
 					@blur="updatedField(field.key)"></q-input>
 
-				<q-input
+				<q-input 
 					v-if="field.field === FormFieldField.TEXTAREA"
 					v-model="formData[field.key]"
 					:label="!field.settings?.stack_label ? field.label : null"
@@ -184,9 +196,8 @@ if (props.options.onFormLoad) {
 					:placeholder="field.placeholder"
 					:input-class="`JLInput JLTextarea JLInput${Strings.capitalize(
 						field.field,
-					)} JLInput${Strings.capitalize(field.key)}`"
+					)} JLInput${Strings.capitalize(field.key)} ${field.classes}`"
 					:dense="field.settings?.dense"
-					:outlined="field.settings?.outlined"
 					:hide-bottom-space="field.settings?.hideBottomSpace"
 					:lazy-rules="field.settings?.lazy_rules"
 					:rules="
@@ -203,19 +214,30 @@ if (props.options.onFormLoad) {
 					:disable="field.disabled"
 					:hint="field.hint"
 					:no-error-icon="field.settings?.no_error_icon"
+					:outlined="field.settings?.design === FormViewDesignSettings.OUTLINED"
+					:filled="field.settings?.design === FormViewDesignSettings.FILLED"
+					:standout="field.settings?.design === FormViewDesignSettings.STANDOUT"
+					:borderless="field.settings?.design === FormViewDesignSettings.BORDERLESS"
+					:rounded="field.settings?.design === FormViewDesignSettings.ROUNDED"
+					:rounded-filled="field.settings?.design === FormViewDesignSettings.ROUNDED_FILLED"
+					:rounded-outlined="field.settings?.design === FormViewDesignSettings.ROUNDED_OUTLINED"
+					:rounded-standout="field.settings?.design === FormViewDesignSettings.ROUNDED_STANDOUT"
+					:square="field.settings?.design === FormViewDesignSettings.SQUARE"
+					:square-filled="field.settings?.design === FormViewDesignSettings.SQUARE_FILLED"
+					:square-outlined="field.settings?.design === FormViewDesignSettings.SQUARE_OUTLINED"
+					:square-standout="field.settings?.design === FormViewDesignSettings.SQUARE_STANDOUT"
 					@keyup.enter="updatedField(field.key)"
 					@blur="updatedField(field.key)"></q-input>
 
-				<q-select
+				<q-select 
 					v-if="field.field === FormFieldField.DROPDOWN"
 					v-model="formData[field.key]"
 					:options="field.dropdown"
 					:name="field.key"
 					:input-class="`JLSelect JLSelect${Strings.capitalize(field.field)} JLSelect${Strings.capitalize(
 						field.key,
-					)}`"
+					)} ${field.classes}`"
 					:dense="field.settings?.dense"
-					:outlined="field.settings?.outlined"
 					:disable="field.disabled"
 					:multiple="field.multiple"
 					:label="!field.settings?.stack_label ? field.label : null"
@@ -224,6 +246,18 @@ if (props.options.onFormLoad) {
 					:no-error-icon="field.settings?.no_error_icon"
 					:hint="field.hint"
 					emit-value
+					:outlined="field.settings?.design === FormViewDesignSettings.OUTLINED"
+					:filled="field.settings?.design === FormViewDesignSettings.FILLED"
+					:standout="field.settings?.design === FormViewDesignSettings.STANDOUT"
+					:borderless="field.settings?.design === FormViewDesignSettings.BORDERLESS"
+					:rounded="field.settings?.design === FormViewDesignSettings.ROUNDED"
+					:rounded-filled="field.settings?.design === FormViewDesignSettings.ROUNDED_FILLED"
+					:rounded-outlined="field.settings?.design === FormViewDesignSettings.ROUNDED_OUTLINED"
+					:rounded-standout="field.settings?.design === FormViewDesignSettings.ROUNDED_STANDOUT"
+					:square="field.settings?.design === FormViewDesignSettings.SQUARE"
+					:square-filled="field.settings?.design === FormViewDesignSettings.SQUARE_FILLED"
+					:square-outlined="field.settings?.design === FormViewDesignSettings.SQUARE_OUTLINED"
+					:square-standout="field.settings?.design === FormViewDesignSettings.SQUARE_STANDOUT"
 					@keyup.enter="updatedField(field.key)"
 					@blur="updatedField(field.key)">
 					<template v-slot:selected>
@@ -245,16 +279,15 @@ if (props.options.onFormLoad) {
 					</template>
 				</q-select>
 
-				<q-select
+				<q-select 
 					v-if="field.field === FormFieldField.COUNTRY_DROPDOWN"
 					v-model="formData[field.key]"
 					:options="countries"
 					:name="field.key"
 					:input-class="`JLSelect JLSelect${Strings.capitalize(field.field)} JLSelect${Strings.capitalize(
 						field.key,
-					)}`"
+					)} ${field.classes}`"
 					:dense="field.settings?.dense"
-					:outlined="field.settings?.outlined"
 					:disable="field.disabled"
 					:multiple="field.multiple"
 					:label="!field.settings?.stack_label ? field.label : null"
@@ -263,6 +296,18 @@ if (props.options.onFormLoad) {
 					:no-error-icon="field.settings?.no_error_icon"
 					:hint="field.hint"
 					emit-value
+					:outlined="field.settings?.design === FormViewDesignSettings.OUTLINED"
+					:filled="field.settings?.design === FormViewDesignSettings.FILLED"
+					:standout="field.settings?.design === FormViewDesignSettings.STANDOUT"
+					:borderless="field.settings?.design === FormViewDesignSettings.BORDERLESS"
+					:rounded="field.settings?.design === FormViewDesignSettings.ROUNDED"
+					:rounded-filled="field.settings?.design === FormViewDesignSettings.ROUNDED_FILLED"
+					:rounded-outlined="field.settings?.design === FormViewDesignSettings.ROUNDED_OUTLINED"
+					:rounded-standout="field.settings?.design === FormViewDesignSettings.ROUNDED_STANDOUT"
+					:square="field.settings?.design === FormViewDesignSettings.SQUARE"
+					:square-filled="field.settings?.design === FormViewDesignSettings.SQUARE_FILLED"
+					:square-outlined="field.settings?.design === FormViewDesignSettings.SQUARE_OUTLINED"
+					:square-standout="field.settings?.design === FormViewDesignSettings.SQUARE_STANDOUT"
 					@keyup.enter="updatedField(field.key)"
 					@blur="updatedField(field.key)">
 					<template v-slot:selected>
@@ -286,7 +331,7 @@ if (props.options.onFormLoad) {
 					v-model="formData[field.key]"
 					:class="`JLToggle JLToggle${Strings.capitalize(field.field)} JLToggle${Strings.capitalize(
 						field.key,
-					)}`"
+					)} ${field.classes}`"
 					:checked-icon="field.icon ?? 'done'"
 					:color="field.settings?.color ?? 'primary'"
 					:label="!field.settings?.stack_label ? field.label : ''"
@@ -300,13 +345,14 @@ if (props.options.onFormLoad) {
 					v-model="formData[field.key]"
 					:name="field.key"
 					mask="YYYY-MM-DD"
-					:class="`JLDate JLDate${Strings.capitalize(field.field)} JLDate${Strings.capitalize(field.key)}`"
+					:class="`JLDate JLDate${Strings.capitalize(field.field)} JLDate${Strings.capitalize(field.key)} ${field.classes}`"
 					:minimal="field.settings?.dense" />
 
 				<JLNotice
 					v-if="field.field === FormFieldField.PLUGIN && field.plugin === FormFieldPlugin.NOTICE"
 					:type="field.pluginOptions.type as NoticeType"
-					:message="'message' in field.pluginOptions ? field.pluginOptions.message : ''" />
+					:message="'message' in field.pluginOptions ? field.pluginOptions.message : ''"
+					:class="field.classes" />
 
 				<Telephone
 					v-if="field.field === FormFieldField.PLUGIN && field.plugin === FormFieldPlugin.TELEPHONE"
@@ -324,23 +370,35 @@ if (props.options.onFormLoad) {
 					:field="field"
 					@installed="installedApp($event, field)" />
 
-				<q-input
+				<q-input 
 					v-if="field.field === FormFieldField.HIDDEN"
 					v-model="formData[field.key]"
 					:name="field.key"
 					:type="field.type"
+					:outlined="field.settings?.design === FormViewDesignSettings.OUTLINED"
+					:filled="field.settings?.design === FormViewDesignSettings.FILLED"
+					:standout="field.settings?.design === FormViewDesignSettings.STANDOUT"
+					:borderless="field.settings?.design === FormViewDesignSettings.BORDERLESS"
+					:rounded="field.settings?.design === FormViewDesignSettings.ROUNDED"
+					:rounded-filled="field.settings?.design === FormViewDesignSettings.ROUNDED_FILLED"
+					:rounded-outlined="field.settings?.design === FormViewDesignSettings.ROUNDED_OUTLINED"
+					:rounded-standout="field.settings?.design === FormViewDesignSettings.ROUNDED_STANDOUT"
+					:square="field.settings?.design === FormViewDesignSettings.SQUARE"
+					:square-filled="field.settings?.design === FormViewDesignSettings.SQUARE_FILLED"
+					:square-outlined="field.settings?.design === FormViewDesignSettings.SQUARE_OUTLINED"
+					:square-standout="field.settings?.design === FormViewDesignSettings.SQUARE_STANDOUT"
 					:class="`hidden JLHidden JLHidden${Strings.capitalize(field.field)} JLHidden${Strings.capitalize(
 						field.key,
-					)}`" />
+					)} ${field.classes}`" />
 
 				<div v-if="field.field === FormFieldField.BUTTON && field.buttons.length" class="JLButtonGroup">
 					<q-btn
 						v-for="(button, key) in field.buttons"
 						:class="`JLButton JLButton${Strings.capitalize(button.type)} JLButton${Strings.capitalize(
 							field.key,
-						)}`"
+						)} ${field.classes}`"
 						:key="key"
-						:color="button.color ?? 'primary'"
+						:color="!button.classes ? button.color : 'primary'"
 						:type="button.type === FormFieldButtonType.SUBMIT ? 'submit' : 'button'"
 						@click="buttonPressed(button)"
 						:disabled="field.disabled || field.loading">
@@ -348,13 +406,13 @@ if (props.options.onFormLoad) {
 							v-if="field.loading"
 							:class="`JLButtonLoader JLButtonLoader${Strings.capitalize(
 								field.field,
-							)} JLButtonLoader${Strings.capitalize(field.key)}`">
+							)} JLButtonLoader${Strings.capitalize(field.key)} `">
 							<q-spinner-dots size="1em" />
 						</span>
 						<span v-else>
 							<q-icon
-								v-if="button.icon?.name"
-								:name="`${button.icon?.type} ${button.icon?.name}`"
+								v-if="button.icon?.name && !button.icon?.after"
+								:name="`${button.icon?.type ? button.icon?.type + ' ' + button.icon?.name : button.icon?.name}`"
 								:class="`JLIcon JLIcon${Strings.capitalize(field.key)} q-mr-xs`" />
 							<span v-if="button.label">{{ button.label }}</span>
 							<span v-else-if="field.label">{{ field.label }}</span>
@@ -363,9 +421,24 @@ if (props.options.onFormLoad) {
 								{{ Strings.capitalize(props.options.name) }}
 							</span>
 							<span v-else>Submit</span>
+							<q-icon
+								v-if="button.icon?.name && button.icon?.after"
+								:name="`${button.icon?.type ? button.icon?.type + ' ' + button.icon?.name : button.icon?.name}`"
+								:class="`JLIcon JLIcon${Strings.capitalize(field.key)} q-mr-xs`" />
 						</span>
 					</q-btn>
 				</div>
+
+				<div v-if="field.error" class="JLFieldError">
+					<div class="q-field__bottom row items-start q-field__bottom--animated">
+						<div class="q-field__messages col">
+							<div role="alert">
+								{{field.error}}
+							</div>
+						</div>
+					</div>
+				</div>
+			
 			</div>
 		</q-form>
 	</div>

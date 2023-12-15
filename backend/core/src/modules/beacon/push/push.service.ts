@@ -50,9 +50,9 @@ export class BeaconPushService {
 		let service: any
 		let app_integration_name: string
 
-		if (Modules.isInstalled('pusher')) {
+		if (Modules.pusher.isInstalled) {
 			app_integration_name = 'pusher'
-			service = require('pusher')
+			service = await Modules.pusher.load()
 
 			if (
 				_.isUndefined(this.configService.get<string>('beacon.PUSHER_APP_ID')) ||

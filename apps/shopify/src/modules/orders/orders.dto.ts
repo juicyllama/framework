@@ -1,3 +1,4 @@
+import { OmitType } from '@nestjs/mapped-types'
 import { IsString, IsNumber, IsOptional, IsDateString, IsBoolean, IsEnum, IsArray, IsObject } from 'class-validator'
 import { ShopifyAddress, ShopifyMoney, ShopifyRestList } from '../shopify.common.dto'
 import { ShopifyCustomer } from '../customers/customers.dto'
@@ -246,4 +247,9 @@ export class ShopifyRestListOrders extends ShopifyRestList {
 	@IsString()
 	@IsOptional()
 	status?: string
+}
+
+export class ShopifyQueryListOrders extends OmitType(ShopifyRestListOrders, ['status', 'api_version'] as const) {
+	@IsNumber()
+	installed_app_id: number
 }

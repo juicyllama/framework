@@ -3,14 +3,14 @@ import { onMounted, reactive, ref } from 'vue'
 import { UserStore } from '../../../store/user'
 import { default as JLForm } from '../../common/form/Form.vue'
 import { useQuasar } from 'quasar'
-import { FormField, FormFieldButtonType, FormFieldField, FormFieldType, FormSettings } from '../../../types/form'
+import { FormField, FormFieldButtonType, FormFieldField, FormFieldType, FormViewSettings } from '../../../types/form'
 import { defaultFormSettings } from '../../../components/common/form/defaults'
 
 const userStore = UserStore()
 const $q = useQuasar()
 
 const props = defineProps<{
-	formSettings?: FormSettings
+	formSettings?: FormViewSettings
 }>()
 
 const form: FormField[] = reactive([])
@@ -26,7 +26,7 @@ function createForm() {
 			field: FormFieldField.INPUT,
 			type: FormFieldType.TEXT,
 			required: true,
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings?? defaultFormSettings,
 			loading: false,
 			size: {
 				tablet: 6,
@@ -40,7 +40,7 @@ function createForm() {
 			field: FormFieldField.INPUT,
 			type: FormFieldType.TEXT,
 			required: true,
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings?? defaultFormSettings,
 			loading: false,
 			size: {
 				tablet: 6,
@@ -54,7 +54,7 @@ function createForm() {
 			field: FormFieldField.INPUT,
 			type: FormFieldType.EMAIL,
 			required: true,
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings?? defaultFormSettings,
 			loading: false,
 		},
 		{
