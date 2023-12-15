@@ -2,17 +2,17 @@ import { SupportedCurrencies } from '@juicyllama/utils'
 import { Scaffold, ScaffoldDto } from '@juicyllama/core'
 import { MockSubscriptionRequest } from '../../test/mocks'
 import { ChargesService } from '../charges/charges.service'
-import { SubscriptionsService } from '../subscriptions/subscriptions.service'
-import { BillingCronService } from './billing.crons.service'
+import { SubscriptionsService } from './subscriptions.service'
 import { BillingModule } from '../billing.module'
 import { WalletService } from '../wallet/wallet.service'
 import { Charge } from '../charges/charges.entity'
 import { InvoicesService } from '../invoices/invoices.service'
+import { SubscriptionsCronService } from './subscriptions.crons.service'
 
 const E = Charge
 type T = Charge
 const MODULE = BillingModule
-const SERVICE = BillingCronService
+const SERVICE = SubscriptionsCronService
 
 describe('Subscriptions Cron', () => {
 	const scaffolding = new Scaffold<T>()

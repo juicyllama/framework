@@ -8,6 +8,7 @@ import { ApiVersion } from '@shopify/shopify-api'
 import _ from 'lodash'
 import { LessThan, IsNull } from 'typeorm'
 import { ShopifyOrdersService } from './orders.service'
+import { CRON_APP_SHOPIFY_SYNC_ORDERS_DOMIN } from './orders.constants'
 
 @Injectable()
 export class ShopifyOrdersCronService {
@@ -18,14 +19,13 @@ export class ShopifyOrdersCronService {
 		private readonly storesService: StoresService,
 	) {}
 
-	@Cron(CronExpression.EVERY_10_MINUTES, { disabled: !process.env.CRON_APP_SHOPIFY_SYNC_ORDERS })
+	@Cron(process.env.CRON_APP_SHOPIFY_SYNC_ORDERS_FREQUENCY ?? CronExpression.EVERY_10_MINUTES, { disabled: !process.env.CRON_APP_SHOPIFY_SYNC_ORDERS })
 	async cronSyncOrders() {
-		const domain = 'app::shopify::orders::crons::getOrders'
-		return await CronRunner(domain, this.syncOrders())
+		return await CronRunner(CRON_APP_SHOPIFY_SYNC_ORDERS_DOMIN, this.syncOrders())
 	}
 
 	async syncOrders(): Promise<any> {
-		const domain = 'app::shopify::orders::getOrders'
+		const domain = CRON_APP_SHOPIFY_SYNC_ORDERS_DOMIN
 
 		const installed_apps = await this.installedAppsService.findAll({
 			where: [

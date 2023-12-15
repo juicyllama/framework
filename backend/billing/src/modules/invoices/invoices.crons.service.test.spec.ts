@@ -1,11 +1,11 @@
 import { ScaffoldDto, Scaffold } from '@juicyllama/core'
 import { MockChargeRequest, MockPaymentMethodCCRequest } from '../../test/mocks'
 import { ChargesService } from '../charges/charges.service'
-import { BillingCronService } from './billing.crons.service'
+import { InvoicesCronService } from './invoices.crons.service'
 import { BillingModule } from '../billing.module'
 import { Charge } from '../charges/charges.entity'
-import { InvoicesService } from '../invoices/invoices.service'
-import { Invoice } from '../invoices/invoices.entity'
+import { InvoicesService } from './invoices.service'
+import { Invoice } from './invoices.entity'
 import { PaymentsService } from '../payments/payments.service'
 import { PaymentMethodType } from '../payment_methods/payment.methods.enums'
 import { PaymentMethodsService } from '../payment_methods/payment.methods.service'
@@ -15,7 +15,7 @@ import { PaymentType } from '../payments/payments.enums'
 const E = Charge
 type T = Charge
 const MODULE = BillingModule
-const SERVICE = BillingCronService
+const SERVICE = InvoicesCronService
 
 describe('Invoices Cron', () => {
 	const scaffolding = new Scaffold<T>()

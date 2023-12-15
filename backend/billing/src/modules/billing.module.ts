@@ -14,11 +14,8 @@ import {
 	cacheConfig,
 	databaseConfig,
 	Query,
-	SettingsModule,
 	TagsModule,
 } from '@juicyllama/core'
-import { BillingCronsController } from './crons/billing.crons.controller'
-import { BillingCronService } from './crons/billing.crons.service'
 import { ChargesModule } from './charges/charges.module'
 import { WalletModule } from './wallet/wallet.module'
 import { InvoicesModule } from './invoices/invoices.module'
@@ -43,15 +40,12 @@ import { TaxModule } from './tax/tax.module'
 		forwardRef(() => InvoicesModule),
 		forwardRef(() => PaymentsModule),
 		forwardRef(() => PaymentMethodsModule),
-		forwardRef(() => SettingsModule),
 		forwardRef(() => SubscriptionsModule),
 		forwardRef(() => TagsModule),
 		forwardRef(() => TaxModule),
 		forwardRef(() => WalletModule),
 		forwardRef(() => WithdrawalsModule),
 	],
-	controllers: [BillingCronsController],
-	providers: [BillingCronService, Logger, Query],
-	exports: [BillingCronService],
+	providers: [Logger, Query],
 })
 export class BillingModule {}

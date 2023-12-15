@@ -1,23 +1,22 @@
 import { SupportedCurrencies } from '@juicyllama/utils'
 import { AppIntegrationName, Scaffold, ScaffoldDto } from '@juicyllama/core'
-import { faker } from '@faker-js/faker'
 import { MockPaymentMethodCCRequest } from '../../test/mocks'
 import { ChargesService } from '../charges/charges.service'
-import { BillingCronService } from './billing.crons.service'
 import { BillingModule } from '../billing.module'
-import { WalletService } from '../wallet/wallet.service'
+import { WalletService } from './wallet.service'
 import { PaymentMethodsService } from '../payment_methods/payment.methods.service'
 import { PaymentsService } from '../payments/payments.service'
 import { PaymentMethod } from '../payment_methods/payment.methods.entity'
 import { PaymentStatus, PaymentType } from '../payments/payments.enums'
 import { Charge } from '../charges/charges.entity'
+import { WalletCronService } from './wallet.crons.service'
 
 const E = Charge
 type T = Charge
 const MODULE = BillingModule
-const SERVICE = BillingCronService
+const SERVICE = WalletCronService
 
-describe('Balance Cron', () => {
+describe('Wallet Cron', () => {
 	const scaffolding = new Scaffold<T>()
 	let scaffold: ScaffoldDto<T>
 
@@ -31,7 +30,6 @@ describe('Balance Cron', () => {
 
 	beforeAll(async () => {
 		scaffold = await scaffolding.up(MODULE, SERVICE)
-
 		chargesService = scaffold.module.get<ChargesService>(ChargesService)
 		paymentsService = scaffold.module.get<PaymentsService>(PaymentsService)
 		paymentMethodsService = scaffold.module.get<PaymentMethodsService>(PaymentMethodsService)
