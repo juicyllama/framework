@@ -20,7 +20,6 @@ import { WalletModule } from './modules/wallet/wallet.module'
 import { WithdrawalsModule } from './modules/withdrawals/withdrawals.module'
 
 //controllers
-import { BillingCronsController } from './modules/crons/billing.crons.controller'
 import { ChargesController } from './modules/charges/charges.controller'
 import { InvoicesController } from './modules/invoices/invoices.controller'
 import { PaymentMethodsController } from './modules/payment_methods/payment.methods.controller'
@@ -29,7 +28,6 @@ import { WalletController } from './modules/wallet/wallet.controller'
 import { WithdrawalsController } from './modules/withdrawals/withdrawals.controller'
 
 // Services
-import { BillingCronService } from './modules/crons/billing.crons.service'
 import { ChargesService } from './modules/charges/charges.service'
 import { InvoicesService } from './modules/invoices/invoices.service'
 import { PaymentMethodsService } from './modules/payment_methods/payment.methods.service'
@@ -91,14 +89,12 @@ export {
 	SubscriptionsModule,
 	WalletModule,
 	WithdrawalsModule,
-	BillingCronsController,
 	ChargesController,
 	InvoicesController,
 	PaymentMethodsController,
 	SubscriptionsController,
 	WalletController,
 	WithdrawalsController,
-	BillingCronService,
 	ChargesService,
 	InvoicesService,
 	PaymentMethodsService,

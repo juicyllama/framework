@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-shopify",
-    "version": "0.0.18",
+    "version": "0.0.19",
     "description": "Juicyllama Shopify App ",
     "author": {
         "name": "JuicyLlama Studio",
@@ -28,12 +28,12 @@
         "prebuild": "rimraf dist",
         "prepare": "pnpm run build",
         "build": "tsc",
-        "sandbox": "export $(grep -v '^#' ../../.env.development) && BASE_URL_API=https://juicyllama.ngrok.io && nest start --config src/sandbox/nest-cli.json --watch ",
+        "sandbox": "export $(grep -v '^#' ../../.env.development) && export $(grep -v '^#' .env.development) && BASE_URL_API=https://juicyllama.ngrok.io && nest start --config src/sandbox/nest-cli.json --watch ",
         "sandbox:ngrok": "~/ngrok http http://localhost:3000 --subdomain=juicyllama",
         "start:dev": "tsc -w",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
+        "test": "export $(grep -v '^#' ../../.env.development) && export $(grep -v '^#' .env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
     },
     "dependencies": {
         "@juicyllama/app-store": "workspace:^",

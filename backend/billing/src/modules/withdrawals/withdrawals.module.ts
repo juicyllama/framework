@@ -1,16 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { JwtModule } from '@nestjs/jwt'
 import { Logger } from '@juicyllama/utils'
-import {
-	AccountModule,
-	AuthModule,
-	BeaconModule,
-	databaseConfig,
-	jwtConfig,
-	Query,
-	UsersModule,
-} from '@juicyllama/core'
+import { AccountModule, AuthModule, BeaconModule, Query, SettingsModule, UsersModule } from '@juicyllama/core'
 import { WithdrawalsService } from './withdrawals.service'
 import { Withdrawal } from './withdrawals.entity'
 import { WalletModule } from '../wallet/wallet.module'
@@ -18,11 +9,11 @@ import { WithdrawalsController } from './withdrawals.controller'
 import { PaymentMethodsModule } from '../payment_methods/payment.methods.module'
 import { Invoice } from '../invoices/invoices.entity'
 import { PaymentsModule } from '../payments/payments.module'
+import { WithdrawalsCronsController } from './withdrawals.cron.controller'
+import { WithdrawalsCronService } from './withdrawals.crons.service'
 
 @Module({
 	imports: [
-		JwtModule.register(jwtConfig()),
-		TypeOrmModule.forRoot(databaseConfig()),
 		TypeOrmModule.forFeature([Withdrawal, Invoice]),
 		forwardRef(() => AuthModule),
 		forwardRef(() => AccountModule),
@@ -30,10 +21,11 @@ import { PaymentsModule } from '../payments/payments.module'
 		forwardRef(() => UsersModule),
 		forwardRef(() => PaymentsModule),
 		forwardRef(() => PaymentMethodsModule),
+		forwardRef(() => SettingsModule),
 		forwardRef(() => WalletModule),
 	],
-	controllers: [WithdrawalsController],
-	providers: [WithdrawalsService, Logger, Query],
+	controllers: [WithdrawalsController, WithdrawalsCronsController],
+	providers: [WithdrawalsService, WithdrawalsCronService, Logger, Query],
 	exports: [WithdrawalsService],
 })
 export class WithdrawalsModule {}

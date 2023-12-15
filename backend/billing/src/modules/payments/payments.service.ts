@@ -238,11 +238,11 @@ export class PaymentsService extends BaseService<T> {
 							? {
 									name: payment.account.account_name,
 									email: payment.account.finance_email,
-							  }
+								}
 							: {
 									name: user.first_name + ' ' + user.last_name,
 									email: user.email,
-							  },
+								},
 					},
 				},
 				subject: `Payment received`,
@@ -278,11 +278,11 @@ export class PaymentsService extends BaseService<T> {
 						? {
 								name: payment_method.account.account_name,
 								email: payment_method.account.finance_email,
-						  }
+							}
 						: {
 								name: user.first_name + ' ' + user.last_name,
 								email: user.email,
-						  },
+							},
 				},
 				event: `account_${payment_method.account.account_id}_billing`,
 			},

@@ -9,7 +9,7 @@ import {
 	UserRole,
 	UsersService,
 } from '@juicyllama/core'
-import { Logger, SupportedCurrencies } from '@juicyllama/utils'
+import { SupportedCurrencies } from '@juicyllama/utils'
 import { WithdrawalsService } from './withdrawals.service'
 import { WithdrawalRequestDto } from './withdrawals.dto'
 import { Withdrawal } from './withdrawals.entity'
@@ -28,7 +28,6 @@ type T = Withdrawal
 @Controller('billing/withdrawals')
 export class WithdrawalsController {
 	constructor(
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
 		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
 		@Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,

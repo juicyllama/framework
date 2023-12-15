@@ -1,6 +1,6 @@
-import { forwardRef, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { Env } from '@juicyllama/utils'
+import { Env, Logger } from '@juicyllama/utils'
 import Joi from 'joi'
 import wordpressConfig from '../config/wordpress.config'
 import { wordpressConfigJoi } from '../config/wordpress.config.joi'
@@ -9,19 +9,22 @@ import { WordpressUsersModule } from './users/wordpress.users.module'
 import { WordpressCategoriesModule } from './categories/wordpress.categories.module'
 import { WordpressMediaModule } from './media/wordpress.media.module'
 import { WordpressInstallationService } from './wordpress.installation'
+import { AppsModule } from '@juicyllama/app-store'
 
 @Module({
+	//todo move this to provider (as per shopify module)
 	imports: [
 		ConfigModule.forRoot({
 			isGlobal: true,
 			load: [wordpressConfig],
 			validationSchema: Env.IsNotTest() ? Joi.object(wordpressConfigJoi) : null,
 		}),
-		forwardRef(() => WordpressPostsModule),
-		forwardRef(() => WordpressUsersModule),
-		forwardRef(() => WordpressCategoriesModule),
-		forwardRef(() => WordpressMediaModule),
+		AppsModule,
+		WordpressPostsModule,
+		WordpressUsersModule,
+		WordpressCategoriesModule,
+		WordpressMediaModule,
 	],
-	providers: [WordpressInstallationService]
+	providers: [WordpressInstallationService, Logger],
 })
 export class WordpressModule {}
