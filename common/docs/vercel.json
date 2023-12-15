@@ -1,5 +1,5 @@
 {
 	"outputDirectory": ".output/public",
 	"framework": "nuxtjs",
-	"installCommand": "pnpm install"
+	"installCommand": "pnpm install --no-frozen-lockfile"
 }
