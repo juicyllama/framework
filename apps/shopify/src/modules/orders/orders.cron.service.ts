@@ -19,7 +19,9 @@ export class ShopifyOrdersCronService {
 		private readonly storesService: StoresService,
 	) {}
 
-	@Cron(process.env.CRON_APP_SHOPIFY_SYNC_ORDERS_FREQUENCY ?? CronExpression.EVERY_10_MINUTES, { disabled: !process.env.CRON_APP_SHOPIFY_SYNC_ORDERS })
+	@Cron(process.env.CRON_APP_SHOPIFY_SYNC_ORDERS_FREQUENCY ?? CronExpression.EVERY_10_MINUTES, {
+		disabled: !process.env.CRON_APP_SHOPIFY_SYNC_ORDERS,
+	})
 	async cronSyncOrders() {
 		return await CronRunner(CRON_APP_SHOPIFY_SYNC_ORDERS_DOMIN, this.syncOrders())
 	}

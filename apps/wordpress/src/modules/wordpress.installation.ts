@@ -53,13 +53,15 @@ export class WordpressInstallationService implements OnModuleInit {
 								type: AppInputType.text,
 								required: true,
 							},
-							description: 'Your WordPress username which can be found in the users section of your WordPress admin area.',
+							description:
+								'Your WordPress username which can be found in the users section of your WordPress admin area.',
 							private: false,
 						},
 						<AppSettingsDto>{
 							key: 'WORDPRESS_APPLICATION_PASSWORD',
 							name: 'WordPress Application Password',
-							description: 'This is a specific application password (not your normal login password) which can be created on the user management page in the WordPress admin.',
+							description:
+								'This is a specific application password (not your normal login password) which can be created on the user management page in the WordPress admin.',
 							input: {
 								type: AppInputType.text,
 							},

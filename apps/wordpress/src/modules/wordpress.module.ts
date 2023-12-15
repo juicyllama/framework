@@ -1,4 +1,4 @@
-import { forwardRef, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { Env, Logger } from '@juicyllama/utils'
 import Joi from 'joi'
@@ -25,6 +25,6 @@ import { AppsModule } from '@juicyllama/app-store'
 		WordpressCategoriesModule,
 		WordpressMediaModule,
 	],
-	providers: [WordpressInstallationService, Logger]
+	providers: [WordpressInstallationService, Logger],
 })
 export class WordpressModule {}

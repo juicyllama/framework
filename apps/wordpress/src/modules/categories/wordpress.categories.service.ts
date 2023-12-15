@@ -1,6 +1,5 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Api, Logger, Env } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
 import * as mock from './mock.json'
 import { wordpressConfigDto } from '../../config/wordpress.config.dto'
 import {
@@ -19,7 +18,6 @@ export class WordpressCategoriesService {
 	constructor(
 		@Inject(forwardRef(() => Api)) private readonly api: Api,
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
 	) {}
 
 	async create(options: { data: WordpressCreateCategory; config?: wordpressConfigDto }): Promise<WordpressCategory> {
