@@ -1,10 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	extends: ['@nuxt-themes/docus'],
-	colorMode: {
-		preference: 'dark', // default value of $colorMode.preference
-    	fallback: 'dark', // fallback value if not system preference found
-	},
 	modules: [
 		'@nuxt/content',
 		'@nuxtjs/google-fonts',
@@ -14,6 +10,11 @@ export default defineNuxtConfig({
 		'nuxt-icon',
 		'@nuxtjs/color-mode'
 	],
+	colorMode: {
+		preference: 'dark',
+    	fallback: 'dark',
+		storageKey: 'jl-docs-color-mode'
+	},
 	ui: {
 		global: true,
 		icons: 'all'
@@ -44,9 +45,9 @@ export default defineNuxtConfig({
 	content: {
 		defaultLocale: 'en',
 		experimental: {
-		  search: {
+		search: {
 			indexed: false
-		  }
+		}
 		},
 		markdown: {
 			mdc: true,
