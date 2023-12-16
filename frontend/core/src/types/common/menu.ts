@@ -1,5 +1,4 @@
 import { Button, Icon } from '../../types'
-import { QTooltipProps } from 'quasar'
 
 export interface Menu {
 	items: MenuItems[]

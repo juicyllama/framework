@@ -10,7 +10,7 @@ import {
 	forwardRef,
 	Inject,
 } from '@nestjs/common'
-import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto, Strings } from '@juicyllama/utils'
+import { StatsMethods, StatsResponseDto, Strings } from '@juicyllama/utils'
 import { CreateUserDto, UpdateUserDto } from './users.dto'
 import { UserOrderBy, UserRelations, UserRole, UserSelect } from './users.enums'
 import { ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
@@ -39,9 +39,9 @@ import {
 	T,
 	UPLOAD_DUPLICATE_FIELD,
 } from './users.constants'
-import { crudDelete, crudFindAll, crudStats } from '../../helpers'
-import { ReadChartsDecorator, UploadFieldsDecorator, UploadImageDecorator } from '../../decorators/crud.decorator'
-import { crudCharts, crudBulkUpload } from '../../helpers/crudController'
+import { crudDelete, } from '../../helpers'
+import { UploadFieldsDecorator, UploadImageDecorator } from '../../decorators/crud.decorator'
+import { crudBulkUpload } from '../../helpers/crudController'
 import { StorageService } from '../storage/storage.service'
 import { CrudUploadFieldsResponse, BulkUploadDto, BulkUploadResponse } from '../../types/common'
 import { TypeOrm } from '../../utils/typeorm/TypeOrm'
@@ -73,7 +73,6 @@ export class UsersController {
 		name: NAME,
 	})
 	async findAll(@AccountId() account_id: number, @Query() query): Promise<T[]> {
-		
 		const where = this.tQuery.buildWhere({
 			repository: this.service.repository,
 			query: query,
@@ -83,7 +82,7 @@ export class UsersController {
 
 		const options = TypeOrm.findOptions<T>(query, where, DEFAULT_ORDER_BY)
 		const users = await this.service.findAll(options)
-		
+
 		for (const u in users) {
 			delete users[u].password
 		}
@@ -122,8 +121,7 @@ export class UsersController {
 		}
 	}
 
-
-	//todo fix to restrict to correct account_id	
+	//todo fix to restrict to correct account_id
 	// @ReadChartsDecorator({ entity: E, selectEnum: UserSelect, name: NAME })
 	// async charts(
 	// 	@Query() query: any,

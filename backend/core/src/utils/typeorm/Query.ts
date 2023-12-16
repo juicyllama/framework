@@ -604,8 +604,8 @@ export class Query<T> {
 						fieldLookupWhere.length === 1
 							? fieldLookupWhere[0]
 							: fieldLookupWhere.length > 0
-							? And(...fieldLookupWhere)
-							: value // if no valid operator is found, return the value as is - backward compatibility
+								? And(...fieldLookupWhere)
+								: value // if no valid operator is found, return the value as is - backward compatibility
 				}
 			}
 		}
@@ -621,7 +621,7 @@ export class Query<T> {
 				whereBase['accounts'] = {
 					account_id: options.account_id,
 				}
-			} 
+			}
 		}
 
 		if (options.account_ids) {
@@ -635,7 +635,7 @@ export class Query<T> {
 				whereBase['accounts'] = {
 					account_id: In(options.account_ids),
 				}
-			}  
+			}
 		}
 
 		if (options.query?.search?.length === 1 && options.query?.search[0] === 'undefined') {
