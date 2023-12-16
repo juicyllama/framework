@@ -101,7 +101,7 @@ describe('Query Bulk', () => {
 		})
 
 		it(`Updates records even if duplicate found`, async () => {
-			const count = await scaffold.services.service.count()
+			//const count = await scaffold.services.service.count()
 
 			const first_name_1 = faker.person.firstName()
 			const last_name_1 = faker.person.lastName()
@@ -147,7 +147,6 @@ describe('Query Bulk', () => {
 				scaffold.services.logger.warn(e.message)
 			}
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
-			console.log(res)
 			expect(res.created).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
 			const lastUser = users.pop()
@@ -175,7 +174,6 @@ describe('Query Bulk', () => {
 				scaffold.services.logger.warn(e.message)
 			}
 				const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
-				console.log(res)
 				expect(res.created).toEqual(2)
 				const users = await scaffold.services.service.findAll({})
 				const lastUser = users.pop()
@@ -224,8 +222,8 @@ describe('Query Bulk', () => {
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
-			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)	
-console.log(res)
+			await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)	
+
 			const user = await scaffold.services.service.findOne({
 				where: {
 					email: email_shared
@@ -254,7 +252,6 @@ console.log(res)
 				scaffold.services.logger.warn(e.message)
 			}
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
-			console.log(res)
 			expect(res.updated).toEqual(2)
 			const new_count = await scaffold.services.service.count()
 			expect(new_count).toEqual(count)
@@ -284,7 +281,6 @@ console.log(res)
 				scaffold.services.logger.warn(e.message)
 			}
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.UPSERT, UPLOAD_DUPLICATE_FIELD)
-			console.log(res)
 			expect(res.created).toEqual(1)
 			expect(res.updated).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
