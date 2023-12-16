@@ -1,5 +1,9 @@
-export interface Button {
+export interface Button extends ButtonStyle {
 	label?: string
+}
+
+export interface ButtonStyle {
+	classes?: string
 	color?: string
 	text_color?: string
 	size?: string
@@ -11,7 +15,7 @@ export interface Button {
 	square?: boolean
 	glossy?: boolean
 	fab?: boolean
-	'fab-mini'?: boolean
+	fab_mini?: boolean
 	padding?: string
 	dense?: boolean
 	round?: boolean

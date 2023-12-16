@@ -17,6 +17,8 @@ import {
 	WidgetsComponent,
 	JLUsersTable,
 	JLUpload,
+	JLBillingPage,
+	JLInvoicePage,
 } from './components'
 import { JLAccountProfile, JLAccountAvatar, JLAccountSwitcher, JLAccountBrand } from './components/core/account'
 import { JLUserAvatar, JLUserProfile, JLUserMenu } from './components/core/user'
@@ -68,6 +70,8 @@ export default {
 		Vue.component('JLUsersTable', JLUsersTable)
 		Vue.component('JLAppStoreConnect', JLAppStoreConnect)
 		Vue.component('JLOauthStart', JLOauthStart)
+		Vue.component('JLBillingPage', JLBillingPage)
+		Vue.component('JLInvoicePage', JLInvoicePage)
 	},
 } as Plugin
 
@@ -103,4 +107,6 @@ export {
 	JLUpload,
 	WidgetsComponent,
 	JLUsersTable,
+	JLBillingPage,
+	JLInvoicePage
 }

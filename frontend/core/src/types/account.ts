@@ -11,6 +11,7 @@ export interface CreateAccount extends AuthFormState {
 export interface NewAccountDetails {
 	account: Account
 	owner: User
+	access_token: string
 }
 
 export interface Account {

@@ -394,12 +394,26 @@ if (props.options.onFormLoad) {
 				<div v-if="field.field === FormFieldField.BUTTON && field.buttons.length" class="JLButtonGroup">
 					<q-btn
 						v-for="(button, key) in field.buttons"
-						:class="`JLButton JLButton${Strings.capitalize(button.type)} JLButton${Strings.capitalize(
+						:class="`${field.settings?.button_style?.classes} JLButton JLButton${Strings.capitalize(button.type)} JLButton${Strings.capitalize(
 							field.key,
 						)} ${field.classes}`"
 						:key="key"
-						:color="!button.classes ? button.color : 'primary'"
-						:type="button.type === FormFieldButtonType.SUBMIT ? 'submit' : 'button'"
+						:color="(!button?.classes && !field.settings?.button_style?.classes) ? button.color ? button.color : field.settings?.button_style?.color ? field.settings?.button_style?.color : 'primary' : 'primary'"
+						:type="button?.type === FormFieldButtonType.SUBMIT ? 'submit' : 'button'"
+						:text-color="button?.text_color ?? field.settings?.button_style?.text_color ?? null"
+						:size="button?.size ?? field.settings?.button_style?.size ?? null"
+						:outline="button?.outline ?? field.settings?.button_style?.outline ?? false"
+						:rounded="button?.rounded ?? field.settings?.button_style?.rounded ?? false"
+						:flat="button?.flat ?? field.settings?.button_style?.flat ?? false"
+						:push="button?.push ?? field.settings?.button_style?.push ?? false"
+						:unelevated="button?.unelevated ?? field.settings?.button_style?.unelevated ?? false"
+						:square="button?.square ?? field.settings?.button_style?.square ?? false"
+						:glossy="button?.glossy ?? field.settings?.button_style?.glossy ?? false"
+						:fab="button?.fab ?? field.settings?.button_style?.fab ?? false"
+						:fab-mini="button?.fab_mini ?? field.settings?.button_style?.fab_mini ?? false"
+						:padding="button?.padding ?? field.settings?.button_style?.padding ?? ''"
+						:dense="button?.dense ?? field.settings?.button_style?.dense ?? false"
+						:round="button?.round ?? field.settings?.button_style?.round ?? false"
 						@click="buttonPressed(button)"
 						:disabled="field.disabled || field.loading">
 						<span

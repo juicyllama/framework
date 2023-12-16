@@ -1,4 +1,4 @@
-import { Button, CustomButton, DropdownOptions, Icon, IconSettings } from './common'
+import { Button, ButtonStyle, CustomButton, DropdownOptions, Icon, IconSettings } from './common'
 import { QVueGlobals } from 'quasar'
 import { NoticeProps } from '@juicyllama/vue-utils'
 import { ConnectAppOptions, InstalledApp } from '../types/appstore'
@@ -176,6 +176,7 @@ export interface FormViewSettings {
 	stack_label?: boolean
 	icon?: Icon
 	design?: FormViewDesignSettings
+	button_style?: ButtonStyle
 }
 
 export interface FormField {

@@ -93,11 +93,15 @@ export class AccountService extends BaseService<T> {
 		}
 
 		await this.accountHooks.Created(account, user)
+
+		const login = await this.authService.login(user)
+
 		delete user.password
 
 		return {
 			account: account,
 			owner: user,
+			access_token: login.access_token,
 		}
 	}
 

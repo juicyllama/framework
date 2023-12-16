@@ -366,4 +366,17 @@ export class Strings {
 
 		return string
 	}
+
+	/**
+	 * Randomize a string
+	 */
+
+	static randomize(string: string): string {
+		return string
+			.split('')
+			.sort(function () {
+				return 0.5 - Math.random()
+			})
+			.join('')	
+	}
 }

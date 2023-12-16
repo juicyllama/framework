@@ -13,7 +13,26 @@ const path = computed(() => route.path)
 </script>
 <template>
 	<div class="JLMenu">
-		<q-list>
+		<q-list v-if="props.menu.mini && props.menu.mini === true">
+			<div v-for="(item, index) in props.menu.items" :key="index" class="JLMenuItemMini">
+				<q-item 
+					@click="!item.link ? item.function() : null"
+					:clickable="!item.clickable_disabled"
+						:disable="item.disable"
+						:tag="item.link ? 'a' : null"
+						:to="!item.clickable_disabled && item.link ? item.link : null"
+						:active="item.link === path.valueOf()"
+				>		
+						<q-item-section v-if="item.icon">
+							<q-icon :name="typeof item.icon === 'string' ? item.icon : item.icon.name" :alt="typeof item.icon === 'string' ? item.icon : item.icon.name" :size="typeof item.icon !== 'string' ? item.icon?.size : null" :color="typeof item.icon !== 'string' ? item.icon?.color : null" :class="item.link === path.valueOf() ? `JLMenuItemIcon JLMenuItemIconActive icon_fix q-pr-sm` : `JLMenuItemIcon icon_fix q-pr-sm`" />
+							<q-tooltip v-if="item.tooltip" :class="item.tooltip.classes" :anchor="item.tooltip.anchor" :self="item.tooltip.self">
+							{{ item.title }}
+							</q-tooltip>
+							</q-item-section>
+				</q-item>
+			</div>
+		</q-list>
+		<q-list v-else>
 			<div v-for="(item, index) in props.menu.items" :key="index" class="JLMenuItem">
 				<div v-if="!item.links?.length" class="JLMenuSingle">
 					<q-item

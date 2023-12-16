@@ -61,6 +61,7 @@ function createForm() {
 			key: 'submit',
 			label: 'Update Profile',
 			field: FormFieldField.BUTTON,
+			settings: props?.formSettings?? defaultFormSettings,
 			buttons: [
 				{
 					type: FormFieldButtonType.SUBMIT,

@@ -1,8 +1,8 @@
 import { Router, RouteLocationNormalizedLoaded } from 'vue-router'
-import { accountStore, logger, LogSeverity, userStore } from '../index'
+import { accountStore, logger, LogSeverity, token, userStore } from '../index'
 
 export async function AuthHook(router: Router, route: RouteLocationNormalizedLoaded) {
-	if (!userStore.user) {
+	if (!userStore.user || !token.get()) {
 		logger({ severity: LogSeverity.VERBOSE, message: `[HOOK] Auth: failed, redirecting to /login?r=${route.fullPath}` })
 		window.location.href = `/login?r=${route.fullPath}`
 	}

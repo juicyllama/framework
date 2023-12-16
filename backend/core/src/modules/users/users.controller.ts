@@ -44,6 +44,7 @@ import { ReadChartsDecorator, UploadFieldsDecorator, UploadImageDecorator } from
 import { crudCharts, crudBulkUpload } from '../../helpers/crudController'
 import { StorageService } from '../storage/storage.service'
 import { CrudUploadFieldsResponse, BulkUploadDto, BulkUploadResponse } from '../../types/common'
+import { TypeOrm } from '../../utils/typeorm/TypeOrm'
 
 @ApiTags(Strings.capitalize(Strings.plural(NAME)))
 @UserAuth()
@@ -72,15 +73,17 @@ export class UsersController {
 		name: NAME,
 	})
 	async findAll(@AccountId() account_id: number, @Query() query): Promise<T[]> {
-		const users = await crudFindAll<T>({
-			service: this.service,
-			tQuery: this.tQuery,
-			account_id: account_id,
+		
+		const where = this.tQuery.buildWhere({
+			repository: this.service.repository,
 			query: query,
-			searchFields: SEARCH_FIELDS,
-			order_by: DEFAULT_ORDER_BY,
+			account_id: account_id,
+			search_fields: SEARCH_FIELDS,
 		})
 
+		const options = TypeOrm.findOptions<T>(query, where, DEFAULT_ORDER_BY)
+		const users = await this.service.findAll(options)
+		
 		for (const u in users) {
 			delete users[u].password
 		}
@@ -93,37 +96,55 @@ export class UsersController {
 		@Query() query,
 		@Query('method') method?: StatsMethods,
 	): Promise<StatsResponseDto> {
-		return await crudStats<T>({
-			service: this.service,
-			tQuery: this.tQuery,
+		if (!method) {
+			method = StatsMethods.COUNT
+		}
+		if (method === StatsMethods.AVG || method === StatsMethods.SUM) {
+			throw new BadRequestException(`Only option for this endpoint currently is COUNT`)
+		}
+
+		const where = this.tQuery.buildWhere({
+			repository: this.service.repository,
 			account_id: account_id,
 			query: query,
-			method: method,
-			searchFields: SEARCH_FIELDS,
+			search_fields: SEARCH_FIELDS,
 		})
+
+		const options = {
+			where: where,
+		}
+
+		switch (method) {
+			case StatsMethods.COUNT:
+				return {
+					count: await this.service.count(options),
+				}
+		}
 	}
 
-	@ReadChartsDecorator({ entity: E, selectEnum: UserSelect, name: NAME })
-	async charts(
-		@Query() query: any,
-		@Query('search') search: string,
-		@Query('from') from: string,
-		@Query('to') to: string,
-		@Query('fields') fields: string[],
-		@Query('period') period?: ChartsPeriod,
-	): Promise<ChartsResponseDto> {
-		return await crudCharts<T>({
-			service: this.service,
-			tQuery: this.tQuery,
-			query,
-			search,
-			period,
-			fields,
-			...(from && { from: new Date(from) }),
-			...(to && { to: new Date(to) }),
-			searchFields: SEARCH_FIELDS,
-		})
-	}
+
+	//todo fix to restrict to correct account_id	
+	// @ReadChartsDecorator({ entity: E, selectEnum: UserSelect, name: NAME })
+	// async charts(
+	// 	@Query() query: any,
+	// 	@Query('search') search: string,
+	// 	@Query('from') from: string,
+	// 	@Query('to') to: string,
+	// 	@Query('fields') fields: string[],
+	// 	@Query('period') period?: ChartsPeriod,
+	// ): Promise<ChartsResponseDto> {
+	// 	return await crudCharts<T>({
+	// 		service: this.service,
+	// 		tQuery: this.tQuery,
+	// 		query,
+	// 		search,
+	// 		period,
+	// 		fields,
+	// 		...(from && { from: new Date(from) }),
+	// 		...(to && { to: new Date(to) }),
+	// 		searchFields: SEARCH_FIELDS,
+	// 	})
+	// }
 
 	@ReadOneDecorator({
 		entity: E,

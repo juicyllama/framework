@@ -7,6 +7,7 @@ import { User } from '../users/users.entity'
 export class SuccessAccountDto {
 	readonly account: Account
 	readonly owner: User
+	readonly access_token?: string
 }
 
 export class OnboardAccountDto {
