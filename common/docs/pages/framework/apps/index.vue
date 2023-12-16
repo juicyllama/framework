@@ -24,7 +24,6 @@ useHead({
 					<a :href="`/framework/apps/${app.key}`" class="focus:outline-none" color="primary" orientation="vertical">
 						<div class="gap-x-8 gap-y-4 rounded-xl flex flex-col flex-1 px-4 py-5 sm:p-6 dark:bg-gray-900/50">
 							<div class="">
-								<span class="absolute inset-0"></span>
 								<div class="mb-2">
 									<img :src="`/images/apps/${app.key}.png`" :alt="app.key" loading="lazy" class="rounded-xl app-image">
 								</div>
