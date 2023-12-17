@@ -61,6 +61,7 @@ export enum FormFieldField {
 	TAGS = 'tags',
 	PLUGIN = 'plugin', //used for custom plugins -> see the plugin field in the form
 	COUNTRY_DROPDOWN = 'country_dropdown',
+	LANGUAGE_DROPDOWN = 'language_dropdown',
 	HIDDEN = 'hidden',
 }
 
