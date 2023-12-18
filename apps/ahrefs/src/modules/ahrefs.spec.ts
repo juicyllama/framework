@@ -1,10 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing'
-import { ConfigModule } from '@nestjs/config'
+import { ConfigValidationModule } from '@juicyllama/core'
 import { Env } from '@juicyllama/utils'
+import { ConfigModule } from '@nestjs/config'
+import { Test, TestingModule } from '@nestjs/testing'
+import { AhrefsConfigDto } from '../config/ahrefs.config.dto'
 import { AhrefsModule } from './ahrefs.module'
 import { AhrefsInstallationService } from './ahrefs.installation'
-import ahrefsConfig from '../config/ahrefs.config'
-import { ahrefsConfigJoi } from '../config/ahrefs.config.joi'
 describe('Ahrefs', () => {
 	let moduleRef: TestingModule
 
@@ -17,9 +17,8 @@ describe('Ahrefs', () => {
 			imports: [
 				ConfigModule.forRoot({
 					isGlobal: true,
-					load: [ahrefsConfig],
-					validationSchema: Env.IsNotTest() ? ahrefsConfigJoi : null,
 				}),
+				ConfigValidationModule.register(AhrefsConfigDto),
 				AhrefsModule,
 			],
 		}).compile()
