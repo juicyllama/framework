@@ -5,7 +5,7 @@ import { validateSync } from 'class-validator'
 import { getConfigToken } from './config.provider'
 
 @Module({})
-export class LlamaConfigModule {
+export class ConfigValidationModule {
 	/**
 	 * @param schema The Class DTO that represents the schema to validate for
 	 * this specific feature
@@ -19,7 +19,7 @@ export class LlamaConfigModule {
 		}
 		const token = getConfigToken(schema)
 		return {
-			module: LlamaConfigModule,
+			module: ConfigValidationModule,
 			providers: [
 				{
 					provide: token,
