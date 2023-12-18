@@ -17,6 +17,7 @@ export { SettingsModule } from './modules/settings/settings.module'
 export { FxModule } from './modules/fx/fx.module'
 export { BeaconModule } from './modules/beacon/beacon.module'
 export { StorageModule } from './modules/storage/storage.module'
+export * from './modules/config'
 
 //controllers
 export { AccountController } from './modules/accounts/account.controller'
