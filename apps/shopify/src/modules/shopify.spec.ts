@@ -3,8 +3,7 @@ import { ConfigModule } from '@nestjs/config'
 import { Env } from '@juicyllama/utils'
 import { ShopifyModule } from './shopify.module'
 import { ShopifyInstallationService } from './shopify.installation'
-import shopifyConfig from '../config/shopify.config'
-import { shopifyConfigJoi } from '../config/shopify.config.joi'
+
 describe('Shopify', () => {
 	let moduleRef: TestingModule
 
@@ -17,8 +16,6 @@ describe('Shopify', () => {
 			imports: [
 				ConfigModule.forRoot({
 					isGlobal: true,
-					load: [shopifyConfig],
-					validationSchema: Env.IsNotTest() ? shopifyConfigJoi : null,
 				}),
 				ShopifyModule,
 			],
