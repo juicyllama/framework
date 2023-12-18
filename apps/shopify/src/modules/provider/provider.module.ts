@@ -1,15 +1,16 @@
+import { ConfigValidationModule, getConfigToken } from '@juicyllama/core'
 import { Module } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 import { Shopify } from '../../config/shopify.config'
 import { SHOPIFY_PROVIDER_TOKEN } from './provider.constants'
+import { ShopifyConfigDto } from '../../config/shopify.config.dto'
 
 @Module({
-	imports: [],
+	imports: [ConfigValidationModule.register(ShopifyConfigDto)],
 	providers: [
 		{
 			provide: SHOPIFY_PROVIDER_TOKEN,
-			inject: [ConfigService],
-			useFactory: (config: ConfigService) => Shopify(config.get('shopify')),
+			inject: [getConfigToken(ShopifyConfigDto)],
+			useFactory: (config: ShopifyConfigDto) => Shopify(config),
 		},
 	],
 	exports: [SHOPIFY_PROVIDER_TOKEN],
