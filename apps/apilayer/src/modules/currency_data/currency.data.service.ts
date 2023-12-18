@@ -1,7 +1,8 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
-import { CurrencyData } from './currency.data.dto'
+import { InjectConfig } from '@juicyllama/core'
 import { Api, Env, SupportedCurrencies, Logger } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
+import { ApilayerConfigDto } from '../../config/apilayer.config.dto'
+import { CurrencyData } from './currency.data.dto'
 import mock from './mock'
 
 const endpoint = 'https://api.apilayer.com/currency_data'
@@ -9,9 +10,9 @@ const endpoint = 'https://api.apilayer.com/currency_data'
 @Injectable()
 export class CurrencyDataService {
 	constructor(
-		@Inject(forwardRef(() => Api)) private readonly api: Api,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		private readonly api: Api,
+		private readonly logger: Logger,
+		@InjectConfig(ApilayerConfigDto) private readonly configService: ApilayerConfigDto,
 	) {}
 
 	/**
@@ -30,7 +31,7 @@ export class CurrencyDataService {
 
 		const config = {
 			headers: {
-				apikey: this.configService.get<string>('apilayer.apikey'),
+				apikey: this.configService.APILAYER_API_KEY,
 			},
 		}
 
