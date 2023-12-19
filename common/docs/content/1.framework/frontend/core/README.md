@@ -6,7 +6,7 @@ Our frontend framework is built on top of [Quasar](https://quasar.dev), [Vue](ht
 
 ## Installation
 
-If you are looking to install the framework for local development, visit our [install instructions here](../../gettingstarted.md#installation).
+If you are looking to install the framework for local development, visit our [install instructions here](https://docs.juicyllama.com/framework#installation).
 
 Alternatively you can install this module individually into your project from [NPM](https://www.npmjs.com/package/@juicyllama/frontend-core):
 

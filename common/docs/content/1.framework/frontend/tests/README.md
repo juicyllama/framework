@@ -86,11 +86,11 @@ export default defineConfig({
 })
 ```
 
-There are also different reporters from which you can choose. Read more: [https://vitest.dev/guide/coverage.html](https://vitest.dev/guide/coverage.html)
+There are also different reporters from which you can choose. Read more: [https://vitest.dev/guide/coverage.html](https://vitest.dev/guide/coverage.html){:target="_blank"}
 
 ## Creating test objects
 
-In some cases you will need to provide mocked data objects to your tests.  
+In some cases you will need to provide mocked data objects to your tests.
 For the `User` and `Account` objects factories are provided:
 
 ```typescript
