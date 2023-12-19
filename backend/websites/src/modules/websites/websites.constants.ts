@@ -8,3 +8,4 @@ export const WEBSITES_SEARCH_FIELDS = ['name', 'url']
 export const WEBSITES_DEFAULT_ORDER_BY = 'name'
 
 export const CRON_WEBSITES_WEBSITE_SCREENSHOT_GENERATE_DOMAIN = 'websites::website::cron::service::generateWebsiteScreenshots'
+export const CRON_WEBSITES_WEBSITE_ICON_GENERATE_DOMAIN = 'websites::website::cron::service::generateWebsiteIcons'

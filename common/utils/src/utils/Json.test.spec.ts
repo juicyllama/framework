@@ -2,9 +2,6 @@ import { Json } from './Json'
 import { File } from './File'
 import { faker } from '@faker-js/faker'
 
-const json = new Json()
-const file = new File()
-
 describe('JSON', () => {
 
 	it('createTempJSONFileFromString', async () => {
@@ -13,10 +10,10 @@ describe('JSON', () => {
 		const last_name = faker.person.lastName()
 		const email = faker.internet.email({firstName: first_name, lastName: last_name})
 	
-		const { filePath, dirPath } = await json.createTempJSONFileFromString(
+		const { filePath, dirPath } = await Json.createTempJSONFileFromString(
 			`[{ "first_name": "${first_name}", "last_name": "${last_name}", "email": "${email}"}]`
 		)
-		await file.unlink(filePath, dirPath)
+		await File.unlink(filePath, dirPath)
 		expect(filePath).toBeDefined()
 	})
 
@@ -25,12 +22,12 @@ describe('JSON', () => {
 		const last_name = faker.person.lastName()
 		const email = faker.internet.email({firstName: first_name, lastName: last_name})
 	
-		const { json_file, filePath, dirPath } = await json.createTempJSONFileFromString(
+		const { json_file, filePath, dirPath } = await Json.createTempJSONFileFromString(
 			`[{ "first_name": "${first_name}", "last_name": "${last_name}", "email": "${email}"}]`
 		)
 
-		const result = await json.parseJsonFile(json_file)
-		await file.unlink(filePath, dirPath)
+		const result = await Json.parseJsonFile(json_file)
+		await File.unlink(filePath, dirPath)
 		expect(result).toBeDefined()
 		expect(result[0]).toBeDefined()
 		expect(result[0].first_name).toEqual(first_name)
@@ -38,12 +35,12 @@ describe('JSON', () => {
 
 	it('parseJSONFile with mapped headers', async () => {
 
-		const { json_file, filePath, dirPath } = await json.createTempJSONFileFromString(
+		const { json_file, filePath, dirPath } = await Json.createTempJSONFileFromString(
 			'[{ "name": "Tom", "type": "Cat"}, { "name": "Jerry", "type": "Mouse"}]'
 		)
 
-		const result = await json.parseJsonFile(json_file, { type: 'animal' })
-		await file.unlink(filePath, dirPath)
+		const result = await Json.parseJsonFile(json_file, { type: 'animal' })
+		await File.unlink(filePath, dirPath)
 
 		expect(result).toBeDefined()
 		expect(result[0]).toBeDefined()
