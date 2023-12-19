@@ -219,35 +219,43 @@ export class Dates {
 	}
 
 	static ahead(date: Date): string {
+
 		const seconds = Math.floor((date.getTime() - new Date().getTime() ) / 1000)
-	
 		let interval = Math.floor(seconds / 31536000)
 
 		if (interval >= 1) {
+			if(interval === 1) return '1 year'
 			return interval + ' years'
 		}
 
 		interval = Math.floor(seconds / 2592000)
 		if (interval >= 1) {
+			if(interval === 1) return '1 month'
 			return interval + ' months'
 		}
 
 		interval = Math.floor(seconds / 86400)
 		if (interval >= 1) {
+			if(interval === 1) return '1 day'
 			return interval + ' days'
 		}
 
 		interval = Math.floor(seconds / 3600)
 		if (interval >= 1) {
+			if(interval === 1) return '1 hour'
 			return (seconds / 3600).toFixed(2) + ' hours'
 		}
 
 		interval = Math.floor(seconds / 60)
 		if (interval >= 1) {
+			if(interval === 1) return '1 minute'
 			return (seconds / 60).toFixed(2) + ' minutes'
 		}
 
-		return Math.floor(seconds) + ' seconds'
+		interval = Math.floor(seconds)
+
+		if(interval === -1 || interval === 0 || interval === 1) return '1 second'
+		return interval + ' seconds'
 	}
 
 	static ago(date: Date): string {
@@ -256,30 +264,35 @@ export class Dates {
 		let interval = Math.floor(seconds / 31536000)
 
 		if (interval >= 1) {
+			if(interval === 1) return '1 year ago'
 			return interval + ' years ago'
 		}
 
 		interval = Math.floor(seconds / 2592000)
 		if (interval >= 1) {
+			if(interval === 1) return '1 month ago'
 			return interval + ' months ago'
 		}
 
 		interval = Math.floor(seconds / 86400)
 		if (interval >= 1) {
+			if(interval === 1) return '1 day ago'
 			return interval + ' days ago'
 		}
 
 		interval = Math.floor(seconds / 3600)
 		if (interval >= 1) {
+			if(interval === 1) return '1 hour ago'
 			return (seconds / 3600).toFixed(2) + ' hours ago'
 		}
 
 		interval = Math.floor(seconds / 60)
 		if (interval >= 1) {
+			if(interval === 1) return '1 minute ago'
 			return (seconds / 60).toFixed(2) + ' minutes ago'
 		}
 
-		return Math.floor(seconds) + ' seconds ago'
+		return seconds.toFixed(2) + ' seconds ago'
 	}
 
 	static minutesAgo(minutes: number): Date {

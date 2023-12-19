@@ -8,9 +8,8 @@
 	"pageNotAvailable": true,
     "description": "Apilayer is the leading provider of off-the-shelf, cloud-based API products built to help developers and businesses around the world operate quickly and effectively. "
 },{
-    "key": "amazon",
+    "key": "aws",
     "name": "Amazon AWS",
-	"pageNotAvailable": true,
     "description": "Amazon Web Services (AWS) is a subsidiary of Amazon providing on-demand cloud computing platforms and APIs to individuals, companies, and governments, on a metered pay-as-you-go basis."
 },{
     "key": "everflow",

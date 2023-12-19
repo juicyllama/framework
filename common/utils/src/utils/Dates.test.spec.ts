@@ -30,4 +30,20 @@ describe('Dates', () => {
 			expect(Dates.format(ago, 'datetime')).toEqual(Dates.format(new Date(now.getTime() - 5 * 60000), 'datetime'))
 		})
 	})
+
+	describe('Ahead', () => {
+		it('0.25 seconds', async () => {
+			const future = new Date()
+			future.setSeconds(future.getSeconds() + 0.25)
+			const ahead = Dates.ahead(future)
+			expect(ahead).toEqual('1 second')
+		})
+
+		it('1 minute', async () => {
+			const future = new Date()
+			future.setSeconds(future.getSeconds() + 60)
+			const ahead = Dates.ahead(future)
+			expect(ahead).toEqual('1 minute')
+		})
+	})
 })

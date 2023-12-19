@@ -108,4 +108,33 @@ export class File {
 		return hash.digest('base64');
 	}
 
+	/**
+	 * Create a Express.Multer.File file from a base64 string
+	 */
+
+	async createFileFromBase64(base64: string, filename: string): Promise<Express.Multer.File> {
+
+		let mimetype
+
+		if(filename.endsWith('.png')){
+			mimetype = 'image/x-png'
+		}
+
+		const buffer = Buffer.from(base64, 'base64')
+		const file = {
+			fieldname: 'file',
+			originalname: filename,
+			encoding: '7bit',
+			mimetype: mimetype,
+			buffer: buffer,
+			size: buffer.length,
+			stream: new Readable(),
+			destination: '',
+			filename: filename,
+			path: '',
+		}
+
+		return file
+	}
+
 }
