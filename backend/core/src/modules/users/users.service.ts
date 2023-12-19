@@ -87,11 +87,11 @@ export class UsersService extends BaseService<T> {
 			format: StorageFileFormat.Express_Multer_File,
 			file: file,
 		})
-		if (result === null || result === void 0 ? void 0 : result.Location) {
+		if (result === null || result === void 0 ? void 0 : result.url) {
 			user = await this.query.update(this.repository, {
 				user_id: user.user_id,
 				avatar_type: UserAvatarType.IMAGE,
-				avatar_image_url: result.Location,
+				avatar_image_url: result.url,
 			})
 		}
 		return user

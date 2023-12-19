@@ -222,14 +222,14 @@ export async function crudBulkUpload<T>(options: {
 			? {
 					filename: options.file && options.file.filename ? options.file.filename : null,
 					mimetype: options.file && options.file.mimetype ? options.file.mimetype : null,
-			  }
+				}
 			: false,
 		raw: options.raw
 			? {
 					length: options.raw.length,
 					start: options.raw.substring(0, 20),
 					end: options.raw.substring(options.raw.length - 20, options.raw.length),
-			  }
+				}
 			: false,
 	})
 
@@ -267,9 +267,6 @@ export async function crudBulkUpload<T>(options: {
 		throw new InternalServerErrorException(`Missing required field: dedup_field`)
 	}
 
-	const csv = new Csv()
-	const json = new Json()
-	const file = new File()
 	let content: any[]
 
 	logger.debug(`[${domain}] Uploading ${options.upload_type} file`)
@@ -282,11 +279,11 @@ export async function crudBulkUpload<T>(options: {
 					throw new BadRequestException(`Not a valid ${options.upload_type} file`)
 				}
 
-				content = await csv.parseCsvFile(options.file, options.mappers)
+				content = await Csv.parseCsvFile(options.file, options.mappers)
 			} else if (options.raw) {
-				const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(options.raw)
-				content = await csv.parseCsvFile(csv_file, options.mappers)
-				await file.unlink(filePath, dirPath)
+				const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(options.raw)
+				content = await Csv.parseCsvFile(csv_file, options.mappers)
+				await File.unlink(filePath, dirPath)
 			}
 			break
 		case UploadType.JSON:
@@ -296,12 +293,12 @@ export async function crudBulkUpload<T>(options: {
 					throw new BadRequestException(`Not a valid ${options.upload_type} file`)
 				}
 
-				content = await json.parseJsonFile(options.file, options.mappers)
+				content = await Json.parseJsonFile(options.file, options.mappers)
 			} else if (options.raw) {
 				try {
-					const { json_file, filePath, dirPath } = await json.createTempJSONFileFromString(options.raw)
-					content = await json.parseJsonFile(json_file, options.mappers)
-					await file.unlink(filePath, dirPath)
+					const { json_file, filePath, dirPath } = await Json.createTempJSONFileFromString(options.raw)
+					content = await Json.parseJsonFile(json_file, options.mappers)
+					await File.unlink(filePath, dirPath)
 				} catch (e: any) {
 					logger.error(`[${domain}] ${e.message}`, e)
 					throw new BadRequestException(`Invalid JSON`)

@@ -1,21 +1,21 @@
 import { AppIntegrationStatus, InstalledAppsService, Oauth, OauthService } from '@juicyllama/app-store'
-import { AccountId, UserAuth } from '@juicyllama/core'
+import { AccountId, InjectConfig, UserAuth } from '@juicyllama/core'
 import { StoresService } from '@juicyllama/ecommerce'
 import { Logger } from '@juicyllama/utils'
 import { Controller, Get, Query, Req, Res, BadRequestException } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 import { ApiHideProperty } from '@nestjs/swagger'
 import { Shopify } from '@shopify/shopify-api'
 import { v4 as uuidv4 } from 'uuid'
 import { ShopifyAuthRedirect, ShopifyAuthScopes } from '../../config/shopify.config'
 import { InjectShopify } from '../provider/provider.constants'
 import { ShopifyAuthRedirectQuery } from './auth.dto'
+import { ShopifyConfigDto } from '../../config/shopify.config.dto'
 
 @Controller('app/shopify/auth')
 export class ShopifyAuthController {
 	constructor(
 		private readonly logger: Logger,
-		private readonly configService: ConfigService,
+		@InjectConfig(ShopifyConfigDto) private readonly configService: ShopifyConfigDto,
 		@InjectShopify() private readonly shopify: Shopify,
 		private readonly oauthService: OauthService,
 		private readonly installedAppsService: InstalledAppsService,
@@ -89,9 +89,9 @@ export class ShopifyAuthController {
 
 		const redirect = `https://${
 			installed_app.settings.SHOPIFY_SHOP_NAME
-		}.myshopify.com/admin/oauth/authorize?client_id=${this.configService.get<string>(
-			'shopify.SHOPIFY_APP_CLIENT_ID',
-		)}&scope=${ShopifyAuthScopes.toString()}&redirect_uri=${
+		}.myshopify.com/admin/oauth/authorize?client_id=${
+			this.configService.SHOPIFY_APP_CLIENT_ID
+		}&scope=${ShopifyAuthScopes.toString()}&redirect_uri=${
 			process.env.BASE_URL_API
 		}${ShopifyAuthRedirect}&state=${state}`
 
@@ -173,7 +173,7 @@ export class ShopifyAuthController {
 		})
 
 		res.setHeader('Set-Cookie', [`app_shopify_state=deleted; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`])
-		res.redirect(this.configService.get<string>('shopify.SHOPIFY_OAUTH_REDIRECT_URL') ?? process.env.BASE_URL_APP)
+		res.redirect(this.configService.SHOPIFY_OAUTH_REDIRECT_URL ?? process.env.BASE_URL_APP)
 		return
 	}
 }

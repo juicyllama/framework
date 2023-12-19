@@ -1,3 +1,5 @@
+import { ButtonStyle } from './common/button'
+
 export * from './common/index'
 
 export interface DropdownOptions {
@@ -87,11 +89,9 @@ export enum TablePosition {
 	AFTER_TABLE,
 }
 
-export interface CustomButton {
+export interface CustomButton extends ButtonStyle {
 	key?: string
 	label?: string
 	icon?: Icon
 	action?: Function // a function to call when the button is clicked, output { data: formData, q: $q, schema: TableSchema | FormSchema, button: CustomButton }
-	classes?: string // classes to add to the button
-	color?: string // color of the button
 }

@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/websites",
-    "version": "0.0.13",
+    "version": "0.1.0",
     "description": "Juicyllama Websites Module ",
     "author": {
         "name": "JuicyLlama Studio",
@@ -35,6 +35,8 @@
     },
     "dependencies": {
         "@juicyllama/core": "workspace:^",
-        "@juicyllama/utils": "workspace:^"
+        "@juicyllama/utils": "workspace:^",
+        "capture-website": "^4.0.0",
+        "get-website-favicon": "^0.0.7"
     }
 }

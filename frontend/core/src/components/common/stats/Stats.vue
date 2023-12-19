@@ -1,36 +1,3 @@
-<template>
-	<q-spinner v-if="isLoading" color="primary" size="3em" />
-	<template v-else>
-		<div v-if="isError">
-			<q-icon size="15" class="ml-2" name="error" /> Failed to load
-		</div>
-		<div v-else class="JLStats__section">
-			<p class="JLStats__section-title">{{ title }}</p>
-
-			<Vue3autocounter
-				v-if="isAnimation && value.signOnTheLeft"
-				:startAmount="0"
-				:endAmount="Number(value.value)"
-				:duration="DURATION_SECONDS"
-				:prefix="value.valueSign"
-				decimalSeparator="."
-				:decimals="2"
-				:autoinit="true" />
-			<Vue3autocounter
-				v-if="isAnimation && !value.signOnTheLeft"
-				:startAmount="0"
-				:endAmount="Number(value.value)"
-				:duration="DURATION_SECONDS"
-				:suffix="value.valueSign"
-				decimalSeparator="."
-				:decimals="2"
-				:autoinit="true" />
-			<div v-else class="JLStats__section-value">{{ generateValueLine(value) }}</div>
-
-			<div v-if="delta" class="JLStats__section-delta">{{ generateValueLine(delta) }}</div>
-		</div>
-	</template>
-</template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import Vue3autocounter from 'vue3-autocounter'
@@ -84,6 +51,41 @@ onMounted(async () => {
 	}
 })
 </script>
+
+<template>
+	<q-spinner v-if="isLoading" color="primary" size="3em" />
+	<template v-else>
+		<div v-if="isError">
+			<q-icon size="15" class="ml-2" name="error" /> Failed to load
+		</div>
+		<div v-else class="JLStats__section">
+			<p class="JLStats__section-title" v-if="title">{{ title }}</p>
+
+			<Vue3autocounter
+				v-if="isAnimation && value.signOnTheLeft"
+				:startAmount="0"
+				:endAmount="Number(value.value)"
+				:duration="DURATION_SECONDS"
+				:prefix="value.valueSign"
+				decimalSeparator="."
+				:decimals="2"
+				:autoinit="true" />
+			<Vue3autocounter
+				v-if="isAnimation && !value.signOnTheLeft"
+				:startAmount="0"
+				:endAmount="Number(value.value)"
+				:duration="DURATION_SECONDS"
+				:suffix="value.valueSign"
+				decimalSeparator="."
+				:decimals="2"
+				:autoinit="true" />
+			<div v-else class="JLStats__section-value">{{ generateValueLine(value) }}</div>
+
+			<div v-if="delta" class="JLStats__section-delta">{{ generateValueLine(delta) }}</div>
+		</div>
+	</template>
+</template>
+
 <style scoped>
 .JLStats {
 	text-align: left;

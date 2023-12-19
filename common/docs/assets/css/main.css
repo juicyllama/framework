@@ -99,3 +99,7 @@ p a:hover {
 .card:hover {
   background-color: var(--card-backgound-color-hover)
 }
+button[aria-label="Color Mode"] {
+	display: none !important;
+	visibility: hidden !important;
+}

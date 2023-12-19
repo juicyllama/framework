@@ -13,10 +13,6 @@ type T = User
 const MODULE = UsersModule
 const SERVICE = UsersService
 
-const csv = new Csv()
-const file = new File()
-const json = new Json()
-
 /**
  * These tests focus on the validation of the controller/data, not the actual adding of data, this is tested at: Query.file.bulkInsert.spec.ts
 */
@@ -37,11 +33,11 @@ describe('Crud Bulk Upload Controller', () => {
 			const last_name = faker.person.lastName()
 			const email = faker.internet.email({firstName: first_name, lastName: last_name})
 
-			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 				`first_name,last_name\n${first_name},${last_name},${email}`
 			)
 			try{
-				await file.unlink(filePath, dirPath)
+				await File.unlink(filePath, dirPath)
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
@@ -69,11 +65,11 @@ describe('Crud Bulk Upload Controller', () => {
 			const last_name = faker.person.lastName()
 			//const email = faker.internet.email({firstName: first_name, lastName: last_name})
 
-			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 				`first_name,last_name,email\n${first_name},${last_name}`
 			)
 			try{
-				await file.unlink(filePath, dirPath)
+				await File.unlink(filePath, dirPath)
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
@@ -104,11 +100,11 @@ describe('Crud Bulk Upload Controller', () => {
 				const last_name = faker.person.lastName()
 				const email = faker.internet.email({firstName: first_name, lastName: last_name})
 
-				const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+				const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 					`first_name,last_name,email\n${first_name},${last_name},${email}`
 				)
 				try{
-					await file.unlink(filePath, dirPath)
+					await File.unlink(filePath, dirPath)
 				}catch(e: any){
 					scaffold.services.logger.warn(e.message)
 				}
@@ -172,11 +168,11 @@ describe('Crud Bulk Upload Controller', () => {
 				const last_name = faker.person.lastName()
 				const email = faker.internet.email({firstName: first_name, lastName: last_name})
 
-				const { json_file, filePath, dirPath } = await json.createTempJSONFileFromString(
+				const { json_file, filePath, dirPath } = await Json.createTempJSONFileFromString(
 					`[{ "first_name": "${first_name}", "last_name": "${last_name}", "email": "${email}"}]`
 				)
 				try{
-					await file.unlink(filePath, dirPath)
+					await File.unlink(filePath, dirPath)
 				}catch(e: any){
 					scaffold.services.logger.warn(e.message)
 				}
@@ -237,12 +233,12 @@ describe('Crud Bulk Upload Controller', () => {
 			const last_name = faker.person.lastName()
 			const email = faker.internet.email({firstName: first_name, lastName: last_name})
 
-			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 				`first_name,last_name,email\n${first_name},${last_name},${email}`
 			)
 
 			try{
-				await file.unlink(filePath, dirPath)
+				await File.unlink(filePath, dirPath)
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
@@ -272,12 +268,12 @@ describe('Crud Bulk Upload Controller', () => {
 			const last_name = faker.person.lastName()
 			const email = faker.internet.email({firstName: first_name, lastName: last_name})
 
-			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 				`fname,lname,email\n${first_name},${last_name},${email}`
 			)
 
 			try{
-				await file.unlink(filePath, dirPath)
+				await File.unlink(filePath, dirPath)
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}

@@ -1,20 +1,20 @@
 // Entities
-import { Website } from './websites/websites.entity'
+import { Website } from './modules/websites/websites.entity'
 
 // Modules
-import { WebsitesModule } from './websites/websites.module'
+import { WebsitesModule } from './modules/websites/websites.module'
 
 // Controllers
-import { WebsitesController } from './websites/websites.controller'
+import { WebsitesController } from './modules/websites/websites.controller'
 
 // Services
-import { WebsitesService } from './websites/websites.service'
+import { WebsitesService } from './modules/websites/websites.service'
 
 // Enums
-import { WebsiteSelect, WebsiteRelations, WebsiteOrderBy } from './websites/websites.enums'
+import { WebsiteSelect, WebsiteRelations, WebsiteOrderBy } from './modules/websites/websites.enums'
 
 // DTOs
-import { WebsiteDto, CreateWebsiteDto, UpdateWebsiteDto } from './websites/websites.dto'
+import { WebsiteDto, CreateWebsiteDto, UpdateWebsiteDto } from './modules/websites/websites.dto'
 import { installWebsiteDocs } from './docs/install'
 
 export {

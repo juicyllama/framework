@@ -1,6 +1,7 @@
 export * from './common'
 export * from './core/account'
 export * from './core/auth'
+export * from './core/billing'
 export * from './core/user'
 export * from './core/users'
 export * from './app-store'

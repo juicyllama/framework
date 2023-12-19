@@ -2,6 +2,9 @@
 import { ref } from 'vue'
 import { BILLING_INVOICE_ENDPOINT, IconSettings } from '../../../index'
 import { invoicesTableSchema } from './billing.table.schema'
+import { JLTable } from '../../../components/common/table'
+import { JLChart } from '../../../components/common/chart'
+import { JLStats } from '../../../components/common/stats'
 
 const props = defineProps<{
 	visibleColumns: string[]
@@ -55,6 +58,7 @@ const avgInvoiceData = ref({
 				<JLChart
 					:endpoint="`${BILLING_INVOICE_ENDPOINT}/stats?method=COUNT`"
 					title="Invoice spend last 12 months"
+					type="line"
 					dynamic-data />
 			</v-col>
 		</v-row>

@@ -93,11 +93,15 @@ export class AccountService extends BaseService<T> {
 		}
 
 		await this.accountHooks.Created(account, user)
+
+		const login = await this.authService.login(user)
+
 		delete user.password
 
 		return {
 			account: account,
 			owner: user,
+			access_token: login.access_token,
 		}
 	}
 
@@ -145,8 +149,8 @@ export class AccountService extends BaseService<T> {
 			file: file,
 		})
 
-		if (result?.Location) {
-			account.avatar_image_url = result.Location
+		if (result?.url) {
+			account.avatar_image_url = result.url
 			account = await super.update(account)
 			return account
 		}

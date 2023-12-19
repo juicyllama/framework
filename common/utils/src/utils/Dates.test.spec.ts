@@ -30,4 +30,55 @@ describe('Dates', () => {
 			expect(Dates.format(ago, 'datetime')).toEqual(Dates.format(new Date(now.getTime() - 5 * 60000), 'datetime'))
 		})
 	})
+
+	describe('Ahead', () => {
+		it('0.25 seconds', async () => {
+			const future = new Date()
+			future.setSeconds(future.getSeconds() + 0.25)
+			const ahead = Dates.ahead(future)
+			expect(ahead).toEqual('1 second')
+		})
+
+		it('30 seconds', async () => {
+			const future = new Date()
+			future.setSeconds(future.getSeconds() + 30)
+			const ahead = Dates.ahead(future)
+			expect(ahead).toEqual('30 seconds')
+		})
+
+		it('1 minute', async () => {
+			const future = new Date()
+			future.setSeconds(future.getSeconds() + 60)
+			const ahead = Dates.ahead(future)
+			expect(ahead).toEqual('1 minute')
+		})
+
+		it('5 minutes', async () => {
+			const future = new Date()
+			future.setSeconds(future.getSeconds() + (60*5))
+			const ahead = Dates.ahead(future)
+			expect(ahead).toEqual('5.00 minutes')
+		})
+
+		it('1 hour', async () => {
+			const future = new Date()
+			future.setSeconds(future.getSeconds() + 3600)
+			const ahead = Dates.ahead(future)
+			expect(ahead).toEqual('1 hour')
+		})
+
+		it('2 hours', async () => {
+			const future = new Date()
+			future.setSeconds(future.getSeconds() + (3600 * 2))
+			const ahead = Dates.ahead(future)
+			expect(ahead).toEqual('2.00 hours')
+		})
+
+		it('2 1/2 hours', async () => {
+			const future = new Date()
+			future.setSeconds(future.getSeconds() + (3600 * 2.5))
+			const ahead = Dates.ahead(future)
+			expect(ahead).toEqual('2.50 hours')
+		})
+	})
 })

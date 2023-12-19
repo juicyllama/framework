@@ -10,8 +10,8 @@ export class Strings {
 
 	static capitalize(str: string): string {
 		try {
-			if(typeof str !== 'string') return ''
-			if(str.length === 0) return ''
+			if (typeof str !== 'string') return ''
+			if (str.length === 0) return ''
 
 			return str.charAt(0).toUpperCase() + str.slice(1)
 		} catch (e: any) {
@@ -365,5 +365,18 @@ export class Strings {
 		}
 
 		return string
+	}
+
+	/**
+	 * Randomize a string
+	 */
+
+	static randomize(string: string): string {
+		return string
+			.split('')
+			.sort(function () {
+				return 0.5 - Math.random()
+			})
+			.join('')
 	}
 }

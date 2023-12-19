@@ -2,16 +2,13 @@ import { Csv } from './Csv'
 import { File } from './File'
 import { faker } from '@faker-js/faker'
 
-const csv = new Csv()
-const file = new File()
-
 describe('CSV', () => {
 
 	it('createTempCSVFileFromString', async () => {
-		const { filePath, dirPath } = await csv.createTempCSVFileFromString(
+		const { filePath, dirPath } = await Csv.createTempCSVFileFromString(
 			'first_name,last_name,email' + '\n' + 'John,Snow,john@got.com'
 		)
-		await file.unlink(filePath, dirPath)
+		await File.unlink(filePath, dirPath)
 		expect(filePath).toBeDefined()
 	})
 
@@ -21,12 +18,12 @@ describe('CSV', () => {
 		const last_name = faker.person.lastName()
 		const email = faker.internet.email({firstName: first_name, lastName: last_name})
 
-		const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+		const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 			`first_name,last_name,email\n${first_name},${last_name},${email}`
 		)
 
-		const result = await csv.parseCsvFile(csv_file)
-		await file.unlink(filePath, dirPath)
+		const result = await Csv.parseCsvFile(csv_file)
+		await File.unlink(filePath, dirPath)
 		expect(result).toBeDefined()
 		expect(result[0]).toBeDefined()
 		expect(result[0].first_name).toEqual(first_name)
@@ -34,12 +31,12 @@ describe('CSV', () => {
 
 	it('parseCsvFile with headers', async () => {
 
-		const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+		const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 			'name,type' + '\n' + 'Tom,Cat' + '\n' + 'Jerry,Mouse'
 		)
 
-		const result = await csv.parseCsvFile(csv_file, { type: 'animal' })
-		await file.unlink(filePath, dirPath)
+		const result = await Csv.parseCsvFile(csv_file, { type: 'animal' })
+		await File.unlink(filePath, dirPath)
 
 		expect(result).toBeDefined()
 		expect(result[0]).toBeDefined()

@@ -8,9 +8,6 @@ import { UserRole } from './users.enums'
 import { UsersModule } from './users.module'
 import { UsersService } from './users.service'
 
-const csv = new Csv()
-const file = new File()
-
 const E = User
 type T = User
 const MODULE = UsersModule
@@ -36,7 +33,7 @@ describe(`${NAME} Endpoints`, () => {
 	})
 
 	async function testBulkUpload(first_name, last_name, email) {
-		const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+		const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 			`first_name,last_name,email\n${first_name},${last_name},${email}`
 		)
 		const res = await TestEndpoint<BulkUploadResponse>({
@@ -51,7 +48,7 @@ describe(`${NAME} Endpoints`, () => {
 			skipResultCheck: true,
 		})
 		try {
-			await file.unlink(filePath, dirPath)
+			await File.unlink(filePath, dirPath)
 		} catch (e: any) {
 			scaffold.services.logger.warn(e.message)
 		}

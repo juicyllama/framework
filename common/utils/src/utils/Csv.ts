@@ -9,7 +9,7 @@ export class Csv {
 	 * @returns array of objects
 	 */
 
-	async parseCsvFile(file: Express.Multer.File, mappers?: { [key: string]: string }): Promise<any[]> {
+	static async parseCsvFile(file: Express.Multer.File, mappers?: { [key: string]: string }): Promise<any[]> {
 		return new Promise((resolve, reject) => {
 			const results = []
 			const stream = Readable.from(file.buffer)
@@ -38,14 +38,13 @@ export class Csv {
 	 * @returns void
 	 */
 
-	async createTempCSVFileFromString(content: string): Promise<{
+	static async createTempCSVFileFromString(content: string): Promise<{
 		filePath: string
 		csv_file: Express.Multer.File
 		dirPath: string
 	}> {
 		try {
-			const file = new File()
-			const result = await file.createTempFileFromString({
+			const result = await File.createTempFileFromString({
 				fileName: 'temp-file.csv',
 				content: content,
 				mimetype: 'text/csv',

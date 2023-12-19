@@ -19,6 +19,7 @@ import { pipeFormData } from '../../../helpers/pipes'
 import { default as Telephone } from '../../../components/common/form/plugins/Telephone.vue'
 import { default as InstalledAppButton } from '../../../components/common/form/plugins/InstallApp.vue'
 import countries from '../../../assets/json/countries.json'
+import languages from '../../../assets/json/languages.json'
 import { JLNotice, NoticeType, Strings } from '@juicyllama/vue-utils'
 
 const props = defineProps<{
@@ -75,6 +76,11 @@ function showSelected(field: FormField) {
 
 function showSelectedCountry(field: FormField) {
 	let selected = countries.find(option => option.value === formData[field.key])
+	return selected?.label ?? selected?.value
+}
+
+function showSelectedLanguage(field: FormField) {
+	let selected = languages.find(option => option.value === formData[field.key])
 	return selected?.label ?? selected?.value
 }
 
@@ -238,6 +244,7 @@ if (props.options.onFormLoad) {
 						field.key,
 					)} ${field.classes}`"
 					:dense="field.settings?.dense"
+					:hide-bottom-space="field.settings?.hideBottomSpace"
 					:disable="field.disabled"
 					:multiple="field.multiple"
 					:label="!field.settings?.stack_label ? field.label : null"
@@ -288,6 +295,7 @@ if (props.options.onFormLoad) {
 						field.key,
 					)} ${field.classes}`"
 					:dense="field.settings?.dense"
+					:hide-bottom-space="field.settings?.hideBottomSpace"
 					:disable="field.disabled"
 					:multiple="field.multiple"
 					:label="!field.settings?.stack_label ? field.label : null"
@@ -313,6 +321,54 @@ if (props.options.onFormLoad) {
 					<template v-slot:selected>
 						<template v-if="formData[field.key]">
 							{{ showSelectedCountry(field) }}
+						</template>
+						<template v-else>
+							<span
+								:class="`JLPlaceholder JLPlaceholder${Strings.capitalize(field.field)}`"
+								v-if="field.placeholder && !field.settings?.stack_label && !field.label"
+								>{{ field.placeholder }}</span
+							><span class="JLPlaceholder" v-else-if="!field.settings?.stack_label && !field.label"
+								>Choose an option</span
+							>
+						</template>
+					</template>
+				</q-select>
+
+				<q-select 
+					v-if="field.field === FormFieldField.LANGUAGE_DROPDOWN"
+					v-model="formData[field.key]"
+					:options="languages"
+					:name="field.key"
+					:input-class="`JLSelect JLSelect${Strings.capitalize(field.field)} JLSelect${Strings.capitalize(
+						field.key,
+					)} ${field.classes}`"
+					:dense="field.settings?.dense"
+					:hide-bottom-space="field.settings?.hideBottomSpace"
+					:disable="field.disabled"
+					:multiple="field.multiple"
+					:label="!field.settings?.stack_label ? field.label : null"
+					:lazy-rules="field.settings?.lazy_rules"
+					:rules="field.required ? inputRequired(field) : null"
+					:no-error-icon="field.settings?.no_error_icon"
+					:hint="field.hint"
+					emit-value
+					:outlined="field.settings?.design === FormViewDesignSettings.OUTLINED"
+					:filled="field.settings?.design === FormViewDesignSettings.FILLED"
+					:standout="field.settings?.design === FormViewDesignSettings.STANDOUT"
+					:borderless="field.settings?.design === FormViewDesignSettings.BORDERLESS"
+					:rounded="field.settings?.design === FormViewDesignSettings.ROUNDED"
+					:rounded-filled="field.settings?.design === FormViewDesignSettings.ROUNDED_FILLED"
+					:rounded-outlined="field.settings?.design === FormViewDesignSettings.ROUNDED_OUTLINED"
+					:rounded-standout="field.settings?.design === FormViewDesignSettings.ROUNDED_STANDOUT"
+					:square="field.settings?.design === FormViewDesignSettings.SQUARE"
+					:square-filled="field.settings?.design === FormViewDesignSettings.SQUARE_FILLED"
+					:square-outlined="field.settings?.design === FormViewDesignSettings.SQUARE_OUTLINED"
+					:square-standout="field.settings?.design === FormViewDesignSettings.SQUARE_STANDOUT"
+					@keyup.enter="updatedField(field.key)"
+					@blur="updatedField(field.key)">
+					<template v-slot:selected>
+						<template v-if="formData[field.key]">
+							{{ showSelectedLanguage(field) }}
 						</template>
 						<template v-else>
 							<span
@@ -375,18 +431,6 @@ if (props.options.onFormLoad) {
 					v-model="formData[field.key]"
 					:name="field.key"
 					:type="field.type"
-					:outlined="field.settings?.design === FormViewDesignSettings.OUTLINED"
-					:filled="field.settings?.design === FormViewDesignSettings.FILLED"
-					:standout="field.settings?.design === FormViewDesignSettings.STANDOUT"
-					:borderless="field.settings?.design === FormViewDesignSettings.BORDERLESS"
-					:rounded="field.settings?.design === FormViewDesignSettings.ROUNDED"
-					:rounded-filled="field.settings?.design === FormViewDesignSettings.ROUNDED_FILLED"
-					:rounded-outlined="field.settings?.design === FormViewDesignSettings.ROUNDED_OUTLINED"
-					:rounded-standout="field.settings?.design === FormViewDesignSettings.ROUNDED_STANDOUT"
-					:square="field.settings?.design === FormViewDesignSettings.SQUARE"
-					:square-filled="field.settings?.design === FormViewDesignSettings.SQUARE_FILLED"
-					:square-outlined="field.settings?.design === FormViewDesignSettings.SQUARE_OUTLINED"
-					:square-standout="field.settings?.design === FormViewDesignSettings.SQUARE_STANDOUT"
 					:class="`hidden JLHidden JLHidden${Strings.capitalize(field.field)} JLHidden${Strings.capitalize(
 						field.key,
 					)} ${field.classes}`" />
@@ -394,12 +438,26 @@ if (props.options.onFormLoad) {
 				<div v-if="field.field === FormFieldField.BUTTON && field.buttons.length" class="JLButtonGroup">
 					<q-btn
 						v-for="(button, key) in field.buttons"
-						:class="`JLButton JLButton${Strings.capitalize(button.type)} JLButton${Strings.capitalize(
+						:class="`${field.settings?.button_style?.classes} JLButton JLButton${Strings.capitalize(button.type)} JLButton${Strings.capitalize(
 							field.key,
 						)} ${field.classes}`"
 						:key="key"
-						:color="!button.classes ? button.color : 'primary'"
-						:type="button.type === FormFieldButtonType.SUBMIT ? 'submit' : 'button'"
+						:color="(!button?.classes && !field.settings?.button_style?.classes) ? button.color ? button.color : field.settings?.button_style?.color ? field.settings?.button_style?.color : 'primary' : 'primary'"
+						:type="button?.type === FormFieldButtonType.SUBMIT ? 'submit' : 'button'"
+						:text-color="button?.text_color ?? field.settings?.button_style?.text_color ?? null"
+						:size="button?.size ?? field.settings?.button_style?.size ?? null"
+						:outline="button?.outline ?? field.settings?.button_style?.outline ?? false"
+						:rounded="button?.rounded ?? field.settings?.button_style?.rounded ?? false"
+						:flat="button?.flat ?? field.settings?.button_style?.flat ?? false"
+						:push="button?.push ?? field.settings?.button_style?.push ?? false"
+						:unelevated="button?.unelevated ?? field.settings?.button_style?.unelevated ?? false"
+						:square="button?.square ?? field.settings?.button_style?.square ?? false"
+						:glossy="button?.glossy ?? field.settings?.button_style?.glossy ?? false"
+						:fab="button?.fab ?? field.settings?.button_style?.fab ?? false"
+						:fab-mini="button?.fab_mini ?? field.settings?.button_style?.fab_mini ?? false"
+						:padding="button?.padding ?? field.settings?.button_style?.padding ?? ''"
+						:dense="button?.dense ?? field.settings?.button_style?.dense ?? false"
+						:round="button?.round ?? field.settings?.button_style?.round ?? false"
 						@click="buttonPressed(button)"
 						:disabled="field.disabled || field.loading">
 						<span

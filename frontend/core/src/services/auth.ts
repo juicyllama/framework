@@ -63,6 +63,11 @@ export const getUser = async (): Promise<User> => {
 
 export const accountAuthCheck = async (): Promise<boolean> => {
 	const response = await instance.get(`auth/account/check`)
+	logger({
+		severity: LogSeverity.VERBOSE,
+		message: `Auth Check - ${response.data.passed}`,
+		object: response.data,
+	})
 	return response.data.passed
 }
 

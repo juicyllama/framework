@@ -604,8 +604,8 @@ export class Query<T> {
 						fieldLookupWhere.length === 1
 							? fieldLookupWhere[0]
 							: fieldLookupWhere.length > 0
-							? And(...fieldLookupWhere)
-							: value // if no valid operator is found, return the value as is - backward compatibility
+								? And(...fieldLookupWhere)
+								: value // if no valid operator is found, return the value as is - backward compatibility
 				}
 			}
 		}
@@ -617,6 +617,10 @@ export class Query<T> {
 				}
 			} else if (options.repository.metadata.columns.find(column => column.propertyName === 'account_id')) {
 				whereBase['account_id'] = options.account_id
+			} else if (options.repository.metadata.relations.find(column => column.propertyName === 'accounts')) {
+				whereBase['accounts'] = {
+					account_id: options.account_id,
+				}
 			}
 		}
 
@@ -627,6 +631,10 @@ export class Query<T> {
 				}
 			} else if (options.repository.metadata.columns.find(column => column.propertyName === 'account_id')) {
 				whereBase['account_id'] = In(options.account_ids)
+			} else if (options.repository.metadata.relations.find(column => column.propertyName === 'accounts')) {
+				whereBase['accounts'] = {
+					account_id: In(options.account_ids),
+				}
 			}
 		}
 

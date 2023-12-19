@@ -99,7 +99,6 @@ export const UserStore = defineStore('user', {
 		},
 
 		async resetComplete(email: string, code: string, password: string, q?: QVueGlobals): Promise<T> {
-			console.log(email, code, password)
 				const access_token = await resetPasswordComplete(email, code, password)
 				return await this.processAccessToken(access_token, q)
 		},
@@ -179,6 +178,7 @@ export const UserStore = defineStore('user', {
 		async logout(router?: Router, redirect?: string) {
 			logger({ severity: LogSeverity.VERBOSE, message: `[Store][User][Logout] Logout User` })
 			window.localStorage.removeItem('user')
+			window.localStorage.removeItem('selected_account')
 			this.$state.user = null
 			await token.remove()
 

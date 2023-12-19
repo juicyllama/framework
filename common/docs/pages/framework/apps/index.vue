@@ -21,10 +21,9 @@ useHead({
 				<div
 					class="card"
 					v-for="(app, index) in apps" :key="index">
-					<a :href="`/framework/apps/${app.key}`" class="focus:outline-none" color="primary" orientation="vertical">
+					<NuxtLink v-if="!app.pageNotAvailable" :to="`/framework/apps/${app.key}`" class="focus:outline-none" color="primary" orientation="vertical">
 						<div class="gap-x-8 gap-y-4 rounded-xl flex flex-col flex-1 px-4 py-5 sm:p-6 dark:bg-gray-900/50">
 							<div class="">
-								<span class="absolute inset-0"></span>
 								<div class="mb-2">
 									<img :src="`/images/apps/${app.key}.png`" :alt="app.key" loading="lazy" class="rounded-xl app-image">
 								</div>
@@ -32,7 +31,18 @@ useHead({
 								<p class="text-[15px] text-gray-500 dark:text-gray-400 mt-1">{{app.description}}</p>
 							</div>
 						</div>
-					</a>
+					</NuxtLink>
+					<div v-else class="focus:outline-none" color="primary" orientation="vertical">
+						<div class="gap-x-8 gap-y-4 rounded-xl flex flex-col flex-1 px-4 py-5 sm:p-6 dark:bg-gray-900/50">
+							<div class="">
+								<div class="mb-2">
+									<img :src="`/images/apps/${app.key}.png`" :alt="app.key" loading="lazy" class="rounded-xl app-image">
+								</div>
+								<p class="text-gray-900 dark:text-white text-base font-bold truncate">{{ app.name }}</p>
+								<p class="text-[15px] text-gray-500 dark:text-gray-400 mt-1">{{app.description}}</p>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
