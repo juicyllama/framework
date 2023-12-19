@@ -16,8 +16,8 @@
         //"noUncheckedIndexedAccess": true, //We need to look at enabling this and fixing errors
 
         /* Transpiling with typescript */
-        "module": "commonjs", //to move to NodeNext when NestJs allows
-       // "moduleResolution": "Node", //to move to NodeNext when NestJs allows
+        "module": "nodenext", //to move to NodeNext when NestJs allows
+        "moduleResolution": "nodenext", //to move to NodeNext when NestJs allows
         "sourceMap": true,
         
         /* MonoRepo */

@@ -11,8 +11,6 @@ const E = User
 type T = User
 const MODULE = UsersModule
 const SERVICE = UsersService
-const csv = new Csv()
-const file = new File()
 
 describe('Query Bulk', () => {
 	const scaffolding = new Scaffold<T>()
@@ -37,13 +35,13 @@ describe('Query Bulk', () => {
 	describe('CREATE', () => {
 		it('Upload 1 User', async () => {
 	
-			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 				`first_name,last_name,email\n${first_name_shared},${last_name_shared},${email_shared}`
 			)
 
-			const data = await csv.parseCsvFile(csv_file)
+			const data = await Csv.parseCsvFile(csv_file)
 			try{
-				await file.unlink(filePath, dirPath)
+				await File.unlink(filePath, dirPath)
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
@@ -63,13 +61,13 @@ describe('Query Bulk', () => {
 			const last_name_1 = faker.person.lastName()
 			const email_1 = faker.internet.email({firstName: first_name_1, lastName: last_name_1})
 
-			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 				`first_name,last_name,email\n${first_name_1},${last_name_1},${email_1}\n${first_name_shared_2},${last_name_shared_2},${email_shared_2}`
 			)
 
-			const data = await csv.parseCsvFile(csv_file)
+			const data = await Csv.parseCsvFile(csv_file)
 			try{
-				await file.unlink(filePath, dirPath)
+				await File.unlink(filePath, dirPath)
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
@@ -84,12 +82,12 @@ describe('Query Bulk', () => {
 
 		it(`Inserts on duplicate`, async () => {
 			const count = await scaffold.services.service.count()
-			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 				`first_name,last_name,email\n${first_name_shared},${last_name_shared},${email_shared}`
 			)
-			const data = await csv.parseCsvFile(csv_file)
+			const data = await Csv.parseCsvFile(csv_file)
 			try{
-				await file.unlink(filePath, dirPath)
+				await File.unlink(filePath, dirPath)
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
@@ -112,13 +110,13 @@ describe('Query Bulk', () => {
 			const email_2 = faker.internet.email({firstName: first_name_2, lastName: last_name_2})
 
 
-			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 				`first_name,last_name,email\n${first_name_1},${last_name_1},${email_1}\n${first_name_shared},${last_name_shared},${email_shared}\n${first_name_2},${last_name_2},${email_2}`
 			)
 
-			const data = await csv.parseCsvFile(csv_file)
+			const data = await Csv.parseCsvFile(csv_file)
 			try{
-				await file.unlink(filePath, dirPath)
+				await File.unlink(filePath, dirPath)
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
@@ -136,13 +134,13 @@ describe('Query Bulk', () => {
 			const last_name = faker.person.lastName()
 			const email = faker.internet.email({firstName: first_name, lastName: last_name})
 
-			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 				`first_name,last_name,email\n${first_name},${last_name},${email}`
 			)
 
-			const data = await csv.parseCsvFile(csv_file)
+			const data = await Csv.parseCsvFile(csv_file)
 			try{
-				await file.unlink(filePath, dirPath)
+				await File.unlink(filePath, dirPath)
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
@@ -163,13 +161,13 @@ describe('Query Bulk', () => {
 			const last_name_2 = faker.person.lastName()
 			const email_2 = faker.internet.email({firstName: first_name_2, lastName: last_name_2})
 
-			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 				`first_name,last_name,email\n${first_name_1},${last_name_1},${email_1}\n${first_name_2},${last_name_2},${email_2}`
 			)
 
-			const data = await csv.parseCsvFile(csv_file)
+			const data = await Csv.parseCsvFile(csv_file)
 			try{
-				await file.unlink(filePath, dirPath)
+				await File.unlink(filePath, dirPath)
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
@@ -192,12 +190,12 @@ describe('Query Bulk', () => {
 			const email_2 = faker.internet.email({firstName: first_name_2, lastName: last_name_2})
 
 
-			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 				`email,first_name\n${email_1},${first_name_1}\n${email_2},${first_name_2}`
 			)
-			const data = await csv.parseCsvFile(csv_file)
+			const data = await Csv.parseCsvFile(csv_file)
 			try{
-				await file.unlink(filePath, dirPath)
+				await File.unlink(filePath, dirPath)
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
@@ -213,12 +211,12 @@ describe('Query Bulk', () => {
 		it(`Update record if duplicate found`, async () => {
 			const count = await scaffold.services.service.count()
 			first_name_shared = faker.person.firstName()
-			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 				`first_name,email\n${first_name_shared},${email_shared}`
 			)
-			const data = await csv.parseCsvFile(csv_file)
+			const data = await Csv.parseCsvFile(csv_file)
 			try{
-				await file.unlink(filePath, dirPath)
+				await File.unlink(filePath, dirPath)
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
@@ -242,12 +240,12 @@ describe('Query Bulk', () => {
 			first_name_shared_2 = faker.person.firstName()
 
 			const count = await scaffold.services.service.count()
-			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 				`first_name,email\n${first_name_shared},${email_shared}\n${first_name_shared_2},${email_shared_2}`
 			)
-			const data = await csv.parseCsvFile(csv_file)
+			const data = await Csv.parseCsvFile(csv_file)
 			try{
-				await file.unlink(filePath, dirPath)
+				await File.unlink(filePath, dirPath)
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
@@ -271,12 +269,12 @@ describe('Query Bulk', () => {
 			const last_name = faker.person.lastName()
 			const email = faker.internet.email({firstName: first_name, lastName: last_name})
 
-			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 				`first_name,email\n${first_name_shared},${email_shared}\n${first_name},${email}`
 			)
-			const data = await csv.parseCsvFile(csv_file)
+			const data = await Csv.parseCsvFile(csv_file)
 			try{
-				await file.unlink(filePath, dirPath)
+				await File.unlink(filePath, dirPath)
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
@@ -301,12 +299,12 @@ describe('Query Bulk', () => {
 	describe('REPOPULATE', () => {
 		it(`Repopulate table from new CSV file`, async () => {
 			const count = await scaffold.services.service.count()	
-			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 				`first_name,email\n${first_name_shared},${email_shared}\n${first_name_shared_2},${email_shared_2}\n${first_name_shared_3},${email_shared_3}`
 			)
-			const data = await csv.parseCsvFile(csv_file)
+			const data = await Csv.parseCsvFile(csv_file)
 			try{
-				await file.unlink(filePath, dirPath)
+				await File.unlink(filePath, dirPath)
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}
@@ -322,12 +320,12 @@ describe('Query Bulk', () => {
 	describe('DELETE', () => {
 		it(`Delete records`, async () => {
 			const count = await scaffold.services.service.count()	
-			const { csv_file, filePath, dirPath } = await csv.createTempCSVFileFromString(
+			const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 				`first_name,email\n${first_name_shared_2},${email_shared_2}\n${first_name_shared_3},${email_shared_3}`
 			)
-			const data = await csv.parseCsvFile(csv_file)
+			const data = await Csv.parseCsvFile(csv_file)
 			try{
-				await file.unlink(filePath, dirPath)
+				await File.unlink(filePath, dirPath)
 			}catch(e: any){
 				scaffold.services.logger.warn(e.message)
 			}

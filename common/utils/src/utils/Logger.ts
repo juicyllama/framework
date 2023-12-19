@@ -37,7 +37,7 @@ export class Logger {
 					break
 				default:
 					if (Modules.bugsnag.isInstalled) {
-						Modules.bugsnag.load().then((Bugsnag)=> {
+						Modules.bugsnag.load().then(Bugsnag => {
 							Bugsnag.notify(new Error(message))
 						})
 					}
@@ -137,7 +137,7 @@ export class Logger {
 		} catch (e) {
 			this.error(e.message)
 			if (Modules.bugsnag.isInstalled) {
-				Modules.bugsnag.load().then((Bugsnag) => {
+				Modules.bugsnag.load().then(Bugsnag => {
 					Bugsnag.notify(new Error(e))
 				})
 			}

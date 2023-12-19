@@ -4,6 +4,7 @@ import { Cache } from 'cache-manager'
 import { CachePeriod, Enviroment, JLCache, Logger, Modules } from '@juicyllama/utils'
 import { StorageFileFormat, StorageFileType } from './storage.enums'
 import { LazyModuleLoader } from '@nestjs/core'
+import { StorageWriteResponseDto } from './storage.dto'
 
 @Injectable()
 export class StorageService {
@@ -29,9 +30,9 @@ export class StorageService {
 		location: string
 		permissions: StorageFileType
 		format?: StorageFileFormat
-		file: any
+		file: Blob | Express.Multer.File | any
 		params?: object
-	}): Promise<any> {
+	}): Promise<StorageWriteResponseDto> {
 		const domain = 'common::storage::write'
 
 		if (Enviroment.test === Enviroment[process.env.NODE_ENV]) {
@@ -60,21 +61,33 @@ export class StorageService {
 			try {
 				const awsS3Module = await this.lazyModuleLoader.load(() => AwsS3Module)
 				service = awsS3Module.get(AwsS3Service)
-				return await service.create({
+				const s3Result = await service.create({
 					location: options.location,
 					bucket: options.permissions,
 					format: options.format ?? StorageFileFormat.BLOB,
 					file: options.file,
 					params: options.params,
 				})
+				
+				return {
+					success: true,
+					url: s3Result.Location,
+				}
+
 			} catch (e: any) {
 				this.logger.error(`[${domain}] ${e.message}`, e)
+				return {
+					success: false,
+					error: e.message,
+				}
 			}
 		}
 
 		if (!service) {
 			this.logger.error(`No storage app installed, options are: @juicyllama/app-aws`)
-			return false
+			return {
+				success: false
+			}
 		}
 	}
 

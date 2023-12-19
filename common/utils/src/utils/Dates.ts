@@ -18,8 +18,7 @@ const nth = function (d) {
 
 export class Dates {
 	static format(date: Date, format: string): string {
-
-		if(format === 'iso') return date.toISOString()
+		if (format === 'iso') return date.toISOString()
 
 		date = new Date(date)
 
@@ -50,8 +49,8 @@ export class Dates {
 				milliseconds.length === 1
 					? '00' + milliseconds
 					: milliseconds.length === 2
-					? '0' + milliseconds
-					: milliseconds,
+						? '0' + milliseconds
+						: milliseconds,
 			)
 	}
 
@@ -63,9 +62,9 @@ export class Dates {
 
 	/**
 	 * Takes a date and adds additional days to it
-	 * @param date 
-	 * @param days 
-	 * @returns 
+	 * @param date
+	 * @param days
+	 * @returns
 	 */
 
 	static addDays(date: Date, days: number): Date {
@@ -76,9 +75,9 @@ export class Dates {
 
 	/**
 	 * Takes a date and subtracts days from it
-	 * @param date 
-	 * @param days 
-	 * @returns 
+	 * @param date
+	 * @param days
+	 * @returns
 	 */
 
 	static subtractDays(date: Date, days: number): Date {
@@ -89,9 +88,9 @@ export class Dates {
 
 	/**
 	 * Takes a date and adds additional hours to it
-	 * @param date 
-	 * @param hours 
-	 * @returns 
+	 * @param date
+	 * @param hours
+	 * @returns
 	 */
 
 	static addHours(date: Date, hours: number): Date {
@@ -102,9 +101,9 @@ export class Dates {
 
 	/**
 	 * Takes a date and subtracts hours from it
-	 * @param date 
-	 * @param hours 
-	 * @returns 
+	 * @param date
+	 * @param hours
+	 * @returns
 	 */
 
 	static subtractHours(date: Date, hours: number): Date {
@@ -112,7 +111,6 @@ export class Dates {
 		result.setHours(result.getHours() - hours)
 		return result
 	}
-
 
 	/**
 	 * Takes a date, adds steps to it and returns the new date
@@ -219,32 +217,40 @@ export class Dates {
 	}
 
 	static ahead(date: Date): string {
-		const seconds = Math.floor((date.getTime() - new Date().getTime() ) / 1000)
-	
+		const seconds = Math.floor((date.getTime() - new Date().getTime()) / 1000)
 		let interval = Math.floor(seconds / 31536000)
 
 		if (interval >= 1) {
+			if (interval === 1) return '1 year'
 			return interval + ' years'
 		}
 
 		interval = Math.floor(seconds / 2592000)
 		if (interval >= 1) {
+			if (interval === 1) return '1 month'
 			return interval + ' months'
 		}
 
 		interval = Math.floor(seconds / 86400)
 		if (interval >= 1) {
+			if (interval === 1) return '1 day'
 			return interval + ' days'
 		}
 
 		interval = Math.floor(seconds / 3600)
 		if (interval >= 1) {
+			if (interval === 1) return '1 hour'
 			return (seconds / 3600).toFixed(2) + ' hours'
 		}
 
 		interval = Math.floor(seconds / 60)
 		if (interval >= 1) {
+			if (interval === 1) return '1 minute'
 			return (seconds / 60).toFixed(2) + ' minutes'
+		}
+
+		if (seconds <= 1) {
+			return '1 second'
 		}
 
 		return Math.floor(seconds) + ' seconds'
@@ -256,27 +262,36 @@ export class Dates {
 		let interval = Math.floor(seconds / 31536000)
 
 		if (interval >= 1) {
+			if (interval === 1) return '1 year ago'
 			return interval + ' years ago'
 		}
 
 		interval = Math.floor(seconds / 2592000)
 		if (interval >= 1) {
+			if (interval === 1) return '1 month ago'
 			return interval + ' months ago'
 		}
 
 		interval = Math.floor(seconds / 86400)
 		if (interval >= 1) {
+			if (interval === 1) return '1 day ago'
 			return interval + ' days ago'
 		}
 
 		interval = Math.floor(seconds / 3600)
 		if (interval >= 1) {
-			return (seconds / 3600).toFixed(2) + ' hours ago'
+			if (interval === 1) return '1 hour ago'
+			return (seconds / 3600) + ' hours ago'
 		}
 
 		interval = Math.floor(seconds / 60)
 		if (interval >= 1) {
-			return (seconds / 60).toFixed(2) + ' minutes ago'
+			if (interval === 1) return '1 minute ago'
+			return (seconds / 60) + ' minute ago'
+		}
+
+		if (seconds <= 1) {
+			return '1 second ago'
 		}
 
 		return Math.floor(seconds) + ' seconds ago'
@@ -305,6 +320,4 @@ export class Dates {
 	static yearsAgo(years: number): Date {
 		return new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 365 * years)
 	}
-
-
 }

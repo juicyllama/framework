@@ -149,8 +149,8 @@ export class AccountService extends BaseService<T> {
 			file: file,
 		})
 
-		if (result?.Location) {
-			account.avatar_image_url = result.Location
+		if (result?.url) {
+			account.avatar_image_url = result.url
 			account = await super.update(account)
 			return account
 		}

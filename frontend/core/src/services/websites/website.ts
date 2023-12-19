@@ -10,3 +10,5 @@ export class WebsiteService extends Api<T> {
         super(WEBSITE_ENDPOINT)
     }
 }
+
+export const websiteService = new WebsiteService()
