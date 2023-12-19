@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-aws",
-    "version": "0.0.44",
+    "version": "0.1.0",
     "description": "Juicyllama NestJs AWS App",
     "author": {
         "name": "JuicyLlama Studio",
