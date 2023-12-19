@@ -1,13 +1,13 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { Logger, Env } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager'
+import { Logger, Env } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class AwsSecretsService {
 	constructor(
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		private readonly configService: ConfigService,
+		private readonly logger: Logger,
 	) {}
 
 	/**
@@ -30,7 +30,7 @@ export class AwsSecretsService {
 							// we don't have/need these in AWS
 							accessKeyId: this.configService.get<string>('aws.AWS_JL_ACCESS_KEY_ID'),
 							secretAccessKey: this.configService.get<string>('aws.AWS_JL_SECRET_KEY_ID'),
-					  },
+						},
 			})
 
 			const response = await client.send(
@@ -48,7 +48,7 @@ export class AwsSecretsService {
 					? {
 							status: e.response.status,
 							data: e.response.data,
-					  }
+						}
 					: null,
 			)
 			return
