@@ -1,8 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm'
 import { IsDate, IsString } from 'class-validator'
-import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm'
 
-@UseInterceptors(ClassSerializerInterceptor)
 @Entity('crm_contacts_mailchimp')
 export class MailchimpContact {
 	@PrimaryGeneratedColumn()
