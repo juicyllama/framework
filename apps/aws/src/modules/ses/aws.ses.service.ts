@@ -1,16 +1,19 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { Env, Logger, Markdown } from '@juicyllama/utils'
 import { SESv2Client, SendEmailRequest, SendEmailCommand } from '@aws-sdk/client-sesv2'
+import { InjectConfig, type BeaconMessageDto } from '@juicyllama/core'
+import { Env, Logger, Markdown } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import type { BeaconMessageDto } from '@juicyllama/core'
-import { S3ClientConfig } from '@aws-sdk/client-s3/dist-types/S3Client'
+import { InjectSes } from './aws.ses.constants'
+import { AwsSesConfigDto } from './config/aws.ses.config.dto'
 
 @Injectable()
 export class AwsSesService {
 	constructor(
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => Markdown)) private readonly markdown: Markdown,
+		private readonly configService: ConfigService,
+		private readonly logger: Logger,
+		private readonly markdown: Markdown,
+		@InjectConfig(AwsSesConfigDto) private readonly sesConfig: AwsSesConfigDto,
+		@InjectSes() private readonly sesClient: SESv2Client,
 	) {}
 
 	/**
@@ -30,21 +33,11 @@ export class AwsSesService {
 		}
 
 		try {
-			const client = new SESv2Client(<S3ClientConfig>{
-				region:
-					this.configService.get<string>('awsSes.AWS_SES_JL_REGION') ??
-					this.configService.get<string>('aws.AWS_JL_REGION'),
-				credentials: {
-					accessKeyId: this.configService.get<string>('aws.AWS_JL_ACCESS_KEY_ID'),
-					secretAccessKey: this.configService.get<string>('aws.AWS_JL_SECRET_KEY_ID'),
-				},
-			})
-
 			const params = await this.mapEmail(message)
 
 			const command = new SendEmailCommand(params)
 
-			const data = await client.send(command)
+			const data = await this.sesClient.send(command)
 
 			this.logger.debug(`[${domain}] Result`, data)
 
@@ -56,7 +49,7 @@ export class AwsSesService {
 					? {
 							status: e.response.status,
 							data: e.response.data,
-					  }
+						}
 					: null,
 			)
 			return false
@@ -75,7 +68,7 @@ export class AwsSesService {
 			},
 		}
 
-		if (!this.configService.get<string>('awsSes.AWS_SES_JL_TEMPLATE_ARN')) {
+		if (!this.sesConfig.AWS_SES_JL_TEMPLATE_ARN) {
 			return await this.mapEmailSimple(message, request)
 		} else {
 			return await this.mapEmailTemplate(message)
@@ -88,11 +81,11 @@ export class AwsSesService {
 
 		if (message.cta) {
 			text += `
-	
+
 			${message.cta.url}`
 
 			markdown += `
-			
+
 			[${message.cta.text}](${message.cta.url})`
 		}
 
@@ -124,7 +117,7 @@ export class AwsSesService {
 			return message.communication.email.from.name
 		}
 
-		return this.configService.get<string>('system.SYSTEM_EMAIL_NAME')
+		return this.configService.get<string>('SYSTEM_EMAIL_NAME')
 	}
 
 	private fromEmail(message: BeaconMessageDto): string {
@@ -132,6 +125,6 @@ export class AwsSesService {
 			return message.communication.email.from.email
 		}
 
-		return this.configService.get<string>('system.SYSTEM_EMAIL_ADDRESS')
+		return this.configService.get<string>('SYSTEM_EMAIL_ADDRESS')
 	}
 }

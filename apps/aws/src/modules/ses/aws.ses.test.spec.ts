@@ -1,6 +1,6 @@
-import { AwsSesService } from './aws.ses.service'
-import { AwsSesModule } from './aws.ses.module'
 import { Account, Scaffold, ScaffoldDto } from '@juicyllama/core'
+import { AwsSesModule } from './aws.ses.module'
+import { AwsSesService } from './aws.ses.service'
 
 const MODULE = AwsSesModule
 const SERVICE = AwsSesService
