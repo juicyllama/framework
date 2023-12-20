@@ -1,31 +1,28 @@
 import { SecretsManagerClient } from '@aws-sdk/client-secrets-manager'
+import { ConfigValidationModule, getConfigToken } from '@juicyllama/core'
 import { Env, Logger } from '@juicyllama/utils'
 import { Module } from '@nestjs/common'
-import { ConfigModule, ConfigService } from '@nestjs/config'
+import { AwsConfigDto } from '../aws.config.dto'
 import { AwsSecretsManagerToken } from './aws.secrets.constants'
 import { AwsSecretsService } from './aws.secrets.service'
 
 @Module({
-	imports: [
-		ConfigModule.forRoot({
-			isGlobal: true,
-		}),
-	],
+	imports: [ConfigValidationModule.register(AwsConfigDto)],
 	controllers: [],
 	providers: [
 		AwsSecretsService,
 		Logger,
 		{
 			provide: AwsSecretsManagerToken,
-			inject: [ConfigService],
-			useFactory: (config: ConfigService) => {
+			inject: [getConfigToken(AwsConfigDto)],
+			useFactory: (config: AwsConfigDto) => {
 				return new SecretsManagerClient({
-					region: config.get('AWS_S3_JL_REGION'),
+					region: config.AWS_JL_REGION,
 					credentials: Env.IsProd
 						? undefined
 						: {
-								accessKeyId: config.get('AWS_JL_ACCESS_KEY_ID'),
-								secretAccessKey: config.get('AWS_JL_SECRET_KEY_ID'),
+								accessKeyId: config.AWS_JL_ACCESS_KEY_ID,
+								secretAccessKey: config.AWS_JL_SECRET_KEY_ID,
 							},
 				})
 			},
