@@ -2,10 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { Env, Logger } from '@juicyllama/utils'
 import { MONGODB, Query, getConfigToken } from '@juicyllama/core'
+import { GoogleConfigDto } from '../../../config/google.config.dto'
+import { GoogleMapsClientToken } from '../provider'
 import { GeocodingService } from './geocoding.service'
 import { GoogleMapsGeocoding } from './geocoding.entity.mongo'
-import { GoogleConfigDto } from '../../../config/google.config.dto'
-import { GoogleMapsClientToken } from './geocoding.constants'
 
 describe('Geocoding Service', () => {
 	let moduleRef: TestingModule

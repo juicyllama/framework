@@ -1,23 +1,17 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { ConfigModule } from '@nestjs/config'
-import { MONGODB, mongodbConfig, Query } from '@juicyllama/core'
-import { Api, Env, Logger } from '@juicyllama/utils'
-import Joi from 'joi'
-import { PlacesService } from './places.service'
-import googleConfig from '../../../config/google.config'
-import { googleConfigJoi } from '../../../config/google.config.joi'
+import { ConfigValidationModule, MONGODB, Query } from '@juicyllama/core'
+import { Api, Logger } from '@juicyllama/utils'
+import { GoogleConfigDto } from '../../../config/google.config.dto'
+import { GoogleMapsClientProviderModule } from '../provider'
 import { GoogleMapsPlace } from './places.entity.mongo'
+import { PlacesService } from './places.service'
 
 @Module({
 	imports: [
-		ConfigModule.forRoot({
-			isGlobal: true,
-			load: [mongodbConfig, googleConfig],
-			validationSchema: Env.IsNotTest() ? Joi.object(googleConfigJoi) : null,
-		}),
-		TypeOrmModule.forRootAsync(mongodbConfig()),
+		ConfigValidationModule.register(GoogleConfigDto),
 		TypeOrmModule.forFeature([GoogleMapsPlace], MONGODB),
+		GoogleMapsClientProviderModule,
 	],
 	controllers: [],
 	providers: [PlacesService, Logger, Query, Api],

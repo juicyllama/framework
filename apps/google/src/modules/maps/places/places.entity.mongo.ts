@@ -1,6 +1,3 @@
-import { Entity, ObjectId, ObjectIdColumn, Column, Unique } from 'typeorm'
-import { IsString, IsBoolean, IsNumber } from 'class-validator'
-import { BaseEntity } from '@juicyllama/core'
 import {
 	AddressComponent,
 	AddressGeometry,
@@ -10,6 +7,9 @@ import {
 	PlacePhoto,
 } from '@googlemaps/google-maps-services-js/src/common'
 import { PlaceReview } from '@googlemaps/google-maps-services-js'
+import { BaseEntity } from '@juicyllama/core'
+import { IsString, IsBoolean, IsNumber } from 'class-validator'
+import { Entity, ObjectId, ObjectIdColumn, Column, Unique } from 'typeorm'
 
 @Entity()
 @Unique('google_maps_place_UNIQUE', ['place_id'])
