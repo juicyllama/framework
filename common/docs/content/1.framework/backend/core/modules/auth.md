@@ -33,15 +33,15 @@ The application supports SSO via the following providers:
 
 ### Google SSO
 
-1. Create a new project in the [Google Cloud Console](https://console.cloud.google.com/)<br><br>
-2. Set up the [Oauth consent screen](https://console.cloud.google.com/apis/credentials/consent)<br><br>
+1. Create a new project in the [Google Cloud Console](https://console.cloud.google.com/){:target="_blank"}<br><br>
+2. Set up the [Oauth consent screen](https://console.cloud.google.com/apis/credentials/consent){:target="_blank"}<br><br>
 3. Add the following scopes:
     - `.../auth/userinfo.email`
     - `.../auth/userinfo.profile`<br><br>
-4. Create a new [OAuth 2.0 Client ID](https://console.cloud.google.com/apis/credentials/oauthclient)<br><br>
+4. Create a new [OAuth 2.0 Client ID](https://console.cloud.google.com/apis/credentials/oauthclient){:target="_blank"}<br><br>
 5. Add your Javascript origins e.g. `https://api.<your-domain>` for your backend API application<br><br>
 6. Add the frontend redirect URI (must point to the login page) e.g. `https://app.<your-domain>/login` for the frontend application<br><br>
-7. Follow the [verification process](https://console.cloud.google.com/apis/credentials/consent/edit;verificationMode=true) to make the app public if you need to<br><br>
+7. Follow the [verification process](https://console.cloud.google.com/apis/credentials/consent/edit;verificationMode=true){:target="_blank"} to make the app public if you need to<br><br>
 8. Add the following environment variables to your application:<br>
 
 ```bash

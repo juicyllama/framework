@@ -1,6 +1,6 @@
 {
 	"name": "@juicyllama/vue-flags",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"description": "Juicyllama Vue Flags",
 	"author": {
 		"name": "JuicyLlama Studio",
@@ -18,8 +18,8 @@
 	"bugs": "https://github.com/juicyllama/framework",
 	"license": "0BSD",
 	"readmeFilename": "README.md",
-	"main": "dist/JLUtils.umd.js",
-	"module": "dist/JLUtils.es.js",
+	"main": "dist/Flags.umd.js",
+	"module": "dist/Flags.es.js",
 	"types": "dist/types/index.d.ts",
 	"files": [
 		"dist",
@@ -31,7 +31,7 @@
 		"build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types ",
 		"typecheck": "vue-tsc --noEmit",
 		"format": "prettier --write .",
-		"lint": "eslint \"**/*.{js,ts,vue}\" --quiet --fix"
+		"lint": "eslint \"src/**/*.{js,ts,vue}\" --quiet --fix"
 	},
 	"dependencies": {
 		"@juicyllama/vue-dev": "workspace:^"

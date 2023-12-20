@@ -52,7 +52,7 @@ jobs:
                     major-wording: 'JLMAJOR'
                     minor-wording: 'feature,feat'
                     patch-wording: 'patch,fixes,fix,misc,docs,refactor'    # Providing patch-wording will override commits
-                    commit-message: 'Release Package: Hive Frontend Bump Version [skip ci]'
+                    commit-message: 'Release Package: Docs Bump Version [skip ci]'
                     skip-tag: true
 
             -   name: 'Release to hosting provider'

@@ -18,7 +18,7 @@ export interface FlagProps {
 	type?: FlagType
 	classes?: string[]
 	size?: {
-		width: number
-		height: number
+		width: string
+		height: string
 	}
 }
