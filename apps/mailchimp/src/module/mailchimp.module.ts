@@ -1,28 +1,31 @@
-import { ConfigModule } from '@nestjs/config'
-import { Api, Enviroment } from '@juicyllama/utils'
-import { MailchimpService } from './mailchimp.service'
-import Joi from 'joi'
+import { ConfigValidationModule, databaseConfig, getConfigToken, Query } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
 import { Module } from '@nestjs/common'
-import mailchimpConfig from '../configs/mailchimp.config'
-import { mailchimpConfigJoi } from '../configs/mailchimp.config.joi'
-import { MailchimpContact } from './mailchimp.entity'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { databaseConfig, Query } from '@juicyllama/core'
+import { MailchimpConfigDto } from '../configs/mailchimp.config.dto'
+import { MailchimpScaffold } from '../configs/mailchimp.scaffold'
+import { MailchimpClientToken } from './mailchimp.constants'
+import { MailchimpContact } from './mailchimp.entity'
+import { MailchimpService } from './mailchimp.service'
 
 @Module({
 	imports: [
-		ConfigModule.forRoot({
-			load: [mailchimpConfig],
-			isGlobal: true,
-			envFilePath: '.env',
-			validationSchema: process.env.NODE_ENV !== Enviroment.test ? Joi.object(mailchimpConfigJoi) : null,
-		}),
+		ConfigValidationModule.register(MailchimpConfigDto),
 		TypeOrmModule.forRoot(databaseConfig()),
 		TypeOrmModule.forFeature([MailchimpContact]),
 	],
 	controllers: [],
-	providers: [MailchimpService, Logger, Api, Query],
+	providers: [
+		MailchimpService,
+		Logger,
+		Query,
+		{
+			provide: MailchimpClientToken,
+			inject: [getConfigToken(MailchimpConfigDto)],
+			useFactory: (config: MailchimpConfigDto) =>
+				MailchimpScaffold(config.MAILCHIMP_API_KEY, config.MAILCHIMP_SERVER_PREFIX),
+		},
+	],
 	exports: [MailchimpService],
 })
 export class MailchimpModule {}
