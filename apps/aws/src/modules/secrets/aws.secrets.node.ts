@@ -40,7 +40,7 @@ export async function getSecret(secret_name: string): Promise<any> {
 				? {
 						status: e.response.status,
 						data: e.response.data,
-				  }
+					}
 				: null,
 		)
 		return
@@ -81,7 +81,7 @@ export async function listSecrets(): Promise<object> {
 				? {
 						status: e.response.status,
 						data: e.response.data,
-				  }
+					}
 				: null,
 		)
 		return
