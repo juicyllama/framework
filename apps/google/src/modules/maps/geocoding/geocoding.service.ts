@@ -1,24 +1,26 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { Client } from '@googlemaps/google-maps-services-js'
+import { InjectConfig, MONGODB, Query } from '@juicyllama/core'
+import { Logger, Env } from '@juicyllama/utils'
+import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { Api, Logger, Env } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
-import { MONGODB, Query } from '@juicyllama/core'
+import { GoogleConfigDto } from '../../../config/google.config.dto'
+import { InjectGoogleMaps } from './geocoding.constants'
 import { GoogleMapsGeocoding } from './geocoding.entity.mongo'
-import * as mock from './mock.json'
 import { googleGeocodeToEntity } from './geocoding.mapper'
-import { Client } from '@googlemaps/google-maps-services-js'
+import * as mock from './mock.json'
 
 type GEOCODING_T = GoogleMapsGeocoding
 
 @Injectable()
 export class GeocodingService {
 	constructor(
-		@Inject(forwardRef(() => Api)) private readonly api: Api,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => Query)) private readonly query: Query<GEOCODING_T>,
+		private readonly logger: Logger,
+		@Inject(Query)
+		private readonly query: Query<GEOCODING_T>,
 		@InjectRepository(GoogleMapsGeocoding, MONGODB) private readonly repository: Repository<GEOCODING_T>,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		@InjectConfig(GoogleConfigDto) private readonly config: GoogleConfigDto,
+		@InjectGoogleMaps() private readonly client: Client,
 	) {}
 
 	async findByAddress(search: string): Promise<GEOCODING_T> {
@@ -50,12 +52,11 @@ export class GeocodingService {
 
 		const args = {
 			params: {
-				key: this.configService.get('google.GOOGLE_MAPS_API_KEY'),
+				key: this.config.GOOGLE_MAPS_API_KEY,
 				address: search,
 			},
 		}
-		const client = new Client()
-		const response = await client.geocode(args)
+		const response = await this.client.geocode(args)
 
 		const geocoding = googleGeocodeToEntity(search, response.data.results[0])
 
