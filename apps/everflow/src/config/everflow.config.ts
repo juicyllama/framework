@@ -1,5 +1,5 @@
 import { registerAs } from '@nestjs/config'
-import { everflowConfigDto } from './everflow.config.dto'
+import { EverflowConfigDto } from './everflow.config.dto'
 import { RawAxiosRequestConfig } from 'axios'
 
 export default registerAs(
@@ -10,7 +10,7 @@ export default registerAs(
 		},
 )
 
-export function getEverflowAxiosConfig(config: everflowConfigDto): RawAxiosRequestConfig {
+export function getEverflowAxiosConfig(config: EverflowConfigDto): RawAxiosRequestConfig {
 	return {
 		headers: {
 			'Content-Type': 'application/json',

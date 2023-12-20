@@ -1,25 +1,23 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Api, Logger, Env } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
+import { Injectable } from '@nestjs/common'
 import * as mock from '../../../../types/click/clicks.mock.json'
 import { EverflowClick } from '../../../../types/click/everflow.click.dto'
-import { EverflowAffiliateReportingClicksBody } from './everflow.affiliate.reporting.clicks.dto'
-import { everflowConfigDto } from '../../../../config/everflow.config.dto'
+import { EverflowConfigDto } from '../../../../config/everflow.config.dto'
 import { getEverflowAxiosConfig } from '../../../../config/everflow.config'
+import { EverflowAffiliateReportingClicksBody } from './everflow.affiliate.reporting.clicks.dto'
 
 const ENDPOINT = `https://api.eflow.team/v1/affiliates/reporting/clicks/stream`
 
 @Injectable()
 export class EverflowAffiliateReportingClicksService {
 	constructor(
-		@Inject(forwardRef(() => Api)) private readonly api: Api,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		private readonly api: Api,
+		private readonly logger: Logger,
 	) {}
 
 	async findAll(options: {
 		arguments: EverflowAffiliateReportingClicksBody
-		config?: everflowConfigDto
+		config?: EverflowConfigDto
 	}): Promise<EverflowClick[]> {
 		const domain = 'app::everflow::affiliate::reporting::clicks::findAll'
 

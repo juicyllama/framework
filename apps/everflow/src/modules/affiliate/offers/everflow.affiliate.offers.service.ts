@@ -3,7 +3,7 @@ import { Api, Logger, Env } from '@juicyllama/utils'
 import { ConfigService } from '@nestjs/config'
 import * as mock from '../../../types/offer/offers.mock.json'
 import { EverflowOffer } from '../../../types/offer/offer.dto'
-import { everflowConfigDto } from '../../../config/everflow.config.dto'
+import { EverflowConfigDto } from '../../../config/everflow.config.dto'
 import { getEverflowAxiosConfig } from '../../../config/everflow.config'
 
 const ENDPOINT = `https://api.eflow.team/v1/affiliates/alloffers`
@@ -16,7 +16,7 @@ export class EverflowAffiliateOffersService {
 		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
 	) {}
 
-	async findAllVisable(options: { config?: everflowConfigDto }): Promise<EverflowOffer[]> {
+	async findAllVisable(options: { config?: EverflowConfigDto }): Promise<EverflowOffer[]> {
 		const domain = 'app::everflow::affiliate::offers::findAllVisable'
 
 		if (Env.IsTest()) {
