@@ -161,6 +161,8 @@
 </template>
 
 <script lang="ts">
+import { useQuasar } from 'quasar'
+
 import { ref, onMounted } from 'vue'
 import WidgetForm from './components/WidgetForm.vue'
 import { useWidgetsStore } from '../../store/widgets'
@@ -171,6 +173,7 @@ import JLTable from './components/JLTable.vue'
 import { saveWidgets } from '../../services/widgets'
 import { widgetClass } from './utils'
 
+const $q = useQuasar()
 const findWidgetById = (widgets, widget) => widgets.findIndex(el => el.id === widget.id)
 
 export default {
@@ -291,6 +294,7 @@ export default {
 			onDragStart,
 			isShowHeader: props.showHeader,
 			title: ref('Widget editor'),
+			$q
 		}
 	},
 }

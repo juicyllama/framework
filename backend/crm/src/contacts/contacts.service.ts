@@ -107,13 +107,13 @@ export class ContactsService extends BaseService<T> {
 			permissions: StorageType.PUBLIC,
 			format: StorageFileFormat.Express_Multer_File,
 			file: file,
-	})
+		})
 
-		if (result?.Location) {
+		if (result?.url) {
 			contact = await this.query.update(this.repository, {
 				contact_id: contact.contact_id,
 				avatar_type: UserAvatarType.IMAGE,
-				avatar_image_url: result.Location,
+				avatar_image_url: result.url,
 			})
 		}
 		return contact
