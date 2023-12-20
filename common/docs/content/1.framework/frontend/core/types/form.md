@@ -33,12 +33,12 @@ Types of fields that are available to be used on the form:
 
 ```js
 ;(INPUT = 'input'),
-	(DROPDOWN = 'dropdown'),
-	(BUTTON = 'button'),
-	(TOGGLE = 'toggle'),
-	(DATE = 'date'),
-	(TAGS = 'tags'),
-	(PLUGIN = 'plugin') //used for custom plugins
+(DROPDOWN = 'dropdown'),
+(BUTTON = 'button'),
+(TOGGLE = 'toggle'),
+(DATE = 'date'),
+(TAGS = 'tags'),
+(PLUGIN = 'plugin') //used for custom plugins
 ```
 
 ## FormFieldType

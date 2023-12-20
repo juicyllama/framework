@@ -8,11 +8,12 @@ export default defineNuxtConfig({
 		'@pinia/nuxt',
 		'@nuxt/ui',
 		'nuxt-icon',
-		'@nuxtjs/color-mode'
+		'@nuxtjs/color-mode',
+		'@nuxtjs/tailwindcss'
 	],
 	colorMode: {
 		preference: 'dark',
-    	fallback: 'dark',
+		fallback: 'dark',
 		storageKey: 'jl-docs-color-mode'
 	},
 	ui: {

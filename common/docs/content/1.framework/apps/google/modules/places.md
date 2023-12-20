@@ -2,7 +2,7 @@
 
 The Places module provides a wrapper around the Google Maps Places API.
 
-For more information about this checkout the official [Google Maps Places API](https://developers.google.com/maps/documentation/places/web-service/overview).
+For more information about this checkout the official [Google Maps Places API](https://developers.google.com/maps/documentation/places/web-service/overview){:target="_blank"}.
 
 ## Installation
 
