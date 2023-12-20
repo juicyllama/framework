@@ -21,7 +21,7 @@ export default defineConfig({
 			name: 'JLUtils',
 			// We are building for CJS and ESM, use a function to rename automatically files.
 			// Example: my-component-library.esm.js
-			fileName: (format) => `${'JLUtils'}.${format}.js`,
+			fileName: (format) => `${'Flags'}.${format}.js`,
 		},
 		rollupOptions: {
 			external: [

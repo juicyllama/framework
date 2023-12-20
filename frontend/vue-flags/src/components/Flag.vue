@@ -3,36 +3,34 @@ import { FlagProps, FlagType } from '../types/flags'
 
 const props = defineProps<FlagProps>()
 
-if(!props.type) props.type = FlagType.RECTANGULAR
-if(!props.image_type) props.image_type = 'svg'
+const type = props.type ?? FlagType.RECTANGULAR
+const image_type = props.image_type ?? 'svg'
+let width = props.size?.width
+let height = props.size?.height
 
-if(!props.size) {
+if(!width || !height) {
 
-	switch(props.type) {
+	switch(type) {
 		case FlagType.RECTANGULAR:
 		case FlagType.ROUNDED_RECTANGLE:
-			props.size = {
-				width: 32,
-				height: 20
-			}
+			width = '32px'
+			height= '20px'
 			break
-		case FlagType.ROUNDED:
+		case FlagType.ROUND:
 		case FlagType.SQUARE:
 		case FlagType.HEXAGONAL:
 		case FlagType.ROUNDED_SQUARE: 
 		default: 
-			props.size = {
-				width: 32,
-				height: 32
-			}
+			width = '32px'
+			height = '32px'
 			break
 	}
 }
 
-let src = `../assets/flags/${props.type}/${props.image_type}/${props.country_code.toUpperCase()}.${props.image_type}`
+let src = `../assets/flags/${type}/${image_type}/${props.country_code.toUpperCase()}.${image_type}`
 
 </script>
 
 <template>
-	<img :class="`flag flag--${props.type} ${prop.classes.join(' ')}`" :src="src" width="props.size.width" height="props.size.height" />
+	<img :class="`flag flag--${type} ${props.classes?.join(' ')}`" :src="src" :width="width" :height="height" />
 </template>
