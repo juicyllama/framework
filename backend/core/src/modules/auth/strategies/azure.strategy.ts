@@ -6,9 +6,12 @@ import { defaultSSOString } from '../../../configs/sso.config.joi'
 const AZURE_AD_CLIENT_ID = process.env.AZURE_AD_CLIENT_ID ?? defaultSSOString
 const AZURE_AD_TENANT_ID = process.env.AZURE_AD_TENANT_ID ?? defaultSSOString
 
+export const enableAzureADStrategy = process.env.AZURE_AD_CLIENT_ID && process.env.AZURE_AD_TENANT_ID && process.env.AZURE_AD_CLIENT_SECRET;
+
 @Injectable()
 export class AzureADStrategy extends PassportStrategy(BearerStrategy, 'azure-ad') {
 	constructor() {
+		if (!enableAzureADStrategy) throw new Error('Azure AD is not enabled');
 		super({
 			identityMetadata: `https://login.microsoftonline.com/${AZURE_AD_TENANT_ID}/v2.0/.well-known/openid-configuration`,
 			clientID: AZURE_AD_CLIENT_ID,
