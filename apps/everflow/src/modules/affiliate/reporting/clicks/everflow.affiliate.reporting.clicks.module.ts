@@ -1,19 +1,11 @@
+import { ConfigValidationModule } from '@juicyllama/core'
+import { Api, Logger } from '@juicyllama/utils'
 import { Module } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
-import { Api, Env, Logger } from '@juicyllama/utils'
-import Joi from 'joi'
+import { EverflowConfigDto } from '../../../../config/everflow.config.dto'
 import { EverflowAffiliateReportingClicksService } from './everflow.affiliate.reporting.clicks.service'
-import everflowConfig from '../../../../config/everflow.config'
-import { everflowConfigJoi } from '../../../../config/everflow.config.joi'
 
 @Module({
-	imports: [
-		ConfigModule.forRoot({
-			isGlobal: true,
-			load: [everflowConfig],
-			validationSchema: Env.IsNotTest() ? Joi.object(everflowConfigJoi) : null,
-		}),
-	],
+	imports: [ConfigValidationModule.register(EverflowConfigDto)],
 	controllers: [],
 	providers: [EverflowAffiliateReportingClicksService, Logger, Api],
 	exports: [EverflowAffiliateReportingClicksService],

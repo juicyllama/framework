@@ -2,7 +2,7 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Api, Logger, Env } from '@juicyllama/utils'
 import { ConfigService } from '@nestjs/config'
 import * as mock from '../../../../types/conversion/conversions.mock.json'
-import { everflowConfigDto } from '../../../../config/everflow.config.dto'
+import { EverflowConfigDto } from '../../../../config/everflow.config.dto'
 import { getEverflowAxiosConfig } from '../../../../config/everflow.config'
 import { EverflowConversion } from '../../../../types/conversion/conversion.dto'
 import { EverflowAffiliateReportingConversionBody } from './everflow.affiliate.reporting.conversion.dto'
@@ -19,7 +19,7 @@ export class EverflowAffiliateReportingConversionsService {
 
 	async findAll(options: {
 		arguments: EverflowAffiliateReportingConversionBody
-		config?: everflowConfigDto
+		config?: EverflowConfigDto
 	}): Promise<EverflowConversion[]> {
 		const domain = 'app::everflow::affiliate::reporting::conversions::findAll'
 
