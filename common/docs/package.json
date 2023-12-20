@@ -40,5 +40,8 @@
 		"quasar": "latest",
 		"vue": "latest",
 		"vue-router": "latest"
+	},
+	"devDependencies": {
+		"@nuxtjs/tailwindcss": "^6.10.1"
 	}
 }
