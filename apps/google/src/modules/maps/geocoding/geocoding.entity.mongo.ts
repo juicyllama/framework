@@ -1,12 +1,12 @@
-import { Entity, ObjectId, ObjectIdColumn, Column, Unique } from 'typeorm'
-import { IsString, IsBoolean } from 'class-validator'
-import { BaseEntity } from '@juicyllama/core'
 import {
 	AddressComponent,
 	AddressGeometry,
 	AddressType,
 	PlusCode,
 } from '@googlemaps/google-maps-services-js/src/common'
+import { BaseEntity } from '@juicyllama/core'
+import { IsString, IsBoolean } from 'class-validator'
+import { Entity, ObjectId, ObjectIdColumn, Column, Unique } from 'typeorm'
 
 @Entity()
 @Unique('google_maps_geocoding_UNIQUE', ['search'])
