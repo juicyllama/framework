@@ -1,25 +1,14 @@
 import { RDSClient } from '@aws-sdk/client-rds'
-import { systemConfigJoi, systemConfig, ConfigValidationModule, getConfigToken } from '@juicyllama/core'
-import { Api, Enviroment, Logger, Markdown } from '@juicyllama/utils'
+import { ConfigValidationModule, getConfigToken } from '@juicyllama/core'
+import { Api, Logger, Markdown } from '@juicyllama/utils'
 import { Module } from '@nestjs/common'
-import { ConfigModule, ConfigService } from '@nestjs/config'
-import Joi from 'joi'
-import { awsConfigJoi } from '../aws.config.joi'
-import awsConfig from '../aws.nest.config'
+import { AwsConfigDto } from '../aws.config.dto'
 import { RdsClient } from './aws.rds.constants'
 import { AwsRdsService } from './aws.rds.service'
-import { AWsRdsConfigDto } from './config/aws.rds.config.dto'
+import { AwsRdsConfigDto } from './config/aws.rds.config.dto'
 
 @Module({
-	imports: [
-		ConfigModule.forRoot({
-			isGlobal: true,
-			load: [awsConfig, systemConfig],
-			validationSchema:
-				process.env.NODE_ENV !== Enviroment.test ? Joi.object({ ...awsConfigJoi, ...systemConfigJoi }) : null,
-		}),
-		ConfigValidationModule.register(AWsRdsConfigDto),
-	],
+	imports: [ConfigValidationModule.register(AwsRdsConfigDto), ConfigValidationModule.register(AwsConfigDto)],
 	controllers: [],
 	providers: [
 		AwsRdsService,
@@ -28,13 +17,13 @@ import { AWsRdsConfigDto } from './config/aws.rds.config.dto'
 		Markdown,
 		{
 			provide: RdsClient,
-			inject: [getConfigToken(AWsRdsConfigDto), ConfigService],
-			useFactory: (rdsConfig: AWsRdsConfigDto, config: ConfigService) => {
+			inject: [getConfigToken(AwsRdsConfigDto), getConfigToken(AwsConfigDto)],
+			useFactory: (rdsConfig: AwsRdsConfigDto, awsConfig: AwsConfigDto) => {
 				return new RDSClient({
-					region: rdsConfig.AWS_RDS_JL_REGION ?? config.get<string>('aws.AWS_JL_REGION'),
+					region: rdsConfig.AWS_RDS_JL_REGION ?? awsConfig.AWS_JL_REGION,
 					credentials: {
-						accessKeyId: config.get<string>('aws.AWS_JL_ACCESS_KEY_ID'),
-						secretAccessKey: config.get<string>('aws.AWS_JL_SECRET_KEY_ID'),
+						accessKeyId: awsConfig.AWS_JL_ACCESS_KEY_ID,
+						secretAccessKey: awsConfig.AWS_JL_SECRET_KEY_ID,
 					},
 				})
 			},
