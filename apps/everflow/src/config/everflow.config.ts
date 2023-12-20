@@ -1,14 +1,5 @@
-import { registerAs } from '@nestjs/config'
 import { EverflowConfigDto } from './everflow.config.dto'
 import { RawAxiosRequestConfig } from 'axios'
-
-export default registerAs(
-	'everflow',
-	() =>
-		<any>{
-			EVERFLOW_API_KEY: process.env.EVERFLOW_API_KEY,
-		},
-)
 
 export function getEverflowAxiosConfig(config: EverflowConfigDto): RawAxiosRequestConfig {
 	return {
