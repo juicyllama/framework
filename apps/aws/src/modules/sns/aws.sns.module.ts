@@ -1,24 +1,37 @@
+import { SNSClient } from '@aws-sdk/client-sns'
+import { ConfigValidationModule } from '@juicyllama/core'
+import { Logger } from '@juicyllama/utils'
 import { Module } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
-import { Api, Enviroment, Logger } from '@juicyllama/utils'
-import Joi from 'joi'
-import { awsConfigJoi } from '../aws.config.joi'
-import awsConfig from '../aws.nest.config'
-import { awsSnsConfigJoi } from './config/aws.sns.config.joi'
-import awsSnsConfig from './config/aws.sns.nest.config'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { AwsSnsClientToken } from './aws.sns.constants'
 import { AwsSnsService } from './aws.sns.service'
+import { AwsSnsConfigDto } from './config/aws.sns.config.dto'
 
 @Module({
 	imports: [
 		ConfigModule.forRoot({
 			isGlobal: true,
-			load: [awsConfig, awsSnsConfig],
-			validationSchema:
-				process.env.NODE_ENV !== Enviroment.test ? Joi.object({ ...awsConfigJoi, ...awsSnsConfigJoi }) : null,
 		}),
+		ConfigValidationModule.register(AwsSnsConfigDto),
 	],
 	controllers: [],
-	providers: [AwsSnsService, Api, Logger],
+	providers: [
+		AwsSnsService,
+		Logger,
+		{
+			provide: AwsSnsClientToken,
+			inject: [ConfigService],
+			useFactory: (config: ConfigService) => {
+				return new SNSClient({
+					region: config.get('AWS_JL_REGION'),
+					credentials: {
+						accessKeyId: config.get('AWS_JL_ACCESS_KEY_ID'),
+						secretAccessKey: config.get('AWS_JL_SECRET_KEY_ID'),
+					},
+				})
+			},
+		},
+	],
 	exports: [AwsSnsService],
 })
 export class AwsSnsModule {}
