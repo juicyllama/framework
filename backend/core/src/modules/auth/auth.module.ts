@@ -28,13 +28,9 @@ import { ssoConfigJoi } from '../../configs/sso.config.joi'
 const strategies = [];
 if (enableAzureADStrategy) {
 	strategies.push(AzureADStrategy)
-} else {
-	console.warn('Azure AD Login is not enabled')
 }
 if (enableGoogleStrategy) {
 	strategies.push(GoogleStrategy)
-} else {
-	console.warn('Google Login is not enabled')
 }
 
 @Module({
