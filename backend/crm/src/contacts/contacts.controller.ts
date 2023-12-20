@@ -229,7 +229,7 @@ export class ContactsController {
 									query.has_email === ContactHasEmailFilter.ANY
 										? In([ContactEmailType.PERSONAL, ContactEmailType.WORK, ContactEmailType.OTHER])
 										: In([query.has_email]),
-						  }
+							}
 						: null,
 					phones: query.has_phone
 						? {
@@ -239,9 +239,9 @@ export class ContactsController {
 												ContactPhoneType.MOBILE,
 												ContactPhoneType.LANDLINE,
 												ContactPhoneType.OTHER,
-										  ])
+											])
 										: In([query.has_phone]),
-						  }
+							}
 						: null,
 				},
 				isNil,
@@ -265,7 +265,7 @@ export class ContactsController {
 													ContactEmailType.PERSONAL,
 													ContactEmailType.WORK,
 													ContactEmailType.OTHER,
-											  ])
+												])
 											: In([query.has_email])
 										: null,
 								},
@@ -279,9 +279,9 @@ export class ContactsController {
 														ContactPhoneType.MOBILE,
 														ContactPhoneType.LANDLINE,
 														ContactPhoneType.OTHER,
-												  ])
+													])
 												: In([query.has_phone]),
-								  }
+									}
 								: null,
 						},
 						isNil,
@@ -303,9 +303,9 @@ export class ContactsController {
 														ContactEmailType.PERSONAL,
 														ContactEmailType.WORK,
 														ContactEmailType.OTHER,
-												  ])
+													])
 												: In([query.has_email]),
-								  }
+									}
 								: null,
 							phones: query.has_phone
 								? {
@@ -315,9 +315,9 @@ export class ContactsController {
 														ContactPhoneType.MOBILE,
 														ContactPhoneType.LANDLINE,
 														ContactPhoneType.OTHER,
-												  ])
+													])
 												: In([query.has_phone]),
-								  }
+									}
 								: null,
 						},
 						isNil,
@@ -336,9 +336,9 @@ export class ContactsController {
 														ContactEmailType.PERSONAL,
 														ContactEmailType.WORK,
 														ContactEmailType.OTHER,
-												  ])
+													])
 												: In([query.has_email]),
-								  }
+									}
 								: null,
 							phones: query.has_phone
 								? {
@@ -348,9 +348,9 @@ export class ContactsController {
 														ContactPhoneType.MOBILE,
 														ContactPhoneType.LANDLINE,
 														ContactPhoneType.OTHER,
-												  ])
+													])
 												: In([query.has_phone]),
-								  }
+									}
 								: null,
 						},
 						isNil,
@@ -369,7 +369,7 @@ export class ContactsController {
 													ContactEmailType.PERSONAL,
 													ContactEmailType.WORK,
 													ContactEmailType.OTHER,
-											  ])
+												])
 											: In([query.has_email])
 										: null,
 								},
@@ -383,9 +383,9 @@ export class ContactsController {
 														ContactPhoneType.MOBILE,
 														ContactPhoneType.LANDLINE,
 														ContactPhoneType.OTHER,
-												  ])
+													])
 												: In([query.has_phone]),
-								  }
+									}
 								: null,
 						},
 						isNil,
@@ -404,7 +404,7 @@ export class ContactsController {
 													ContactPhoneType.MOBILE,
 													ContactPhoneType.LANDLINE,
 													ContactPhoneType.OTHER,
-											  ])
+												])
 											: In([query.has_phone])
 										: null,
 								},
@@ -418,9 +418,9 @@ export class ContactsController {
 														ContactEmailType.PERSONAL,
 														ContactEmailType.WORK,
 														ContactEmailType.OTHER,
-												  ])
+													])
 												: In([query.has_email]),
-								  }
+									}
 								: null,
 						},
 						isNil,
