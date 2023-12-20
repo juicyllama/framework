@@ -1,24 +1,21 @@
-import { forwardRef, Inject, Injectable, BadRequestException } from '@nestjs/common'
+import { BaseService, Query } from '@juicyllama/core'
+import { Logger, Enviroment } from '@juicyllama/utils'
+import { Mandate, MollieClient } from '@mollie/api-client'
+import { Injectable, BadRequestException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
+import { InjectMollie } from '../provider'
 import { MollieMandate } from './mandate.entity'
-import { Logger, Enviroment } from '@juicyllama/utils'
-import { createMollieClient, Mandate } from '@mollie/api-client'
 import mandateMock from './mandate.mock'
-import { ConfigService } from '@nestjs/config'
-import { BaseService, Query } from '@juicyllama/core'
-import { CustomerService } from '../customer/customer.service'
 
-const E = MollieMandate
 type T = MollieMandate
 @Injectable()
 export class MandateService extends BaseService<T> {
 	constructor(
-		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
-		@Inject(forwardRef(() => CustomerService)) private readonly customerService: CustomerService,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		@InjectRepository(MollieMandate) readonly repository: Repository<T>,
+		private readonly logger: Logger,
+		readonly query: Query<T>,
+		@InjectMollie() private readonly client: MollieClient,
 	) {
 		super(query, repository)
 	}
@@ -56,10 +53,7 @@ export class MandateService extends BaseService<T> {
 				this.logger.debug(`Get mollie mandate`, {
 					mandate: mandate,
 				})
-				const mollieClient = createMollieClient({
-					apiKey: this.configService.get<string>('mollie.MOLLIE_API_KEY'),
-				})
-				mollie_response = await mollieClient.customerMandates.get(mandate.ext_mandate_id, {
+				mollie_response = await this.client.customerMandates.get(mandate.ext_mandate_id, {
 					customerId: mandate.customer.ext_customer_id,
 				})
 

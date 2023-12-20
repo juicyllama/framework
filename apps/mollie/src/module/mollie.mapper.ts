@@ -1,5 +1,5 @@
-import * as Mollie from '@mollie/api-client'
 import { PaymentStatus } from '@juicyllama/billing'
+import * as Mollie from '@mollie/api-client'
 export function molliePaymentStatus(status: Mollie.PaymentStatus): PaymentStatus {
 	switch (status) {
 		case Mollie.PaymentStatus.pending:

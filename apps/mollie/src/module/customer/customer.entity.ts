@@ -1,6 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
-import { IsDate, IsString, IsNumber } from 'class-validator'
 import { Account, BaseEntity } from '@juicyllama/core'
+import { IsDate, IsString, IsNumber } from 'class-validator'
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
 
 @Entity('apps_mollie_customers')
 @Unique('apps_mollie_customers_UNIQUE', ['account'])
