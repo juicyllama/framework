@@ -87,7 +87,7 @@ export function microsoftLogin(VITE_API_BASE_URL: string) {
 }
 export function azureLogin(VITE_API_BASE_URL: string) {
 	localStorage.setItem('OAuthType', 'azure_ad')
-	window.location.href = `${VITE_API_BASE_URL}/auth/azure_ad`
+	window.location.href = `${VITE_API_BASE_URL}/auth/azure_ad/pre`
 }
 
 export async function completeGoogleLogin(params, q: QVueGlobals) {

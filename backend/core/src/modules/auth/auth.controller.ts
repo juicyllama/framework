@@ -1,4 +1,4 @@
-import { Body, Controller, forwardRef, Get, Inject, Post, Req, UseGuards } from '@nestjs/common'
+import { Body, Controller, forwardRef, Get, Inject, Post, Req, Res, UseGuards } from '@nestjs/common'
 import { ApiHideProperty, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { LoginResponseDto, ValidateCodeDto } from './dtos/login.dto'
 import { CompletePasswordResetDto, InitiateResetPasswordDto } from './dtos/password.reset.dto'
@@ -148,6 +148,16 @@ export class AuthController {
 	@Get('google/redirect')
 	async googleAuthRedirect(@Req() req): Promise<LoginResponseDto> {
 		return this.authService.login(req.user)
+	}
+
+	@ApiOperation({
+		summary: 'Azure AD Login - Start',
+	})
+	@Get('azure_ad/pre')
+	async preAzureLogin(@Res() res: any): Promise<void> {
+		const redirectUri = encodeURIComponent(`${process.env.BASE_URL_API}/auth/azure_ad`);
+		const redirectTo = `https://login.microsoftonline.com/${process.env.AZURE_AD_TENANT_ID}/oauth2/v2.0/authorize?client_id=${process.env.AZURE_AD_CLIENT_ID}&response_type=code&redirect_uri=${redirectUri}&scope=openid email profile`;
+		res.redirect(redirectTo);		
 	}
 
 	@ApiOperation({
