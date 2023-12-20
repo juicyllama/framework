@@ -1,10 +1,10 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { IsDate, IsEnum, IsNumber, IsString, MaxLength, IsOptional } from 'class-validator'
-import { MollieCustomer } from '../customer/customer.entity'
-import { MollieMandate } from '../mandate/mandate.entity'
+import { BaseEntity } from '@juicyllama/core'
 import { SupportedCurrencies } from '@juicyllama/utils'
 import { PaymentMethod, PaymentStatus } from '@mollie/api-client'
-import { BaseEntity } from '@juicyllama/core'
+import { IsDate, IsEnum, IsNumber, IsString, MaxLength, IsOptional } from 'class-validator'
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { MollieCustomer } from '../customer/customer.entity'
+import { MollieMandate } from '../mandate/mandate.entity'
 
 @Entity('apps_mollie_payments')
 export class MolliePayment extends BaseEntity {
@@ -48,7 +48,7 @@ export class MolliePayment extends BaseEntity {
 	@JoinColumn({ name: 'mollie_mandate_id' })
 	mandate?: MollieMandate
 
-	@Column({ default: null, nullable: true})
+	@Column({ default: null, nullable: true })
 	@IsNumber()
 	@IsOptional()
 	mollie_mandate_id?: number

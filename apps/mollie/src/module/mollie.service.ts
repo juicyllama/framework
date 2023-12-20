@@ -1,19 +1,19 @@
-import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Account } from '@juicyllama/core'
-import { CustomerService } from './customer/customer.service'
-import { PaymentService } from './payment/payment.service'
-import { MandateService } from './mandate/mandate.service'
 import { SupportedCurrencies, Logger } from '@juicyllama/utils'
+import { BadRequestException, Injectable } from '@nestjs/common'
+import { CustomerService } from './customer/customer.service'
 import { MollieMandate } from './mandate/mandate.entity'
+import { MandateService } from './mandate/mandate.service'
 import { MolliePayment } from './payment/payment.entity'
+import { PaymentService } from './payment/payment.service'
 
 @Injectable()
 export class MollieService {
 	constructor(
-		@Inject(forwardRef(() => CustomerService)) private readonly customerService: CustomerService,
-		@Inject(forwardRef(() => MandateService)) private readonly mandateService: MandateService,
-		@Inject(forwardRef(() => PaymentService)) private readonly paymentService: PaymentService,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		private readonly customerService: CustomerService,
+		private readonly mandateService: MandateService,
+		private readonly paymentService: PaymentService,
+		private readonly logger: Logger,
 	) {}
 
 	/**
