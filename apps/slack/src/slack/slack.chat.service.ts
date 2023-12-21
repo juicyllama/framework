@@ -1,15 +1,14 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { ChatPostMessageArguments } from '@slack/web-api/dist/methods'
-import { App } from '@slack/bolt'
-import { ChatPostMessageResponse } from '@slack/web-api'
 import { Logger, Env } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
+import { Injectable } from '@nestjs/common'
+import { App } from '@slack/bolt'
+import { ChatPostMessageResponse, ChatPostMessageArguments } from '@slack/web-api'
+import { InjectSlack } from './slack.constants'
 
 @Injectable()
 export class SlackChatService {
 	constructor(
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		private readonly logger: Logger,
+		@InjectSlack() private readonly app: App,
 	) {}
 
 	async send(message: ChatPostMessageArguments): Promise<ChatPostMessageResponse> {
@@ -20,16 +19,9 @@ export class SlackChatService {
 			return
 		}
 
-		const creds = {
-			token: this.configService.get('slack.SLACK_BOT_TOKEN'),
-			signingSecret: this.configService.get('slack.SLACK_SIGNING_SECRET'),
-		}
-
-		const app = new App(creds)
-
 		try {
 			this.logger.debug(`[${domain}] Request`, message)
-			const response = await app.client.chat.postMessage(message)
+			const response = await this.app.client.chat.postMessage(message)
 			this.logger.debug(`[${domain}] Response`, response)
 			return response
 		} catch (e) {

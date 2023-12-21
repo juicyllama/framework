@@ -1,23 +1,29 @@
+import { ConfigValidationModule, getConfigToken } from '@juicyllama/core'
+import { Logger } from '@juicyllama/utils'
 import { Module } from '@nestjs/common'
-import { SlackService } from './slack.service'
+import { App } from '@slack/bolt'
+import { SlackConfigDto } from '../config/slack.config.dto'
 import { SlackChatService } from './slack.chat.service'
-import { Env, Logger } from '@juicyllama/utils'
-import slackConfig from '../config/slack.config'
-import { slackConfigJoi } from '../config/slack.config.joi'
-import Joi from 'joi'
-import { ConfigModule } from '@nestjs/config'
+import { SlackService } from './slack.service'
+import { SlackBoltClientToken } from './slack.constants'
 
 @Module({
-	imports: [
-		ConfigModule.forRoot({
-			load: [slackConfig],
-			isGlobal: true,
-			envFilePath: '.env',
-			validationSchema: Env.IsNotTest() ? Joi.object(slackConfigJoi) : null,
-		}),
-	],
+	imports: [ConfigValidationModule.register(SlackConfigDto)],
 	controllers: [],
-	providers: [SlackService, SlackChatService, Logger],
+	providers: [
+		SlackService,
+		SlackChatService,
+		Logger,
+		{
+			provide: SlackBoltClientToken,
+			inject: [getConfigToken(SlackConfigDto)],
+			useFactory: (config: SlackConfigDto) =>
+				new App({
+					signingSecret: config.SLACK_SIGNING_SECRET,
+					token: config.SLACK_BOT_TOKEN,
+				}),
+		},
+	],
 	exports: [SlackService],
 })
 export class SlackModule {}

@@ -1,11 +1,10 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { ChatPostMessageArguments } from '@slack/web-api/dist/methods'
-import { ChatPostMessageResponse } from '@slack/web-api'
+import { Injectable } from '@nestjs/common'
+import { ChatPostMessageResponse, ChatPostMessageArguments } from '@slack/web-api'
 import { SlackChatService } from './slack.chat.service'
 
 @Injectable()
 export class SlackService {
-	constructor(@Inject(forwardRef(() => SlackChatService)) private readonly slackChatService: SlackChatService) {}
+	constructor(private readonly slackChatService: SlackChatService) {}
 
 	/**
 	 * Send basicMessage
