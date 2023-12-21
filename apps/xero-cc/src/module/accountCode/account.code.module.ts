@@ -1,12 +1,12 @@
+import { Query } from '@juicyllama/core'
+import { Logger } from '@juicyllama/utils'
 import { Module } from '@nestjs/common'
-import { AccountCodeService } from './account.code.service'
-import { Query, Tag } from '@juicyllama/core'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { XeroAccountCode } from './account.code.entity'
-import { Logger } from '@juicyllama/utils'
+import { AccountCodeService } from './account.code.service'
 
 @Module({
-	imports: [TypeOrmModule.forFeature([XeroAccountCode, Tag])],
+	imports: [TypeOrmModule.forFeature([XeroAccountCode])],
 	controllers: [],
 	providers: [AccountCodeService, Query, Logger],
 	exports: [AccountCodeService],

@@ -1,23 +1,20 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { Account, Query } from '@juicyllama/core'
+import { Enviroment, Logger } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { Logger } from '@juicyllama/utils'
 import { XeroContact } from './contact.entity'
-import { Enviroment } from '@juicyllama/utils'
-import { Account, Query } from '@juicyllama/core'
 import contactMock from './contact.mock'
-import { AuthService } from '../xero.auth.service'
+import { AuthService } from '../auth'
 import { accountToContact } from './contact.mapper'
-import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class ContactService {
 	constructor(
-		@Inject(forwardRef(() => Query)) private readonly query: Query<XeroContact>,
+		private readonly query: Query<XeroContact>,
 		@InjectRepository(XeroContact) private readonly repository: Repository<XeroContact>,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		private readonly logger: Logger,
+		private readonly authService: AuthService,
 	) {}
 
 	async getOrCreate(account: Account): Promise<XeroContact> {

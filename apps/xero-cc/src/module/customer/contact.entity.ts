@@ -1,3 +1,5 @@
+import { Account } from '@juicyllama/core'
+import { IsDate, IsString } from 'class-validator'
 import {
 	Column,
 	CreateDateColumn,
@@ -9,8 +11,6 @@ import {
 	Unique,
 	UpdateDateColumn,
 } from 'typeorm'
-import { IsDate, IsString } from 'class-validator'
-import { Account } from '@juicyllama/core'
 
 @Entity('apps_xero_cc_contacts')
 @Unique('apps_xero_cc_contacts_UNIQUE', ['account'])

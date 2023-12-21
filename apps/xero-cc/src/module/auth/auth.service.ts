@@ -1,17 +1,16 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { InjectConfig, OauthInterface } from '@juicyllama/core'
+import { JLCache, Logger } from '@juicyllama/utils'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { XeroClient } from 'xero-node'
-import { JLCache } from '@juicyllama/utils'
-import { Logger } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
+import { Inject, Injectable } from '@nestjs/common'
 import { Cache } from 'cache-manager'
-import { OauthInterface } from '@juicyllama/core'
+import { XeroClient } from 'xero-node'
+import { XeroConfigDto } from '../../config/xero.config.dto'
 
 @Injectable()
 export class AuthService {
 	constructor(
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		@InjectConfig(XeroConfigDto) private readonly config: XeroConfigDto,
+		private readonly logger: Logger,
 		@Inject(CACHE_MANAGER) private cacheManager: Cache,
 	) {}
 
@@ -19,12 +18,12 @@ export class AuthService {
 		const domain = 'apps::xero_cc::accessToken'
 
 		const cache_key = JLCache.cacheKey(domain, {
-			clientId: this.configService.get<string>('xero_cc.XERO_CC_CLIENT_ID'),
+			clientId: this.config.XERO_CC_CLIENT_ID,
 		})
 
 		const xero = new XeroClient({
-			clientId: this.configService.get<string>('xero_cc.XERO_CC_CLIENT_ID'),
-			clientSecret: this.configService.get<string>('xero_cc.XERO_CC_CLIENT_SECRET'),
+			clientId: this.config.XERO_CC_CLIENT_ID,
+			clientSecret: this.config.XERO_CC_CLIENT_SECRET,
 			grantType: 'client_credentials',
 		})
 

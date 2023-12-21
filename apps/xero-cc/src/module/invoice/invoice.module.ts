@@ -1,17 +1,22 @@
-import { forwardRef, Module } from '@nestjs/common'
+import { ConfigValidationModule, Query } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
-import { InvoiceService } from './invoice.service'
-import { ContactModule } from '../customer/contact.module'
-import { Query } from '@juicyllama/core'
-import { AuthService } from '../xero.auth.service'
+import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { XeroContact } from '../customer/contact.entity'
+import { XeroConfigDto } from '../../config/xero.config.dto'
+import { AuthModule } from '../auth'
+import { ContactModule } from '../customer/contact.module'
 import { XeroInvoice } from './invoice.entity'
+import { InvoiceService } from './invoice.service'
 
 @Module({
-	imports: [TypeOrmModule.forFeature([XeroContact, XeroInvoice]), forwardRef(() => ContactModule)],
+	imports: [
+		TypeOrmModule.forFeature([XeroInvoice]),
+		ContactModule,
+		AuthModule,
+		ConfigValidationModule.register(XeroConfigDto),
+	],
 	controllers: [],
-	providers: [InvoiceService, Logger, Query, AuthService],
+	providers: [InvoiceService, Logger, Query],
 	exports: [InvoiceService],
 })
 export class InvoiceModule {}

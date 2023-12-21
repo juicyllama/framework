@@ -1,3 +1,4 @@
+import { IsDate, IsNumber, IsString } from 'class-validator'
 import {
 	Column,
 	CreateDateColumn,
@@ -9,7 +10,6 @@ import {
 	Unique,
 	UpdateDateColumn,
 } from 'typeorm'
-import { IsDate, IsNumber, IsString } from 'class-validator'
 import { XeroContact } from '../customer/contact.entity'
 
 @Entity('apps_xero_cc_invoices')
