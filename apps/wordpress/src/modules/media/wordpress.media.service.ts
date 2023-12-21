@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Api, Logger, Env } from '@juicyllama/utils'
 import * as mock from './mock.json'
-import { wordpressConfigDto } from '../../config/wordpress.config.dto'
+import { WordpressConfigDto } from '../../config/wordpress.config.dto'
 import {
 	WordpressCreateMedia,
 	WordpressGetMedia,
@@ -24,7 +24,7 @@ export class WordpressMediaService {
 		data: WordpressCreateMedia
 		imageBuffer: Buffer
 		filename: string
-		config?: wordpressConfigDto
+		config?: WordpressConfigDto
 	}): Promise<WordpressMedia> {
 		const domain = 'app::wordpress::media::create'
 
@@ -52,7 +52,7 @@ export class WordpressMediaService {
 
 	async findAll(options?: {
 		arguments?: WordpressListMedia
-		config?: wordpressConfigDto
+		config?: WordpressConfigDto
 	}): Promise<WordpressMedia[]> {
 		const domain = 'app::wordpress::media::findAll'
 
@@ -73,7 +73,7 @@ export class WordpressMediaService {
 	async findOne(options: {
 		mediaId: number
 		arguments?: WordpressGetMedia
-		config?: wordpressConfigDto
+		config?: WordpressConfigDto
 	}): Promise<WordpressMedia> {
 		const domain = 'app::wordpress::media::findOne'
 
@@ -94,7 +94,7 @@ export class WordpressMediaService {
 	async update(options: {
 		mediaId: number
 		data: WordpressUpdateMedia
-		config?: wordpressConfigDto
+		config?: WordpressConfigDto
 	}): Promise<WordpressMedia> {
 		const domain = 'app::wordpress::media::update'
 
@@ -111,7 +111,7 @@ export class WordpressMediaService {
 		}
 	}
 
-	async remove(options: { mediaId: number; config?: wordpressConfigDto }): Promise<void> {
+	async remove(options: { mediaId: number; config?: WordpressConfigDto }): Promise<void> {
 		const domain = 'app::wordpress::media::remove'
 
 		if (Env.IsTest()) {

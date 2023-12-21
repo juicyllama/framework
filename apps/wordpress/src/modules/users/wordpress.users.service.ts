@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Api, Logger, Env } from '@juicyllama/utils'
 import * as mock from './mock.json'
-import { wordpressConfigDto } from '../../config/wordpress.config.dto'
+import { WordpressConfigDto } from '../../config/wordpress.config.dto'
 import {
 	WordpressGetUser,
 	WordpressListUsers,
@@ -20,7 +20,7 @@ export class WordpressUsersService {
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 	) {}
 
-	async create(options: { data: WordpressCreateUser; config?: wordpressConfigDto }): Promise<WordpressUser> {
+	async create(options: { data: WordpressCreateUser; config?: WordpressConfigDto }): Promise<WordpressUser> {
 		const domain = 'app::wordpress::users::create'
 
 		if (Env.IsTest()) {
@@ -36,7 +36,7 @@ export class WordpressUsersService {
 		}
 	}
 
-	async findAll(options?: { arguments?: WordpressListUsers; config?: wordpressConfigDto }): Promise<WordpressUser[]> {
+	async findAll(options?: { arguments?: WordpressListUsers; config?: WordpressConfigDto }): Promise<WordpressUser[]> {
 		const domain = 'app::wordpress::users::findAll'
 
 		if (Env.IsTest()) {
@@ -56,7 +56,7 @@ export class WordpressUsersService {
 	async findOne(options: {
 		postId: number
 		arguments?: WordpressGetUser
-		config?: wordpressConfigDto
+		config?: WordpressConfigDto
 	}): Promise<WordpressUser> {
 		const domain = 'app::wordpress::users::findOne'
 
@@ -77,7 +77,7 @@ export class WordpressUsersService {
 	async update(options: {
 		postId: number
 		data: WordpressUpdateUser
-		config?: wordpressConfigDto
+		config?: WordpressConfigDto
 	}): Promise<WordpressUser> {
 		const domain = 'app::wordpress::users::update'
 
@@ -94,7 +94,7 @@ export class WordpressUsersService {
 		}
 	}
 
-	async remove(options: { postId: number; config?: wordpressConfigDto }): Promise<void> {
+	async remove(options: { postId: number; config?: WordpressConfigDto }): Promise<void> {
 		const domain = 'app::wordpress::users::remove'
 
 		if (Env.IsTest()) {

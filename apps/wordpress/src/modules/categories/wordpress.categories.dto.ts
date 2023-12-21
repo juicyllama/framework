@@ -1,5 +1,5 @@
-import { IsString, IsNumber, IsObject, IsEnum, IsArray } from 'class-validator'
 import { PartialType } from '@nestjs/swagger'
+import { IsString, IsNumber, IsObject, IsEnum, IsArray } from 'class-validator'
 import { WordpressContext, WordpressOrder, WordpressOrderBy } from '../wordpress.enums'
 
 export class WordpressGetCategory {

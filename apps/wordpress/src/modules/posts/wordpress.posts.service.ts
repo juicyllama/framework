@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Api, Logger, Env } from '@juicyllama/utils'
 import * as mock from './mock.json'
-import { wordpressConfigDto } from '../../config/wordpress.config.dto'
+import { WordpressConfigDto } from '../../config/wordpress.config.dto'
 import {
 	WordpressCreatePost,
 	WordpressGetPost,
@@ -20,7 +20,7 @@ export class WordpressPostsService {
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 	) {}
 
-	async create(options: { data: WordpressCreatePost; config?: wordpressConfigDto }): Promise<WordpressPost> {
+	async create(options: { data: WordpressCreatePost; config?: WordpressConfigDto }): Promise<WordpressPost> {
 		const domain = 'app::wordpress::posts::create'
 
 		if (Env.IsTest()) {
@@ -36,7 +36,7 @@ export class WordpressPostsService {
 		}
 	}
 
-	async findAll(options?: { arguments?: WordpressListPosts; config?: wordpressConfigDto }): Promise<WordpressPost[]> {
+	async findAll(options?: { arguments?: WordpressListPosts; config?: WordpressConfigDto }): Promise<WordpressPost[]> {
 		const domain = 'app::wordpress::posts::findAll'
 
 		if (Env.IsTest()) {
@@ -56,7 +56,7 @@ export class WordpressPostsService {
 	async findOne(options: {
 		postId: number
 		arguments?: WordpressGetPost
-		config?: wordpressConfigDto
+		config?: WordpressConfigDto
 	}): Promise<WordpressPost> {
 		const domain = 'app::wordpress::posts::findOne'
 
@@ -77,7 +77,7 @@ export class WordpressPostsService {
 	async update(options: {
 		postId: number
 		data: WordpressUpdatePost
-		config?: wordpressConfigDto
+		config?: WordpressConfigDto
 	}): Promise<WordpressPost> {
 		const domain = 'app::wordpress::posts::update'
 
@@ -94,7 +94,7 @@ export class WordpressPostsService {
 		}
 	}
 
-	async remove(options: { postId: number; config?: wordpressConfigDto }): Promise<void> {
+	async remove(options: { postId: number; config?: WordpressConfigDto }): Promise<void> {
 		const domain = 'app::wordpress::posts::remove'
 
 		if (Env.IsTest()) {
