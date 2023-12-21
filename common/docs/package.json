@@ -42,6 +42,7 @@
 		"vue-router": "latest"
 	},
 	"devDependencies": {
-		"@nuxtjs/tailwindcss": "6.9.0"
+		"@nuxtjs/tailwindcss": "6.9.0",
+		"vite-plugin-require": "^1.1.11"
 	}
 }

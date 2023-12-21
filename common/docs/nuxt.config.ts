@@ -1,4 +1,4 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import vitePluginRequire from "vite-plugin-require";
 export default defineNuxtConfig({
 	extends: ['@nuxt-themes/docus'],
 	modules: [
@@ -62,4 +62,9 @@ export default defineNuxtConfig({
 		  Nunito:  [400, 500, 600, 700, 800, 900],
 		}
 	  },
+	vite: {
+		plugins: [
+			vitePluginRequire()
+		]
+	}
 })
