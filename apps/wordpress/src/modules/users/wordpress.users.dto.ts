@@ -1,7 +1,7 @@
-import { IsString, IsDateString, IsNumber, IsObject, IsEnum, IsArray } from 'class-validator'
 import { PartialType } from '@nestjs/swagger'
-import { WordpressUserlocale } from './wordpress.users.enums'
+import { IsString, IsDateString, IsNumber, IsObject, IsEnum, IsArray } from 'class-validator'
 import { WordpressContext, WordpressOrder, WordpressOrderBy } from '../wordpress.enums'
+import { WordpressUserlocale } from './wordpress.users.enums'
 
 export class WordpressGetUser {
 	@IsEnum(WordpressContext)

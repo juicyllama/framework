@@ -1,7 +1,8 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Api, Logger, Env } from '@juicyllama/utils'
-import * as mock from './mock.json'
+import { Injectable } from '@nestjs/common'
 import { WordpressConfigDto } from '../../config/wordpress.config.dto'
+import { getWordpressAxiosConfig } from '../../config/wordpress.config'
+import * as mock from './mock.json'
 import {
 	WordpressGetUser,
 	WordpressListUsers,
@@ -9,15 +10,14 @@ import {
 	WordpressCreateUser,
 	WordpressUpdateUser,
 } from './wordpress.users.dto'
-import { getWordpressAxiosConfig, getWordpressUrl } from '../../config/wordpress.config'
-
-const ENDPOINT = `/wp-json/wp/v2/users`
+import { InjectWordpressUsersUrl } from './wordpress.users.constants'
 
 @Injectable()
 export class WordpressUsersService {
 	constructor(
-		@Inject(forwardRef(() => Api)) private readonly api: Api,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		private readonly api: Api,
+		private readonly logger: Logger,
+		@InjectWordpressUsersUrl() private readonly urlBase: string,
 	) {}
 
 	async create(options: { data: WordpressCreateUser; config?: WordpressConfigDto }): Promise<WordpressUser> {
@@ -29,7 +29,7 @@ export class WordpressUsersService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
+			const url = new URL(this.urlBase)
 			return await this.api.post(domain, url.toString(), options.data, getWordpressAxiosConfig(options.config))
 		} catch (e) {
 			this.logger.error(`[${domain}] Error creating user: ${e.message}`, e)
@@ -45,7 +45,7 @@ export class WordpressUsersService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
+			const url = new URL(this.urlBase)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString(), getWordpressAxiosConfig(options.config))
 		} catch (e) {
@@ -66,7 +66,7 @@ export class WordpressUsersService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
+			const url = new URL(`${this.urlBase}/${options.postId}`)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString(), getWordpressAxiosConfig(options.config))
 		} catch (e) {
@@ -87,7 +87,7 @@ export class WordpressUsersService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
+			const url = new URL(`${this.urlBase}/${options.postId}`)
 			return await this.api.post(domain, url.toString(), options.data, getWordpressAxiosConfig(options.config))
 		} catch (e) {
 			this.logger.error(`[${domain}] Error updating user: ${e.message}`, e)
@@ -103,7 +103,7 @@ export class WordpressUsersService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
+			const url = new URL(`${this.urlBase}/${options.postId}`)
 			await this.api.delete(domain, url.toString(), getWordpressAxiosConfig(options.config))
 		} catch (e) {
 			this.logger.error(`[${domain}] Error removing user: ${e.message}`, e)
