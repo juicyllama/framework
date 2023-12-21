@@ -1,7 +1,8 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Api, Logger, Env } from '@juicyllama/utils'
-import * as mock from './mock.json'
+import { Injectable } from '@nestjs/common'
 import { WordpressConfigDto } from '../../config/wordpress.config.dto'
+import { getWordpressAxiosConfig } from '../../config/wordpress.config'
+import * as mock from './mock.json'
 import {
 	WordpressCreatePost,
 	WordpressGetPost,
@@ -9,15 +10,14 @@ import {
 	WordpressPost,
 	WordpressUpdatePost,
 } from './wordpress.posts.dto'
-import { getWordpressAxiosConfig, getWordpressUrl } from '../../config/wordpress.config'
-
-const ENDPOINT = `/wp-json/wp/v2/posts`
+import { InjectWordpressPostsUrl } from './wordpress.posts.constants'
 
 @Injectable()
 export class WordpressPostsService {
 	constructor(
-		@Inject(forwardRef(() => Api)) private readonly api: Api,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		private readonly api: Api,
+		private readonly logger: Logger,
+		@InjectWordpressPostsUrl() private readonly urlBase: string,
 	) {}
 
 	async create(options: { data: WordpressCreatePost; config?: WordpressConfigDto }): Promise<WordpressPost> {
@@ -29,7 +29,7 @@ export class WordpressPostsService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
+			const url = new URL(this.urlBase)
 			return await this.api.post(domain, url.toString(), options.data, getWordpressAxiosConfig(options.config))
 		} catch (e) {
 			this.logger.error(`[${domain}] Error creating post: ${e.message}`, e)
@@ -45,7 +45,7 @@ export class WordpressPostsService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
+			const url = new URL(this.urlBase)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString())
 		} catch (e) {
@@ -66,7 +66,7 @@ export class WordpressPostsService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
+			const url = new URL(`${this.urlBase}/${options.postId}`)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString(), getWordpressAxiosConfig(options.config))
 		} catch (e) {
@@ -87,7 +87,7 @@ export class WordpressPostsService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
+			const url = new URL(`${this.urlBase}/${options.postId}`)
 			return await this.api.post(domain, url.toString(), options.data, getWordpressAxiosConfig(options.config))
 		} catch (e) {
 			this.logger.error(`[${domain}] Error updating post: ${e.message}`, e)
@@ -103,7 +103,7 @@ export class WordpressPostsService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
+			const url = new URL(`${this.urlBase}/${options.postId}`)
 			await this.api.delete(domain, url.toString(), getWordpressAxiosConfig(options.config))
 		} catch (e) {
 			this.logger.error(`[${domain}] Error removing post: ${e.message}`, e)
