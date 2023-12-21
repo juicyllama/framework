@@ -5,7 +5,7 @@ title: Chart
 # JLChart
 
 Alows to display various data charts - Bar, Line, Pie along with custom ones.
-Based on [chartjs](https://www.chartjs.org/) library.
+Based on [chartjs](https://www.chartjs.org/){:target="_blank"} library.
 
 ## Props
 

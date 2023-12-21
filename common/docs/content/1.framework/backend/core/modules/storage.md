@@ -4,11 +4,11 @@ The storage module abstracts away the saving of data (files, images, etc) to the
 
 This module currently supports:
 
-- [AWS S3](../../../apps/aws/modules/s3.md)
+- [AWS S3](/framework/apps/aws/modules/s3)
 
 ## Install
 
-This module is part of our core framework and therefore does not need installing seperatly. 
+This module is part of our core framework and therefore does not need installing seperatly.
 
 ### Api Backend
 
@@ -34,7 +34,7 @@ The system ships with the ability to have private and public buckets, alternativ
 - Private - Can only be read by the application and is not available online. This is helpful for storing client sensative data like invoices or document.
 - Public - Can be both read by the application and the public internet. This is good for saving public facing user avatars or other public files.
 
-Learn more about how to setup these buckets in the [AWS S3 docs](../../../apps/aws/modules/s3.md).
+Learn more about how to setup these buckets in the [AWS S3 docs](/framework/apps/aws/modules/s3).
 
 ## Services
 

@@ -1,7 +1,7 @@
 {
 	"name": "@juicyllama/docs",
 	"type": "module",
-	"version": "0.4.0",
+	"version": "0.4.4",
 	"description": "Juicyllama Docs portal",
 	"author": {
 		"name": "JuicyLlama Studio",
@@ -40,5 +40,8 @@
 		"quasar": "latest",
 		"vue": "latest",
 		"vue-router": "latest"
+	},
+	"devDependencies": {
+		"@nuxtjs/tailwindcss": "^6.10.1"
 	}
 }
