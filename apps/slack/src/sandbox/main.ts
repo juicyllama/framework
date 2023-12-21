@@ -1,7 +1,7 @@
 import 'module-alias/register'
-import { NestFactory } from '@nestjs/core'
 import 'reflect-metadata'
 import { Env, Logger } from '@juicyllama/utils'
+import { NestFactory } from '@nestjs/core'
 import { SandboxModule } from './sandbox.module'
 
 const domain = 'main::bootstrap'
