@@ -1,7 +1,8 @@
-import { forwardRef, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
 import { WordpressModule } from '../modules/wordpress.module'
 
 @Module({
-	imports: [forwardRef(() => WordpressModule)],
+	imports: [ConfigModule.forRoot(), WordpressModule],
 })
 export class SandboxModule {}
