@@ -1,6 +1,6 @@
 import { IsString, IsUrl } from 'class-validator'
 
-export class wordpressConfigDto {
+export class WordpressConfigDto {
 	@IsUrl()
 	WORDPRESS_URL: string
 

@@ -1,7 +1,9 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Api, Logger, Env } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
+import { WordpressConfigDto } from '../../config/wordpress.config.dto'
+import { getWordpressAxiosConfig } from '../../config/wordpress.config'
 import * as mock from './mock.json'
-import { wordpressConfigDto } from '../../config/wordpress.config.dto'
+import { InjectWordpressCategoriesUrl } from './wordpress.categories.constants'
 import {
 	WordpressCategory,
 	WordpressCreateCategory,
@@ -9,18 +11,16 @@ import {
 	WordpressGetCategory,
 	WordpressUpdateCategory,
 } from './wordpress.categories.dto'
-import { getWordpressAxiosConfig, getWordpressUrl } from '../../config/wordpress.config'
-
-const ENDPOINT = `/wp-json/wp/v2/categories`
 
 @Injectable()
 export class WordpressCategoriesService {
 	constructor(
-		@Inject(forwardRef(() => Api)) private readonly api: Api,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		private readonly api: Api,
+		private readonly logger: Logger,
+		@InjectWordpressCategoriesUrl() private readonly urlBase: string,
 	) {}
 
-	async create(options: { data: WordpressCreateCategory; config?: wordpressConfigDto }): Promise<WordpressCategory> {
+	async create(options: { data: WordpressCreateCategory; config?: WordpressConfigDto }): Promise<WordpressCategory> {
 		const domain = 'app::wordpress::categories::create'
 
 		if (Env.IsTest()) {
@@ -29,7 +29,7 @@ export class WordpressCategoriesService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
+			const url = new URL(this.urlBase)
 			return await this.api.post(domain, url.toString(), options.data, getWordpressAxiosConfig(options.config))
 		} catch (e) {
 			this.logger.error(`[${domain}] Error creating category: ${e.message}`, e)
@@ -38,7 +38,7 @@ export class WordpressCategoriesService {
 
 	async findAll(options?: {
 		arguments?: WordpressListCategories
-		config?: wordpressConfigDto
+		config?: WordpressConfigDto
 	}): Promise<WordpressCategory[]> {
 		const domain = 'app::wordpress::categories::findAll'
 
@@ -48,7 +48,7 @@ export class WordpressCategoriesService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
+			const url = new URL(this.urlBase)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString())
 		} catch (e) {
@@ -59,7 +59,7 @@ export class WordpressCategoriesService {
 	async findOne(options: {
 		postId: number
 		arguments?: WordpressGetCategory
-		config?: wordpressConfigDto
+		config?: WordpressConfigDto
 	}): Promise<WordpressCategory> {
 		const domain = 'app::wordpress::categories::findOne'
 
@@ -69,7 +69,7 @@ export class WordpressCategoriesService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
+			const url = new URL(`${this.urlBase}/${options.postId}`)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString(), getWordpressAxiosConfig(options.config))
 		} catch (e) {
@@ -80,7 +80,7 @@ export class WordpressCategoriesService {
 	async update(options: {
 		postId: number
 		data: WordpressUpdateCategory
-		config?: wordpressConfigDto
+		config?: WordpressConfigDto
 	}): Promise<WordpressCategory> {
 		const domain = 'app::wordpress::categories::update'
 
@@ -90,14 +90,14 @@ export class WordpressCategoriesService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
+			const url = new URL(`${this.urlBase}/${options.postId}`)
 			return await this.api.post(domain, url.toString(), options.data, getWordpressAxiosConfig(options.config))
 		} catch (e) {
 			this.logger.error(`[${domain}] Error updating category: ${e.message}`, e)
 		}
 	}
 
-	async remove(options: { postId: number; config?: wordpressConfigDto }): Promise<void> {
+	async remove(options: { postId: number; config?: WordpressConfigDto }): Promise<void> {
 		const domain = 'app::wordpress::categories::remove'
 
 		if (Env.IsTest()) {
@@ -106,7 +106,7 @@ export class WordpressCategoriesService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
+			const url = new URL(`${this.urlBase}/${options.postId}`)
 			await this.api.delete(domain, url.toString(), getWordpressAxiosConfig(options.config))
 		} catch (e) {
 			this.logger.error(`[${domain}] Error removing category: ${e.message}`, e)
