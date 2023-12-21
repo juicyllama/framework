@@ -1,16 +1,15 @@
-import { Module } from '@nestjs/common'
-import { Logger } from '@juicyllama/utils'
-import { ContactService } from './contact.service'
 import { Query } from '@juicyllama/core'
-import { AuthService } from '../xero.auth.service'
+import { Logger } from '@juicyllama/utils'
+import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { AuthModule } from '../auth'
 import { XeroContact } from './contact.entity'
-import { XeroInvoice } from '../invoice/invoice.entity'
+import { ContactService } from './contact.service'
 
 @Module({
-	imports: [TypeOrmModule.forFeature([XeroContact, XeroInvoice])],
+	imports: [TypeOrmModule.forFeature([XeroContact]), AuthModule],
 	controllers: [],
-	providers: [ContactService, Logger, Query, AuthService],
+	providers: [ContactService, Logger, Query],
 	exports: [ContactService],
 })
 export class ContactModule {}

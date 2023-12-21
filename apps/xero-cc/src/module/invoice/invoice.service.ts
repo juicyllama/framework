@@ -1,24 +1,23 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { Account, InjectConfig, Query } from '@juicyllama/core'
+import { Dates, Enviroment, Logger } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { Logger } from '@juicyllama/utils'
-import { XeroInvoice } from './invoice.entity'
-import { Dates, Enviroment } from '@juicyllama/utils'
-import invoiceMock from './invoice.mock'
 import { Invoice, Payment } from 'xero-node'
-import { AuthService } from '../xero.auth.service'
+import { XeroConfigDto } from '../../config/xero.config.dto'
+import { AuthService } from '../auth'
 import { XeroContact } from '../customer/contact.entity'
-import { Account, Query } from '@juicyllama/core'
-import { ConfigService } from '@nestjs/config'
+import { XeroInvoice } from './invoice.entity'
+import invoiceMock from './invoice.mock'
 
 @Injectable()
 export class InvoiceService {
 	constructor(
-		@Inject(forwardRef(() => Query)) private readonly query: Query<XeroInvoice>,
+		private readonly query: Query<XeroInvoice>,
 		@InjectRepository(XeroInvoice) private readonly repository: Repository<XeroInvoice>,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		private readonly logger: Logger,
+		private readonly authService: AuthService,
+		@InjectConfig(XeroConfigDto) private readonly config: XeroConfigDto,
 	) {}
 
 	async getOrCreate(options: {
@@ -102,7 +101,7 @@ export class InvoiceService {
 						invoiceID: invoice.ext_invoice_id,
 					},
 					account: {
-						accountID: this.configService.get<string>('xero_cc.XERO_CC_DEFAULT_BANK_ACCOUNT_ID'),
+						accountID: this.config.XERO_CC_DEFAULT_BANK_ACCOUNT_ID,
 					},
 					amount: amount,
 					date: Dates.format(new Date(), 'YYYY-MM-DD'),
