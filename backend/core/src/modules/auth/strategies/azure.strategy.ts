@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common'
 import { PassportStrategy, AuthGuard } from '@nestjs/passport'
-import { BearerStrategy, IBearerStrategyOption } from 'passport-azure-ad'
+import { OIDCStrategy, IOIDCStrategy } from 'passport-azure-ad'
 import { defaultSSOString } from '../../../configs/sso.config.joi'
 
 const AZURE_AD_CLIENT_ID = process.env.AZURE_AD_CLIENT_ID ?? defaultSSOString
 const AZURE_AD_TENANT_ID = process.env.AZURE_AD_TENANT_ID ?? defaultSSOString
 
 @Injectable()
-export class AzureADStrategy extends PassportStrategy(BearerStrategy, 'azure-ad') {
+export class AzureADStrategy extends PassportStrategy(OIDCStrategy, 'azure-ad') {
 	constructor() {
 		super({
 		  clientID: process.env.AZURE_AD_CLIENT_ID,
@@ -20,7 +20,7 @@ export class AzureADStrategy extends PassportStrategy(BearerStrategy, 'azure-ad'
 		  scope: ['openid', 'profile', 'email'],
 		  passReqToCallback: false,
 		  loggingLevel: 'info',
-		});
+		} as IOIDCStrategy);
 	  }
 	
 	  async validate(response: any, done: Function) {

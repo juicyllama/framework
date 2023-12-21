@@ -16,7 +16,6 @@ const props = defineProps<{
 }>()
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-
 const path: Ref<string> = ref()
 const password: Ref<boolean> = ref()
 const passwordless: Ref<boolean> = ref()

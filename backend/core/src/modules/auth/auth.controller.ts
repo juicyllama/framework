@@ -156,7 +156,7 @@ export class AuthController {
 	@Get('azure_ad/pre')
 	async preAzureLogin(@Res() res: any): Promise<void> {
 		const redirectUri = encodeURIComponent(`${process.env.BASE_URL_API}/auth/azure_ad`);
-		const redirectTo = `https://login.microsoftonline.com/${process.env.AZURE_AD_TENANT_ID}/oauth2/v2.0/authorize?client_id=${process.env.AZURE_AD_CLIENT_ID}&response_type=code&redirect_uri=${redirectUri}&scope=openid email profile`;
+		const redirectTo = `https://login.microsoftonline.com/${process.env.AZURE_AD_TENANT_ID}/oauth2/v2.0/authorize?client_id=${process.env.AZURE_AD_CLIENT_ID}&response_type=code&redirect_uri=${redirectUri}&state=core_login&scope=openid email profile`;
 		res.redirect(redirectTo);		
 	}
 
