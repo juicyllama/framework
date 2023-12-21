@@ -1,14 +1,16 @@
-import { Test, TestingModule } from '@nestjs/testing'
-import { Env } from '@juicyllama/utils'
+import { Env, Logger } from '@juicyllama/utils'
 import { forwardRef } from '@nestjs/common'
+import { Test, TestingModule } from '@nestjs/testing'
 import { OpenaiModule } from './openai.module'
 import { OpenaiService } from './openai.service'
-import { Logger } from '@juicyllama/utils'
+import OpenAI from 'openai'
+import { OpenAIClientToken } from './openai.constants'
 
 describe('OpenAI', () => {
 	let moduleRef: TestingModule
 
 	let openaiService: OpenaiService
+	let openAI: jest.MockedObjectDeep<OpenAI>
 	const logger = new Logger()
 
 	beforeAll(async () => {
@@ -17,16 +19,51 @@ describe('OpenAI', () => {
 		}
 
 		moduleRef = await Test.createTestingModule({
-			imports: [forwardRef(() => OpenaiModule)],
+			providers: [
+				OpenaiService,
+				{
+					provide: Logger,
+					useValue: {
+						debug: jest.fn(),
+						error: jest.fn(),
+					},
+				},
+				{
+					provide: OpenAIClientToken,
+					useValue: {
+						chat: {
+							completions: {
+								create: jest.fn(),
+							},
+						},
+					},
+				},
+			],
 		}).compile()
 
 		openaiService = moduleRef.get<OpenaiService>(OpenaiService)
+		openAI = moduleRef.get(OpenAIClientToken)
 	})
 
 	describe('Chat', () => {
 		it('Get a chat response back (no options)', async () => {
 			const domain = 'app::openai::test::chat'
-
+			openAI.chat.completions.create.mockResolvedValueOnce({
+				choices: [
+					{
+						message: {
+							role: 'assistant',
+							content: 'this is some content',
+						},
+						finish_reason: 'stop',
+						index: 0,
+					},
+				],
+				id: 'some id',
+				created: Date.now(),
+				model: 'model',
+				object: 'chat.completion',
+			})
 			try {
 				const result = await openaiService.ask({
 					messages: [{ role: 'user', content: 'Say this is a test' }],
@@ -41,7 +78,6 @@ describe('OpenAI', () => {
 				logger.error(`[${domain}] Error: ${e.message}`, e)
 				throw new Error(e.message)
 			}
-			
 		})
 	})
 })

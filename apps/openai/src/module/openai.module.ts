@@ -1,24 +1,26 @@
-import { ConfigModule } from '@nestjs/config'
-import { Api, Enviroment } from '@juicyllama/utils'
-import { OpenaiService } from './openai.service'
-import Joi from 'joi'
+import { ConfigValidationModule, getConfigToken } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
 import { Module } from '@nestjs/common'
-import openaiConfig from '../configs/openai.config'
-import { openaiConfigJoi } from '../configs/openai.config.joi'
+import OpenAI from 'openai'
+import { OpenAiConfigDto } from '../configs/openai.config.dto'
+import { OpenaiService } from './openai.service'
+import { OpenAIClientToken } from './openai.constants'
 //import { OpenaiSqlService } from './sql/openai.sql.service'
 
 @Module({
-	imports: [
-		ConfigModule.forRoot({
-			load: [openaiConfig],
-			isGlobal: true,
-			envFilePath: '.env',
-			validationSchema: process.env.NODE_ENV !== Enviroment.test ? Joi.object(openaiConfigJoi) : null,
-		}),
-	],
+	imports: [ConfigValidationModule.register(OpenAiConfigDto)],
 	controllers: [],
-	providers: [OpenaiService, Logger, Api],
+	providers: [
+		OpenaiService,
+		Logger,
+		{
+			provide: OpenAIClientToken,
+			inject: [getConfigToken(OpenAiConfigDto)],
+			useFactory: (config: OpenAiConfigDto) => {
+				return new OpenAI({ apiKey: config.OPENAI_API_KEY })
+			},
+		},
+	],
 	exports: [OpenaiService],
 })
 export class OpenaiModule {}

@@ -1,14 +1,14 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Logger } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
+import { Injectable } from '@nestjs/common'
 import OpenAI from 'openai'
 import { DeepPartial } from 'typeorm'
+import { InjectOpenAI } from './openai.constants'
 
 @Injectable()
 export class OpenaiService {
 	constructor(
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		private readonly logger: Logger,
+		@InjectOpenAI() private readonly client: OpenAI,
 	) {}
 
 	async ask(
@@ -25,11 +25,7 @@ export class OpenaiService {
 		}
 
 		try {
-			const openai = new OpenAI({
-				apiKey: this.configService.get<string>('openai.OPENAI_API_KEY'),
-			})
-
-			const chatCompletion = (await openai.chat.completions.create(params)) as OpenAI.Chat.ChatCompletion
+			const chatCompletion = (await this.client.chat.completions.create(params)) as OpenAI.Chat.ChatCompletion
 			this.logger.debug(`[${domain}] Response: ${JSON.stringify(chatCompletion, null, 2)}`)
 			return chatCompletion
 		} catch (e) {
