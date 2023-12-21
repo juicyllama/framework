@@ -1,5 +1,5 @@
+import { PartialType } from '@nestjs/swagger'
 import { IsString, IsUrl, IsDateString, IsNumber, IsObject, IsEnum, IsArray } from 'class-validator'
-import { WordpresMediaStatus, WordpressMediaType } from './wordpress.media.enums'
 import { WordpressLinks, WordpressMeta, WordpressRenderedObject } from '../wordpress.dto'
 import {
 	WordpressContext,
@@ -8,7 +8,7 @@ import {
 	WordpressCommentStatus,
 	WordpressPingStatus,
 } from '../wordpress.enums'
-import { PartialType } from '@nestjs/swagger'
+import { WordpresMediaStatus, WordpressMediaType } from './wordpress.media.enums'
 
 export class WordpressListMedia {
 	@IsEnum(WordpressContext)

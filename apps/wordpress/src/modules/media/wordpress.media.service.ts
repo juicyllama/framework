@@ -1,7 +1,9 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Api, Logger, Env } from '@juicyllama/utils'
-import * as mock from './mock.json'
+import { Injectable } from '@nestjs/common'
 import { WordpressConfigDto } from '../../config/wordpress.config.dto'
+import { getWordpressAxiosConfig } from '../../config/wordpress.config'
+import * as mock from './mock.json'
+import { InjectWordpressMediaUrl } from './wordpress.media.constants'
 import {
 	WordpressCreateMedia,
 	WordpressGetMedia,
@@ -9,15 +11,13 @@ import {
 	WordpressMedia,
 	WordpressUpdateMedia,
 } from './wordpress.media.dto'
-import { getWordpressAxiosConfig, getWordpressUrl } from '../../config/wordpress.config'
-
-const ENDPOINT = `/wp-json/wp/v2/media`
 
 @Injectable()
 export class WordpressMediaService {
 	constructor(
-		@Inject(forwardRef(() => Api)) private readonly api: Api,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		private readonly api: Api,
+		private readonly logger: Logger,
+		@InjectWordpressMediaUrl() private readonly urlBase: string,
 	) {}
 
 	async create(options: {
@@ -34,7 +34,7 @@ export class WordpressMediaService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
+			const url = new URL(this.urlBase)
 
 			const media = await this.api.post(domain, url.toString(), options.imageBuffer, {
 				headers: {
@@ -62,7 +62,7 @@ export class WordpressMediaService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
+			const url = new URL(this.urlBase)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString())
 		} catch (e) {
@@ -83,7 +83,7 @@ export class WordpressMediaService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.mediaId)
+			const url = new URL(`${this.urlBase}/${options.mediaId}`)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString(), getWordpressAxiosConfig(options.config))
 		} catch (e) {
@@ -104,7 +104,7 @@ export class WordpressMediaService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.mediaId)
+			const url = new URL(`${this.urlBase}/${options.mediaId}`)
 			return await this.api.post(domain, url.toString(), options.data, getWordpressAxiosConfig(options.config))
 		} catch (e) {
 			this.logger.error(`[${domain}] Error updating media: ${e.message}`, e)
@@ -120,7 +120,7 @@ export class WordpressMediaService {
 		}
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.mediaId)
+			const url = new URL(`${this.urlBase}/${options.mediaId}`)
 			await this.api.delete(domain, url.toString(), getWordpressAxiosConfig(options.config))
 		} catch (e) {
 			this.logger.error(`[${domain}] Error deleting media: ${e.message}`, e)
