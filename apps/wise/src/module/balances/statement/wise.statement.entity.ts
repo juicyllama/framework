@@ -1,7 +1,7 @@
-import { IsDate, IsEnum, IsNumber, IsString, MaxLength, MinLength } from 'class-validator'
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 import { BaseEntity } from '@juicyllama/core'
 import { SupportedCurrencies } from '@juicyllama/utils'
+import { IsDate, IsEnum, IsNumber, IsString, MaxLength, MinLength } from 'class-validator'
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity('apps_wise_transactions')
 export class WiseTransaction extends BaseEntity {

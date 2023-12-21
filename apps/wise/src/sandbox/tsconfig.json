@@ -1,6 +1,7 @@
 {
-  "compilerOptions": {
-    "outDir": "./dist",
-    "baseUrl": "./."
-  },
+	"compilerOptions": {
+		"experimentalDecorators": true,
+		"outDir": "./dist",
+		"baseUrl": "./."
+	}
 }

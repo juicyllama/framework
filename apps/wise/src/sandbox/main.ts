@@ -1,10 +1,10 @@
 import 'module-alias/register'
+import 'reflect-metadata'
+import { TypeOrmFilter, validationPipeOptions } from '@juicyllama/core'
+import { Enviroment, Logger } from '@juicyllama/utils'
 import { NestFactory } from '@nestjs/core'
 import { ValidationPipe } from '@nestjs/common'
-import 'reflect-metadata'
-import { Enviroment, Logger } from '@juicyllama/utils'
 import { SandboxModule } from './sandbox.module'
-import { TypeOrmFilter, validationPipeOptions } from '@juicyllama/core'
 
 const domain = 'main::bootstrap'
 const logger = new Logger()

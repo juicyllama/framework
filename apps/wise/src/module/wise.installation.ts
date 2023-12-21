@@ -1,12 +1,12 @@
-import { forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common'
 import { Env, Logger } from '@juicyllama/utils'
+import { Injectable, OnModuleInit } from '@nestjs/common'
 import { WiseWebhooksService } from './webhooks/wise.webhooks.service'
 
 @Injectable()
 export class WiseInstallationService implements OnModuleInit {
 	constructor(
-		@Inject(forwardRef(() => WiseWebhooksService)) private readonly webhooksService: WiseWebhooksService,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		private readonly webhooksService: WiseWebhooksService,
+		private readonly logger: Logger,
 	) {}
 
 	async onModuleInit() {

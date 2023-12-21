@@ -1,6 +1,6 @@
 import { IsBoolean, IsDate, IsEnum, IsNumber, IsObject, IsString } from 'class-validator'
-import { WiseBalanceInvestmentState, WiseBalanceType } from './wise.balance.enums'
 import { WiseAmountDto } from '../wise.dto'
+import { WiseBalanceInvestmentState, WiseBalanceType } from './wise.balance.enums'
 
 export class WiseBalanceDto {
 	@IsNumber()

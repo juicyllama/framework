@@ -1,6 +1,6 @@
 import { IsArray, IsDate, IsEnum, IsNumber, IsObject, IsString } from 'class-validator'
-import { WiseStatementAccountHolderType, WiseTransactionDetailsType, WiseTransactionType } from './wise.statement.enums'
 import { WiseAddressDto, WiseAmountDto } from '../../wise.dto'
+import { WiseStatementAccountHolderType, WiseTransactionDetailsType, WiseTransactionType } from './wise.statement.enums'
 
 export class WiseGetTransactionsRequestDto {
 	@IsNumber()

@@ -1,7 +1,7 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Logger } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
 
 @Injectable()
 export class WiseBalanceService {
-	constructor(@Inject(forwardRef(() => Logger)) private readonly logger: Logger) {}
+	constructor(private readonly logger: Logger) {}
 }

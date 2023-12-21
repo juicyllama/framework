@@ -1,12 +1,12 @@
-import { forwardRef, Module } from '@nestjs/common'
-import { Logger, Api } from '@juicyllama/utils'
-import { WiseBalanceService } from './wise.balance.service'
+import { Logger } from '@juicyllama/utils'
+import { Module } from '@nestjs/common'
 import { WiseStatementModule } from './statement/wise.statement.module'
+import { WiseBalanceService } from './wise.balance.service'
 
 @Module({
-	imports: [forwardRef(() => WiseStatementModule)],
+	imports: [WiseStatementModule],
 	controllers: [],
-	providers: [WiseBalanceService, Logger, Api],
+	providers: [WiseBalanceService, Logger],
 	exports: [WiseBalanceService],
 })
 export class WiseBalanceModule {}

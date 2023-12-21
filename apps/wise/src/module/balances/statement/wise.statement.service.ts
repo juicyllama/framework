@@ -1,10 +1,10 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Logger } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
 //import { WiseGetTransactionsRequestDto } from './wise.statement.dto'
 
 @Injectable()
 export class WiseStatementService {
-	constructor(@Inject(forwardRef(() => Logger)) private readonly logger: Logger) {}
+	constructor(private readonly logger: Logger) {}
 
 	//async getTransactions(options: WiseGetTransactionsRequestDto) {
 	// todo getTransactions() -> Mirror Mollie Payment
