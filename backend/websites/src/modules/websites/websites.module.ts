@@ -14,10 +14,16 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { Website } from './websites.entity'
 import { WebsitesCronsController } from './websites.cron.controller'
 import { WebsitesCronsService } from './websites.crons.service'
+import { ConfigModule } from '@nestjs/config'
+import websitesConfig from '../../config/websites.config'
 
 @Module({
 	imports: [
 		TypeOrmModule.forFeature([Website, Account]),
+		ConfigModule.forRoot({
+			isGlobal: true,
+			load: [websitesConfig],
+		}),
 		forwardRef(() => AuthModule),
 		forwardRef(() => BeaconModule),
 		forwardRef(() => SettingsModule),

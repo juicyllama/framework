@@ -1,7 +1,7 @@
 import { registerAs } from '@nestjs/config'
 
 export default registerAs(
-	'billing',
+	'websites',
 	() =>
 		<any>{
 			CRON_WEBSITES_WEBSITE_SCREENSHOT_GENERATE: process.env.CRON_WEBSITES_WEBSITE_SCREENSHOT_GENERATE,
