@@ -1,5 +1,5 @@
+import { PartialType } from '@nestjs/swagger'
 import { IsString, IsUrl, IsDateString, IsBoolean, IsNumber, IsObject, IsEnum, IsArray } from 'class-validator'
-import { WordpresPostStatus, WordpressPostFormat } from './wordpress.posts.enums'
 import { WordpressLinks, WordpressMeta, WordpressRenderedObject } from '../wordpress.dto'
 import {
 	WordpressContext,
@@ -8,7 +8,7 @@ import {
 	WordpressCommentStatus,
 	WordpressPingStatus,
 } from '../wordpress.enums'
-import { PartialType } from '@nestjs/swagger'
+import { WordpresPostStatus, WordpressPostFormat } from './wordpress.posts.enums'
 
 export class WordpressListPosts {
 	@IsEnum(WordpressContext)
