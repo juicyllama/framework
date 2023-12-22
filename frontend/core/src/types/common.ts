@@ -70,6 +70,8 @@ export interface IconSettings {
 		error: string
 		warning: string
 		info: string
+		users: string
+		[key: string]: string
 	}
 }
 
