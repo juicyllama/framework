@@ -173,7 +173,6 @@ import JLTable from './components/JLTable.vue'
 import { saveWidgets } from '../../services/widgets'
 import { widgetClass } from './utils'
 
-const $q = useQuasar()
 const findWidgetById = (widgets, widget) => widgets.findIndex(el => el.id === widget.id)
 
 export default {
@@ -185,6 +184,7 @@ export default {
 		const leftDrawerOpen = ref(false)
 		const search = ref('')
 		const showWidgetEditForm = ref(false)
+		const $q = useQuasar()
 
 		const comps = {
 			JLChart,
