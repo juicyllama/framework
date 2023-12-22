@@ -75,7 +75,8 @@ export class TransactionsController {
 		currency_field: TRANSACTION_CURRENCY_FIELD,
 		currency_fields: TRANSACTION_CURRENCY_FIELDS,
 	})
-	async findAll(@Query() query, @AccountId() account_id: number): Promise<TRANSACTION_T[]> {
+	async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Promise<TRANSACTION_T[]> {
+		await this.authService.check(req.user.user_id, account_id)
 		return await crudFindAll<TRANSACTION_T>({
 			service: this.service,
 			tQuery: this.tQuery,
@@ -93,10 +94,12 @@ export class TransactionsController {
 
 	@ReadStatsDecorator({ name: TRANSACTION_NAME })
 	async stats(
+		@Req() req, 
 		@Query() query,
 		@AccountId() account_id: number,
 		@Query('method') method: StatsMethods,
 	): Promise<StatsResponseDto> {
+		await this.authService.check(req.user.user_id, account_id)
 		return await crudStats<TRANSACTION_T>({
 			service: this.service,
 			tQuery: this.tQuery,
@@ -115,6 +118,8 @@ export class TransactionsController {
 		currency_fields: TRANSACTION_CURRENCY_FIELDS,
 	})
 	async charts(
+		@Req() req, 
+		@AccountId() account_id: number,
 		@Query() query: any,
 		@Query('search') search: string,
 		@Query('from') from: string,
@@ -122,6 +127,7 @@ export class TransactionsController {
 		@Query('fields') fields: string[],
 		@Query('period') period?: ChartsPeriod,
 	): Promise<ChartsResponseDto> {
+		await this.authService.check(req.user.user_id, account_id)
 		return await crudCharts<TRANSACTION_T>({
 			service: this.service,
 			tQuery: this.tQuery,
@@ -149,7 +155,8 @@ export class TransactionsController {
 		currency_field: TRANSACTION_CURRENCY_FIELD,
 		currency_fields: TRANSACTION_CURRENCY_FIELDS,
 	})
-	async findOne(@AccountId() account_id: number, @Param() params, @Query() query): Promise<TRANSACTION_T> {
+	async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Query() query): Promise<TRANSACTION_T> {
+		await this.authService.check(req.user.user_id, account_id)
 		return await crudFindOne<TRANSACTION_T>({
 			service: this.service,
 			query: query,

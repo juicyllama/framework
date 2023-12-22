@@ -1,23 +1,26 @@
 <script setup lang="ts">
 import { Ref, ref, watch } from 'vue'
-import { UserStore } from '../../../store/user'
-import { AccountStore } from '../../../store/account'
 import { Account, FormViewSettings, FormViewDesignSettings } from '../../../types'
-import { useRouter } from 'vue-router'
+import { QVueGlobals } from 'quasar'
+import { Router } from 'vue-router'
+import { AccountStore } from '../../../store/account';
+import { UserStore } from '../../../store/user';
 
 let accounts: Ref<Account[]> = ref([])
 let options: { label: string; value: number }[]
+const accountStore = AccountStore()
+const userStore = UserStore()
 
 const props = defineProps<{
+	q: QVueGlobals
+	router: Router
+	type: 'dropdown' //todo modal so we can optionally run the modal on login if there are multiple accounts
 	settings: FormViewSettings
 }>()
 
-const accountStore = AccountStore()
-const userStore = UserStore()
-const router = useRouter()
 
 if (!userStore.user) {
-	await userStore.logout(router)
+	await userStore.logout(props.router)
 }
 
 userStore.$subscribe((mutation, state) => {
@@ -49,7 +52,6 @@ watch(model, value => {
 	const account = accounts?.value?.find(account => {
 		return account.account_id === value.value
 	})
-	const accountStore = AccountStore()
 	accountStore.setSelectedAccount(account)
 	window.history.go()
 })
@@ -57,7 +59,10 @@ watch(model, value => {
 
 <template>
 	<div class="JLAccountSwitcher" v-if="accounts && accounts.length > 1">
-		<q-select {{props.form?.field?.settings?.design}}
+
+		<div v-if="props.type === 'dropdown'"> 
+
+		<q-select
 			v-model="model"
 			:dense="props.settings?.dense ?? false"
 			:options="options"
@@ -82,5 +87,6 @@ watch(model, value => {
 					:class="props.settings.icon.classes ?? null" />
 			</template>
 		</q-select>
+		</div>
 	</div>
 </template>

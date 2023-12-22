@@ -27,7 +27,7 @@
 	],
 	"scripts": {
 		"prepare": "pnpm run build",
-		"build": "vite build && npm run build:types",
+		"build": "vite build && pnpm run build:types",
 		"build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types ",
 		"typecheck": "vue-tsc --noEmit",
 		"format": "prettier --write .",

@@ -26,11 +26,11 @@ export class XeroInvoice {
 	@IsString()
 	reference: string
 
-	@Column()
+	@Column('decimal', { precision: 20, scale: 10, default: 0 })
 	@IsNumber()
 	amount_due: number
 
-	@Column()
+	@Column('decimal', { precision: 20, scale: 10, default: 0 })
 	@IsNumber()
 	amount_paid: number
 

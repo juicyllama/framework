@@ -62,7 +62,8 @@ export class WebsitesController {
 		orderByEnum: WebsiteOrderBy,
 		relationsEnum: WebsiteRelations,
 	})
-	async findAll(@Query() query, @AccountId() account_id: number): Promise<WEBSITES_T[]> {
+	async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Promise<WEBSITES_T[]> {
+		await this.authService.check(req.user.user_id, account_id)
 		return await crudFindAll<WEBSITES_T>({
 			service: this.service,
 			tQuery: this.tQuery,
@@ -75,10 +76,12 @@ export class WebsitesController {
 
 	@ReadStatsDecorator({ name: WEBSITES_NAME })
 	async stats(
+		@Req() req,
 		@Query() query,
 		@AccountId() account_id: number,
 		@Query('method') method: StatsMethods,
 	): Promise<StatsResponseDto> {
+		await this.authService.check(req.user.user_id, account_id)
 		return await crudStats<WEBSITES_T>({
 			service: this.service,
 			tQuery: this.tQuery,
@@ -96,7 +99,8 @@ export class WebsitesController {
 		relationsEnum: WebsiteRelations,
 		primaryKey: WEBSITES_PRIMARY_KEY,
 	})
-	async findOne(@AccountId() account_id: number, @Param() params, @Query() query): Promise<WEBSITES_T> {
+	async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Query() query): Promise<WEBSITES_T> {
+		await this.authService.check(req.user.user_id, account_id)
 		return await crudFindOne<WEBSITES_T>({
 			service: this.service,
 			query: query,
