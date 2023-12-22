@@ -54,24 +54,7 @@ export interface AvatarOptions {
 export interface IconSettings {
 	type?: string
 	icons?: {
-		add?: string
-		edit?: string
-		delete?: string
-		search?: string
-		columns?: string
-		profile?: string
-		billing?: string
-		settings?: string
-		admin?: string
-		home: string
-		menu_seperator: string
-		mobile_nav: string
-		success: string
-		error: string
-		warning: string
-		info: string
-		users: string
-		[key: string]: string
+		[key: string]: string;
 	}
 }
 
