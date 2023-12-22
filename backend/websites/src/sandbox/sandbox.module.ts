@@ -3,9 +3,6 @@ import { CoreModule } from '@juicyllama/core'
 import { WebsitesModule } from '../modules/websites/websites.module'
 
 @Module({
-	imports: [
-		forwardRef(() => CoreModule),
-		forwardRef(() => WebsitesModule)
-	],
+	imports: [forwardRef(() => CoreModule), forwardRef(() => WebsitesModule)],
 })
 export class SandboxModule {}

@@ -180,7 +180,7 @@ export async function crudUpdate<T>(options: {
 
 	if (options.account_id) {
 		const record = await options.service.findById(options.primaryKey)
-		if (record.account.account_id !== options.account_id) {
+		if (record?.account?.account_id && record.account.account_id !== options.account_id) {
 			throw new BadRequestException(
 				`You do not have permission to update this ${options.service.name} with #${options.primaryKey}`,
 			)

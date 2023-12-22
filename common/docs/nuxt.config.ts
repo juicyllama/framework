@@ -1,4 +1,4 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import vitePluginRequire from "vite-plugin-require";
 export default defineNuxtConfig({
 	extends: ['@nuxt-themes/docus'],
 	modules: [
@@ -8,11 +8,12 @@ export default defineNuxtConfig({
 		'@pinia/nuxt',
 		'@nuxt/ui',
 		'nuxt-icon',
-		'@nuxtjs/color-mode'
+		'@nuxtjs/color-mode',
+		'@nuxtjs/tailwindcss'
 	],
 	colorMode: {
 		preference: 'dark',
-    	fallback: 'dark',
+		fallback: 'dark',
 		storageKey: 'jl-docs-color-mode'
 	},
 	ui: {
@@ -61,4 +62,9 @@ export default defineNuxtConfig({
 		  Nunito:  [400, 500, 600, 700, 800, 900],
 		}
 	  },
+	vite: {
+		plugins: [
+			vitePluginRequire()
+		]
+	}
 })
