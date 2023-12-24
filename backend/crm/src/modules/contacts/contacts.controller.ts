@@ -65,7 +65,9 @@ export class ContactsController extends BaseController<T> {
 
 		if (body.tags) {
 			for (const tag of body.tags) {
-				tags.push(await this.tagsService.create(tag))
+				tags.push(await this.tagsService.create({
+					name: tag
+				}))
 			}
 		}
 
