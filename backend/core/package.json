@@ -36,7 +36,6 @@
     },
     "dependencies": {
         "@juicyllama/dev": "workspace:^",
-        "@juicyllama/utils": "workspace:^",
-        "jwks-rsa": "^3.1.0"
+        "@juicyllama/utils": "workspace:^"
     }
 }
