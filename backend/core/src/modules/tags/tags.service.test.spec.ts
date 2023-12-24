@@ -9,7 +9,7 @@ type T = Tag
 const MODULE = TagsModule
 const SERVICE = TagsService
 
-const tag = faker.word.sample().toUpperCase()
+const tag = faker.word.sample()
 
 describe('TagsService', () => {
 	const scaffolding = new Scaffold<T>()
@@ -24,7 +24,9 @@ describe('TagsService', () => {
 
 	describe('Create Tag', () => {
 		it('Should create a new tag', async () => {
-			await scaffold.services.service.create(tag)
+			await scaffold.services.service.create({
+				name: tag,
+			})
 			tags = await scaffold.services.service.findAll()
 			expect(tags[0].name).toBe(tag)
 		})
@@ -33,9 +35,9 @@ describe('TagsService', () => {
 	describe('Create From String', () => {
 		it('Should create a number of tags and return them', async () => {
 			const result = await scaffold.services.service.createFromStrings(['test', 'test2', 'test3'])
-			expect(result[0].name).toBe('test'.toUpperCase())
-			expect(result[1].name).toBe('test2'.toUpperCase())
-			expect(result[2].name).toBe('test3'.toUpperCase())
+			expect(result[0].name).toBe('test')
+			expect(result[1].name).toBe('test2')
+			expect(result[2].name).toBe('test3')
 		})
 	})
 

@@ -7,7 +7,7 @@ import {
 	File,
 	Json,
 	Logger,
-	Objects
+	Objects,
 } from '@juicyllama/utils'
 import { Query as TQuery } from '../utils/typeorm/Query'
 import { TypeOrm } from '../utils/typeorm/TypeOrm'

@@ -222,10 +222,10 @@ export class UsersController {
 		return await this.service.uploadAvatar(user, file)
 	}
 
-	@BulkUploadDecorator({ supportedFields: UPLOAD_FIELDS, dedupField: UPLOAD_DUPLICATE_FIELD })
+	@BulkUploadDecorator({ uploadSupportedFields: UPLOAD_FIELDS, uploadDedupField: UPLOAD_DUPLICATE_FIELD })
 	async bulkUpload(
 		@Req() req,
-		@Body() params: BulkUploadDto,
+		@Body() body: BulkUploadDto,
 		@AccountId() account_id: number,
 		@UploadedFile() file?: Express.Multer.File,
 	): Promise<BulkUploadResponse> {
@@ -234,7 +234,7 @@ export class UsersController {
 			fields: UPLOAD_FIELDS,
 			dedup_field: UPLOAD_DUPLICATE_FIELD,
 			service: this.service,
-			...params,
+			...body,
 			file: file,
 		})
 		const users = await this.service.findAll({
@@ -251,7 +251,7 @@ export class UsersController {
 		return res
 	}
 
-	@UploadFieldsDecorator()
+	@UploadFieldsDecorator({ uploadSupportedFields: UPLOAD_FIELDS, uploadDedupField: UPLOAD_DUPLICATE_FIELD })
 	async uploadFileFields(): Promise<CrudUploadFieldsResponse> {
 		return {
 			fields: UPLOAD_FIELDS,
