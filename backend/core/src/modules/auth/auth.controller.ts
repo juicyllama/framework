@@ -60,7 +60,7 @@ export class AuthController {
 		type: SuccessResponseDto,
 	})
 	@Post('password-reset')
-	async initiatePasswordReset(@Req() req, @Body() data: InitiateResetPasswordDto): Promise<SuccessResponseDto> {
+	async initiatePasswordReset(@Body() data: InitiateResetPasswordDto): Promise<SuccessResponseDto> {
 		return {
 			success: await this.authService.initiatePasswordReset(data),
 		}

@@ -41,11 +41,11 @@ export class AzureADStrategy extends PassportStrategy(BearerStrategy, 'azure-ad'
 			loggingLevel: config.settings.loggingLevel,
 			scope: AZURE_AD_EXPOSED_SCOPES.split(' '),
 			loggingNoPII: false,
-		});
+		} as IBearerStrategyOption);
 	}
 
 	async validate(payload: any) {
-		return await this.usersService.validateEmail(payload.email)
+		return false; // await this.usersService.validateEmail(payload.email)
 	}
 }
 
