@@ -1,9 +1,7 @@
-import axios from 'axios'
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { PassportStrategy, AuthGuard } from '@nestjs/passport'
 import { BearerStrategy, IBearerStrategyOption } from 'passport-azure-ad'
 import { defaultSSOString } from '../../../configs/sso.config.joi'
-import { Env } from '@juicyllama/utils'
 import { UsersService } from '../../..'
 
 const AZURE_AD_CLIENT_ID = process.env.AZURE_AD_CLIENT_ID ?? defaultSSOString
