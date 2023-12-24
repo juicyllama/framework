@@ -13,7 +13,6 @@ import { ShopifyService } from './preinstall/shopify.service'
 
 @Module({
 	imports: [
-		JwtModule.register(jwtConfig()),
 		TypeOrmModule.forFeature([InstalledApp]),
 		forwardRef(() => AccountModule),
 		forwardRef(() => AppsModule),

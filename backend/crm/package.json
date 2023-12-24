@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/crm",
-    "version": "0.1.12",
+    "version": "0.1.13",
     "description": "Juicyllama CRM Module",
     "author": {
         "name": "JuicyLlama Studio",
@@ -30,7 +30,8 @@
         "build": "tsc",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests",
+        "before:commit": "pnpm run lint && pnpm run format && pnpm run test && pnpm run build"
     },
     "dependencies": {
         "@juicyllama/core": "workspace:^",

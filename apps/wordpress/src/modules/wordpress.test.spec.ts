@@ -30,7 +30,7 @@ describe('WordPress', () => {
 
 			const options = {
 				config: <wordpressConfigDto>{
-					WORDPRESS_URL: 'https://juicyllama.com/wp-json/wp/v2/users',
+					WORDPRESS_URL: 'https://slackvc.com/wp-json/wp/v2/users',
 					WORDPRESS_USERNAME: 'test',
 					WORDPRESS_APPLICATION_PASSWORD: 'test',
 				},
@@ -45,7 +45,6 @@ describe('WordPress', () => {
 			try {
 				await api.get(domain, url.toString(), getWordpressAxiosConfig(options.config))
 			} catch (e) {
-				console.log('e.response', e.response)
 				expect(e.response.status).not.toEqual(200)
 			}
 		})

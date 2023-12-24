@@ -1,22 +1,13 @@
-import { Module } from '@nestjs/common'
-import { CacheModule } from '@nestjs/cache-manager'
+import { Module, forwardRef } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Tag } from './tags.entity'
 import { TagsService } from './tags.service'
-import cacheConfig from '../../configs/cache.config'
-import { ConfigModule } from '@nestjs/config'
 import { Query } from '../../utils/typeorm/Query'
+import { AuthModule } from '../auth/auth.module'
+import { BeaconModule } from '../beacon/beacon.module'
 
 @Module({
-	imports: [
-		ConfigModule.forRoot({
-			load: [cacheConfig],
-			isGlobal: true,
-			envFilePath: '.env',
-		}),
-		CacheModule.registerAsync(cacheConfig()),
-		TypeOrmModule.forFeature([Tag]),
-	],
+	imports: [TypeOrmModule.forFeature([Tag]), forwardRef(() => AuthModule), forwardRef(() => BeaconModule)],
 	controllers: [],
 	providers: [TagsService, Query],
 	exports: [TagsService],

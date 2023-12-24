@@ -34,7 +34,7 @@ describe(`${NAME} Endpoints`, () => {
 
 	async function testBulkUpload(first_name, last_name, email) {
 		const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
-			`first_name,last_name,email\n${first_name},${last_name},${email}`
+			`first_name,last_name,email\n${first_name},${last_name},${email}`,
 		)
 		const res = await TestEndpoint<BulkUploadResponse>({
 			type: METHOD.CREATE,
@@ -43,7 +43,7 @@ describe(`${NAME} Endpoints`, () => {
 			url: `${url}/upload`,
 			attach: {
 				field: 'file',
-				file: csv_file.path
+				file: csv_file.path,
 			},
 			skipResultCheck: true,
 		})
@@ -52,7 +52,7 @@ describe(`${NAME} Endpoints`, () => {
 		} catch (e: any) {
 			scaffold.services.logger.warn(e.message)
 		}
-		return res;
+		return res
 	}
 
 	describe('#bulkUpload', () => {
@@ -68,10 +68,9 @@ describe(`${NAME} Endpoints`, () => {
 			expect(lastUser.first_name).toEqual(first_name)
 			expect(lastUser.last_name).toEqual(last_name)
 			expect(lastUser.email).toEqual(email)
-
 		})
 
-		it('Adds newly created user to creating user\'s account with a VIEWER role', async () => {
+		it("Adds newly created user to creating user's account with a VIEWER role", async () => {
 			const first_name = faker.person.firstName()
 			const last_name = faker.person.lastName()
 			const email = faker.internet.email()
