@@ -5,7 +5,7 @@ import type { UserLogin } from '../types'
 import { goToDashboard, logger } from '../helpers'
 import { LogSeverity } from '../types'
 import { QVueGlobals } from 'quasar'
-import { token, userStore } from '../index'
+import { userStore } from '../index'
 import { Router } from 'vue-router'
 
 export async function loginUser(payload: UserLogin, q: QVueGlobals, router?: Router): Promise<string> {
@@ -26,7 +26,6 @@ export async function loginUser(payload: UserLogin, q: QVueGlobals, router?: Rou
 	else {
 		throw new Error('Unknown error')
 	}
-
 }
 
 export const passwordlessLogin = async (email: string): Promise<void> => {
