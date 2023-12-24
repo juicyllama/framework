@@ -68,12 +68,11 @@ export class StorageService {
 					file: options.file,
 					params: options.params,
 				})
-				
+
 				return {
 					success: true,
 					url: s3Result.Location,
 				}
-
 			} catch (e: any) {
 				this.logger.error(`[${domain}] ${e.message}`, e)
 				return {
@@ -86,7 +85,7 @@ export class StorageService {
 		if (!service) {
 			this.logger.error(`No storage app installed, options are: @juicyllama/app-aws`)
 			return {
-				success: false
+				success: false,
 			}
 		}
 	}

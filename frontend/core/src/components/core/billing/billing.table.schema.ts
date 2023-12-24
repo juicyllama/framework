@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-empty-function*/
-
-import { BILLING_INVOICE_ENDPOINT, IconSettings, TableSchema } from '../../../index'
+import { BILLING_INVOICE_ENDPOINT, billingInvoiceService, IconSettings, TableSchema } from '../../../index'
 
 export const invoicesTableSchema = (icon?: IconSettings, visibleColumns?: string[]): TableSchema => {
 	return {
@@ -22,25 +20,22 @@ export const invoicesTableSchema = (icon?: IconSettings, visibleColumns?: string
 			limit: '5',
 			offset: '0',
 			order_by: 'created_at',
-			order_by_type: 'ASC',
-			select: ['app_invoice_id', 'created_at'].toString(),
-			relations: '',
+			order_by_type: 'DESC',
 		},
 		functions: {
-			// eslint-disable-next-line @typescript-eslint/no-empty-function
-			create: () => {},
-			// eslint-disable-next-line @typescript-eslint/no-empty-function
-			findOne: () => {},
 			// @ts-ignore
-			findAll: () => {},
+			create: billingInvoiceService.create,
 			// @ts-ignore
-			stats: config => {
-				console.log(config)
-			},
+			findOne: billingInvoiceService.findOne,
 			// @ts-ignore
-			update: () => {},
+			findAll: billingInvoiceService.findAll,
+			// @ts-ignore
+			stats: billingInvoiceService.stats,
+			// @ts-ignore
+			update: billingInvoiceService.update,
+			// @ts-ignore
+			delete: billingInvoiceService.delete,
 		},
-
 		schema: [
 			{
 				required: true,

@@ -1,7 +1,6 @@
 import { IsUrl, IsBoolean, IsString, IsOptional } from 'class-validator'
 
 export class StorageWriteResponseDto {
-	
 	/**
 	 * If the file was uploaded successfully
 	 */
@@ -13,7 +12,7 @@ export class StorageWriteResponseDto {
 	 * The url of the file online
 	 * @example https://some.location/file.ext
 	 */
-	
+
 	@IsUrl()
 	@IsOptional()
 	url?: string
@@ -21,9 +20,8 @@ export class StorageWriteResponseDto {
 	/**
 	 * An error message if the upload errored
 	 */
-	
+
 	@IsString()
 	@IsOptional()
 	error?: string
-
 }

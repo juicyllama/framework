@@ -39,7 +39,7 @@ import {
 	T,
 	UPLOAD_DUPLICATE_FIELD,
 } from './users.constants'
-import { crudDelete, } from '../../helpers'
+import { crudDelete } from '../../helpers'
 import { UploadFieldsDecorator, UploadImageDecorator } from '../../decorators/crud.decorator'
 import { crudBulkUpload } from '../../helpers/crudController'
 import { StorageService } from '../storage/storage.service'
