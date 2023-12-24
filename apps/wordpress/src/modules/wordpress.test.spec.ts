@@ -45,7 +45,6 @@ describe('WordPress', () => {
 			try {
 				await api.get(domain, url.toString(), getWordpressAxiosConfig(options.config))
 			} catch (e) {
-				console.log('e.response', e.response)
 				expect(e.response.status).not.toEqual(200)
 			}
 		})

@@ -1,83 +1,60 @@
-import {
-	Controller,
-	forwardRef,
-	Post,
-	Inject,
-	Param,
-	Query,
-	Req,
-} from '@nestjs/common'
+import { Controller, forwardRef, Post, Inject, Param, Query, Req } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
-import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto } from '@juicyllama/utils'
-import { AccountId, AuthService, ReadManyDecorator, UserAuth, crudFindAll, 	Query as TQuery, ReadChartsDecorator, crudCharts, StorageService, crudStats, ReadStatsDecorator, ReadOneDecorator, crudFindOne, FxService } from '@juicyllama/core'
-import { Invoice } from './invoices.entity'
+import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
+import {
+	AccountId,
+	AuthService,
+	ReadManyDecorator,
+	UserAuth,
+	Query as TQuery,
+	ReadChartsDecorator,
+	ReadStatsDecorator,
+	ReadOneDecorator,
+	FxService,
+	BaseController,
+} from '@juicyllama/core'
 import { InvoicesService } from './invoices.service'
-import { InvoiceOrderBy, InvoiceRelations, InvoiceSelect } from './invoices.enums'
-import { T, E, SEARCH_FIELDS, BILLING_INVOICES_NAME, ORDER_BY, PRIMARY_KEY, CURRENCY_FIELD, CURRENCY_FIELDS} from './invoices.constants'
+import {
+	BILLING_INVOICES_T as T,
+} from './invoices.constants'
+import { billingRoles as roles } from '../billing.constants'
+import { billingInvoiceConstants as constants } from './invoices.constants'
 
 @ApiTags('Invoices')
 @UserAuth()
 @Controller('billing/invoices')
-export class InvoicesController {
+export class InvoicesController extends BaseController<T> {
 	constructor(
-		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
-		@Inject(forwardRef(() => InvoicesService)) private readonly service: InvoicesService,
-		@Inject(forwardRef(() => StorageService)) readonly storageService: StorageService,
-		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<T>,
-		@Inject(forwardRef(() => FxService)) private readonly fxService: FxService,
-	) {}
-
-	@ReadManyDecorator({
-		name: BILLING_INVOICES_NAME,
-		entity: E,
-		selectEnum: InvoiceSelect,
-		orderByEnum: InvoiceOrderBy,
-		relationsEnum: InvoiceRelations,
-		currency_field: CURRENCY_FIELD,
-		currency_fields: CURRENCY_FIELDS,
-	})
-	async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Promise<T[]> {
-		await this.authService.check(req.user.user_id, account_id)
-		return await crudFindAll<T>({
-			service: this.service,
-			tQuery: this.tQuery,
-			account_id: account_id,
-			query: query,
-			searchFields: SEARCH_FIELDS,
-			order_by: ORDER_BY,
-			currency: {
-				fxService: this.fxService,
-				currency_field: CURRENCY_FIELD,
-				currency_fields: CURRENCY_FIELDS,
+		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
+		@Inject(forwardRef(() => InvoicesService)) readonly service: InvoicesService,
+		@Inject(forwardRef(() => TQuery)) readonly tQuery: TQuery<T>,
+		@Inject(forwardRef(() => FxService)) readonly fxService: FxService,
+	) {
+		super(service, tQuery, constants, {
+			services: {
+				authService,
+				fxService
 			},
+			roles: roles
 		})
 	}
 
-	@ReadStatsDecorator({ name: BILLING_INVOICES_NAME })
+	@ReadManyDecorator(constants)
+	async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Promise<T[]> {
+		return super.findAll(req, query, account_id)
+	}
+
+	@ReadStatsDecorator(constants)
 	async stats(
 		@Req() req,
 		@Query() query,
-		@Query('method') method: StatsMethods,
 		@AccountId() account_id: number,
-	): Promise<StatsResponseDto> {
-		await this.authService.check(req.user.user_id, account_id)
-		return await crudStats<T>({
-			service: this.service,
-			tQuery: this.tQuery,
-			account_id: account_id,
-			query: query,
-			method: method,
-			searchFields: SEARCH_FIELDS,
-		})
+		@Query('method') method: StatsMethods,
+	): Promise<any> {
+		return super.stats(req, query, account_id, method)
 	}
 
-	@ReadChartsDecorator({
-		entity: E,
-		name: BILLING_INVOICES_NAME,
-		selectEnum: InvoiceSelect,
-		currency_field: CURRENCY_FIELD,
-		currency_fields: CURRENCY_FIELDS,
-	})
+	@ReadChartsDecorator(constants)
 	async charts(
 		@Req() req,
 		@AccountId() account_id: number,
@@ -88,60 +65,18 @@ export class InvoicesController {
 		@Query('fields') fields: string[],
 		@Query('period') period?: ChartsPeriod,
 	): Promise<ChartsResponseDto> {
-		await this.authService.check(req.user.user_id, account_id)
-		return await crudCharts<T>({
-			service: this.service,
-			tQuery: this.tQuery,
-			query,
-			search,
-			period,
-			fields,
-			...(from && { from: new Date(from) }),
-			...(to && { to: new Date(to) }),
-			searchFields: SEARCH_FIELDS,
-			currency: {
-				fxService: this.fxService,
-				currency_field: CURRENCY_FIELD,
-				currency_fields: CURRENCY_FIELDS,
-			},
-		})
+		return super.charts(req, account_id, query, search, from, to, fields, period)
 	}
 
-	@ReadOneDecorator({
-		entity: E,
-		name: BILLING_INVOICES_NAME,
-		selectEnum: InvoiceSelect,
-		relationsEnum: InvoiceRelations,
-		primaryKey: PRIMARY_KEY,
-		currency_field: CURRENCY_FIELD,
-		currency_fields: CURRENCY_FIELDS,
-	})
-	async findOne(
-		@Req() req,
-		@Param() params,
-		@AccountId() account_id: number,
-		@Query() query,
-	): Promise<Invoice> {
-		await this.authService.check(req.user.user_id, account_id)
-		return await crudFindOne<T>({
-			service: this.service,
-			query: query,
-			primaryKey: params[PRIMARY_KEY],
-			account_id: account_id,
-			currency: {
-				fxService: this.fxService,
-				currency_field: CURRENCY_FIELD,
-				currency_fields: CURRENCY_FIELDS,
-			},
-		})
+	@ReadOneDecorator(constants)
+	async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
+		return super.findOne(req, account_id, params, query)
 	}
 
 	@ApiOperation({ summary: `Download invoice file` })
 	@Post(`/download/:invoice_id`)
-	async uploadAvatarFile(@Req() req, @AccountId() invoice_id: number, @AccountId() account_id: number): Promise<T> {
+	async downloadInvoice(@Req() req, @AccountId() invoice_id: number, @AccountId() account_id: number): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id)
 		return await this.service.downloadInvoice(req.user, invoice_id)
 	}
-
-	
 }

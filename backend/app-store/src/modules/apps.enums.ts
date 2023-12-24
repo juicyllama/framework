@@ -59,3 +59,8 @@ export enum AppOrderBy {
 	category = 'category',
 	created_at = 'created_at',
 }
+
+export enum AppRelations {
+	'parent' = 'parent',
+	'children' = 'children'
+}

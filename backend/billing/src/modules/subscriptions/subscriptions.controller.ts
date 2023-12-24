@@ -1,41 +1,35 @@
 import { Controller, forwardRef, Query, Inject, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { IsNull } from 'typeorm'
-import { Subscription } from './subscriptions.entity'
 import { SubscriptionsService } from './subscriptions.service'
-import { AccountId, AuthService, ReadManyDecorator, UserAuth, UserRole } from '@juicyllama/core'
-import { Query as JLQuery } from '@juicyllama/core'
-import { SubscriptionOrderBy, SubscriptionRelations, SubscriptionSelect } from './subscriptions.enums'
-import { BILLING_SUBSCRIPTIONS_NAME } from './subscriptions.constants'
-
-const E = Subscription
-type T = Subscription
+import { AccountId, AuthService, BaseController, FxService, ReadManyDecorator, UserAuth } from '@juicyllama/core'
+import { Query as TQuery } from '@juicyllama/core'
+import {
+	billingSubscriptionsConstants as constants,
+	BILLING_SUBSCRIPTIONS_T as T
+} from './subscriptions.constants'
+import { billingRoles as roles } from '../billing.constants'
 
 @ApiTags('Subscriptions')
 @UserAuth()
 @Controller('/billing/subscriptions')
-export class SubscriptionsController {
+export class SubscriptionsController extends BaseController<T> {
 	constructor(
-		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
-		@Inject(forwardRef(() => SubscriptionsService)) private readonly subscriptionsService: SubscriptionsService,
-		@Inject(forwardRef(() => JLQuery)) private readonly query: JLQuery<T>,
-	) {}
+		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
+		@Inject(forwardRef(() => SubscriptionsService)) readonly service: SubscriptionsService,
+		@Inject(forwardRef(() => TQuery)) readonly tQuery: TQuery<T>,
+		@Inject(forwardRef(() => FxService)) readonly fxService: FxService,
+	) {
+		super(service, tQuery, constants, {
+			services: {
+				authService,
+				fxService
+			},
+			roles: roles
+		})
+	}
 
-	@ReadManyDecorator({
-		name: BILLING_SUBSCRIPTIONS_NAME,
-		entity: E,
-		selectEnum: SubscriptionSelect,
-		orderByEnum: SubscriptionOrderBy,
-		relationsEnum: SubscriptionRelations,
-	})
-	async listAll(@Req() req, @AccountId() account_id: number, @Query() query): Promise<T[]> {
-		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
-
-		const where = {
-			account: { account_id: account_id },
-			deleted_at: IsNull(),
-		}
-
-		return await this.subscriptionsService.findAll(this.query.findOptions(query, where))
+	@ReadManyDecorator(constants)
+	async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Promise<T[]> {
+		return super.findAll(req, query, account_id)
 	}
 }

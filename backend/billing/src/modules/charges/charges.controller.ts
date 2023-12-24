@@ -1,50 +1,39 @@
 import { Controller, forwardRef, Inject, Query, Req } from '@nestjs/common'
-import { ApiQuery, ApiTags } from '@nestjs/swagger'
-import { IsNull } from 'typeorm'
-import { Charge } from './charges.entity'
+import { ApiTags } from '@nestjs/swagger'
 import { ChargesService } from './charges.service'
-import { AccountId, AuthService, ReadManyDecorator, UserAuth, UserRole } from '@juicyllama/core'
-import { ChargeOrderBy, ChargeRelations, ChargeSelect } from './charges.enums'
-import { Query as JLQuery } from '@juicyllama/core/dist/utils/typeorm/Query'
-import { SupportedCurrencies } from '@juicyllama/utils'
-import { BILLING_CHARGES_NAME } from './charges.constants'
-
-const E = Charge
-type T = Charge
+import {
+	AccountId,
+	AuthService,
+	ReadManyDecorator,
+	UserAuth,
+	Query as TQuery,
+	FxService,
+	BaseController,
+} from '@juicyllama/core'
+import { billingChargesConstants as constants, BILLING_CHARGES_T as T } from './charges.constants'
+import { billingRoles as roles } from '../billing.constants'
 
 @ApiTags('Charges')
 @UserAuth()
 @Controller('/billing/charges')
-export class ChargesController {
+export class ChargesController extends BaseController<T> {
 	constructor(
-		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
-		@Inject(forwardRef(() => ChargesService)) private readonly chargesService: ChargesService,
-		@Inject(forwardRef(() => JLQuery)) private readonly query: JLQuery<T>,
-	) {}
+		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
+		@Inject(forwardRef(() => ChargesService)) readonly service: ChargesService,
+		@Inject(forwardRef(() => TQuery)) readonly tQuery: TQuery<T>,
+		@Inject(forwardRef(() => FxService)) readonly fxService: FxService,
+	) {
+		super(service, tQuery, constants, {
+			services: {
+				authService,
+				fxService
+			},
+			roles: roles
+		})
+	}
 
-	@ReadManyDecorator({
-		name: BILLING_CHARGES_NAME,
-		entity: E,
-		selectEnum: ChargeSelect,
-		orderByEnum: ChargeOrderBy,
-		relationsEnum: ChargeRelations,
-	})
-	@ApiQuery({
-		name: 'currency',
-		description: 'The currency you are requesting data for',
-		type: String,
-		required: false,
-		example: SupportedCurrencies.USD,
-	})
-	async listAll(@Req() req, @AccountId() account_id: number, @Query() query): Promise<T[]> {
-		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
-
-		const where = {
-			account: { account_id: account_id },
-			deleted_at: IsNull(),
-			currency: query.currency ?? null,
-		}
-
-		return await this.chargesService.findAll(this.query.findOptions(query, where))
+	@ReadManyDecorator(constants)
+	async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Promise<T[]> {
+		return super.findAll(req, query, account_id)
 	}
 }
