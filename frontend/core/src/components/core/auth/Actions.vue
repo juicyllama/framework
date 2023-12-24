@@ -16,6 +16,10 @@ const props = defineProps<{
 }>()
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+const VITE_AZURE_AD_TENANT_ID = import.meta.env.VITE_AZURE_AD_TENANT_ID
+const VITE_AZURE_AD_CLIENT_ID = import.meta.env.VITE_AZURE_AD_CLIENT_ID
+const VITE_AZURE_AD_EXPOSED_SCOPES = import.meta.env.VITE_AZURE_AD_EXPOSED_SCOPES
+
 const path: Ref<string> = ref()
 const password: Ref<boolean> = ref()
 const passwordless: Ref<boolean> = ref()
@@ -32,7 +36,7 @@ function doLinkedinLogin() {
 	linkedInLogin(VITE_API_BASE_URL)
 }
 function doAzureSso() {
-	azureLogin(VITE_API_BASE_URL)
+	azureLogin(VITE_AZURE_AD_TENANT_ID, VITE_AZURE_AD_CLIENT_ID, VITE_AZURE_AD_EXPOSED_SCOPES, router)
 }
 
 onMounted(async () => {

@@ -6,10 +6,10 @@ import {
 	ApiNotFoundResponse,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
-import { JwtAuthGuard } from '../modules/auth/guards/jwt-auth.guard'
+import { AuthGuard } from '@nestjs/passport'
 
 export function UserAuth(options?: { skipAccountId?: boolean }) {
-	const decorators = [ApiBearerAuth(), UseGuards(JwtAuthGuard)]
+	const decorators = [ApiBearerAuth(), UseGuards(AuthGuard(['jwt', 'azure-ad']))]
 
 	if (!options?.skipAccountId) {
 		decorators.push(

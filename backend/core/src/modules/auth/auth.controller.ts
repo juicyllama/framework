@@ -11,7 +11,6 @@ import { LocalAuthGuard } from './guards/local-auth.guard'
 import { UsersService } from '../users/users.service'
 import { AuthGuard } from '@nestjs/passport'
 import { AccountId } from '../../decorators'
-import { AzureADGuard } from './strategies/azure.strategy'
 
 @ApiTags('Auth')
 @Controller('/auth')
@@ -147,19 +146,6 @@ export class AuthController {
 	@UseGuards(AuthGuard('google'))
 	@Get('google/redirect')
 	async googleAuthRedirect(@Req() req): Promise<LoginResponseDto> {
-		return this.authService.login(req.user)
-	}
-
-	@ApiOperation({
-		summary: 'Azure AD Login - Complete',
-	})
-	@ApiOkResponse({
-		description: 'OK',
-		type: LoginResponseDto,
-	})
-	@UseGuards(AzureADGuard)
-	@Get('azure_ad/redirect')
-	async azureAuthRedirect(@Req() req): Promise<LoginResponseDto> {
 		return this.authService.login(req.user)
 	}
 

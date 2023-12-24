@@ -8,29 +8,27 @@ import { UsersService } from '../../..'
 
 const AZURE_AD_CLIENT_ID = process.env.AZURE_AD_CLIENT_ID ?? defaultSSOString
 const AZURE_AD_TENANT_ID = process.env.AZURE_AD_TENANT_ID ?? defaultSSOString
-
-const EXPOSED_SCOPES = ['User.Read'];
+const AZURE_AD_EXPOSED_SCOPES = process.env.AZURE_AD_EXPOSED_SCOPES ?? defaultSSOString
 
 
 const config = {
 	credentials: {
-	  tenantID: AZURE_AD_TENANT_ID,
-	  clientID: AZURE_AD_CLIENT_ID,
-	  audience: AZURE_AD_CLIENT_ID,
+		tenantID: AZURE_AD_TENANT_ID,
+		clientID: AZURE_AD_CLIENT_ID,
+		audience: AZURE_AD_CLIENT_ID,
 	},
 	metadata: {
-	  authority: 'login.microsoftonline.com',
-	  discovery: '.well-known/openid-configuration',
-	  version: 'v2.0',
+		authority: 'login.microsoftonline.com',
+		discovery: '.well-known/openid-configuration',
+		version: 'v2.0',
 	},
 	settings: {
-	  validateIssuer: false,
-	  passReqToCallback: false,
-	  loggingLevel: 'warn',
+		validateIssuer: false,
+		passReqToCallback: false,
+		loggingLevel: 'warn',
 	},
-  };
+};
 
-// const EXPOSED_SCOPES = 'openid profile email';
 
 @Injectable()
 export class AzureADStrategy extends PassportStrategy(BearerStrategy, 'azure-ad') {
@@ -43,14 +41,14 @@ export class AzureADStrategy extends PassportStrategy(BearerStrategy, 'azure-ad'
 			validateIssuer: config.settings.validateIssuer,
 			passReqToCallback: config.settings.passReqToCallback,
 			loggingLevel: config.settings.loggingLevel,
-			scope: EXPOSED_SCOPES,
+			scope: AZURE_AD_EXPOSED_SCOPES.split(' '),
 			loggingNoPII: false,
-		  });
-	  }
-	
-	  async validate(payload: any) {
+		});
+	}
+
+	async validate(payload: any) {
 		return await this.usersService.validateEmail(payload.email)
-	  }
+	}
 }
 
 export const AzureADGuard = AuthGuard('azure-ad')
