@@ -45,7 +45,7 @@ export class AzureADStrategy extends PassportStrategy(BearerStrategy, 'azure-ad'
 	}
 
 	async validate(payload: any) {
-		return false; // await this.usersService.validateEmail(payload.email)
+		return await this.usersService.validateEmail(payload.email)
 	}
 }
 
