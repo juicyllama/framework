@@ -1,4 +1,4 @@
-import { Body, Controller, forwardRef, Get, Inject, Post, Req, Res, UseGuards, Query } from '@nestjs/common'
+import { Body, Controller, forwardRef, Get, Inject, Post, Req, UseGuards } from '@nestjs/common'
 import { ApiHideProperty, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { LoginResponseDto, ValidateCodeDto } from './dtos/login.dto'
 import { CompletePasswordResetDto, InitiateResetPasswordDto } from './dtos/password.reset.dto'
