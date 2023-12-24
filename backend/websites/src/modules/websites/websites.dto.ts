@@ -1,25 +1,45 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger'
+import { PartialType } from '@nestjs/swagger'
 import { IsUrl, IsOptional, IsString, MaxLength, MinLength } from 'class-validator'
+import { BaseResponseDto, SwaggerPropertyDecorator, SwaggerPropertyType } from '@juicyllama/core'
+import { Classes } from '@juicyllama/utils'
 
 export class WebsiteDto {
-	@ApiProperty({ description: 'Website Name', example: 'Google' })
+	@SwaggerPropertyDecorator({
+		description: 'Website Name',
+		type: SwaggerPropertyType.STRING,
+		example: 'Google',
+		required: true,
+	})
 	@IsString()
 	@MinLength(2)
 	@MaxLength(50)
 	name: string
 
-	@ApiProperty({ description: 'The website URL', example: 'https://google.com' })
+	@SwaggerPropertyDecorator({
+		description: 'The website URL',
+		type: SwaggerPropertyType.STRING,
+		example: 'https://google.com',
+		required: true,
+	})
 	@IsString()
 	@IsUrl()
-	url?: string
+	url: string
 
-	@ApiProperty({ description: 'The URL of your website screenshot' })
+	@SwaggerPropertyDecorator({
+		description: 'The URL of your website screenshot',
+		type: SwaggerPropertyType.STRING,
+		required: false,
+	})
 	@IsOptional()
 	@IsString()
 	@IsUrl()
 	screenshot_url?: string
 
-	@ApiProperty({ description: 'The URL of your websites icon (e.g. a favicon)' })
+	@SwaggerPropertyDecorator({
+		description: 'The URL of your websites icon (e.g. a favicon)',
+		type: SwaggerPropertyType.STRING,
+		required: false,
+	})
 	@IsOptional()
 	@IsString()
 	@IsUrl()
@@ -29,3 +49,8 @@ export class WebsiteDto {
 export class CreateWebsiteDto extends WebsiteDto {}
 
 export class UpdateWebsiteDto extends PartialType(WebsiteDto) {}
+
+export class WebsiteResponeDto extends Classes.ExtendsMultiple([WebsiteDto, BaseResponseDto]) {
+	@SwaggerPropertyDecorator({ description: 'The website ID', example: 1 })
+	readonly website_id: number
+}

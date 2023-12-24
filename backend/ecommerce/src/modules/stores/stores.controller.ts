@@ -1,37 +1,36 @@
-import { Controller, forwardRef, Inject, Query, Param, UploadedFile } from '@nestjs/common'
+import { Body, Controller, forwardRef, Inject, Param, Query, Req, UploadedFile } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { WebsitesService as Service } from './websites.service'
+import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
+import { StoresService } from './stores.service'
 import {
 	Query as TQuery,
+	AccountId,
 	AuthService,
+	CreateDecorator,
+	DeleteDecorator,
+	ReadManyDecorator,
+	ReadOneDecorator,
+	ReadStatsDecorator,
+	UpdateDecorator,
 	UserAuth,
 	BaseController,
-	CreateDecorator,
-	AccountId,
-	ReadManyDecorator,
-	ReadStatsDecorator,
 	ReadChartsDecorator,
-	ReadOneDecorator,
-	UpdateDecorator,
 	BulkUploadDecorator,
 	BulkUploadDto,
 	BulkUploadResponse,
-	UploadFieldsDecorator,
 	CrudUploadFieldsResponse,
-	DeleteDecorator,
+	UploadFieldsDecorator,
 } from '@juicyllama/core'
-import { CreateWebsiteDto as CreateDto, UpdateWebsiteDto as UpdateDto } from './websites.dto'
-import { websiteConstants as constants, WEBSITES_T as T } from './websites.constants'
-import { Req, Body } from '@nestjs/common'
-import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
+import { CreateStoreDto as CreateDto, UpdateStoreDto as UpdateDto } from './stores.dto'
+import { STORE_T as T, storeConstants as constants } from './stores.constants'
 
-@ApiTags('Websites')
+@ApiTags('Stores')
 @UserAuth()
-@Controller('websites/website')
-export class WebsitesController extends BaseController<T> {
+@Controller('ecommerce/stores')
+export class StoresController extends BaseController<T> {
 	constructor(
 		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
-		@Inject(forwardRef(() => Service)) readonly service: Service,
+		@Inject(forwardRef(() => StoresService)) readonly service: StoresService,
 		@Inject(forwardRef(() => TQuery)) readonly tQuery: TQuery<T>,
 	) {
 		super(service, tQuery, constants, {

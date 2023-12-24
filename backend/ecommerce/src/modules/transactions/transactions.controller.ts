@@ -1,38 +1,51 @@
-import { Controller, forwardRef, Inject, Query, Param, UploadedFile } from '@nestjs/common'
+import {
+	BadRequestException,
+	Body,
+	Controller,
+	forwardRef,
+	Inject,
+	Param,
+	Query,
+	Req,
+	UploadedFile,
+} from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { WebsitesService as Service } from './websites.service'
+import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
+import { TransactionsService } from './transactions.service'
 import {
 	Query as TQuery,
-	AuthService,
-	UserAuth,
-	BaseController,
-	CreateDecorator,
 	AccountId,
+	AuthService,
+	CreateDecorator,
+	DeleteDecorator,
 	ReadManyDecorator,
-	ReadStatsDecorator,
-	ReadChartsDecorator,
 	ReadOneDecorator,
+	ReadStatsDecorator,
 	UpdateDecorator,
+	UserAuth,
+	ReadChartsDecorator,
+	FxService,
+	BaseController,
 	BulkUploadDecorator,
 	BulkUploadDto,
-	BulkUploadResponse,
-	UploadFieldsDecorator,
 	CrudUploadFieldsResponse,
-	DeleteDecorator,
+	UploadFieldsDecorator,
+	BulkUploadResponse,
 } from '@juicyllama/core'
-import { CreateWebsiteDto as CreateDto, UpdateWebsiteDto as UpdateDto } from './websites.dto'
-import { websiteConstants as constants, WEBSITES_T as T } from './websites.constants'
-import { Req, Body } from '@nestjs/common'
-import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
+import { StoresService } from '../stores/stores.service'
+import { transactionConstants as constants, TRANSACTION_T as T } from './transactions.constants'
+import { CreateTransactionDto as CreateDto, UpdateTransactionDto as UpdateDto } from './transactions.dto'
 
-@ApiTags('Websites')
+@ApiTags('Transactions')
 @UserAuth()
-@Controller('websites/website')
-export class WebsitesController extends BaseController<T> {
+@Controller('ecommerce/transactions')
+export class TransactionsController extends BaseController<T> {
 	constructor(
 		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
-		@Inject(forwardRef(() => Service)) readonly service: Service,
+		@Inject(forwardRef(() => TransactionsService)) readonly service: TransactionsService,
+		@Inject(forwardRef(() => StoresService)) readonly storesService: StoresService,
 		@Inject(forwardRef(() => TQuery)) readonly tQuery: TQuery<T>,
+		@Inject(forwardRef(() => FxService)) readonly fxService: FxService,
 	) {
 		super(service, tQuery, constants, {
 			services: {
@@ -43,6 +56,7 @@ export class WebsitesController extends BaseController<T> {
 
 	@CreateDecorator(constants)
 	async create(@Req() req, @Body() body: CreateDto, @AccountId() account_id: number): Promise<T> {
+		await this.storeAuth(account_id, body.store_id)
 		return super.create(req, body, account_id)
 	}
 
@@ -103,5 +117,18 @@ export class WebsitesController extends BaseController<T> {
 	@DeleteDecorator(constants)
 	async remove(@Req() req, @Param() params, @AccountId() account_id: number): Promise<T> {
 		return super.remove(req, params, account_id)
+	}
+
+	private async storeAuth(account_id: number, store_id: number) {
+		const store = await this.storesService.findOne({
+			where: {
+				account_id: account_id,
+				store_id: store_id,
+			},
+		})
+
+		if (!store) {
+			throw new BadRequestException('Store not found')
+		}
 	}
 }

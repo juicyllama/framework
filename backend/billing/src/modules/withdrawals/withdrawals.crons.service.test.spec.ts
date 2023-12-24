@@ -1,10 +1,6 @@
 import { SupportedCurrencies } from '@juicyllama/utils'
 import { Scaffold, ScaffoldDto } from '@juicyllama/core'
-import {
-	MockPaymentMethodBankRequest,
-	MockPaymentRequest,
-	MockWithdrawalRequest,
-} from '../../test/mocks'
+import { MockPaymentMethodBankRequest, MockPaymentRequest, MockWithdrawalRequest } from '../../test/mocks'
 import { WithdrawalsCronService } from './withdrawals.crons.service'
 import { PaymentsService } from '../payments/payments.service'
 import { PaymentMethodsService } from '../payment_methods/payment.methods.service'

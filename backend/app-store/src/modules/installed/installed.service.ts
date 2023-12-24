@@ -103,15 +103,14 @@ export class InstalledAppsService extends BaseService<T> {
 		switch (app.integration_name) {
 			case AppStoreIntegrationName.wordpress:
 				return await this.wordPressService.precheckWordpress(domain, app, settings)
-			
+
 			case AppStoreIntegrationName.shopify:
 				return await this.shopifyService.precheckShopify(domain, app, settings, account_id)
-			
+
 			default:
 				return {
 					result: true,
 				}
 		}
 	}
-
 }
