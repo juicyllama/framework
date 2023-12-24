@@ -1,5 +1,7 @@
 import { IsArray, IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator'
+import { ApiProperty } from '@nestjs/swagger'
 
+//todo move to types (package/core)
 //todo move to core to decorate all responses with @ApiProperty({ description: 'The tag ID', example: 1 })
 
 export class ErrorResponseDto {
@@ -13,14 +15,18 @@ export class ErrorResponseDto {
 	error: string
 }
 export class StatsResponseDto {
+
+	@ApiProperty({ name: 'count', example: 0 })
 	@IsNumber()
 	@IsOptional()
 	count?: number
 
+	@ApiProperty({ name: 'avg', example: 0 })
 	@IsNumber()
 	@IsOptional()
 	avg?: number
 
+	@ApiProperty({ name: 'sum', example: 0 })
 	@IsNumber()
 	@IsOptional()
 	sum?: number

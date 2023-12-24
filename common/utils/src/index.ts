@@ -1,5 +1,6 @@
 export { Api } from './utils/Api'
 export { JLCache } from './utils/Cache'
+export { Classes } from './utils/Classes'
 export { Color } from './utils/Color'
 export { Countries } from './utils/Countries'
 export { Csv } from './utils/Csv'
