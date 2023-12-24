@@ -59,7 +59,7 @@ if (route.query.code) {
 				await completeMicrosoftLogin(route.query, $q)
 				break
 			case 'azure_ad':
-				await completeAzureLogin(route.query, $q)
+				// await completeAzureLogin(route.query, $q)
 				break
 			default:
 				new Error('OAuthType not found')

@@ -34,7 +34,8 @@
         "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
     },
     "dependencies": {
+        "@juicyllama/dev": "workspace:^",
         "@juicyllama/utils": "workspace:^",
-        "@juicyllama/dev": "workspace:^"
+        "jwks-rsa": "^3.1.0"
     }
 }

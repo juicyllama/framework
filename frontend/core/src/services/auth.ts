@@ -1,11 +1,31 @@
 import instance from './index'
+import {PublicClientApplication} from "@azure/msal-browser";
 import type { User } from '../types'
 import type { UserLogin } from '../types'
 import { logger } from '../helpers'
 import { LogSeverity } from '../types'
 import { QVueGlobals } from 'quasar'
-import { userStore } from '../index'
+import { token, userStore } from '../index'
 import { Router } from 'vue-router'
+
+
+const AZURE_AD_TENANT_ID = process.env.VITE_AZURE_AD_TENANT_ID || import.meta.env.VITE_AZURE_AD_TENANT_ID
+const AZURE_AD_CLIENT_ID = process.env.VITE_AZURE_AD_CLIENT_ID || import.meta.env.VITE_AZURE_AD_CLIENT_ID
+
+const msalConfig = {
+    auth: {
+        clientId: AZURE_AD_CLIENT_ID,
+        authority: `https://login.microsoftonline.com/${AZURE_AD_TENANT_ID}`,
+        redirectUri: "https://local.sentinel.hiveuw.com:8080/login"
+    },
+	cache: {
+		cacheLocation: 'localStorage', // This configures where your cache will be stored
+		storeAuthStateInCookie: false // Set this to "true" if you are having issues on IE11 or Edge
+	}
+};
+
+const msalInstance = new PublicClientApplication(msalConfig);
+msalInstance.initialize();
 
 export async function loginUser(payload: UserLogin, q: QVueGlobals, router?: Router): Promise<string> {
 	const response = await instance.post(`auth/login`, payload)
@@ -87,7 +107,14 @@ export function microsoftLogin(VITE_API_BASE_URL: string) {
 }
 export function azureLogin(VITE_API_BASE_URL: string) {
 	localStorage.setItem('OAuthType', 'azure_ad')
-	window.location.href = 'https://local.api.sentinel.hiveuw.com/auth/azure_ad/pre' // `${VITE_API_BASE_URL}/auth/azure_ad/pre`
+	msalInstance.loginPopup({
+		scopes: [`api://${AZURE_AD_CLIENT_ID}/User.Read`],
+	}).then(async (authResponse) => {
+		const accessToken = authResponse.accessToken;
+		token.set(accessToken)
+		await instance.get(`auth/azure_ad/redirect`)
+		userStore.processAccessToken(accessToken)
+	});
 }
 
 export async function completeGoogleLogin(params, q: QVueGlobals) {
@@ -106,6 +133,7 @@ export async function completeMicrosoftLogin(params, q: QVueGlobals) {
 }
 
 export async function completeAzureLogin(params, q: QVueGlobals) {
-	const response = await instance.get(`auth/azure_ad/redirect`, { params: params })
-	return userStore.processAccessToken(response.data.access_token, q)
+	const response = await instance.get(`auth/azure_ad`, { params: params })
+	userStore.processAccessToken(response.data.access_token, q)
+	await instance.get(`auth/azure_ad/redirect`)
 }

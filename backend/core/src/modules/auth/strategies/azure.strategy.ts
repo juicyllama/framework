@@ -1,37 +1,55 @@
-import { Injectable } from '@nestjs/common'
+import axios from 'axios'
+import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { PassportStrategy, AuthGuard } from '@nestjs/passport'
 import { BearerStrategy, IBearerStrategyOption } from 'passport-azure-ad'
 import { defaultSSOString } from '../../../configs/sso.config.joi'
 import { Env } from '@juicyllama/utils'
+import { UsersService } from '../../..'
 
 const AZURE_AD_CLIENT_ID = process.env.AZURE_AD_CLIENT_ID ?? defaultSSOString
 const AZURE_AD_TENANT_ID = process.env.AZURE_AD_TENANT_ID ?? defaultSSOString
 
+const EXPOSED_SCOPES = ['User.Read'];
+
+
+const config = {
+	credentials: {
+	  tenantID: AZURE_AD_TENANT_ID,
+	  clientID: AZURE_AD_CLIENT_ID,
+	  audience: AZURE_AD_CLIENT_ID,
+	},
+	metadata: {
+	  authority: 'login.microsoftonline.com',
+	  discovery: '.well-known/openid-configuration',
+	  version: 'v2.0',
+	},
+	settings: {
+	  validateIssuer: false,
+	  passReqToCallback: false,
+	  loggingLevel: 'warn',
+	},
+  };
+
+// const EXPOSED_SCOPES = 'openid profile email';
+
 @Injectable()
 export class AzureADStrategy extends PassportStrategy(BearerStrategy, 'azure-ad') {
-	constructor() {
+	constructor(@Inject(forwardRef(() => UsersService)) private usersService: UsersService) {
 		super({
-		  clientID: process.env.AZURE_AD_CLIENT_ID,
-		  clientSecret: process.env.AZURE_AD_CLIENT_SECRET,
-		  identityMetadata: `https://login.microsoftonline.com/${process.env.AZURE_AD_TENANT_ID}/v2.0/.well-known/openid-configuration`,
-		  responseType: 'code',
-		  responseMode: 'query',
-			//   redirectUrl: process.env.AZURE_AD_REDIRECT_URI,
-		  redirectUrl: `${process.env.BASE_URL_APP}/login`,
-		  allowHttpForRedirectUrl: !Env.IsProd(), // Set to false in production
-		  scope: ['openid', 'profile', 'email'],
-		  passReqToCallback: false,
-		  loggingLevel: 'info',
-		});
+			identityMetadata: `https://${config.metadata.authority}/${config.credentials.tenantID}/${config.metadata.version}/${config.metadata.discovery}`,
+			issuer: `https://${config.metadata.authority}/${config.credentials.tenantID}/${config.metadata.version}`,
+			clientID: config.credentials.clientID,
+			audience: config.credentials.audience,
+			validateIssuer: config.settings.validateIssuer,
+			passReqToCallback: config.settings.passReqToCallback,
+			loggingLevel: config.settings.loggingLevel,
+			scope: EXPOSED_SCOPES,
+			loggingNoPII: false,
+		  });
 	  }
 	
-	  async validate(response: any, done: Function) {
-		// Extract user information from the Azure AD response
-		const user = {
-		  ...response,
-		  // additional user processing if needed
-		};
-		done(null, user);
+	  async validate(payload: any) {
+		return await this.usersService.validateEmail(payload.email)
 	  }
 }
 
