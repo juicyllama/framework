@@ -65,9 +65,11 @@ export class ContactsController extends BaseController<T> {
 
 		if (body.tags) {
 			for (const tag of body.tags) {
-				tags.push(await this.tagsService.create({
-					name: tag
-				}))
+				tags.push(
+					await this.tagsService.create({
+						name: tag,
+					}),
+				)
 			}
 		}
 
@@ -119,6 +121,9 @@ export class ContactsController extends BaseController<T> {
 	async update(@Req() req, @AccountId() account_id: number, @Body() data: UpdateDto, @Param() params): Promise<T> {
 		return super.update(req, account_id, data, params)
 	}
+
+	//todo add tag
+	//todo remove tag
 
 	@BulkUploadDecorator(constants)
 	async bulkUpload(
