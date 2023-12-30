@@ -8,6 +8,7 @@ import {
 	StatsMethods,
 	StatsResponseDto,
 	Strings,
+	Logger,
 } from '@juicyllama/utils'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { ImportMode, ControllerConstants, CrudUploadFieldsResponse, BulkUploadResponse } from '../types/common'
@@ -182,8 +183,12 @@ export function ReadChartsDecorator(options: Partial<ControllerConstants>) {
 
 export function ReadOneDecorator(options: Partial<ControllerConstants>) {
 
-	if(!options || !options.primaryKey) {
-		throw new Error('UpdateDecorator requires a primaryKey')
+	if(!options?.primaryKey) {
+		const logger = new Logger()
+		logger.error('ReadOneDecorator requires a primaryKey', {
+			options: options
+		})
+		throw new Error('ReadOneDecorator requires a primaryKey')
 	}
 
 	const decorators = [
@@ -235,11 +240,11 @@ export function ReadOneDecorator(options: Partial<ControllerConstants>) {
  */
 export function UpdateDecorator(options: Partial<ControllerConstants>) {
 
-	console.log('UpdateDecorator constants: ', options)
-	console.log('UpdateDecorator Primary Key: ', `:${options?.primaryKey}`)
-
-
-	if(!options || !options.primaryKey) {
+	if(!options?.primaryKey) {
+		const logger = new Logger()
+		logger.error('UpdateDecorator requires a primaryKey', {
+			options: options
+		})
 		throw new Error('UpdateDecorator requires a primaryKey')
 	}
 
@@ -339,8 +344,12 @@ export function UploadFieldsDecorator(options: Partial<ControllerConstants>) {
  */
 export function DeleteDecorator(options: Partial<ControllerConstants>) {
 
-	if(!options || !options.primaryKey) {
-		throw new Error('UpdateDecorator requires a primaryKey')
+	if(!options?.primaryKey) {
+		const logger = new Logger()
+		logger.error('DeleteDecorator requires a primaryKey', {
+			options: options
+		})
+		throw new Error('DeleteDecorator requires a primaryKey')
 	}
 
 	const decorators = [
