@@ -5,9 +5,11 @@ import { Setting } from './settings.entity'
 import { Logger } from '@juicyllama/utils'
 import { Query } from '../../utils/typeorm/Query'
 import { SettingsController } from './settings.controller'
+import { CacheModule } from '@nestjs/cache-manager'
+import cacheConfig from '../../configs/cache.config'
 
 @Module({
-	imports: [TypeOrmModule.forFeature([Setting])],
+	imports: [CacheModule.registerAsync(cacheConfig()), TypeOrmModule.forFeature([Setting])],
 	controllers: [SettingsController],
 	providers: [SettingsService, Logger, Query],
 	exports: [SettingsService],

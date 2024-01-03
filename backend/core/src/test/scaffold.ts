@@ -6,17 +6,13 @@ import { User } from '../modules/users/users.entity'
 import { Env, Logger } from '@juicyllama/utils'
 import { MockAccountRequest } from './mocks'
 import { testCleanup } from './closedown'
-import { cacheConfig, jwtConfig, systemConfig, validationPipeOptions, databaseConfig, mongodbConfig } from '../configs'
 import { AccountModule } from '../modules/accounts/account.module'
 import { AuthModule } from '../modules/auth/auth.module'
 import { AuthService } from '../modules/auth/auth.service'
 import { Query } from '../utils/typeorm/Query'
 import { DeepPartial, Repository } from 'typeorm'
 import { faker } from '@faker-js/faker'
-import { JwtModule } from '@nestjs/jwt'
-import { ConfigModule } from '@nestjs/config'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { CacheModule } from '@nestjs/cache-manager'
+import { validationPipeOptions } from '../configs/nest.config'
 
 let httpServer: HttpServer
 let moduleRef: TestingModule
@@ -64,7 +60,7 @@ export class Scaffold<T> {
 			pattern: /[!-~]/,
 		})
 
-		const imports = []
+		const imports = [forwardRef(() => AccountModule), forwardRef(() => AuthModule)]
 
 		if (MODULE) {
 			imports.push(forwardRef(() => MODULE))

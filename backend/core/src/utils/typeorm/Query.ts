@@ -955,14 +955,16 @@ export class Query<T> {
 		}
 	}
 
-	includeAccount<T>(whereBase: any, options: {
-		repository: Repository<T>
-		query?: any
-		account_id?: number
-		account_ids?: number[]
-		search_fields?: string[]
-	}): any{
-	
+	includeAccount<T>(
+		whereBase: any,
+		options: {
+			repository: Repository<T>
+			query?: any
+			account_id?: number
+			account_ids?: number[]
+			search_fields?: string[]
+		},
+	): any {
 		if (options.account_id) {
 			if (options.repository.metadata.relations.find(column => column.propertyName === 'account')) {
 				whereBase['account'] = {
@@ -976,7 +978,7 @@ export class Query<T> {
 				}
 			}
 		}
-	
+
 		if (options.account_ids) {
 			if (options.repository.metadata.relations.find(column => column.propertyName === 'account')) {
 				whereBase['account'] = {
@@ -990,10 +992,9 @@ export class Query<T> {
 				}
 			}
 		}
-	
+
 		return whereBase
 	}
-
 }
 
 function splitStringByFirstColon(inputString: string): string[] {
