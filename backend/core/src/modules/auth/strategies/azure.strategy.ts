@@ -24,7 +24,7 @@ const config = {
 	settings: {
 		validateIssuer: Env.IsProd(),
 		passReqToCallback: false,
-		loggingLevel: (Env.IsProd() ? 'warn' : 'log'),
+		loggingLevel: (Env.IsProd() ? 'warn' : 'info'),
 	},
 };
 
