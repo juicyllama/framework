@@ -64,17 +64,7 @@ export class Scaffold<T> {
 			pattern: /[!-~]/,
 		})
 
-		const imports = [
-			JwtModule.register(jwtConfig()),
-			ConfigModule.forRoot({
-				load: [systemConfig, databaseConfig, jwtConfig, cacheConfig],
-				isGlobal: true,
-				envFilePath: '.env'
-			}),
-			CacheModule.registerAsync(cacheConfig()),
-			TypeOrmModule.forRoot(databaseConfig()),
-			TypeOrmModule.forRootAsync(mongodbConfig()),
-			forwardRef(() => AccountModule), forwardRef(() => AuthModule)]
+		const imports = []
 
 		if (MODULE) {
 			imports.push(forwardRef(() => MODULE))
