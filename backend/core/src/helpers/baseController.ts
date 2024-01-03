@@ -57,8 +57,8 @@ export class BaseController<T> {
 
 		return await crudCreate<T>({
 			service: this.service,
-			data: body,
-			account_id: account_id,
+			data: new this.constants.entity(body),
+			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : null,
 		})
 	}
 
@@ -74,7 +74,7 @@ export class BaseController<T> {
 		return await crudFindAll<T>({
 			service: this.service,
 			tQuery: this.tQuery,
-			account_id: account_id,
+			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : null,
 			query: query,
 			searchFields: this.constants.searchFields,
 			order_by: this.constants.defaultOrderBy,
@@ -101,7 +101,7 @@ export class BaseController<T> {
 		return await crudStats<T>({
 			service: this.service,
 			tQuery: this.tQuery,
-			account_id: account_id,
+			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : null,
 			query: query,
 			method: method,
 			searchFields: this.constants.searchFields,
@@ -127,7 +127,7 @@ export class BaseController<T> {
 		}
 
 		return await crudCharts<T>({
-			account_id: account_id,
+			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : null,
 			service: this.service,
 			tQuery: this.tQuery,
 			query,
@@ -161,7 +161,7 @@ export class BaseController<T> {
 			service: this.service,
 			query: query,
 			primaryKey: params[this.constants.primaryKey],
-			account_id: account_id,
+			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : null,
 			currency:
 				this.optional.services.fxService && this.constants.currencyField && this.constants.currencyFields.length
 					? {
@@ -182,10 +182,13 @@ export class BaseController<T> {
 			)
 		}
 
+		console.log('BaseController constants', this.constants)
+		console.log('BaseController Update params', params)
+
 		return await crudUpdate<T>({
 			service: this.service,
-			data: data,
-			primaryKey: params[this.constants.primaryKey],
+			data: new this.constants.entity(data),
+			primaryKey: Number(params[this.constants.primaryKey]),
 		})
 	}
 
@@ -233,14 +236,14 @@ export class BaseController<T> {
 				return await crudPurge<T>({
 					service: this.service,
 					primaryKey: params[this.constants.primaryKey],
-					account_id: account_id,
+					account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : null,
 				})
 			case 'DELETE':
 			default:
 				return await crudDelete<T>({
 					service: this.service,
 					primaryKey: params[this.constants.primaryKey],
-					account_id: account_id,
+					account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : null,
 				})
 		}
 	}

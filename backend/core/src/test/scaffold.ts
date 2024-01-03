@@ -3,16 +3,20 @@ import { forwardRef, HttpServer, INestApplication, ValidationPipe } from '@nestj
 import { AccountService } from '../modules/accounts/account.service'
 import { Account } from '../modules/accounts/account.entity'
 import { User } from '../modules/users/users.entity'
-import { Env, Logger, Security } from '@juicyllama/utils'
+import { Env, Logger } from '@juicyllama/utils'
 import { MockAccountRequest } from './mocks'
 import { testCleanup } from './closedown'
-import { validationPipeOptions } from '../configs'
+import { cacheConfig, jwtConfig, systemConfig, validationPipeOptions, databaseConfig, mongodbConfig } from '../configs'
 import { AccountModule } from '../modules/accounts/account.module'
 import { AuthModule } from '../modules/auth/auth.module'
 import { AuthService } from '../modules/auth/auth.service'
 import { Query } from '../utils/typeorm/Query'
 import { DeepPartial, Repository } from 'typeorm'
 import { faker } from '@faker-js/faker'
+import { JwtModule } from '@nestjs/jwt'
+import { ConfigModule } from '@nestjs/config'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { CacheModule } from '@nestjs/cache-manager'
 
 let httpServer: HttpServer
 let moduleRef: TestingModule
@@ -60,7 +64,17 @@ export class Scaffold<T> {
 			pattern: /[!-~]/,
 		})
 
-		const imports = [forwardRef(() => AccountModule), forwardRef(() => AuthModule)]
+		const imports = [
+			JwtModule.register(jwtConfig()),
+			ConfigModule.forRoot({
+				load: [systemConfig, databaseConfig, jwtConfig, cacheConfig],
+				isGlobal: true,
+				envFilePath: '.env'
+			}),
+			CacheModule.registerAsync(cacheConfig()),
+			TypeOrmModule.forRoot(databaseConfig()),
+			TypeOrmModule.forRootAsync(mongodbConfig()),
+			forwardRef(() => AccountModule), forwardRef(() => AuthModule)]
 
 		if (MODULE) {
 			imports.push(forwardRef(() => MODULE))

@@ -1,9 +1,11 @@
 import { IsString, IsBoolean, IsOptional, IsEmail, MinLength, MaxLength, IsEnum } from 'class-validator'
 import { ApiProperty, PartialType } from '@nestjs/swagger'
 import { UserRole } from './users.enums'
+import { Classes } from '@juicyllama/utils'
+import { BaseResponseDto } from '../../types/common'
+import { SwaggerPropertyDecorator, SwaggerPropertyType } from '../../decorators/Swagger.decorator'
 
 export class UserDto {
-	user_id?: number
 
 	@ApiProperty({
 		description: 'The users first name',
@@ -68,3 +70,10 @@ export class CreateUserDto extends UserDto {
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
+
+export class UserResponeDto extends Classes.ExtendsMultiple([UserDto, BaseResponseDto]) {
+	
+	@SwaggerPropertyDecorator({ description: 'The User ID', example: 1, type: SwaggerPropertyType.NUMBER })
+	readonly user_id: number
+
+}

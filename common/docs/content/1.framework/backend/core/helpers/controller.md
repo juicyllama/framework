@@ -15,13 +15,8 @@ This means that all the data is automatically cached and push messages sent to y
 Import the helpers into your controller:
 
 ```typescript
+import { Controller, forwardRef, Inject, Body, Query, Param, Req, UploadedFile } from '@nestjs/common'
 import {
-	crudCreate,
-	crudFindAll,
-	crudFindOne,
-	crudStats,
-	crudUpdate,
-	crudDelete,
 	Query as TQuery,
 	UserAuth,
 	CreateDecorator,
@@ -31,8 +26,53 @@ import {
 	ReadChartsDecorator,
 	UpdateDecorator,
 	DeleteDecorator,
+	BaseController,
+	AuthService,
+	AccountId,
+	BulkUploadDecorator,
+	BulkUploadDto,
+	BulkUploadResponse,
+	UploadFieldsDecorator,
+	CrudUploadFieldsResponse,
 } from '@juicyllama/core'
-import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto } from '@juicyllama/utils'
+import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
+import { ApiTags } from '@nestjs/swagger'
+```
+
+If you require user authentication include:
+
+```typescript
+@UserAuth()
+```
+
+Specify the documentation Tag: 
+
+```typescript
+@ApiTags('Animals')
+```
+
+Choose the endpoint url: 
+
+```typescript
+@Controller(`/animals`)
+```
+
+Make sure you extend your controller with the base controller and inject the relevent items up to the BaseController
+
+```typescript
+export class AnimalsController extends BaseController<T> {
+	constructor(
+		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
+		@Inject(forwardRef(() => Service)) readonly service: Service,
+		@Inject(forwardRef(() => TQuery)) readonly tQuery: TQuery<T>,
+	) {
+		super(service, tQuery, constants, {
+			services: {
+				authService,
+			},
+		})
+	}
+}
 ```
 
 ## Methods
@@ -44,12 +84,9 @@ The following methods can be used in your application:
 Create a new object in the database.
 
 ```typescript
-@CreateDecorator({entity: E, name: NAME})
-async create(@Body() data: CreateExampleDto): Promise<T> {
-    return await crudCreate<T>({
-        service: this.service,
-        data: data,
-	})
+@CreateDecorator(constants)
+async create(@Req() req, @Body() body: CreateDto, @AccountId() account_id: number): Promise<T> {
+	return super.create(req, body, account_id)
 }
 ```
 
@@ -58,22 +95,9 @@ async create(@Body() data: CreateExampleDto): Promise<T> {
 Find all objects in the database.
 
 ```typescript
-@ReadManyDecorator({
-    entity: E,
-    selectEnum: ExampleSelect,
-    orderByEnum: ExampleOrderBy,
-    relationsEnum: ExampleRelations,
-    name: NAME
-})
-async findAll(@AccountId() account_id: number, @Query() query): Promise<T[]> {
-	return await crudFindAll<T>({
-		service: this.service,
-		tQuery: this.tQuery,
-		account_id: account_id,
-		query: query,
-		searchFields: SEARCH_FIELDS,
-		order_by: DEFAULT_ORDER_BY,
-	})
+@ReadManyDecorator(constants)
+async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Promise<T[]> {
+	return super.findAll(req, query, account_id)
 }
 ```
 
@@ -82,19 +106,9 @@ async findAll(@AccountId() account_id: number, @Query() query): Promise<T[]> {
 Find one object in the database.
 
 ```typescript
-@ReadOneDecorator({
-    entity: E,
-    primaryKey: PRIMARY_KEY,
-    selectEnum: ExampleSelect,
-    relationsEnum: ExampleRelations,
-    name: NAME
-})
+@ReadOneDecorator(constants)
 async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
-	return await crudFindOne<T>({
-		service: this.service,
-		query: query,
-		primaryKey: params[PRIMARY_KEY],
-	})
+	return super.findOne(req, account_id, params, query)
 }
 ```
 
@@ -103,21 +117,15 @@ async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Que
 Get stats about the objects in the database.
 
 ```typescript
-@ReadStatsDecorator({name: NAME})
-	async stats(
-		@AccountId() account_id: number,
-		@Query() query,
-		@Query('method') method?: StatsMethods,
-	): Promise<StatsResponseDto> {
-		return await crudStats<T>({
-			service: this.service,
-			tQuery: this.tQuery,
-			account_id: account_id,
-			query: query,
-			method: method,
-			searchFields: SEARCH_FIELDS,
-		})
-	}
+@ReadStatsDecorator(constants)
+async stats(
+	@Req() req,
+	@Query() query,
+	@AccountId() account_id: number,
+	@Query('method') method: StatsMethods,
+): Promise<any> {
+	return super.stats(req, query, account_id, method)
+}
 ```
 
 ### Charts
@@ -125,57 +133,52 @@ Get stats about the objects in the database.
 Get datasets for pie/line charts from the database.
 
 ```typescript
-	@ReadChartsDecorator({
-		entity: E,
-		name: NAME,
-		selectEnum: ExampleSelect
-	})
-	async charts(
-		@Query() query: any,
-		@Query('search') search: string,
-		@Query('from') from: string,
-		@Query('to') to: string,
-		@Query('fields') fields: string[],
-		@Query('period') period?: ChartsPeriod,
-	): Promise<ChartsResponseDto> {
-		return await crudCharts<T>({
-			service: this.service,
-			tQuery: this.tQuery,
-			query,
-			search,
-			period,
-			fields,
-			...(from && { from: new Date(from) }),
-			...(to && { to: new Date(to) }),
-			searchFields: SEARCH_FIELDS,
-		})
-	}
+@ReadChartsDecorator(constants)
+async charts(
+	@Req() req,
+	@AccountId() account_id: number,
+	@Query() query: any,
+	@Query('search') search: string,
+	@Query('from') from: string,
+	@Query('to') to: string,
+	@Query('fields') fields: string[],
+	@Query('period') period?: ChartsPeriod,
+): Promise<ChartsResponseDto> {
+	return super.charts(req, account_id, query, search, from, to, fields, period)
+}
 ```
 
 ### Bulk Upload
 
-::alert{type="danger"}
-Document here
-::
+```typescript
+@BulkUploadDecorator(constants)
+async bulkUpload(
+	@Req() req,
+	@Body() body: BulkUploadDto,
+	@AccountId() account_id: number,
+	@UploadedFile() file?: Express.Multer.File,
+): Promise<BulkUploadResponse> {
+	return super.bulkUpload(req, body, account_id, file)
+}
+```
 
 ### Bulk Upload Fields
 
-::alert{type="danger"}
-Document here
-::
+```typescript
+@UploadFieldsDecorator(constants)
+async uploadFileFields(): Promise<CrudUploadFieldsResponse> {
+	return super.uploadFileFields()
+}
+```
 
 ### Update
 
 Update an object in the database.
 
 ```typescript
-@UpdateDecorator({entity: E, primaryKey: PRIMARY_KEY, name: NAME})
-async update(@Param() params, @Body() data: UpdateExampleDto): Promise<T> {
-    return await crudUpdate<T>({
-        service: this.service,
-		primaryKey: params[PRIMARY_KEY],
-        data: data,
-	})
+@UpdateDecorator(constants)
+async update(@Req() req, @AccountId() account_id: number, @Body() data: UpdateDto, @Param() params): Promise<T> {
+	return super.update(req, account_id, data, params)
 }
 ```
 
@@ -184,12 +187,9 @@ async update(@Param() params, @Body() data: UpdateExampleDto): Promise<T> {
 Delete an object in the database.
 
 ```typescript
-@DeleteDecorator({entity: E, primaryKey: PRIMARY_KEY, name: NAME})
-async delete(@Param() params): Promise<T> {
-    return await crudDelete<T>({
-        service: this.service,
-		primaryKey: params[PRIMARY_KEY]
-	})
+@DeleteDecorator(constants)
+async remove(@Req() req, @Param() params, @AccountId() account_id: number): Promise<T> {
+	return super.remove(req, params, account_id)
 }
 ```
 
@@ -206,27 +206,25 @@ import { FxService } from '@juicyllama/core'
 const CURRENCY_FIELD = 'currency' // the field containing the current of the record
 const CURRENCY_FIELDS = ['total', 'amount'] //the fields containing amounts to be converted
 
-@ReadOneDecorator({
-    entity: E,
-    primaryKey: PRIMARY_KEY,
-    selectEnum: ExampleSelect,
-    relationsEnum: ExampleRelations,
-    name: NAME,
-	currency_field: CURRENCY_FIELD,
-	currency_fields: CURRENCY_FIELDS
-})
-async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
-	return await crudFindOne<T>({
-		service: this.service,
-		query: query,
-		primaryKey: params[PRIMARY_KEY],
-		currency: {
-			fxService: fxService, //injected in the constructor
-			currency_field: CURRENCY_FIELD,
-			currency_fields: CURRENCY_FIELDS
-			//currency is not required as it will be taken from the query param "currency" passed by the client
-		}
-	})
+export class AnimalsController extends BaseController<T> {
+	constructor(
+		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
+		@Inject(forwardRef(() => Service)) readonly service: Service,
+		@Inject(forwardRef(() => FxService)) readonly fxService: FxService,
+		@Inject(forwardRef(() => TQuery)) readonly tQuery: TQuery<T>,
+	) {
+		super(service, tQuery, constants, {
+			services: {
+				authService,
+				fxService,
+			},
+		})
+	}
+
+	@ReadOneDecorator(constants)
+	async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
+		return super.findOne(req, account_id, params, query)
+	}
 }
 ```
 

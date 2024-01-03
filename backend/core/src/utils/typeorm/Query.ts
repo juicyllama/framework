@@ -542,6 +542,14 @@ export class Query<T> {
 		return (event += this.getTableName(repository))
 	}
 
+	requiresAccountId(repository: Repository<T>): Boolean {
+		return !!repository.metadata.columns.find(column => {
+			if (column.propertyName === 'account_id') {
+				return column
+			}
+		})
+	}
+
 	private mapComparisonOperatorToTypeORMFindOperators<T>(op: ComparisonOperator, value: T): FindOperator<T> {
 		switch (op) {
 			case ComparisonOperator.GT:
@@ -574,7 +582,7 @@ export class Query<T> {
 	}): FindOptionsWhere<T>[] | FindOptionsWhere<T> {
 		const where = []
 
-		const whereBase = {}
+		let whereBase = {}
 
 		if (options.query) {
 			for (const [key, value] of Object.entries(options.query)) {
@@ -610,33 +618,7 @@ export class Query<T> {
 			}
 		}
 
-		if (options.account_id) {
-			if (options.repository.metadata.relations.find(column => column.propertyName === 'account')) {
-				whereBase['account'] = {
-					account_id: options.account_id,
-				}
-			} else if (options.repository.metadata.columns.find(column => column.propertyName === 'account_id')) {
-				whereBase['account_id'] = options.account_id
-			} else if (options.repository.metadata.relations.find(column => column.propertyName === 'accounts')) {
-				whereBase['accounts'] = {
-					account_id: options.account_id,
-				}
-			}
-		}
-
-		if (options.account_ids) {
-			if (options.repository.metadata.relations.find(column => column.propertyName === 'account')) {
-				whereBase['account'] = {
-					account_id: In(options.account_ids),
-				}
-			} else if (options.repository.metadata.columns.find(column => column.propertyName === 'account_id')) {
-				whereBase['account_id'] = In(options.account_ids)
-			} else if (options.repository.metadata.relations.find(column => column.propertyName === 'accounts')) {
-				whereBase['accounts'] = {
-					account_id: In(options.account_ids),
-				}
-			}
-		}
+		whereBase = this.includeAccount(whereBase, options)
 
 		if (options.query?.search?.length === 1 && options.query?.search[0] === 'undefined') {
 			delete options.query.search
@@ -972,6 +954,46 @@ export class Query<T> {
 			return <T>result
 		}
 	}
+
+	includeAccount<T>(whereBase: any, options: {
+		repository: Repository<T>
+		query?: any
+		account_id?: number
+		account_ids?: number[]
+		search_fields?: string[]
+	}): any{
+	
+		if (options.account_id) {
+			if (options.repository.metadata.relations.find(column => column.propertyName === 'account')) {
+				whereBase['account'] = {
+					account_id: options.account_id,
+				}
+			} else if (options.repository.metadata.columns.find(column => column.propertyName === 'account_id')) {
+				whereBase['account_id'] = options.account_id
+			} else if (options.repository.metadata.relations.find(column => column.propertyName === 'accounts')) {
+				whereBase['accounts'] = {
+					account_id: options.account_id,
+				}
+			}
+		}
+	
+		if (options.account_ids) {
+			if (options.repository.metadata.relations.find(column => column.propertyName === 'account')) {
+				whereBase['account'] = {
+					account_id: In(options.account_ids),
+				}
+			} else if (options.repository.metadata.columns.find(column => column.propertyName === 'account_id')) {
+				whereBase['account_id'] = In(options.account_ids)
+			} else if (options.repository.metadata.relations.find(column => column.propertyName === 'accounts')) {
+				whereBase['accounts'] = {
+					account_id: In(options.account_ids),
+				}
+			}
+		}
+	
+		return whereBase
+	}
+
 }
 
 function splitStringByFirstColon(inputString: string): string[] {
