@@ -1,6 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { PassportStrategy, AuthGuard } from '@nestjs/passport'
 import { BearerStrategy, IBearerStrategyOption } from 'passport-azure-ad'
+import { Env } from '@juicyllama/utils'
 import { defaultSSOString } from '../../../configs/sso.config.joi'
 import { UsersService } from '../../..'
 
@@ -21,9 +22,9 @@ const config = {
 		version: 'v2.0',
 	},
 	settings: {
-		validateIssuer: false,
+		validateIssuer: Env.IsProd(),
 		passReqToCallback: false,
-		loggingLevel: 'warn',
+		loggingLevel: (Env.IsProd() ? 'warn' : 'log'),
 	},
 };
 
