@@ -4,11 +4,11 @@ import { BearerStrategy, IBearerStrategyOption } from 'passport-azure-ad'
 import { Env } from '@juicyllama/utils'
 import { defaultSSOString } from '../../../configs/sso.config.joi'
 import { UsersService } from '../../..'
+import { AZURE_AD } from '../auth.constants'
 
 const AZURE_AD_CLIENT_ID = process.env.AZURE_AD_CLIENT_ID ?? defaultSSOString
 const AZURE_AD_TENANT_ID = process.env.AZURE_AD_TENANT_ID ?? defaultSSOString
 const AZURE_AD_EXPOSED_SCOPES = process.env.AZURE_AD_EXPOSED_SCOPES ?? defaultSSOString
-
 
 const config = {
 	credentials: {
@@ -28,11 +28,10 @@ const config = {
 	},
 };
 
-
 export const enableAzureADStrategy = process.env.AZURE_AD_CLIENT_ID && process.env.AZURE_AD_TENANT_ID && process.env.AZURE_AD_CLIENT_SECRET;
 
 @Injectable()
-export class AzureADStrategy extends PassportStrategy(BearerStrategy, 'azure-ad') {
+export class AzureADStrategy extends PassportStrategy(BearerStrategy, AZURE_AD) {
 	constructor(@Inject(forwardRef(() => UsersService)) private usersService: UsersService) {
 		if (!enableAzureADStrategy) throw new Error('Azure AD is not enabled');
 		super({
@@ -53,4 +52,4 @@ export class AzureADStrategy extends PassportStrategy(BearerStrategy, 'azure-ad'
 	}
 }
 
-export const AzureADGuard = AuthGuard('azure-ad')
+export const AzureADGuard = AuthGuard(AZURE_AD)

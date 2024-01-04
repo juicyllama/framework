@@ -81,11 +81,6 @@ export function linkedInLogin(VITE_API_BASE_URL: string) {
 	window.location.href = `${VITE_API_BASE_URL}/auth/linkedin`
 }
 
-export function microsoftLogin(VITE_API_BASE_URL: string) {
-	localStorage.setItem('OAuthType', 'microsoft')
-	window.location.href = `${VITE_API_BASE_URL}/auth/microsoft`
-}
-
 export function azureLogin(VITE_AZURE_AD_TENANT_ID: string, VITE_AZURE_AD_CLIENT_ID: string, VITE_AZURE_AD_EXPOSED_SCOPES: string, router: Router) {
 	const scopes = VITE_AZURE_AD_EXPOSED_SCOPES
 		.split(' ')
@@ -120,10 +115,5 @@ export async function completeGoogleLogin(params, q: QVueGlobals) {
 
 export async function completeLinkedInLogin(params, q: QVueGlobals) {
 	const response = await instance.get(`auth/linkedin/redirect`, { params: params })
-	return userStore.processAccessToken(response.data.access_token, q)
-}
-
-export async function completeMicrosoftLogin(params, q: QVueGlobals) {
-	const response = await instance.get(`auth/microsoft/redirect`, { params: params })
 	return userStore.processAccessToken(response.data.access_token, q)
 }

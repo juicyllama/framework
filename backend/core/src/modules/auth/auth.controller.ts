@@ -148,6 +148,28 @@ export class AuthController {
 		return this.authService.login(req.user)
 	}
 
+	@ApiOperation({
+		summary: 'Linkedin Login - Start',
+	})
+	@UseGuards(AuthGuard('linkedin'))
+	@Get('linkedin')
+	async initiateLinkedinLogin(): Promise<void> {
+		// initiates the Linkedin login
+	}
+
+	@ApiOperation({
+		summary: 'Linkedin Login - Complete',
+	})
+	@ApiOkResponse({
+		description: 'OK',
+		type: LoginResponseDto,
+	})
+	@UseGuards(AuthGuard('linkedin'))
+	@Get('linkedin/redirect')
+	async linkedinAuthRedirect(@Req() req): Promise<LoginResponseDto> {
+		return this.authService.login(req.user)
+	}
+
 	@ApiHideProperty()
 	@UserAuth()
 	@Get('account/check')
