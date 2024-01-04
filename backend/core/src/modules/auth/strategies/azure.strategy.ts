@@ -29,9 +29,12 @@ const config = {
 };
 
 
+export const enableAzureADStrategy = process.env.AZURE_AD_CLIENT_ID && process.env.AZURE_AD_TENANT_ID && process.env.AZURE_AD_CLIENT_SECRET;
+
 @Injectable()
 export class AzureADStrategy extends PassportStrategy(BearerStrategy, 'azure-ad') {
 	constructor(@Inject(forwardRef(() => UsersService)) private usersService: UsersService) {
+		if (!enableAzureADStrategy) throw new Error('Azure AD is not enabled');
 		super({
 			identityMetadata: `https://${config.metadata.authority}/${config.credentials.tenantID}/${config.metadata.version}/${config.metadata.discovery}`,
 			issuer: `https://${config.metadata.authority}/${config.credentials.tenantID}/${config.metadata.version}`,
@@ -46,7 +49,7 @@ export class AzureADStrategy extends PassportStrategy(BearerStrategy, 'azure-ad'
 	}
 
 	async validate(payload: any) {
-		return await this.usersService.validateEmail(payload.email)
+		return enableAzureADStrategy && payload['email'] && await this.usersService.validateEmail(payload.email)
 	}
 }
 

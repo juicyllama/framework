@@ -4,9 +4,12 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { UsersService } from '../../users/users.service'
 import { defaultSSOString } from '../../../configs/sso.config.joi'
 
+export const enableGoogleStrategy = process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 	constructor(@Inject(forwardRef(() => UsersService)) private usersService: UsersService) {
+		if (!enableGoogleStrategy) throw new Error('Google is not enabled');
 		super({
 			clientID: process.env.GOOGLE_CLIENT_ID ?? defaultSSOString,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? defaultSSOString,

@@ -182,11 +182,10 @@ export function ReadChartsDecorator(options: Partial<ControllerConstants>) {
 }
 
 export function ReadOneDecorator(options: Partial<ControllerConstants>) {
-
-	if(!options?.primaryKey) {
+	if (!options?.primaryKey) {
 		const logger = new Logger()
 		logger.error('ReadOneDecorator requires a primaryKey', {
-			options: options
+			options: options,
 		})
 		throw new Error('ReadOneDecorator requires a primaryKey')
 	}
@@ -239,11 +238,10 @@ export function ReadOneDecorator(options: Partial<ControllerConstants>) {
  * Update Decorator
  */
 export function UpdateDecorator(options: Partial<ControllerConstants>) {
-
-	if(!options?.primaryKey) {
+	if (!options?.primaryKey) {
 		const logger = new Logger()
 		logger.error('UpdateDecorator requires a primaryKey', {
-			options: options
+			options: options,
 		})
 		throw new Error('UpdateDecorator requires a primaryKey')
 	}
@@ -343,11 +341,10 @@ export function UploadFieldsDecorator(options: Partial<ControllerConstants>) {
  * Delete Decorators
  */
 export function DeleteDecorator(options: Partial<ControllerConstants>) {
-
-	if(!options?.primaryKey) {
+	if (!options?.primaryKey) {
 		const logger = new Logger()
 		logger.error('DeleteDecorator requires a primaryKey', {
-			options: options
+			options: options,
 		})
 		throw new Error('DeleteDecorator requires a primaryKey')
 	}

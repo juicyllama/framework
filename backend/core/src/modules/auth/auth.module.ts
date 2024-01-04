@@ -14,8 +14,8 @@ import { Role } from './role.entity'
 import { AuthService } from './auth.service'
 import { CronStrategy } from './strategies/cron.strategy'
 import { BasicStrategy } from './strategies/basic.strategy'
-import { GoogleStrategy } from './strategies/google.strategy'
-import { AzureADStrategy } from './strategies/azure.strategy'
+import { GoogleStrategy, enableGoogleStrategy } from './strategies/google.strategy'
+import { AzureADStrategy, enableAzureADStrategy } from './strategies/azure.strategy'
 import { Env, Logger } from '@juicyllama/utils'
 import { Query } from '../../utils/typeorm/Query'
 import { BeaconModule } from '../beacon/beacon.module'
@@ -24,6 +24,14 @@ import { AuthController } from './auth.controller'
 import { MiddlewareAccountId } from '../../middleware'
 import Joi from 'joi'
 import { ssoConfigJoi } from '../../configs/sso.config.joi'
+
+const strategies = [];
+if (enableAzureADStrategy) {
+	strategies.push(AzureADStrategy)
+}
+if (enableGoogleStrategy) {
+	strategies.push(GoogleStrategy)
+}
 
 @Module({
 	imports: [
@@ -50,10 +58,9 @@ import { ssoConfigJoi } from '../../configs/sso.config.joi'
 		JwtStrategy,
 		CronStrategy,
 		BasicStrategy,
-		GoogleStrategy,
-		AzureADStrategy,
 		Logger,
 		Query,
+		...strategies
 	],
 	exports: [AuthService],
 })

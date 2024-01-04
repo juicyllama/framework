@@ -12,14 +12,13 @@ export const PRIMARY_KEY: string = 'user_id'
 export const UPLOAD_FIELDS: string[] = ['first_name', 'last_name', 'email']
 export const UPLOAD_DUPLICATE_FIELD: string = 'email'
 
-
 export const usersConstants: ControllerConstants = {
-    entity: E,
-    name: NAME,
-    primaryKey: PRIMARY_KEY,
-    searchFields: SEARCH_FIELDS,
-    defaultOrderBy: DEFAULT_ORDER_BY,
-    selectEnum: UserSelect,
+	entity: E,
+	name: NAME,
+	primaryKey: PRIMARY_KEY,
+	searchFields: SEARCH_FIELDS,
+	defaultOrderBy: DEFAULT_ORDER_BY,
+	selectEnum: UserSelect,
 	orderByEnum: UserOrderBy,
 	relationsEnum: UserRelations,
 	dtos: {

@@ -13,6 +13,7 @@ export default registerAs(
 			useFactory: async () => {
 				return {
 					type: 'mongodb',
+					name: DATA_CAHCE_NAME,
 					url: buildMongoURLFromAPIKey(),
 					entities: [path.resolve(__dirname, '**', '*.entity.mongo.{ts,js}')],
 					autoLoadEntities: true,

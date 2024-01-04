@@ -5,14 +5,15 @@ import path from 'path'
 import { Env } from '@juicyllama/utils'
 
 export default registerAs(
-	'mongodb',
+	MONGODB,
 	() =>
 		<TypeOrmModuleAsyncOptions>{
 			name: MONGODB,
 			imports: [ConfigModule],
 			useFactory: async () => {
 				return {
-					type: 'mongodb',
+					type: MONGODB,
+					name: MONGODB,
 					url: process.env.MONGODB_URL,
 					entities: [path.resolve(__dirname, '**', '*.entity.mongo.{ts,js}')],
 					autoLoadEntities: true,

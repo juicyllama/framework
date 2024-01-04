@@ -6,7 +6,6 @@ import { BaseResponseDto } from '../../types/common'
 import { SwaggerPropertyDecorator, SwaggerPropertyType } from '../../decorators/Swagger.decorator'
 
 export class UserDto {
-
 	@ApiProperty({
 		description: 'The users first name',
 		example: 'Jon',
@@ -72,8 +71,6 @@ export class CreateUserDto extends UserDto {
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
 
 export class UserResponeDto extends Classes.ExtendsMultiple([UserDto, BaseResponseDto]) {
-	
 	@SwaggerPropertyDecorator({ description: 'The User ID', example: 1, type: SwaggerPropertyType.NUMBER })
 	readonly user_id: number
-
 }
