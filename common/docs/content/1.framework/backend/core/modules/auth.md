@@ -47,6 +47,7 @@ The application supports SSO via the following providers:
 ```bash
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
+GOOGLE_LOGIN_SCOPES='email profile' # space separated scopes. if not provided "email profile" will be used as default
 ```
 
 9. To show the Google SSO button on the frontend, add the following environment variables to your frontend application:<br>

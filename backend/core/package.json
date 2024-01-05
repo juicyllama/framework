@@ -35,7 +35,7 @@
         "before:commit": "pnpm run lint && pnpm run format && pnpm run test && pnpm run build"
     },
     "dependencies": {
-        "@juicyllama/utils": "workspace:^",
-        "@juicyllama/dev": "workspace:^"
+        "@juicyllama/dev": "workspace:^",
+        "@juicyllama/utils": "workspace:^"
     }
 }
