@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import { Logger } from './Logger'
+import { Logger } from './Logger.js'
 
 const logger = new Logger()
 

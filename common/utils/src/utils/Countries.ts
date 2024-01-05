@@ -1,6 +1,6 @@
 import COUNTRIES from '../assets/countries.json'
 import { isNil } from 'lodash'
-import { Logger } from './Logger'
+import { Logger } from './Logger.js'
 
 export class Countries {
 	/**

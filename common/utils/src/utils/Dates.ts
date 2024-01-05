@@ -1,6 +1,6 @@
-import { DateRangeDto } from '../dto/date.dto'
-import { StepType } from '../enums/stats'
-import { month_names, month_names_short, SubscriptionFrequency } from '../enums/dates'
+import { DateRangeDto } from '../dto/date.dto.js'
+import { StepType } from '../enums/stats.js'
+import { month_names, month_names_short, SubscriptionFrequency } from '../enums/dates.js'
 
 const nth = function (d) {
 	if (d > 3 && d < 21) return 'th'

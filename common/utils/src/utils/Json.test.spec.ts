@@ -1,5 +1,5 @@
-import { Json } from './Json'
-import { File } from './File'
+import { Json } from './Json.js'
+import { File } from './File.js'
 import { faker } from '@faker-js/faker'
 
 describe('JSON', () => {

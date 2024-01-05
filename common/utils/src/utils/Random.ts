@@ -1,6 +1,6 @@
 import FACTS from '../assets/llama.facts.json'
 import { faker } from '@faker-js/faker'
-import { Strings } from './Strings'
+import { Strings } from './Strings.js'
 
 const UPPERCASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
 	LOWERCASE = 'abcdefghijklmnopqrstuvwxyz',

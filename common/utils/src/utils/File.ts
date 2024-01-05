@@ -1,9 +1,9 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import * as crypto from 'crypto'
-import { Logger } from './Logger'
+import { Logger } from './Logger.js'
 import { Readable } from 'stream'
-import { Random } from './Random'
+import { Random } from './Random.js'
 import axios from 'axios'
 import * as mimetypes from '../assets/mimetypes.json'
 

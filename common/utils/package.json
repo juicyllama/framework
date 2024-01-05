@@ -1,6 +1,7 @@
 {
     "name": "@juicyllama/utils",
     "version": "0.3.2",
+    "type": "module",
     "description": "Juicyllama Utils",
     "author": {
         "name": "JuicyLlama Studio",
@@ -18,11 +19,14 @@
     "bugs": "https://github.com/juicyllama/framework",
     "license": "BSD-4-Clause",
     "readmeFilename": "README.md",
-    "main": "dist/index.js",
+    "exports": "./dist/index.js",
     "files": [
         "dist/**/*",
         "*.md"
     ],
+    "engines": {
+        "node": ">=16"
+    },
     "types": "dist/index.d.ts",
     "scripts": {
         "prebuild": "rimraf dist",
@@ -31,8 +35,7 @@
         "start:dev": "tsc -w",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests",
-        "test:geocoding": "export $(grep -v '^#' ../.env.development) && NODE_ENV=test && jest --runInBand --testPathPattern=common/utils/src/utils/Geocoding.test.spec.ts"
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && vitest run"
     },
     "dependencies": {
         "@turf/turf": "^6.5.0",

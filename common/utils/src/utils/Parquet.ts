@@ -1,6 +1,6 @@
 import { ParquetWriter, ParquetSchema } from 'parquetjs'
 import * as fs from 'fs'
-import { File } from './File'
+import { File } from './File.js'
 
 export class Parquet {
 	/**
