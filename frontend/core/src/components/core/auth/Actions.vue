@@ -15,7 +15,7 @@ const props = defineProps<{
 	adazure?: boolean
 }>()
 
-const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://local.api.sentinel.hiveuw.com'
+const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 const VITE_AZURE_AD_TENANT_ID = import.meta.env.VITE_AZURE_AD_TENANT_ID
 const VITE_AZURE_AD_CLIENT_ID = import.meta.env.VITE_AZURE_AD_CLIENT_ID
 const VITE_AZURE_AD_EXPOSED_SCOPES = import.meta.env.VITE_AZURE_AD_EXPOSED_SCOPES

@@ -24,6 +24,7 @@ import { AuthController } from './auth.controller'
 import { MiddlewareAccountId } from '../../middleware'
 import Joi from 'joi'
 import { ssoConfigJoi } from '../../configs/sso.config.joi'
+import { enableLinkedinStrategy, LinkedinStrategy } from './strategies/linkedin.strategy'
 
 const strategies = [];
 if (enableAzureADStrategy) {
@@ -31,6 +32,9 @@ if (enableAzureADStrategy) {
 }
 if (enableGoogleStrategy) {
 	strategies.push(GoogleStrategy)
+}
+if (enableLinkedinStrategy) {
+	strategies.push(LinkedinStrategy)
 }
 
 @Module({
