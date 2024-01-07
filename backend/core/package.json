@@ -23,6 +23,11 @@
         "dist/**/*",
         "*.md"
     ],
+    "type": "module",
+    "exports": "./dist/index.js",
+    "engines": {
+        "node": ">=16"
+    },
     "types": "dist/index.d.ts",
     "scripts": {
         "prebuild": "rimraf dist",
