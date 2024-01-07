@@ -1,6 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 import { registerAs } from '@nestjs/config'
-import { CustomNamingStrategy } from '../utils/typeorm/naming.strategy'
+import { CustomNamingStrategy } from '../utils/typeorm/naming.strategy.js'
 import { Env } from '@juicyllama/utils'
 import * as path from 'path'
 import { config } from 'dotenv'

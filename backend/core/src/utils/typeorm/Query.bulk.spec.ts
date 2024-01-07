@@ -1,10 +1,10 @@
-import { UsersService } from '../../modules/users/users.service'
-import { User } from '../../modules/users/users.entity'
+import { UsersService } from '../../modules/users/users.service.js'
+import { User } from '../../modules/users/users.entity.js'
 import { Scaffold, ScaffoldDto } from '../../test'
-import { UsersModule } from '../../modules/users/users.module'
-import { ImportMode } from '../../types/common'
+import { UsersModule } from '../../modules/users/users.module.js'
+import { ImportMode } from '../../types/common.js'
 import { Csv, File } from '@juicyllama/utils'
-import { UPLOAD_DUPLICATE_FIELD } from '../../modules/users/users.constants'
+import { UPLOAD_DUPLICATE_FIELD } from '../../modules/users/users.constants.js'
 import { faker } from '@faker-js/faker'
 
 const E = User

@@ -7,8 +7,8 @@ import expressAuth from 'express-basic-auth'
 import * as handlebars from 'express-handlebars'
 import pathModule from 'path'
 import { resolve } from 'url'
-import { LogoOptions, RedocDocument, RedocOptions } from './interfaces'
-import { schema } from './model'
+import { LogoOptions, RedocDocument, RedocOptions } from './interfaces/index.js'
+import { schema } from './model/options.model.js'
 
 const logger = new Logger()
 

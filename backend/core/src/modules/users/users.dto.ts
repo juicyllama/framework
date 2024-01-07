@@ -1,9 +1,9 @@
 import { IsString, IsBoolean, IsOptional, IsEmail, MinLength, MaxLength, IsEnum } from 'class-validator'
 import { ApiProperty, PartialType } from '@nestjs/swagger'
-import { UserRole } from './users.enums'
+import { UserRole } from './users.enums.js'
 import { Classes } from '@juicyllama/utils'
-import { BaseResponseDto } from '../../types/common'
-import { SwaggerPropertyDecorator, SwaggerPropertyType } from '../../decorators/Swagger.decorator'
+import { BaseResponseDto } from '../../types/common.js'
+import { SwaggerPropertyDecorator, SwaggerPropertyType } from '../../decorators/Swagger.decorator.js'
 
 export class UserDto {
 	@ApiProperty({

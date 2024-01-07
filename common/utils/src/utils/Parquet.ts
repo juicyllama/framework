@@ -1,4 +1,4 @@
-import { ParquetWriter, ParquetSchema } from 'parquetjs'
+import parquet from 'parquetjs'
 import * as fs from 'fs'
 import { File } from './File.js'
 
@@ -11,10 +11,10 @@ export class Parquet {
 		path: string
 		file: Buffer
 	}> {
-		let pSchema: ParquetSchema
+		let pSchema: parquet.ParquetSchema
 
 		try {
-			pSchema = new ParquetSchema(options.schema)
+			pSchema = new parquet.ParquetSchema(options.schema)
 		} catch (e) {
 			throw new Error(`Error creating parquet schema: ${e}`)
 		}
@@ -22,7 +22,7 @@ export class Parquet {
 		//create file
 		const tmp = await File.createTempFilePath(options.fileName)
 
-		const writer = await ParquetWriter.openFile(pSchema, tmp.filePath)
+		const writer = await parquet.ParquetWriter.openFile(pSchema, tmp.filePath)
 
 		for (const row of options.data) {
 			if (options.rowFunc) {

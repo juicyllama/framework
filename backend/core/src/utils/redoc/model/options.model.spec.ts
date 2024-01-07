@@ -2,7 +2,7 @@ import 'reflect-metadata'
 
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { Test } from '@nestjs/testing'
-import { schema } from './options.model'
+import { schema } from './options.model.js'
 
 describe('options.models.ts', () => {
 	it('should work for a swagger document without document.info', async () => {

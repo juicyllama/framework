@@ -1,11 +1,11 @@
 import { IsEnum, IsNumber, IsDate, IsString, IsObject } from 'class-validator'
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
-import { BeaconStatus } from '../beacon.enums'
-import { BeaconCommunicationDto } from '../beacon.dto'
+import { BeaconStatus } from '../beacon.enums.js'
+import { BeaconCommunicationDto } from '../beacon.dto.js'
 
 @Entity('beacon_email')
 export class BeaconEmail {
-	@PrimaryGeneratedColumn()
+	@PrimaryGeneratedColumn({ type: 'bigint'})
 	@IsNumber()
 	readonly email_id: number
 
@@ -13,11 +13,11 @@ export class BeaconEmail {
 	@IsObject()
 	communication: BeaconCommunicationDto
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'varchar' })
 	@IsString()
 	app_integration_name?: string
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'bigint' })
 	@IsNumber()
 	app_email_id?: number
 
@@ -33,25 +33,25 @@ export class BeaconEmail {
 	@IsObject()
 	cta?: any
 
-	@Column({ default: BeaconStatus.PENDING })
+	@Column({ default: BeaconStatus.PENDING, type: 'varchar' })
 	@IsEnum(BeaconStatus)
 	status?: BeaconStatus
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'varchar' })
 	@IsString()
 	unique?: string
 
-	@CreateDateColumn()
+	@CreateDateColumn({ type: 'timestamp'})
 	readonly created_at: Date
 
-	@UpdateDateColumn()
+	@UpdateDateColumn({ type: 'timestamp'})
 	updated_at: Date
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'timestamp' })
 	@IsDate()
 	sent_at?: Date
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'timestamp' })
 	@IsDate()
 	delivered_at?: Date
 

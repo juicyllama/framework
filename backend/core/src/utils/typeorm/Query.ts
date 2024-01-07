@@ -18,12 +18,12 @@ import {
 	FindOptionsWhere,
 } from 'typeorm'
 import _ from 'lodash'
-import { TypeOrm } from './TypeOrm'
-import { isNil, omitBy } from 'lodash'
+const { isNil, omitBy } = _
+import { TypeOrm } from './TypeOrm.js'
 import { ComparisonOperator, Enums, Env, getMySQLTimeInterval, Logger, SupportedCurrencies } from '@juicyllama/utils'
-import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder'
-import { ChartOptions, CurrencyOptions } from '../../types/typeorm'
-import { ImportMode, BulkUploadResponse, ChartResult } from '../../types/common'
+import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder.js'
+import { ChartOptions, CurrencyOptions } from '../../types/typeorm.js'
+import { ImportMode, BulkUploadResponse, ChartResult } from '../../types/common.js'
 
 const logger = new Logger()
 

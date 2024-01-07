@@ -1,2 +1,2 @@
-export * from './redocDocument.interface'
-export * from './redocOptions.interface'
+export * from './redocDocument.interface.js'
+export * from './redocOptions.interface.js'

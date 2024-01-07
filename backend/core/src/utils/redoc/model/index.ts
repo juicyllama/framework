@@ -1,1 +1,1 @@
-export * from './options.model'
+export * from './options.model.js'

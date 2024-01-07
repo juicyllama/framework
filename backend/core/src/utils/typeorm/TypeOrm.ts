@@ -1,8 +1,9 @@
 import { MoreThan, Repository, ColumnType } from 'typeorm'
-import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
-import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere'
-import { isNil, omitBy } from 'lodash'
-import { FindOneOptions } from 'typeorm/find-options/FindOneOptions'
+import { FindManyOptions } from 'typeorm/find-options/FindManyOptions.js'
+import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere.js'
+import _ from 'lodash'
+const { isNil, omitBy } = _
+import { FindOneOptions } from 'typeorm/find-options/FindOneOptions.js'
 
 export class TypeOrm {
 	/**

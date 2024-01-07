@@ -7,7 +7,7 @@ import {
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 import { AuthGuard } from '@nestjs/passport'
-import { AZURE_AD, JWT } from '../modules/auth/auth.constants'
+import { AZURE_AD, JWT } from '../modules/auth/auth.constants.js'
 
 export function UserAuth(options?: { skipAccountId?: boolean }) {
 	const decorators = [ApiBearerAuth(), UseGuards(AuthGuard([JWT, AZURE_AD]))]

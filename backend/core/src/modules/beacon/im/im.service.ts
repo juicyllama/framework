@@ -1,14 +1,14 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { BeaconMessageDto } from '../beacon.dto'
+import { BeaconMessageDto } from '../beacon.dto.js'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
 import { ConfigService } from '@nestjs/config'
 import { Env, Logger, Modules } from '@juicyllama/utils'
 import { LazyModuleLoader } from '@nestjs/core'
-import { Query } from '../../../utils/typeorm/Query'
-import { BeaconIm } from './im.entity'
-import { AppIntegrationName } from '../../../types'
-import { BeaconStatus } from '../beacon.enums'
+import { Query } from '../../../utils/typeorm/Query.js'
+import { BeaconIm } from './im.entity.js'
+import { AppIntegrationName } from '../../../types/index.js'
+import { BeaconStatus } from '../beacon.enums.js'
 
 @Injectable()
 export class BeaconImService {

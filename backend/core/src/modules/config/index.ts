@@ -1,2 +1,2 @@
-export * from './config.module'
-export * from './config.provider'
+export * from './config.module.js'
+export * from './config.provider.js'

@@ -12,10 +12,10 @@ import {
 	MaxLength,
 	MinLength,
 } from 'class-validator'
-import { BaseEntity } from '../../helpers/baseEntity'
-import { Account } from '../accounts/account.entity'
-import { UserAvatarType } from './users.enums'
-import { Role } from '../auth/role.entity'
+import { BaseEntity } from '../../helpers/baseEntity.js'
+import { Account } from '../accounts/account.entity.js'
+import { UserAvatarType } from './users.enums.js'
+import { Role } from '../auth/role.entity.js'
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -25,41 +25,41 @@ export class User extends BaseEntity {
 	@IsString()
 	@MinLength(2)
 	@MaxLength(50)
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'varchar' })
 	first_name?: string
 
 	@IsString()
 	@MinLength(2)
 	@MaxLength(50)
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'varchar' })
 	@Expose({ groups: ['ADMIN', 'OWNER'] })
 	last_name?: string
 
-	@Column({ unique: true })
+	@Column({ unique: true, type: 'varchar' })
 	@IsEmail()
 	@Expose({ groups: ['ADMIN', 'OWNER'] })
 	readonly email: string
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'varchar' })
 	@IsString()
 	@Exclude()
 	password?: string
 
-	@Column({ default: true })
+	@Column({ default: true, type: 'varchar' })
 	@IsBoolean()
 	@Expose({ groups: ['ADMIN', 'OWNER'] })
 	password_reset?: boolean
 
-	@Column({ default: UserAvatarType.NONE })
+	@Column({ default: UserAvatarType.NONE, type: 'varchar' })
 	@IsEnum(UserAvatarType)
 	avatar_type: UserAvatarType
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'varchar' })
 	@IsUrl()
 	@IsOptional()
 	avatar_image_url?: string
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'timestamp' })
 	@IsDate()
 	@Expose({ groups: ['ADMIN', 'OWNER'] })
 	last_login_at?: Date

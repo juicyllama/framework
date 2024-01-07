@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config'
 import Strategy from 'passport-headerapikey'
 
 @Injectable()
+// @ts-ignore
 export class CronStrategy extends PassportStrategy(Strategy, 'cron') {
 	constructor(@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService) {
 		super({ header: 'CRON-API-KEY', prefix: '' }, true, async (apiKey, done) => {

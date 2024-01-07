@@ -1,8 +1,8 @@
 import { IsOptional, IsNumber, IsJSON, IsString, MaxLength, MinLength } from 'class-validator'
 import { Column, ManyToOne, Entity, PrimaryGeneratedColumn, Unique, JoinColumn } from 'typeorm'
-import { BaseEntity } from '../../helpers'
-import { Account } from '../accounts/account.entity'
-import { User } from '../users/users.entity'
+import { BaseEntity } from '../../helpers/index.js'
+import { Account } from '../accounts/account.entity.js'
+import { User } from '../users/users.entity.js'
 
 @Entity('settings')
 @Unique(['key'])
@@ -10,7 +10,7 @@ export class Setting extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id: number
 
-	@Column()
+	@Column({ type: 'varchar'})
 	@IsString()
 	@MinLength(1)
 	@MaxLength(255)
@@ -26,7 +26,7 @@ export class Setting extends BaseEntity {
 	@JoinColumn({ name: 'account_id' })
 	account?: Account
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'bigint' })
 	@IsNumber()
 	@IsOptional()
 	account_id?: number
@@ -37,7 +37,7 @@ export class Setting extends BaseEntity {
 	@JoinColumn({ name: 'user_id' })
 	user?: User
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'bigint' })
 	@IsNumber()
 	@IsOptional()
 	user_id?: number

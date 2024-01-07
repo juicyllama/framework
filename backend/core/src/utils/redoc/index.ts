@@ -1,2 +1,2 @@
-export * from './interfaces'
-export * from './redoc-module'
+export * from './interfaces/index.js'
+export * from './redoc-module.js'

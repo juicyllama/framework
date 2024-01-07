@@ -1,7 +1,6 @@
 {
     "name": "@juicyllama/utils",
     "version": "0.3.2",
-    "type": "module",
     "description": "Juicyllama Utils",
     "author": {
         "name": "JuicyLlama Studio",
@@ -19,11 +18,12 @@
     "bugs": "https://github.com/juicyllama/framework",
     "license": "BSD-4-Clause",
     "readmeFilename": "README.md",
-    "exports": "./dist/index.js",
     "files": [
         "dist/**/*",
         "*.md"
     ],
+    "type": "module",
+    "exports": "./dist/index.js",
     "engines": {
         "node": ">=16"
     },

@@ -2,7 +2,7 @@ import { DynamicModule, Module, Type } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { plainToInstance } from 'class-transformer'
 import { validateSync } from 'class-validator'
-import { getConfigToken } from './config.provider'
+import { getConfigToken } from './config.provider.js'
 
 @Module({})
 export class ConfigValidationModule {

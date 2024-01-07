@@ -5,6 +5,7 @@
         "rootDir": "./src",
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
+        "lib": ["es5", "es6", "dom"]
     },
     "include": [
         "src/**/*.ts",

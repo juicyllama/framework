@@ -1,8 +1,8 @@
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy } from 'passport-google-oauth20'
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { UsersService } from '../../users/users.service'
-import { defaultSSOString } from '../../../configs/sso.config.joi'
+import { UsersService } from '../../users/users.service.js'
+import { defaultSSOString } from '../../../configs/sso.config.joi.js'
 
 export const enableGoogleStrategy = process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
 

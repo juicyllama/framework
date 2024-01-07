@@ -1,15 +1,15 @@
 import { forwardRef, Module } from '@nestjs/common'
-import { AccountModule } from './accounts/account.module'
-import { UsersModule } from './users/users.module'
+import { AccountModule } from './accounts/account.module.js'
+import { UsersModule } from './users/users.module.js'
 import {
 	AuthModule,
 	BeaconModule,
-	ConfigValidationModule,
 	FxModule,
 	SettingsModule,
 	StorageModule,
 	TagsModule,
-} from '..'
+} from '../index.js'
+import { ConfigValidationModule } from './config/config.module.js'
 
 @Module({
 	imports: [

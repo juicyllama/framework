@@ -11,7 +11,7 @@ import {
 	Logger,
 } from '@juicyllama/utils'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { ImportMode, ControllerConstants, CrudUploadFieldsResponse, BulkUploadResponse } from '../types/common'
+import { ImportMode, ControllerConstants, CrudUploadFieldsResponse, BulkUploadResponse } from '../types/common.js'
 
 /**
  * Create Decorator

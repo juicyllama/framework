@@ -1,8 +1,8 @@
-import { Account } from '../../modules/accounts/account.entity'
+import { Account } from '../../modules/accounts/account.entity.js'
 import { Scaffold, ScaffoldDto } from '../../test'
 import { faker } from '@faker-js/faker'
-import { AccountService } from '../../modules/accounts/account.service'
-import { AccountModule } from '../../modules/accounts/account.module'
+import { AccountService } from '../../modules/accounts/account.service.js'
+import { AccountModule } from '../../modules/accounts/account.module.js'
 
 type T = Account
 const E = Account

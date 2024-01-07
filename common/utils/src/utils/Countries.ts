@@ -1,5 +1,10 @@
-import COUNTRIES from '../assets/countries.json'
-import { isNil } from 'lodash'
+import COUNTRIES from '../assets/countries.json' assert {
+	type: 'json',
+	integrity: 'sha384-ABC123'
+  };
+  
+import _ from 'lodash'
+const { isNil } = _
 import { Logger } from './Logger.js'
 
 export class Countries {

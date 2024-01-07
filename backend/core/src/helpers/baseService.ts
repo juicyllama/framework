@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
-import { Query } from '../utils/typeorm/Query'
+import { Query } from '../utils/typeorm/Query.js'
 import { DeepPartial, FindOneOptions, Repository } from 'typeorm'
-import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
-import { BeaconService } from '../modules/beacon/beacon.service'
+import { FindManyOptions } from 'typeorm/find-options/FindManyOptions.js'
+import { BeaconService } from '../modules/beacon/beacon.service.js'
 import { Cache } from 'cache-manager'
 import { CachePeriod, JLCache, Logger } from '@juicyllama/utils'
-import { ChartOptions, CurrencyOptions } from '../types/typeorm'
-import { ImportMode, BulkUploadResponse } from '../types/common'
+import { ChartOptions, CurrencyOptions } from '../types/typeorm.js'
+import { ImportMode, BulkUploadResponse } from '../types/common.js'
 
 /**
  * Base service for all services

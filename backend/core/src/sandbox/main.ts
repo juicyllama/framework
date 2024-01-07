@@ -4,9 +4,9 @@ import { ValidationPipe } from '@nestjs/common'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import 'reflect-metadata'
 import { Enviroment, Logger } from '@juicyllama/utils'
-import { RedocModule } from '../utils/redoc'
-import { redocConfig, TypeOrmFilter, validationPipeOptions } from '../index'
-import { SandboxModule } from './sandbox.module'
+import { RedocModule } from '../utils/redoc/index.js'
+import { redocConfig, TypeOrmFilter, validationPipeOptions } from '../index.js'
+import { SandboxModule } from './sandbox.module.js'
 
 const domain = 'main::bootstrap'
 const logger = new Logger()

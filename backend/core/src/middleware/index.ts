@@ -1,1 +1,1 @@
-export { MiddlewareAccountId } from './AuthCheck'
+export { MiddlewareAccountId } from './AuthCheck.js'

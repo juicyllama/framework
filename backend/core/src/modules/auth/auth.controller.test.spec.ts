@@ -1,10 +1,10 @@
 import request from 'supertest'
-import { Role } from './role.entity'
+import { Role } from './role.entity.js'
 import { faker } from '@faker-js/faker'
-import { AuthModule } from './auth.module'
-import { AuthService } from './auth.service'
+import { AuthModule } from './auth.module.js'
+import { AuthService } from './auth.service.js'
 import { Scaffold, ScaffoldDto, TestService } from '../../test'
-import { PRIMARY_KEY } from '../users/users.constants'
+import { PRIMARY_KEY } from '../users/users.constants.js'
 import { METHOD } from '../../types'
 
 const E = Role

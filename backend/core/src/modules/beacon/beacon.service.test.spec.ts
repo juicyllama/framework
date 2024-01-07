@@ -1,7 +1,7 @@
-import { BeaconService } from './beacon.service'
-import { BeaconModule } from './beacon.module'
+import { BeaconService } from './beacon.service.js'
+import { BeaconModule } from './beacon.module.js'
 import { Scaffold, ScaffoldDto } from '../../test'
-import { Account } from '../accounts/account.entity'
+import { Account } from '../accounts/account.entity.js'
 
 const MODULE = BeaconModule
 const SERVICE = BeaconService

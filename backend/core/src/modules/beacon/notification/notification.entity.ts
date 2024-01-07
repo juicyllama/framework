@@ -1,12 +1,12 @@
 import { IsNumber, IsDate, IsString, IsArray } from 'class-validator'
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { User } from '../../users/users.entity'
-import { Account } from '../../accounts/account.entity'
-import { BaseEntity } from '../../../helpers'
+import { User } from '../../users/users.entity.js'
+import { Account } from '../../accounts/account.entity.js'
+import { BaseEntity } from '../../../helpers/index.js'
 
 @Entity('beacon_notification')
 export class BeaconNotification extends BaseEntity {
-	@PrimaryGeneratedColumn()
+	@PrimaryGeneratedColumn({ type: 'bigint'})
 	@IsNumber()
 	readonly notification_id: number
 
@@ -23,7 +23,7 @@ export class BeaconNotification extends BaseEntity {
 	@IsArray()
 	users?: User[]
 
-	@Column()
+	@Column({ type: 'bigint'})
 	@IsString()
 	subject: string
 
@@ -31,11 +31,11 @@ export class BeaconNotification extends BaseEntity {
 	@IsString()
 	markdown: string
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'varchar' })
 	@IsString()
 	unique?: string
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'timestamp' })
 	@IsDate()
 	removed_at?: Date
 

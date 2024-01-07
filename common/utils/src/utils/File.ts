@@ -5,7 +5,10 @@ import { Logger } from './Logger.js'
 import { Readable } from 'stream'
 import { Random } from './Random.js'
 import axios from 'axios'
-import * as mimetypes from '../assets/mimetypes.json'
+import * as mimetypes from '../assets/mimetypes.json' assert {
+	type: 'json',
+	integrity: 'sha384-ABC123'
+}
 
 const logger = new Logger()
 
