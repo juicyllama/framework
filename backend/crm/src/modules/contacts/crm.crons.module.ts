@@ -7,10 +7,10 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { JwtModule } from '@nestjs/jwt'
 import { CrmCronsContactsService } from './crm.crons.contacts.service'
 import { CRMCronsController } from './crm.cron.controller'
-import { ContactsModule } from '../contacts/contacts.module'
-import { ContactPhoneService } from '../contacts/phone/phone.service'
-import { Contact } from '../contacts/contacts.entity'
-import { ContactPhone } from '../contacts/phone/phone.entity'
+import { ContactsModule } from './contacts.module'
+import { ContactPhoneService } from './phone/phone.service'
+import { Contact } from './contacts.entity'
+import { ContactPhone } from './phone/phone.entity'
 
 @Module({
 	imports: [

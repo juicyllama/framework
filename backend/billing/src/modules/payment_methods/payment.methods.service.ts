@@ -234,7 +234,6 @@ export class PaymentMethodsService extends BaseService<T> {
 				const mollieRedirect = await mollieService.addCard(<Account>payment_method.account, description)
 				payment_method.app_integration_name = AppIntegrationName.mollie
 				payment_method.redirect_url = mollieRedirect
-
 				return payment_method
 			} catch (e: any) {
 				this.logger.error(`[${domain}] Failed to add card: ${e.message}`, e)
@@ -280,4 +279,43 @@ export class PaymentMethodsService extends BaseService<T> {
 	// 		}
 	// 	}
 	// }
+
+	async syncPaymentDetails(payment_method: T): Promise<void> {
+		const domain = 'billing::PaymentMethodsService::syncPaymentDetails'
+
+		switch (payment_method.method) {
+			case PaymentMethodType.creditcard:
+				switch (payment_method.app_integration_name) {
+					case AppIntegrationName.mollie:
+						if (Modules.mollie.isInstalled) {
+							const { MollieModule, MollieService } = await Modules.mollie.load()
+							try {
+								const mollieModule = await this.lazyModuleLoader.load(() => MollieModule)
+								const mollieService = mollieModule.get(MollieService)
+								const mandate = await mollieService.getMandate(payment_method.account)
+
+								if (!mandate) {
+									this.logger.error(`[${domain}] Failed to sync mandate`)
+									return
+								}
+
+								await this.update({
+									payment_method_id: payment_method.payment_method_id,
+									details: {
+										cardHolder: mandate.details.cardHolder,
+										cardNumber: mandate.details.cardNumber,
+										cardLabel: mandate.details.cardLabel,
+										cardFingerprint: mandate.details.cardFingerprint,
+										cardExpiryDate: mandate.details.cardExpiryDate,
+									},
+								})
+							} catch (e: any) {
+								this.logger.error(`[${domain}] Failed to sync mandate: ${e.message}`)
+							}
+						}
+						break
+				}
+				break
+		}
+	}
 }

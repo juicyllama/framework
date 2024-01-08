@@ -1,204 +1,61 @@
+import { Controller, forwardRef, Post, Inject, Param, Query, Req } from '@nestjs/common'
+import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
 import {
-	BadRequestException,
-	Controller,
-	forwardRef,
-	Get,
-	Post,
-	Inject,
-	NotFoundException,
-	Param,
-	Query,
-	Req,
-} from '@nestjs/common'
-import { ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
-import { IsNull } from 'typeorm'
-import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto, SupportedCurrencies } from '@juicyllama/utils'
-import { AccountId, AuthService, ReadManyDecorator, UserAuth } from '@juicyllama/core'
-import { Query as JLQuery } from '@juicyllama/core/dist/utils/typeorm/Query'
-import { ReadChartsDecorator } from '@juicyllama/core/dist/decorators/crud.decorator'
-import { crudCharts } from '@juicyllama/core/dist/helpers/crudController'
-import { StorageService } from '@juicyllama/core/dist/modules/storage/storage.service'
-import { Invoice } from './invoices.entity'
+	AccountId,
+	AuthService,
+	ReadManyDecorator,
+	UserAuth,
+	Query as TQuery,
+	ReadChartsDecorator,
+	ReadStatsDecorator,
+	ReadOneDecorator,
+	FxService,
+	BaseController,
+} from '@juicyllama/core'
 import { InvoicesService } from './invoices.service'
-import { InvoiceOrderBy, InvoiceRelations, InvoiceSelect } from './invoices.enums'
-import { T, E, SEARCH_FIELDS, BILLING_INVOICES_NAME } from './invoices.constants'
+import { BILLING_INVOICES_T as T } from './invoices.constants'
+import { billingRoles as roles } from '../billing.constants'
+import { billingInvoiceConstants as constants } from './invoices.constants'
 
 @ApiTags('Invoices')
 @UserAuth()
 @Controller('billing/invoices')
-export class InvoicesController {
+export class InvoicesController extends BaseController<T> {
 	constructor(
-		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
-		@Inject(forwardRef(() => InvoicesService)) private readonly invoicesService: InvoicesService,
-		@Inject(forwardRef(() => StorageService)) readonly storageService: StorageService,
-		@Inject(forwardRef(() => JLQuery)) private readonly query: JLQuery<T>,
-	) {}
-
-	@ReadManyDecorator({
-		name: BILLING_INVOICES_NAME,
-		entity: E,
-		selectEnum: InvoiceSelect,
-		orderByEnum: InvoiceOrderBy,
-		relationsEnum: InvoiceRelations,
-	})
-	@ApiQuery({
-		name: 'currency',
-		description: 'The currency you are requesting data for',
-		type: String,
-		required: false,
-		example: SupportedCurrencies.USD,
-	})
-	async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Promise<T[]> {
-		await this.authService.check(req.user.user_id, account_id)
-
-		const where = {
-			account: {
-				account_id: account_id,
+		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
+		@Inject(forwardRef(() => InvoicesService)) readonly service: InvoicesService,
+		@Inject(forwardRef(() => TQuery)) readonly tQuery: TQuery<T>,
+		@Inject(forwardRef(() => FxService)) readonly fxService: FxService,
+	) {
+		super(service, tQuery, constants, {
+			services: {
+				authService,
+				fxService,
 			},
-			deleted_at: IsNull(),
-			currency: query.currency ?? null,
-		}
-
-		const records = await this.invoicesService.findAll(this.query.findOptions(query, where))
-
-		if (!records.length) {
-			throw new NotFoundException(`No accounts found`)
-		}
-
-		return records
+			roles: roles,
+		})
 	}
 
-	@ApiOperation({
-		summary: 'Invoice Stats',
-	})
-	@ApiQuery({
-		name: 'method',
-		description: `The method you would like to run, defaults to \`${StatsMethods.COUNT}\``,
-		type: String,
-		required: false,
-		example: StatsMethods.COUNT,
-		enum: [StatsMethods.COUNT],
-	})
-	@ApiQuery({
-		name: 'currency',
-		description: 'The currency you are requesting data for',
-		type: String,
-		required: false,
-		example: SupportedCurrencies.USD,
-	})
-	@ApiOkResponse({
-		description: 'OK',
-		type: StatsResponseDto,
-	})
-	@Get('stats')
+	@ReadManyDecorator(constants)
+	async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Promise<T[]> {
+		return super.findAll(req, query, account_id)
+	}
+
+	@ReadStatsDecorator(constants)
 	async stats(
 		@Req() req,
 		@Query() query,
+		@AccountId() account_id: number,
 		@Query('method') method: StatsMethods,
-		@AccountId() account_id: number,
-	): Promise<StatsResponseDto> {
-		if (!method) {
-			method = StatsMethods.COUNT
-		}
-
-		if (method === StatsMethods.AVG || method === StatsMethods.SUM) {
-			throw new BadRequestException(`Only option for this endpoint currently is COUNT`)
-		}
-
-		await this.authService.check(req.user.user_id, account_id)
-
-		const where = {
-			account: {
-				account_id: account_id,
-			},
-			deleted_at: IsNull(),
-			currency: query.currency ?? null,
-		}
-
-		const options = {
-			where: where,
-		}
-
-		switch (method) {
-			case StatsMethods.COUNT:
-				return {
-					count: await this.invoicesService.count(options),
-				}
-		}
+	): Promise<any> {
+		return super.stats(req, query, account_id, method)
 	}
 
-	@ApiOperation({ summary: 'Get Invoice' })
-	@ApiQuery({
-		name: 'select',
-		description: 'If you wish to specify which items you would like returning (boost performance)',
-		type: [String],
-		isArray: true,
-		explode: false,
-		required: false,
-		example: `${InvoiceSelect.invoice_id},${InvoiceSelect.paid_at}`,
-		enum: InvoiceSelect,
-	})
-	@ApiQuery({
-		name: 'relations',
-		description: 'Expand the result to include connected data',
-		type: [String],
-		isArray: true,
-		explode: false,
-		required: false,
-		example: `${InvoiceRelations.account}`,
-		enum: InvoiceRelations,
-	})
-	@ApiParam({
-		name: 'invoice_id',
-		description: 'The id of the invoice',
-		type: Number,
-		required: true,
-		example: 1,
-	})
-	@ApiOkResponse({
-		description: 'OK',
-		type: Invoice,
-	})
-	@Get(':invoice_id')
-	async findOne(
-		@Req() req,
-		@Param('invoice_id') invoice_id: number,
-		@AccountId() account_id: number,
-		@Query() query,
-	): Promise<Invoice> {
-		await this.authService.check(req.user.user_id, account_id)
-
-		const where = {
-			account: {
-				account_id: account_id,
-			},
-			invoice_id: invoice_id,
-			deleted_at: IsNull(),
-		}
-
-		const record = await this.invoicesService.findOne(this.query.findOneOptions(query, where))
-		if (!record) {
-			throw new NotFoundException(`Invoice #${invoice_id} not found`)
-		}
-		return record
-	}
-
-	@ApiOperation({ summary: `Download invoice file` })
-	@Post(`/download/:invoice_id`)
-	async uploadAvatarFile(@Req() req, @AccountId() invoice_id: number, @AccountId() account_id: number): Promise<T> {
-		const user = req.user
-		await this.authService.check(user.user_id, account_id)
-
-		return await this.invoicesService.downloadInvoice(user, invoice_id)
-	}
-
-	@ReadChartsDecorator({
-		name: BILLING_INVOICES_NAME,
-		entity: E,
-		selectEnum: InvoiceSelect,
-	})
+	@ReadChartsDecorator(constants)
 	async charts(
 		@Req() req,
+		@AccountId() account_id: number,
 		@Query() query: any,
 		@Query('search') search: string,
 		@Query('from') from: string,
@@ -206,16 +63,18 @@ export class InvoicesController {
 		@Query('fields') fields: string[],
 		@Query('period') period?: ChartsPeriod,
 	): Promise<ChartsResponseDto> {
-		return await crudCharts<T>({
-			service: this.invoicesService,
-			tQuery: this.query,
-			query,
-			search,
-			period,
-			fields,
-			...(from && { from: new Date(from) }),
-			...(to && { to: new Date(to) }),
-			searchFields: SEARCH_FIELDS,
-		})
+		return super.charts(req, account_id, query, search, from, to, fields, period)
+	}
+
+	@ReadOneDecorator(constants)
+	async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
+		return super.findOne(req, account_id, params, query)
+	}
+
+	@ApiOperation({ summary: `Download invoice file` })
+	@Post(`/download/:invoice_id`)
+	async downloadInvoice(@Req() req, @AccountId() invoice_id: number, @AccountId() account_id: number): Promise<T> {
+		await this.authService.check(req.user.user_id, account_id)
+		return await this.service.downloadInvoice(req.user, invoice_id)
 	}
 }

@@ -17,9 +17,7 @@ describe('AI', () => {
 		}
 
 		moduleRef = await Test.createTestingModule({
-			imports: [
-				forwardRef(() => AiModule),
-			],
+			imports: [forwardRef(() => AiModule)],
 		}).compile()
 
 		aiService = moduleRef.get<AiService>(AiService)
@@ -31,7 +29,7 @@ describe('AI', () => {
 
 			try {
 				const result = await aiService.chat({
-					question: 'How much is that doggy in the window?'
+					question: 'How much is that doggy in the window?',
 				})
 				expect(result).toBeDefined()
 				expect(result.response).toBeDefined()
@@ -39,7 +37,6 @@ describe('AI', () => {
 				logger.error(`[${domain}] Error: ${e.message}`, e)
 				throw new Error(e.message)
 			}
-			
 		})
 	})
 })

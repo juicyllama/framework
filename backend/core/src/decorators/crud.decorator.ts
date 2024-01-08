@@ -8,19 +8,24 @@ import {
 	StatsMethods,
 	StatsResponseDto,
 	Strings,
+	Logger,
 } from '@juicyllama/utils'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { ImportMode } from '../types/common'
+import { ImportMode, ControllerConstants, CrudUploadFieldsResponse, BulkUploadResponse } from '../types/common'
 
 /**
  * Create Decorator
  */
-export function CreateDecorator<T>(options: { entity: T; name: string }) {
+export function CreateDecorator(options: Partial<ControllerConstants>) {
 	const decorators = [
-		ApiOperation({ summary: options?.name ? `Create ${Strings.capitalize(options.name)}` : 'Create' }),
-		ApiCreatedResponse(generateResponseObject(options.entity, 'Created')),
-		Post(),
+		ApiOperation({ summary: options?.name ? `Create ${Strings.capitalize(options?.name)}` : 'Create' }),
 	]
+
+	if (options?.dtos?.response) {
+		decorators.push(ApiCreatedResponse(generateResponseObject(options?.dtos.response, 'Created')))
+	}
+
+	decorators.push(Post())
 
 	return applyDecorators(...decorators)
 }
@@ -29,17 +34,9 @@ export function CreateDecorator<T>(options: { entity: T; name: string }) {
  * Read Decorators
  */
 
-export function ReadManyDecorator<T>(options: {
-	entity: T
-	selectEnum: any
-	orderByEnum: any
-	relationsEnum?: any
-	name: string
-	currency_field?: string
-	currency_fields?: string[]
-}) {
+export function ReadManyDecorator(options: Partial<ControllerConstants>) {
 	const decorators = [
-		ApiOperation({ summary: options.name ? `List ${Strings.capitalize(Strings.plural(options.name))}` : 'List' }),
+		ApiOperation({ summary: options?.name ? `List ${Strings.capitalize(Strings.plural(options?.name))}` : 'List' }),
 		ApiQuery({
 			name: 'select',
 			description: 'If you wish to specify which items you would like returning (boost performance)',
@@ -47,14 +44,14 @@ export function ReadManyDecorator<T>(options: {
 			isArray: true,
 			explode: false,
 			required: false,
-			enum: options.selectEnum,
+			enum: options?.selectEnum,
 		}),
 		ApiQuery({
 			name: 'order_by',
 			description: 'Order the results by a specific field',
 			type: String,
 			required: false,
-			enum: options.orderByEnum,
+			enum: options?.orderByEnum,
 		}),
 		ApiQuery({
 			name: 'order_by_type',
@@ -82,7 +79,7 @@ export function ReadManyDecorator<T>(options: {
 			isArray: true,
 			explode: false,
 			required: false,
-			enum: options.relationsEnum,
+			enum: options?.relationsEnum,
 		}),
 		ApiQuery({
 			name: 'search',
@@ -92,20 +89,28 @@ export function ReadManyDecorator<T>(options: {
 		}),
 	]
 
-	if (options.currency_field && options.currency_fields?.length) {
-		decorators.push(currencyFieldsDecorator(options.currency_field, options.currency_fields))
+	if (options?.currencyField && options?.currencyFields?.length) {
+		decorators.push(currencyFieldsDecorator(options?.currencyField, options?.currencyFields))
 	}
 
-	decorators.push(...generateSelectRHSFilteringAPIQueries(options.selectEnum))
-	decorators.push(ApiOkResponse(generateResponseObject(options.entity, 'OK')))
+	decorators.push(...generateSelectRHSFilteringAPIQueries(options?.selectEnum))
+
+	if (options?.dtos?.response) {
+		decorators.push(ApiOkResponse(generateResponseObject(options?.dtos.response, 'OK', true)))
+	}
+
 	decorators.push(Get())
 
 	return applyDecorators(...decorators)
 }
 
-export function ReadStatsDecorator(options: { name: string }) {
+export function ReadStatsDecorator(options: Partial<ControllerConstants>) {
 	return applyDecorators(
-		ApiOperation({ summary: options?.name ? `${Strings.capitalize(options.name)} Stats` : 'Stats' }),
+		ApiOperation({
+			summary: options?.name ? `${Strings.capitalize(options?.name)} Stats` : 'Stats',
+			description:
+				'Returns calculations on the table based on your filters, for example `COUNT` will return the total number of columns matching your filters as `{count: x}`',
+		}),
 		ApiQuery({
 			name: 'method',
 			description: `The method you would like to run, defaults to \`${StatsMethods.COUNT}\``,
@@ -125,15 +130,9 @@ export function ReadStatsDecorator(options: { name: string }) {
 	)
 }
 
-export function ReadChartsDecorator<T>(options: {
-	entity: T
-	selectEnum: any
-	name: string
-	currency_field?: string
-	currency_fields?: string[]
-}) {
+export function ReadChartsDecorator(options: Partial<ControllerConstants>) {
 	const decorators = [
-		ApiOperation({ summary: options?.name ? `${Strings.capitalize(options.name)} Charts` : 'Charts' }),
+		ApiOperation({ summary: options?.name ? `${Strings.capitalize(options?.name)} Charts` : 'Charts' }),
 		ApiQuery({
 			name: 'fields',
 			description: `The fields by which you would like to group the data`,
@@ -171,31 +170,31 @@ export function ReadChartsDecorator<T>(options: {
 		}),
 	]
 
-	if (options.currency_field && options.currency_fields?.length) {
-		decorators.push(currencyFieldsDecorator(options.currency_field, options.currency_fields))
+	if (options?.currencyField && options?.currencyFields?.length) {
+		decorators.push(currencyFieldsDecorator(options?.currencyField, options?.currencyFields))
 	}
 
-	decorators.push(...generateSelectRHSFilteringAPIQueries(options.selectEnum))
+	decorators.push(...generateSelectRHSFilteringAPIQueries(options?.selectEnum))
 	decorators.push(ApiOkResponse(generateResponseObject(ChartsResponseDto, 'OK')))
 	decorators.push(Get('charts'))
 
 	return applyDecorators(...decorators)
 }
 
-export function ReadOneDecorator<T>(options: {
-	entity: T
-	primaryKey: string
-	selectEnum: any
-	relationsEnum?: any
-	name: string
-	currency_field?: string
-	currency_fields?: string[]
-}) {
+export function ReadOneDecorator(options: Partial<ControllerConstants>) {
+	if (!options?.primaryKey) {
+		const logger = new Logger()
+		logger.error('ReadOneDecorator requires a primaryKey', {
+			options: options,
+		})
+		throw new Error('ReadOneDecorator requires a primaryKey')
+	}
+
 	const decorators = [
-		ApiOperation({ summary: options?.name ? `Get ${Strings.capitalize(options.name)}` : 'Get' }),
+		ApiOperation({ summary: options?.name ? `Get ${Strings.capitalize(options?.name)}` : 'Get' }),
 		ApiParam({
-			name: options.primaryKey,
-			description: `The ${options.primaryKey} for the record you wish to return`,
+			name: options?.primaryKey,
+			description: `The ${options?.primaryKey} for the record you wish to return`,
 			type: Number,
 			required: true,
 			example: 1,
@@ -207,7 +206,7 @@ export function ReadOneDecorator<T>(options: {
 			isArray: true,
 			explode: false,
 			required: false,
-			enum: options.selectEnum,
+			enum: options?.selectEnum,
 		}),
 		ApiQuery({
 			name: 'relations',
@@ -216,17 +215,21 @@ export function ReadOneDecorator<T>(options: {
 			isArray: true,
 			explode: false,
 			required: false,
-			enum: options.relationsEnum,
+			enum: options?.relationsEnum,
 		}),
 	]
 
-	if (options.currency_field && options.currency_fields?.length) {
-		decorators.push(currencyFieldsDecorator(options.currency_field, options.currency_fields))
+	if (options?.currencyField && options?.currencyFields?.length) {
+		decorators.push(currencyFieldsDecorator(options?.currencyField, options?.currencyFields))
 	}
 
-	decorators.push(...generateSelectRHSFilteringAPIQueries(options.selectEnum))
-	decorators.push(ApiOkResponse(generateResponseObject(options.entity, 'OK')))
-	decorators.push(Get(`:${options.primaryKey}`))
+	decorators.push(...generateSelectRHSFilteringAPIQueries(options?.selectEnum))
+
+	if (options?.dtos?.response) {
+		decorators.push(ApiOkResponse(generateResponseObject(options?.dtos.response, 'OK')))
+	}
+
+	decorators.push(Get(`:${options?.primaryKey}`))
 
 	return applyDecorators(...decorators)
 }
@@ -234,24 +237,36 @@ export function ReadOneDecorator<T>(options: {
 /**
  * Update Decorator
  */
-export function UpdateDecorator<T>(options: { entity: T; primaryKey: string; name: string }) {
+export function UpdateDecorator(options: Partial<ControllerConstants>) {
+	if (!options?.primaryKey) {
+		const logger = new Logger()
+		logger.error('UpdateDecorator requires a primaryKey', {
+			options: options,
+		})
+		throw new Error('UpdateDecorator requires a primaryKey')
+	}
+
 	const decorators = [
-		ApiOperation({ summary: options?.name ? `Update ${Strings.capitalize(options.name)}` : 'Update' }),
+		ApiOperation({ summary: options?.name ? `Update ${Strings.capitalize(options?.name)}` : 'Update' }),
 		ApiParam({
-			name: options.primaryKey,
-			description: `The ${options.primaryKey} for the ${options.name} you wish to return`,
+			name: options?.primaryKey,
+			description: `The ${options?.primaryKey} for the ${options?.name} you wish to return`,
 			type: Number,
 			required: true,
 			example: 1,
 		}),
-		ApiOkResponse(generateResponseObject(options.entity, 'OK')),
-		Patch(`:${options.primaryKey}`),
 	]
+
+	if (options?.dtos?.response) {
+		decorators.push(ApiOkResponse(generateResponseObject(options?.dtos.response, 'OK')))
+	}
+
+	decorators.push(Patch(`:${options?.primaryKey}`))
 
 	return applyDecorators(...decorators)
 }
 
-export function UploadImageDecorator(options: { entity: any }) {
+export function UploadImageDecorator(options: Partial<ControllerConstants>) {
 	const decorators = [
 		ApiConsumes('multipart/form-data'),
 		ApiQuery({
@@ -261,28 +276,33 @@ export function UploadImageDecorator(options: { entity: any }) {
 			required: true,
 		}),
 		UseInterceptors(FileInterceptor('file')),
-		ApiOkResponse(generateResponseObject(options.entity, 'OK')),
 	]
+
+	if (options?.dtos?.response) {
+		decorators.push(ApiOkResponse(generateResponseObject(options?.dtos.response, 'OK')))
+	}
 
 	return applyDecorators(...decorators)
 }
 
-export function UploadFileDecorator(options: { entity: any }) {
-	return applyDecorators(
-		ApiConsumes('multipart/form-data'),
-		UseInterceptors(FileInterceptor('file')),
-		ApiOkResponse(generateResponseObject(options.entity, 'OK')),
-	)
+export function UploadFileDecorator(options: Partial<ControllerConstants>) {
+	const decorators = [ApiConsumes('multipart/form-data'), UseInterceptors(FileInterceptor('file'))]
+
+	if (options?.dtos?.response) {
+		decorators.push(ApiOkResponse(generateResponseObject(options?.dtos.response, 'OK')))
+	}
+
+	return applyDecorators(...decorators)
 }
 
-export function BulkUploadDecorator(options: { supportedFields?: string[]; dedupField?: string }) {
+export function BulkUploadDecorator(options: Partial<ControllerConstants>) {
 	const decorators = [
 		ApiOperation({
 			summary: `Bulk Upload`,
 			description: `You can pass the following fields as part of the bulk upload: ${
-				options.supportedFields ? '`' + options.supportedFields.join('`, `') + '`' : ''
+				options?.uploadSupportedFields ? '`' + options?.uploadSupportedFields.join('`, `') + '`' : ''
 			}. The following field will be used to deduplicate the records: ${
-				options.dedupField ? '`' + options.dedupField + '`' : ''
+				options?.uploadDedupField ? '`' + options?.uploadDedupField + '`' : ''
 			}. Duplicates work as follows:
 		\n - \`${ImportMode.CREATE}\` - Any duplicates found will throw an error and the import will fail
 		\n - \`${ImportMode.UPSERT}\` - Any duplicates found will be updated, any new records will be created
@@ -299,20 +319,20 @@ export function BulkUploadDecorator(options: { supportedFields?: string[]; dedup
 				},
 			}),
 		),
-		ApiOkResponse({ description: 'OK' }),
+		ApiOkResponse({ description: 'OK', type: BulkUploadResponse }),
 		Post(`upload`),
 	]
 
 	return applyDecorators(...decorators)
 }
 
-export function UploadFieldsDecorator() {
+export function UploadFieldsDecorator(options: Partial<ControllerConstants>) {
 	return applyDecorators(
 		ApiOperation({
-			summary: `Upload Fields`,
+			summary: `Upload ${options?.name} Fields`,
 			description: `This endpoint shows what fields the bulk upload supports, you should either pass these or use these as the keys in your mapper object if you are passing different values.`,
 		}),
-		ApiOkResponse({ description: 'OK' }),
+		ApiOkResponse({ description: 'OK', type: CrudUploadFieldsResponse }),
 		Get(`upload/fields`),
 	)
 }
@@ -320,19 +340,31 @@ export function UploadFieldsDecorator() {
 /**
  * Delete Decorators
  */
-export function DeleteDecorator<T>(options: { entity: T; primaryKey: string; name: string }) {
+export function DeleteDecorator(options: Partial<ControllerConstants>) {
+	if (!options?.primaryKey) {
+		const logger = new Logger()
+		logger.error('DeleteDecorator requires a primaryKey', {
+			options: options,
+		})
+		throw new Error('DeleteDecorator requires a primaryKey')
+	}
+
 	const decorators = [
-		ApiOperation({ summary: options?.name ? `Delete ${Strings.capitalize(options.name)}` : 'Delete' }),
+		ApiOperation({ summary: options?.name ? `Delete ${Strings.capitalize(options?.name)}` : 'Delete' }),
 		ApiParam({
-			name: options.primaryKey,
-			description: `The ${options.primaryKey} for the ${options.name} you wish to delete`,
+			name: options?.primaryKey,
+			description: `The ${options?.primaryKey} for the ${options?.name} you wish to delete`,
 			type: Number,
 			required: true,
 			example: 1,
 		}),
-		ApiOkResponse(generateResponseObject(options.entity, 'OK')),
-		Delete(`:${options.primaryKey}`),
 	]
+
+	if (options?.dtos?.response) {
+		decorators.push(ApiOkResponse(generateResponseObject(options?.dtos.response, 'OK')))
+	}
+
+	decorators.push(Delete(`:${options?.primaryKey}`))
 
 	return applyDecorators(...decorators)
 }
@@ -340,13 +372,16 @@ export function DeleteDecorator<T>(options: { entity: T; primaryKey: string; nam
 function generateResponseObject(
 	type,
 	description: string,
+	isArray: boolean = false,
 ): {
 	type: any
 	description: string
+	isArray: boolean
 } {
 	return {
 		type: type,
 		description: description,
+		isArray: isArray,
 	}
 }
 

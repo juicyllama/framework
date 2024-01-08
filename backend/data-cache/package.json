@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/data-cache",
-    "version": "0.0.5",
+    "version": "0.0.7",
     "description": "Juicyllama Data Cache",
     "author": {
         "name": "JuicyLlama Studio",
@@ -31,7 +31,8 @@
         "start:dev": "tsc -w",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests",
+        "before:commit": "pnpm run lint && pnpm run format && pnpm run test && pnpm run build"
     },
     "dependencies": {
         "@juicyllama/core": "workspace:^",

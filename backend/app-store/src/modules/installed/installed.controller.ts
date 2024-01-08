@@ -3,7 +3,12 @@ import { ApiTags } from '@nestjs/swagger'
 import { StatsMethods, StatsResponseDto } from '@juicyllama/utils'
 import { InstalledAppsService } from './installed.service'
 import { AppsService } from '../apps.service'
-import { CreateInstalledAppDto, InstalledAppPreCheckDto, UpdateInstalledAppDto, preInstallCheckResponse } from './installed.dto'
+import {
+	CreateInstalledAppDto,
+	InstalledAppPreCheckDto,
+	UpdateInstalledAppDto,
+	preInstallCheckResponse,
+} from './installed.dto'
 import { AppIntegrationType } from '../apps.enums'
 import { InstalledAppsOrderBy, InstalledAppsRelations, InstalledAppsSelect } from './installed.enums'
 import {
@@ -21,6 +26,7 @@ import {
 	ReadStatsDecorator,
 	UpdateDecorator,
 	UserAuth,
+	AuthService,
 } from '@juicyllama/core'
 import {
 	INSTALLED_APP_DEFAULT_ORDER_BY,
@@ -36,18 +42,20 @@ import {
 @Controller('/apps/installed')
 export class InstalledAppsController {
 	constructor(
+		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
 		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<INSTALLED_APP_T>,
 		@Inject(forwardRef(() => InstalledAppsService)) private readonly service: InstalledAppsService,
 		@Inject(forwardRef(() => AppsService)) private readonly appsService: AppsService,
 	) {}
 
-
 	//todo add swagger
 	@Post('precheck')
 	async preInstallCheck(
+		@Req() req,
 		@AccountId() account_id: number,
 		@Body() data: InstalledAppPreCheckDto,
 	): Promise<preInstallCheckResponse> {
+		await this.authService.check(req.user.user_id, account_id)
 
 		const app = await this.appsService.findById(data.app_id)
 
@@ -64,6 +72,8 @@ export class InstalledAppsController {
 		@AccountId() account_id: number,
 		@Body() data: CreateInstalledAppDto,
 	): Promise<INSTALLED_APP_T> {
+		await this.authService.check(req.user.user_id, account_id)
+
 		const app = await this.appsService.findById(data.app_id)
 
 		if (!app) {
@@ -108,7 +118,8 @@ export class InstalledAppsController {
 		relationsEnum: InstalledAppsRelations,
 		name: INSTALLED_APP_NAME,
 	})
-	async findAll(@AccountId() account_id: number, @Query() query): Promise<INSTALLED_APP_T[]> {
+	async findAll(@Req() req, @AccountId() account_id: number, @Query() query): Promise<INSTALLED_APP_T[]> {
+		await this.authService.check(req.user.user_id, account_id)
 		const records = await crudFindAll<INSTALLED_APP_T>({
 			service: this.service,
 			tQuery: this.tQuery,
@@ -125,14 +136,14 @@ export class InstalledAppsController {
 		return records
 	}
 
-	
-
 	@ReadStatsDecorator({ name: INSTALLED_APP_NAME })
 	async stats(
+		@Req() req,
 		@AccountId() account_id: number,
 		@Query() query,
 		@Query('method') method?: StatsMethods,
 	): Promise<StatsResponseDto> {
+		await this.authService.check(req.user.user_id, account_id)
 		return await crudStats<INSTALLED_APP_T>({
 			service: this.service,
 			tQuery: this.tQuery,
@@ -150,9 +161,16 @@ export class InstalledAppsController {
 		relationsEnum: InstalledAppsRelations,
 		name: INSTALLED_APP_NAME,
 	})
-	async findOne(@Param() params, @Query() query): Promise<INSTALLED_APP_T> {
+	async findOne(
+		@Req() req,
+		@AccountId() account_id: number,
+		@Param() params,
+		@Query() query,
+	): Promise<INSTALLED_APP_T> {
+		await this.authService.check(req.user.user_id, account_id)
 		const record = await crudFindOne<INSTALLED_APP_T>({
 			service: this.service,
+			account_id: account_id,
 			query: query,
 			primaryKey: params[INSTALLED_APP_PRIMARY_KEY],
 		})
@@ -164,10 +182,20 @@ export class InstalledAppsController {
 		primaryKey: INSTALLED_APP_PRIMARY_KEY,
 		name: INSTALLED_APP_NAME,
 	})
-	async update(@Body() data: UpdateInstalledAppDto, @Param() params): Promise<INSTALLED_APP_T> {
+	async update(
+		@Req() req,
+		@AccountId() account_id: number,
+		@Body() data: UpdateInstalledAppDto,
+		@Param() params,
+	): Promise<INSTALLED_APP_T> {
+		await this.authService.check(req.user.user_id, account_id)
 		if (data.settings) {
 			const installed_app = await this.service.findById(params[INSTALLED_APP_PRIMARY_KEY])
-			const checks = await this.service.preInstallChecks(installed_app.app, data.settings, installed_app.account_id)
+			const checks = await this.service.preInstallChecks(
+				installed_app.app,
+				data.settings,
+				installed_app.account_id,
+			)
 
 			if (checks.result === false) {
 				throw new BadRequestException(checks.error)
@@ -176,6 +204,7 @@ export class InstalledAppsController {
 
 		const record = await crudUpdate<INSTALLED_APP_T>({
 			service: this.service,
+			account_id: account_id,
 			data: data,
 			primaryKey: params[INSTALLED_APP_PRIMARY_KEY],
 		})
@@ -187,12 +216,11 @@ export class InstalledAppsController {
 		primaryKey: INSTALLED_APP_PRIMARY_KEY,
 		name: INSTALLED_APP_NAME,
 	})
-	async remove(@Param() params): Promise<INSTALLED_APP_T> {
+	async remove(@Req() req, @AccountId() account_id: number, @Param() params): Promise<INSTALLED_APP_T> {
+		await this.authService.check(req.user.user_id, account_id)
 		return await crudPurge<INSTALLED_APP_T>({
 			service: this.service,
 			primaryKey: params[INSTALLED_APP_PRIMARY_KEY],
 		})
 	}
-
-	
 }

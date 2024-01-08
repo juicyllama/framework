@@ -6,12 +6,29 @@ They are built to reduce the number of decorators you need and therefore simplif
 
 They have the added benefit of building automated documentation for your endpoints.
 
+::alert{type="tip"}
+Pro Tip: Put your reusable constants in a dedicated constants.ts file to manage all of your modules constants in one place.
+
+```typescript
+import { ControllerConstants } from '@juicyllama/core'
+
+export const exampleConstants: ControllerConstants = {
+    entity: T, 
+    name: 'example',
+    primaryKey: 'example_id',
+    selectEnum: ExampleSelect,
+    orderByEnum: ExampleOrderBy,
+    relationsEnum: ExampleRelations,
+}
+```
+::
+
 ### Create
 
 Takes two arguments, the entity/dto class type and the name of the endpoint (optional).
 
 ```typescript
-@CreateDecorator({entity: T, name: 'example'})
+@CreateDecorator(exampleConstants)
 ```
 
 Resulting in an `POST` endpoint `/` with documentation for type `T`.
@@ -29,13 +46,7 @@ We have three decorators for reading data:
 This decorator takes 5 arguments, the entity class, the primary key, the selectable fields enum, the relations enum and the name of the endpoint (optional).
 
 ```typescript
-@ReadOneDecorator({
-    entity: E,
-    primaryKey: PRIMARY_KEY,
-    selectEnum: ExampleSelect,
-    relationsEnum: ExampleRelations,
-    name: NAME
-})
+@ReadOneDecorator(exampleConstants)
 ```
 
 This results in a `GET` endpoint `/:id` with swagger documentation for returning a single entity of type `E`.
@@ -45,13 +56,7 @@ This results in a `GET` endpoint `/:id` with swagger documentation for returning
 The 5 arguments for the list decorator are the entity class, the selectable fields enum, the order by enum, the relations enum and the name of the endpoint (optional).
 
 ```typescript
-@ReadManyDecorator({
-    entity: E,
-    selectEnum: ExampleSelect,
-    orderByEnum: ExampleOrderBy,
-    relationsEnum: ExampleRelations,
-    name: NAME
-})
+@ReadManyDecorator(exampleConstants)
 ```
 
 This results in a `GET` endpoint `/` with swagger documentation for returning an array of entities of type `E`.
@@ -61,7 +66,7 @@ This results in a `GET` endpoint `/` with swagger documentation for returning an
 The stats decorator optionally takes the name of the endpoint.
 
 ```typescript
-@ReadStatsDecorator({name: NAME})
+@ReadStatsDecorator(exampleConstants)
 ```
 
 This results in a `GET` endpoint `/stats` with swagger documentation for returning a count/sum/avg result on the database.
@@ -71,11 +76,7 @@ This results in a `GET` endpoint `/stats` with swagger documentation for returni
 The charts decorator optionally takes the name of the endpoint.
 
 ```typescript
-@ReadChartsDecorator({
-    entity: E,
-    name: NAME,
-    selectEnum: ExampleSelect
-})
+@ReadChartsDecorator(exampleConstants)
 ```
 
 This results in a `GET` endpoint `/charts` with swagger documentation for returning datasets for pie/line charts from the database grouped by a field and optionally by time period.
@@ -85,7 +86,7 @@ This results in a `GET` endpoint `/charts` with swagger documentation for return
 The update decorator takes the entity class, the primary key and the name of the endpoint (optional).
 
 ```typescript
-@UpdateDecorator({entity: E, primaryKey: PRIMARY_KEY, name: NAME})
+@UpdateDecorator(exampleConstants)
 ```
 
 This results in a `PATCH` endpoint `/:id` with swagger documentation for updating a single entity of type `E`.
@@ -95,7 +96,7 @@ This results in a `PATCH` endpoint `/:id` with swagger documentation for updatin
 The delete decorator takes the entity class, the primary key and the name of the endpoint (optional).
 
 ```typescript
-@DeleteDecorator({entity: E, primaryKey: PRIMARY_KEY, name: NAME})
+@DeleteDecorator(exampleConstants)
 ```
 
 This results in a `DELETE` endpoint `/:id` with swagger documentation for deleting a single entity of type `E`.

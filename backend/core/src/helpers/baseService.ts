@@ -235,7 +235,7 @@ export class BaseService<T> {
 			}
 		} catch (e) {
 			const logger = new Logger()
-			logger.error(`[core::baseService::cacheRecord] ${e.message()}`, e)
+			logger.error(`[core::baseService::cacheRecord] ${e.message}`, e)
 		}
 	}
 

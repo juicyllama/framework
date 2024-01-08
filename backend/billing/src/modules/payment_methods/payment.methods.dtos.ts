@@ -5,19 +5,22 @@ import { SupportedCurrencies } from '@juicyllama/utils'
 
 export class PaymentMethodCreditCardDetails {
 	@IsString()
-	cardHolder: string
+	cardHolder?: string
 
 	@IsString()
-	cardNumber: string
+	cardNumber?: string
 
 	@IsString()
-	cardLabel: string
+	cardLabel?: string
 
 	@IsString()
-	cardFingerprint: string
+	cardFingerprint?: string
 
 	@IsDate()
-	cardExpireDate: Date
+	cardExpiryDate?: Date
+
+	@IsString()
+	cardToken?: string
 }
 
 export class PaymentMethodBankTransferGBPDetails {
@@ -87,7 +90,11 @@ export class CreatePaymentMethodDto {
 	@IsObject()
 	payment_method: PaymentMethodDetails
 
-	@ApiProperty({ description: 'A description of the payment method', example: 'My first payment method' })
+	@ApiProperty({
+		description: 'A description of the payment method',
+		example: 'My first payment method',
+		required: false,
+	})
 	@IsString()
 	description?: string
 }

@@ -9,7 +9,7 @@ import { goToLoginRedirect } from '../../../helpers'
 import { useQuasar } from 'quasar'
 
 import { Strings } from '@juicyllama/vue-utils'
-import { completeGoogleLogin, completeLinkedInLogin, completeMicrosoftLogin, completeAzureLogin } from '../../../services/auth'
+import { completeGoogleLogin, completeLinkedInLogin } from '../../../services/auth'
 import { FormViewSettings, LogSeverity, FormViewDesignSettings } from '../../../types'
 
 const $q = useQuasar()
@@ -54,12 +54,6 @@ if (route.query.code) {
 				break
 			case 'linkedin':
 				await completeLinkedInLogin(route.query, $q)
-				break
-			case 'microsoft':
-				await completeMicrosoftLogin(route.query, $q)
-				break
-			case 'azure_ad':
-				await completeAzureLogin(route.query, $q)
 				break
 			default:
 				new Error('OAuthType not found')

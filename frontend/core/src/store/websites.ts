@@ -30,8 +30,10 @@ export const WebsitesStore = defineStore('websites', {
 				for (let i = 0; i < this.$state.length; i++) {
 					if (this.$state[i].website_id === result.website_id) {
 						this.$state[i] = result
+
 					}
 				}
+				window.localStorage.setItem('websites', JSON.stringify(this.$state))
 			}
 
 			return result
@@ -46,6 +48,7 @@ export const WebsitesStore = defineStore('websites', {
 
 			if (result) {
 				this.$state = this.$state.filter((website) => website.website_id !== website_id)
+				window.localStorage.setItem('websites', JSON.stringify(this.$state))
 			}
 
 			return result

@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common'
 import { StatsMethods, StatsResponseDto, Strings } from '@juicyllama/utils'
 import { CreateUserDto, UpdateUserDto } from './users.dto'
-import { UserOrderBy, UserRelations, UserRole, UserSelect } from './users.enums'
+import { UserRole } from './users.enums'
 import { ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { AuthService } from '../auth/auth.service'
 import { AccountService } from '../accounts/account.service'
@@ -38,8 +38,9 @@ import {
 	SEARCH_FIELDS,
 	T,
 	UPLOAD_DUPLICATE_FIELD,
+	usersConstants as constants,
 } from './users.constants'
-import { crudDelete, } from '../../helpers'
+import { crudDelete } from '../../helpers'
 import { UploadFieldsDecorator, UploadImageDecorator } from '../../decorators/crud.decorator'
 import { crudBulkUpload } from '../../helpers/crudController'
 import { StorageService } from '../storage/storage.service'
@@ -58,20 +59,14 @@ export class UsersController {
 		@Inject(forwardRef(() => StorageService)) readonly storageService: StorageService,
 	) {}
 
-	@CreateDecorator({ entity: E, name: NAME })
+	@CreateDecorator(constants)
 	async create(@Req() req, @AccountId() account_id: number, @Body() data: CreateUserDto): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		const account = await this.accountService.findById(account_id)
 		return await this.service.invite(account, data)
 	}
 
-	@ReadManyDecorator({
-		entity: E,
-		selectEnum: UserSelect,
-		orderByEnum: UserOrderBy,
-		relationsEnum: UserRelations,
-		name: NAME,
-	})
+	@ReadManyDecorator(constants)
 	async findAll(@AccountId() account_id: number, @Query() query): Promise<T[]> {
 		const where = this.tQuery.buildWhere({
 			repository: this.service.repository,
@@ -89,7 +84,7 @@ export class UsersController {
 		return users
 	}
 
-	@ReadStatsDecorator({ name: NAME })
+	@ReadStatsDecorator(constants)
 	async stats(
 		@AccountId() account_id: number,
 		@Query() query,
@@ -144,13 +139,7 @@ export class UsersController {
 	// 	})
 	// }
 
-	@ReadOneDecorator({
-		entity: E,
-		selectEnum: UserSelect,
-		primaryKey: PRIMARY_KEY,
-		relationsEnum: UserRelations,
-		name: NAME,
-	})
+	@ReadOneDecorator(constants)
 	async findOne(@AccountId() account_id: number, @Param() params): Promise<T> {
 		const user = await this.service.findOne({
 			where: {
@@ -169,7 +158,7 @@ export class UsersController {
 		return user
 	}
 
-	@UpdateDecorator({ entity: E, primaryKey: PRIMARY_KEY, name: NAME })
+	@UpdateDecorator(constants)
 	async update(
 		@Req() req,
 		@AccountId() account_id: number,
@@ -222,10 +211,10 @@ export class UsersController {
 		return await this.service.uploadAvatar(user, file)
 	}
 
-	@BulkUploadDecorator({ supportedFields: UPLOAD_FIELDS, dedupField: UPLOAD_DUPLICATE_FIELD })
+	@BulkUploadDecorator(constants)
 	async bulkUpload(
 		@Req() req,
-		@Body() params: BulkUploadDto,
+		@Body() body: BulkUploadDto,
 		@AccountId() account_id: number,
 		@UploadedFile() file?: Express.Multer.File,
 	): Promise<BulkUploadResponse> {
@@ -234,7 +223,7 @@ export class UsersController {
 			fields: UPLOAD_FIELDS,
 			dedup_field: UPLOAD_DUPLICATE_FIELD,
 			service: this.service,
-			...params,
+			...body,
 			file: file,
 		})
 		const users = await this.service.findAll({
@@ -251,7 +240,7 @@ export class UsersController {
 		return res
 	}
 
-	@UploadFieldsDecorator()
+	@UploadFieldsDecorator(constants)
 	async uploadFileFields(): Promise<CrudUploadFieldsResponse> {
 		return {
 			fields: UPLOAD_FIELDS,
@@ -285,7 +274,7 @@ export class UsersController {
 		return await this.authService.assignRole(user, account, role)
 	}
 
-	@DeleteDecorator({ entity: E, primaryKey: PRIMARY_KEY, name: NAME })
+	@DeleteDecorator(constants)
 	async remove(@Req() req, @AccountId() account_id: number, @Param() params): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		return await crudDelete<T>({

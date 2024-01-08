@@ -23,6 +23,7 @@ import { SETTINGS_E, SETTINGS_T, SETTINGS_NAME } from './settings.constants'
 export class SettingsController {
 	constructor(@Inject(forwardRef(() => SettingsService)) private readonly service: SettingsService) {}
 
+	//use new extends BaseController<SETTINGS_T> to replace this
 	@CreateDecorator({ entity: SETTINGS_E, name: SETTINGS_NAME })
 	async create(@AccountId() account_id: number, @Body() data: CreateSettingsDto): Promise<SETTINGS_T> {
 		return await this.service.create(data.key, data.value, account_id, data.user_id)

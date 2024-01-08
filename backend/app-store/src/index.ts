@@ -43,7 +43,12 @@ import {
 	AppSettingsDto,
 	AppUploadDto,
 } from './modules/apps.dto'
-import { CreateInstalledAppDto, UpdateInstalledAppDto, InstalledAppPreCheckDto, preInstallCheckResponse } from './modules/installed/installed.dto'
+import {
+	CreateInstalledAppDto,
+	UpdateInstalledAppDto,
+	InstalledAppPreCheckDto,
+	preInstallCheckResponse,
+} from './modules/installed/installed.dto'
 import { OAuthAuthorizeResponseDto } from './modules/oauth/oauth.dto'
 import { installAppStoreDocs } from './docs/install'
 
@@ -84,6 +89,6 @@ export {
 	LogsService,
 	installAppStoreDocs,
 	AppStoreIntegrationName,
-	InstalledAppPreCheckDto, 
-	preInstallCheckResponse
+	InstalledAppPreCheckDto,
+	preInstallCheckResponse,
 }

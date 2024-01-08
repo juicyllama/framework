@@ -12,3 +12,4 @@ export {
 	crudDelete,
 	crudPurge,
 } from './crudController'
+export { BaseController } from './baseController'

@@ -128,6 +128,7 @@ export {
 	crudDelete,
 	crudPurge,
 	CronRunner,
+	BaseController,
 } from './helpers'
 
 // Middleware
@@ -158,6 +159,10 @@ export {
 	OauthInterface,
 	ChartOptions,
 	CurrencyOptions,
+	ControllerConstants,
+	ControllerOptionalProps,
+	ControllerRoles,
+	BaseResponseDto,
 } from './types'
 
 //Mocks

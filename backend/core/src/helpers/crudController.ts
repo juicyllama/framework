@@ -7,6 +7,7 @@ import {
 	File,
 	Json,
 	Logger,
+	Objects,
 } from '@juicyllama/utils'
 import { Query as TQuery } from '../utils/typeorm/Query'
 import { TypeOrm } from '../utils/typeorm/TypeOrm'
@@ -39,6 +40,8 @@ export async function crudFindAll<T>(options: {
 		delete options.query.convert_currencies_to
 	}
 
+	options.query = Objects.clean(options.query)
+
 	const where = options.tQuery.buildWhere({
 		repository: options.service.repository,
 		query: options.query,
@@ -64,6 +67,8 @@ export async function crudFindOne<T>(options: {
 		delete options.query.convert_currencies_to
 	}
 
+	options.query = Objects.clean(options.query)
+
 	const where = {
 		[PRIMARY_KEY]: options.primaryKey,
 		...(options.account_id ? { account: { account_id: options.account_id } } : null),
@@ -85,6 +90,8 @@ export async function crudStats<T>(options: {
 	if (!options.method) {
 		options.method = StatsMethods.COUNT
 	}
+
+	options.query = Objects.clean(options.query)
 
 	const where = options.tQuery.buildWhere({
 		repository: options.service.repository,
@@ -135,6 +142,8 @@ export async function crudCharts<T>(options: {
 		delete options.query.convert_currencies_to
 	}
 
+	options.query = Objects.clean(options.query)
+
 	const where = options.tQuery.buildWhere({
 		repository: options.service.repository,
 		query: options.query,
@@ -180,7 +189,7 @@ export async function crudUpdate<T>(options: {
 
 	if (options.account_id) {
 		const record = await options.service.findById(options.primaryKey)
-		if (record.account.account_id !== options.account_id) {
+		if (record?.account?.account_id && record.account.account_id !== options.account_id) {
 			throw new BadRequestException(
 				`You do not have permission to update this ${options.service.name} with #${options.primaryKey}`,
 			)

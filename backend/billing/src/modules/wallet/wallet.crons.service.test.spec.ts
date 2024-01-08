@@ -80,7 +80,7 @@ describe('Wallet Cron', () => {
 				amount: 100,
 				currency: SupportedCurrencies.USD,
 				payment_status: PaymentStatus.success,
-				payment_type: PaymentType.payment
+				payment_type: PaymentType.payment,
 			})
 		})
 

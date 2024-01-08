@@ -225,7 +225,6 @@ describe('TypeORM query', () => {
 			expect(result[0].account_name).toEqual(scaffold.values.account.account_name)
 		})
 
-
 		it('Perform a find with buildWhere account_id and two search fields using partial query', async () => {
 			const where = scaffold.query.buildWhere({
 				repository: scaffold.repository,

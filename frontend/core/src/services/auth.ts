@@ -1,7 +1,8 @@
 import instance from './index'
+import { PublicClientApplication } from "@azure/msal-browser";
 import type { User } from '../types'
 import type { UserLogin } from '../types'
-import { logger } from '../helpers'
+import { goToDashboard, logger } from '../helpers'
 import { LogSeverity } from '../types'
 import { QVueGlobals } from 'quasar'
 import { userStore } from '../index'
@@ -10,22 +11,21 @@ import { Router } from 'vue-router'
 export async function loginUser(payload: UserLogin, q: QVueGlobals, router?: Router): Promise<string> {
 	const response = await instance.post(`auth/login`, payload)
 
-	if(response.data.error) {
-		switch(response.data.error.message) {
+	if (response.data.error) {
+		switch (response.data.error.message) {
 			case 'Password requires changing':
-				await router.push('/reset?email=' + payload.email+'&message='+response.data.error.message)
+				await router.push('/reset?email=' + payload.email + '&message=' + response.data.error.message)
 				return
 			default:
 				throw new Error(response.data.error.message)
 		}
 	}
-	else if(response.data.access_token){
+	else if (response.data.access_token) {
 		return response.data.access_token
 	}
 	else {
 		throw new Error('Unknown error')
 	}
-	
 }
 
 export const passwordlessLogin = async (email: string): Promise<void> => {
@@ -81,13 +81,31 @@ export function linkedInLogin(VITE_API_BASE_URL: string) {
 	window.location.href = `${VITE_API_BASE_URL}/auth/linkedin`
 }
 
-export function microsoftLogin(VITE_API_BASE_URL: string) {
-	localStorage.setItem('OAuthType', 'microsoft')
-	window.location.href = `${VITE_API_BASE_URL}/auth/microsoft`
-}
-export function azureLogin(VITE_API_BASE_URL: string) {
-	localStorage.setItem('OAuthType', 'azure_ad')
-	window.location.href = `${VITE_API_BASE_URL}/auth/azure_ad`
+export function azureLogin(VITE_AZURE_AD_TENANT_ID: string, VITE_AZURE_AD_CLIENT_ID: string, VITE_AZURE_AD_EXPOSED_SCOPES: string, router: Router) {
+	const scopes = VITE_AZURE_AD_EXPOSED_SCOPES
+		.split(' ')
+		.map(scope => `api://${VITE_AZURE_AD_CLIENT_ID}/${scope}`)
+	const msalConfig = {
+		auth: {
+			clientId: VITE_AZURE_AD_CLIENT_ID,
+			authority: `https://login.microsoftonline.com/${VITE_AZURE_AD_TENANT_ID}`,
+			redirectUri: "https://local.sentinel.hiveuw.com:8080/login"
+		},
+		cache: {
+			cacheLocation: 'localStorage', // This configures where your cache will be stored
+			storeAuthStateInCookie: false // Set this to "true" if you are having issues on IE11 or Edge
+		}
+	};
+	const msalInstance = new PublicClientApplication(msalConfig);
+	msalInstance.initialize().then(() => {
+		msalInstance
+			.loginPopup({ scopes })
+			.then(async (authResponse) => {
+				const accessToken = authResponse.accessToken;
+				await userStore.processAccessToken(accessToken)
+				goToDashboard(router)
+			});
+	})
 }
 
 export async function completeGoogleLogin(params, q: QVueGlobals) {
@@ -97,15 +115,5 @@ export async function completeGoogleLogin(params, q: QVueGlobals) {
 
 export async function completeLinkedInLogin(params, q: QVueGlobals) {
 	const response = await instance.get(`auth/linkedin/redirect`, { params: params })
-	return userStore.processAccessToken(response.data.access_token, q)
-}
-
-export async function completeMicrosoftLogin(params, q: QVueGlobals) {
-	const response = await instance.get(`auth/microsoft/redirect`, { params: params })
-	return userStore.processAccessToken(response.data.access_token, q)
-}
-
-export async function completeAzureLogin(params, q: QVueGlobals) {
-	const response = await instance.get(`auth/azure_ad/redirect`, { params: params })
 	return userStore.processAccessToken(response.data.access_token, q)
 }

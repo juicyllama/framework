@@ -19,12 +19,15 @@ import { JLLogin } from '@juicyllama/frontend-core'
 const google = Boolean(import.meta.env.VITE_SSO_GOOGLE)
 const facebook = Boolean(import.meta.env.VITE_SSO_FACEBOOK)
 const linkedin = Boolean(import.meta.env.VITE_SSO_LINKEDIN)
+const adazure = Boolean(import.meta.env.VITE_SSO_AZURE_AD)
+
 </script>
 <template>
 	<JLLogin
 		:google="google"
 		:facebook="facebook"
 		:linkedin="linkedin"
+    :adazure="adazure"
 		:dense="true"
 		:lazy_rules="true"
 		class="q-mt-md">
@@ -74,4 +77,25 @@ const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
                       </div>
                 </template>
 </JLLogin>
+```
+
+
+## Azure AD
+
+The following environment variables must be set in order to allow Azure AD login to work properly.
+
+Backend:
+```bash
+AZURE_AD_CLIENT_ID=your_client_id_at_azure
+AZURE_AD_TENANT_ID=your_tenant_id_at_azure
+# space separated list of permissions you've set up in your Azure app registrations
+AZURE_AD_EXPOSED_SCOPES='User.Read Files.Read'
+```
+
+Add the matching variables in the Frontend as well:
+```sh
+VITE_AZURE_AD_CLIENT_ID=your_client_id_at_azure
+VITE_AZURE_AD_TENANT_ID=your_tenant_id_at_azure
+# space separated list of permissions you've set up in your Azure app registrations
+VITE_AZURE_AD_EXPOSED_SCOPES='User.Read Files.Read'
 ```

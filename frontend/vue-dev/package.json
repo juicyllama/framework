@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/vue-dev",
-    "version": "0.0.51",
+    "version": "0.0.52",
     "description": "Frontend Development Dependencies",
     "author": {
         "name": "JuicyLlama Studio",
@@ -19,6 +19,7 @@
     "license": "0BSD",
     "readmeFilename": "README.md",
     "dependencies": {
+        "@azure/msal-browser": "^3.6.0",
         "@babel/types": "^7.22.19",
         "@bugsnag/js": "^7.21.0",
         "@bugsnag/plugin-vue": "^7.19.0",

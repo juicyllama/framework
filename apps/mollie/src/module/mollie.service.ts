@@ -81,11 +81,29 @@ export class MollieService {
 
 	/**
 	 * Get payment - returns payment from mollie payment table
-	 *
-	 *
 	 */
 
 	async getPayment(id: number): Promise<MolliePayment> {
 		return await this.paymentService.findById(id)
+	}
+
+	/**
+	 * Get Mandate - returns mandate from mollie mandate table
+	 */
+
+	async getMandate(account: Account): Promise<MollieMandate> {
+		const mollie_customer = await this.customerService.findByAccount(account)
+		if (!mollie_customer) {
+			throw new BadRequestException(`Cannot find mollie customer for account #${account.account_id}`)
+		}
+
+		return await this.mandateService.findOne({
+			where: {
+				mollie_customer_id: mollie_customer.mollie_customer_id,
+			},
+			order: {
+				created_at: 'DESC',
+			},
+		})
 	}
 }

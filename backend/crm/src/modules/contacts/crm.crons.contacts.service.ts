@@ -2,8 +2,8 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { CachePeriod, Enviroment, Logger, Modules } from '@juicyllama/utils'
 import { ConfigService } from '@nestjs/config'
 import { SettingsService } from '@juicyllama/core'
-import { ContactPhoneService } from '../contacts/phone/phone.service'
-import { ContactPhoneStatus } from '../contacts/phone/phone.enums'
+import { ContactPhoneService } from './phone/phone.service'
+import { ContactPhoneStatus } from './phone/phone.enums'
 
 @Injectable()
 export class CrmCronsContactsService {

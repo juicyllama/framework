@@ -26,6 +26,15 @@ export async function apiRequest<T>(options: {
 
 		let url = options.url
 
+		//clean up params
+		for(const key in options.params){
+			if(options.params[key] === undefined) delete options.params[key]
+			if(typeof options.params[key] === 'boolean'){
+				if(options.params[key]) options.params[key] = 1
+				else options.params[key] = 0
+			}
+		}
+
 		if (options.params) {
 			url += '?' + new URLSearchParams(<any>options.params).toString()
 		}
