@@ -1,7 +1,7 @@
 import { IsString, MaxLength, MinLength } from 'class-validator'
 import { PartialType } from '@nestjs/swagger'
-import { SwaggerPropertyDecorator } from '../../decorators/Swagger.decorator'
-import { BaseResponseDto } from '../../types/common'
+import { SwaggerPropertyDecorator } from '../../decorators/Swagger.decorator.js'
+import { BaseResponseDto } from '../../types/common.js'
 import { Classes } from '@juicyllama/utils'
 
 export class TagDto {

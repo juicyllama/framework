@@ -1,4 +1,4 @@
-import { TypeOrm } from './TypeOrm'
+import { TypeOrm } from './TypeOrm.js'
 import { Logger } from '@juicyllama/utils'
 import { Repository, ColumnType } from 'typeorm'
 

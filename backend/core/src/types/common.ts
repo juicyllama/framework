@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsEnum, IsOptional, IsString } from 'class-validator'
-import { FxService } from '../modules/fx/fx.service'
-import { UserRole } from '../modules/users/users.enums'
-import { AuthService } from '..'
+import { FxService } from '../modules/fx/fx.service.js'
+import { UserRole } from '../modules/users/users.enums.js'
+import { AuthService } from '../index.js'
 
 export enum UploadType {
 	CSV = 'CSV',

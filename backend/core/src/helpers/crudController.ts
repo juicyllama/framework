@@ -9,13 +9,13 @@ import {
 	Logger,
 	Objects,
 } from '@juicyllama/utils'
-import { Query as TQuery } from '../utils/typeorm/Query'
-import { TypeOrm } from '../utils/typeorm/TypeOrm'
+import { Query as TQuery } from '../utils/typeorm/Query.js'
+import { TypeOrm } from '../utils/typeorm/TypeOrm.js'
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common'
 import _ from 'lodash'
 import { DeepPartial } from 'typeorm'
-import { UploadType, ImportMode, BulkUploadResponse } from '../types/common'
-import { CurrencyOptions } from '../types'
+import { UploadType, ImportMode, BulkUploadResponse } from '../types/common.js'
+import { CurrencyOptions } from '../types/index.js'
 
 const logger = new Logger()
 

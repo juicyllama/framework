@@ -1,8 +1,8 @@
 import { forwardRef, Inject, Injectable, NestMiddleware } from '@nestjs/common'
 import { NextFunction } from 'express'
 import { Modules } from '@juicyllama/utils'
-import { AuthService } from '../modules/auth/auth.service'
-import { AccountService } from '../modules/accounts/account.service'
+import { AuthService } from '../modules/auth/auth.service.js'
+import { AccountService } from '../modules/accounts/account.service.js'
 
 @Injectable()
 export class MiddlewareAccountId implements NestMiddleware {

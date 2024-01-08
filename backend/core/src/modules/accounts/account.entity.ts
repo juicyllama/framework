@@ -1,15 +1,15 @@
 import { IsArray, IsBoolean, IsEmail, IsEnum, IsNumber, IsString, IsUrl, MaxLength, MinLength } from 'class-validator'
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
-import { BaseEntity } from '../../helpers/baseEntity'
+import { BaseEntity } from '../../helpers/baseEntity.js'
 import { SupportedCurrencies } from '@juicyllama/utils'
-import { Tag } from '../tags/tags.entity'
-import { Role } from '../auth/role.entity'
+import { Tag } from '../tags/tags.entity.js'
+import { Role } from '../auth/role.entity.js'
 @Entity('accounts')
 export class Account extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	readonly account_id: number
 
-	@Column()
+	@Column({ type: 'varchar'})
 	@IsString()
 	account_name: string
 
@@ -17,53 +17,53 @@ export class Account extends BaseEntity {
 	@IsEnum(SupportedCurrencies)
 	currency: SupportedCurrencies
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'varchar' })
 	@IsString()
 	company_name?: string
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'varchar' })
 	@IsString()
 	address_1?: string
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'varchar' })
 	@IsString()
 	address_2?: string
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'varchar' })
 	@IsString()
 	city?: string
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'varchar' })
 	@IsString()
 	postcode?: string
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'varchar' })
 	@IsString()
 	state?: string
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'varchar' })
 	@IsString()
 	@MinLength(2)
 	@MaxLength(2)
 	country?: string
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'varchar' })
 	@IsEmail()
 	finance_email?: string
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'varchar' })
 	@IsEmail()
 	customer_service_email?: string
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'varchar' })
 	@IsUrl()
 	avatar_image_url?: string
 
-	@Column({ default: 0 })
+	@Column({ default: 0, nullable: true, type: 'int' })
 	@IsNumber()
 	onboarding_step?: number
 
-	@Column({ default: null, nullable: true })
+	@Column({ default: null, nullable: true, type: 'boolean' })
 	@IsBoolean()
 	onboarding_complete?: boolean
 

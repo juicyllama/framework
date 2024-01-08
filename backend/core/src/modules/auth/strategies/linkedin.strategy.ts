@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy } from 'passport-linkedin-oauth2'
-import { UsersService } from '../../users/users.service'
+import { UsersService } from '../../users/users.service.js'
 
 export const enableLinkedinStrategy = process.env.LINKEDIN_KEY && process.env.LINKEDIN_SECRET
 

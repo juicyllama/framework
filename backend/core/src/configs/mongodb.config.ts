@@ -1,6 +1,6 @@
 import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm'
 import { ConfigModule, registerAs } from '@nestjs/config'
-import { MONGODB } from '../constants'
+import { MONGODB } from '../constants.js'
 import path from 'path'
 import { Env } from '@juicyllama/utils'
 

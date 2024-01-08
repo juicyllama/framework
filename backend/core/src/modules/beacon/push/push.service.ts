@@ -1,12 +1,12 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { BeaconMessageDto } from '../beacon.dto'
-import { BeaconPush } from './push.entity'
+import { BeaconMessageDto } from '../beacon.dto.js'
+import { BeaconPush } from './push.entity.js'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { Env, Logger, Modules } from '@juicyllama/utils'
-import { BeaconStatus } from '../beacon.enums'
+import { BeaconStatus } from '../beacon.enums.js'
 import { ConfigService } from '@nestjs/config'
-import { Query } from '../../../utils/typeorm/Query'
+import { Query } from '../../../utils/typeorm/Query.js'
 import _ from 'lodash'
 
 @Injectable()

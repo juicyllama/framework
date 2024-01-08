@@ -1,4 +1,4 @@
-import { Enviroment } from '../enums/env'
+import { Enviroment } from '../enums/env.js'
 import { createHash } from 'crypto'
 import * as jwt from 'jwt-simple'
 

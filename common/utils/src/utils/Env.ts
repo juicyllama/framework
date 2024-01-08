@@ -1,4 +1,4 @@
-import { Enviroment } from '../enums/env'
+import { Enviroment } from '../enums/env.js'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as os from 'os'

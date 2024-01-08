@@ -1,5 +1,5 @@
 import { ApiForbiddenResponse, ApiNotFoundResponse, ApiUnauthorizedResponse } from '@nestjs/swagger'
-import { Query as TQuery } from '../utils/typeorm/Query'
+import { Query as TQuery } from '../utils/typeorm/Query.js'
 import {
 	crudBulkUpload,
 	crudCharts,
@@ -10,14 +10,14 @@ import {
 	crudPurge,
 	crudStats,
 	crudUpdate,
-} from './crudController'
+} from './crudController.js'
 import {
 	BulkUploadDto,
 	BulkUploadResponse,
 	ControllerConstants,
 	ControllerOptionalProps,
 	CrudUploadFieldsResponse,
-} from '../types/common'
+} from '../types/common.js'
 import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto } from '@juicyllama/utils'
 
 /**

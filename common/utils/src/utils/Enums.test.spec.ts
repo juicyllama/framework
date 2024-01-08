@@ -1,4 +1,4 @@
-import { Enums } from './Enums'
+import { Enums } from './Enums.js'
 
 enum example {
 	VIEWER_WITHOUT_REVENUE = 1,

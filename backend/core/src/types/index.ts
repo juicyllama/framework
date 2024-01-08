@@ -1,4 +1,4 @@
-export { AppIntegrationName } from './apps.enums'
+export { AppIntegrationName } from './apps.enums.js'
 export {
 	UploadType,
 	HTTP_METHODS,
@@ -12,7 +12,7 @@ export {
 	ControllerOptionalProps,
 	ControllerRoles,
 	BaseResponseDto,
-} from './common'
-export { OauthInterface } from './oauth.interface'
+} from './common.js'
+export { OauthInterface } from './oauth.interface.js'
 
-export { ChartOptions, CurrencyOptions } from './typeorm'
+export { ChartOptions, CurrencyOptions } from './typeorm.js'

@@ -1,6 +1,6 @@
 import { ChartsPeriod } from '@juicyllama/utils'
-import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
-import { FxService } from '../modules/fx/fx.service'
+import { FindManyOptions } from 'typeorm/find-options/FindManyOptions.js'
+import { FxService } from '../modules/fx/fx.service.js'
 
 export type ChartOptions<T = any> = FindManyOptions<T> & {
 	search?: string

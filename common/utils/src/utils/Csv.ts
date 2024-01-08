@@ -1,6 +1,6 @@
 import csvParser from 'csv-parser'
 import { Readable } from 'stream'
-import { File } from './File'
+import { File } from './File.js'
 
 export class Csv {
 	/**

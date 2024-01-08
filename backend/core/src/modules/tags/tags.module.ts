@@ -1,10 +1,10 @@
 import { Module, forwardRef } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { Tag } from './tags.entity'
-import { TagsService } from './tags.service'
-import { Query } from '../../utils/typeorm/Query'
-import { AuthModule } from '../auth/auth.module'
-import { BeaconModule } from '../beacon/beacon.module'
+import { Tag } from './tags.entity.js'
+import { TagsService } from './tags.service.js'
+import { Query } from '../../utils/typeorm/Query.js'
+import { AuthModule } from '../auth/auth.module.js'
+import { BeaconModule } from '../beacon/beacon.module.js'
 
 @Module({
 	imports: [TypeOrmModule.forFeature([Tag]), forwardRef(() => AuthModule), forwardRef(() => BeaconModule)],

@@ -11,12 +11,12 @@ import {
 	Inject,
 } from '@nestjs/common'
 import { StatsMethods, StatsResponseDto, Strings } from '@juicyllama/utils'
-import { CreateUserDto, UpdateUserDto } from './users.dto'
-import { UserRole } from './users.enums'
+import { CreateUserDto, UpdateUserDto } from './users.dto.js'
+import { UserRole } from './users.enums.js'
 import { ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
-import { AuthService } from '../auth/auth.service'
-import { AccountService } from '../accounts/account.service'
-import { UsersService } from './users.service'
+import { AuthService } from '../auth/auth.service.js'
+import { AccountService } from '../accounts/account.service.js'
+import { UsersService } from './users.service.js'
 import {
 	AccountId,
 	CreateDecorator,
@@ -27,8 +27,8 @@ import {
 	UpdateDecorator,
 	BulkUploadDecorator,
 	UserAuth,
-} from '../../decorators'
-import { Query as TQuery } from '../../utils/typeorm/Query'
+} from '../../decorators/index.js'
+import { Query as TQuery } from '../../utils/typeorm/Query.js'
 import {
 	UPLOAD_FIELDS,
 	DEFAULT_ORDER_BY,
@@ -39,13 +39,13 @@ import {
 	T,
 	UPLOAD_DUPLICATE_FIELD,
 	usersConstants as constants,
-} from './users.constants'
-import { crudDelete } from '../../helpers'
-import { UploadFieldsDecorator, UploadImageDecorator } from '../../decorators/crud.decorator'
-import { crudBulkUpload } from '../../helpers/crudController'
-import { StorageService } from '../storage/storage.service'
-import { CrudUploadFieldsResponse, BulkUploadDto, BulkUploadResponse } from '../../types/common'
-import { TypeOrm } from '../../utils/typeorm/TypeOrm'
+} from './users.constants.js'
+import { crudDelete } from '../../helpers/index.js'
+import { UploadFieldsDecorator, UploadImageDecorator } from '../../decorators/crud.decorator.js'
+import { crudBulkUpload } from '../../helpers/crudController.js'
+import { StorageService } from '../storage/storage.service.js'
+import { CrudUploadFieldsResponse, BulkUploadDto, BulkUploadResponse } from '../../types/common.js'
+import { TypeOrm } from '../../utils/typeorm/TypeOrm.js'
 
 @ApiTags(Strings.capitalize(Strings.plural(NAME)))
 @UserAuth()

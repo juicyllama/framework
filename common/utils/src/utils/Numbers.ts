@@ -1,4 +1,4 @@
-import { SupportedCurrencies } from '../enums/currencies'
+import { SupportedCurrencies } from '../enums/currencies.js'
 
 export class Numbers {
 	/**

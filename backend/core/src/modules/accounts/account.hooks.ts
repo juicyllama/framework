@@ -1,8 +1,8 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { BeaconService } from '../beacon/beacon.service'
-import { Account } from './account.entity'
+import { BeaconService } from '../beacon/beacon.service.js'
+import { Account } from './account.entity.js'
 import { Strings } from '@juicyllama/utils'
-import { User } from '../users/users.entity'
+import { User } from '../users/users.entity.js'
 
 @Injectable()
 export class AccountHooks {

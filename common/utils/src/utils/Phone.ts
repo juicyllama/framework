@@ -1,5 +1,8 @@
-import CODES from '../assets/dailing_codes.json'
-import { Strings } from './Strings'
+import CODES from '../assets/dailing_codes.json' assert {
+	type: 'json',
+	integrity: 'sha384-ABC123'
+}
+import { Strings } from './Strings.js'
 
 export class Phone {
 	/**

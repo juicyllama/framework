@@ -1,5 +1,5 @@
-import { Modules } from './Modules'
-import { Env } from './Env'
+import { Modules } from './Modules.js'
+import { Env } from './Env.js'
 
 /* eslint @typescript-eslint/no-var-requires: "off" */
 

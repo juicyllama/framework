@@ -1,5 +1,5 @@
-import { Csv } from './Csv'
-import { File } from './File'
+import { Csv } from './Csv.js'
+import { File } from './File.js'
 
 describe('File', () => {
 

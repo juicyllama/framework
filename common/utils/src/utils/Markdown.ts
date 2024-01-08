@@ -1,4 +1,4 @@
-import { Modules } from './Modules'
+import { Modules } from './Modules.js'
 
 export class Markdown {
 	/**

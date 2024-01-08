@@ -2,11 +2,11 @@ import { faker } from '@faker-js/faker'
 import { Csv, File } from '@juicyllama/utils'
 import { MockUserRequest, Scaffold, ScaffoldDto, TestEndpoint } from '../../test'
 import { BulkUploadResponse, METHOD } from '../../types'
-import { AuthService } from '../auth/auth.service'
-import { User } from './users.entity'
-import { UserRole } from './users.enums'
-import { UsersModule } from './users.module'
-import { UsersService } from './users.service'
+import { AuthService } from '../auth/auth.service.js'
+import { User } from './users.entity.js'
+import { UserRole } from './users.enums.js'
+import { UsersModule } from './users.module.js'
+import { UsersService } from './users.service.js'
 
 const E = User
 type T = User

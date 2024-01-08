@@ -1,5 +1,5 @@
-import { RedocOptions } from '../utils/redoc'
 import { Strings } from '@juicyllama/utils'
+import { RedocOptions } from '../utils/redoc/interfaces/redocOptions.interface.js'
 
 export const redocConfig = <RedocOptions>{
 	title: process.env.PROJECT_NAME ? `${Strings.capitalize(process.env.PROJECT_NAME)} :: API` : 'API',

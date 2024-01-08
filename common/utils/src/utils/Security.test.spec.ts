@@ -1,4 +1,4 @@
-import { Security } from './Security'
+import { Security } from './Security.js'
 
 describe('Security', () => {
 	it('hashPassword', async () => {

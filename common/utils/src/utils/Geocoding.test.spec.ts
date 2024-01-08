@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { Coordinates, BoundingBox, Geocoding } from './Geocoding'
+import { Coordinates, BoundingBox, Geocoding } from './Geocoding.js'
 
 describe('areCoordinatesInBoundingBox', () => {
 	it('Check if London is in UK', async () => {

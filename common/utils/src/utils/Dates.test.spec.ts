@@ -1,4 +1,4 @@
-import { Dates } from './Dates'
+import { Dates } from './Dates.js'
 
 describe('Dates', () => {
 	describe('Format', () => {

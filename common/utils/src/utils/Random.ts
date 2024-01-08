@@ -1,6 +1,9 @@
-import FACTS from '../assets/llama.facts.json'
+import FACTS from '../assets/llama.facts.json' assert {
+	type: 'json',
+	integrity: 'sha384-ABC123'
+}
 import { faker } from '@faker-js/faker'
-import { Strings } from './Strings'
+import { Strings } from './Strings.js'
 
 const UPPERCASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
 	LOWERCASE = 'abcdefghijklmnopqrstuvwxyz',

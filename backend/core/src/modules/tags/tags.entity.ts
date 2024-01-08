@@ -5,12 +5,12 @@ import { ApiProperty } from '@nestjs/swagger'
 @Entity('tags')
 @Unique('tag_UNIQUE', ['name'])
 export class Tag {
-	@PrimaryGeneratedColumn()
+	@PrimaryGeneratedColumn({ type: 'bigint'})
 	@ApiProperty({ description: 'The tag ID', example: 1 })
 	readonly tag_id: number
 
 	@ApiProperty({ description: 'The name of your tag', example: 'TAG' })
-	@Column()
+	@Column({ type: 'varchar' })
 	@IsString()
 	@MinLength(1)
 	@MaxLength(255)

@@ -1,5 +1,5 @@
 import { IsEnum, IsNumber, IsObject, IsString } from 'class-validator'
-import { BeaconStatus } from '../beacon.enums'
+import { BeaconStatus } from '../beacon.enums.js'
 
 export class BeaconPushResponseDto {
 	@IsNumber()

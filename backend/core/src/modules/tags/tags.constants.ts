@@ -1,7 +1,7 @@
-import { ControllerConstants } from '../../types/common'
-import { TagDto, CreateTagDto, UpdateTagDto, TagResponceDto } from './tags.dtos'
-import { Tag } from './tags.entity'
-import { TagsSelect, TagsOrderBy, TagsRelations } from './tags.enum'
+import { ControllerConstants } from '../../types/common.js'
+import { TagDto, CreateTagDto, UpdateTagDto, TagResponceDto } from './tags.dtos.js'
+import { Tag } from './tags.entity.js'
+import { TagsSelect, TagsOrderBy, TagsRelations } from './tags.enum.js'
 
 export const TAGS_E = Tag
 export type TAGS_T = Tag

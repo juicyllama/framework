@@ -1,8 +1,8 @@
-import { Role } from './role.entity'
-import { AuthModule } from './auth.module'
-import { AuthService } from './auth.service'
+import { Role } from './role.entity.js'
+import { AuthModule } from './auth.module.js'
+import { AuthService } from './auth.service.js'
 import { Scaffold, ScaffoldDto } from '../../test'
-import { UserRole } from '../users/users.enums'
+import { UserRole } from '../users/users.enums.js'
 
 const E = Role
 type T = Role

@@ -1,7 +1,7 @@
-import { UsersService } from './users.service'
-import { User } from './users.entity'
+import { UsersService } from './users.service.js'
+import { User } from './users.entity.js'
 import { Scaffold, ScaffoldDto } from '../../test'
-import { UsersModule } from './users.module'
+import { UsersModule } from './users.module.js'
 
 const E = User
 type T = User

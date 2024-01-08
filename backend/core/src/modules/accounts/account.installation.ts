@@ -1,6 +1,6 @@
 import { forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common'
 import { Logger, Env, SupportedCurrencies } from '@juicyllama/utils'
-import { AccountService } from './account.service'
+import { AccountService } from './account.service.js'
 
 @Injectable()
 export class AccountInstallationService implements OnModuleInit {

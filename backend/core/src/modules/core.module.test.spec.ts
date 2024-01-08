@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { Env } from '@juicyllama/utils'
-import { CoreModule } from './core.module'
+import { CoreModule } from './core.module.js'
 describe('Core Bootup', () => {
 	let moduleRef: TestingModule
 
