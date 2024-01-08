@@ -7,7 +7,6 @@ import { createMollieClient, Mandate } from '@mollie/api-client'
 import mandateMock from './mandate.mock'
 import { ConfigService } from '@nestjs/config'
 import { BaseService, Query } from '@juicyllama/core'
-import { CustomerService } from '../customer/customer.service'
 
 const E = MollieMandate
 type T = MollieMandate
@@ -17,7 +16,6 @@ export class MandateService extends BaseService<T> {
 		@InjectRepository(E) readonly repository: Repository<T>,
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
-		@Inject(forwardRef(() => CustomerService)) private readonly customerService: CustomerService,
 		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
 	) {
 		super(query, repository)

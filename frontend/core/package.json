@@ -33,7 +33,6 @@
 		"test": "vitest --silent --run"
 	},
 	"dependencies": {
-		"@azure/msal-browser": "^3.6.0",
 		"@juicyllama/vue-dev": "workspace:^",
 		"@juicyllama/vue-utils": "workspace:^"
 	}

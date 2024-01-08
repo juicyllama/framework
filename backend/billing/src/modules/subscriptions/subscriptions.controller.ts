@@ -3,10 +3,7 @@ import { ApiTags } from '@nestjs/swagger'
 import { SubscriptionsService } from './subscriptions.service'
 import { AccountId, AuthService, BaseController, FxService, ReadManyDecorator, UserAuth } from '@juicyllama/core'
 import { Query as TQuery } from '@juicyllama/core'
-import {
-	billingSubscriptionsConstants as constants,
-	BILLING_SUBSCRIPTIONS_T as T
-} from './subscriptions.constants'
+import { billingSubscriptionsConstants as constants, BILLING_SUBSCRIPTIONS_T as T } from './subscriptions.constants'
 import { billingRoles as roles } from '../billing.constants'
 
 @ApiTags('Subscriptions')
@@ -22,9 +19,9 @@ export class SubscriptionsController extends BaseController<T> {
 		super(service, tQuery, constants, {
 			services: {
 				authService,
-				fxService
+				fxService,
 			},
-			roles: roles
+			roles: roles,
 		})
 	}
 

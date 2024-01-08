@@ -14,9 +14,7 @@ import {
 	BaseController,
 } from '@juicyllama/core'
 import { InvoicesService } from './invoices.service'
-import {
-	BILLING_INVOICES_T as T,
-} from './invoices.constants'
+import { BILLING_INVOICES_T as T } from './invoices.constants'
 import { billingRoles as roles } from '../billing.constants'
 import { billingInvoiceConstants as constants } from './invoices.constants'
 
@@ -33,9 +31,9 @@ export class InvoicesController extends BaseController<T> {
 		super(service, tQuery, constants, {
 			services: {
 				authService,
-				fxService
+				fxService,
 			},
-			roles: roles
+			roles: roles,
 		})
 	}
 

@@ -71,7 +71,7 @@ export function MockPaymentMethodCCRequest(account: Account): DeepPartial<Paymen
 			cardNumber: faker.finance.creditCardNumber(),
 			cardLabel: faker.finance.accountName(),
 			cardFingerprint: '4444333322221111',
-			cardExpireDate: faker.date.future(),
+			cardExpiryDate: faker.date.future(),
 		},
 		can_send: false,
 		can_charge: true,

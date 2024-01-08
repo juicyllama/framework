@@ -26,9 +26,9 @@ export class ChargesController extends BaseController<T> {
 		super(service, tQuery, constants, {
 			services: {
 				authService,
-				fxService
+				fxService,
 			},
-			roles: roles
+			roles: roles,
 		})
 	}
 

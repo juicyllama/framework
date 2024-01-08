@@ -14,14 +14,14 @@ export const BILLING_SUBSCRIPTIONS_E = Subscription
 export type BILLING_SUBSCRIPTIONS_T = Subscription
 
 export const billingSubscriptionsConstants = {
-    entity: BILLING_SUBSCRIPTIONS_E,
-    name: BILLING_SUBSCRIPTIONS_NAME,
-    primaryKey: BILLING_SUBSCRIPTIONS_PRIMARY_KEY,
-    searchFields: BILLING_SUBSCRIPTIONS_SEARCH_FIELDS,
-    defaultOrderBy: BILLING_SUBSCRIPTIONS_DEFAULT_ORDER_BY,
-    currencyField: BILLING_SUBSCRIPTIONS_CURRENCY_FIELD,
-    currencyFields: BILLING_SUBSCRIPTIONS_CURRENCY_FIELDS,
-    selectEnum: SubscriptionSelect,
+	entity: BILLING_SUBSCRIPTIONS_E,
+	name: BILLING_SUBSCRIPTIONS_NAME,
+	primaryKey: BILLING_SUBSCRIPTIONS_PRIMARY_KEY,
+	searchFields: BILLING_SUBSCRIPTIONS_SEARCH_FIELDS,
+	defaultOrderBy: BILLING_SUBSCRIPTIONS_DEFAULT_ORDER_BY,
+	currencyField: BILLING_SUBSCRIPTIONS_CURRENCY_FIELD,
+	currencyFields: BILLING_SUBSCRIPTIONS_CURRENCY_FIELDS,
+	selectEnum: SubscriptionSelect,
 	orderByEnum: SubscriptionOrderBy,
 	relationsEnum: SubscriptionRelations,
 }

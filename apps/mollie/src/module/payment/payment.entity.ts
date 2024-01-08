@@ -48,7 +48,7 @@ export class MolliePayment extends BaseEntity {
 	@JoinColumn({ name: 'mollie_mandate_id' })
 	mandate?: MollieMandate
 
-	@Column({ default: null, nullable: true})
+	@Column({ default: null, nullable: true })
 	@IsNumber()
 	@IsOptional()
 	mollie_mandate_id?: number

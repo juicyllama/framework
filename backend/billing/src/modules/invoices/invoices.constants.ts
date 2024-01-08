@@ -15,14 +15,14 @@ export const CRON_BILLING_INVOICES_RESEND_DOMAIN = 'billing::invoices::cron::ser
 export const CRON_BILLING_INVOICES_SETTLE_DOMAIN = 'billing::invoices::cron::service::settleInvoices'
 
 export const billingInvoiceConstants = {
-    entity: BILLING_INVOICES_E,
-    name: BILLING_INVOICES_NAME,
-    primaryKey: BILLING_INVOICES_PRIMARY_KEY,
-    searchFields: BILLING_INVOICES_SEARCH_FIELDS,
-    defaultOrderBy: BILLING_INVOICES_ORDER_BY,
-    currencyField: BILLING_INVOICES_CURRENCY_FIELD,
-    currencyFields: BILLING_INVOICES_CURRENCY_FIELDS,
-    selectEnum: InvoiceSelect,
+	entity: BILLING_INVOICES_E,
+	name: BILLING_INVOICES_NAME,
+	primaryKey: BILLING_INVOICES_PRIMARY_KEY,
+	searchFields: BILLING_INVOICES_SEARCH_FIELDS,
+	defaultOrderBy: BILLING_INVOICES_ORDER_BY,
+	currencyField: BILLING_INVOICES_CURRENCY_FIELD,
+	currencyFields: BILLING_INVOICES_CURRENCY_FIELDS,
+	selectEnum: InvoiceSelect,
 	orderByEnum: InvoiceOrderBy,
 	relationsEnum: InvoiceRelations,
 }

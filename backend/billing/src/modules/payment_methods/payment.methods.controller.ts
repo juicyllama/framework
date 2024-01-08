@@ -11,7 +11,7 @@ import {
 	Req,
 	Res,
 } from '@nestjs/common'
-import { ApiHeader, ApiHideProperty, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiHideProperty, ApiOperation, ApiTags } from '@nestjs/swagger'
 import {
 	AccountId,
 	AccountService,
@@ -40,7 +40,7 @@ import {
 	BILLING_PAYMENT_MENTHODS_E,
 	BILLING_PAYMENT_MENTHODS_SEARCH_FIELDS,
 	BILLING_PAYMENT_MENTHODS_PRIMARY_KEY,
-	BILLING_PAYMENT_MENTHODS_DEFAULT_ORDER_BY
+	BILLING_PAYMENT_MENTHODS_DEFAULT_ORDER_BY,
 } from './payment.methods.constants'
 
 @ApiTags('Payment Methods')
@@ -88,6 +88,14 @@ export class PaymentMethodsController {
 					created_at: 'DESC',
 				},
 			})
+
+			if (!payment_method) {
+				this.logger.error(`[${domain}] Payment method not found`, {
+					account_id: account_id,
+					app_payment_method_id: ext_payment_method_id,
+					payment_status: payment_status,
+				})
+			}
 		}
 
 		if (payment_method) {
@@ -105,23 +113,16 @@ export class PaymentMethodsController {
 			}
 		}
 
-		this.logger.error(`[${domain}] Payment method not found`, {
-			account_id: account_id,
-			app_payment_method_id: ext_payment_method_id,
-			payment_status: payment_status,
-		})
+		//Get payment detials from payment gateway
+		if (!payment_method.details) {
+			await this.service.syncPaymentDetails(payment_method)
+		}
 
 		res.redirect(payment_method.client_redirect_url)
 	}
 
 	@ApiOperation({
 		summary: 'Add Payment Method',
-	})
-	@ApiHeader({
-		name: 'account_id',
-		description: 'The account you are acting for',
-		required: true,
-		example: 1,
 	})
 	@UserAuth()
 	@Post()
