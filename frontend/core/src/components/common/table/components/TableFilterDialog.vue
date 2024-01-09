@@ -1,14 +1,11 @@
 <template>
 	<q-dialog v-model="props.dialog">
 		<q-card style="width: 700px; max-width: 80vw">
-			<q-card-section style="border-bottom: 1px solid #0000001f">
+			<q-card-section class="app_border-top">
 				<div class="text-h6">
 					Filters <span>({{ activeFilters.length }})</span>
 				</div>
 			</q-card-section>
-
-			<!-- TODO -->
-			<!-- ADD ? ICON WITH EXPLANATION -->
 
 			<q-card-section>
 				<FormFilter
@@ -19,7 +16,7 @@
 					@add="addFilter()" />
 			</q-card-section>
 
-			<q-card-section style="border-top: 1px solid #0000001f" v-if="activeFilters.length">
+			<q-card-section class="app_border-top" v-if="activeFilters.length">
 				<div class="text-h6">Active filters</div>
 				<ul class="q-pl-none">
 					<li style="list-style-type: none" v-for="filter in activeFilters" :key="filter.label">
@@ -28,7 +25,7 @@
 				</ul>
 			</q-card-section>
 
-			<q-card-actions align="between" class="bg-white text-teal" style="border-top: 1px solid #0000001f">
+			<q-card-actions align="between" class="bg-white text-teal app_border-top">
 				<q-btn flat label="Clear all filters" @click="clear()" v-close-popup />
 				<q-btn flat label="Apply" v-close-popup />
 			</q-card-actions>
@@ -92,3 +89,8 @@ const removeFilter = (filter: IFilter) => {
 	emit('remove', index)
 }
 </script>
+<style>
+.app_border-top {
+	border-top: 1px solid #0000001f;
+}
+</style>
