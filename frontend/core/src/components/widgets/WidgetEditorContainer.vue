@@ -173,7 +173,7 @@ import JLForm from './components/JLForm.vue'
 import JLTable from './components/JLTable.vue'
 import { AccountStore } from '../../store/account'
 // import { saveWidgets } from '../../services/widgets'
-import { widgetClass } from './utils'
+import { widgetClass, getKey } from './utils'
 import { SettingsService } from '../../services/settings'
 
 const findWidgetById = (widgets, widget) => widgets.findIndex(el => el.id === widget.id)
@@ -186,6 +186,7 @@ export default {
 	setup(props) {
 		const leftDrawerOpen = ref(false)
 		const search = ref('')
+		const isNew = ref(true)
 		const showWidgetEditForm = ref(false)
 		const $q = useQuasar()
 		const settingsService = new SettingsService()
@@ -204,12 +205,12 @@ export default {
 		const widgets2 = ref([])
 
 		onMounted(() => {
-			//format: frontend::widgets::<route>::<account_id>
-			const widgetKey = `frontend::widgets::${String(route.name)}::${accountStore.selected_account?.account_id}`
+			const widgetKey = getKey(route.name as string, accountStore.selected_account?.account_id)
 			settingsService.getKey(widgetKey).then(data => {
 				if (data) {
 					widgetsStore.widgets = data
-					widgets2.value = data
+					widgets2.value = data as any
+					isNew.value = false
 				}
 			})
 		})
@@ -226,9 +227,12 @@ export default {
 		}
 
 		const saveDashboard = () => {
-			//format: frontend::widgets::<route>::<account_id>
-			const widgetKey = `frontend::widgets::${String(route.name)}::${accountStore.selected_account?.account_id}`
-			settingsService.setKey(widgetKey, widgets2.value)
+			const widgetKey = getKey(route.name as string, accountStore.selected_account?.account_id)
+			if (isNew.value) {
+				settingsService.createKey(widgetKey, widgets2.value)
+			} else {
+				settingsService.updateKey(widgetKey, widgets2.value)
+			}
 		}
 
 		const onDragStart = (event, widget, src) => {

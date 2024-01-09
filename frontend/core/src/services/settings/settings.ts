@@ -14,10 +14,20 @@ export class SettingsService extends Api<T> {
 			method: 'GET',
 		})
 	}
-	async setKey(key: string, value: object): Promise<T> {
+	async createKey(key: string, value: object): Promise<T> {
 		return await apiRequest<T>({
 			url: `${SETTINGS_ENDPOINT}`,
 			method: 'POST',
+			data: {
+				value,
+				key
+			},
+		})
+	}
+	async updateKey(key: string, value: object): Promise<T> {
+		return await apiRequest<T>({
+			url: `${SETTINGS_ENDPOINT}`,
+			method: 'PATCH',
 			data: {
 				value,
 				key

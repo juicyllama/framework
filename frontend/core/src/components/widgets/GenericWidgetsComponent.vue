@@ -5,21 +5,23 @@ import WidgetDisplayContainer from './WidgetDisplayContainer.vue'
 import WidgetEditorContainer from './WidgetEditorContainer.vue'
 import { SettingsService } from '../../services/settings'
 import { useWidgetsStore } from '../../store/widgets'
+import { AccountStore } from '../../store/account'
+import { getKey } from './utils'
 // import { loadWidgets } from '../../services/widgets'
 
 const props = defineProps<{
 	editable: boolean
 	data?: any
-	account_id?: string
+	user_id?: string
 }>()
 
 const widgetsStore = useWidgetsStore()
 const settingsService = new SettingsService()
+const accountStore = AccountStore()
 const route = useRoute()
 
 onMounted(async () => {
-	//format: frontend::widgets::<route>::<account_id>
-	const widgetKey = `frontend::widgets::${String(route.name)}::${props.account_id}`
+	const widgetKey = getKey(route.name as string, accountStore.selected_account?.account_id, props.user_id)
 
 	if (!props.editable) {
 		if (props.data) {
