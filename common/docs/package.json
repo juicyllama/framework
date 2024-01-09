@@ -1,7 +1,8 @@
 {
 	"name": "@juicyllama/docs",
-	"version": "0.0.37",
-	"description": "Juicyllama Framework Docs",
+	"type": "module",
+	"version": "0.6.4",
+	"description": "Juicyllama Docs portal",
 	"author": {
 		"name": "JuicyLlama Studio",
 		"email": "studio@juicyllama.com",
@@ -9,25 +10,39 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/juicyllama/framework/common/docs"
+		"url": "https://github.com/juicyllama/framework/tree/main/common/docs"
 	},
 	"bugs": "https://github.com/juicyllama/framework",
-	"license": "0BSD",
 	"readmeFilename": "README.md",
-	"main": "index.js",
-	"keywords": [
-		"juicyllama",
-		"framework",
-		"developer",
-		"docs"
-	],
 	"scripts": {
-		"docs:dev": "vuepress dev",
-		"docs:build": "vuepress build"
+		"build": "nuxt build",
+		"dev": "nuxt dev",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview",
+		"postinstall": "nuxt prepare",
+		"format": "prettier --write --ignore-path .gitignore \"**/*.{js,vue,json,md}\""
 	},
 	"dependencies": {
-		"@vuepress/plugin-container": "next",
-		"vue": "^3.3.4",
-		"vuepress": "next"
+		"@juicyllama/frontend-core": "latest",
+		"@nuxt-themes/docus": "github:shershen08/docus#jl-flavour-features",
+		"@nuxt/content": "2.8.0",
+		"@nuxt/devtools": "latest",
+		"@nuxt/eslint-config": "latest",
+		"@nuxt/ui": "2.10.0",
+		"@nuxt/ui-pro": "0.6.1",
+		"@nuxtjs/color-mode": "3.3.2",
+		"@nuxtjs/google-fonts": "3.1.1",
+		"@pinia/nuxt": "latest",
+		"@quasar/extras": "latest",
+		"nuxt": "3.8.2",
+		"nuxt-icon": "^0.6.7",
+		"nuxt-quasar-ui": "latest",
+		"quasar": "latest",
+		"vue": "latest",
+		"vue-router": "latest"
+	},
+	"devDependencies": {
+		"@nuxtjs/tailwindcss": "6.9.0",
+		"vite-plugin-require": "^1.1.11"
 	}
 }

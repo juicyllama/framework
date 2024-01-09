@@ -1,12 +1,2 @@
-import type { App, Plugin } from 'vue'
-import BillingPage from './BillingPage.vue'
-import InvoicePage from './InvoicePage.vue'
-
-export default {
-	install(Vue: App) {
-		Vue.component('JLBillingPage', BillingPage)
-		Vue.component('JLInvoicePage', InvoicePage)
-	},
-} as Plugin
-
-export { BillingPage, InvoicePage }
+export { default as JLBillingPage } from './BillingPage.vue'
+export { default as JLInvoicePage } from './InvoicePage.vue'

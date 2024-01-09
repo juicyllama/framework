@@ -2,6 +2,7 @@
 export { ShopifyModule } from './modules/shopify.module'
 export { ShopifyAuthModule } from './modules/auth/auth.module'
 export { ShopifyOrdersModule } from './modules/orders/orders.module'
+export { ShopifyProviderModule } from './modules/provider/provider.module'
 export { ShopifyWebhooksModule } from './modules/webhooks/webhooks.module'
 
 // Controllers
@@ -40,3 +41,6 @@ export {
 	ShopifyRestListOrders,
 } from './modules/orders/orders.dto'
 export { ShopifyWebhook, ShopifyWebhookCreate, ShopifyRestListWebhooks } from './modules/webhooks/webhooks.dto'
+
+// Constants and decorators
+export { InjectShopify, SHOPIFY_PROVIDER_TOKEN } from './modules/provider/provider.constants'

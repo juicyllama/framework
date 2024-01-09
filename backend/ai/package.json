@@ -1,16 +1,16 @@
 {
     "name": "@juicyllama/ai",
-    "version": "0.1.9",
+    "version": "0.1.10",
     "description": "Juicyllama NestJs AI Module",
     "author": {
         "name": "JuicyLlama Studio",
         "email": "studio@juicyllama.com",
         "url": "https://juicyllama.com"
     },
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org/"
-	},
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/juicyllama/framework/tree/main/backend/ai"
@@ -31,10 +31,7 @@
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests",
-        "test:clear": "npx jest --clearCache",
-        "test:watch": "jest --watch",
-        "test:cov": "jest --coverage",
-        "test:e2e": "jest --config ./test/jest-e2e.json"
+        "before:commit": "pnpm run lint && pnpm run format && pnpm run test && pnpm run build"
     },
     "dependencies": {
         "@juicyllama/core": "workspace:^",

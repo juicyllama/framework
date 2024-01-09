@@ -1,28 +1,23 @@
-import { Module, forwardRef } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
-import { Env, Logger } from '@juicyllama/utils'
-import Joi from 'joi'
-import shopifyConfig from '../../config/shopify.config'
-import { shopifyConfigJoi } from '../../config/shopify.config.joi'
-import { ShopifyAuthController } from './auth.controller'
 import { AppsModule, InstalledAppsModule, OAuthModule } from '@juicyllama/app-store'
-import { AuthModule, jwtConfig } from '@juicyllama/core'
-import { JwtModule } from '@nestjs/jwt'
+import { AuthModule, ConfigValidationModule, jwtConfig } from '@juicyllama/core'
 import { StoresModule } from '@juicyllama/ecommerce'
+import { Logger } from '@juicyllama/utils'
+import { Module } from '@nestjs/common'
+import { JwtModule } from '@nestjs/jwt'
+import { ShopifyProviderModule } from '../provider/provider.module'
+import { ShopifyAuthController } from './auth.controller'
+import { ShopifyConfigDto } from '../../config/shopify.config.dto'
 
 @Module({
 	imports: [
-		ConfigModule.forRoot({
-			isGlobal: true,
-			load: [shopifyConfig],
-			validationSchema: Env.IsNotTest() ? Joi.object(shopifyConfigJoi) : null,
-		}),
 		JwtModule.register(jwtConfig()),
-		forwardRef(() => AuthModule),
-		forwardRef(() => AppsModule),
-		forwardRef(() => OAuthModule),
-		forwardRef(() => InstalledAppsModule),
-		forwardRef(() => StoresModule),
+		AuthModule,
+		AppsModule,
+		OAuthModule,
+		InstalledAppsModule,
+		StoresModule,
+		ShopifyProviderModule,
+		ConfigValidationModule.register(ShopifyConfigDto),
 	],
 	controllers: [ShopifyAuthController],
 	providers: [Logger],

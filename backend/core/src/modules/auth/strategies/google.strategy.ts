@@ -4,19 +4,22 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { UsersService } from '../../users/users.service'
 import { defaultSSOString } from '../../../configs/sso.config.joi'
 
+export const enableGoogleStrategy = process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 	constructor(@Inject(forwardRef(() => UsersService)) private usersService: UsersService) {
+		if (!enableGoogleStrategy) throw new Error('Google is not enabled')
 		super({
 			clientID: process.env.GOOGLE_CLIENT_ID ?? defaultSSOString,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? defaultSSOString,
 			callbackURL: `${process.env.BASE_URL_APP}/login`,
-			scope: ['email', 'profile'],
+			scope: process.env.GOOGLE_LOGIN_SCOPES ? process.env.GOOGLE_LOGIN_SCOPES.split(' ') : ['email', 'profile'],
 		})
 	}
 
 	async validate(accessToken: string, refreshToken: string, profile: any): Promise<any> {
 		const { emails } = profile
-		return await this.usersService.validateEmail(emails[0].value)
+		return enableGoogleStrategy && (await this.usersService.validateEmail(emails[0].value))
 	}
 }

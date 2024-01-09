@@ -31,7 +31,7 @@
 	</q-card>
 </template>
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { useWidgetsStore } from '../../../store/widgets'
 import AdditionalSettings from './AdditionalSettings.vue'
@@ -44,24 +44,32 @@ const widgetsStore = useWidgetsStore()
 const onSubmit = () => {
 	if (!isEdit.value) {
 		widgetsStore.add({
-			...options.data,
+			...options.value.data,
 			id: uuidv4(),
 			order: 0,
 		})
 	} else {
-		widgetsStore.replace(widgetsStore.widgetToEdit.id, options.data)
+		widgetsStore.replace(widgetsStore.widgetToEdit.id, options.value.data)
 		widgetsStore.clearWidgetToEdit()
 	}
-	options.data = EMPTY_WIDGET
+	options.value.data = EMPTY_WIDGET
 	emit('add')
 }
 
 const onChange = (value: string): void => {
-	options.data.configs = JSON.stringify(value)
+	options.value.data.configs = JSON.stringify(value)
 }
 
 const isEdit = computed<boolean>(() => !!widgetsStore.widgetToEdit.id)
-const options = reactive<any>(() => ({
-	data: isEdit.value ? widgetsStore.widgetToEdit : EMPTY_WIDGET,
-}))
+const options = computed<any>(() => {
+	if (isEdit.value) {
+		return {
+			data: widgetsStore.widgetToEdit,
+		}
+	} else {
+		return {
+			data: EMPTY_WIDGET,
+		}
+	}
+})
 </script>

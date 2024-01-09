@@ -9,13 +9,13 @@ import {
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
-import { JwtAuthGuard } from '@juicyllama/core'
+import { AuthService, JwtAuthGuard, AccountId } from '@juicyllama/core'
 import { AiService } from './ai.service'
 import { Ai } from './ai.entity'
-import { AiChatRequest, AiSQLRequest } from './ai.dto'
+import { AiChatRequest } from './ai.dto'
 import { DeepPartial } from 'typeorm'
 
-@ApiTags('Lana')
+@ApiTags('Ai')
 @Controller('ai')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -27,7 +27,10 @@ import { DeepPartial } from 'typeorm'
 })
 @ApiNotFoundResponse({ description: 'Not Found' })
 export class AiController {
-	constructor(@Inject(forwardRef(() => AiService)) private readonly aiService: AiService) {}
+	constructor(
+		@Inject(forwardRef(() => AiService)) private readonly aiService: AiService,
+		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
+	) {}
 
 	@ApiOperation({ summary: 'Ask', description: 'Query public/general AI models' })
 	@ApiOkResponse({
@@ -35,19 +38,21 @@ export class AiController {
 		type: Ai,
 	})
 	@Post('ask')
-	async ask(@Req() req, @Body() data: AiChatRequest): Promise<Ai> {
+	async ask(@Req() req, @AccountId() account_id: number, @Body() data: AiChatRequest): Promise<Ai> {
+		await this.authService.check(req.user.user_id, account_id)
 		return await this.aiService.chat(data)
 	}
 
-	@ApiOperation({ summary: 'Ask', description: 'Query public/general AI models' })
-	@ApiOkResponse({
-		description: 'OK',
-		type: Ai,
-	})
-	@Post('sql')
-	async sql(@Req() req, @Body() data: AiSQLRequest): Promise<Ai> {
-		return await this.aiService.sql(data)
-	}
+	// @ApiOperation({ summary: 'Ask', description: 'Query public/general AI models' })
+	// @ApiOkResponse({
+	// 	description: 'OK',
+	// 	type: Ai,
+	// })
+	// @Post('sql')
+	// async sql(@Req() req, @AccountId() account_id: number, @Body() data: AiSQLRequest): Promise<Ai> {
+	//	await this.authService.check(req.user.user_id, account_id)
+	// 	return await this.aiService.sql(data)
+	// }
 
 	@ApiOperation({
 		summary: 'Update',
@@ -65,7 +70,13 @@ export class AiController {
 		type: Ai,
 	})
 	@Patch('update/:ai_id')
-	async update(@Req() req, @Param('ai_id') ai_id: number, @Body() ai_data: DeepPartial<Ai>): Promise<Ai> {
+	async update(
+		@Req() req,
+		@AccountId() account_id: number,
+		@Param('ai_id') ai_id: number,
+		@Body() ai_data: DeepPartial<Ai>,
+	): Promise<Ai> {
+		await this.authService.check(req.user.user_id, account_id)
 		return await this.aiService.update({
 			ai_id: ai_id,
 			...ai_data,

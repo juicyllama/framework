@@ -37,8 +37,7 @@ export async function TestEndpoint<T>(options: {
 	switch (options.type) {
 		case METHOD.CREATE:
 		case METHOD.POST:
-
-		const url = `${options.url}?${querystring.stringify(options.queryParams)}`
+			const url = `${options.url}?${querystring.stringify(options.queryParams)}`
 			const requestBuilder = request(options.scaffold.server)
 				.post(url)
 				.set(headers)
@@ -155,7 +154,6 @@ export async function TestEndpoint<T>(options: {
 			return E
 
 		case METHOD.LIST:
-			
 			await request(options.scaffold.server)
 				.get(`${options.url}?${querystring.stringify(options.queryParams)}`)
 				.set(headers)

@@ -7,7 +7,7 @@ export const createAccount = async (payload: CreateAccount): Promise<NewAccountD
 	const response = await instance.post(`/account`, {
 		account_name: payload.account_name,
 		owners_email: payload.email,
-		owners_password: payload.password.value,
+		owners_password: payload.password?.value,
 		owners_first_name: payload.first_name,
 		owners_last_name: payload.last_name,
 	})

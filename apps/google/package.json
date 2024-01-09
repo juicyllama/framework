@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-google",
-    "version": "0.0.5",
+    "version": "0.0.9",
     "description": "Juicyllama NestJs Google App",
     "author": {
         "name": "JuicyLlama Studio",
@@ -31,7 +31,8 @@
         "start:dev": "tsc -w",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests",
+        "before:commit": "pnpm run lint && pnpm run format && pnpm run test && pnpm run build"
     },
     "dependencies": {
         "@googlemaps/google-maps-services-js": "^3.3.38",

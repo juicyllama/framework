@@ -2,11 +2,12 @@
 import { MenuItem } from '../../../../types'
 
 const props = defineProps<MenuItem>()
+defineEmits(['click'])
 </script>
 
 <template>
 	<q-item-section v-if="props.icon" style="flex: none; font-size: medium">
-		<q-icon :name="props.icon" class="JLMenuItemIcon icon_fix q-pr-sm" />
+		<q-icon :name="typeof props.icon === 'string' ? props.icon : props.icon.name" class="JLMenuItemIcon icon_fix q-pr-sm" />
 	</q-item-section>
 
 	<q-item-section>

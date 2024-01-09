@@ -1,6 +1,6 @@
 export interface StatsDataSet {
-	title: string
-	value: DataValue
+	title?: string
+	value?: DataValue
 	delta?: DataValue
 	endpoint?: string
 	dynamicData?: boolean

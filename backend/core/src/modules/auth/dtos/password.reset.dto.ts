@@ -6,7 +6,7 @@ export class CompletePasswordResetDto {
 	@IsString()
 	@ApiProperty({
 		description: 'The users email address',
-		example: 'richard.branson@fly.virgin.com',
+		example: 'jon.doe@example.com',
 	})
 	readonly email: string
 
@@ -20,14 +20,14 @@ export class CompletePasswordResetDto {
 	@IsString()
 	@MinLength(8)
 	@MaxLength(50)
-	newPassword: string
+	readonly password: string
 }
 
 export class InitiateResetPasswordDto {
 	@IsEmail()
 	@ApiProperty({
 		description: 'The users email address',
-		example: 'richard.branson@fly.virgin.com',
+		example: 'jon.doe@example.com',
 	})
 	readonly email: string
 }

@@ -5,15 +5,18 @@ import { useQuasar } from 'quasar'
 import { AccountStore } from '../../../store/account'
 import AccountAvatar from './AccountAvatar.vue'
 import { UserStore } from '../../../store/user'
-import { FormField, FormFieldButtonType, FormFieldField, FormFieldType, FormSettings } from '../../../types/form'
+import { FormField, FormFieldButtonType, FormFieldField, FormFieldType, FormViewSettings } from '../../../types/form'
 import { defaultFormSettings } from '../../../components/common/form/defaults'
+import { useRouter, useRoute } from 'vue-router'
 
+const router = useRouter()
+const route = useRoute()
 const accountStore = AccountStore()
 const userStore = UserStore()
 const $q = useQuasar()
 
 const props = defineProps<{
-	formSettings?: FormSettings
+	formSettings?: FormViewSettings
 }>()
 
 const form: FormField[] = reactive([])
@@ -29,7 +32,7 @@ function createForm() {
 			field: FormFieldField.INPUT,
 			type: FormFieldType.TEXT,
 			required: true,
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -39,7 +42,7 @@ function createForm() {
 			field: FormFieldField.INPUT,
 			type: FormFieldType.TEXT,
 			required: false,
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -49,7 +52,7 @@ function createForm() {
 			field: FormFieldField.INPUT,
 			type: FormFieldType.TEXT,
 			required: false,
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -59,7 +62,7 @@ function createForm() {
 			field: FormFieldField.INPUT,
 			type: FormFieldType.TEXT,
 			required: false,
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -73,7 +76,7 @@ function createForm() {
 				tablet: 6,
 				desktop: 6,
 			},
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -87,7 +90,7 @@ function createForm() {
 				tablet: 6,
 				desktop: 6,
 			},
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -101,7 +104,7 @@ function createForm() {
 				tablet: 6,
 				desktop: 6,
 			},
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -115,7 +118,7 @@ function createForm() {
 				tablet: 6,
 				desktop: 6,
 			},
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -129,7 +132,7 @@ function createForm() {
 				tablet: 6,
 				desktop: 6,
 			},
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -143,7 +146,7 @@ function createForm() {
 				tablet: 6,
 				desktop: 6,
 			},
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -153,7 +156,7 @@ function createForm() {
 			field: FormFieldField.INPUT,
 			type: FormFieldType.TEXT,
 			required: false,
-			settings: props?.formSettings?.field?.settings ?? defaultFormSettings.field.settings,
+			settings: props?.formSettings ?? defaultFormSettings,
 			loading: false,
 		},
 		{
@@ -182,7 +185,7 @@ onMounted(async () => {
 
 <template>
 	<div id="JLAccountsProfile">
-		<AccountAvatar :click-to-edit="userStore.isAdmin()" size="80px" class="q-pb-lg" />
+		<AccountAvatar :click-to-edit="userStore.isAdmin(router, route)" size="80px" class="q-pb-lg" />
 		<JLForm
 			:options="{ type: 'edit', fields: form, name: 'account' }"
 			v-if="loaded"

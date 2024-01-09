@@ -2,7 +2,7 @@ import { RedocOptions } from '../utils/redoc'
 import { Strings } from '@juicyllama/utils'
 
 export const redocConfig = <RedocOptions>{
-	title: `${Strings.capitalize(process.env.PROJECT_NAME)} :: API`,
+	title: process.env.PROJECT_NAME ? `${Strings.capitalize(process.env.PROJECT_NAME)} :: API` : 'API',
 	logo: {
 		url: process.env.BASE_URL_API ? `${process.env.BASE_URL_API}/icon.png` : undefined,
 		backgroundColor: '#F0F0F0',
@@ -19,6 +19,10 @@ export const redocConfig = <RedocOptions>{
 		{
 			name: 'Accounts',
 			tags: ['Account', 'Users'],
+		},
+		{
+			name: 'Settings',
+			tags: ['Settings'],
 		},
 	],
 	/*generateCodeSamples: {

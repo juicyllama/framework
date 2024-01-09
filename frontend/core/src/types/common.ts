@@ -1,3 +1,5 @@
+import { ButtonStyle } from './common/button'
+
 export * from './common/index'
 
 export interface DropdownOptions {
@@ -52,20 +54,18 @@ export interface AvatarOptions {
 export interface IconSettings {
 	type?: string
 	icons?: {
-		add?: string
-		edit?: string
-		delete?: string
-		search?: string
-		columns?: string
+		[key: string]: string;
 	}
 }
 
 export interface Icon {
-	name: string
+	name?: string
 	type?: string
 	size?: string
 	color?: string
 	classes?: string
+	hide?: boolean
+	after?: boolean // if true, the button will be added after the label
 }
 
 export enum TablePosition {
@@ -74,11 +74,9 @@ export enum TablePosition {
 	AFTER_TABLE,
 }
 
-export interface CustomButton {
+export interface CustomButton extends ButtonStyle {
 	key?: string
 	label?: string
 	icon?: Icon
 	action?: Function // a function to call when the button is clicked, output { data: formData, q: $q, schema: TableSchema | FormSchema, button: CustomButton }
-	classes?: string // classes to add to the button
-	color?: string // color of the button
 }

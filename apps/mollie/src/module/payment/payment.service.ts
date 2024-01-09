@@ -8,7 +8,7 @@ import { createMollieClient, Payment, PaymentMethod, PaymentStatus, SequenceType
 import { MandateService } from '../mandate/mandate.service'
 import paymentMock from './payment.mock'
 import { CustomerService } from '../customer/customer.service'
-import { Account, AppIntegrationName, BaseService, Query } from '@juicyllama/core'
+import { Account, AccountService, AppIntegrationName, BaseService, Query } from '@juicyllama/core'
 import { MollieMandate } from '../mandate/mandate.entity'
 import { MollieCustomer } from '../customer/customer.entity'
 import { molliePaymentStatus } from '../mollie.mapper'
@@ -22,6 +22,7 @@ export class PaymentService extends BaseService<T> {
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
+		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
 		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
 		@Inject(forwardRef(() => CustomerService)) private readonly customerService: CustomerService,
 		@Inject(forwardRef(() => MandateService)) private readonly mandateService: MandateService,
@@ -116,11 +117,11 @@ export class PaymentService extends BaseService<T> {
 		let mollie_response: Payment
 
 		if (!payment.customer) {
-			payment = await this.findById(payment.mollie_payment_id)
+			payment.customer = await this.customerService.findById(payment.mollie_customer_id)
 		}
 
 		if (!payment.customer.account) {
-			payment.customer = await this.customerService.findById(payment.customer.mollie_customer_id)
+			payment.customer.account = await this.accountService.findById(payment.customer.account_id)
 		}
 
 		try {
@@ -187,9 +188,7 @@ export class PaymentService extends BaseService<T> {
 		if (!mandate) {
 			mandate = await this.mandateService.findOne({
 				where: {
-					customer: {
-						mollie_customer_id: customer.mollie_customer_id,
-					},
+					mollie_customer_id: customer.mollie_customer_id,
 				},
 				order: {
 					created_at: 'DESC',
@@ -281,24 +280,24 @@ export class PaymentService extends BaseService<T> {
 			return
 		}
 
-		await this.paymentsService.paymentResponse(
-			AppIntegrationName.mollie,
-			payment.mandate.mollie_mandate_id,
-			payment.mollie_payment_id,
-			payment.amount,
-			payment.currency,
-			molliePaymentStatus(payment.status),
-			payment.amount >= 0 ? PaymentType.payment : PaymentType.refund,
-		)
-
-		this.logger.verbose(`[${domain}] Pushing payment response`, {
+		await this.paymentsService.paymentResponse({
+			account_id: payment.customer.account_id,
 			app_integration_name: AppIntegrationName.mollie,
-			mollie_mandate_id: payment.mandate.mollie_mandate_id,
-			mollie_payment_id: payment.mollie_payment_id,
+			app_payment_id: payment.mollie_payment_id,
 			amount: payment.amount,
 			currency: payment.currency,
-			status: molliePaymentStatus(payment.status),
-			type: payment.amount >= 0 ? PaymentType.payment : PaymentType.refund,
+			payment_status: molliePaymentStatus(payment.status),
+			payment_type: payment.amount >= 0 ? PaymentType.payment : PaymentType.refund,
+		})
+
+		this.logger.verbose(`[${domain}] Pushing payment response`, {
+			account_id: payment.customer.account_id,
+			app_integration_name: AppIntegrationName.mollie,
+			app_payment_id: payment.mollie_payment_id,
+			amount: payment.amount,
+			currency: payment.currency,
+			payment_status: molliePaymentStatus(payment.status),
+			payment_type: payment.amount >= 0 ? PaymentType.payment : PaymentType.refund,
 		})
 	}
 

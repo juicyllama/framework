@@ -75,9 +75,7 @@ export class CustomerService extends BaseService<T> {
 	async findByAccount(account: Account): Promise<MollieCustomer> {
 		return await this.query.findOne(this.repository, {
 			where: {
-				account: {
-					account_id: account.account_id,
-				},
+				account_id: account.account_id,
 			},
 		})
 	}

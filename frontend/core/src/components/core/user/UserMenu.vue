@@ -4,9 +4,12 @@ import { UserStore } from '../../../store/user'
 import { JLMenu } from '../../common/menu'
 import { Menu, UserMenuOptions } from '../../../types'
 import { ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
+const router = useRouter()
+const route = useRoute()
 const userStore = UserStore()
-const admin = ref<boolean>(await userStore.isAdmin())
+const admin = ref<boolean>(await userStore.isAdmin(router, route))
 
 const props = defineProps<UserMenuOptions>()
 
@@ -18,7 +21,7 @@ if (props?.show?.profile) {
 	userMenu.items.push({
 		title: 'Your Profile',
 		caption: '',
-		icon: `${props.icon?.type ? props.icon.type : 'person'} `,
+		icon: `${props.icon?.icons?.profile ? props.icon.type + ' ' +  props.icon.icons.profile : 'person'} `,
 		link: '/profile',
 	})
 }
@@ -27,7 +30,7 @@ if (props?.show?.billing) {
 	userMenu.items.push({
 		title: 'Billing',
 		caption: '',
-		icon: `${props.icon?.type ? props.icon.type : ''} description`,
+		icon: `${props.icon?.icons?.billing ? props.icon.type + ' ' +  props.icon.icons.billing : 'description'} `,
 		link: '/invoices',
 	})
 }
@@ -36,13 +39,13 @@ if (admin.value && props?.show?.admin) {
 	userMenu.items.push({
 		title: 'Admin',
 		caption: '',
-		icon: `${props.icon?.type ? props.icon.type : ''} 'settings'`,
+		icon: `${props.icon?.icons?.admin ? props.icon.type + ' ' +  props.icon.icons.admin : 'settings'} `,
 		link: '/admin',
 	})
 }
 
 function logout() {
-	userStore.logout()
+	userStore.logout(router)
 }
 </script>
 

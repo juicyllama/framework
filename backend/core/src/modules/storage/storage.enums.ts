@@ -1,4 +1,6 @@
-export enum StorageFileType {
+export type StorageFileType = StorageType.PUBLIC | StorageType.PRIVATE | string
+
+export enum StorageType {
 	PUBLIC = 'PUBLIC',
 	PRIVATE = 'PRIVATE',
 }

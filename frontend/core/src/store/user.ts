@@ -1,3 +1,4 @@
+import { Router, RouteLocationNormalizedLoaded } from 'vue-router'
 import { defineStore } from 'pinia'
 import type { User, UserLogin } from '../types'
 import { UserPreferences } from '../types'
@@ -48,13 +49,13 @@ export const UserStore = defineStore('user', {
 			return merged
 		},
 
-		async login(data: UserLogin, q?: QVueGlobals): Promise<User> {
+		async login(data: UserLogin, q?: QVueGlobals, router?: Router): Promise<User> {
 			try {
-				const access_token = await loginUser(data)
-				logger({ severity: LogSeverity.VERBOSE, message: `User access token: ${access_token}` })
+				const access_token = await loginUser(data, q, router)
+				if(!access_token) return
 				return await this.processAccessToken(access_token, q)
 			} catch (e: any) {
-				logger({ severity: LogSeverity.ERROR, message: e.message })
+				logger({ severity: LogSeverity.ERROR, message: e.message, q: q })
 			}
 		},
 
@@ -98,12 +99,8 @@ export const UserStore = defineStore('user', {
 		},
 
 		async resetComplete(email: string, code: string, password: string, q?: QVueGlobals): Promise<T> {
-			try {
 				const access_token = await resetPasswordComplete(email, code, password)
 				return await this.processAccessToken(access_token, q)
-			} catch (e: any) {
-				logger({ severity: LogSeverity.ERROR, message: e.message })
-			}
 		},
 
 		async getUser(): Promise<T> {
@@ -111,21 +108,26 @@ export const UserStore = defineStore('user', {
 			return await this.setUser(userData)
 		},
 
-		isAdmin(account_id?: number): boolean {
+		isAdmin(router: Router, route: RouteLocationNormalizedLoaded, account_id?: number): boolean {
 			if (!account_id) {
 				const accountStore = AccountStore()
 				account_id = accountStore.getAccountId
 			}
 
 			if (!this.$state.user) {
-				this.logout()
+
+				if(route.fullPath) {
+					router.push(`/login?r=${route.fullPath}`)
+				}else{
+					this.logout(router, '/login')
+				}				
 				return false
 			}
 
 			const roles = this.$state.user.roles
 
 			if (!roles) {
-				this.logout()
+				this.logout(router, '/login')
 				return false
 			}
 
@@ -173,18 +175,27 @@ export const UserStore = defineStore('user', {
 			}
 		},
 
-		async logout() {
+		async logout(router?: Router, redirect?: string) {
+			logger({ severity: LogSeverity.VERBOSE, message: `[Store][User][Logout] Logout User` })
 			window.localStorage.removeItem('user')
+			window.localStorage.removeItem('selected_account')
 			this.$state.user = null
 			await token.remove()
-			//const accountStore = AccountStore()
-			//await accountStore.unsetSelectedAccount()
-			await goToLogin()
+
+			if(!router) {
+				if(redirect){
+					window.location.href = redirect
+				}else{
+					window.location.href = '/'
+				}
+			}
+
+			await goToLogin(router, redirect)
 		},
 
 		async processAccessToken(access_token: string, q?: QVueGlobals): Promise<T> {
 			await token.set(access_token)
-			const user = await this.getUser()
+			const user = await getUser()
 
 			if (!user?.user_id) {
 				logger({ severity: LogSeverity.ERROR, message: `Authentication Error`, q: q })
@@ -204,13 +215,21 @@ export const UserStore = defineStore('user', {
 
 			logger({ severity: LogSeverity.LOG, message: `Login Successful`, q: q })
 
+			await this.setUser(user)
+
 			return user
 		},
 
-		async accountCheck() {
+		async accountCheck(router: Router, redirect: string) {
 			if (!accountAuthCheck) {
-				await this.logout()
+				logger({ severity: LogSeverity.VERBOSE, message: `[Store][User][AccountCheck] Failed` })
+				await this.logout(router, redirect)
 			}
 		},
 	},
+	getters: {
+		getUser(state): User {
+			return state.user ?? null
+		},
+	}
 })

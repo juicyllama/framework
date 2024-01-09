@@ -1,9 +1,9 @@
 <template>
 	<q-layout view="lHh Lpr fff" class="bg-grey-1">
-		<q-header elevated class="bg-white text-grey-8" height-hint="64">
+		<q-header v-if="isShowHeader" elevated class="bg-white text-grey-8" height-hint="64">
 			<q-toolbar class="JLWidget__toolbar" style="height: 64px">
 				<q-toolbar-title v-if="$q.screen.gt.sm" shrink class="row items-center no-wrap">
-					<span class="q-ml-sm">Dashboard</span>
+					<span class="q-ml-sm">{{ title }}</span>
 				</q-toolbar-title>
 
 				<q-space />
@@ -149,6 +149,8 @@
 			</q-page-sticky>
 		</q-page-container>
 
+		<q-btn fab v-if="!isShowHeader" @click="onShowForm" icon="add" color="accent" />
+
 		<div v-show="isDragging" class="zone3 col-12 align-self-end" @dragover.prevent @drop="onDropTrash($event)">
 			<div class="bg-error trash-container">
 				<q-icon size="32px" color="white" class="q-mt-sm" name=" delete_forever" />
@@ -159,15 +161,20 @@
 </template>
 
 <script lang="ts">
+import { useQuasar } from 'quasar'
+
 import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import WidgetForm from './components/WidgetForm.vue'
 import { useWidgetsStore } from '../../store/widgets'
 import { JLChart } from '../../components/common/chart'
 import JLStats from './components/JLStats.vue'
 import JLForm from './components/JLForm.vue'
 import JLTable from './components/JLTable.vue'
-import { saveWidgets } from '../../services/widgets'
-import { widgetClass } from './utils'
+import { AccountStore } from '../../store/account'
+// import { saveWidgets } from '../../services/widgets'
+import { widgetClass, getKey } from './utils'
+import { SettingsService } from '../../services/settings'
 
 const findWidgetById = (widgets, widget) => widgets.findIndex(el => el.id === widget.id)
 
@@ -175,10 +182,16 @@ export default {
 	components: {
 		WidgetForm,
 	},
-	setup() {
+	props: ['data', 'showHeader'],
+	setup(props) {
 		const leftDrawerOpen = ref(false)
 		const search = ref('')
+		const isNew = ref(true)
 		const showWidgetEditForm = ref(false)
+		const $q = useQuasar()
+		const settingsService = new SettingsService()
+		const accountStore = AccountStore()
+		const route = useRoute()
 
 		const comps = {
 			JLChart,
@@ -192,15 +205,15 @@ export default {
 		const widgets2 = ref([])
 
 		onMounted(() => {
-			const dashboard = localStorage.getItem('dashboard')
-			if (dashboard) {
-				widgetsStore.widgets = JSON.parse(dashboard)
-				widgets2.value = JSON.parse(dashboard)
-			}
+			const widgetKey = getKey(route.name as string, accountStore.selected_account?.account_id)
+			settingsService.getKey(widgetKey).then(data => {
+				if (data) {
+					widgetsStore.widgets = data
+					widgets2.value = data as any
+					isNew.value = false
+				}
+			})
 		})
-
-		//TODO: remove when API is ready
-		//const LS_KEY_FOR_DATA = 'dashboard'
 
 		const close = () => {
 			showWidgetEditForm.value = false
@@ -214,9 +227,12 @@ export default {
 		}
 
 		const saveDashboard = () => {
-			saveWidgets(widgets2.value)
-			//TODO: remove when API is ready, show notification
-			//localStorage.setItem(LS_KEY_FOR_DATA, JSON.stringify(widgetsStore.widgets))
+			const widgetKey = getKey(route.name as string, accountStore.selected_account?.account_id)
+			if (isNew.value) {
+				settingsService.createKey(widgetKey, widgets2.value)
+			} else {
+				settingsService.updateKey(widgetKey, widgets2.value)
+			}
 		}
 
 		const onDragStart = (event, widget, src) => {
@@ -286,6 +302,9 @@ export default {
 			resortDrop,
 			onDrop,
 			onDragStart,
+			isShowHeader: props.showHeader,
+			title: ref('Widget editor'),
+			$q
 		}
 	},
 }

@@ -1,9 +1,9 @@
-import { Configuration, OpenAIApi } from 'openai'
+import OpenAi from 'openai'
 
 export function OpenaiScaffold(OPENAI_API_KEY: string) {
-	const configuration = new Configuration({
+	const openai = new OpenAi({
 		apiKey: OPENAI_API_KEY,
 	})
 
-	return new OpenAIApi(configuration)
+	return openai
 }

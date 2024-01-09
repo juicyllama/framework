@@ -1,16 +1,31 @@
 import instance from './index'
+import { PublicClientApplication } from "@azure/msal-browser";
 import type { User } from '../types'
 import type { UserLogin } from '../types'
-import { logger } from '../helpers'
+import { goToDashboard, logger } from '../helpers'
 import { LogSeverity } from '../types'
-import { useQuasar } from 'quasar'
+import { QVueGlobals } from 'quasar'
 import { userStore } from '../index'
+import { Router } from 'vue-router'
 
-const $q = useQuasar()
-
-export const loginUser = async (payload: UserLogin): Promise<string> => {
+export async function loginUser(payload: UserLogin, q: QVueGlobals, router?: Router): Promise<string> {
 	const response = await instance.post(`auth/login`, payload)
-	return response.data.access_token
+
+	if (response.data.error) {
+		switch (response.data.error.message) {
+			case 'Password requires changing':
+				await router.push('/reset?email=' + payload.email + '&message=' + response.data.error.message)
+				return
+			default:
+				throw new Error(response.data.error.message)
+		}
+	}
+	else if (response.data.access_token) {
+		return response.data.access_token
+	}
+	else {
+		throw new Error('Unknown error')
+	}
 }
 
 export const passwordlessLogin = async (email: string): Promise<void> => {
@@ -31,7 +46,7 @@ export const resetPasswordCode = async (email: string, code: string): Promise<vo
 }
 
 export const resetPasswordComplete = async (email: string, code: string, pass: string): Promise<string> => {
-	const response = await instance.patch(`auth/password-reset/complete`, { email: email, code: code, password: pass })
+	const response = await instance.post(`auth/password-reset/complete`, { email: email, code: code, password: pass })
 	return response.data.access_token
 }
 
@@ -48,6 +63,11 @@ export const getUser = async (): Promise<User> => {
 
 export const accountAuthCheck = async (): Promise<boolean> => {
 	const response = await instance.get(`auth/account/check`)
+	logger({
+		severity: LogSeverity.VERBOSE,
+		message: `Auth Check - ${response.data.passed}`,
+		object: response.data,
+	})
 	return response.data.passed
 }
 
@@ -61,31 +81,39 @@ export function linkedInLogin(VITE_API_BASE_URL: string) {
 	window.location.href = `${VITE_API_BASE_URL}/auth/linkedin`
 }
 
-export function microsoftLogin(VITE_API_BASE_URL: string) {
-	localStorage.setItem('OAuthType', 'microsoft')
-	window.location.href = `${VITE_API_BASE_URL}/auth/microsoft`
-}
-export function azureLogin(VITE_API_BASE_URL: string) {
-	localStorage.setItem('OAuthType', 'azure_ad')
-	window.location.href = `${VITE_API_BASE_URL}/auth/azure_ad`
+export function azureLogin(VITE_AZURE_AD_TENANT_ID: string, VITE_AZURE_AD_CLIENT_ID: string, VITE_AZURE_AD_EXPOSED_SCOPES: string, router: Router) {
+	const scopes = VITE_AZURE_AD_EXPOSED_SCOPES
+		.split(' ')
+		.map(scope => `api://${VITE_AZURE_AD_CLIENT_ID}/${scope}`)
+	const msalConfig = {
+		auth: {
+			clientId: VITE_AZURE_AD_CLIENT_ID,
+			authority: `https://login.microsoftonline.com/${VITE_AZURE_AD_TENANT_ID}`,
+			redirectUri: "https://local.sentinel.hiveuw.com:8080/login"
+		},
+		cache: {
+			cacheLocation: 'localStorage', // This configures where your cache will be stored
+			storeAuthStateInCookie: false // Set this to "true" if you are having issues on IE11 or Edge
+		}
+	};
+	const msalInstance = new PublicClientApplication(msalConfig);
+	msalInstance.initialize().then(() => {
+		msalInstance
+			.loginPopup({ scopes })
+			.then(async (authResponse) => {
+				const accessToken = authResponse.accessToken;
+				await userStore.processAccessToken(accessToken)
+				goToDashboard(router)
+			});
+	})
 }
 
-export async function completeGoogleLogin(params) {
+export async function completeGoogleLogin(params, q: QVueGlobals) {
 	const response = await instance.get(`auth/google/redirect`, { params: params })
-	return userStore.processAccessToken(response.data.access_token, $q)
+	return userStore.processAccessToken(response.data.access_token, q)
 }
 
-export async function completeLinkedInLogin(params) {
+export async function completeLinkedInLogin(params, q: QVueGlobals) {
 	const response = await instance.get(`auth/linkedin/redirect`, { params: params })
-	return userStore.processAccessToken(response.data.access_token, $q)
-}
-
-export async function completeMicrosoftLogin(params) {
-	const response = await instance.get(`auth/microsoft/redirect`, { params: params })
-	return userStore.processAccessToken(response.data.access_token, $q)
-}
-
-export async function completeAzureLogin(params) {
-	const response = await instance.get(`auth/azure_ad/redirect`, { params: params })
-	return userStore.processAccessToken(response.data.access_token, $q)
+	return userStore.processAccessToken(response.data.access_token, q)
 }

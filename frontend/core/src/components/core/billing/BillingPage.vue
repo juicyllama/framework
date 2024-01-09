@@ -1,12 +1,32 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { BILLING_INVOICE_ENDPOINT, IconSettings } from '../../../index'
+import { ref, Ref } from 'vue'
+import type { QVueGlobals } from 'quasar'
+import { IconSettings } from '../../../types/common'
 import { invoicesTableSchema } from './billing.table.schema'
+import { JLTable } from '../../../components/common/table'
+//import { JLChart } from '../../../components/common/chart'
+//import { JLStats } from '../../../components/common/stats'
+import { BILLING_INVOICE_ENDPOINT, billingInvoiceService } from '../../../services/billing/invoices'
 
 const props = defineProps<{
-	visibleColumns: string[]
-	icon: IconSettings
+	visibleColumns?: string[]
+	iconSettings: IconSettings,
+	q?: QVueGlobals
 }>()
+
+const invoice_count: Ref<number> = ref(0)
+
+if(props.q) {
+	props.q.loading.show({
+		message: 'Loading Invoice Data...'
+	})
+}
+	
+invoice_count.value = await billingInvoiceService.stats({ method: 'COUNT' })
+
+if(props.q) {
+	props.q.loading.hide()
+}
 
 const onDownloadButtonClick = invoiceObject => {
 	const url = `${BILLING_INVOICE_ENDPOINT}/files/${invoiceObject.invoice_id}`
@@ -28,37 +48,27 @@ const onDownloadButtonClick = invoiceObject => {
 	req.send()
 }
 
-const lastInvoiceData = ref({
-	//TODO:
-	// unable to find method to get LAST items in
-	// https://github.com/juicyllama-npm/billing/blob/main/src/modules/invoices/invoices.service.ts
-	// add LIMIT ?
-	endpoint: `${BILLING_INVOICE_ENDPOINT}/stats?method=AVG`,
-	dynamicData: true,
-})
-const avgInvoiceData = ref({
-	endpoint: `${BILLING_INVOICE_ENDPOINT}/stats?method=AVG`,
-	dynamicData: true,
-})
 </script>
 <template>
 	<div class="JLPage JLPage--billing">
-		<v-row>
-			<v-col xs="12" sm="6">
-				<JLTable :visibleColumns="visibleColumns" :options="invoicesTableSchema(props.icon, visibleColumns)">
-					<template v-slot:custom-action="{ row }">
-						<q-btn @click="onDownloadButtonClick(row)" color="primary">Download</q-btn>
-					</template>
-				</JLTable>
-			</v-col>
-			<v-col xs="12" sm="6">
-				<JLChart
-					:endpoint="`${BILLING_INVOICE_ENDPOINT}/stats?method=COUNT`"
-					title="Invoice spend last 12 months"
-					dynamic-data />
-			</v-col>
-		</v-row>
-		<v-row>
+		<div v-if="invoice_count > 0">
+			<v-row >
+				<v-col xs="12" sm="6">
+					<JLTable :visibleColumns="visibleColumns" :options="invoicesTableSchema(props.iconSettings, visibleColumns)">
+						<template v-slot:custom-action="{ row }">
+							<q-btn @click="onDownloadButtonClick(row)" color="primary">Download</q-btn>
+						</template>
+					</JLTable>
+				</v-col>
+				<!-- <v-col xs="12" sm="6">
+					<JLChart
+						:endpoint="`${BILLING_INVOICE_ENDPOINT}/stats?method=COUNT`"
+						title="Invoice spend last 12 months"
+						type="line"
+						dynamic-data />
+				</v-col> -->
+			</v-row>
+			<!-- <v-row>
 			<v-col xs="12" sm="6">
 				<v-col>
 					<h4>Last Invoice Total</h4>
@@ -69,6 +79,10 @@ const avgInvoiceData = ref({
 					<JLStats v-bind="avgInvoiceData" />
 				</v-col>
 			</v-col>
-		</v-row>
+		</v-row> -->
+		</div>
+		<div v-else>
+			<p>No invoices found, check back later.</p>
+		</div>
 	</div>
 </template>

@@ -5,10 +5,11 @@ import { InstalledApp } from './installed.entity'
 import { BaseService, BeaconService, Query } from '@juicyllama/core'
 import { AppsService } from '../apps.service'
 import { AppStoreIntegrationName } from '../apps.enums'
-import { Env, Logger, Modules } from '@juicyllama/utils'
+import { Logger } from '@juicyllama/utils'
 import { App } from '../apps.entity'
-import { CreateInstalledAppDto } from './installed.dto'
+import { CreateInstalledAppDto, preInstallCheckResponse } from './installed.dto'
 import { WordPressService } from './preinstall/wordpress.service'
+import { ShopifyService } from './preinstall/shopify.service'
 
 export const E = InstalledApp
 export type T = InstalledApp
@@ -20,8 +21,9 @@ export class InstalledAppsService extends BaseService<T> {
 		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
 		@Inject(forwardRef(() => AppsService)) readonly appsService: AppsService,
-		@Inject(forwardRef(() => WordPressService)) private readonly wordpressService: WordPressService,
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		@Inject(forwardRef(() => WordPressService)) readonly wordPressService: WordPressService,
+		@Inject(forwardRef(() => ShopifyService)) readonly shopifyService: ShopifyService,
 	) {
 		super(query, repository, {
 			beacon: beaconService,
@@ -94,36 +96,17 @@ export class InstalledAppsService extends BaseService<T> {
 	//Check if app passes the installation checks
 	// result = true - all passed
 	// result = false - failed checks & error contains error message
-	async preInstallChecks(app: App, settings: any): Promise<{ result: boolean; error?: string }> {
+	async preInstallChecks(app: App, settings: any, account_id: number): Promise<preInstallCheckResponse> {
 		const domain = 'app::installed::preInstallChecks'
 		this.logger.debug(`[${domain}][${app.integration_name}] Checking app #${app.app_id} for pre-install checks`)
 
-		//ensure app is installed
 		switch (app.integration_name) {
 			case AppStoreIntegrationName.wordpress:
-				if (Env.IsProd() && !Modules.isInstalled('@juicyllama/app-wordpress')) {
-					this.logger.debug(`[${domain}][${app.integration_name}] App not installed`)
-					return {
-						result: false,
-						error: `App not installed`,
-					}
-				}
-				break
-			case AppStoreIntegrationName.shopify:
-				if (Env.IsProd() && !Modules.isInstalled('@juicyllama/app-shopify')) {
-					this.logger.debug(`[${domain}][${app.integration_name}] App not installed`)
-					return {
-						result: false,
-						error: `App not installed`,
-					}
-				}
-				break
-		}
+				return await this.wordPressService.precheckWordpress(domain, app, settings)
 
-		//if app can validate credentials, do so
-		switch (app.integration_name) {
-			case AppStoreIntegrationName.wordpress:
-				return await this.wordpressService.precheckWordpress(domain, app, settings)
+			case AppStoreIntegrationName.shopify:
+				return await this.shopifyService.precheckShopify(domain, app, settings, account_id)
+
 			default:
 				return {
 					result: true,

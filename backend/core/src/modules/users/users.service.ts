@@ -6,7 +6,7 @@ import { AccountService } from '../accounts/account.service'
 import { AuthService } from '../auth/auth.service'
 import { BaseService } from '../../helpers/baseService'
 import { StorageService } from '../storage/storage.service'
-import { StorageFileFormat, StorageFileType } from '../storage/storage.enums'
+import { StorageFileFormat, StorageType } from '../storage/storage.enums'
 import { BeaconService } from '../beacon/beacon.service'
 import { UserAvatarType, UserRole } from './users.enums'
 import { Query } from '../../utils/typeorm/Query'
@@ -42,6 +42,9 @@ export class UsersService extends BaseService<T> {
 	}
 
 	async invite(account: Account, newUser: CreateUserDto): Promise<T> {
+		const userRole = newUser.role ?? UserRole.VIEWER
+		if (newUser.role) delete newUser.role
+
 		let user = await this.findOneByEmail(newUser.email)
 		if (user) {
 			const account_exists = user.accounts.find(a => a.account_id === account.account_id)
@@ -49,7 +52,7 @@ export class UsersService extends BaseService<T> {
 				user.accounts.push(account)
 				await this.usersHooks.account_added(account, user)
 				user = await this.update(user)
-				await this.authService.assignRole(user, account, UserRole.VIEWER)
+				await this.authService.assignRole(user, account, userRole)
 			}
 			return user
 		} else {
@@ -58,6 +61,7 @@ export class UsersService extends BaseService<T> {
 				accounts: [account],
 			})
 			await this.usersHooks.invited(account, user)
+			await this.authService.assignRole(user, account, userRole)
 			delete user.password
 			return user
 		}
@@ -77,17 +81,17 @@ export class UsersService extends BaseService<T> {
 	}
 
 	async uploadAvatar(user, file): Promise<T> {
-		const result = await this.storageService.write(
-			`users/${user.user_id}/avatar/${file.originalname}`,
-			StorageFileType.PUBLIC,
-			StorageFileFormat.Express_Multer_File,
-			file,
-		)
-		if (result === null || result === void 0 ? void 0 : result.Location) {
+		const result = await this.storageService.write({
+			location: `users/${user.user_id}/avatar/${file.originalname}`,
+			permissions: StorageType.PUBLIC,
+			format: StorageFileFormat.Express_Multer_File,
+			file: file,
+		})
+		if (result === null || result === void 0 ? void 0 : result.url) {
 			user = await this.query.update(this.repository, {
 				user_id: user.user_id,
 				avatar_type: UserAvatarType.IMAGE,
-				avatar_image_url: result.Location,
+				avatar_image_url: result.url,
 			})
 		}
 		return user

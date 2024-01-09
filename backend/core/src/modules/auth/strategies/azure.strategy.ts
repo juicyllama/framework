@@ -1,23 +1,56 @@
-import { Injectable } from '@nestjs/common'
+import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { PassportStrategy, AuthGuard } from '@nestjs/passport'
-import { BearerStrategy } from 'passport-azure-ad'
+import { BearerStrategy, IBearerStrategyOption } from 'passport-azure-ad'
+import { Env } from '@juicyllama/utils'
 import { defaultSSOString } from '../../../configs/sso.config.joi'
+import { UsersService } from '../../..'
+import { AZURE_AD } from '../auth.constants'
 
 const AZURE_AD_CLIENT_ID = process.env.AZURE_AD_CLIENT_ID ?? defaultSSOString
 const AZURE_AD_TENANT_ID = process.env.AZURE_AD_TENANT_ID ?? defaultSSOString
+const AZURE_AD_EXPOSED_SCOPES = process.env.AZURE_AD_EXPOSED_SCOPES ?? defaultSSOString
+
+const config = {
+	credentials: {
+		tenantID: AZURE_AD_TENANT_ID,
+		clientID: AZURE_AD_CLIENT_ID,
+		audience: AZURE_AD_CLIENT_ID,
+	},
+	metadata: {
+		authority: 'login.microsoftonline.com',
+		discovery: '.well-known/openid-configuration',
+		version: 'v2.0',
+	},
+	settings: {
+		validateIssuer: Env.IsProd(),
+		passReqToCallback: false,
+		loggingLevel: Env.IsProd() ? 'warn' : 'info',
+	},
+}
+
+export const enableAzureADStrategy =
+	process.env.AZURE_AD_CLIENT_ID && process.env.AZURE_AD_TENANT_ID && process.env.AZURE_AD_CLIENT_SECRET
 
 @Injectable()
-export class AzureADStrategy extends PassportStrategy(BearerStrategy, 'azure-ad') {
-	constructor() {
+export class AzureADStrategy extends PassportStrategy(BearerStrategy, AZURE_AD) {
+	constructor(@Inject(forwardRef(() => UsersService)) private usersService: UsersService) {
+		if (!enableAzureADStrategy) throw new Error('Azure AD is not enabled')
 		super({
-			identityMetadata: `https://login.microsoftonline.com/${AZURE_AD_TENANT_ID}/v2.0/.well-known/openid-configuration`,
-			clientID: AZURE_AD_CLIENT_ID,
-		})
+			identityMetadata: `https://${config.metadata.authority}/${config.credentials.tenantID}/${config.metadata.version}/${config.metadata.discovery}`,
+			issuer: `https://${config.metadata.authority}/${config.credentials.tenantID}/${config.metadata.version}`,
+			clientID: config.credentials.clientID,
+			audience: config.credentials.audience,
+			validateIssuer: config.settings.validateIssuer,
+			passReqToCallback: config.settings.passReqToCallback,
+			loggingLevel: config.settings.loggingLevel,
+			scope: AZURE_AD_EXPOSED_SCOPES.split(' '),
+			loggingNoPII: false,
+		} as IBearerStrategyOption)
 	}
 
-	async validate(data) {
-		return data
+	async validate(payload: any) {
+		return enableAzureADStrategy && payload['email'] && (await this.usersService.validateEmail(payload.email))
 	}
 }
 
-export const AzureADGuard = AuthGuard('azure-ad')
+export const AzureADGuard = AuthGuard(AZURE_AD)

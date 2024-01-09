@@ -30,11 +30,12 @@
         "build": "tsc",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests"
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests",
+        "before:commit": "pnpm run lint && pnpm run format && pnpm run test && pnpm run build"
     },
     "dependencies": {
         "@juicyllama/core": "workspace:^",
         "@juicyllama/utils": "workspace:^",
-        "openai": "^3.3.0"
+        "openai": "^4.19.0"
     }
 }

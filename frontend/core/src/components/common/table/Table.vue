@@ -7,6 +7,7 @@ import Table from '../../../components/common/table/components/Table.vue'
 import { loadPusher } from '../../../plugins'
 import { FindOptions, LogSeverity } from '../../../types'
 import { logger, TableColumn, TableSchema } from '../../../index'
+import { default as JLAreYouSure } from '../AreYouSure.vue'
 
 const props = defineProps<{
 	options: TableSchema
@@ -373,27 +374,9 @@ onMounted(async () => {
 			@toggleButton="tableToggled"
 			@advancedFilter="onAdvancedFilterChange"></Table>
 
-		<q-dialog v-model="confirm" persistent>
-			<q-card>
-				<q-card-section class="row items-center">
-					<h5>
-						<q-icon
-							class="JLIcon JLIconDelete"
-							size="1em"
-							:name="`${options.icon?.type} ${
-								options.icon?.icons?.delete ?? 'delete'
-							}`" />
+			<JLAreYouSure :confirm="confirm" @cancel="confirm = false" @proceed="confirmedDeleteRecord" :button_proceed="{label: 'Delete Record'}" :icon="{classes: 'JLIcon JLIconDelete', size: '1em', type: options.icon?.type, name: options.icon?.icons?.delete ?? 'delete' }" />
 
-						<span class="q-ml-sm">Are you sure?</span>
-					</h5>
-				</q-card-section>
 
-				<q-card-actions align="right">
-					<q-btn label="Cancel" color="primary" @click="confirm = false" />
-					<q-btn label="Delete Record" color="red" @click="confirmedDeleteRecord" />
-				</q-card-actions>
-			</q-card>
-		</q-dialog>
 	</div>
 </template>
 <style scoped></style>

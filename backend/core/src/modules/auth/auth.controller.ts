@@ -11,7 +11,6 @@ import { LocalAuthGuard } from './guards/local-auth.guard'
 import { UsersService } from '../users/users.service'
 import { AuthGuard } from '@nestjs/passport'
 import { AccountId } from '../../decorators'
-import { AzureADGuard } from './strategies/azure.strategy'
 
 @ApiTags('Auth')
 @Controller('/auth')
@@ -26,7 +25,7 @@ export class AuthController {
 		description:
 			'Posting the users email and password if successfully authenticated will return a token. Pass this bearer token in the `Authorization header (Authorization: Bearer {TOKEN})` to access restricted endpoints.',
 	})
-	@ApiQuery({ name: 'email', required: true, type: String, example: 'richard.branson@fly.virgin.com' })
+	@ApiQuery({ name: 'email', required: true, type: String, example: 'jon.doe@example.com' })
 	@ApiQuery({ name: 'password', required: true, type: String, example: 'S7r0#gP@$s' })
 	@ApiOkResponse({
 		description: 'OK',
@@ -61,7 +60,7 @@ export class AuthController {
 		type: SuccessResponseDto,
 	})
 	@Post('password-reset')
-	async initiatePasswordReset(@Req() req, @Body() data: InitiateResetPasswordDto): Promise<SuccessResponseDto> {
+	async initiatePasswordReset(@Body() data: InitiateResetPasswordDto): Promise<SuccessResponseDto> {
 		return {
 			success: await this.authService.initiatePasswordReset(data),
 		}
@@ -150,24 +149,24 @@ export class AuthController {
 	}
 
 	@ApiOperation({
-		summary: 'Azure AD Login - Start',
+		summary: 'Linkedin Login - Start',
 	})
-	@UseGuards(AzureADGuard)
-	@Get('azure_ad')
-	async initiateAzureLogin(): Promise<void> {
-		// initiates the Azure AD login
+	@UseGuards(AuthGuard('linkedin'))
+	@Get('linkedin')
+	async initiateLinkedinLogin(): Promise<void> {
+		// initiates the Linkedin login
 	}
 
 	@ApiOperation({
-		summary: 'Azure AD Login - Complete',
+		summary: 'Linkedin Login - Complete',
 	})
 	@ApiOkResponse({
 		description: 'OK',
 		type: LoginResponseDto,
 	})
-	@UseGuards(AzureADGuard)
-	@Get('azure_ad/redirect')
-	async azureAuthRedirect(@Req() req): Promise<LoginResponseDto> {
+	@UseGuards(AuthGuard('linkedin'))
+	@Get('linkedin/redirect')
+	async linkedinAuthRedirect(@Req() req): Promise<LoginResponseDto> {
 		return this.authService.login(req.user)
 	}
 

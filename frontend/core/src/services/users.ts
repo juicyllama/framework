@@ -9,6 +9,11 @@ export const USERS_ENDPOINT = '/users'
 export const USERS_PUSHER_CHANNEL = 'account_${account_id}_users'
 
 export class UsersService extends Api<T> {
+
+	constructor() {
+        super(USERS_ENDPOINT)
+    }
+
 	async updateUserRole(user_id: number, role: UserRole): Promise<T> {
 		return await apiRequest<T>({
 			url: `${USERS_ENDPOINT}/${user_id}/role?role=${role}`,

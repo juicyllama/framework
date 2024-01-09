@@ -1,13 +1,12 @@
 import {
 	And,
 	DeepPartial,
-	DeleteResult,
 	Equal,
 	FindManyOptions,
 	FindOneOptions,
 	FindOperator,
-	In,
 	InsertResult,
+	In,
 	IsNull,
 	LessThan,
 	LessThanOrEqual,
@@ -21,10 +20,10 @@ import {
 import _ from 'lodash'
 import { TypeOrm } from './TypeOrm'
 import { isNil, omitBy } from 'lodash'
-import { ComparisonOperator, Enums, Env, getMySQLTimeInterval, Logger } from '@juicyllama/utils'
+import { ComparisonOperator, Enums, Env, getMySQLTimeInterval, Logger, SupportedCurrencies } from '@juicyllama/utils'
 import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder'
-import { ChartOptions } from './types'
-import { ImportMode, BulkUploadResponse } from '../../types/common'
+import { ChartOptions, CurrencyOptions } from '../../types/typeorm'
+import { ImportMode, BulkUploadResponse, ChartResult } from '../../types/common'
 
 const logger = new Logger()
 
@@ -49,10 +48,43 @@ export class Query<T> {
 
 		try {
 			const record = repository.create(data)
-			return await repository.save(record)
-		} catch (e) {
+			const result = await repository.save(record)
+
+			if (Env.IsNotProd()) {
+				logger.debug(`[QUERY][CREATE][${repository.metadata.tableName}] Result`, result)
+			}
+
+			return result
+		} catch (e: any) {
 			return await this.handleCreateError(e, repository, data)
 		}
+	}
+
+	/**
+	 * Upsert a record
+	 * @param repository
+	 * @param data
+	 */
+
+	async upsert(repository: Repository<T>, data: DeepPartial<T>, dedup_field: string): Promise<InsertResult> {
+		if (Env.IsNotProd()) {
+			logger.debug(`[QUERY][UPSERT][${repository.metadata.tableName}]`, data)
+		}
+
+		const fields: string[] = []
+
+		for (const field of Object.keys(data)) {
+			if (field === dedup_field) continue
+			fields.push(field)
+		}
+
+		return await repository
+			.createQueryBuilder()
+			.insert()
+			.into(repository.metadata.tableName)
+			.values(data)
+			.orUpdate(fields, [dedup_field])
+			.execute()
 	}
 
 	async bulk(
@@ -98,20 +130,16 @@ export class Query<T> {
 					result = await this.createBulkRecords(repository, data)
 					await this.dropTable(repository, `${repository.metadata.tableName}_COPY`)
 				} catch (e: any) {
+					logger.error(
+						`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] ${e.message}`,
+						e.stack,
+					)
 					await this.restoreTable(repository)
 				}
 				break
 		}
 
-		logger.debug(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] Result`, {
-			affected_records:
-				'affected_records' in result
-					? result.affected_records
-					: 'raw' in result
-					? result.raw.affected_records
-					: null,
-		})
-
+		logger.debug(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] Result`, result)
 		return result
 	}
 
@@ -122,13 +150,19 @@ export class Query<T> {
 	 * @param {string[]} [relations]
 	 */
 
-	async findOneById(repository: Repository<T>, id: number, relations?: string[]): Promise<T> {
+	async findOneById(
+		repository: Repository<T>,
+		id: number,
+		relations?: string[],
+		currency?: CurrencyOptions,
+	): Promise<T> {
 		const where = {}
 		where[this.getPrimaryKey(repository)] = id
-		return this.findOne(repository, {
+		const result = <T>await this.findOne(repository, {
 			where: where,
 			relations: relations?.length ? relations : this.getRelations(repository),
 		})
+		return <T>await this.convertCurrency<T>(result, currency)
 	}
 
 	/**
@@ -142,12 +176,14 @@ export class Query<T> {
 		repository: Repository<T>,
 		where: FindOptionsWhere<T>[] | FindOptionsWhere<T>,
 		options?: FindManyOptions,
+		currency?: CurrencyOptions,
 	): Promise<T> {
 		options = TypeOrm.findOneOptionsWrapper<T>(repository, options)
-		return this.findOne(repository, {
+		const result = <T>await this.findOne(repository, {
 			...options,
 			where: where,
 		})
+		return <T>await this.convertCurrency<T>(result, currency)
 	}
 
 	/**
@@ -156,13 +192,18 @@ export class Query<T> {
 	 * @param options
 	 */
 
-	findOne(repository: Repository<T>, options?: FindOneOptions): Promise<T> {
+	async findOne(repository: Repository<T>, options?: FindOneOptions, currency?: CurrencyOptions): Promise<T> {
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}]`, { options: options })
 		}
 
 		options = TypeOrm.findOneOptionsWrapper<T>(repository, options)
-		return repository.findOne(options)
+		const result = <T>await repository.findOne(options)
+		const convertedResult = <T>await this.convertCurrency<T>(result, currency)
+		if (Env.IsNotProd()) {
+			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}] Result`, convertedResult)
+		}
+		return convertedResult
 	}
 
 	/**
@@ -171,13 +212,14 @@ export class Query<T> {
 	 * @param options
 	 */
 
-	findAll(repository: Repository<T>, options?: FindManyOptions): Promise<T[]> {
+	async findAll(repository: Repository<T>, options?: FindManyOptions, currency?: CurrencyOptions): Promise<T[]> {
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][FIND][MANY][${repository.metadata.tableName}]`, { options: options })
 		}
 
 		options = TypeOrm.findAllOptionsWrapper<T>(repository, options)
-		return repository.find(options)
+		const result = <T[]>await repository.find(options)
+		return <T[]>await this.convertCurrency<T>(result, currency)
 	}
 
 	/**
@@ -273,7 +315,12 @@ export class Query<T> {
 	 * @param options
 	 */
 
-	async charts(repository: Repository<T>, field: string, options: ChartOptions): Promise<any> {
+	async charts(
+		repository: Repository<T>,
+		field: string,
+		options: ChartOptions,
+		currency?: CurrencyOptions,
+	): Promise<ChartResult[]> {
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][CHARTS][${repository.metadata.tableName}]`, { field, options: options })
 		}
@@ -284,6 +331,11 @@ export class Query<T> {
 			.createQueryBuilder()
 			.select('COUNT(*)', 'count')
 			.addSelect(field)
+
+		if (currency?.currency && currency.currency_fields.includes(field)) {
+			queryBuilder = queryBuilder.addSelect(currency.currency_field)
+		}
+
 		if (options.period) {
 			queryBuilder = queryBuilder.addSelect(getMySQLTimeInterval(options.period), 'time_interval')
 		}
@@ -294,11 +346,51 @@ export class Query<T> {
 		if (options.to) {
 			queryBuilder = queryBuilder.andWhere('created_at <= :to', { to: options.to })
 		}
+
 		queryBuilder = queryBuilder.groupBy(field)
+
 		if (options.period) {
 			queryBuilder = queryBuilder.addGroupBy('time_interval')
 		}
-		return queryBuilder.getRawMany()
+
+		if (currency?.currency && currency.currency_fields.includes(field)) {
+			queryBuilder = queryBuilder.addGroupBy(currency.currency_field)
+		}
+
+		const result = <ChartResult[]>await queryBuilder.getRawMany()
+
+		// If its a currency we should sum and convert the results
+		if (currency?.currency && currency.currency_fields.includes(field)) {
+			const reduced: ChartResult[] = []
+
+			for (const r of result) {
+				const reducedIndex = reduced.findIndex(function (record) {
+					return record.time_interval.toString() == r.time_interval.toString()
+				})
+
+				if (SupportedCurrencies[r[currency.currency_field]] !== SupportedCurrencies[currency.currency]) {
+					r[field] = await currency.fxService.convert(
+						r[field],
+						SupportedCurrencies[r[currency.currency_field]],
+						SupportedCurrencies[currency.currency],
+						r.time_interval,
+					)
+				}
+
+				if (reducedIndex === -1) {
+					reduced.push({
+						count: 1,
+						[field]: Number(r[field]) * Number(r.count),
+						time_interval: r.time_interval,
+						currency: r.currency ?? null,
+					})
+				} else {
+					reduced[reducedIndex][field] += Number(r[field]) * Number(r.count)
+				}
+			}
+			return reduced
+		}
+		return result
 	}
 
 	/**
@@ -360,6 +452,8 @@ export class Query<T> {
 			logger.debug(`[QUERY][COPY TABLE][${repository.metadata.tableName}]`)
 		}
 
+		await this.dropTable(repository, table_name ?? repository.metadata.tableName + '_COPY')
+
 		const sql_copy = `CREATE TABLE ${table_name ?? repository.metadata.tableName + '_COPY'} LIKE ${
 			repository.metadata.tableName
 		}`
@@ -402,7 +496,7 @@ export class Query<T> {
 			logger.debug(`[QUERY][DROP TABLE][${table_name}]`)
 		}
 
-		const sql_drop = `DROP TABLE ${table_name}`
+		const sql_drop = `DROP TABLE IF EXISTS ${table_name}`
 		await this.raw(repository, sql_drop)
 	}
 
@@ -448,6 +542,14 @@ export class Query<T> {
 		return (event += this.getTableName(repository))
 	}
 
+	requiresAccountId(repository: Repository<T>): Boolean {
+		return !!repository.metadata.columns.find(column => {
+			if (column.propertyName === 'account_id') {
+				return column
+			}
+		})
+	}
+
 	private mapComparisonOperatorToTypeORMFindOperators<T>(op: ComparisonOperator, value: T): FindOperator<T> {
 		switch (op) {
 			case ComparisonOperator.GT:
@@ -480,7 +582,7 @@ export class Query<T> {
 	}): FindOptionsWhere<T>[] | FindOptionsWhere<T> {
 		const where = []
 
-		const whereBase = {}
+		let whereBase = {}
 
 		if (options.query) {
 			for (const [key, value] of Object.entries(options.query)) {
@@ -510,31 +612,13 @@ export class Query<T> {
 						fieldLookupWhere.length === 1
 							? fieldLookupWhere[0]
 							: fieldLookupWhere.length > 0
-							? And(...fieldLookupWhere)
-							: value // if no valid operator is found, return the value as is - backward compatibility
+								? And(...fieldLookupWhere)
+								: value // if no valid operator is found, return the value as is - backward compatibility
 				}
 			}
 		}
 
-		if (options.account_id) {
-			if (options.repository.metadata.relations.find(column => column.propertyName === 'account')) {
-				whereBase['account'] = {
-					account_id: options.account_id,
-				}
-			} else if (options.repository.metadata.columns.find(column => column.propertyName === 'account_id')) {
-				whereBase['account_id'] = options.account_id
-			}
-		}
-
-		if (options.account_ids) {
-			if (options.repository.metadata.relations.find(column => column.propertyName === 'account')) {
-				whereBase['account'] = {
-					account_id: In(options.account_ids),
-				}
-			} else if (options.repository.metadata.columns.find(column => column.propertyName === 'account_id')) {
-				whereBase['account_id'] = In(options.account_ids)
-			}
-		}
+		whereBase = this.includeAccount(whereBase, options)
 
 		if (options.query?.search?.length === 1 && options.query?.search[0] === 'undefined') {
 			delete options.query.search
@@ -617,33 +701,6 @@ export class Query<T> {
 	}
 
 	/**
-	 * Returns unique key fields for the given repository
-	 */
-
-	getUniqueKeyFields(repository: Repository<T>): string[] {
-		const uniques: string[] = []
-
-		if (repository.metadata.indices.length) {
-			if (repository.metadata.indices[0]?.columnNamesWithOrderingMap) {
-				for (const [key] of Object.entries(repository.metadata.indices[0]?.columnNamesWithOrderingMap)) {
-					uniques.push(key)
-				}
-			}
-		}
-
-		if (uniques.length) {
-			return uniques
-		}
-
-		const unqiueKeys: string[] = repository.metadata.uniques.map(e => e.givenColumnNames[0])
-		if (unqiueKeys.length) {
-			return unqiueKeys
-		}
-
-		return []
-	}
-
-	/**
 	 * Duplicate key error
 	 */
 
@@ -661,18 +718,21 @@ export class Query<T> {
 
 			const uniqueKeyWhere = {}
 
-			for (const key of this.getUniqueKeyFields(repository)) {
+			for (const key of TypeOrm.getUniqueKeyFields(repository)) {
 				uniqueKeyWhere[key] = data[key]
 			}
 
 			return this.findOne(repository, { where: uniqueKeyWhere })
 		} else {
-			logger.error(`[SQL][CREATE] ${e.message}`, {
+			logger.error(`[SQL][CREATE] Error: ${e.message}`, {
 				repository: {
 					tableName: repository.metadata.tableName,
 				},
 				data: data,
-				error: e,
+				error: {
+					message: e.message,
+					stack: e.stack,
+				},
 			})
 
 			return undefined
@@ -693,7 +753,7 @@ export class Query<T> {
 
 			const uniqueKeyWhere = {}
 
-			for (const key of this.getUniqueKeyFields(repository)) {
+			for (const key of TypeOrm.getUniqueKeyFields(repository)) {
 				uniqueKeyWhere[key] = data[key]
 			}
 
@@ -704,36 +764,89 @@ export class Query<T> {
 					tableName: repository.metadata.tableName,
 				},
 				data: data,
-				error: e,
+				error: {
+					message: e.message,
+					stack: e.stack,
+				},
 			})
 
 			return undefined
 		}
 	}
 
-	async createBulkRecords(repository: Repository<T>, data: DeepPartial<T>[]): Promise<InsertResult> {
-		return await repository.createQueryBuilder().insert().into(repository.metadata.tableName).values(data).execute()
+	/**
+	 * Inserts multiple records
+	 */
+
+	async createBulkRecords(repository: Repository<T>, data: DeepPartial<T>[]): Promise<BulkUploadResponse> {
+		// due to performance issues adding thousands of records at once (with possible subscribers etc), we will insert records individually
+		const result: BulkUploadResponse = {
+			total: data.length,
+			processed: 0,
+			created: 0,
+			updated: 0,
+			deleted: 0,
+			errored: 0,
+			errors: [],
+			ids: [],
+		}
+
+		for (const record of data) {
+			try {
+				const entity = await this.create(repository, record)
+				result.ids.push(entity[this.getPrimaryKey(repository)])
+				result.created++
+			} catch (e: any) {
+				result.errored++
+				result.errors.push(e.message)
+			}
+			result.processed++
+		}
+		return result
 	}
 
 	async upsertBulkRecords(
 		repository: Repository<T>,
 		data: DeepPartial<T>[],
 		dedup_field: string,
-	): Promise<InsertResult> {
-		const fields: string[] = []
+	): Promise<BulkUploadResponse> {
+		// due to performance issues adding thousands of records at once (with possible subscribers etc), we will insert records individually
 
-		for (const field of Object.keys(data[0])) {
-			if (field === dedup_field) continue
-			fields.push(field)
+		const result: BulkUploadResponse = {
+			total: data.length,
+			processed: 0,
+			created: 0,
+			updated: 0,
+			deleted: 0,
+			errored: 0,
+			errors: [],
+			ids: [],
 		}
 
-		return await repository
-			.createQueryBuilder()
-			.insert()
-			.into(repository.metadata.tableName)
-			.values(data)
-			.orUpdate(fields, [dedup_field])
-			.execute()
+		for (const record of data) {
+			try {
+				const r = await this.findOne(repository, {
+					where: {
+						[dedup_field]: record[dedup_field],
+					},
+				})
+
+				const entity = await this.upsert(repository, record, dedup_field)
+
+				if (r) {
+					result.updated++
+				} else {
+					result.created++
+				}
+				result.ids.push(entity[this.getPrimaryKey(repository)])
+			} catch (e: any) {
+				result.errored++
+				result.errors.push(e.message)
+			}
+			result.processed++
+		}
+
+		return result
 	}
 
 	/*
@@ -744,21 +857,143 @@ export class Query<T> {
 		repository: Repository<T>,
 		data: DeepPartial<T>[],
 		dedup_field: string,
-	): Promise<DeleteResult> {
+	): Promise<BulkUploadResponse> {
+		const result: BulkUploadResponse = {
+			total: data.length,
+			processed: 0,
+			created: 0,
+			updated: 0,
+			deleted: 0,
+			errored: 0,
+			errors: [],
+		}
+
 		const records: any[] = []
 
 		for (const row of data) {
 			records.push(row[dedup_field])
 		}
 
-		return await repository
-			.createQueryBuilder()
-			.delete()
-			.from(repository.metadata.tableName)
-			.where({
-				[dedup_field]: In(records),
+		for (const record of data) {
+			try {
+				const r = await this.findOne(repository, <any>{
+					where: {
+						[dedup_field]: record[dedup_field],
+					},
+				})
+
+				if (r) {
+					await this.purge(repository, r)
+					result.deleted++
+				}
+			} catch (e: any) {
+				result.errored++
+				result.errors.push(e.message)
+			}
+			result.processed++
+		}
+
+		return result
+	}
+
+	/**
+	 * Converts currency_fields to a spcific currency
+	 */
+
+	async convertCurrency<T>(result: T | T[], currency?: CurrencyOptions): Promise<T | T[]> {
+		if (
+			!currency ||
+			!currency.currency ||
+			!currency.fxService ||
+			!currency.currency_field ||
+			!currency.currency_fields.length
+		)
+			return result
+
+		const logger = new Logger()
+
+		if (Array.isArray(result)) {
+			logger.debug(`[QUERY][CONVERTCURRENCY] Converting ${result.length} Records to ${currency.currency}`, {
+				currency_field: currency.currency_field,
+				currency_fields: currency.currency_fields,
 			})
-			.execute()
+
+			for (const r in result) {
+				if (
+					SupportedCurrencies[result[r][currency.currency_field]] !== SupportedCurrencies[currency.currency]
+				) {
+					for (const field of currency.currency_fields) {
+						result[r][field] = await currency.fxService.convert(
+							result[r][field],
+							SupportedCurrencies[result[r][currency.currency_field]],
+							SupportedCurrencies[currency.currency],
+							result[r]['created_at'] ?? new Date(),
+						)
+					}
+					result[r][currency.currency_field] = SupportedCurrencies[currency.currency]
+				}
+			}
+			return <T[]>result
+		} else {
+			logger.debug(`[QUERY][CONVERTCURRENCY] Converting record to ${currency.currency}`, {
+				currency_field: currency.currency_field,
+				currency_fields: currency.currency_fields,
+			})
+
+			if (result[currency.currency_field] != SupportedCurrencies[currency.currency]) {
+				for (const field of currency.currency_fields) {
+					result[field] = await currency.fxService.convert(
+						result[field],
+						SupportedCurrencies[field[currency.currency_field]],
+						SupportedCurrencies[currency.currency],
+						result['created_at'] ?? new Date(),
+					)
+				}
+				result[currency.currency_field] = SupportedCurrencies[currency.currency]
+			}
+			return <T>result
+		}
+	}
+
+	includeAccount<T>(
+		whereBase: any,
+		options: {
+			repository: Repository<T>
+			query?: any
+			account_id?: number
+			account_ids?: number[]
+			search_fields?: string[]
+		},
+	): any {
+		if (options.account_id) {
+			if (options.repository.metadata.relations.find(column => column.propertyName === 'account')) {
+				whereBase['account'] = {
+					account_id: options.account_id,
+				}
+			} else if (options.repository.metadata.columns.find(column => column.propertyName === 'account_id')) {
+				whereBase['account_id'] = options.account_id
+			} else if (options.repository.metadata.relations.find(column => column.propertyName === 'accounts')) {
+				whereBase['accounts'] = {
+					account_id: options.account_id,
+				}
+			}
+		}
+
+		if (options.account_ids) {
+			if (options.repository.metadata.relations.find(column => column.propertyName === 'account')) {
+				whereBase['account'] = {
+					account_id: In(options.account_ids),
+				}
+			} else if (options.repository.metadata.columns.find(column => column.propertyName === 'account_id')) {
+				whereBase['account_id'] = In(options.account_ids)
+			} else if (options.repository.metadata.relations.find(column => column.propertyName === 'accounts')) {
+				whereBase['accounts'] = {
+					account_id: In(options.account_ids),
+				}
+			}
+		}
+
+		return whereBase
 	}
 }
 

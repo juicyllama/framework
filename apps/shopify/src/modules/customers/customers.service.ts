@@ -1,12 +1,12 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { Logger } from '@juicyllama/utils'
 import { Contact, ContactsService } from '@juicyllama/crm'
+import { Logger } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
 
 @Injectable()
 export class ShopifyCustomersService {
 	constructor(
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => ContactsService)) private readonly constactsService: ContactsService,
+		private readonly logger: Logger,
+		private readonly constactsService: ContactsService,
 	) {}
 
 	/**
@@ -21,7 +21,7 @@ export class ShopifyCustomersService {
 		})
 
 		//TODO
-		// delete contact data
+		// delete contact data from contacts service
 
 		return
 	}

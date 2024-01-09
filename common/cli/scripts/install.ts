@@ -1,9 +1,6 @@
 import { cli_error, cli_log } from '../helpers/logging'
-import { setupDomain } from '../helpers/domains'
 import { setupSSL } from '../helpers/ssl'
 import { JL } from '../types/project'
-//import { setupDoppler } from '../helpers/doppler'
-//import { exec } from 'child_process'
 import { setupDocker } from '../helpers/docker'
 import fs from 'fs'
 
@@ -11,15 +8,18 @@ export async function install() {
 	const json = JSON.parse(fs.readFileSync('package.json', 'utf-8'))
 	const project: JL = json.jl
 
-	cli_log(`Found ${project.apps.length} apps in package.json`)
+	if(project.apps){
+		cli_log(`Found ${project.apps.length} apps in package.json`)
 
-	for (const app of project.apps) {
-		if (app.domain) {
-
-			await setupDomain(app)
-
-			if (app.ssl) {
-				await setupSSL(app)
+		for (const app of project.apps) {
+			if (app.domain) {
+	
+				//replaced with public A record pointing to 121.0.0.1
+				//await setupDomain(app)
+	
+				if (app.ssl) {
+					await setupSSL(app)
+				}
 			}
 		}
 	}
@@ -34,7 +34,5 @@ export async function install() {
 		await setupDocker(project)
 	}
 
-	if (project.apps.length) {
-		cli_log(`Install complete!`)
-	}
+	cli_log(`Install complete!`)
 }

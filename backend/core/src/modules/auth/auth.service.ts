@@ -9,7 +9,18 @@ import {
 	UnauthorizedException,
 } from '@nestjs/common'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { CachePeriod, Enums, Env, JLCache, Logger, Modules, OTP, Strings, SuccessResponseDto } from '@juicyllama/utils'
+import {
+	CachePeriod,
+	Enums,
+	Env,
+	JLCache,
+	Logger,
+	File,
+	Modules,
+	OTP,
+	Strings,
+	SuccessResponseDto,
+} from '@juicyllama/utils'
 import { InjectRepository } from '@nestjs/typeorm'
 import { In, Like, Repository } from 'typeorm'
 import { UsersService } from '../users/users.service'
@@ -80,8 +91,8 @@ export class AuthService extends BaseService<T> {
 		const payload = await this.constructLoginPayload(user)
 		if (!['development', 'test'].includes(process.env.NODE_ENV)) {
 			let Bugsnag
-			if (Modules.isInstalled('@bugsnag/js')) {
-				Bugsnag = require('@bugsnag/js')
+			if (Modules.bugsnag.isInstalled) {
+				Bugsnag = await Modules.bugsnag.load()
 				Bugsnag.setUser(user.user_id, user.email)
 			}
 		}
@@ -117,7 +128,7 @@ export class AuthService extends BaseService<T> {
 				'Your verification code is invalid or expired, please generate a new verification code',
 			)
 		}
-		user.password = data.newPassword
+		user.password = data.password
 		user.password_reset = false
 
 		await this.usersService.update(user)
@@ -136,6 +147,9 @@ export class AuthService extends BaseService<T> {
 		return !!user.user_id
 	}
 	async validateVerificationCode(data): Promise<SuccessResponseDto> {
+		if (!data.email) {
+			throw new BadRequestException('Email is required')
+		}
 		const user = await this.usersService.findOneByEmail(data.email)
 		this.handleUserNotFoundException(user)
 		const verificationCode = await this.getValidationCode(user)
@@ -182,14 +196,38 @@ export class AuthService extends BaseService<T> {
 	}
 	async sendVerificationCode(user, code) {
 		const domain = 'accounts::auth::sendVerificationCode'
+
+		if (!process.env.BEACON_USER_AUTH_VERIFICATION_CODE) {
+			return
+		}
+
+		if (!user.first_name) {
+			user.first_name = 'Hi there'
+		}
+
 		const subject = `🔑 Reset Password`
-		let markdown = `Hi ${
-			user.first_name ?? 'there'
-		}, <br><br> You recently requested to reset the password for your ${Strings.capitalize(
-			process.env.npm_package_name,
-		)} account. Use the code below to change your password \n`
-		markdown += `### ${code} \n`
-		markdown += `If you did not request a password reset, please ignore this email. This password reset code is only valid for the next 20 minutes.`
+
+		let markdown = ``
+
+		if (File.exists(process.env.BEACON_USER_AUTH_VERIFICATION_CODE + '/email.md')) {
+			markdown = await File.read(process.env.BEACON_USER_AUTH_VERIFICATION_CODE + '/email.md')
+			markdown = Strings.replacer(markdown, {
+				user: user,
+				code: code,
+				hrefs: {
+					cta: `${process.env.BASE_URL_APP}/password/reset?code=${code}`,
+				},
+			})
+		} else {
+			markdown = `Hi ${
+				user.first_name ?? 'there'
+			}, <br><br> You recently requested to reset the password for your ${Strings.capitalize(
+				process.env.npm_package_name,
+			)} account. Use the code below to change your password \n`
+			markdown += `### ${code} \n`
+			markdown += `If you did not request a password reset, please ignore this email. This password reset code is only valid for the next 20 minutes.`
+		}
+
 		const result = await this.beaconService.notify({
 			subject: subject,
 			methods: {
@@ -204,24 +242,43 @@ export class AuthService extends BaseService<T> {
 				},
 			},
 			markdown: markdown,
-			cta: {
-				text: `One-Click Reset`,
-				url: `${process.env.BASE_URL_APP}/password/reset?code=${code}`,
-			},
 			json: {},
 		})
 		this.logger.log(`[${domain}] Email sent to ${user.email} with subject: ${subject}`, result)
 	}
 	async sendLoginCode(user, code) {
 		const domain = 'accounts::auth::sendLoginCode'
+
+		if (!process.env.BEACON_USER_AUTH_PASSWORDLESS_CODE) {
+			return
+		}
+
+		if (!user.first_name) {
+			user.first_name = 'Hi there'
+		}
+
 		const subject = `🔑 Login Code`
-		let markdown = `Hi ${
-			user.first_name ?? 'there'
-		}, <br><br> You recently requested passwordless login for your ${Strings.capitalize(
-			process.env.npm_package_name,
-		)} account. Use the code below to login: \n`
-		markdown += ` ### ${code} \n`
-		markdown += `This login code is only valid for the next 20 minutes.`
+		let markdown = ``
+
+		if (File.exists(process.env.BEACON_USER_AUTH_PASSWORDLESS_CODE + '/email.md')) {
+			markdown = await File.read(process.env.BEACON_USER_AUTH_PASSWORDLESS_CODE + '/email.md')
+			markdown = Strings.replacer(markdown, {
+				user: user,
+				code: code,
+				hrefs: {
+					cta: `${process.env.BASE_URL_APP}/passwordless?code=${code}`,
+				},
+			})
+		} else {
+			markdown = `Hi ${
+				user.first_name ?? 'there'
+			}, <br><br> You recently requested passwordless login for your ${Strings.capitalize(
+				process.env.npm_package_name,
+			)} account. Use the code below to login: \n`
+			markdown += ` ### ${code} \n`
+			markdown += `This login code is only valid for the next 20 minutes.`
+		}
+
 		const result = await this.beaconService.notify({
 			methods: {
 				email: true,
@@ -236,10 +293,6 @@ export class AuthService extends BaseService<T> {
 			},
 			subject: subject,
 			markdown: markdown,
-			cta: {
-				text: `One-Click Login`,
-				url: `${process.env.BASE_URL_APP}/passwordless?code=${code}`,
-			},
 			json: {},
 		})
 		this.logger.log(`[${domain}] Email sent to ${user.email} with subject: ${subject}`, result)

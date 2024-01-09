@@ -1,6 +1,5 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Api, Logger, Env } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
 import * as mock from './mock.json'
 import { wordpressConfigDto } from '../../config/wordpress.config.dto'
 import {

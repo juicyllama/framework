@@ -1,23 +1,12 @@
-import { Module, forwardRef } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
-import { Env, Logger } from '@juicyllama/utils'
-import Joi from 'joi'
-import shopifyConfig from '../../config/shopify.config'
-import { shopifyConfigJoi } from '../../config/shopify.config.joi'
 import { InstalledAppsModule, OAuthModule } from '@juicyllama/app-store'
+import { Logger } from '@juicyllama/utils'
+import { Module } from '@nestjs/common'
 import { ShopifyWebhooksService } from './webhooks.service'
 import { ShopifyWebhooksController } from './webhooks.controller'
+import { ShopifyProviderModule } from '../provider/provider.module'
 
 @Module({
-	imports: [
-		ConfigModule.forRoot({
-			isGlobal: true,
-			load: [shopifyConfig],
-			validationSchema: Env.IsNotTest() ? Joi.object(shopifyConfigJoi) : null,
-		}),
-		forwardRef(() => OAuthModule),
-		forwardRef(() => InstalledAppsModule),
-	],
+	imports: [OAuthModule, InstalledAppsModule, ShopifyProviderModule],
 	controllers: [ShopifyWebhooksController],
 	providers: [ShopifyWebhooksService, Logger],
 	exports: [ShopifyWebhooksService],

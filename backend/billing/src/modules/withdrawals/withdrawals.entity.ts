@@ -1,11 +1,5 @@
 import { IsEnum, IsNumber, MaxLength, MinLength } from 'class-validator'
-import {
-	Column,
-	Entity,
-	JoinColumn,
-	ManyToOne,
-	PrimaryGeneratedColumn
-} from 'typeorm'
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { Account, BaseEntity } from '@juicyllama/core'
 import { Wallet } from '../wallet/wallet.entity'
 import { PaymentMethod } from '../payment_methods/payment.methods.entity'

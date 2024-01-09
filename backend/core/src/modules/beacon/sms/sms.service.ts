@@ -50,9 +50,8 @@ export class BeaconSmsService {
 
 		let service: any
 
-		if (Modules.isInstalled('@juicyllama/aws')) {
-			//@ts-ignore
-			const { AwsSnsModule, AwsSnsService } = await import('@juicyllama/aws')
+		if (Modules.aws.isInstalled) {
+			const { AwsSnsModule, AwsSnsService } = await Modules.aws.load()
 
 			try {
 				const awsSnsModule = await this.lazyModuleLoader.load(() => AwsSnsModule)

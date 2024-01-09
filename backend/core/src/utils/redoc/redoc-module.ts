@@ -116,7 +116,8 @@ export class RedocModule {
 			},
 		}
 		// this is our handlebars file path
-		const redocFilePath = pathModule.join(__dirname, '..', 'views', 'redoc.handlebars')
+		const redocFilePath = pathModule.join(__dirname, 'views', 'redoc.handlebars')
+
 		// get handlebars rendered HTML
 		const redocHTML = await hbs.render(redocFilePath, renderData)
 		// Serve ReDoc Frontend

@@ -9,39 +9,39 @@ import {
 	UserRole,
 	UsersService,
 } from '@juicyllama/core'
-import { Logger, SupportedCurrencies } from '@juicyllama/utils'
+import { SupportedCurrencies } from '@juicyllama/utils'
 import { WithdrawalsService } from './withdrawals.service'
 import { WithdrawalRequestDto } from './withdrawals.dto'
-import { Withdrawal } from './withdrawals.entity'
 import { PaymentMethodsService } from '../payment_methods/payment.methods.service'
 import { WalletService } from '../wallet/wallet.service'
 import { FindOptionsWhere, In } from 'typeorm'
 import { WithdrawalOrderBy, WithdrawalRelations, WithdrawalSelect } from './withdrawals.enums'
 import { Query as JLQuery } from '@juicyllama/core/dist/utils/typeorm/Query'
-
-const E = Withdrawal
-type T = Withdrawal
+import { BILLING_WITHDRAWAL_NAME, BILLING_WITHDRAWAL_T, BILLING_WITHDRAWAL_E } from './withdrawals.constants'
 
 @ApiTags('Withdrawals')
 @UserAuth()
 @Controller('billing/withdrawals')
 export class WithdrawalsController {
 	constructor(
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
 		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
 		@Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,
 		@Inject(forwardRef(() => PaymentMethodsService)) private readonly paymentMethodsService: PaymentMethodsService,
 		@Inject(forwardRef(() => WalletService)) private readonly walletService: WalletService,
 		@Inject(forwardRef(() => WithdrawalsService)) private readonly withdrawalsService: WithdrawalsService,
-		@Inject(forwardRef(() => JLQuery)) private readonly query: JLQuery<T>,
+		@Inject(forwardRef(() => JLQuery)) private readonly query: JLQuery<BILLING_WITHDRAWAL_T>,
 	) {}
 
 	@ApiOperation({
 		summary: 'Request Withdrawal',
 	})
 	@Post()
-	async create(@Req() req, @AccountId() account_id: number, @Body() data: WithdrawalRequestDto): Promise<T> {
+	async create(
+		@Req() req,
+		@AccountId() account_id: number,
+		@Body() data: WithdrawalRequestDto,
+	): Promise<BILLING_WITHDRAWAL_T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		const account = await this.accountService.findById(account_id)
 
@@ -75,7 +75,13 @@ export class WithdrawalsController {
 		)
 	}
 
-	@ReadManyDecorator(E, WithdrawalSelect, WithdrawalOrderBy, WithdrawalRelations)
+	@ReadManyDecorator({
+		name: BILLING_WITHDRAWAL_NAME,
+		entity: BILLING_WITHDRAWAL_E,
+		selectEnum: WithdrawalSelect,
+		orderByEnum: WithdrawalOrderBy,
+		relationsEnum: WithdrawalRelations,
+	})
 	@ApiQuery({
 		name: 'currency',
 		description: 'The currency you are requesting data for',
@@ -83,10 +89,10 @@ export class WithdrawalsController {
 		required: false,
 		example: SupportedCurrencies.USD,
 	})
-	async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Promise<T[]> {
+	async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Promise<BILLING_WITHDRAWAL_T[]> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 
-		const where: FindOptionsWhere<T>[] = [
+		const where: FindOptionsWhere<BILLING_WITHDRAWAL_T>[] = [
 			{
 				account: {
 					account_id: In([account_id]),

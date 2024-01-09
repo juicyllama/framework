@@ -5,7 +5,7 @@ import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
 import { BeaconService } from '../modules/beacon/beacon.service'
 import { Cache } from 'cache-manager'
 import { CachePeriod, JLCache, Logger } from '@juicyllama/utils'
-import { ChartOptions } from '../utils/typeorm/types'
+import { ChartOptions, CurrencyOptions } from '../types/typeorm'
 import { ImportMode, BulkUploadResponse } from '../types/common'
 
 /**
@@ -78,8 +78,8 @@ export class BaseService<T> {
 	 * @param options
 	 */
 
-	async findAll(options?: FindManyOptions): Promise<T[]> {
-		return await this.query.findAll(this.repository, options)
+	async findAll(options?: FindManyOptions, currency?: CurrencyOptions): Promise<T[]> {
+		return await this.query.findAll(this.repository, options, currency)
 	}
 
 	/**
@@ -87,11 +87,11 @@ export class BaseService<T> {
 	 * @param options
 	 */
 
-	async findOne(options?: FindOneOptions): Promise<T> {
+	async findOne(options?: FindOneOptions, currency?: CurrencyOptions): Promise<T> {
 		let result = await this.cacheFindOne(options)
 		if (result) return result
 
-		result = await this.query.findOne(this.repository, options)
+		result = await this.query.findOne(this.repository, options, currency)
 		if (result) await this.cacheRecord(result)
 		return result
 	}
@@ -102,11 +102,11 @@ export class BaseService<T> {
 	 * @param relations
 	 */
 
-	async findById(id: number, relations?: string[]): Promise<T> {
+	async findById(id: number, relations?: string[], currency?: CurrencyOptions): Promise<T> {
 		let result = await this.cacheFindById(id)
 		if (result) return result
 
-		result = await this.query.findOneById(this.repository, id, relations)
+		result = await this.query.findOneById(this.repository, id, relations, currency)
 		if (result) await this.cacheRecord(result)
 		return result
 	}
@@ -146,8 +146,8 @@ export class BaseService<T> {
 	 * @param options
 	 */
 
-	async charts(field: string, options?: ChartOptions): Promise<any> {
-		return await this.query.charts(this.repository, field, options)
+	async charts(field: string, options?: ChartOptions, currency?: CurrencyOptions): Promise<any> {
+		return await this.query.charts(this.repository, field, options, currency)
 	}
 
 	/**
@@ -235,7 +235,7 @@ export class BaseService<T> {
 			}
 		} catch (e) {
 			const logger = new Logger()
-			logger.error(`[core::baseService::cacheRecord] ${e.message()}`, e)
+			logger.error(`[core::baseService::cacheRecord] ${e.message}`, e)
 		}
 	}
 

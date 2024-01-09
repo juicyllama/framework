@@ -1,5 +1,12 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { ShopifyOrder, ShopifyOrderDiscountCodes } from './orders.dto'
+import { InstalledApp } from '@juicyllama/app-store'
+import {
+	ContactsService,
+	ContactEmailService,
+	ContactAddressService,
+	ContactPhoneService,
+	Contact,
+	ContactAddress,
+} from '@juicyllama/crm'
 import {
 	Store,
 	Transaction,
@@ -11,26 +18,18 @@ import {
 	TransactionsService,
 	UpdateTransactionDto,
 } from '@juicyllama/ecommerce'
-import {
-	ContactsService,
-	ContactEmailService,
-	ContactAddressService,
-	ContactPhoneService,
-	Contact,
-	ContactAddress,
-} from '@juicyllama/crm'
+import { Injectable } from '@nestjs/common'
+import { ShopifyOrder, ShopifyOrderDiscountCodes } from './orders.dto'
 import { ShopifyOrderDicountCodeType, ShopifyOrderFinancialStatus, ShopifyOrderFulfillmentStatus } from './orders.enums'
-import { InstalledApp } from '@juicyllama/app-store'
 
 @Injectable()
 export class ShopifyOrdersMapperService {
 	constructor(
-		@Inject(forwardRef(() => ContactsService)) private readonly contactsService: ContactsService,
-		@Inject(forwardRef(() => ContactEmailService)) private readonly contactEmailService: ContactEmailService,
-		@Inject(forwardRef(() => ContactAddressService)) private readonly contactAddressService: ContactAddressService,
-		@Inject(forwardRef(() => ContactPhoneService)) private readonly contactPhoneService: ContactPhoneService,
-		@Inject(forwardRef(() => TransactionsService)) private readonly transactionsService: TransactionsService,
-		@Inject(forwardRef(() => TransactionDiscountsService))
+		private readonly contactsService: ContactsService,
+		private readonly contactEmailService: ContactEmailService,
+		private readonly contactAddressService: ContactAddressService,
+		private readonly contactPhoneService: ContactPhoneService,
+		private readonly transactionsService: TransactionsService,
 		private readonly transactionsDiscountService: TransactionDiscountsService,
 	) {}
 
@@ -109,6 +108,7 @@ export class ShopifyOrdersMapperService {
 		const transaction = await this.transactionsService.create({
 			account_id: store.account_id,
 			store_id: store.store_id,
+			installed_app_id: installed_app.installed_app_id,
 			order_id: order.id.toString(),
 			order_number: order.order_number.toString(),
 			contact_id: contact?.contact_id,
@@ -147,31 +147,22 @@ export class ShopifyOrdersMapperService {
 		let has_changed = false
 		const changed: UpdateTransactionDto = {}
 
-		if (
-			transaction.payment_status !==
-			this.shopifyOrderFinancialStatusToEcommerceTransactionStatus(order.financial_status)
-		) {
-			changed.payment_status = this.shopifyOrderFinancialStatusToEcommerceTransactionStatus(
-				order.financial_status,
-			)
+		const newPaymentStatus = this.shopifyOrderFinancialStatusToEcommerceTransactionStatus(order.financial_status)
+		if (transaction.payment_status !== newPaymentStatus) {
+			changed.payment_status = newPaymentStatus
 			has_changed = true
 		}
 
-		if (
-			transaction.fulfillment_status !==
-			this.shopifyOrderFulfillmentStatusToEcommerceTransactionStatus(order.fulfillment_status)
-		) {
-			changed.fulfillment_status = this.shopifyOrderFulfillmentStatusToEcommerceTransactionStatus(
-				order.fulfillment_status,
-			)
+		const newFulfillmentStatus = this.shopifyOrderFulfillmentStatusToEcommerceTransactionStatus(
+			order.fulfillment_status,
+		)
+		if (transaction.fulfillment_status !== newFulfillmentStatus) {
+			changed.fulfillment_status = newFulfillmentStatus
 			has_changed = true
 		}
-
-		if (
-			order.total_shipping_price_set?.shop_money?.amount &&
-			Number(transaction.total_shipping) !== Number(order.total_shipping_price_set.shop_money.amount)
-		) {
-			changed.total_shipping = Number(order.total_shipping_price_set?.shop_money?.amount)
+		const orderTotal = Number(order.total_shipping_price_set?.shop_money?.amount ?? '0')
+		if (order.total_shipping_price_set?.shop_money?.amount && Number(transaction.total_shipping) !== orderTotal) {
+			changed.total_shipping = orderTotal
 			has_changed = true
 		}
 

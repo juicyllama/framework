@@ -1,15 +1,18 @@
-import { BadRequestException, Body, Controller, forwardRef, Inject, Param, Query, Req } from '@nestjs/common'
+import { BadRequestException, Body, Controller, forwardRef, Inject, Param, Query, Req, Post } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { StatsMethods, StatsResponseDto } from '@juicyllama/utils'
 import { InstalledAppsService } from './installed.service'
 import { AppsService } from '../apps.service'
-import { CreateInstalledAppDto, UpdateInstalledAppDto } from './installed.dto'
+import {
+	CreateInstalledAppDto,
+	InstalledAppPreCheckDto,
+	UpdateInstalledAppDto,
+	preInstallCheckResponse,
+} from './installed.dto'
 import { AppIntegrationType } from '../apps.enums'
 import { InstalledAppsOrderBy, InstalledAppsRelations, InstalledAppsSelect } from './installed.enums'
 import {
 	AccountId,
-	AccountService,
-	AuthService,
 	CreateDecorator,
 	crudPurge,
 	crudFindAll,
@@ -23,7 +26,7 @@ import {
 	ReadStatsDecorator,
 	UpdateDecorator,
 	UserAuth,
-	UsersService,
+	AuthService,
 } from '@juicyllama/core'
 import {
 	INSTALLED_APP_DEFAULT_ORDER_BY,
@@ -40,19 +43,37 @@ import {
 export class InstalledAppsController {
 	constructor(
 		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
-		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
 		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<INSTALLED_APP_T>,
 		@Inject(forwardRef(() => InstalledAppsService)) private readonly service: InstalledAppsService,
 		@Inject(forwardRef(() => AppsService)) private readonly appsService: AppsService,
-		@Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,
 	) {}
 
-	@CreateDecorator(INSTALLED_APP_E, INSTALLED_APP_NAME)
+	//todo add swagger
+	@Post('precheck')
+	async preInstallCheck(
+		@Req() req,
+		@AccountId() account_id: number,
+		@Body() data: InstalledAppPreCheckDto,
+	): Promise<preInstallCheckResponse> {
+		await this.authService.check(req.user.user_id, account_id)
+
+		const app = await this.appsService.findById(data.app_id)
+
+		if (!app) {
+			throw new BadRequestException(`No app found with that app_id`)
+		}
+
+		return await this.service.preInstallChecks(app, data.settings, account_id)
+	}
+
+	@CreateDecorator({ entity: INSTALLED_APP_E, name: INSTALLED_APP_NAME })
 	async create(
 		@Req() req,
 		@AccountId() account_id: number,
 		@Body() data: CreateInstalledAppDto,
 	): Promise<INSTALLED_APP_T> {
+		await this.authService.check(req.user.user_id, account_id)
+
 		const app = await this.appsService.findById(data.app_id)
 
 		if (!app) {
@@ -63,7 +84,7 @@ export class InstalledAppsController {
 			throw new BadRequestException(`Missing required settings`)
 		}
 
-		const checks = await this.service.preInstallChecks(app, data.settings)
+		const checks = await this.service.preInstallChecks(app, data.settings, account_id)
 
 		if (checks.result === false) {
 			throw new BadRequestException(checks.error)
@@ -90,14 +111,15 @@ export class InstalledAppsController {
 		return await this.service.removePrivateSettings(installed_app)
 	}
 
-	@ReadManyDecorator(
-		INSTALLED_APP_E,
-		InstalledAppsSelect,
-		InstalledAppsOrderBy,
-		InstalledAppsRelations,
-		INSTALLED_APP_NAME,
-	)
-	async findAll(@AccountId() account_id: number, @Query() query): Promise<INSTALLED_APP_T[]> {
+	@ReadManyDecorator({
+		entity: INSTALLED_APP_E,
+		selectEnum: InstalledAppsSelect,
+		orderByEnum: InstalledAppsOrderBy,
+		relationsEnum: InstalledAppsRelations,
+		name: INSTALLED_APP_NAME,
+	})
+	async findAll(@Req() req, @AccountId() account_id: number, @Query() query): Promise<INSTALLED_APP_T[]> {
+		await this.authService.check(req.user.user_id, account_id)
 		const records = await crudFindAll<INSTALLED_APP_T>({
 			service: this.service,
 			tQuery: this.tQuery,
@@ -114,12 +136,14 @@ export class InstalledAppsController {
 		return records
 	}
 
-	@ReadStatsDecorator(INSTALLED_APP_NAME)
+	@ReadStatsDecorator({ name: INSTALLED_APP_NAME })
 	async stats(
+		@Req() req,
 		@AccountId() account_id: number,
 		@Query() query,
 		@Query('method') method?: StatsMethods,
 	): Promise<StatsResponseDto> {
+		await this.authService.check(req.user.user_id, account_id)
 		return await crudStats<INSTALLED_APP_T>({
 			service: this.service,
 			tQuery: this.tQuery,
@@ -130,27 +154,48 @@ export class InstalledAppsController {
 		})
 	}
 
-	@ReadOneDecorator(
-		INSTALLED_APP_E,
-		INSTALLED_APP_PRIMARY_KEY,
-		InstalledAppsSelect,
-		InstalledAppsRelations,
-		INSTALLED_APP_NAME,
-	)
-	async findOne(@Param() params, @Query() query): Promise<INSTALLED_APP_T> {
+	@ReadOneDecorator({
+		entity: INSTALLED_APP_E,
+		primaryKey: INSTALLED_APP_PRIMARY_KEY,
+		selectEnum: InstalledAppsSelect,
+		relationsEnum: InstalledAppsRelations,
+		name: INSTALLED_APP_NAME,
+	})
+	async findOne(
+		@Req() req,
+		@AccountId() account_id: number,
+		@Param() params,
+		@Query() query,
+	): Promise<INSTALLED_APP_T> {
+		await this.authService.check(req.user.user_id, account_id)
 		const record = await crudFindOne<INSTALLED_APP_T>({
 			service: this.service,
+			account_id: account_id,
 			query: query,
 			primaryKey: params[INSTALLED_APP_PRIMARY_KEY],
 		})
 		return await this.service.removePrivateSettings(record)
 	}
 
-	@UpdateDecorator(INSTALLED_APP_E, INSTALLED_APP_PRIMARY_KEY, INSTALLED_APP_NAME)
-	async update(@Body() data: UpdateInstalledAppDto, @Param() params): Promise<INSTALLED_APP_T> {
+	@UpdateDecorator({
+		entity: INSTALLED_APP_E,
+		primaryKey: INSTALLED_APP_PRIMARY_KEY,
+		name: INSTALLED_APP_NAME,
+	})
+	async update(
+		@Req() req,
+		@AccountId() account_id: number,
+		@Body() data: UpdateInstalledAppDto,
+		@Param() params,
+	): Promise<INSTALLED_APP_T> {
+		await this.authService.check(req.user.user_id, account_id)
 		if (data.settings) {
 			const installed_app = await this.service.findById(params[INSTALLED_APP_PRIMARY_KEY])
-			const checks = await this.service.preInstallChecks(installed_app.app, data.settings)
+			const checks = await this.service.preInstallChecks(
+				installed_app.app,
+				data.settings,
+				installed_app.account_id,
+			)
 
 			if (checks.result === false) {
 				throw new BadRequestException(checks.error)
@@ -159,14 +204,20 @@ export class InstalledAppsController {
 
 		const record = await crudUpdate<INSTALLED_APP_T>({
 			service: this.service,
+			account_id: account_id,
 			data: data,
 			primaryKey: params[INSTALLED_APP_PRIMARY_KEY],
 		})
 		return await this.service.removePrivateSettings(record)
 	}
 
-	@DeleteDecorator(INSTALLED_APP_E, INSTALLED_APP_PRIMARY_KEY, INSTALLED_APP_NAME)
-	async remove(@Param() params): Promise<INSTALLED_APP_T> {
+	@DeleteDecorator({
+		entity: INSTALLED_APP_E,
+		primaryKey: INSTALLED_APP_PRIMARY_KEY,
+		name: INSTALLED_APP_NAME,
+	})
+	async remove(@Req() req, @AccountId() account_id: number, @Param() params): Promise<INSTALLED_APP_T> {
+		await this.authService.check(req.user.user_id, account_id)
 		return await crudPurge<INSTALLED_APP_T>({
 			service: this.service,
 			primaryKey: params[INSTALLED_APP_PRIMARY_KEY],

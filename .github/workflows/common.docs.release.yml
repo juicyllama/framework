@@ -13,6 +13,7 @@ on:
         branches:
             - main
         paths:
+            - 'common/docs/*'
             - 'common/docs/**'
     workflow_dispatch:
 
@@ -37,7 +38,7 @@ jobs:
             -   name: 'Install Node.js'
                 uses: actions/setup-node@v3
                 with:
-                    node-version: 19
+                    node-version: 18.18.2
 
             -   run: git stash
             -   run: git pull --force
@@ -51,10 +52,10 @@ jobs:
                     major-wording: 'JLMAJOR'
                     minor-wording: 'feature,feat'
                     patch-wording: 'patch,fixes,fix,misc,docs,refactor'    # Providing patch-wording will override commits
-                    commit-message: 'Release Package: Hive Frontend Bump Version [skip ci]'
+                    commit-message: 'Release Package: Docs Bump Version [skip ci]'
                     skip-tag: true
 
-            -   name: 'Release to Amplify'
+            -   name: 'Release to hosting provider'
                 run: |
-                    URL="${{ secrets.JUICYLLAMA_DOCS_AMPLIFY_WEBHOOK_URL }}"
-                    curl -X POST -d {} "$URL&operation=startbuild" -H "Content-Type: application/json"
+                    URL="${{ secrets.JUICYLLAMA_DOCS_RELEASE_WEBHOOK }}"
+                    curl -X POST -d {} "$URL" -H "Content-Type: application/json"

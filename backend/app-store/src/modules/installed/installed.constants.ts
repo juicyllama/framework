@@ -13,3 +13,4 @@ export const INSTALLED_APP_ENDPOINT_URL = '/apps/installed'
 export const INSTALLED_APP_MODULE = InstalledAppsModule
 export const INSTALLED_APP_CONTROLLER = InstalledAppsController
 export const INSTALLED_APP_SERVICE = InstalledAppsService
+export const INSTALLED_APPS_PUSHER_EVENT = 'account_${account_id}_apps_installed'

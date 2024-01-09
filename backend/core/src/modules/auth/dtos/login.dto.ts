@@ -14,7 +14,7 @@ export class LoginRequestDto {
 	@IsString()
 	@ApiProperty({
 		description: 'The users email address',
-		example: 'richard.branson@fly.virgin.com',
+		example: 'jon.doe@example.com',
 	})
 	readonly email: string
 
@@ -28,6 +28,14 @@ export class LoginRequestDto {
 }
 
 export class ValidateCodeDto {
+	@IsEmail()
+	@IsString()
+	@ApiProperty({
+		description: 'The users email address',
+		example: 'jon.doe@example.com',
+	})
+	readonly email: string
+
 	@IsString()
 	@IsNotEmpty()
 	readonly code: string

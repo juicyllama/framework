@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { watchEffect, reactive } from 'vue'
-import { getInvoiceById } from '../../../services/billing'
+import { watchEffect, reactive, ref, Ref } from 'vue'
+import { Invoice } from '../../../types'
+import { billingInvoiceService } from '../../../services/billing';
 
 const props = defineProps<{
 	invoice_id: number
@@ -12,17 +13,20 @@ const data = reactive({
 	error: false,
 })
 
-watchEffect(() => {
-	getInvoiceById(props.invoice_id)
-		.then(respData => {
-			data.invoiceData = respData
-		})
-		.catch(() => {
-			data.error = true
-		})
-		.finally(() => {
-			data.loaded = true
-		})
+const invoice: Ref<Invoice> = ref(null)
+
+watchEffect(async () => {
+
+	invoice.value = await billingInvoiceService.findOne({
+		record_id: props.invoice_id,
+	})
+
+	if(!invoice.value) {
+		data.error = true
+		return
+	}
+
+	data.loaded = true
 })
 
 //app_invoice_id, amount_total, amount_due, amount_paid, created_at, updated_at, paid_at, is_paid

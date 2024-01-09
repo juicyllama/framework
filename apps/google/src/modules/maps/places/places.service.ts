@@ -10,6 +10,11 @@ import { googlePlaceDetailsToEntity } from './places.mapper'
 import { Client } from '@googlemaps/google-maps-services-js'
 
 type PLACES_T = GoogleMapsPlace
+const CACHE_DAYS = 365
+
+type GetPlaceByIdOpts = {
+	refresh?: boolean
+}
 
 @Injectable()
 export class PlacesService {
@@ -21,7 +26,7 @@ export class PlacesService {
 		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
 	) {}
 
-	async getPlaceById(place_id: string): Promise<PLACES_T> {
+	async getPlaceById(place_id: string, opts: GetPlaceByIdOpts = {}): Promise<PLACES_T> {
 		const domain = 'app::google::maps::places::getPlaceById'
 
 		if (Env.IsTest()) {
@@ -35,9 +40,9 @@ export class PlacesService {
 			},
 		})
 
-		if (result) {
+		if (result && !opts.refresh) {
 			const cachedDate = new Date()
-			cachedDate.setDate(cachedDate.getDate() - 365)
+			cachedDate.setDate(cachedDate.getDate() - CACHE_DAYS)
 
 			// if the number is cached and is not older than cachedDate
 			if (cachedDate < result.created_at) {
@@ -61,6 +66,9 @@ export class PlacesService {
 
 		this.logger.debug(`[${domain}] Adding result into the data lake, calling API`, place)
 
+		if (result && place) {
+			await this.query.purge(this.repository, result);
+		}
 		return await this.query.create(this.repository, place)
 	}
 }

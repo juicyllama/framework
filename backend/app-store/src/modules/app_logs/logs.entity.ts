@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { IsEnum, IsObject, IsString } from 'class-validator'
 import { InstalledApp } from '../installed/installed.entity'
 import { AppsLogsType } from './logs.enums'

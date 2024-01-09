@@ -3,14 +3,15 @@ import type { AuthFormState } from '../helpers/validators'
 import type { User } from './user'
 
 export interface CreateAccount extends AuthFormState {
-	account_name: string
-	first_name: string
-	last_name: string
+	account_name?: string
+	first_name?: string
+	last_name?: string
 }
 
 export interface NewAccountDetails {
 	account: Account
 	owner: User
+	access_token: string
 }
 
 export interface Account {

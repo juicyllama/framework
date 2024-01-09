@@ -1,3 +1,4 @@
+export { default as JLAreYouSure } from './AreYouSure.vue'
 export * from './form'
 export { JLTable } from './table'
 export { JLMenu, JLDropdownButtonMenu } from './menu'

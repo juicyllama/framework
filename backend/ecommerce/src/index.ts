@@ -1,48 +1,48 @@
 // Entities
-import { Store } from './stores/stores.entity'
-import { Transaction } from './transactions/transactions.entity'
-import { TransactionDiscount } from './transactions/discounts/discounts.entity'
+import { Store } from './modules/stores/stores.entity'
+import { Transaction } from './modules/transactions/transactions.entity'
+import { TransactionDiscount } from './modules/transactions/discounts/discounts.entity'
 
 // Modules
 import { EcommerceModule } from './ecommerce.module'
-import { StoresModule } from './stores/stores.module'
-import { TransactionsModule } from './transactions/transactions.module'
-import { TransactionDiscountsModule } from './transactions/discounts/discounts.module'
+import { StoresModule } from './modules/stores/stores.module'
+import { TransactionsModule } from './modules/transactions/transactions.module'
+import { TransactionDiscountsModule } from './modules/transactions/discounts/discounts.module'
 
 // Controllers
-import { StoresController } from './stores/stores.controller'
-import { TransactionsController } from './transactions/transactions.controller'
-import { TransactionDiscountsController } from './transactions/discounts/discounts.controller'
+import { StoresController } from './modules/stores/stores.controller'
+import { TransactionsController } from './modules/transactions/transactions.controller'
+import { TransactionDiscountsController } from './modules/transactions/discounts/discounts.controller'
 
 // Services
-import { StoresService } from './stores/stores.service'
-import { TransactionsService } from './transactions/transactions.service'
-import { TransactionDiscountsService } from './transactions/discounts/discounts.service'
+import { StoresService } from './modules/stores/stores.service'
+import { TransactionsService } from './modules/transactions/transactions.service'
+import { TransactionDiscountsService } from './modules/transactions/discounts/discounts.service'
 
 // Enums
-import { StoreSelect, StoreRelations, StoreOrderBy } from './stores/stores.enums'
+import { StoreSelect, StoreRelations, StoreOrderBy } from './modules/stores/stores.enums'
 import {
 	TransactionSelect,
 	TransactionRelations,
 	TransactionOrderBy,
 	TransactionPaymentStatus,
 	TransactionFulfillmentStatus,
-} from './transactions/transactions.enums'
+} from './modules/transactions/transactions.enums'
 import {
 	TransactionDiscountSelect,
 	TransactionDiscountRelations,
 	TransactionDiscountOrderBy,
 	TransactionDiscountType,
-} from './transactions/discounts/discounts.enums'
+} from './modules/transactions/discounts/discounts.enums'
 
 // DTOs
-import { StoreDto, CreateStoreDto, UpdateStoreDto } from './stores/stores.dto'
-import { TransactionDto, CreateTransactionDto, UpdateTransactionDto } from './transactions/transactions.dto'
+import { StoreDto, CreateStoreDto, UpdateStoreDto } from './modules/stores/stores.dto'
+import { TransactionDto, CreateTransactionDto, UpdateTransactionDto } from './modules/transactions/transactions.dto'
 import {
 	TransactionDiscountDto,
 	CreateTransactionDiscountDto,
 	UpdateTransactionDiscountDto,
-} from './transactions/discounts/discounts.dto'
+} from './modules/transactions/discounts/discounts.dto'
 
 //Docs
 import { installEcommerceDocs } from './docs/install'

@@ -178,7 +178,7 @@ export class Api {
 				? {
 						status: e.response.status,
 						data: e.response.data,
-				  }
+					}
 				: null,
 			error: {
 				status: e.status,

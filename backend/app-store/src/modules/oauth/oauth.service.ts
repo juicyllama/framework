@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { Oauth } from './oauth.entity'
 import { BaseService, BeaconService, Query } from '@juicyllama/core'
+import { App } from '../apps.entity'
 
 export const E = Oauth
 export type T = Oauth

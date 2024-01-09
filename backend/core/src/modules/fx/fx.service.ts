@@ -32,7 +32,35 @@ export class FxService {
 	 */
 
 	async convert(amount: number, from: SupportedCurrencies, to: SupportedCurrencies, date?: Date): Promise<number> {
-		const domain = 'utils::fx::service::convert'
+		const domain = 'core::fx::service::convert'
+
+		if (!amount) {
+			this.logger.error(`[${domain}] Amount is required`, {
+				amount: amount,
+				from: from,
+				to: to,
+				date: date,
+			})
+			throw new Error('Amount is required')
+		}
+		if (!from) {
+			this.logger.error(`[${domain}] From is required`, {
+				amount: amount,
+				from: from,
+				to: to,
+				date: date,
+			})
+			throw new Error('From is required')
+		}
+		if (!to) {
+			this.logger.error(`[${domain}] To is required`, {
+				amount: amount,
+				from: from,
+				to: to,
+				date: date,
+			})
+			throw new Error('To is required')
+		}
 
 		let convertResult
 
@@ -45,7 +73,7 @@ export class FxService {
 		})
 
 		let rates = <FxRate>await this.cacheManager.get(cache_key)
-		if (rates) return calc(amount, rates[from.toString()], rates[to.toString()])
+		if (rates) return calc(amount, rates[from], rates[to])
 
 		//get rate based on date from database
 		rates = await this.query.findOne(this.repository, {
@@ -56,12 +84,11 @@ export class FxService {
 
 		if (rates) {
 			await this.cacheManager.set(cache_key, rates, CachePeriod.WEEK)
-			return calc(amount, rates[from.toString()], rates[to.toString()])
+			return calc(amount, rates[from], rates[to])
 		}
 
-		if (Modules.isInstalled('@juicyllama/data-cache')) {
-			//@ts-ignore
-			const { DataCacheModule, DataCacheService, Fx } = await import('@juicyllama/data-cache')
+		if (Modules.datacache.isInstalled) {
+			const { DataCacheModule, DataCacheService, Fx } = await Modules.datacache.load()
 
 			try {
 				const dataCacheModule = await this.lazyModuleLoader.load(() => DataCacheModule)
@@ -74,16 +101,15 @@ export class FxService {
 				if (result) {
 					rates = await this.query.create(this.repository, result)
 					await this.cacheManager.set(cache_key, rates, CachePeriod.WEEK)
-					return calc(amount, rates[from.toString()], rates[to.toString()])
+					return calc(amount, rates[from], rates[to])
 				}
 			} catch (e: any) {
 				this.logger.error(`[${domain}] ${e.message}`, e)
 			}
 		}
 
-		if (!convertResult && Modules.isInstalled('@juicyllama/apilayer')) {
-			//@ts-ignore
-			const { CurrencyDataModule, CurrencyDataService } = await import('@juicyllama/app-apilayer')
+		if (Modules.apilayer.isInstalled) {
+			const { CurrencyDataModule, CurrencyDataService } = await Modules.apilayer.load()
 			const currencyDataModule = await this.lazyModuleLoader.load(() => CurrencyDataModule)
 			const currencyDataService = currencyDataModule.get(CurrencyDataService)
 
@@ -99,11 +125,12 @@ export class FxService {
 				}
 
 				rates = await this.query.create(this.repository, create)
-				convertResult = calc(amount, rates[from.toString()], rates[to.toString()])
+				convertResult = calc(amount, rates[from], rates[to])
+			} else {
+				throw new Error(`[${domain}] Error getting rates from apilayer`)
 			}
 		} else {
-			this.logger.error(`[${domain}] No FX App Installed, options are @juicyllama/app-apilayer`)
-			throw new Error(`No FX App Installed, options are @juicyllama/app-apilayer`)
+			throw new Error(`[${domain}] No FX App Installed, options are @juicyllama/app-apilayer`)
 		}
 
 		if (!convertResult) {
@@ -112,14 +139,13 @@ export class FxService {
 			})
 
 			if (rates) {
-				convertResult = calc(amount, rates[from.toString()], rates[to.toString()])
+				convertResult = calc(amount, rates[from], rates[to])
 			}
 		}
 
 		if (convertResult) {
-			if (Modules.isInstalled('@juicyllama/data-cache')) {
-				//@ts-ignore
-				const { DataCacheModule, DataCacheService, Fx } = await import('@juicyllama/data-cache')
+			if (Modules.datacache.isInstalled) {
+				const { DataCacheModule, DataCacheService, Fx } = await Modules.datacache.load()
 
 				try {
 					const dataCacheModule = await this.lazyModuleLoader.load(() => DataCacheModule)
@@ -141,5 +167,13 @@ export class FxService {
 			amount: amount,
 			date: date,
 		})
+	}
+
+	/**
+	 * Create a new FX rate
+	 * @param options
+	 */
+	async create(fxRate: Partial<FxRate>): Promise<FxRate> {
+		return await this.query.create(this.repository, fxRate)
 	}
 }

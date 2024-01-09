@@ -1,13 +1,13 @@
 import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common'
 import { BeaconService } from '../beacon/beacon.service'
 import { Account } from './account.entity'
-import { Logger, SupportedCurrencies } from '@juicyllama/utils'
+import { Logger, SupportedCurrencies, Random } from '@juicyllama/utils'
 import { BaseService } from '../../helpers/baseService'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
 import { Query } from '../../utils/typeorm/Query'
 import { StorageService } from '../storage/storage.service'
-import { StorageFileFormat, StorageFileType } from '../storage/storage.enums'
+import { StorageFileFormat, StorageType } from '../storage/storage.enums'
 import { AuthService } from '../auth/auth.service'
 import { UsersService } from '../users/users.service'
 import { UserRole } from '../users/users.enums'
@@ -46,6 +46,10 @@ export class AccountService extends BaseService<T> {
 	async onboard(data: OnboardAccountDto): Promise<SuccessAccountDto> {
 		const domain = 'core::account::service::onboard'
 
+		if (!data.account_name) {
+			data.account_name = Random.Words(' ', 3, 'noun', 'capitalize')
+		}
+
 		const account_data = {
 			account_name: data.account_name,
 			currency:
@@ -57,17 +61,29 @@ export class AccountService extends BaseService<T> {
 		let user = await this.usersService.findOneByEmail(data.owners_email)
 
 		if (!user) {
+			let password_reset = false
+
+			if (!data.owners_password) {
+				data.owners_password = Random.Password(16)
+				password_reset = true
+			}
+
 			const onboardOwner = {
 				email: data.owners_email,
 				password: data.owners_password,
 				first_name: data.owners_first_name,
 				last_name: data.owners_last_name,
-				password_reset: false,
+				password_reset: password_reset,
 				accounts: [account],
 			}
 			user = await this.usersService.create(onboardOwner)
 			user = await this.authService.assignRole(user, account, UserRole.OWNER)
 			this.logger.debug(`[${domain}] New account owner created`, user)
+
+			if (password_reset) {
+				await this.accountHooks.TempPassowrd(user, data.owners_password)
+				this.logger.debug(`[${domain}] Temporary password email to owner`)
+			}
 		} else {
 			this.logger.debug(`[${domain}] New account created by existing user`, user)
 			user.accounts.push(account)
@@ -77,11 +93,15 @@ export class AccountService extends BaseService<T> {
 		}
 
 		await this.accountHooks.Created(account, user)
+
+		const login = await this.authService.login(user)
+
 		delete user.password
 
 		return {
 			account: account,
 			owner: user,
+			access_token: login.access_token,
 		}
 	}
 
@@ -122,15 +142,15 @@ export class AccountService extends BaseService<T> {
 	}
 
 	async uploadAvatar(account: T, file: Express.Multer.File): Promise<T> {
-		const result = await this.storageService.write(
-			`accounts/${account.account_id}/avatar/${file.originalname}`,
-			StorageFileType.PUBLIC,
-			StorageFileFormat.Express_Multer_File,
-			file,
-		)
+		const result = await this.storageService.write({
+			location: `accounts/${account.account_id}/avatar/${file.originalname}`,
+			permissions: StorageType.PUBLIC,
+			format: StorageFileFormat.Express_Multer_File,
+			file: file,
+		})
 
-		if (result?.Location) {
-			account.avatar_image_url = result.Location
+		if (result?.url) {
+			account.avatar_image_url = result.url
 			account = await super.update(account)
 			return account
 		}
@@ -146,12 +166,10 @@ export class AccountService extends BaseService<T> {
 		const old_owner_role = await this.authService.assignRole(old_owner, account, UserRole.ADMIN)
 		return !!(new_owner_role.user_id && old_owner_role.user_id)
 	}
-	async getOwner(account) {
+	async getOwner(account_id: number): Promise<User> {
 		const role = await this.authService.findOne({
 			where: {
-				account: {
-					account_id: account.account_id,
-				},
+				account_id: account_id,
 				role: UserRole.OWNER,
 			},
 		})

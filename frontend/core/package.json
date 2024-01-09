@@ -1,6 +1,6 @@
 {
 	"name": "@juicyllama/frontend-core",
-	"version": "0.1.15",
+	"version": "0.4.2",
 	"description": "Juicyllama Frontend Core",
 	"author": {
 		"name": "JuicyLlama Studio",
@@ -30,11 +30,10 @@
 		"build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types ",
 		"format": "prettier --write \"src/**/*.ts\"",
 		"lint": "eslint \"**/*.{js,ts,vue}\" --quiet --fix",
-		"test": "vitest --silent --run",
-		"sandbox": "export $(grep -v '^#' ../../.env.development) && cd sandbox && vite"
+		"test": "vitest --silent --run"
 	},
 	"dependencies": {
-		"@juicyllama/vue-utils": "workspace:^",
-		"@juicyllama/vue-dev": "workspace:^"
+		"@juicyllama/vue-dev": "workspace:^",
+		"@juicyllama/vue-utils": "workspace:^"
 	}
 }

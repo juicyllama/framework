@@ -17,6 +17,7 @@ export { SettingsModule } from './modules/settings/settings.module'
 export { FxModule } from './modules/fx/fx.module'
 export { BeaconModule } from './modules/beacon/beacon.module'
 export { StorageModule } from './modules/storage/storage.module'
+export * from './modules/config'
 
 //controllers
 export { AccountController } from './modules/accounts/account.controller'
@@ -45,7 +46,7 @@ export {
 } from './modules/users/users.enums'
 export { AccountOrderBy, AccountRelations, AccountSelect } from './modules/accounts/account.enums'
 export { BeaconStatus } from './modules/beacon/beacon.enums'
-export { StorageFileFormat, StorageFileType } from './modules/storage/storage.enums'
+export { StorageFileFormat, StorageType, StorageFileType } from './modules/storage/storage.enums'
 
 // DTOs
 export { CreateUserDto, UpdateUserDto, UserDto } from './modules/users/users.dto'
@@ -66,6 +67,7 @@ export { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard'
 export { CustomNamingStrategy } from './utils/typeorm/naming.strategy'
 export { Query } from './utils/typeorm/Query'
 export { TypeOrm } from './utils/typeorm/TypeOrm'
+export { TypemOrmParquet } from './utils/typeorm/Parquet'
 export { TypeOrmFilter } from './utils/typeorm/TypeOrmFilter'
 export { CacheService } from './utils/typeorm/Cache'
 export { RmqModule } from './utils/rabbitmq/rmq.module'
@@ -126,6 +128,7 @@ export {
 	crudDelete,
 	crudPurge,
 	CronRunner,
+	BaseController,
 } from './helpers'
 
 // Middleware
@@ -154,4 +157,13 @@ export {
 	BulkUploadDto,
 	BulkUploadResponse,
 	OauthInterface,
+	ChartOptions,
+	CurrencyOptions,
+	ControllerConstants,
+	ControllerOptionalProps,
+	ControllerRoles,
+	BaseResponseDto,
 } from './types'
+
+//Mocks
+export { fxMock } from './modules/fx/mock'
