@@ -159,4 +159,18 @@ export class File {
 		const ext = fileName.split('.').pop()
 		return mimetypes[ext] ?? 'application/octet-stream'
 	}
+
+	/**
+	 * Check if a file exists
+	 */
+	static exists(filePath: string): boolean {
+		return fs.existsSync(filePath);
+	}
+
+	/**
+	 * Read a file
+	 */
+	static async read(filePath: string): Promise<string> {
+		return fs.readFileSync(filePath, 'utf-8')
+	}
 }
