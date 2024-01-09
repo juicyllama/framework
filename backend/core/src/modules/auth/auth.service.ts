@@ -9,7 +9,18 @@ import {
 	UnauthorizedException,
 } from '@nestjs/common'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { CachePeriod, Enums, Env, JLCache, Logger, File, Modules, OTP, Strings, SuccessResponseDto } from '@juicyllama/utils'
+import {
+	CachePeriod,
+	Enums,
+	Env,
+	JLCache,
+	Logger,
+	File,
+	Modules,
+	OTP,
+	Strings,
+	SuccessResponseDto,
+} from '@juicyllama/utils'
 import { InjectRepository } from '@nestjs/typeorm'
 import { In, Like, Repository } from 'typeorm'
 import { UsersService } from '../users/users.service'
@@ -185,29 +196,29 @@ export class AuthService extends BaseService<T> {
 	}
 	async sendVerificationCode(user, code) {
 		const domain = 'accounts::auth::sendVerificationCode'
-	
+
 		if (!process.env.BEACON_USER_AUTH_VERIFICATION_CODE) {
 			return
 		}
 
-		if(!user.first_name){
+		if (!user.first_name) {
 			user.first_name = 'Hi there'
 		}
-	
+
 		const subject = `🔑 Reset Password`
 
 		let markdown = ``
 
-		if(File.exists(process.env.BEACON_USER_AUTH_VERIFICATION_CODE+'/email.md')){
-			markdown = await File.read(process.env.BEACON_USER_AUTH_VERIFICATION_CODE+'/email.md')
+		if (File.exists(process.env.BEACON_USER_AUTH_VERIFICATION_CODE + '/email.md')) {
+			markdown = await File.read(process.env.BEACON_USER_AUTH_VERIFICATION_CODE + '/email.md')
 			markdown = Strings.replacer(markdown, {
 				user: user,
 				code: code,
 				hrefs: {
-					cta: `${process.env.BASE_URL_APP}/password/reset?code=${code}`
-				}
+					cta: `${process.env.BASE_URL_APP}/password/reset?code=${code}`,
+				},
 			})
-		}else{
+		} else {
 			markdown = `Hi ${
 				user.first_name ?? 'there'
 			}, <br><br> You recently requested to reset the password for your ${Strings.capitalize(
@@ -242,23 +253,23 @@ export class AuthService extends BaseService<T> {
 			return
 		}
 
-		if(!user.first_name){
+		if (!user.first_name) {
 			user.first_name = 'Hi there'
 		}
 
 		const subject = `🔑 Login Code`
 		let markdown = ``
 
-		if(File.exists(process.env.BEACON_USER_AUTH_PASSWORDLESS_CODE+'/email.md')){
-			markdown = await File.read(process.env.BEACON_USER_AUTH_PASSWORDLESS_CODE+'/email.md')
+		if (File.exists(process.env.BEACON_USER_AUTH_PASSWORDLESS_CODE + '/email.md')) {
+			markdown = await File.read(process.env.BEACON_USER_AUTH_PASSWORDLESS_CODE + '/email.md')
 			markdown = Strings.replacer(markdown, {
 				user: user,
 				code: code,
 				hrefs: {
 					cta: `${process.env.BASE_URL_APP}/passwordless?code=${code}`,
-				}
+				},
 			})
-		}else{
+		} else {
 			markdown = `Hi ${
 				user.first_name ?? 'there'
 			}, <br><br> You recently requested passwordless login for your ${Strings.capitalize(
@@ -267,7 +278,7 @@ export class AuthService extends BaseService<T> {
 			markdown += ` ### ${code} \n`
 			markdown += `This login code is only valid for the next 20 minutes.`
 		}
-		
+
 		const result = await this.beaconService.notify({
 			methods: {
 				email: true,

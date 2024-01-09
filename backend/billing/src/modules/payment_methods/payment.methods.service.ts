@@ -321,35 +321,30 @@ export class PaymentMethodsService extends BaseService<T> {
 		}
 	}
 
-
-	async sendBeaconOnExpiringSoon(
-		payment_method: PaymentMethod,
-	): Promise<void> {
-
+	async sendBeaconOnExpiringSoon(payment_method: PaymentMethod): Promise<void> {
 		if (!process.env.BEACON_BILLING_PAYMENT_METHOD_EXPIRY) {
 			return
 		}
 
-		if(!payment_method.account.finance_email){
+		if (!payment_method.account.finance_email) {
 			const user = await this.accountService.getOwner(payment_method.account.account_id)
 			payment_method.account.finance_email = user.email
 		}
 
 		let markdown = ``
 
-			if(File.exists(process.env.BEACON_BILLING_PAYMENT_METHOD_EXPIRY+'/email.md')){
-				markdown = await File.read(process.env.BEACON_BILLING_PAYMENT_METHOD_EXPIRY+'/email.md')
-				markdown = Strings.replacer(markdown, {
-					payment_method: payment_method,
-				})
-			}else{
-				markdown = `The payment method on file for ${payment_method.account.account_name} is expiring soon. Please update your payment method.`
-			}
-
+		if (File.exists(process.env.BEACON_BILLING_PAYMENT_METHOD_EXPIRY + '/email.md')) {
+			markdown = await File.read(process.env.BEACON_BILLING_PAYMENT_METHOD_EXPIRY + '/email.md')
+			markdown = Strings.replacer(markdown, {
+				payment_method: payment_method,
+			})
+		} else {
+			markdown = `The payment method on file for ${payment_method.account.account_name} is expiring soon. Please update your payment method.`
+		}
 
 		await this.beaconService.notify({
 			methods: {
-				email: true
+				email: true,
 				//todo add to app notifications
 			},
 			communication: {
@@ -357,11 +352,11 @@ export class PaymentMethodsService extends BaseService<T> {
 					to: {
 						name: payment_method.account.account_name,
 						email: payment_method.account.finance_email,
-					}
-				}
+					},
+				},
 			},
-			subject: `⚠️ ${payment_method.method} is expiring soon`,
-			markdown: markdown
+			subject: `⚠️ ${Strings.capitalize(payment_method.method)} is expiring soon`,
+			markdown: markdown,
 		})
 	}
 }

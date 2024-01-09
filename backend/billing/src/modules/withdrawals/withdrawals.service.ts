@@ -49,11 +49,10 @@ export class WithdrawalsService extends BaseService<T> {
 	}
 
 	async sendBeaconOnCreate(withdrawal: T, user: User): Promise<void> {
-		
 		if (!process.env.BEACON_BILLING_WITHDRAWAL_REQUEST) {
 			return
 		}
-		
+
 		const amount = new Intl.NumberFormat('en-US', {
 			style: 'currency',
 			currency: withdrawal.currency,
@@ -61,17 +60,16 @@ export class WithdrawalsService extends BaseService<T> {
 
 		let markdown = ``
 
-		if(File.exists(process.env.BEACON_BILLING_WITHDRAWAL_REQUEST+'/email.md')){
-			markdown = await File.read(process.env.BEACON_BILLING_WITHDRAWAL_REQUEST+'/email.md')
+		if (File.exists(process.env.BEACON_BILLING_WITHDRAWAL_REQUEST + '/email.md')) {
+			markdown = await File.read(process.env.BEACON_BILLING_WITHDRAWAL_REQUEST + '/email.md')
 			markdown = Strings.replacer(markdown, {
 				withdrawal: withdrawal,
 				user: user,
 				amount: amount,
 			})
-		}else{
+		} else {
 			markdown = `A withdrawal request of ${amount} has been received and will be processed as soon as possible.`
 		}
-
 
 		await this.beaconService.notify({
 			methods: {

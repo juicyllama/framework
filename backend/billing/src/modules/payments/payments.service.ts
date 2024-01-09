@@ -222,13 +222,11 @@ export class PaymentsService extends BaseService<T> {
 	 * @param user
 	 */
 	async sendBeaconOnCreate(payment: T, user: User): Promise<void> {
-
 		if (!process.env.BEACON_BILLING_PAYMENT_RECEIVED) {
 			return
 		}
 
 		if (payment.amount > 0) {
-
 			const amount = new Intl.NumberFormat('en-US', {
 				style: 'currency',
 				currency: payment.currency,
@@ -236,14 +234,14 @@ export class PaymentsService extends BaseService<T> {
 
 			let markdown = ``
 
-			if(File.exists(process.env.BEACON_BILLING_PAYMENT_RECEIVED+'/email.md')){
-				markdown = await File.read(process.env.BEACON_BILLING_PAYMENT_RECEIVED+'/email.md')
+			if (File.exists(process.env.BEACON_BILLING_PAYMENT_RECEIVED + '/email.md')) {
+				markdown = await File.read(process.env.BEACON_BILLING_PAYMENT_RECEIVED + '/email.md')
 				markdown = Strings.replacer(markdown, {
 					payment: payment,
 					user: user,
-					amount: amount
+					amount: amount,
 				})
-			}else{
+			} else {
 				markdown = `A payment of ${amount} has been received via ${Strings.capitalize(
 					payment.method,
 				)} and applied to your account.`
@@ -266,7 +264,7 @@ export class PaymentsService extends BaseService<T> {
 								},
 					},
 				},
-				subject: `Payment received`,
+				subject: `💸 Payment Received`,
 				markdown: markdown,
 				json: {
 					payment_id: payment.payment_id,
@@ -281,7 +279,6 @@ export class PaymentsService extends BaseService<T> {
 		amount: number,
 		currency: SupportedCurrencies,
 	): Promise<void> {
-
 		if (!process.env.BEACON_BILLING_PAYMENT_DECLINED) {
 			return
 		}
@@ -293,17 +290,16 @@ export class PaymentsService extends BaseService<T> {
 
 		let markdown = ``
 
-			if(File.exists(process.env.BEACON_BILLING_PAYMENT_RECEIVED+'/email.md')){
-				markdown = await File.read(process.env.BEACON_BILLING_PAYMENT_RECEIVED+'/email.md')
-				markdown = Strings.replacer(markdown, {
-					payment_method: payment_method,
-					user: user,
-					amount: amount_formatted
-				})
-			}else{
-				markdown = `A payment of ${amount_formatted} has been declined. Please check with your payment provider or update your payment method on file.`
-			}
-
+		if (File.exists(process.env.BEACON_BILLING_PAYMENT_DECLINED + '/email.md')) {
+			markdown = await File.read(process.env.BEACON_BILLING_PAYMENT_DECLINED + '/email.md')
+			markdown = Strings.replacer(markdown, {
+				payment_method: payment_method,
+				user: user,
+				amount: amount_formatted,
+			})
+		} else {
+			markdown = `A payment of ${amount_formatted} has been declined. Please check with your payment provider or update your payment method on file.`
+		}
 
 		await this.beaconService.notify({
 			methods: {
@@ -324,7 +320,7 @@ export class PaymentsService extends BaseService<T> {
 				},
 				event: `account_${payment_method.account.account_id}_billing`,
 			},
-			subject: `Payment declined`,
+			subject: `🚨 Payment Declined`,
 			markdown: markdown,
 			json: {
 				payment_method_id: payment_method.payment_method_id,

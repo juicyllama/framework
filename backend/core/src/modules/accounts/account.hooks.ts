@@ -19,23 +19,23 @@ export class AccountHooks {
 			return
 		}
 
-		if(!owner.first_name){
+		if (!owner.first_name) {
 			owner.first_name = 'Hi there'
 		}
 
 		const subject = `✅ Account Created`
 		let markdown = ``
 
-		if(File.exists(process.env.BEACON_ACCOUNT_CREATE+'/email.md')){
-			markdown = await File.read(process.env.BEACON_ACCOUNT_CREATE+'/email.md')
+		if (File.exists(process.env.BEACON_ACCOUNT_CREATE + '/email.md')) {
+			markdown = await File.read(process.env.BEACON_ACCOUNT_CREATE + '/email.md')
 			markdown = Strings.replacer(markdown, {
 				account: account,
 				owner: owner,
 				hrefs: {
 					dashboard: process.env.BASE_URL_APP + '/dashboard',
-				}
+				},
 			})
-		}else{
+		} else {
 			markdown = `${owner.first_name ?? 'Hello'}, we are really pleased to welcome ${
 				account.account_name
 			} to ${Strings.capitalize(process.env.SYSTEM_EMAIL_NAME ?? process.env.npm_package_name)}!`
@@ -60,28 +60,27 @@ export class AccountHooks {
 	}
 
 	async TempPassowrd(owner: User, password: string): Promise<void> {
-
 		if (!process.env.BEACON_ACCOUNT_ADMIN_TEMPORARY_PASSWORD) {
 			return
 		}
 
-		if(!owner.first_name){
+		if (!owner.first_name) {
 			owner.first_name = 'Hi there'
 		}
 
 		const subject = `🔑 Temporary Password`
 		let markdown = ``
 
-		if(File.exists(process.env.BEACON_ACCOUNT_ADMIN_TEMPORARY_PASSWORD+'/email.md')){
-			markdown = await File.read(process.env.BEACON_ACCOUNT_ADMIN_TEMPORARY_PASSWORD+'/email.md')
+		if (File.exists(process.env.BEACON_ACCOUNT_ADMIN_TEMPORARY_PASSWORD + '/email.md')) {
+			markdown = await File.read(process.env.BEACON_ACCOUNT_ADMIN_TEMPORARY_PASSWORD + '/email.md')
 			markdown = Strings.replacer(markdown, {
 				owner: owner,
 				password: password,
 				hrefs: {
 					reset: process.env.BASE_URL_APP + '/reset',
-				}
+				},
 			})
-		}else{
+		} else {
 			markdown = `${
 				owner.first_name ?? 'Hello'
 			}, we have automatically created you a temporary password: <strong>${password}</strong> <br /><br />Please login and change your password as soon as possible.`
