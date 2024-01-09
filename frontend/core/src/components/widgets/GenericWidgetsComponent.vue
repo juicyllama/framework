@@ -1,32 +1,40 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import WidgetDisplayContainer from './WidgetDisplayContainer.vue'
 import WidgetEditorContainer from './WidgetEditorContainer.vue'
-import { loadWidgets } from '../../services/widgets'
+import { SettingsService } from '../../services/settings'
 import { useWidgetsStore } from '../../store/widgets'
+// import { loadWidgets } from '../../services/widgets'
 
 const props = defineProps<{
 	editable: boolean
-	endpoint?: string
 	data?: any
 	account_id?: string
 }>()
 
-const dashboardData = ref({})
 const widgetsStore = useWidgetsStore()
+const settingsService = new SettingsService()
+const route = useRoute()
 
 onMounted(async () => {
-	if (props.endpoint) {
-		dashboardData.value = await loadWidgets(props.endpoint)
-		widgetsStore.setWidgets(dashboardData.value)
-	} else {
-		dashboardData.value = props.data
-		widgetsStore.setWidgets(dashboardData.value)
-	}
+	//format: frontend::widgets::<route>::<account_id>
+	const widgetKey = `frontend::widgets::${String(route.name)}::${props.account_id}`
 
+	if (!props.editable) {
+		if (props.data) {
+			widgetsStore.setWidgets(props.data)
+		} else {
+			settingsService.getKey(widgetKey).then(data => {
+				if (data) {
+					widgetsStore.setWidgets(data)
+				}
+			})
+		}
+	}
 })
 </script>
 <template>
-	<WidgetEditorContainer v-if="props.editable" :data="dashboardData" :endpoint="props.endpoint" />
+	<WidgetEditorContainer v-if="props.editable" />
 	<WidgetDisplayContainer v-else />
 </template>
