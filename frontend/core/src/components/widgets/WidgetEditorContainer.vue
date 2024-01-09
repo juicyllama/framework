@@ -164,14 +164,17 @@
 import { useQuasar } from 'quasar'
 
 import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import WidgetForm from './components/WidgetForm.vue'
 import { useWidgetsStore } from '../../store/widgets'
 import { JLChart } from '../../components/common/chart'
 import JLStats from './components/JLStats.vue'
 import JLForm from './components/JLForm.vue'
 import JLTable from './components/JLTable.vue'
-import { saveWidgets } from '../../services/widgets'
-import { widgetClass } from './utils'
+import { AccountStore } from '../../store/account'
+// import { saveWidgets } from '../../services/widgets'
+import { widgetClass, getKey } from './utils'
+import { SettingsService } from '../../services/settings'
 
 const findWidgetById = (widgets, widget) => widgets.findIndex(el => el.id === widget.id)
 
@@ -179,12 +182,16 @@ export default {
 	components: {
 		WidgetForm,
 	},
-	props: ['endpoint', 'data', 'showHeader'],
+	props: ['data', 'showHeader'],
 	setup(props) {
 		const leftDrawerOpen = ref(false)
 		const search = ref('')
+		const isNew = ref(true)
 		const showWidgetEditForm = ref(false)
 		const $q = useQuasar()
+		const settingsService = new SettingsService()
+		const accountStore = AccountStore()
+		const route = useRoute()
 
 		const comps = {
 			JLChart,
@@ -198,15 +205,15 @@ export default {
 		const widgets2 = ref([])
 
 		onMounted(() => {
-			const dashboard = localStorage.getItem('dashboard')
-			if (dashboard) {
-				widgetsStore.widgets = JSON.parse(dashboard)
-				widgets2.value = JSON.parse(dashboard)
-			}
+			const widgetKey = getKey(route.name as string, accountStore.selected_account?.account_id)
+			settingsService.getKey(widgetKey).then(data => {
+				if (data) {
+					widgetsStore.widgets = data
+					widgets2.value = data as any
+					isNew.value = false
+				}
+			})
 		})
-
-		//TODO: remove when API is ready
-		//const LS_KEY_FOR_DATA = 'dashboard'
 
 		const close = () => {
 			showWidgetEditForm.value = false
@@ -220,9 +227,12 @@ export default {
 		}
 
 		const saveDashboard = () => {
-			saveWidgets(props.endpoint, widgets2.value)
-			//TODO: remove when API is ready, show notification
-			//localStorage.setItem(LS_KEY_FOR_DATA, JSON.stringify(widgetsStore.widgets))
+			const widgetKey = getKey(route.name as string, accountStore.selected_account?.account_id)
+			if (isNew.value) {
+				settingsService.createKey(widgetKey, widgets2.value)
+			} else {
+				settingsService.updateKey(widgetKey, widgets2.value)
+			}
 		}
 
 		const onDragStart = (event, widget, src) => {
