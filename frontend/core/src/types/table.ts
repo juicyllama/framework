@@ -53,6 +53,7 @@ export interface TableSchema {
 		clickable?: boolean
 		column_filter?: boolean
 		search_filter?: SearchFilterOptions
+		advanced_filters?: boolean
 		add_record?: boolean
 		update_inline?: boolean
 		update_record?: boolean
@@ -86,4 +87,15 @@ export interface TableSchema {
 		onEditFormLoad?: Function
 	}
 	style?: string
+}
+
+export interface IFilterType {
+	label: string,
+	method: string
+}
+
+export interface IFilter {
+	label: string,
+	type: string | IFilterType,
+	value: string | number
 }
