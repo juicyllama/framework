@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import Table from '../../../components/common/table/components/Table.vue'
-import { loadPusher } from '../../../plugins'
-import { FindOptions, LogSeverity } from '../../../types'
+import { onMounted, Ref, ref } from 'vue'
 import { isEmpty, isNull, result } from 'lodash'
 import { defineStore } from 'pinia'
 import { useQuasar } from 'quasar'
-import { onMounted, Ref, ref } from 'vue'
+import Table from '../../../components/common/table/components/Table.vue'
+import { loadPusher } from '../../../plugins'
+import { FindOptions, LogSeverity } from '../../../types'
 import { logger, TableColumn, TableSchema } from '../../../index'
 import { default as JLAreYouSure } from '../AreYouSure.vue'
 
@@ -101,6 +101,25 @@ async function getData() {
 		const data = await props.options.functions.findAll({
 			url: props.options.endpoint,
 			find: useListStore.options,
+			q: $q,
+		})
+
+		rows.value = formatFormData(data)
+	} else {
+		rows.value = []
+	}
+
+	loading.value = false
+}
+
+async function onAdvancedFilterChange(advancedFiltersValue: any) {
+	if (total_rows.value > 0) {
+		const data = await props.options.functions.findAll({
+			url: props.options.endpoint,
+			find: {
+				...useListStore.options,
+				advancedFiltersValue,
+			},
 			q: $q,
 		})
 
@@ -352,7 +371,8 @@ onMounted(async () => {
 			@updateValue="updateValue"
 			@deleteRecord="deleteRecord"
 			@pluginAction="pluginAction"
-			@toggleButton="tableToggled"></Table>
+			@toggleButton="tableToggled"
+			@advancedFilter="onAdvancedFilterChange"></Table>
 
 			<JLAreYouSure :confirm="confirm" @cancel="confirm = false" @proceed="confirmedDeleteRecord" :button_proceed="{label: 'Delete Record'}" :icon="{classes: 'JLIcon JLIconDelete', size: '1em', type: options.icon?.type, name: options.icon?.icons?.delete ?? 'delete' }" />
 

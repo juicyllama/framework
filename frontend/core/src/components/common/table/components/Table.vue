@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Ref, ref, reactive, computed, watch } from 'vue'
 import FieldContents from './FieldContents.vue'
 import TableActions from './TableActions.vue'
 import {
@@ -10,12 +11,12 @@ import {
 	TablePosition,
 	TableSchema,
 } from '../../../../types'
+import { IFilter } from '../../../../types/table'
 import { Strings } from '@juicyllama/vue-utils'
 import { useQuasar } from 'quasar'
-import { Ref, computed, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { default as JLForm } from '../../form/Form.vue'
-import { ColumnsFilter, CustomButtons, SearchFilter } from './index'
+import { ColumnsFilter, CustomButtons, TextSearchFilter } from './index'
 import { logger } from '../../../../index'
 
 const props = defineProps<{
@@ -45,6 +46,7 @@ const emit = defineEmits([
 	'deleteRecord',
 	'pluginAction',
 	'toggleButton',
+	'advancedFilter',
 ])
 
 const $q = useQuasar()
@@ -294,10 +296,52 @@ watch(
 		createRecord.value = false
 	},
 )
+
+const advancedFilterDialog = ref<boolean>(false)
+const labels = computed(() => JLToQColumns.map(el => el.label))
+const activeLabels = computed<string[]>(() => activeFilters.value.map(el => el.label))
+
+const activeFilters = ref<IFilter[]>([])
+
+const perCollumnFilterQuery = computed<Array<string | number>[]>(() => {
+	return activeFilters.value.map(el => {
+		const item = JLToQColumns.find(i => i.label === el.label)
+		const method: string = typeof el.type === 'object' ? el.type.method : ''
+		if (item && ['NULL', '!NULL'].includes(method)) return [item.name, method]
+		if (item) return [item.name, method, el.value]
+		else return []
+	})
+})
+
+const onClearFilters = () => {
+	activeFilters.value = []
+}
+
+const onAddFilter = data => {
+	activeFilters.value.push(data)
+}
+
+const onRemoveFilter = index => {
+	activeFilters.value.splice(index, 1)
+}
+
+watch(
+	() => props.restart,
+	() => {
+		emit('advancedFilter', perCollumnFilterQuery.value)
+	},
+)
 </script>
 
 <template>
 	<div id="JLTable" class="JLTable">
+		<TableFilterDialog
+			v-model="advancedFilterDialog"
+			:activeFilters="activeFilters"
+			:labels="labels"
+			@clear="onClearFilters"
+			@add="onAddFilter"
+			@remove="onRemoveFilter" />
 		<q-table
 			:title="props.tableSchema.title ?? ''"
 			v-bind:style="props.tableSchema?.style"
@@ -312,6 +356,12 @@ watch(
 			:visible-columns="JLToQColumns.map(col => col.name)"
 			v-model:pagination="pagination"
 			@request="onRequest">
+			<template v-slot:header-cell="props">
+				<q-th :props="props">
+					{{ props.col.label }}
+					<q-icon name="filter_alt" size="1.2em" color="red" v-if="activeLabels.includes(props.col.label)" />
+				</q-th>
+			</template>
 			<template v-slot:top-left v-if="props.tableSchema.show?.table_actions !== false">
 				<div class="JLTableTopLeft">
 					<h5 class="JLTableTitle" v-if="props.tableSchema.title">{{ props.tableSchema.title }}</h5>
@@ -352,7 +402,7 @@ watch(
 							@update:model-value="toggle_table" />
 					</div>
 
-					<SearchFilter
+					<TextSearchFilter
 						v-if="!loading && props.tableSchema?.show?.search_filter?.position === TablePosition.TOP_LEFT"
 						:search="filter"
 						:table-schema="props.tableSchema"
@@ -362,20 +412,22 @@ watch(
 
 			<template v-slot:top-right v-if="props.tableSchema.show?.table_actions !== false">
 				<div class="JLTableTopRight">
-					<SearchFilter
+					<TextSearchFilter
 						v-if="!loading && props.tableSchema?.show?.search_filter?.position === TablePosition.TOP_RIGHT"
 						:search="filter"
 						:table-schema="props.tableSchema"
 						@searchUpdated="searchUpdated" />
+
+					<q-btn
+						v-if="!loading && props.tableSchema?.show?.advanced_filters"
+						class="q-ml-sm"
+						color="primary"
+						:label="`Filters (${activeFilters.length})`"
+						@click="advancedFilterDialog = true" />
+
 					<div v-if="props.tableSchema?.show?.expandable">
 						<div @click="toggleTableSize" style="cursor: pointer">
-							<q-icon
-								v-bind:name="
-									!tableExpanded
-										? 'open_in_full'
-										: 'aspect_ratio'
-								"
-								size="xs" />
+							<q-icon v-bind:name="!tableExpanded ? 'open_in_full' : 'aspect_ratio'" size="xs" />
 						</div>
 					</div>
 
@@ -387,9 +439,7 @@ watch(
 
 					<q-btn class="JLButton JLTableAddRecord" v-if="props.tableSchema.show.add_record" @click="addItem">
 						<q-icon
-							:name="`${props.tableSchema.icon?.type} ${
-								props.tableSchema.icon?.icons?.add ?? 'add_box'
-							}`"
+							:name="`${props.tableSchema.icon?.type} ${props.tableSchema.icon?.icons?.add ?? 'add_box'}`"
 							size="medium"
 							class="JLIcon JLIconAddRecord" />
 						Add
@@ -426,10 +476,12 @@ watch(
 					<q-td
 						v-for="col in JLToQColumns"
 						:key="col.field"
-						:class="[JLToQColumns.map(col => col.name).includes(col.field)
+						:class="[
+							JLToQColumns.map(col => col.name).includes(col.field)
 								? 'JLTableRowColVisible'
-								: 'JLTableRowColHide', col.field === 'action' ? 'row justify-center' : '']"
-						>
+								: 'JLTableRowColHide',
+							col.field === 'action' ? 'row justify-center' : '',
+						]">
 						<div v-if="loading">
 							<q-skeleton type="rect" class="JLTableLoadingSkeleton" />
 						</div>
