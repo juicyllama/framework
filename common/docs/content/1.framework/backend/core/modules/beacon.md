@@ -123,3 +123,44 @@ The beacon module can integrate with the following modules:
 | SMS    | [app-aws]()                     |
 | Push   | [app-pusher]()                  |
 | IM     | [app-slack](/apps/slack/readme) |
+
+
+## Templates
+
+The framework ships with very basic messages which you can enable by adding the relevent entry to your `.env` file.
+
+### Custom Templates
+
+However we recommend adding your own custom templates.
+
+To setup your custom templates, you can add the following files: 
+
+- email.md
+- 
+
+Before the template is sent, we automatically convert `${values}` from the injected object details below.
+
+Once you have added the above templates to your project, you can then add the reference in your `.env` file, for example:
+
+```
+BEACON_ACCOUNT_CREATE="lib/common/beacons/accounts/create"
+```
+
+The system will then look for the above template files in that folder, if it does not find the file, it will revert to the frameworks default. 
+
+### Template Hooks
+
+Add the hook to your .env file pointing to your template directory
+
+| Hook | Injected Object                    |
+| ------ | ------------------------------- |
+| `BEACON_ACCOUNT_CREATE`  | `{ account: Account, owner: User, hrefs: {	dashboard: String } }` |
+| `BEACON_ACCOUNT_ADMIN_TEMPORARY_PASSWORD`    |  `{ owner: User, password: String, hrefs: { reset: String } }` |
+| `BEACON_USER_INVITED`  | `{ account: Account, user: User, hrefs: {	reset: String } }` |
+| `BEACON_USER_ADDED`  | `{ account: Account, user: User, hrefs: { login: String } }` |
+| `BEACON_USER_AUTH_VERIFICATION_CODE`  | `{ user: User, code: String, { hrefs: { cta: String } }` |
+| `BEACON_USER_AUTH_PASSWORDLESS_CODE`  | `{ user: User, code: String, { hrefs: { cta: String } }` |
+| `BEACON_BILLING_WITHDRAWAL_REQUEST`  | `{ withdrawal: Withdrawal, user: User, amount: Intl.NumberFormat }` |
+| `BEACON_BILLING_PAYMENT_RECEIVED`  | `{ payment: Payment, user: User, amount: Intl.NumberFormat }` |
+| `BEACON_BILLING_PAYMENT_DECLINED`  | `{ payment_method: PaymentMethod, user: User, amount: Intl.NumberFormat }` |
+| `BEACON_BILLING_PAYMENT_METHOD_EXPIRY`  | `{ payment_method: PaymentMethod}` |

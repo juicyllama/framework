@@ -24,16 +24,17 @@ const config = {
 	settings: {
 		validateIssuer: Env.IsProd(),
 		passReqToCallback: false,
-		loggingLevel: (Env.IsProd() ? 'warn' : 'info'),
+		loggingLevel: Env.IsProd() ? 'warn' : 'info',
 	},
-};
+}
 
-export const enableAzureADStrategy = process.env.AZURE_AD_CLIENT_ID && process.env.AZURE_AD_TENANT_ID && process.env.AZURE_AD_CLIENT_SECRET;
+export const enableAzureADStrategy =
+	process.env.AZURE_AD_CLIENT_ID && process.env.AZURE_AD_TENANT_ID && process.env.AZURE_AD_CLIENT_SECRET
 
 @Injectable()
 export class AzureADStrategy extends PassportStrategy(BearerStrategy, AZURE_AD) {
 	constructor(@Inject(forwardRef(() => UsersService)) private usersService: UsersService) {
-		if (!enableAzureADStrategy) throw new Error('Azure AD is not enabled');
+		if (!enableAzureADStrategy) throw new Error('Azure AD is not enabled')
 		super({
 			identityMetadata: `https://${config.metadata.authority}/${config.credentials.tenantID}/${config.metadata.version}/${config.metadata.discovery}`,
 			issuer: `https://${config.metadata.authority}/${config.credentials.tenantID}/${config.metadata.version}`,
@@ -44,11 +45,11 @@ export class AzureADStrategy extends PassportStrategy(BearerStrategy, AZURE_AD) 
 			loggingLevel: config.settings.loggingLevel,
 			scope: AZURE_AD_EXPOSED_SCOPES.split(' '),
 			loggingNoPII: false,
-		} as IBearerStrategyOption);
+		} as IBearerStrategyOption)
 	}
 
 	async validate(payload: any) {
-		return enableAzureADStrategy && payload['email'] && await this.usersService.validateEmail(payload.email)
+		return enableAzureADStrategy && payload['email'] && (await this.usersService.validateEmail(payload.email))
 	}
 }
 

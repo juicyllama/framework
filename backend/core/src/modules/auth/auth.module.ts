@@ -26,7 +26,7 @@ import Joi from 'joi'
 import { ssoConfigJoi } from '../../configs/sso.config.joi'
 import { enableLinkedinStrategy, LinkedinStrategy } from './strategies/linkedin.strategy'
 
-const strategies = [];
+const strategies = []
 if (enableAzureADStrategy) {
 	strategies.push(AzureADStrategy)
 }
@@ -56,16 +56,7 @@ if (enableLinkedinStrategy) {
 		forwardRef(() => UsersModule),
 	],
 	controllers: [AuthController],
-	providers: [
-		AuthService,
-		LocalStrategy,
-		JwtStrategy,
-		CronStrategy,
-		BasicStrategy,
-		Logger,
-		Query,
-		...strategies
-	],
+	providers: [AuthService, LocalStrategy, JwtStrategy, CronStrategy, BasicStrategy, Logger, Query, ...strategies],
 	exports: [AuthService],
 })
 export class AuthModule {

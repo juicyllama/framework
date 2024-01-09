@@ -8,7 +8,7 @@ export const enableLinkedinStrategy = process.env.LINKEDIN_KEY && process.env.LI
 @Injectable()
 export class LinkedinStrategy extends PassportStrategy(Strategy, 'linkedin') {
 	constructor(@Inject(forwardRef(() => UsersService)) private usersService: UsersService) {
-		if (!enableLinkedinStrategy) throw new Error('Linkedin is not enabled');
+		if (!enableLinkedinStrategy) throw new Error('Linkedin is not enabled')
 		super({
 			clientID: process.env.LINKEDIN_KEY,
 			clientSecret: process.env.LINKEDIN_SECRET,
@@ -19,6 +19,6 @@ export class LinkedinStrategy extends PassportStrategy(Strategy, 'linkedin') {
 
 	async validate(accessToken: string, refreshToken: string, profile: any): Promise<any> {
 		const { emails } = profile
-		return enableLinkedinStrategy && await this.usersService.validateEmail(emails[0].value)
+		return enableLinkedinStrategy && (await this.usersService.validateEmail(emails[0].value))
 	}
 }
