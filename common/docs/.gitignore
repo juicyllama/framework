@@ -3,3 +3,4 @@
 .cache
 .idea
 node_modules
+.nuxt
