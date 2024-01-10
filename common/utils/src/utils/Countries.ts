@@ -279,8 +279,10 @@ export class Countries {
 		if (!countryName || isNil(countryName)) return null
 
 		try {
-			const foundCountry = COUNTRIES.find(country => country['Country Name'].toLowerCase() === countryName.toLowerCase());
-			return foundCountry ? foundCountry.ISO2 : null;
+			const foundCountry = COUNTRIES.find(
+				country => country['Country Name'].toLowerCase() === countryName.toLowerCase(),
+			)
+			return foundCountry ? foundCountry.ISO2 : null
 		} catch (e: any) {
 			const logger = new Logger()
 			logger.error(`[Utils::Countries::countryNameToISO2] ${e.message}`, e.stack)

@@ -164,7 +164,7 @@ export class File {
 	 * Check if a file exists
 	 */
 	static exists(filePath: string): boolean {
-		return fs.existsSync(filePath);
+		return fs.existsSync(filePath)
 	}
 
 	/**

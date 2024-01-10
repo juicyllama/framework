@@ -40,7 +40,7 @@ export class Poll {
 				try {
 					result = await axios.get(url, config)
 				} catch (e) {
-					const error = e as Error; // Type assertion to specify the type of 'e' as 'Error'
+					const error = e as Error // Type assertion to specify the type of 'e' as 'Error'
 					logger.warn(`[${domain}][${uuid}] POLL Error: ${error.message}`, {
 						error: {
 							message: error.message,
@@ -111,21 +111,21 @@ export class Poll {
 				let result
 
 				try {
-					result = await func();
+					result = await func()
 				} catch (e) {
-					const error = e as Error; // Type assertion to specify the type of 'e' as 'Error'
+					const error = e as Error // Type assertion to specify the type of 'e' as 'Error'
 					logger.warn(`[${domain}][${uuid}] POLL Error: ${error.message}`, {
 						error: {
 							message: error.message,
 							stack: error.stack,
 						},
-					});
+					})
 				}
 
 				logger.debug(`[${domain}][${uuid}]} POLL #${attempts + 1}: Response`, {
 					result: result,
 					validate: validate.toString(),
-				});
+				})
 
 				attempts++
 

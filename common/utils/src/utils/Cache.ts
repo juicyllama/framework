@@ -1,4 +1,4 @@
-import { Enviroment, fromStringToEnv } from '../enums/env'
+import { fromStringToEnv } from '../enums/env'
 
 export class JLCache {
 	/**

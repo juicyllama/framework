@@ -15,7 +15,6 @@ export class ErrorResponseDto {
 	error!: string
 }
 export class StatsResponseDto {
-
 	@ApiProperty({ name: 'count', example: 0 })
 	@IsNumber()
 	@IsOptional()

@@ -86,7 +86,7 @@ export class Env {
 			line => line.split('=')[0] === options.key,
 		)
 		const result = matchedLine !== undefined ? matchedLine.split('=')[1] : null
-		return result !== null ? result.replace(/"/g, '') : '';
+		return result !== null ? result.replace(/"/g, '') : ''
 	}
 
 	/**

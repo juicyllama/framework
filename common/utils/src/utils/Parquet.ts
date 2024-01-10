@@ -8,11 +8,11 @@ export class Parquet {
 	 */
 
 	static async toParquet<T>(options: {
-        schema: Record<string, any>;
-        data: Record<any, any>[];
-        fileName?: string;
-        rowFunc?: (value: any, key?: string, row?: T) => any;
-    }): Promise<{ path: string; file: Buffer }> {
+		schema: Record<string, any>
+		data: Record<any, any>[]
+		fileName?: string
+		rowFunc?: (value: any, key?: string, row?: T) => any
+	}): Promise<{ path: string; file: Buffer }> {
 		let pSchema: ParquetSchema
 
 		try {

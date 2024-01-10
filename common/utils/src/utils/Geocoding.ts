@@ -1,10 +1,10 @@
-import bboxPolygon from '@turf/bbox-polygon';
-import {point} from '@turf/helpers';
-import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import bboxPolygon from '@turf/bbox-polygon'
+import { point } from '@turf/helpers'
+import booleanPointInPolygon from '@turf/boolean-point-in-polygon'
 //@ts-ignore
-import buffer from '@turf/buffer';
-import bbox from '@turf/bbox';
-import distance from '@turf/distance';
+import buffer from '@turf/buffer'
+import bbox from '@turf/bbox'
+import distance from '@turf/distance'
 
 export interface Coordinates {
 	latitude: number

@@ -28,7 +28,8 @@ export class Locale {
 			if (language == null) {
 				continue
 			}
-			if (typeof language === 'string') { // Add this line to ensure language is of type string
+			if (typeof language === 'string') {
+				// Add this line to ensure language is of type string
 				len = language.length
 				if (!shortLanguage && len) {
 					shortLanguage = language

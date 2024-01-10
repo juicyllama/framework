@@ -57,13 +57,7 @@ export class Api {
 	 * @return object
 	 */
 
-	async post(
-		domain: string,
-		url: string,
-		data?: object,
-		config?: any,
-		uuid?: string,
-	): Promise<any | boolean> {
+	async post(domain: string, url: string, data?: object, config?: any, uuid?: string): Promise<any | boolean> {
 		if (!config) {
 			config = this.defaultConfig()
 		}
