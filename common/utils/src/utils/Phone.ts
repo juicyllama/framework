@@ -10,7 +10,7 @@ export class Phone {
 	 */
 
 	static internationalCode(iso2: string): string {
-		const code = CODES[iso2].dialling_code
+		const code = CODES[iso2 as keyof typeof CODES].dialling_code
 		return Strings.onlyNumbers(code)
 	}
 }

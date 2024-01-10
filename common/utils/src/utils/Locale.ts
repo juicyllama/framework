@@ -23,17 +23,19 @@ export class Locale {
 
 		// support for other well known properties in browsers
 		for (i = 0; i < browserLanguagePropertyKeys.length; i++) {
-			language = nav[browserLanguagePropertyKeys[i]]
+			language = nav[browserLanguagePropertyKeys[i] as keyof Navigator]
 			//skip this loop iteration if property is null/undefined.  IE11 fix.
 			if (language == null) {
 				continue
 			}
-			len = language.length
-			if (!shortLanguage && len) {
-				shortLanguage = language
-			}
-			if (language && len > 2) {
-				return language
+			if (typeof language === 'string') { // Add this line to ensure language is of type string
+				len = language.length
+				if (!shortLanguage && len) {
+					shortLanguage = language
+				}
+				if (language && len > 2) {
+					return language
+				}
 			}
 		}
 

@@ -35,7 +35,12 @@
         "test:geocoding": "export $(grep -v '^#' ../.env.development) && NODE_ENV=test && jest --runInBand --testPathPattern=common/utils/src/utils/Geocoding.test.spec.ts"
     },
     "dependencies": {
-        "@turf/turf": "^6.5.0",
+        "@turf/bbox": "^6.5.0",
+        "@turf/bbox-polygon": "^6.5.0",
+        "@turf/boolean-point-in-polygon": "^6.5.0",
+        "@turf/buffer": "^6.5.0",
+        "@turf/distance": "^6.5.0",
+        "@turf/helpers": "^6.5.0",
         "axios": "latest",
         "csv-parser": "3.0.0",
         "dayjs": "1.11.10",
@@ -43,6 +48,7 @@
         "showdown": "2.1.0"
     },
     "devDependencies": {
-        "@juicyllama/dev": "workspace:^"
+        "@juicyllama/dev": "workspace:^",
+        "@types/parquetjs": "^0.10.6"
     }
 }

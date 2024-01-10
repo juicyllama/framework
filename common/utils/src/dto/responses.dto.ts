@@ -6,13 +6,13 @@ import { ApiProperty } from '@nestjs/swagger'
 
 export class ErrorResponseDto {
 	@IsNumber()
-	statusCode: number
+	statusCode!: number
 
 	@IsArray()
-	message: string[]
+	message!: string[]
 
 	@IsString()
-	error: string
+	error!: string
 }
 export class StatsResponseDto {
 
@@ -62,18 +62,18 @@ export class InvoicesSummaryResponseDto {
 
 export class SuccessResponseDto {
 	@IsBoolean()
-	success: boolean
+	success!: boolean
 }
 
 export class ProcessedResponseDto {
 	@IsNumber()
-	created: number
+	created!: number
 
 	@IsNumber()
-	updated: number
+	updated!: number
 
 	@IsNumber()
-	deleted: number
+	deleted!: number
 }
 
 export interface CronRecords {

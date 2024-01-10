@@ -7,10 +7,12 @@ export class Parquet {
 	 * Converts an entity and its data to a parquet file
 	 */
 
-	static async toParquet<T>(options: { schema: any; data: T[]; fileName?: string; rowFunc?: Function }): Promise<{
-		path: string
-		file: Buffer
-	}> {
+	static async toParquet<T>(options: {
+        schema: Record<string, any>;
+        data: Record<any, any>[];
+        fileName?: string;
+        rowFunc?: (value: any, key?: string, row?: T) => any;
+    }): Promise<{ path: string; file: Buffer }> {
 		let pSchema: ParquetSchema
 
 		try {

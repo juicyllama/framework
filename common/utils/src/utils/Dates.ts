@@ -2,7 +2,7 @@ import { DateRangeDto } from '../dto/date.dto'
 import { StepType } from '../enums/stats'
 import { month_names, month_names_short, SubscriptionFrequency } from '../enums/dates'
 
-const nth = function (d) {
+const nth = function (d: number) {
 	if (d > 3 && d < 21) return 'th'
 	switch (d % 10) {
 		case 1:
@@ -175,7 +175,7 @@ export class Dates {
 	 * Checks if date is between two other dates
 	 */
 	static isBetween(date: Date, from: Date, to: Date): boolean {
-		const isBetween = (date, min, max) => date.getTime() >= min.getTime() && date.getTime() <= max.getTime()
+		const isBetween = (date: Date, min: Date, max: Date) => date.getTime() >= min.getTime() && date.getTime() <= max.getTime()
 		return isBetween(date, from, to)
 	}
 

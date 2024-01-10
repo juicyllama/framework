@@ -1,4 +1,4 @@
-import { Enviroment } from '../enums/env'
+import { Enviroment, fromStringToEnv } from '../enums/env'
 
 export class JLCache {
 	/**
@@ -56,9 +56,9 @@ export class JLCache {
 				.map(key => key + '=' + query[key])
 				.join('&')
 
-			return `route::${Enviroment[process.env.NODE_ENV]}${route}/${queryString}`
+			return `route::${fromStringToEnv()}${route}/${queryString}`
 		}
 
-		return `route::${Enviroment[process.env.NODE_ENV]}${route}`
+		return `route::${fromStringToEnv()}${route}`
 	}
 }

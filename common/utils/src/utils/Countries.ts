@@ -7,9 +7,9 @@ export class Countries {
 	 * Takes in an ISO2 country code and returns the ISO3 version
 	 */
 
-	static convertISO2ToISO3(iso2: string): string {
+	static convertISO2ToISO3(iso2: string): string | null {
 		if (!iso2 || isNil(iso2)) return null
-		const ISO2toISO3 = {
+		const ISO2toISO3: { [key: string]: string } = {
 			BD: 'BGD',
 			BE: 'BEL',
 			BF: 'BFA',
@@ -275,11 +275,12 @@ export class Countries {
 	 * convert country name to ISO2 code
 	 */
 
-	static countryNameToISO2(countryName) {
+	static countryNameToISO2(countryName: string) {
 		if (!countryName || isNil(countryName)) return null
 
 		try {
-			return COUNTRIES.find(country => country['Country Name'].toLowerCase() === countryName.toLowerCase()).ISO2
+			const foundCountry = COUNTRIES.find(country => country['Country Name'].toLowerCase() === countryName.toLowerCase());
+			return foundCountry ? foundCountry.ISO2 : null;
 		} catch (e: any) {
 			const logger = new Logger()
 			logger.error(`[Utils::Countries::countryNameToISO2] ${e.message}`, e.stack)
@@ -292,7 +293,7 @@ export class Countries {
 	 * @param ISO2
 	 */
 
-	static getCountry(ISO2) {
+	static getCountry(ISO2: string) {
 		if (!ISO2 || isNil(ISO2)) return null
 
 		try {

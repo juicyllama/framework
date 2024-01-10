@@ -26,6 +26,8 @@
         "install:framework": "sh ./framework-install.sh",
         "link": "sh ./pnpm-link.sh",
         "start:docker": "sh ./start-docker.sh",
-        "lint:framework": "eslint \"**/src/**/*.ts\" --fix"
+        "lint:framework": "eslint \"**/src/**/*.ts\" --fix",
+        "build": "pnpm -r --filter=!dev run build",
+        "test": "pnpm -r --filter=!dev run test"
     }
 }

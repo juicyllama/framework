@@ -11,7 +11,7 @@ export class Csv {
 
 	static async parseCsvFile(file: Express.Multer.File, mappers?: { [key: string]: string }): Promise<any[]> {
 		return new Promise((resolve, reject) => {
-			const results = []
+			const results: any[] = []
 			const stream = Readable.from(file.buffer)
 
 			stream
