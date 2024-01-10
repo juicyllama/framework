@@ -49,6 +49,7 @@
     },
     "devDependencies": {
         "@juicyllama/dev": "workspace:^",
+        "@types/lodash": "^4.14.199",
         "@types/parquetjs": "^0.10.6"
     }
 }

@@ -710,6 +710,9 @@ importers:
       '@juicyllama/dev':
         specifier: workspace:^
         version: link:../dev
+      '@types/lodash':
+        specifier: ^4.14.199
+        version: 4.14.202
       '@types/parquetjs':
         specifier: ^0.10.6
         version: 0.10.6
@@ -6976,7 +6979,6 @@ packages:
 
   /@types/lodash@4.14.202:
     resolution: {integrity: sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ==}
-    dev: false
 
   /@types/luxon@3.3.8:
     resolution: {integrity: sha512-jYvz8UMLDgy3a5SkGJne8H7VA7zPV2Lwohjx0V8V31+SqAjNmurWMkk9cQhfvlcnXWudBpK9xPM1n4rljOcHYQ==}
