@@ -87,6 +87,16 @@ export class Dates {
 	}
 
 	/**
+	 * Takes a date and adds additional minutes to it
+	 */
+
+	static addMinutes(date: Date, minutes: number): Date {
+		const result = new Date(date)
+		result.setMinutes(result.getMinutes() + minutes)
+		return result
+	}
+
+	/**
 	 * Takes a date and adds additional hours to it
 	 * @param date
 	 * @param hours
