@@ -20,7 +20,7 @@ export default defineNuxtConfig({
 		global: true,
 		icons: 'all'
 	},
-	devtools: { enabled: true },
+	devtools: { enabled: process.env.NODE_ENV === 'development' },
 	typescript: {
 		tsConfig: {
 			compilerOptions: {
@@ -34,7 +34,7 @@ export default defineNuxtConfig({
 	},
 	nitro: {
 		prerender: {
-			crawlLinks: true,
+			crawlLinks: false,
 			failOnError: false
 		}
 	},
@@ -45,11 +45,6 @@ export default defineNuxtConfig({
 	},
 	content: {
 		defaultLocale: 'en',
-		experimental: {
-		search: {
-			indexed: false
-		}
-		},
 		markdown: {
 			mdc: true,
 		},
