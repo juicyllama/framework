@@ -1,6 +1,6 @@
 import vitePluginRequire from "vite-plugin-require";
 export default defineNuxtConfig({
-	//extends: ['@nuxt-themes/docus'],
+	extends: ['@nuxt/ui-pro'],
 	modules: [
 		'@nuxt/content',
 		'@nuxtjs/google-fonts',
@@ -9,7 +9,10 @@ export default defineNuxtConfig({
 		'@nuxt/ui',
 		'nuxt-icon',
 		'@nuxtjs/color-mode',
-		'@nuxtjs/tailwindcss'
+		'@nuxtjs/tailwindcss',
+		'@nuxthq/studio',
+		'@nuxtjs/fontaine',
+		'nuxt-og-image'
 	],
 	colorMode: {
 		preference: 'dark',
