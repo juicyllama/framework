@@ -23,7 +23,7 @@
 		"format": "prettier --write --ignore-path .gitignore \"**/*.{js,vue,json,md}\""
 	},
 	"dependencies": {
-		"@juicyllama/frontend-core": "workspace:latest",
+		"@juicyllama/frontend-core": "latest",
 		"@nuxt-themes/docus": "github:shershen08/docus#jl-flavour-features",
 		"@nuxt/content": "2.8.0",
 		"@nuxt/devtools": "latest",
