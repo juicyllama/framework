@@ -34,7 +34,7 @@
 		"@nuxtjs/google-fonts": "3.1.1",
 		"@pinia/nuxt": "latest",
 		"@quasar/extras": "latest",
-		"nuxt": "3.8.2",
+		"nuxt": "3.9.1",
 		"nuxt-icon": "^0.6.8",
 		"nuxt-quasar-ui": "latest",
 		"quasar": "latest",
