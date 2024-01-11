@@ -1,6 +1,6 @@
 import vitePluginRequire from "vite-plugin-require";
 export default defineNuxtConfig({
-	extends: ['@nuxt-themes/docus'],
+	//extends: ['@nuxt-themes/docus'],
 	modules: [
 		'@nuxt/content',
 		'@nuxtjs/google-fonts',
