@@ -1,7 +1,7 @@
 version: 1
 applications:
 
-    - appRoot: common/docs
+    - appRoot: common/docs/
       frontend:
           phases:
             preBuild:
