@@ -113,7 +113,7 @@ export class Logger {
 		return process.env.LOG_LEVEL ? Number(process.env.LOG_LEVEL) : DEFAULT_LOG_LEVEL
 	}
 
-	private processParams(message, optionalParams): string {
+	private processParams(message: string, optionalParams: any[]): string {
 		try {
 			for (const param of optionalParams) {
 				switch (typeof param) {
@@ -135,10 +135,10 @@ export class Logger {
 				}
 			}
 		} catch (e) {
-			this.error(e.message)
+			this.error((e as Error).message)
 			if (Modules.bugsnag.isInstalled) {
 				Modules.bugsnag.load().then(Bugsnag => {
-					Bugsnag.notify(new Error(e))
+					return Bugsnag.notify(new Error(e as string))
 				})
 			}
 		}

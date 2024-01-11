@@ -42,7 +42,7 @@ export class Api {
 
 			return response.data
 		} catch (e) {
-			return this.processError(e, 'GET', url, domain, config, null, uuid)
+			return this.processError(e, 'GET', url, domain, config, undefined, uuid)
 		}
 	}
 
@@ -57,13 +57,7 @@ export class Api {
 	 * @return object
 	 */
 
-	async post(
-		domain: string,
-		url: string,
-		data?: object | string,
-		config?: any,
-		uuid?: string,
-	): Promise<any | boolean> {
+	async post(domain: string, url: string, data?: object, config?: any, uuid?: string): Promise<any | boolean> {
 		if (!config) {
 			config = this.defaultConfig()
 		}
@@ -150,7 +144,7 @@ export class Api {
 			logger.debug(`[${domain}]${uuid ? '[' + uuid + ']' : ''} Response ${response.status}`, response.data)
 			return true
 		} catch (e) {
-			return this.processError(e, 'DELETE', url, domain, config, null, uuid)
+			return this.processError(e, 'DELETE', url, domain, config, undefined, uuid)
 		}
 	}
 
@@ -163,7 +157,7 @@ export class Api {
 		}
 	}
 
-	processError(e, method, url, domain?, config?, data?, uuid?) {
+	processError(e: any, method: string, url: string, domain?: string, config?: any, data?: object, uuid?: string) {
 		const message = `[${domain}]${uuid ? '[' + uuid + ']' : ''} Error (${
 			e.response && e.response.status ? e.response.status : null
 		}): ${e.message}`

@@ -32,7 +32,7 @@ export class Poll {
 
 		const poll = () => {
 			let attempts = 0
-			const executePoll = async (resolve, reject) => {
+			const executePoll = async (resolve: (value: any) => void, reject: (reason?: any) => void) => {
 				logger.debug(`[${domain}][${uuid}]} POLL #${attempts + 1}: ${url}`)
 
 				let result
@@ -40,20 +40,21 @@ export class Poll {
 				try {
 					result = await axios.get(url, config)
 				} catch (e) {
-					logger.warn(`[${domain}][${uuid}] POLL Error: ${e.message}`, {
+					const error = e as Error // Type assertion to specify the type of 'e' as 'Error'
+					logger.warn(`[${domain}][${uuid}] POLL Error: ${error.message}`, {
 						error: {
-							message: e.message,
-							stack: e.stack,
+							message: error.message,
+							stack: error.stack,
 						},
 					})
 				}
 
-				logger.debug(`[${domain}][${uuid}]} POLL #${attempts + 1}: Response (${result.status})`, result.data)
+				logger.debug(`[${domain}][${uuid}]} POLL #${attempts + 1}: Response (${result?.status})`, result?.data)
 
 				attempts++
 
-				if (validate(result.data)) {
-					return resolve(result.data)
+				if (validate(result?.data)) {
+					return resolve(result?.data)
 				} else if (attempts === max_attempts) {
 					return reject('Exceeded max attempts')
 				} else {
@@ -98,7 +99,7 @@ export class Poll {
 
 		const poll = () => {
 			let attempts = 0
-			const executePoll = async (resolve, reject) => {
+			const executePoll = async (resolve: (value: any) => void, reject: (reason?: any) => void) => {
 				logger.debug(`[${domain}][${uuid}]} POLL #${attempts + 1}`, {
 					func: func.toString(),
 					interval: interval,
@@ -112,10 +113,11 @@ export class Poll {
 				try {
 					result = await func()
 				} catch (e) {
-					logger.warn(`[${domain}][${uuid}] POLL Error: ${e.message}`, {
+					const error = e as Error // Type assertion to specify the type of 'e' as 'Error'
+					logger.warn(`[${domain}][${uuid}] POLL Error: ${error.message}`, {
 						error: {
-							message: e.message,
-							stack: e.stack,
+							message: error.message,
+							stack: error.stack,
 						},
 					})
 				}

@@ -15,7 +15,7 @@ describe('Countries', () => {
 	describe('Retrieve', () => {
 		it('getCountry', async () => {
 			const country = Countries.getCountry('US')
-			expect(country['Country Name']).toEqual('United States')
+			expect(country && country['Country Name']).toEqual('United States')
 		})
 	})
 })

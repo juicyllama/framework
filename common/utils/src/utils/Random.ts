@@ -33,7 +33,7 @@ export class Random {
 	}
 
 	static String(length?: number): string {
-		if (!length) Math.floor(Math.random() * 8) + 5
+		length ||= Math.floor(Math.random() * 8) + 5
 
 		let result = ''
 

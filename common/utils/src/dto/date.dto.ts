@@ -2,8 +2,8 @@ import { IsDateString } from 'class-validator'
 
 export class DateRangeDto {
 	@IsDateString()
-	from: Date
+	from!: Date
 
 	@IsDateString()
-	to: Date
+	to!: Date
 }

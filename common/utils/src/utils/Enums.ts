@@ -3,7 +3,7 @@ export class Enums {
 	 * Get an enum key based on it's value
 	 */
 
-	static getKeyName<T>(anEnum: T, value: any): string {
+	static getKeyName<T extends object>(anEnum: T, value: any): string {
 		return Object.keys(anEnum)[Object.values(anEnum).indexOf(value)]
 	}
 
@@ -13,11 +13,11 @@ export class Enums {
 			return []
 		}
 
-		const arr = []
+		const arr: any[] = []
 		Object.keys(Enum).forEach(key => {
 			arr.push({
 				[key_name]: key,
-				[pair_name]: Enum[key],
+				[pair_name]: (Enum as any)[key],
 			})
 		})
 

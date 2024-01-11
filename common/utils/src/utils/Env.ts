@@ -1,4 +1,4 @@
-import { Enviroment } from '../enums/env'
+import { Enviroment, fromStringToEnv } from '../enums/env'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as os from 'os'
@@ -9,7 +9,7 @@ export class Env {
 	 */
 
 	static get(): Enviroment {
-		return Enviroment[process.env.NODE_ENV]
+		return fromStringToEnv()
 	}
 
 	/**
@@ -86,7 +86,7 @@ export class Env {
 			line => line.split('=')[0] === options.key,
 		)
 		const result = matchedLine !== undefined ? matchedLine.split('=')[1] : null
-		return result.replace(/"/g, '')
+		return result !== null ? result.replace(/"/g, '') : ''
 	}
 
 	/**
@@ -110,7 +110,7 @@ export class Env {
 		fs.writeFileSync(path.resolve(options.envPath, options.fileName), envVars.join(os.EOL))
 	}
 
-	static setEnv(options: { values: object; envPath?: string; fileName?: string }) {
+	static setEnv(options: { values: { [key: string]: string }; envPath?: string; fileName?: string }) {
 		for (const key of Object.keys(options.values)) {
 			Env.setEnvValue({
 				key: key,
