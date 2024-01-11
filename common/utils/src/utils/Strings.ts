@@ -32,7 +32,7 @@ export class Strings {
 	 * @param {Object} obj
 	 */
 
-	static replacer(template, obj) {
+	static replacer(template: string, obj: { [x: string]: any }) {
 		const keys = Object.keys(obj)
 		const func = Function(...keys, 'return `' + template + '`;')
 		return func(...keys.map(k => obj[k]))

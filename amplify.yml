@@ -1,0 +1,19 @@
+version: 1
+applications:
+
+    - appRoot: common/docs/
+      frontend:
+          phases:
+            preBuild:
+              commands:
+                - npm install
+            build:
+              commands:
+                - npm run generate
+          artifacts:
+            baseDirectory: '.output/public'
+            files:
+              - '**/*'
+          cache:
+            paths:
+              - node_modules/**/*

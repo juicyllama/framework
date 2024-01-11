@@ -210,6 +210,10 @@ export const UserStore = defineStore('user', {
 				await accountStore.setAccountByUser(user)
 			}
 
+			if(!user.accounts.map(accounts => accounts.account_id).includes(accountStore.getAccountId)){
+				await accountStore.setAccountByUser(user)
+			}
+
 			logger({ severity: LogSeverity.LOG, message: `Login Successful`, q: q })
 
 			await this.setUser(user)

@@ -1,7 +1,7 @@
 {
 	"name": "@juicyllama/docs",
 	"type": "module",
-	"version": "0.6.5",
+	"version": "0.7.9",
 	"description": "Juicyllama Docs portal",
 	"author": {
 		"name": "JuicyLlama Studio",
@@ -28,21 +28,23 @@
 		"@nuxt/content": "2.8.0",
 		"@nuxt/devtools": "latest",
 		"@nuxt/eslint-config": "latest",
-		"@nuxt/ui": "2.10.0",
+		"@nuxt/ui": "2.12.0",
 		"@nuxt/ui-pro": "0.6.1",
 		"@nuxtjs/color-mode": "3.3.2",
 		"@nuxtjs/google-fonts": "3.1.1",
+		"@nuxtjs/plausible": "0.2.4",
+		"@nuxtjs/tailwindcss": "6.9.0",
 		"@pinia/nuxt": "latest",
 		"@quasar/extras": "latest",
-		"nuxt": "3.8.2",
-		"nuxt-icon": "^0.6.7",
+		"nuxt": "3.9.1",
+		"nuxt-icon": "^0.6.8",
 		"nuxt-quasar-ui": "latest",
 		"quasar": "latest",
+		"vite-plugin-require": "^1.1.14",
 		"vue": "latest",
 		"vue-router": "latest"
 	},
-	"devDependencies": {
-		"@nuxtjs/tailwindcss": "6.9.0",
-		"vite-plugin-require": "^1.1.11"
+	"engines": {
+		"node": ">=18.0.0"
 	}
 }

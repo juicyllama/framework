@@ -1,4 +1,4 @@
-import { Enviroment } from '../enums/env'
+import { Enviroment, fromStringToEnv } from '../enums/env'
 import { createHash } from 'crypto'
 import * as jwt from 'jwt-simple'
 
@@ -22,7 +22,7 @@ export class Security {
 	 */
 
 	static referrerCheck(referrer: string, domain: string): boolean {
-		if (Enviroment[process.env.NODE_ENV] === Enviroment.production) {
+		if (fromStringToEnv() === Enviroment.production) {
 			if (!referrer) {
 				throw new Error('Unauthorized')
 			}
