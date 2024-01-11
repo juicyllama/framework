@@ -7,9 +7,3 @@
 # JuicyLlama Docs
 
 This repo contains all the source code for our developer docs portal.
-
-### Install
-Learn more at the [JuicyLlama framework](https://docs.juicyllama.com/) docs.
-
-### Status
-Uptime monitoring can be found [here](https://status.juicyllama.com/) 

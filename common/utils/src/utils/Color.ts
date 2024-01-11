@@ -3,24 +3,28 @@
  */
 
 export class Color {
-	static lightOrDark(color): 'light' | 'dark' {
-		let r, g, b
+	static lightOrDark(color: string): 'light' | 'dark' {
+		let r: number, g: number, b: number
 
 		// Check the format of the color, HEX or RGB?
 		if (color.match(/^rgb/)) {
 			// If HEX --> store the red, green, blue values in separate variables
-			color = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/)
-
-			r = color[1]
-			g = color[2]
-			b = color[3]
+			const match = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/)
+			if (match) {
+				r = Number(match[1])
+				g = Number(match[2])
+				b = Number(match[3])
+			} else {
+				throw new Error('Invalid color')
+			}
 		} else {
 			// If RGB --> Convert it to HEX: http://gist.github.com/983661
-			color = +('0x' + color.slice(1).replace(color.length < 5 && /./g, '$&$&'))
+			// @ts-ignore
+			const hex = +('0x' + color.slice(1).replace(color.length < 5 && /./g, '$&$&'))
 
-			r = color >> 16
-			g = (color >> 8) & 255
-			b = color & 255
+			r = hex >> 16
+			g = (hex >> 8) & 255
+			b = hex & 255
 		}
 
 		// HSP (Highly Sensitive Poo) equation from http://alienryderflex.com/hsp.html

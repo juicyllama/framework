@@ -1,4 +1,10 @@
-import * as turf from '@turf/turf'
+import bboxPolygon from '@turf/bbox-polygon'
+import { point } from '@turf/helpers'
+import booleanPointInPolygon from '@turf/boolean-point-in-polygon'
+//@ts-ignore
+import buffer from '@turf/buffer'
+import bbox from '@turf/bbox'
+import distance from '@turf/distance'
 
 export interface Coordinates {
 	latitude: number
@@ -15,13 +21,13 @@ export interface BoundingBox {
 export class Geocoding {
 	static areCoordinatesInBoundingBox(coordinates: Coordinates, boundingBox: BoundingBox): boolean {
 		// Define the bounding box polygon using the northeast and southwest coordinates
-		const bboxPolygon = turf.bboxPolygon([boundingBox.west, boundingBox.south, boundingBox.east, boundingBox.north])
+		const _bboxPolygon = bboxPolygon([boundingBox.west, boundingBox.south, boundingBox.east, boundingBox.north])
 
 		// Convert the target coordinates to a turf point
-		const pointToCheck = turf.point([coordinates.longitude, coordinates.latitude])
+		const pointToCheck = point([coordinates.longitude, coordinates.latitude])
 
 		// Check if the point lies within the bounding box polygon
-		const isPointInBbox = turf.booleanPointInPolygon(pointToCheck, bboxPolygon)
+		const isPointInBbox = booleanPointInPolygon(pointToCheck, _bboxPolygon)
 
 		return isPointInBbox
 	}
@@ -66,7 +72,7 @@ export class Geocoding {
 		southwest: Coordinates,
 		meters: number,
 	): { northeast: Coordinates; southwest: Coordinates } {
-		const originalBbox = turf.bboxPolygon([
+		const originalBbox = bboxPolygon([
 			southwest.longitude,
 			southwest.latitude,
 			northeast.longitude,
@@ -74,10 +80,10 @@ export class Geocoding {
 		])
 
 		// Buffer the bounding box
-		const bufferedBbox = turf.buffer(originalBbox, meters / 1000, { units: 'kilometers' }) // Convert meters to kilometers for turf.buffer
+		const bufferedBbox = buffer(originalBbox, meters / 1000, { units: 'kilometers' }) // Convert meters to kilometers for buffer
 
 		// Get the bounding box of the bufferedBbox to determine its extents
-		const bufferedBboxExtent = turf.bbox(bufferedBbox)
+		const bufferedBboxExtent = bbox(bufferedBbox)
 
 		// Extract the new northeast and southwest coordinates from the buffered bounding box
 		const newNortheast: Coordinates = {
@@ -96,12 +102,12 @@ export class Geocoding {
 	//This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
 	static distanceBetweenTwoPoints(pointA: Coordinates, pointB: Coordinates): number {
 		// Convert your coordinates to turf Point format
-		const turfPointA = turf.point([pointA.longitude, pointA.latitude])
-		const turfPointB = turf.point([pointB.longitude, pointB.latitude])
+		const turfPointA = point([pointA.longitude, pointA.latitude])
+		const turfPointB = point([pointB.longitude, pointB.latitude])
 
 		// Calculate distance using turf's distance function (this will be in kilometers by default)
-		const distance = turf.distance(turfPointA, turfPointB)
+		const _distance = distance(turfPointA, turfPointB)
 
-		return distance // Returns the distance in kilometers
+		return _distance // Returns the distance in kilometers
 	}
 }

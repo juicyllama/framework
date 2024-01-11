@@ -206,10 +206,11 @@ export const UserStore = defineStore('user', {
 
 			const accountStore = AccountStore()
 
-			if (
-				!accountStore.getAccountId ||
-				!user.accounts.map(accounts => accounts.account_id).includes(accountStore.getAccountId)
-			) {
+			if (!accountStore.getAccountId) {
+				await accountStore.setAccountByUser(user)
+			}
+
+			if(!user.accounts.map(accounts => accounts.account_id).includes(accountStore.getAccountId)){
 				await accountStore.setAccountByUser(user)
 			}
 

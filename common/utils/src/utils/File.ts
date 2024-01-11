@@ -131,9 +131,9 @@ export class File {
 		return file
 	}
 
-	static async downloadFile(url): Promise<Express.Multer.File> {
+	static async downloadFile(url: string): Promise<Express.Multer.File> {
 		const download = await axios.get(url, { responseType: 'arraybuffer' })
-		const filename = url.split('/').pop()
+		const filename = url.split('/').pop() || '' // Add default value for filename
 
 		const file = {
 			fieldname: 'file',
@@ -157,6 +157,20 @@ export class File {
 
 	static getMimeType(fileName: string): string {
 		const ext = fileName.split('.').pop()
-		return mimetypes[ext] ?? 'application/octet-stream'
+		return ext ? (mimetypes as Record<string, string>)[ext] : 'application/octet-stream'
+	}
+
+	/**
+	 * Check if a file exists
+	 */
+	static exists(filePath: string): boolean {
+		return fs.existsSync(filePath)
+	}
+
+	/**
+	 * Read a file
+	 */
+	static async read(filePath: string): Promise<string> {
+		return fs.readFileSync(filePath, 'utf-8')
 	}
 }

@@ -1,7 +1,7 @@
 import { BadRequestException, forwardRef, Inject, Injectable, NotImplementedException } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
-import { Env, Logger, Modules, SupportedCurrencies } from '@juicyllama/utils'
-import { Account, AppIntegrationName, BaseService, Query } from '@juicyllama/core'
+import { Env, Logger, Modules, SupportedCurrencies, File, Strings } from '@juicyllama/utils'
+import { Account, AccountService, AppIntegrationName, BaseService, BeaconService, Query } from '@juicyllama/core'
 import { DeepPartial, Repository } from 'typeorm'
 import { PaymentMethod } from './payment.methods.entity'
 import { PaymentMethodStatus, PaymentMethodType } from './payment.methods.enums'
@@ -23,6 +23,8 @@ export class PaymentMethodsService extends BaseService<T> {
 		@InjectRepository(E) readonly repository: Repository<T>,
 		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		@Inject(forwardRef(() => BeaconService)) private readonly beaconService: BeaconService,
+		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
 	) {
 		super(query, repository)
 	}
@@ -317,5 +319,44 @@ export class PaymentMethodsService extends BaseService<T> {
 				}
 				break
 		}
+	}
+
+	async sendBeaconOnExpiringSoon(payment_method: PaymentMethod): Promise<void> {
+		if (!process.env.BEACON_BILLING_PAYMENT_METHOD_EXPIRY) {
+			return
+		}
+
+		if (!payment_method.account.finance_email) {
+			const user = await this.accountService.getOwner(payment_method.account.account_id)
+			payment_method.account.finance_email = user.email
+		}
+
+		let markdown = ``
+
+		if (File.exists(process.env.BEACON_BILLING_PAYMENT_METHOD_EXPIRY + '/email.md')) {
+			markdown = await File.read(process.env.BEACON_BILLING_PAYMENT_METHOD_EXPIRY + '/email.md')
+			markdown = Strings.replacer(markdown, {
+				payment_method: payment_method,
+			})
+		} else {
+			markdown = `The payment method on file for ${payment_method.account.account_name} is expiring soon. Please update your payment method.`
+		}
+
+		await this.beaconService.notify({
+			methods: {
+				email: true,
+				//todo add to app notifications
+			},
+			communication: {
+				email: {
+					to: {
+						name: payment_method.account.account_name,
+						email: payment_method.account.finance_email,
+					},
+				},
+			},
+			subject: `⚠️ ${Strings.capitalize(payment_method.method)} is expiring soon`,
+			markdown: markdown,
+		})
 	}
 }

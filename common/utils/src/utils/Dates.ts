@@ -2,7 +2,7 @@ import { DateRangeDto } from '../dto/date.dto'
 import { StepType } from '../enums/stats'
 import { month_names, month_names_short, SubscriptionFrequency } from '../enums/dates'
 
-const nth = function (d) {
+const nth = function (d: number) {
 	if (d > 3 && d < 21) return 'th'
 	switch (d % 10) {
 		case 1:
@@ -83,6 +83,16 @@ export class Dates {
 	static subtractDays(date: Date, days: number): Date {
 		const result = new Date(date)
 		result.setDate(result.getDate() - days)
+		return result
+	}
+
+	/**
+	 * Takes a date and adds additional minutes to it
+	 */
+
+	static addMinutes(date: Date, minutes: number): Date {
+		const result = new Date(date)
+		result.setMinutes(result.getMinutes() + minutes)
 		return result
 	}
 
@@ -175,7 +185,8 @@ export class Dates {
 	 * Checks if date is between two other dates
 	 */
 	static isBetween(date: Date, from: Date, to: Date): boolean {
-		const isBetween = (date, min, max) => date.getTime() >= min.getTime() && date.getTime() <= max.getTime()
+		const isBetween = (date: Date, min: Date, max: Date) =>
+			date.getTime() >= min.getTime() && date.getTime() <= max.getTime()
 		return isBetween(date, from, to)
 	}
 
@@ -281,13 +292,13 @@ export class Dates {
 		interval = Math.floor(seconds / 3600)
 		if (interval >= 1) {
 			if (interval === 1) return '1 hour ago'
-			return (seconds / 3600) + ' hours ago'
+			return seconds / 3600 + ' hours ago'
 		}
 
 		interval = Math.floor(seconds / 60)
 		if (interval >= 1) {
 			if (interval === 1) return '1 minute ago'
-			return (seconds / 60) + ' minute ago'
+			return seconds / 60 + ' minute ago'
 		}
 
 		if (seconds <= 1) {

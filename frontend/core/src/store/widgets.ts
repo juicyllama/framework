@@ -3,7 +3,7 @@ const LS_KEY_FOR_DATA = 'dashboard-widgets'
 
 const saved = localStorage.getItem(LS_KEY_FOR_DATA) || ''
 
-export const useWidgetsStore = defineStore('counter', {
+export const useWidgetsStore = defineStore('widgets', {
 	state: () => ({
 		widgets: saved ? JSON.parse(saved) : [],
 		widgetToEdit: {
