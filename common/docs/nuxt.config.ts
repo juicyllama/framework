@@ -1,51 +1,47 @@
-import vitePluginRequire from "vite-plugin-require";
+// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	extends: ['@nuxt/ui-pro'],
 	modules: [
-		'@nuxt/content',
-		'@nuxtjs/google-fonts',
-		'nuxt-quasar-ui',
-		'@pinia/nuxt',
-		'@nuxt/ui',
-		'nuxt-icon',
-		'@nuxtjs/color-mode',
-		'@nuxtjs/tailwindcss',
-		'@nuxthq/studio',
-		'@nuxtjs/fontaine',
-		'nuxt-og-image'
+	  '@nuxt/content',
+	  '@nuxt/ui',
+	  '@nuxthq/studio',
+	  '@nuxtjs/fontaine',
+	  '@nuxtjs/google-fonts',
+	  'nuxt-og-image'
 	],
+	hooks: {
+	  // Define `@nuxt/ui` components as global to use them in `.md` (feel free to add those you need)
+	  'components:extend': (components) => {
+		const globals = components.filter((c) => ['UButton', 'UIcon'].includes(c.pascalName))
+  
+		globals.forEach((c) => c.global = true)
+	  }
+	},
 	colorMode: {
 		preference: 'dark',
 		fallback: 'dark',
 		storageKey: 'jl-docs-color-mode'
 	},
 	ui: {
-		global: true,
-		icons: 'all'
+	  icons: ['heroicons', 'simple-icons']
 	},
-	devtools: { enabled: process.env.NODE_ENV === 'development' },
-	typescript: {
-		tsConfig: {
-			compilerOptions: {
-				verbatimModuleSyntax: false
-			}
-		}
+	// Fonts
+	fontMetrics: {
+	  fonts: ['DM Sans']
 	},
-	sourcemap: {
-		server: false,
-		client: false
+	googleFonts: {
+	  display: 'swap',
+	  download: true,
+	  families: {
+		Nunito:  [400, 500, 600, 700, 800, 900],
+	  }
 	},
-	nitro: {
-		prerender: {
-			crawlLinks: false,
-			failOnError: false
-		}
+	routeRules: {
+	  '/api/search.json': { prerender: true },
 	},
-	runtimeConfig: {
-		public: {
-			siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://docs.juicyllama.com/'
-		}
-	},
+	// Devtools / Typescript
+	devtools: { enabled: true },
+	typescript: { strict: false },
 	content: {
 		defaultLocale: 'en',
 		markdown: {
@@ -55,14 +51,9 @@ export default defineNuxtConfig({
 			preload: ['sql'],
 		  }
 	},
-	googleFonts: {
-		families: {
-		  Nunito:  [400, 500, 600, 700, 800, 900],
+	nitro: {
+		prerender: {
+		  failOnError: false
 		}
-	  },
-	vite: {
-		plugins: [
-			vitePluginRequire()
-		]
 	}
-})
+  })

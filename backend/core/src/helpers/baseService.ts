@@ -103,6 +103,11 @@ export class BaseService<T> {
 	 */
 
 	async findById(id: number, relations?: string[], currency?: CurrencyOptions): Promise<T> {
+
+		if(!id){
+			throw new Error('ID is required')
+		}
+
 		let result = await this.cacheFindById(id)
 		if (result) return result
 

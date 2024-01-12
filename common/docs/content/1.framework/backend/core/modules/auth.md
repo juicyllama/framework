@@ -57,5 +57,5 @@ VITE_SSO_GOOGLE=true
 ```
 
 ::alert{type="info"}
-For customizing how the Google SSO button looks, see the [Frontend Auth Docs](/frontend/core/components/auth/login)
+For customizing how the Google SSO button looks, see the [Frontend Auth Docs](../../../frontend/core/components/1.auth/login.md)
 ::

@@ -122,7 +122,7 @@ The beacon module can integrate with the following modules:
 | Email  | [app-aws]()                     |
 | SMS    | [app-aws]()                     |
 | Push   | [app-pusher]()                  |
-| IM     | [app-slack](/apps/slack/readme) |
+| IM     | [app-slack](../../../apps/slack/0.index.md) |
 
 
 ## Templates

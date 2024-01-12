@@ -20,8 +20,8 @@ The frontend contains all the code needed to integrate features into your applic
 
 These include:
 
-- [Components](./components/) - Prebuilt vue components you can import into your pages.
-- [Helpers](./helpers/) - Prebuilt helpers to speed up common tasks.
-- [Plugins](./plugins/) - App plugins you can easily import into your applications.
-- [Stores](./stores/) - Stores you can access directly via your code.
-- [Types](./types/) - Full typescript support for your code.
+- Components - Prebuilt vue components you can import into your pages.
+- Helpers - Prebuilt helpers to speed up common tasks.
+- Plugins - App plugins you can easily import into your applications.
+- Stores - Stores you can access directly via your code.
+- Types - Full typescript support for your code.

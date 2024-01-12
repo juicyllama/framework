@@ -31,7 +31,7 @@ If you have specific features, apps, tools or support you want to build into the
 ### Contributing Flow 
 
 1. Install the framework locally by first [folking the framework](https://docs.github.com/en/get-started/quickstart/contributing-to-projects) into your github account.
-2. Follow the [installation instructions here](../gettingstarted.md#installation) by cloning your folked version of the framework.
+2. Follow the [installation instructions here](../1.framework/0.index.md#installation) by cloning your folked version of the framework.
 2. Branch off `main` and include your `issue number` along with the `task description` e.g. `feature/123-my-new-feature`. We use the following prefixes:
     - `feature/` for new features
     - `bug/` for bug fixes

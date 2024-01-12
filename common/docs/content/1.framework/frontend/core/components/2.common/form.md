@@ -10,7 +10,7 @@ This component renders a form with configurable fields that allow to create/edit
 
 This component accepts the following props:
 
--   `options` - The table options, see [FormSchema](/frontend/core/types/form) for more information.
+-   `options` - The table options, see [FormSchema](../../types/form.md) for more information.
 
 ## Button on form
 

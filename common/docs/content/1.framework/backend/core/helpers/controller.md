@@ -5,7 +5,7 @@ A set of pre-built CRUD controllers for your NestJS application.
 Simply import, call the methods in your controllers to leverage all the benefits of the framework.
 
 ::alert{type="info"}
-These methods use the service methods under the hood. If you want to learn more about the service methods, check out the [Service](/backend/core/helpers/service) documentation.
+These methods use the service methods under the hood. If you want to learn more about the service methods, check out the [Service](../helpers/service.md) documentation.
 
 This means that all the data is automatically cached and push messages sent to your frontend applications.
 ::
