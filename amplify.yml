@@ -6,12 +6,14 @@ applications:
           phases:
             preBuild:
               commands:
-                - npm install
+                - nvm use 18
+                - corepack enable
+                - npx --yes nypm i
             build:
               commands:
-                - npm run generate
+                - npm run build
           artifacts:
-            baseDirectory: '.output/public'
+            baseDirectory: .amplify-hosting
             files:
               - '**/*'
           cache:
