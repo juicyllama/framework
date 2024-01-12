@@ -39,7 +39,7 @@ If you have specific features, apps, tools or support you want to build into the
     - `docs/` for documentation changes
     - `test/` for test changes
     - `misc/` for other changes<br><br>
-4. Write your code follow the [Code Style Guide](./code-style-guide) and commit your changes to your branch.<br><br>
+4. Write your code follow the [Code Style Guide](code-style-guide) and commit your changes to your branch.<br><br>
 5. Ensure you have written tests for your changes and that they pass.<br><br>
 6. If you have added a new feature (or updated an existing one), please update this [documentation](#documentation) to reflect the changes.<br><br>
 7. Once complete initiate a pull request from your folked version to the framework. This will trigger a review process and automated tests. If the tests fail, please fix the issues and push the changes to your branch. The tests will automatically re-run.<br><br>
@@ -47,7 +47,7 @@ If you have specific features, apps, tools or support you want to build into the
 
 ## Code
 
-Please follow the [Code Style Guide](./code-style-guide) when contributing.
+Please follow the [Code Style Guide](code-style-guide) when contributing.
 
 ## Testing
 

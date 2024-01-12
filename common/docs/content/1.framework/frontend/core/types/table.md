@@ -17,10 +17,10 @@ import type { TableSchema } from '@juicyllama/frontend-core'
 | `title`     | `[string]` | The title of the table                                                                    |
 | `event`     | `[string]` | The event pusher should listen for                                                        |
 | `endpoint`  | `[string]` | The endpoint to fetch the data from                                                       |
-| `icon`      | `[object]` | The [IconSettings](./common.md/#icon-settings) to use for the table |
+| `icon`      | `[object]` | The [IconSettings](common.md/#icon-settings) to use for the table |
 | `show`      | `[object]` | The [show](#show) object to use for the table                                             |
 | `redirects` | `[object]` | The [redirect](#redirects) settings to use for the table                                  |
-| `find`      | `[object]` | The [FindOptions](./common.md/#findoptions) settings to use for the table                      |
+| `find`      | `[object]` | The [FindOptions](common.md/#findoptions) settings to use for the table                      |
 | `functions` | `[object]` | The [Functions](#functions) to use with the actions                                       |
 
 ## TableColumn
@@ -42,7 +42,7 @@ import type { TableColumn } from '@juicyllama/frontend-core'
 | `format`      | `[Function]` | The function to format the value in the display                                                   |
 | `reformat`    | `[Function]` | Used to reformat on create/edit before sending to server                                          |
 | `show`        | `[boolean]`  | If this column should be shown in the table                                                       |
-| `form`        | `[object]`   | The [FormField](./form.md#formfield) the form element for this entity item |
+| `form`        | `[object]`   | The [FormField](form.md#formfield) the form element for this entity item |
 | `extra`       | `[object]`   | Table [Extra](#extra) options for this column                                                     |
 
 ## Show
@@ -98,7 +98,7 @@ Additional column items specific to the column type:
 If you would like to add your own custom buttons to the table.
 
 ::alert{type="info"}
-This extends [CustomButton](./common.md#custom-button), so you can use all the same properties as a CustomButton along with these additional properties.
+This extends [CustomButton](common.md#custom-button), so you can use all the same properties as a CustomButton along with these additional properties.
 ::
 
 | Property   | Type     | Description                                            |
