@@ -14,7 +14,7 @@ As a bonus this will also pass account and user details to logging tools like Bu
 
 You can apply this via your Module as follows
 
-```typescript
+```ts
 import { MiddlewareAccountId } from '@juicyllama/core'
 
 @Module({

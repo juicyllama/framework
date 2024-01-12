@@ -8,7 +8,7 @@ To test vue-components `vue-test-utils` can be used. It is a set of utility func
 
 Example:
 
-```typescript
+```ts
 import { mount } from '@vue/test-utils'
 import { it, expect } from 'vitest'
 
@@ -44,7 +44,7 @@ After mounting a component. You have an object of type `VueWrapper`. It provides
 -   `findComponent`: finds a Vue-component based on a selector or a component definition.
 -   `findAllComponents`: finds `Array` of Vue-components based on a selector or a component definition.
 
-```typescript
+```ts
 import { Component } from 'src/components/Component.vue'
 import { AnotherComponent } from 'src/components/Another.vue'
 
@@ -61,7 +61,7 @@ const vueWrappers: VueWrapper<AnotherComponent>[] = wrapper.findAllComponents(An
 To mock your stores inside of the components a mocked pinia instance must be provided.
 There is helper function which does just that:
 
-```typescript
+```ts
 import { mountWithMocks } from './utils/wrapper'
 
 const wrapper = mountWithMocks(MessageComponent, {
@@ -73,7 +73,7 @@ const wrapper = mountWithMocks(MessageComponent, {
 
 This pinia instance will have no functional mocks set up however. To mock a store you need to create your own pinia instance and attach the mocked stores:
 
-```typescript
+```ts
 import { mockPinia, mountWithMocks } from './utils/wrapper'
 import { RandomStore } from 'src/stores/random'
 
@@ -105,7 +105,7 @@ In this case the component needs to be embedded in `<Suspense>` component.
 
 There is also a helper function, which does just that and provides the parent and the child component:
 
-```typescript
+```ts
 import { asyncMountWithMocks } from './utils/wrapper'
 
 const { component, parent } = await asyncMountWithMocks(Component)
@@ -116,7 +116,7 @@ const { component, parent } = await asyncMountWithMocks(Component)
 Sometimes your component need to access a `vue-router` instance.
 There is a helper instance to inject a mocked router:
 
-```typescript
+```ts
 import { beforeEach } from 'vitest'
 import { createAndInjectRouter } from './utils/wrapper'
 
@@ -127,7 +127,7 @@ beforeEach(() => {
 
 The router can then be accessed from the component's wrapper:
 
-```typescript
+```ts
 beforeEach(() => {
 	createAndInjectRouter()
 })

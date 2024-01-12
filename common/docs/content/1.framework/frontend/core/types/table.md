@@ -6,7 +6,7 @@ title: Table
 
 This component renders a table schema, it is used by the [JLTable](../components/2.common/table.md) component to render the table.
 
-```typescript
+```ts
 import type { TableSchema } from '@juicyllama/frontend-core'
 ```
 
@@ -27,7 +27,7 @@ import type { TableSchema } from '@juicyllama/frontend-core'
 
 This is the schema for each table column you want to render.
 
-```typescript
+```ts
 import type { TableColumn } from '@juicyllama/frontend-core'
 ```
 

@@ -8,7 +8,7 @@ For more information about this checkout the official (Google Maps Geocoding API
 
 Import the module into your project:
 
-```typescript
+```ts
 // app.module.ts
 import { GeocodingModule } from '@juicyllama/app-google'
 
@@ -23,7 +23,7 @@ import { GeocodingModule } from '@juicyllama/app-google'
 
 Inject the service into your application:
 
-```typescript
+```ts
 // app.service.ts
 import { GeocodingService } from '@juicyllama/app-google'
 
@@ -45,7 +45,7 @@ Returns the first Geocoding data for a given search string.
 Give a full address for best results.
 ::
 
-```typescript
+```ts
 // app.service.ts
 
 const address = 'London Heathrow Airport, London, GB'

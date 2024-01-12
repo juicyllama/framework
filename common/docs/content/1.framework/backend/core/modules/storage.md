@@ -14,7 +14,7 @@ This module is part of our core framework and therefore does not need installing
 
 Import the module into your application:
 
-```typescript
+```ts
 //app.module.ts
 import { StorageModule } from '@juicyllama/core'
 
@@ -42,7 +42,7 @@ Use the following operations to read, write, list and delete data in the cloud.
 
 First setup the service:
 
-```typescript
+```ts
 // app.service.ts
 import { StorageService, StorageFileType } from '@juicyllama/core'
 
@@ -58,7 +58,7 @@ Then you can call the following functions:
 
 Write files to the cloud
 
-```typescript
+```ts
 async function writeSomething(file: Blob){
     const result = await this.storageService.write({
         location: '/path/to/save/file/to/file.ext',
@@ -73,7 +73,7 @@ async function writeSomething(file: Blob){
 
 Read file from the cloud
 
-```typescript
+```ts
 async function readSomething(){
     const result = await this.storageService.read({
         location: '/path/to/read/file/from/file.ext',
@@ -87,7 +87,7 @@ async function readSomething(){
 
 List files from the cloud
 
-```typescript
+```ts
 async function listFiles(){
     const result = await this.storageService.list({
         location: '/path/to/read/file/from',
@@ -100,7 +100,7 @@ async function listFiles(){
 
 Delete a file from the cloud
 
-```typescript
+```ts
 async function readSomething(){
     const result = await this.storageService.del({
         location: '/path/to/delete/file/from/file.ext',

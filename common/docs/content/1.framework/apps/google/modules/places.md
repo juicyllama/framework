@@ -8,7 +8,7 @@ For more information about this checkout the official [Google Maps Places API](h
 
 Import the module into your project:
 
-```typescript
+```ts
 // app.module.ts
 import { PlacesModule } from '@juicyllama/app-google'
 
@@ -23,7 +23,7 @@ import { PlacesModule } from '@juicyllama/app-google'
 
 Inject the service into your application:
 
-```typescript
+```ts
 // app.service.ts
 import { PlacesService } from '@juicyllama/app-google'
 
@@ -41,7 +41,7 @@ The service makes available the following methods:
 
 Returns the place data for a given place_id string.
 
-```typescript
+```ts
 // app.service.ts
 
 const place_id = 'ChIJtV5bzSAFdkgRpwLZFPWrJgo' // Buckingham Palace

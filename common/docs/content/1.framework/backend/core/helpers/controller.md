@@ -14,7 +14,7 @@ This means that all the data is automatically cached and push messages sent to y
 
 Import the helpers into your controller:
 
-```typescript
+```ts
 import { Controller, forwardRef, Inject, Body, Query, Param, Req, UploadedFile } from '@nestjs/common'
 import {
 	Query as TQuery,
@@ -41,25 +41,25 @@ import { ApiTags } from '@nestjs/swagger'
 
 If you require user authentication include:
 
-```typescript
+```ts
 @UserAuth()
 ```
 
 Specify the documentation Tag: 
 
-```typescript
+```ts
 @ApiTags('Animals')
 ```
 
 Choose the endpoint url: 
 
-```typescript
+```ts
 @Controller(`/animals`)
 ```
 
 Make sure you extend your controller with the base controller and inject the relevent items up to the BaseController
 
-```typescript
+```ts
 export class AnimalsController extends BaseController<T> {
 	constructor(
 		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
@@ -83,7 +83,7 @@ The following methods can be used in your application:
 
 Create a new object in the database.
 
-```typescript
+```ts
 @CreateDecorator(constants)
 async create(@Req() req, @Body() body: CreateDto, @AccountId() account_id: number): Promise<T> {
 	return super.create(req, body, account_id)
@@ -94,7 +94,7 @@ async create(@Req() req, @Body() body: CreateDto, @AccountId() account_id: numbe
 
 Find all objects in the database.
 
-```typescript
+```ts
 @ReadManyDecorator(constants)
 async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Promise<T[]> {
 	return super.findAll(req, query, account_id)
@@ -105,7 +105,7 @@ async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Prom
 
 Find one object in the database.
 
-```typescript
+```ts
 @ReadOneDecorator(constants)
 async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
 	return super.findOne(req, account_id, params, query)
@@ -116,7 +116,7 @@ async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Que
 
 Get stats about the objects in the database.
 
-```typescript
+```ts
 @ReadStatsDecorator(constants)
 async stats(
 	@Req() req,
@@ -132,7 +132,7 @@ async stats(
 
 Get datasets for pie/line charts from the database.
 
-```typescript
+```ts
 @ReadChartsDecorator(constants)
 async charts(
 	@Req() req,
@@ -150,7 +150,7 @@ async charts(
 
 ### Bulk Upload
 
-```typescript
+```ts
 @BulkUploadDecorator(constants)
 async bulkUpload(
 	@Req() req,
@@ -164,7 +164,7 @@ async bulkUpload(
 
 ### Bulk Upload Fields
 
-```typescript
+```ts
 @UploadFieldsDecorator(constants)
 async uploadFileFields(): Promise<CrudUploadFieldsResponse> {
 	return super.uploadFileFields()
@@ -175,7 +175,7 @@ async uploadFileFields(): Promise<CrudUploadFieldsResponse> {
 
 Update an object in the database.
 
-```typescript
+```ts
 @UpdateDecorator(constants)
 async update(@Req() req, @AccountId() account_id: number, @Body() data: UpdateDto, @Param() params): Promise<T> {
 	return super.update(req, account_id, data, params)
@@ -186,7 +186,7 @@ async update(@Req() req, @AccountId() account_id: number, @Body() data: UpdateDt
 
 Delete an object in the database.
 
-```typescript
+```ts
 @DeleteDecorator(constants)
 async remove(@Req() req, @Param() params, @AccountId() account_id: number): Promise<T> {
 	return super.remove(req, params, account_id)
@@ -199,7 +199,7 @@ The `findAll` `findOne` and `charts` endpoints support currency conversion, this
 
 You can pass details into both the Decorator and the Controller as follows:
 
-```typescript
+```ts
 import { FxService } from '@juicyllama/core'
 //inject FxService into the constructor
 

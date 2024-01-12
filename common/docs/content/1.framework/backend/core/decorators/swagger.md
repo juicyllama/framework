@@ -4,7 +4,7 @@ A prebuilt swagger decorator to make creating your swagger documentation is simp
 
 ### Decorator
 
-```typescript
+```ts
 import { SwaggerPropertyDecorator } from '@juicyllama/core'
 
 @SwaggerPropertyDecorator(options)
@@ -28,7 +28,7 @@ Provide the following optional options to the decorator:
 
 Import the enum from the core package and reference it in your decorator.
 
-```typescript
+```ts
 import { SwaggerPropertyType } from '@juicyllama/core'
 
 enum SwaggerPropertyType {
@@ -47,7 +47,7 @@ enum SwaggerPropertyType {
 
 If you would like to reference other common resources in your documentation, you can use the following enum.
 
-```typescript
+```ts
 import { SwaggerPropertyReference } from '@juicyllama/core'
 
 export enum SwaggerPropertyReference {
@@ -65,7 +65,7 @@ Depending on the inputs you provide, the decorator will build the swagger docume
 
 For example, if you provide the following:
 
-```typescript
+```ts
 import { SwaggerPropertyDecorator, SwaggerPropertyType } from '@juicyllama/core'
 
 @SwaggerPropertyDecorator({

@@ -30,7 +30,7 @@ We don't use `const` for doing any form of calculation or manipulation, we use f
 
 For example, don't do this:
 
-```typescript
+```ts
 const varName = function (parameters) {
 	// return statement
 }
@@ -38,7 +38,7 @@ const varName = function (parameters) {
 
 Do this instead
 
-```typescript
+```ts
 const varName = run(parameters)
 
 function run(parameters): string {

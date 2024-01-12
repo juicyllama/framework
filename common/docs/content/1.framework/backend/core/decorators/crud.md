@@ -9,7 +9,7 @@ They have the added benefit of building automated documentation for your endpoin
 ::alert{type="tip"}
 Pro Tip: Put your reusable constants in a dedicated constants.ts file to manage all of your modules constants in one place.
 
-```typescript
+```ts
 import { ControllerConstants } from '@juicyllama/core'
 
 export const exampleConstants: ControllerConstants = {
@@ -27,7 +27,7 @@ export const exampleConstants: ControllerConstants = {
 
 Takes two arguments, the entity/dto class type and the name of the endpoint (optional).
 
-```typescript
+```ts
 @CreateDecorator(exampleConstants)
 ```
 
@@ -45,7 +45,7 @@ We have three decorators for reading data:
 
 This decorator takes 5 arguments, the entity class, the primary key, the selectable fields enum, the relations enum and the name of the endpoint (optional).
 
-```typescript
+```ts
 @ReadOneDecorator(exampleConstants)
 ```
 
@@ -55,7 +55,7 @@ This results in a `GET` endpoint `/:id` with swagger documentation for returning
 
 The 5 arguments for the list decorator are the entity class, the selectable fields enum, the order by enum, the relations enum and the name of the endpoint (optional).
 
-```typescript
+```ts
 @ReadManyDecorator(exampleConstants)
 ```
 
@@ -65,7 +65,7 @@ This results in a `GET` endpoint `/` with swagger documentation for returning an
 
 The stats decorator optionally takes the name of the endpoint.
 
-```typescript
+```ts
 @ReadStatsDecorator(exampleConstants)
 ```
 
@@ -75,7 +75,7 @@ This results in a `GET` endpoint `/stats` with swagger documentation for returni
 
 The charts decorator optionally takes the name of the endpoint.
 
-```typescript
+```ts
 @ReadChartsDecorator(exampleConstants)
 ```
 
@@ -85,7 +85,7 @@ This results in a `GET` endpoint `/charts` with swagger documentation for return
 
 The update decorator takes the entity class, the primary key and the name of the endpoint (optional).
 
-```typescript
+```ts
 @UpdateDecorator(exampleConstants)
 ```
 
@@ -95,7 +95,7 @@ This results in a `PATCH` endpoint `/:id` with swagger documentation for updatin
 
 The delete decorator takes the entity class, the primary key and the name of the endpoint (optional).
 
-```typescript
+```ts
 @DeleteDecorator(exampleConstants)
 ```
 

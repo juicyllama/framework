@@ -4,7 +4,7 @@ The api helper makes it easy to perform API calls to the backend framework.
 
 ## Usage
 
-```typescript
+```ts
 import { Api } from '@juicyllama/frontend-core'
 
 const api = new Api<T>()
@@ -16,7 +16,7 @@ const api = new Api<T>()
 
 Create a record via the API endpoint.
 
-```typescript
+```ts
 import { Api, User } from '@juicyllama/frontend-core'
 
 const api = new Api<User>()

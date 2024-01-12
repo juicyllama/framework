@@ -32,7 +32,7 @@ const links = [
 
 export default defineAppConfig({
 	ui: {
-	  primary: 'green',
+	  primary: 'yellow',
 	  gray: 'slate',
 	  footer: {
 		bottom: {

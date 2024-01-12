@@ -10,7 +10,7 @@ The auth module contains all the functionality required to authentication users,
 
 Import the module into your application:
 
-```typescript
+```ts
 //app.module.ts
 import { forwardRef, Module } from '@nestjs/common'
 import { AuthModule } from '@juicyllama/core'

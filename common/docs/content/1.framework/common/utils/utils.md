@@ -8,7 +8,7 @@ Perform API calls with a single command, the util handles all the logging and er
 
 [Get](#get) | [Post](#post) | [Patch](#patch) | [Put](#put) | [Delete](#delete)
 
-```typescript
+```ts
 import { Api } from '@juicyllama/utils'
 ```
 
@@ -16,7 +16,7 @@ import { Api } from '@juicyllama/utils'
 
 Perform a get request with the given options:
 
-```typescript
+```ts
 const result = await Api.get('logging::domain', 'https://example.com')
 ```
 
@@ -24,7 +24,7 @@ const result = await Api.get('logging::domain', 'https://example.com')
 
 Perform a post request with the given options:
 
-```typescript
+```ts
 const result = await Api.post('logging::domain', 'https://example.com', {
 	//data to post
 })
@@ -34,7 +34,7 @@ const result = await Api.post('logging::domain', 'https://example.com', {
 
 Perform a patch request with the given options:
 
-```typescript
+```ts
 const result = await Api.patch('logging::domain', 'https://example.com', {
 	//data to patch
 })
@@ -44,7 +44,7 @@ const result = await Api.patch('logging::domain', 'https://example.com', {
 
 Perform a patch request with the given options:
 
-```typescript
+```ts
 const result = await Api.put('logging::domain', 'https://example.com', {
 	//data to put
 })
@@ -54,7 +54,7 @@ const result = await Api.put('logging::domain', 'https://example.com', {
 
 Perform a delete request with the given options:
 
-```typescript
+```ts
 const result = await Api.delete('logging::domain', 'https://example.com')
 ```
 
@@ -64,7 +64,7 @@ The cache utils helps with creating cache keys for your application.
 
 [CacheKey](#cacheKey) | [CacheKeyFromRoute](#cacheKeyFromRoute)
 
-```typescript
+```ts
 import { JLCache } from '@juicyllama/utils'
 ```
 
@@ -72,7 +72,7 @@ import { JLCache } from '@juicyllama/utils'
 
 Create a cache key from the given domain and optional params:
 
-```typescript
+```ts
 const domain = 'module::serivce::function'
 const params = {
 	id: 1,
@@ -87,7 +87,7 @@ const cacheKey = JLCache.CacheKey(domain, params)
 
 Create a cache key from the given route and optional query params:
 
-```typescript
+```ts
 // Request to : /test?id=1
 @Get('/test')
 example(@Req req, @Query query){
@@ -102,7 +102,7 @@ Here are some utils for working with colors
 
 [lightOrDark](#lightOrDark)
 
-```typescript
+```ts
 import { Color } from '@juicyllama/utils'
 ```
 
@@ -110,7 +110,7 @@ import { Color } from '@juicyllama/utils'
 
 Checks if a color is light or dark, allowing you to set the text color to match the background color.
 
-```typescript
+```ts
 let color = '#ffffff'
 let shade = Color.lightOrDark(color)
 //shade = 'light'
@@ -126,7 +126,7 @@ Helper utils for working with country data
 
 [convertISO2ToISO3](#convertISO2ToISO3)
 
-```typescript
+```ts
 import { Countries } from '@juicyllama/utils'
 ```
 
@@ -134,7 +134,7 @@ import { Countries } from '@juicyllama/utils'
 
 Get a country by ISO2 code
 
-```typescript
+```ts
 const iso2 = 'US'
 const country = Countries.getCountry(iso2)
 //{
@@ -166,7 +166,7 @@ const country = Countries.getCountry(iso2)
 
 Pass a ISO2 country code and get the ISO3 code back:
 
-```typescript
+```ts
 const iso2 = 'US'
 const iso3 = Countries.convertISO2ToISO3(iso2)
 //iso3 = 'USA'
@@ -176,7 +176,7 @@ const iso3 = Countries.convertISO2ToISO3(iso2)
 
 Pass a country name and get back the ISO2 value:
 
-```typescript
+```ts
 const name = 'United States'
 const iso2 = Countries.countryNameToISO2(name)
 //iso2 = 'US'
@@ -188,7 +188,7 @@ Helper utils for working with dates
 
 [format](#format) | [formatZerolessValue](#formatZerolessValue) | [addDays](#addDays) | [addStep](#addStep) | [lastMonth](#lastMonth) | [isBetween](#isBetween) | [nextDate](#nextDate)
 
-```typescript
+```ts
 import { Dates } from '@juicyllama/utils'
 ```
 
@@ -196,7 +196,7 @@ import { Dates } from '@juicyllama/utils'
 
 Pass a date and the format you would like to get back:
 
-```typescript
+```ts
 const example = new Date('2000-01-01')
 const exampleFormatted = Dates.format(example, 'MM/DD/YYYY')
 //exampleFormatted = '01/01/2000'
@@ -206,7 +206,7 @@ const exampleFormatted = Dates.format(example, 'MM/DD/YYYY')
 
 Ensures the number you pass is at least 2 digits long, if it is not it will add a zero to the front:
 
-```typescript
+```ts
 const twoDigits = Dates.formatZerolessValue(1)
 //twoDigits = '01'
 ```
@@ -215,7 +215,7 @@ const twoDigits = Dates.formatZerolessValue(1)
 
 Add days to a date:
 
-```typescript
+```ts
 const example = new Date('2000-01-01')
 const examplePlusDays = Dates.addDays(example, 1)
 //examplePlusDays = '2000-01-02'
@@ -225,7 +225,7 @@ const examplePlusDays = Dates.addDays(example, 1)
 
 Add a step to a date:
 
-```typescript
+```ts
 const example = new Date('2000-01-01')
 const examplePlusStep = Dates.addStep(example, StepType.MONHTHS, 2)
 //examplePlusStep = '2000-03-01'
@@ -235,7 +235,7 @@ const examplePlusStep = Dates.addStep(example, StepType.MONHTHS, 2)
 
 Get the date range of the last month (calculated from `now()`):
 
-```typescript
+```ts
 const lastMonth = Dates.lastMonth()
 //lastMonth = {
 //  from: '2000-01-01 00:00:00',
@@ -247,7 +247,7 @@ const lastMonth = Dates.lastMonth()
 
 Check if a date is between two dates:
 
-```typescript
+```ts
 const example = new Date('2000-01-01')
 const isBetween = Dates.isBetween(example, '2000-01-01', '2000-01-31')
 //isBetween = true
@@ -257,7 +257,7 @@ const isBetween = Dates.isBetween(example, '2000-01-01', '2000-01-31')
 
 Get the next date of a given SubscriptionFrequency:
 
-```typescript
+```ts
 const nextDate = Dates.nextDate(SubscriptionFrequency.MONTHLY)
 //nextDate = '2000-02-01'
 ```
@@ -268,7 +268,7 @@ Helper utils for working with emails
 
 [maskEmail](#maskEmail)
 
-```typescript
+```ts
 import { Emails } from '@juicyllama/utils'
 ```
 
@@ -276,7 +276,7 @@ import { Emails } from '@juicyllama/utils'
 
 Mask an email address:
 
-```typescript
+```ts
 const email = 'example@domain.com'
 const maskedEmail = Emails.maskEmail(email)
 //maskedEmail = 'e****e@d*****n.com'
@@ -288,7 +288,7 @@ Helper utils for working with enums
 
 [getKeyName](#getKeyName) | [toArray](#toArray)
 
-```typescript
+```ts
 import { Enums } from '@juicyllama/utils'
 ```
 
@@ -296,7 +296,7 @@ import { Enums } from '@juicyllama/utils'
 
 Get the key name of an enum value:
 
-```typescript
+```ts
 enum Example {
 	ONE = 1,
 	TWO = 2,
@@ -310,7 +310,7 @@ const getKeyName = Enums.getKeyName(Example, 1)
 
 Convert an enum to an array:
 
-```typescript
+```ts
 enum Example {
 	ONE = 1,
 	TWO = 2,
@@ -332,7 +332,7 @@ Helper utils for working with environment types
 
 [get](#get) | [IsProd](#isProd) | [IsDev](#isDev) | [IsTest](#isTest) | [IsNotTest](#isNotTest) | [IsNotProd](#isNotProd) | [IsSandbox](#isSandbox) | [ReadEnvVars](#readEnvVars) | [GetEnvValue](#getEnvValue) | [SetEnvValue](#setEnvValue)
 
-```typescript
+```ts
 import { Env } from '@juicyllama/utils'
 ```
 
@@ -340,7 +340,7 @@ import { Env } from '@juicyllama/utils'
 
 Get the current environment type:
 
-```typescript
+```ts
 const env = Env.get()
 //env = 'development'
 ```
@@ -349,7 +349,7 @@ const env = Env.get()
 
 Check if the current environment is production:
 
-```typescript
+```ts
 const isProd = Env.isProd()
 //isProd = false
 ```
@@ -358,7 +358,7 @@ const isProd = Env.isProd()
 
 Check if the current environment is development:
 
-```typescript
+```ts
 const isDev = Env.isDev()
 //isDev = true
 ```
@@ -367,7 +367,7 @@ const isDev = Env.isDev()
 
 Check if the current environment is test:
 
-```typescript
+```ts
 const isTest = Env.isTest()
 //isTest = false
 ```
@@ -376,7 +376,7 @@ const isTest = Env.isTest()
 
 Check if the current environment is not test:
 
-```typescript
+```ts
 const isNotTest = Env.isNotTest()
 //isNotTest = true
 ```
@@ -385,7 +385,7 @@ const isNotTest = Env.isNotTest()
 
 Check if the current environment is not production:
 
-```typescript
+```ts
 const isNotProd = Env.isNotProd()
 //isNotProd = true
 ```
@@ -394,7 +394,7 @@ const isNotProd = Env.isNotProd()
 
 Check if the current environment is sandbox:
 
-```typescript
+```ts
 const isSandbox = Env.isSandbox()
 //isSandbox = false
 ```
@@ -403,7 +403,7 @@ const isSandbox = Env.isSandbox()
 
 Read environment variables from a file:
 
-```typescript
+```ts
 const envVars = Env.readEnvVars()
 //envVars = {
 //  NODE_ENV: 'development',
@@ -415,7 +415,7 @@ const envVars = Env.readEnvVars()
 
 Get an environment variable:
 
-```typescript
+```ts
 const envVar = Env.getEnvValue('NODE_ENV')
 //envVar = 'development'
 ```
@@ -424,7 +424,7 @@ const envVar = Env.getEnvValue('NODE_ENV')
 
 Set an environment variable:
 
-```typescript
+```ts
 Env.setEnvValue('NODE_ENV', 'production')
 ```
 
@@ -434,7 +434,7 @@ Helper utils for working with functions
 
 [whoIsMyDaddy](#whoIsMyDaddy)
 
-```typescript
+```ts
 import { Functions } from '@juicyllama/utils'
 ```
 
@@ -442,7 +442,7 @@ import { Functions } from '@juicyllama/utils'
 
 Get the name of the function that called the function you are in:
 
-```typescript
+```ts
 const whoIsMyDaddy = Functions.whoIsMyDaddy()
 //whoIsMyDaddy = 'parentName'
 ```
@@ -453,7 +453,7 @@ Helper utils for working with geocoding
 
 [areCoordinatesInBoundingBox](#areCoordinatesInBoundingBox)
 
-```typescript
+```ts
 import { Geocoding } from '@juicyllama/utils'
 ```
 
@@ -461,7 +461,7 @@ import { Geocoding } from '@juicyllama/utils'
 
 Check if coordinates are in a bounding box:
 
-```typescript
+```ts
 const coordinates = {
 	latitude: 51.5074,
 	longitude: 0.1278,
@@ -482,7 +482,7 @@ const areCoordinatesInBoundingBox = Geocoding.areCoordinatesInBoundingBox(coordi
 
 Check if coordinates are between two points:
 
-```typescript
+```ts
 const coordinates = {
 	latitude: 51.5074,
 	longitude: 0.1278,
@@ -508,7 +508,7 @@ Here are some helper functions for locale information
 
 #### GetLocale
 
-```typescript
+```ts
 const locale = new Locale()
 const result = locale.getLocale()
 //result = 'en-GB'
@@ -516,7 +516,7 @@ const result = locale.getLocale()
 
 #### GetCountry
 
-```typescript
+```ts
 const locale = new Locale()
 const country = locale.getCountry()
 //country = 'GB'
@@ -524,7 +524,7 @@ const country = locale.getCountry()
 
 #### GetLanguage
 
-```typescript
+```ts
 const locale = new Locale()
 const language = locale.getLanguage()
 //language = 'en'
@@ -538,7 +538,7 @@ Helper utils for working with logging
 This is used across all JuicyLlama packages
 ::
 
-```typescript
+```ts
 import { Logger } from '@juicyllama/utils'
 ```
 
@@ -546,7 +546,7 @@ import { Logger } from '@juicyllama/utils'
 
 Log data out:
 
-```typescript
+```ts
 Logger.data('example', { foo: 'bar' })
 //[example]=>{ foo: 'bar' }
 ```
@@ -555,7 +555,7 @@ Logger.data('example', { foo: 'bar' })
 
 Log an error out:
 
-```typescript
+```ts
 Logger.error('ERROR')
 //\x1b[31m ERROR \x1b[0m
 ```
@@ -564,7 +564,7 @@ Logger.error('ERROR')
 
 Log a warning out:
 
-```typescript
+```ts
 Logger.warn('WARNING')
 //\x1b[33m WARNING \x1b[0m
 ```
@@ -573,7 +573,7 @@ Logger.warn('WARNING')
 
 Log a message out:
 
-```typescript
+```ts
 Logger.log('LOG')
 //\x1b[32m LOG \x1b[0m
 ```
@@ -582,7 +582,7 @@ Logger.log('LOG')
 
 Log a debug message out:
 
-```typescript
+```ts
 Logger.debug('DEBUG')
 //\x1b[35m DEBUG \x1b[0m
 ```
@@ -591,7 +591,7 @@ Logger.debug('DEBUG')
 
 Log a verbose message out:
 
-```typescript
+```ts
 Logger.verbose('VERBOSE')
 //\x1b[36m VERBOSE \x1b[0m
 ```
@@ -600,7 +600,7 @@ Logger.verbose('VERBOSE')
 
 Log a table out:
 
-```typescript
+```ts
 Logger.table([{ foo: 'bar' }])
 //┌─────────┬──────┐
 //│ (index) │ foo  │
@@ -615,7 +615,7 @@ Helper utils for working with markdown
 
 [markdownToHTML](#markdownToHTML)
 
-```typescript
+```ts
 import { Markdown } from '@juicyllama/utils'
 ```
 
@@ -623,7 +623,7 @@ import { Markdown } from '@juicyllama/utils'
 
 Convert markdown to HTML:
 
-```typescript
+```ts
 const markdown = '# Hello World'
 const html = Markdown.markdownToHTML(markdown)
 //html = '<h1>Hello World</h1>'
@@ -635,7 +635,7 @@ Helper utils for working with modules
 
 [IsInstalled](#isInstalled)
 
-```typescript
+```ts
 import { Modules } from '@juicyllama/utils'
 ```
 
@@ -643,7 +643,7 @@ import { Modules } from '@juicyllama/utils'
 
 Check if a module is installed:
 
-```typescript
+```ts
 const isInstalled = await Modules.slack.isInstalled
 //isInstalled = true
 ```
@@ -654,7 +654,7 @@ Helper utils for working with numbers
 
 [amountToCents](#amountToCents) | [toCurrency](#toCurrency) | [toFinancial](#toFinancial)
 
-```typescript
+```ts
 import { Numbers } from '@juicyllama/utils'
 ```
 
@@ -662,7 +662,7 @@ import { Numbers } from '@juicyllama/utils'
 
 Convert an amount to cents:
 
-```typescript
+```ts
 const amount = 10.99
 const cents = Numbers.amountToCents(amount)
 //cents = 1099
@@ -672,7 +672,7 @@ const cents = Numbers.amountToCents(amount)
 
 Convert a number to a currency string:
 
-```typescript
+```ts
 const amount = 10.99
 const currency = Numbers.toCurrency(amount, SupportedCurrencies.USD)
 //currency = '$10.99'
@@ -682,7 +682,7 @@ const currency = Numbers.toCurrency(amount, SupportedCurrencies.USD)
 
 Convert a number to a financial string:
 
-```typescript
+```ts
 const amount = 10
 const financial = Numbers.toFinancial(amount)
 //financial = '10.00'
@@ -694,7 +694,7 @@ Helper utils for working with one time passwords
 
 [generateVerificationCode](#generateVerificationCode)
 
-```typescript
+```ts
 import { OTP } from '@juicyllama/utils'
 ```
 
@@ -702,7 +702,7 @@ import { OTP } from '@juicyllama/utils'
 
 Generate a numerical verification code of a given length:
 
-```typescript
+```ts
 const verificationCode = OTP.generateVerificationCode(6)
 //verificationCode = '123456'
 ```
@@ -713,7 +713,7 @@ Helper utils for working with phone numbers
 
 [internationalCode](#internationalCode)
 
-```typescript
+```ts
 import { Phone } from '@juicyllama/utils'
 ```
 
@@ -721,7 +721,7 @@ import { Phone } from '@juicyllama/utils'
 
 Get the international code for a country:
 
-```typescript
+```ts
 const internationalCode = Phone.internationalCode('GB')
 //internationalCode = '44'
 ```
@@ -732,7 +732,7 @@ Helper utils for working with polling
 
 [url](#url) | [function](#function)
 
-```typescript
+```ts
 import { Poll } from '@juicyllama/utils'
 ```
 
@@ -740,7 +740,7 @@ import { Poll } from '@juicyllama/utils'
 
 Poll a URL:
 
-```typescript
+```ts
 const data = await Poll.url('https://example.com')
 //data = { foo: 'bar' }
 ```
@@ -749,7 +749,7 @@ const data = await Poll.url('https://example.com')
 
 Poll a function:
 
-```typescript
+```ts
 const validate = val => {
 	val.foo === 'bar'
 }
@@ -768,7 +768,7 @@ Helper utils for working with random data
 
 [LlamaFact](#LlamaFact)
 
-```typescript
+```ts
 import { Random } from '@juicyllama/utils'
 ```
 
@@ -776,7 +776,7 @@ import { Random } from '@juicyllama/utils'
 
 Get a random llama fact:
 
-```typescript
+```ts
 const llamaFact = Random.llamaFact()
 //llamaFact = 'Llamas are very intelligent and can be trained to do tricks.'
 ```
@@ -787,7 +787,7 @@ Helper utils for working with security
 
 [hashPassword](#hashPassword) | [referrerCheck](#referrerCheck)
 
-```typescript
+```ts
 import { Security } from '@juicyllama/utils'
 ```
 
@@ -795,7 +795,7 @@ import { Security } from '@juicyllama/utils'
 
 Hash a password:
 
-```typescript
+```ts
 const hashedPassword = await Security.hashPassword('test')
 //hashedPassword = 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff'
 ```
@@ -804,7 +804,7 @@ const hashedPassword = await Security.hashPassword('test')
 
 Check if a referrer is valid:
 
-```typescript
+```ts
 const referrer = 'https://example.com'
 const domain = 'https://example.com'
 const isValid = Security.referrerCheck(referrer, domain)
@@ -819,7 +819,7 @@ Helper utils for working with stopwatches
 This is useful for crons or long running processes to track how long they take
 ::
 
-```typescript
+```ts
 import { Stopwatch } from '@juicyllama/utils'
 const stopwatch = new Stopwatch('test')
 stopwatch.start()
@@ -838,7 +838,7 @@ Helper utils for working with strings
 
 [capitalize](#capitalize) | [replacer](#replacer) | [numbersToLetters](#numbersToLetters) | [numbersTo26Letters](#numbersTo26Letters) | [toHTMLConversion](#toHTMLConversion) | [fromHTMLtoStringConversion](#fromHTMLtoStringConversion) | [az09Lowercase](#az09Lowercase) | [onlyNumbers](#onlyNumbers) | [plural](#plural)
 
-```typescript
+```ts
 import { Strings } from '@juicyllama/utils'
 ```
 
@@ -846,7 +846,7 @@ import { Strings } from '@juicyllama/utils'
 
 Capitalize a string:
 
-```typescript
+```ts
 const capitalized = Strings.capitalize('hello')
 //capitalized = 'Hello'
 ```
@@ -855,7 +855,7 @@ const capitalized = Strings.capitalize('hello')
 
 Replace all occurrences of a string
 
-```typescript
+```ts
 const template = `My name is ${name.toUpperCase()}`
 const object = {
 	name: 'John',
@@ -868,7 +868,7 @@ const replaced = Strings.replacer(template, object)
 
 Convert a number to letters:
 
-```typescript
+```ts
 const letters = Strings.numbersToLetters(123)
 //letters = 'ABC'
 ```
@@ -877,7 +877,7 @@ const letters = Strings.numbersToLetters(123)
 
 Convert a number to letters using the 26 letters of the alphabet:
 
-```typescript
+```ts
 const letters = Strings.numbersTo26Letters(3)
 //letters = 'C'
 ```
@@ -886,7 +886,7 @@ const letters = Strings.numbersTo26Letters(3)
 
 Convert a string to HTML:
 
-```typescript
+```ts
 const html = Strings.toHTMLConversion('Hello \n World')
 //html = 'Hello <br />World'
 ```
@@ -895,7 +895,7 @@ const html = Strings.toHTMLConversion('Hello \n World')
 
 Convert HTML to a string:
 
-```typescript
+```ts
 const string = Strings.fromHTMLtoStringConversion('<h1>Hello World</h1>')
 //string = 'Hello World'
 ```
@@ -908,7 +908,7 @@ Convert a string to lowercase and remove all non alphanumeric characters:
 Currently only supports spaces and dashes, useful for slugs
 ::
 
-```typescript
+```ts
 const string = Strings.az09Lowercase('Hello World - welcome')
 //string = 'helloworldwelcome'
 ```
@@ -917,7 +917,7 @@ const string = Strings.az09Lowercase('Hello World - welcome')
 
 Remove all non-numeric characters from a string:
 
-```typescript
+```ts
 const string = Strings.onlyNumbers('1beep2boop3')
 //string = '123'
 ```
@@ -926,7 +926,7 @@ const string = Strings.onlyNumbers('1beep2boop3')
 
 Pluralize a string:
 
-```typescript
+```ts
 const string = Strings.plural('cat', 2)
 //string = '2 cats'
 ```
