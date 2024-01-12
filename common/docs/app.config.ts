@@ -55,7 +55,7 @@ export default defineAppConfig({
 	  links: links
 	},
 	footer: {
-	  credits: 'Copyright © 2023',
+	  credits: 'Copyright © '+ new Date().getFullYear(),
 	  colorMode: false,
 	  links: links
 	},
@@ -63,21 +63,11 @@ export default defineAppConfig({
 	  title: 'Table of Contents',
 	  bottom: {
 		title: 'Community',
-		edit: 'https://github.com/nuxt-ui-pro/docs/edit/main/content',
+		edit: 'https://github.com/juicyllama/framework/tree/main/common/docs/content',
 		links: [{
 		  icon: 'i-heroicons-star',
 		  label: 'Star on GitHub',
-		  to: 'https://github.com/nuxt/ui',
-		  target: '_blank',
-		}, {
-		  icon: 'i-heroicons-book-open',
-		  label: 'Nuxt UI Pro docs',
-		  to: 'https://ui.nuxt.com/pro/guide',
-		  target: '_blank',
-		}, {
-		  icon: 'i-simple-icons-nuxtdotjs',
-		  label: 'Purchase a license',
-		  to: 'https://ui.nuxt.com/pro/purchase',
+		  to: 'https://github.com/juicyllama/framework',
 		  target: '_blank',
 		}]
 	  }
