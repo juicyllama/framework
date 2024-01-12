@@ -63,7 +63,7 @@ const features = [
 				<div
 					class="card"
 					v-for="item in features" :key="item.title">
-					<a :href="`${item.link}`" class="focus:outline-none" color="primary" orientation="vertical" tabindex="-1">
+					<a :href="item.link" class="focus:outline-none" color="primary" orientation="vertical" tabindex="-1">
 						<div class="gap-x-8 gap-y-4 rounded-xl flex flex-col flex-1 px-4 py-5 sm:p-6 dark:bg-gray-900/50">
 							<div class="">
 								<span class="absolute inset-0"></span>
