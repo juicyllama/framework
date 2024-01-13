@@ -76,7 +76,7 @@ export class ShortlinksService extends BaseService<T> {
 	/**
 	 * To be called in your microservice to handle the redirect
 	 */
-	async redirect(@Req() req, url_code: string) {
+	async redirect(@Req() req: AuthenticatedRequest, url_code: string) {
 		//const domain = 'tools::shortlinks::service::redirect'
 
 		const shortlink = await this.query.findOneByWhere(this.repository, { url_code: url_code })

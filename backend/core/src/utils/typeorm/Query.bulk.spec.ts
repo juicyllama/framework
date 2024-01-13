@@ -1,11 +1,12 @@
-import { UsersService } from '../../modules/users/users.service'
-import { User } from '../../modules/users/users.entity'
-import { Scaffold, ScaffoldDto } from '../../test'
-import { UsersModule } from '../../modules/users/users.module'
-import { ImportMode } from '../../types/common'
+import { faker } from '@faker-js/faker'
 import { Csv, File } from '@juicyllama/utils'
 import { UPLOAD_DUPLICATE_FIELD } from '../../modules/users/users.constants'
-import { faker } from '@faker-js/faker'
+import { User } from '../../modules/users/users.entity'
+import { UsersModule } from '../../modules/users/users.module'
+import { UsersService } from '../../modules/users/users.service'
+import { Scaffold } from '../../test'
+import { ScaffoldDtoWithRepository } from '../../test/scaffold'
+import { ImportMode } from '../../types/common'
 
 const E = User
 type T = User
@@ -14,10 +15,10 @@ const SERVICE = UsersService
 
 describe('Query Bulk', () => {
 	const scaffolding = new Scaffold<T>()
-	let scaffold: ScaffoldDto<T>
+	let scaffold: ScaffoldDtoWithRepository<T>
 
 	beforeAll(async () => {
-		scaffold = await scaffolding.up(MODULE, SERVICE)
+		scaffold = await scaffolding.up(MODULE, SERVICE) as ScaffoldDtoWithRepository<T>
 	})
 
 	let first_name_shared = faker.person.firstName()

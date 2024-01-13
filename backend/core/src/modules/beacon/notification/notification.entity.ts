@@ -8,11 +8,11 @@ import { BaseEntity } from '../../../helpers'
 export class BeaconNotification extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	@IsNumber()
-	readonly notification_id: number
+	readonly notification_id!: number
 
 	@ManyToOne(() => Account, account => account.account_id, { cascade: false })
 	@JoinColumn({ name: 'account_id' })
-	account: Account
+	account!: Account
 
 	@ManyToMany(() => User, user => user.user_id)
 	@JoinTable({
@@ -25,11 +25,11 @@ export class BeaconNotification extends BaseEntity {
 
 	@Column()
 	@IsString()
-	subject: string
+	subject!: string
 
 	@Column({ type: 'mediumtext', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', default: null, nullable: true }) //support emojis
 	@IsString()
-	markdown: string
+	markdown!: string
 
 	@Column({ default: null, nullable: true })
 	@IsString()
@@ -41,7 +41,7 @@ export class BeaconNotification extends BaseEntity {
 
 	@ManyToOne(() => User, user => user.user_id, { cascade: false })
 	@JoinColumn({ name: 'removed_by_id' })
-	removed_by: User
+	removed_by?: User
 
 	constructor(partial: Partial<BeaconNotification>) {
 		super()

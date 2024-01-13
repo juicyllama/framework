@@ -1,4 +1,4 @@
-import { ChartsPeriod } from '@juicyllama/utils'
+import { ChartsPeriod, SupportedCurrencies } from '@juicyllama/utils'
 import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
 import { FxService } from '../modules/fx/fx.service'
 
@@ -9,9 +9,9 @@ export type ChartOptions<T = any> = FindManyOptions<T> & {
 	to?: Date
 }
 
-export type CurrencyOptions = {
+export type CurrencyOptions<T> = {
 	fxService: FxService // the fx service we want to use
-	currency?: string // the currency we want the reults in
-	currency_field: string // the field used to determine the currency
-	currency_fields: string[] //the fields to convert
+	currency?: SupportedCurrencies; // the currency we want the results in
+	currency_field: keyof T & string; // the field used to determine the currency
+	currency_fields: Array<keyof T> //the fields to convert
 }

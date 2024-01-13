@@ -1,10 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { CachePeriod, Env, JLCache, Logger, Modules } from '@juicyllama/utils'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { Cache } from 'cache-manager'
-import { CachePeriod, Enviroment, JLCache, Logger, Modules } from '@juicyllama/utils'
-import { StorageFileFormat, StorageFileType } from './storage.enums'
+import { Inject, Injectable } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
+import { Cache } from 'cache-manager'
 import { StorageWriteResponseDto } from './storage.dto'
+import { StorageFileFormat, StorageFileType } from './storage.enums'
 
 @Injectable()
 export class StorageService {
@@ -32,10 +32,10 @@ export class StorageService {
 		format?: StorageFileFormat
 		file: Blob | Express.Multer.File | any
 		params?: object
-	}): Promise<StorageWriteResponseDto> {
+	}): Promise<StorageWriteResponseDto | undefined> {
 		const domain = 'common::storage::write'
 
-		if (Enviroment.test === Enviroment[process.env.NODE_ENV]) {
+		if (Env.IsTest()) {
 			this.logger.verbose(`[${domain}] Skipping as testing`)
 			return
 		}

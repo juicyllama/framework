@@ -1,16 +1,19 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
-import { FxRate } from './fx.entity'
-import { Cache } from 'cache-manager'
 import { CachePeriod, Dates, JLCache, Logger, Modules, SupportedCurrencies } from '@juicyllama/utils'
-import { Query } from '../../utils/typeorm/Query'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Cache } from 'cache-manager'
+import { Repository } from 'typeorm'
+import { Query } from '../../utils/typeorm/Query'
+import { FxRate } from './fx.entity'
 
 const calc = (amount: number, from: number, to: number): number => {
 	return (amount / from) * to
 }
+
+const DOMAIN = 'core::fx::service::convert'
+
 
 @Injectable()
 export class FxService {
@@ -32,34 +35,15 @@ export class FxService {
 	 */
 
 	async convert(amount: number, from: SupportedCurrencies, to: SupportedCurrencies, date?: Date): Promise<number> {
-		const domain = 'core::fx::service::convert'
 
 		if (!amount) {
-			this.logger.error(`[${domain}] Amount is required`, {
-				amount: amount,
-				from: from,
-				to: to,
-				date: date,
-			})
-			throw new Error('Amount is required')
+			throw new CurrencyConversionError(from, to, amount, date, 'Amount is required')
 		}
 		if (!from) {
-			this.logger.error(`[${domain}] From is required`, {
-				amount: amount,
-				from: from,
-				to: to,
-				date: date,
-			})
-			throw new Error('From is required')
+			throw new CurrencyConversionError(from, to, amount, date, 'From is required')
 		}
 		if (!to) {
-			this.logger.error(`[${domain}] To is required`, {
-				amount: amount,
-				from: from,
-				to: to,
-				date: date,
-			})
-			throw new Error('To is required')
+			throw new CurrencyConversionError(from, to, amount, date, 'To is required')
 		}
 
 		let convertResult
@@ -68,7 +52,7 @@ export class FxService {
 			date = new Date()
 		}
 
-		const cache_key = JLCache.cacheKey(domain, {
+		const cache_key = JLCache.cacheKey(DOMAIN, {
 			date: Dates.format(date, 'YYYY-MM-DD'),
 		})
 
@@ -104,7 +88,7 @@ export class FxService {
 					return calc(amount, rates[from], rates[to])
 				}
 			} catch (e: any) {
-				this.logger.error(`[${domain}] ${e.message}`, e)
+				this.logger.error(`[${DOMAIN}] ${e.message}`, e)
 			}
 		}
 
@@ -116,7 +100,7 @@ export class FxService {
 			const ext_rate = await currencyDataService.getRate(Dates.format(date, 'YYYY-MM-DD'))
 
 			if (ext_rate && ext_rate.quotes) {
-				const create = {
+				const create: Record<string, any> = {
 					date: date,
 				}
 
@@ -127,10 +111,10 @@ export class FxService {
 				rates = await this.query.create(this.repository, create)
 				convertResult = calc(amount, rates[from], rates[to])
 			} else {
-				throw new Error(`[${domain}] Error getting rates from apilayer`)
+				throw new CurrencyConversionError(from, to, amount, date, 'Error getting rates from apilayer`')
 			}
 		} else {
-			throw new Error(`[${domain}] No FX App Installed, options are @juicyllama/app-apilayer`)
+			throw new CurrencyConversionError(from, to, amount, date, `No FX App Installed, options are @juicyllama/app-apilayer`)
 		}
 
 		if (!convertResult) {
@@ -153,7 +137,7 @@ export class FxService {
 
 					await dataCacheService.set(Fx, rates)
 				} catch (e: any) {
-					this.logger.error(`[${domain}] ${e.message}`, e)
+					this.logger.error(`[${DOMAIN}] ${e.message}`, e)
 				}
 			}
 
@@ -161,12 +145,8 @@ export class FxService {
 			return convertResult
 		}
 
-		this.logger.error(`[${domain}] Error converting currency`, {
-			from: from,
-			to: to,
-			amount: amount,
-			date: date,
-		})
+		
+		throw new CurrencyConversionError(from, to, amount, date)
 	}
 
 	/**
@@ -176,4 +156,20 @@ export class FxService {
 	async create(fxRate: Partial<FxRate>): Promise<FxRate> {
 		return await this.query.create(this.repository, fxRate)
 	}
+}
+
+class CurrencyConversionError extends Error {
+    from: string;
+    to: string;
+    amount: number;
+	date?: Date;
+
+    constructor(from: string, to: string, amount: number, date?: Date, message?: string) {
+        super(`${DOMAIN} Error converting currency` + (message ? `: ${message}` : ``) + `; from ${from} to ${to} for amount ${amount}` + (date ? ` on ${Dates.format(date, 'YYYY-MM-DD')}` : ``));
+        this.name = 'CurrencyConversionError';
+        this.from = from;
+        this.to = to;
+		this.date = date;
+        this.amount = amount;
+    }
 }

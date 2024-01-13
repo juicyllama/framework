@@ -13,27 +13,27 @@ import { Query as TQuery } from '../utils/typeorm/Query'
 import { TypeOrm } from '../utils/typeorm/TypeOrm'
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common'
 import _ from 'lodash'
-import { DeepPartial } from 'typeorm'
+import { DeepPartial, ObjectLiteral, FindOptionsWhere } from 'typeorm'
 import { UploadType, ImportMode, BulkUploadResponse } from '../types/common'
 import { CurrencyOptions } from '../types'
 
 const logger = new Logger()
 
-export async function crudCreate<T>(options: { service: any; data: any; account_id?: number }): Promise<T> {
+export async function crudCreate<T extends ObjectLiteral>(options: { service: any; data: any; account_id?: number }): Promise<T> {
 	return await options.service.create({
 		...options.data,
-		account_id: options.account_id ?? options.data.account_id ?? null,
+		account_id: options.account_id ?? options.data.account_id ?? undefined,
 	})
 }
 
-export async function crudFindAll<T>(options: {
+export async function crudFindAll<T extends ObjectLiteral>(options: {
 	service: any
 	tQuery: TQuery<T>
 	account_id?: number
 	query: any
 	searchFields?: string[]
 	order_by?: string
-	currency?: CurrencyOptions
+	currency?: CurrencyOptions<T>
 }): Promise<T[]> {
 	if (options.query.convert_currencies_to && options.currency) {
 		options.currency.currency = options.query.convert_currencies_to
@@ -45,20 +45,21 @@ export async function crudFindAll<T>(options: {
 	const where = options.tQuery.buildWhere({
 		repository: options.service.repository,
 		query: options.query,
-		account_id: options.account_id ?? null,
+		account_id: options.account_id ?? undefined,
 		search_fields: options.searchFields,
 	})
+	const PRIMARY_KEY = TypeOrm.getPrimaryKey<T>(options.service.repository)
 
-	const sql_options = TypeOrm.findOptions<T>(options.query, where, options.order_by)
+	const sql_options = TypeOrm.findOptions<T>(options.query, where, PRIMARY_KEY as string)
 	return await options.service.findAll(sql_options, options.currency)
 }
 
-export async function crudFindOne<T>(options: {
+export async function crudFindOne<T extends ObjectLiteral>(options: {
 	service: any
 	query: any
 	primaryKey: number
 	account_id?: number
-	currency?: CurrencyOptions
+	currency?: CurrencyOptions<T>
 }): Promise<T> {
 	const PRIMARY_KEY = TypeOrm.getPrimaryKey<T>(options.service.repository)
 
@@ -69,17 +70,17 @@ export async function crudFindOne<T>(options: {
 
 	options.query = Objects.clean(options.query)
 
-	const where = {
+	//@ts-ignore
+	const where: FindOptionsWhere<T> = {
 		[PRIMARY_KEY]: options.primaryKey,
 		...(options.account_id ? { account: { account_id: options.account_id } } : null),
 	}
 
-	//@ts-ignore
 	const sql_options = TypeOrm.findOneOptions<T>(options.query, where)
 	return await options.service.findOne(sql_options, options.currency)
 }
 
-export async function crudStats<T>(options: {
+export async function crudStats<T extends ObjectLiteral>(options: {
 	service: any
 	tQuery: TQuery<T>
 	account_id?: number
@@ -96,7 +97,7 @@ export async function crudStats<T>(options: {
 	const where = options.tQuery.buildWhere({
 		repository: options.service.repository,
 		query: options.query,
-		account_id: options.account_id ?? null,
+		account_id: options.account_id ?? undefined,
 		search_fields: options.searchFields,
 	})
 
@@ -122,7 +123,7 @@ export async function crudStats<T>(options: {
 	}
 }
 
-export async function crudCharts<T>(options: {
+export async function crudCharts<T extends ObjectLiteral>(options: {
 	service: any
 	tQuery: TQuery<T>
 	query: any
@@ -133,7 +134,7 @@ export async function crudCharts<T>(options: {
 	to?: Date
 	fields: string[]
 	searchFields: string[]
-	currency?: CurrencyOptions
+	currency?: CurrencyOptions<T>
 }): Promise<ChartsResponseDto> {
 	const fields = _.castArray(options.fields)
 
@@ -147,7 +148,7 @@ export async function crudCharts<T>(options: {
 	const where = options.tQuery.buildWhere({
 		repository: options.service.repository,
 		query: options.query,
-		account_id: options.account_id ?? null,
+		account_id: options.account_id ?? undefined,
 		search_fields: options.searchFields,
 	})
 
@@ -179,7 +180,7 @@ export async function crudCharts<T>(options: {
 	}
 }
 
-export async function crudUpdate<T>(options: {
+export async function crudUpdate<T extends ObjectLiteral>(options: {
 	service: any
 	data: any
 	primaryKey: number
@@ -197,7 +198,7 @@ export async function crudUpdate<T>(options: {
 	}
 
 	if (!options.primaryKey) {
-		throw new BadRequestException(`Missing required field: ${PRIMARY_KEY}`)
+		throw new BadRequestException(`Missing required field: ${PRIMARY_KEY as string}`)
 	}
 
 	return await options.service.update({
@@ -206,7 +207,7 @@ export async function crudUpdate<T>(options: {
 	})
 }
 
-export async function crudBulkUpload<T>(options: {
+export async function crudBulkUpload<T extends ObjectLiteral>(options: {
 	fields: string[]
 	dedup_field: string
 	mappers?: { [key: string]: string }
@@ -276,7 +277,7 @@ export async function crudBulkUpload<T>(options: {
 		throw new InternalServerErrorException(`Missing required field: dedup_field`)
 	}
 
-	let content: any[]
+	let content: any[] | undefined = undefined
 
 	logger.debug(`[${domain}] Uploading ${options.upload_type} file`)
 
@@ -320,7 +321,7 @@ export async function crudBulkUpload<T>(options: {
 			throw new BadRequestException(`Not a supported file type`)
 	}
 
-	if (!content.length) {
+	if (!content?.length) {
 		logger.debug(`[${domain}] No records found in ${options.upload_type} file`)
 		throw new BadRequestException(`No records found in ${options.upload_type} file`)
 	}
@@ -340,15 +341,16 @@ export async function crudBulkUpload<T>(options: {
 
 	logger.debug(`[${domain}] Converting file to DTO object`)
 	let dtos: DeepPartial<T>[] = content.map(row => {
-		const dto = options.fields.reduce(
+		const dto: DeepPartial<T> = options.fields.reduce(
 			(dto, key) => ({
 				...dto,
 				[key]: row[key],
 			}),
-			{},
+			{} as DeepPartial<T>,
 		)
-		dto['account_id'] = options.account_id
-		return <DeepPartial<T>>dto
+		// @ts-ignore
+		dto['account_id']  = options.account_id
+		return dto
 	})
 
 	dtos = cleanDtos(dtos, options, domain)
@@ -357,12 +359,13 @@ export async function crudBulkUpload<T>(options: {
 		logger.debug(`[${domain}] Offloading DTOs to bulk service`)
 		return <BulkUploadResponse>await options.service.bulk(dtos, options.import_mode, options.dedup_field)
 	} catch (e) {
-		logger.error(`[${domain}] ${e.message}`, e)
-		throw new BadRequestException(e.message)
+		const error = e as Error
+		logger.error(`[${domain}] ${error.message}`, error)
+		throw new BadRequestException(error.message)
 	}
 }
 
-export async function crudDelete<T>(options: { service: any; primaryKey: number; account_id?: number }): Promise<T> {
+export async function crudDelete<T extends ObjectLiteral>(options: { service: any; primaryKey: number; account_id?: number }): Promise<T> {
 	const record = await options.service.findById(options.primaryKey)
 
 	if (options.account_id && record.account.account_id !== options.account_id) {
@@ -374,7 +377,7 @@ export async function crudDelete<T>(options: { service: any; primaryKey: number;
 	return await options.service.remove(record)
 }
 
-export async function crudPurge<T>(options: { service: any; primaryKey: number; account_id?: number }): Promise<T> {
+export async function crudPurge<T extends ObjectLiteral>(options: { service: any; primaryKey: number; account_id?: number }): Promise<T> {
 	const record = await options.service.findById(options.primaryKey)
 
 	if (options.account_id && record.account.account_id !== options.account_id) {
@@ -386,10 +389,10 @@ export async function crudPurge<T>(options: { service: any; primaryKey: number; 
 	return await options.service.purge(record)
 }
 
-function cleanDtos<T>(dtos: DeepPartial<T>[], options: any, domain: string): DeepPartial<T>[] {
+function cleanDtos<T extends ObjectLiteral>(dtos: DeepPartial<T>[], options: any, domain: string): DeepPartial<T>[] {
 	//remove empty values
 	for (const d in dtos) {
-		dtos[d] = <DeepPartial<T>>_.omitBy(dtos[d], _.isUndefined)
+		dtos[d] = <DeepPartial<T>>_.omitBy<DeepPartial<T>>(dtos[d], _.isUndefined)
 	}
 
 	const unique = _.uniqBy(dtos, options.dedup_field)

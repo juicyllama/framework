@@ -115,7 +115,7 @@ export class ShopifyAuthController {
 
 	@ApiHideProperty()
 	@Get('redirect')
-	async redirect(@Query() query: ShopifyAuthRedirectQuery, @Req() req: any, @Res() res: any): Promise<void> {
+	async redirect(@Query() query: any: ShopifyAuthRedirectQuery, @Req() req: any, @Res() res: any): Promise<void> {
 		const domain = 'app::shopify::auth::controller::redirect'
 		this.logger.log(`[${domain}] Redirect`, query)
 
@@ -133,7 +133,7 @@ export class ShopifyAuthController {
 
 	@ApiHideProperty()
 	@Get('complete')
-	async complete(@Query() query: ShopifyAuthRedirectQuery, @Req() req: any, @Res() res: any): Promise<void> {
+	async complete(@Query() query: any: ShopifyAuthRedirectQuery, @Req() req: any, @Res() res: any): Promise<void> {
 		const domain = 'app::shopify::auth::controller::complete'
 		this.logger.log(`[${domain}] Complete`, query)
 

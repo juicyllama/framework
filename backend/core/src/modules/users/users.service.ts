@@ -14,6 +14,7 @@ import { Account } from '../accounts/account.entity'
 import { UsersHooks } from './users.hooks'
 import { CreateUserDto } from './users.dto'
 import { E, T } from './users.constants'
+import { User } from './users.entity'
 
 @Injectable()
 export class UsersService extends BaseService<T> {
@@ -75,19 +76,22 @@ export class UsersService extends BaseService<T> {
 		if (data.password) {
 			data.password = Security.hashPassword(data.password)
 		}
+		if (!data.user_id){
+			throw new Error('User ID is required')
+		}
 
 		await this.repository.save(data)
 		return await this.query.findOneById(this.repository, data.user_id)
 	}
 
-	async uploadAvatar(user, file): Promise<T> {
+	async uploadAvatar(user: User, file: Express.Multer.File): Promise<T> {
 		const result = await this.storageService.write({
 			location: `users/${user.user_id}/avatar/${file.originalname}`,
 			permissions: StorageType.PUBLIC,
 			format: StorageFileFormat.Express_Multer_File,
 			file: file,
 		})
-		if (result === null || result === void 0 ? void 0 : result.url) {
+		if (result?.url) {
 			user = await this.query.update(this.repository, {
 				user_id: user.user_id,
 				avatar_type: UserAvatarType.IMAGE,
@@ -97,7 +101,7 @@ export class UsersService extends BaseService<T> {
 		return user
 	}
 
-	async validateUser(email, pass): Promise<T> {
+	async validateUser(email: string, pass: string): Promise<T> {
 		const options = {
 			where: {
 				email: email,
@@ -113,7 +117,7 @@ export class UsersService extends BaseService<T> {
 
 		return user
 	}
-	async validateEmail(email): Promise<T> {
+	async validateEmail(email: string): Promise<T> {
 		const where = {
 			email: email,
 			deleted_at: null,
@@ -128,7 +132,7 @@ export class UsersService extends BaseService<T> {
 		return user
 	}
 
-	async getValidatedUserByEmail(email): Promise<T> {
+	async getValidatedUserByEmail(email: string): Promise<T> {
 		let user = await super.findOne({
 			where: [{ email: email }],
 		})

@@ -18,7 +18,7 @@ export class BeaconPushService {
 		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
 	) {}
 
-	async create(message: BeaconMessageDto): Promise<boolean> {
+	async create(message: BeaconMessageDto): Promise<boolean | undefined> {
 		const domain = 'utils::beacon::push::create'
 
 		if (Env.IsTest()) {

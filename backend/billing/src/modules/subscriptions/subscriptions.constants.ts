@@ -19,8 +19,8 @@ export const billingSubscriptionsConstants = {
 	primaryKey: BILLING_SUBSCRIPTIONS_PRIMARY_KEY,
 	searchFields: BILLING_SUBSCRIPTIONS_SEARCH_FIELDS,
 	defaultOrderBy: BILLING_SUBSCRIPTIONS_DEFAULT_ORDER_BY,
-	currencyField: BILLING_SUBSCRIPTIONS_CURRENCY_FIELD,
-	currencyFields: BILLING_SUBSCRIPTIONS_CURRENCY_FIELDS,
+	currencyField: BILLING_SUBSCRIPTIONS_CURRENCY_FIELD, // the field that holds the currency e.g. 'USD'
+	currencyFields: BILLING_SUBSCRIPTIONS_CURRENCY_FIELDS, // the fields that hold numeric values in the currency e.g. '123.45'. example values: ['subtotal_price', 'total_shipping', 'total_price']
 	selectEnum: SubscriptionSelect,
 	orderByEnum: SubscriptionOrderBy,
 	relationsEnum: SubscriptionRelations,

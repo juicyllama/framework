@@ -2,6 +2,7 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Strings, File } from '@juicyllama/utils'
 import { ConfigService } from '@nestjs/config'
 import { BeaconService } from '../beacon/beacon.service'
+import { Account, User } from '../..'
 
 @Injectable()
 export class UsersHooks {
@@ -10,13 +11,13 @@ export class UsersHooks {
 		@Inject(forwardRef(() => BeaconService)) private readonly beaconService: BeaconService,
 	) {}
 
-	async invited(account, user) {
+	async invited(account: Account, user: User) {
 		if (!process.env.BEACON_USER_INVITED) {
 			return
 		}
 
 		const subject = `🎉 You are invited to join ${account.account_name} on ${Strings.capitalize(
-			this.configService.get(`PROJECT_NAME`),
+			this.configService.get(`PROJECT_NAME`, 'PROJECT_NAME'),
 		)}`
 
 		let markdown = ``
@@ -33,7 +34,7 @@ export class UsersHooks {
 		} else {
 			markdown = `${user.first_name}, you have been invited to join ${
 				account.account_name
-			}'s account on ${Strings.capitalize(this.configService.get(`PROJECT_NAME`))}!
+			}'s account on ${Strings.capitalize(this.configService.get(`PROJECT_NAME`, 'PROJECT_NAME'))}!
 			
 	You can [set your password here](${this.configService.get(`APP_BASE_URL`)}/reset).`
 		}
@@ -46,7 +47,7 @@ export class UsersHooks {
 				email: {
 					to: {
 						email: user.email,
-						name: user.name,
+						name: `${user.first_name} ${user.last_name}`,
 					},
 				},
 			},
@@ -56,13 +57,13 @@ export class UsersHooks {
 		})
 	}
 
-	async account_added(account, user) {
+	async account_added(account: Account, user: User) {
 		if (!process.env.BEACON_USER_ADDED) {
 			return
 		}
 
 		const subject = `🎉 You've joined ${account.account_name} on ${Strings.capitalize(
-			this.configService.get(`PROJECT_NAME`),
+			this.configService.get(`PROJECT_NAME`, 'PROJECT_NAME'),
 		)}`
 
 		let markdown = ``
@@ -79,7 +80,7 @@ export class UsersHooks {
 		} else {
 			markdown = `${user.first_name}, ${
 				account.account_name
-			} has added you to their account on ${Strings.capitalize(this.configService.get(`PROJECT_NAME`))}!
+			} has added you to their account on ${Strings.capitalize(this.configService.get(`PROJECT_NAME`, 'PROJECT_NAME'))}!
 			
 	You can [login here](${this.configService.get(`APP_BASE_URL`)}/login) with your existing credentials.`
 		}
@@ -92,7 +93,7 @@ export class UsersHooks {
 				email: {
 					to: {
 						email: user.email,
-						name: user.name,
+						name: `${user.first_name} ${user.last_name}`,
 					},
 				},
 			},

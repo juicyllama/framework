@@ -50,10 +50,17 @@ export class AccountService extends BaseService<T> {
 			data.account_name = Random.Words(' ', 3, 'noun', 'capitalize')
 		}
 
+		if (!process.env.SYSTEM_DEFAULT_CURRENCY) {
+			this.logger.error(`[${domain}] SYSTEM_DEFAULT_CURRENCY not set`)
+			throw new BadRequestException(`SYSTEM_DEFAULT_CURRENCY not set`)
+		}
+
+		const SYSTEM_DEFAULT_CURRENCY = <keyof typeof SupportedCurrencies>process.env.SYSTEM_DEFAULT_CURRENCY
+
 		const account_data = {
 			account_name: data.account_name,
 			currency:
-				data.currency ?? SupportedCurrencies[process.env.SYSTEM_DEFAULT_CURRENCY] ?? SupportedCurrencies.USD,
+				data.currency ?? SupportedCurrencies[SYSTEM_DEFAULT_CURRENCY] ?? SupportedCurrencies.USD,
 		}
 
 		const account = await super.create(account_data)
@@ -86,6 +93,9 @@ export class AccountService extends BaseService<T> {
 			}
 		} else {
 			this.logger.debug(`[${domain}] New account created by existing user`, user)
+			if (!user.accounts) {
+				user.accounts = []
+			}
 			user.accounts.push(account)
 			user = await this.usersService.update(user)
 			user = await this.authService.assignRole(user, account, UserRole.OWNER)
@@ -113,11 +123,12 @@ export class AccountService extends BaseService<T> {
 
 	async onboardAdditional(user: User, data: OnboardAdditionalAccountDto): Promise<SuccessAccountDto> {
 		const domain = 'core::account::service::onboardAdditional'
+		const SYSTEM_DEFAULT_CURRENCY = <keyof typeof SupportedCurrencies>process.env.SYSTEM_DEFAULT_CURRENCY
 
 		const account_data = {
 			account_name: data.account_name,
 			currency:
-				data.currency ?? SupportedCurrencies[process.env.SYSTEM_DEFAULT_CURRENCY] ?? SupportedCurrencies.USD,
+				data.currency ?? SupportedCurrencies[SYSTEM_DEFAULT_CURRENCY] ?? SupportedCurrencies.USD,
 		}
 
 		const account = await super.create(account_data)
@@ -127,6 +138,9 @@ export class AccountService extends BaseService<T> {
 			account: account,
 		})
 
+		if (!user.accounts) {
+			user.accounts = []
+		}
 		user.accounts.push(account)
 		user = await this.usersService.update(user)
 		user = await this.authService.assignRole(user, account, UserRole.OWNER)
@@ -159,9 +173,10 @@ export class AccountService extends BaseService<T> {
 			account: account,
 			result: result,
 		})
+		throw new BadRequestException(`Error saving avatar`)
 	}
 
-	async transfer(account, old_owner, new_owner) {
+	async transfer(account: Account, old_owner: User, new_owner: User) {
 		const new_owner_role = await this.authService.assignRole(new_owner, account, UserRole.OWNER)
 		const old_owner_role = await this.authService.assignRole(old_owner, account, UserRole.ADMIN)
 		return !!(new_owner_role.user_id && old_owner_role.user_id)
@@ -173,6 +188,9 @@ export class AccountService extends BaseService<T> {
 				role: UserRole.OWNER,
 			},
 		})
+		if (!role?.user) {
+			throw new BadRequestException(`Account #${account_id} has no owner`)
+		}
 		return role.user
 	}
 

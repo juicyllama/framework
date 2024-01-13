@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsEnum, IsOptional, IsString } from 'class-validator'
+import { AuthService } from '..'
 import { FxService } from '../modules/fx/fx.service'
 import { UserRole } from '../modules/users/users.enums'
-import { AuthService } from '..'
+import { SupportedCurrencies } from '@juicyllama/utils'
 
 export enum UploadType {
 	CSV = 'CSV',
@@ -50,13 +51,13 @@ export class CrudUploadFieldsResponse {
 		name: 'fields',
 		example: ['first_name', 'last_name', 'email'],
 	})
-	fields: string[]
+	fields!: string[]
 
 	@ApiProperty({
 		name: 'dedup_field',
 		example: 'email',
 	})
-	dedup_field: string
+	dedup_field!: string
 }
 
 export enum ImportMode {
@@ -130,7 +131,7 @@ export class BulkUploadResponse {
 		required: true,
 		example: 100,
 	})
-	total: number
+	total!: number
 
 	@ApiProperty({
 		name: 'processed',
@@ -139,7 +140,7 @@ export class BulkUploadResponse {
 		required: true,
 		example: 100,
 	})
-	processed: number
+	processed!: number
 
 	@ApiProperty({
 		name: 'created',
@@ -148,7 +149,7 @@ export class BulkUploadResponse {
 		required: true,
 		example: 80,
 	})
-	created: number
+	created!: number
 
 	@ApiProperty({
 		name: 'updated',
@@ -157,7 +158,7 @@ export class BulkUploadResponse {
 		required: true,
 		example: 20,
 	})
-	updated: number
+	updated!: number
 
 	@ApiProperty({
 		name: 'deleted',
@@ -166,7 +167,7 @@ export class BulkUploadResponse {
 		required: true,
 		example: 0,
 	})
-	deleted: number
+	deleted!: number
 
 	@ApiProperty({
 		name: 'errored',
@@ -175,7 +176,7 @@ export class BulkUploadResponse {
 		required: true,
 		example: 0,
 	})
-	errored: number
+	errored!: number
 
 	@ApiProperty({
 		name: 'errors',
@@ -193,14 +194,14 @@ export class BulkUploadResponse {
 		required: false,
 		example: [1, 2, 3, 4],
 	})
-	ids?: number[]
+	ids!: number[]
 }
 
 export interface ChartResult {
 	count: number
 	[key: string]: any
 	time_interval: Date
-	currency?: string | null
+	currency?: SupportedCurrencies // e.g 'USD'
 }
 
 export type ControllerOptionalProps = {
@@ -221,8 +222,8 @@ export type ControllerConstants = {
 	selectEnum?: any
 	orderByEnum?: any
 	relationsEnum?: any
-	currencyField?: string
-	currencyFields?: string[]
+	currencyField?: string // e.g 'currency'. in a given entity, this field's value contains a SupportedCurrency e.g. 'USD'
+	currencyFields?: string[] // the fields that hold numeric values in the currency e.g. '123.45'  e.g. ['subtotal_price', 'total_shipping', 'total_price']
 	uploadSupportedFields?: string[]
 	uploadDedupField?: string
 	dtos?: {
@@ -251,7 +252,7 @@ export class BaseResponseDto {
 		type: 'Date',
 		required: true,
 	})
-	created_at: Date
+	created_at?: Date
 
 	@ApiProperty({
 		name: 'updated_at',
@@ -259,5 +260,5 @@ export class BaseResponseDto {
 		type: 'Date',
 		required: true,
 	})
-	updated_at: Date
+	updated_at?: Date
 }

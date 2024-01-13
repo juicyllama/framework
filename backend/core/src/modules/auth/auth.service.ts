@@ -32,11 +32,12 @@ import { Cache } from 'cache-manager'
 import { BaseService } from '../../helpers'
 import { Query } from '../../utils/typeorm/Query'
 import { BeaconService } from '../beacon/beacon.service'
-import { LoginResponseDto } from './dtos/login.dto'
+import { LoginResponseDto, ValidateCodeDto } from './dtos/login.dto'
 import { AUTH_ACCOUNT_IDS, AUTH_ACCOUNT_ROLE, AUTH_CODE } from './auth.constants'
 import { UserRole, UserRoleNum } from '../users/users.enums'
 import { User } from '../users/users.entity'
 import { Account } from '../accounts/account.entity'
+import { CompletePasswordResetDto, InitiateResetPasswordDto } from './dtos/password.reset.dto'
 
 const E = Role
 type T = Role
@@ -87,9 +88,9 @@ export class AuthService extends BaseService<T> {
 		return user
 	}
 
-	async login(user) {
+	async login(user: User) {
 		const payload = await this.constructLoginPayload(user)
-		if (!['development', 'test'].includes(process.env.NODE_ENV)) {
+		if (!['development', 'test'].includes(Env.get())) {
 			let Bugsnag
 			if (Modules.bugsnag.isInstalled) {
 				Bugsnag = await Modules.bugsnag.load()
@@ -101,7 +102,7 @@ export class AuthService extends BaseService<T> {
 		await this.usersService.update(user)
 		return new LoginResponseDto(this.jwtService.sign(payload, { secret: process.env.JWT_KEY }))
 	}
-	async constructLoginPayload(user) {
+	async constructLoginPayload(user: User) {
 		if (!user.accounts) {
 			throw new ImATeapotException(`Missing accounts on login payload, go grab a cuppa while you seek help!`)
 		}
@@ -111,18 +112,21 @@ export class AuthService extends BaseService<T> {
 			account_ids: await this.getAccountIds(user),
 		}
 	}
-	async initiatePasswordReset(data) {
+	async initiatePasswordReset(data: InitiateResetPasswordDto) {
 		const user = await this.usersService.findOneByEmail(data.email)
 		this.handleUserNotFoundException(user)
 		const code = await this.generateVerificationCodeAndSavetoRedis(user)
-		await this.sendVerificationCode(user, code)
+		if (!code) {
+			throw new BadRequestException(`Failed to generate verification code`)
+		}
+		await this.sendVerificationCode(user, <string>code)
 		return !!user.user_id
 	}
-	async completePasswordReset(data) {
+	async completePasswordReset(data: CompletePasswordResetDto) {
 		const user = await this.usersService.findOneByEmail(data.email)
 		this.handleUserNotFoundException(user)
 		const verificationCode = await this.getValidationCode(user)
-		if (this.verificationCodeIsInvalid(verificationCode, data.code)) {
+		if (verificationCode && this.verificationCodeIsInvalid(verificationCode, data.code)) {
 			throw new BadRequestException(
 				'',
 				'Your verification code is invalid or expired, please generate a new verification code',
@@ -139,21 +143,23 @@ export class AuthService extends BaseService<T> {
 			this.jwtService.sign(await this.constructLoginPayload(user), { secret: process.env.JWT_KEY }),
 		)
 	}
-	async initiatePasswordlessLogin(data) {
+	async initiatePasswordlessLogin(data: InitiateResetPasswordDto) {
 		const user = await this.usersService.findOneByEmail(data.email)
 		this.handleUserNotFoundException(user)
 		const code = await this.generateVerificationCodeAndSavetoRedis(user)
-		await this.sendLoginCode(user, code)
+		if (!code) {
+			throw new BadRequestException(`Failed to generate verification code`)
+		}await this.sendLoginCode(user, <string>code)
 		return !!user.user_id
 	}
-	async validateVerificationCode(data): Promise<SuccessResponseDto> {
+	async validateVerificationCode(data: ValidateCodeDto): Promise<SuccessResponseDto> {
 		if (!data.email) {
 			throw new BadRequestException('Email is required')
 		}
 		const user = await this.usersService.findOneByEmail(data.email)
 		this.handleUserNotFoundException(user)
 		const verificationCode = await this.getValidationCode(user)
-		if (this.verificationCodeIsInvalid(verificationCode, data.code)) {
+		if (verificationCode && this.verificationCodeIsInvalid(verificationCode, data.code)) {
 			throw new BadRequestException(
 				'',
 				'Your verification code is invalid or expired, please generate a new verification code',
@@ -163,17 +169,17 @@ export class AuthService extends BaseService<T> {
 			success: !!user.user_id,
 		}
 	}
-	async getValidationCode(user) {
+	async getValidationCode(user: User): Promise<string | undefined> {
 		const cache_key = JLCache.cacheKey(AUTH_CODE, { user_id: user.user_id })
-		const result = await this.cacheManager.get(cache_key)
+		const result = await this.cacheManager.get<string>(cache_key)
 		this.logger.log(`[CACHE][GET] ${cache_key} = `, result)
 		return result
 	}
-	async validateLoginCodeAndLogin(data) {
+	async validateLoginCodeAndLogin(data: ValidateCodeDto) {
 		const user = await this.usersService.findOneByEmail(data.email)
 		this.handleUserNotFoundException(user)
 		const verificationCode = await this.getValidationCode(user)
-		if (this.verificationCodeIsInvalid(verificationCode, data.code)) {
+		if (verificationCode && this.verificationCodeIsInvalid(verificationCode, data.code)) {
 			throw new BadRequestException(
 				'',
 				'Your login code is invalid or expired, please generate a new verification code',
@@ -186,15 +192,15 @@ export class AuthService extends BaseService<T> {
 			this.jwtService.sign(await this.constructLoginPayload(user), { secret: process.env.JWT_KEY }),
 		)
 	}
-	handleUserNotFoundException(user) {
+	handleUserNotFoundException(user: User) {
 		if (!user) {
 			throw new NotFoundException('User not found')
 		}
 	}
-	verificationCodeIsInvalid(verificationCode, code) {
+	verificationCodeIsInvalid(verificationCode: string, code: string) {
 		return !verificationCode || !(code == verificationCode)
 	}
-	async sendVerificationCode(user, code) {
+	async sendVerificationCode(user: User, code: string) {
 		const domain = 'accounts::auth::sendVerificationCode'
 
 		if (!process.env.BEACON_USER_AUTH_VERIFICATION_CODE) {
@@ -222,7 +228,7 @@ export class AuthService extends BaseService<T> {
 			markdown = `Hi ${
 				user.first_name ?? 'there'
 			}, <br><br> You recently requested to reset the password for your ${Strings.capitalize(
-				process.env.npm_package_name,
+				process.env.npm_package_name || 'package_name',
 			)} account. Use the code below to change your password \n`
 			markdown += `### ${code} \n`
 			markdown += `If you did not request a password reset, please ignore this email. This password reset code is only valid for the next 20 minutes.`
@@ -246,7 +252,7 @@ export class AuthService extends BaseService<T> {
 		})
 		this.logger.log(`[${domain}] Email sent to ${user.email} with subject: ${subject}`, result)
 	}
-	async sendLoginCode(user, code) {
+	async sendLoginCode(user: User, code: string) {
 		const domain = 'accounts::auth::sendLoginCode'
 
 		if (!process.env.BEACON_USER_AUTH_PASSWORDLESS_CODE) {
@@ -273,7 +279,7 @@ export class AuthService extends BaseService<T> {
 			markdown = `Hi ${
 				user.first_name ?? 'there'
 			}, <br><br> You recently requested passwordless login for your ${Strings.capitalize(
-				process.env.npm_package_name,
+				process.env.npm_package_name || 'package_name',
 			)} account. Use the code below to login: \n`
 			markdown += ` ### ${code} \n`
 			markdown += `This login code is only valid for the next 20 minutes.`
@@ -297,17 +303,17 @@ export class AuthService extends BaseService<T> {
 		})
 		this.logger.log(`[${domain}] Email sent to ${user.email} with subject: ${subject}`, result)
 	}
-	async generateVerificationCodeAndSavetoRedis(user) {
+	async generateVerificationCodeAndSavetoRedis(user: User) {
 		const verificationCode = OTP.generateVerificationCode(6)
 		const cache_key = JLCache.cacheKey(AUTH_CODE, { user_id: user.user_id })
 		this.logger.log(`[CACHE][SET] ${cache_key} = ${verificationCode}`)
 		await this.cacheManager.set(cache_key, verificationCode, CachePeriod.TWENTY)
 		return await this.cacheManager.get(cache_key)
 	}
-	async clearUserAuthCache(user) {
+	async clearUserAuthCache(user: User) {
 		let cache_key = JLCache.cacheKey(AUTH_ACCOUNT_IDS, { user_id: user.user_id })
 		await this.cacheManager.del(cache_key)
-		for (const account of user.accounts) {
+		for (const account of user.accounts || []) {
 			cache_key = JLCache.cacheKey(AUTH_ACCOUNT_ROLE, { user_id: user.user_id, account_id: account.account_id })
 			await this.cacheManager.del(cache_key)
 		}
@@ -322,7 +328,7 @@ export class AuthService extends BaseService<T> {
 		const GOD_DOMAINS = await this.settingsService.findValue('GOD_DOMAINS')
 		return await this.usersService.findAll({
 			where: {
-				email: In(GOD_DOMAINS.map(d => Like(`%${d}`))),
+				email: In(GOD_DOMAINS.map((d: string) => Like(`%${d}`))),
 			},
 		})
 	}
@@ -353,12 +359,12 @@ export class AuthService extends BaseService<T> {
 		}
 		return account_ids
 	}
-	async getUserRole(user_id, account_id) {
+	async getUserRole(user_id: number, account_id: number): Promise<UserRole> {
 		const cache_key = JLCache.cacheKey(AUTH_ACCOUNT_ROLE, { user_id: user_id, account_id: account_id })
 		if (Env.useCache()) {
 			const result = await this.cacheManager.get(cache_key)
 			if (result) {
-				return result
+				return <UserRole>result
 			}
 		}
 		const user = await this.usersService.findById(user_id)
@@ -384,18 +390,18 @@ export class AuthService extends BaseService<T> {
 			if (Env.useCache()) {
 				await this.cacheManager.set(cache_key, UserRoleNum.VIEWER, CachePeriod.DAY)
 			}
-			return UserRoleNum.VIEWER
+			return UserRole.VIEWER
 		}
 		for (const permission of permissions) {
 			if (UserRoleNum[permission.role] > role_value) role_value = UserRoleNum[permission.role]
 		}
-		const user_role = UserRole[Enums.getKeyName(UserRoleNum, role_value)]
+		const user_role = UserRole[<keyof typeof UserRole>Enums.getKeyName(UserRoleNum, role_value)]
 		if (Env.useCache()) {
 			await this.cacheManager.set(cache_key, user_role, CachePeriod.DAY)
 		}
 		return user_role
 	}
-	async getRole(user_id, account_id) {
+	async getRole(user_id: number, account_id: number) {
 		return await this.repository.findOne({
 			where: {
 				user: {
@@ -407,7 +413,7 @@ export class AuthService extends BaseService<T> {
 			},
 		})
 	}
-	async getRoles(user_id) {
+	async getRoles(user_id: number) {
 		return await this.repository.find({
 			where: {
 				user: {
@@ -443,7 +449,7 @@ export class AuthService extends BaseService<T> {
 		}
 	}
 
-	referrerCheck(referrer, allowed, domain) {
+	referrerCheck(referrer: string | URL, allowed: string, domain: any) {
 		if (Env.IsProd()) {
 			if (!referrer) {
 				this.logger.warn(`[${domain}] No referrer found`, {
@@ -464,7 +470,7 @@ export class AuthService extends BaseService<T> {
 		}
 		return true
 	}
-	async processGodUser(user) {
+	async processGodUser(user: User) {
 		if (await this.isGodUser(user)) {
 			user.accounts = await this.accountService.findAll({
 				take: 99999999,
