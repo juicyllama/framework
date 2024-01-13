@@ -25,7 +25,7 @@ async function createSSL(app: App) {
 }
 
 export async function setupSSL(app: App) {
-	const file = path.resolve(currentPath, app.ssl, `${app.domain}-key.pem`)
+	const file = path.join(currentPath(), app.ssl, `${app.domain}-key.pem`)
 
 	if (!fileExists(file)) {
 		await createSSL(app)
