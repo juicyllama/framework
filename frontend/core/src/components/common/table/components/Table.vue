@@ -298,14 +298,14 @@ watch(
 )
 
 const advancedFilterDialog = ref<boolean>(false)
-const labels = computed(() => JLToQColumns.map(el => el.label))
+const labels = computed(() => JLToQColumns.value.map(el => el.label))
 const activeLabels = computed<string[]>(() => activeFilters.value.map(el => el.label))
 
 const activeFilters = ref<IFilter[]>([])
 
 const perCollumnFilterQuery = computed<Array<string | number>[]>(() => {
 	return activeFilters.value.map(el => {
-		const item = JLToQColumns.find(i => i.label === el.label)
+		const item = JLToQColumns.value.find(i => i.label === el.label)
 		const method: string = typeof el.type === 'object' ? el.type.method : ''
 		if (item && ['NULL', '!NULL'].includes(method)) return [item.name, method]
 		if (item) return [item.name, method, el.value]
