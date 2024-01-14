@@ -34,6 +34,7 @@ export class Dates {
 
 		return format
 			.replace('YYYY', year)
+			.replace('YY', year.substring(4, 2))
 			.replace('MMMM', month_names[date.getMonth()])
 			.replace('MMM', month_names_short[date.getMonth()])
 			.replace('MM', month.length === 1 ? '0' + month : month)
