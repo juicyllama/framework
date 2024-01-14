@@ -14,7 +14,7 @@ const E = Account
 type T = Account
 const MODULE = AccountModule
 const SERVICE = AccountService
-let PRIMARY_KEY
+const PRIMARY_KEY = 'account_id'
 
 describe('Account Service', () => {
 	const scaffolding = new Scaffold<T>()
@@ -33,7 +33,6 @@ describe('Account Service', () => {
 
 		query = scaffold.module.get<Query<T>>(Query)
 		usersService = scaffold.module.get<UsersService>(UsersService)
-		PRIMARY_KEY = query.getPrimaryKey(scaffold.services.service.repository)
 	})
 
 	describe('Onboard', () => {

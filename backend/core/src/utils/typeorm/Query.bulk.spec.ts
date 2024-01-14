@@ -78,7 +78,7 @@ describe('Query Bulk', () => {
 			expect(lastUser.email).toEqual(email_shared_2)
 		})
 
-		it(`Inserts on duplicate`, async () => {
+		it(`Doesn't insert on duplicate`, async () => {
 			const count = await scaffold.services.service.count()
 			const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 				`first_name,last_name,email\n${first_name_shared},${last_name_shared},${email_shared}`,
@@ -91,7 +91,8 @@ describe('Query Bulk', () => {
 			}
 
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
-			expect(res.created).toEqual(1)
+			expect(res.created).toEqual(0)
+			expect(res.errored).toEqual(1)
 			const new_count = await scaffold.services.service.count()
 			expect(new_count).toEqual(count)
 		})
@@ -119,7 +120,8 @@ describe('Query Bulk', () => {
 			}
 
 			const res = await scaffold.query.bulk(scaffold.repository, data, ImportMode.CREATE)
-			expect(res.created).toEqual(3)
+			expect(res.created).toEqual(2)
+			expect(res.errored).toEqual(1)
 		})
 	})
 
