@@ -34,7 +34,10 @@ export class TypeOrm {
 		return omitBy(options, isNil)
 	}
 
-	static findOneOptions<T extends ObjectLiteral>(query: any, where: FindOptionsWhere<T>[] | FindOptionsWhere<T>): FindOneOptions<T> {
+	static findOneOptions<T extends ObjectLiteral>(
+		query: any,
+		where: FindOptionsWhere<T>[] | FindOptionsWhere<T>,
+	): FindOneOptions<T> {
 		if (query.select) {
 			query.select = query.select.split(',')
 		}
@@ -58,7 +61,10 @@ export class TypeOrm {
 	 *  * Filter out invalid select values
 	 */
 
-	static findAllOptionsWrapper<T extends ObjectLiteral>(repository: Repository<T>, options?: FindManyOptions): FindManyOptions {
+	static findAllOptionsWrapper<T extends ObjectLiteral>(
+		repository: Repository<T>,
+		options?: FindManyOptions,
+	): FindManyOptions {
 		options = this.handleEmptyOptions(repository, options)
 		options = this.handleEmptyWhere(repository, options)
 		options = this.handleEmptyRelations(repository, options)
@@ -66,18 +72,27 @@ export class TypeOrm {
 		return options
 	}
 
-	static findOneOptionsWrapper<T extends ObjectLiteral>(repository: Repository<T>, options?: FindManyOptions): FindManyOptions {
+	static findOneOptionsWrapper<T extends ObjectLiteral>(
+		repository: Repository<T>,
+		options?: FindManyOptions,
+	): FindManyOptions {
 		options = this.handleEmptyOptions(repository, options)
 		options = this.handleEmptyRelations(repository, options)
 		options = this.filterOutInvalidSelectValues(repository, options)
 		return options
 	}
 
-	static filterOutInvalidSelectValues<T extends ObjectLiteral>(repository: Repository<T>, options: FindManyOptions): FindManyOptions {
+	static filterOutInvalidSelectValues<T extends ObjectLiteral>(
+		repository: Repository<T>,
+		options: FindManyOptions,
+	): FindManyOptions {
 		if (options?.select) {
 			options.select = <string[]>options.select || []
 			const validSelectValues: string[] = repository.metadata.columns.map(column => column.propertyName)
-			options.select = options.select.filter((select: string | number | symbol) => typeof select === 'string' && validSelectValues.includes(select))		}
+			options.select = options.select.filter(
+				(select: string | number | symbol) => typeof select === 'string' && validSelectValues.includes(select),
+			)
+		}
 		return options
 	}
 
@@ -181,9 +196,11 @@ export class TypeOrm {
 
 		if (repository.metadata.indices.length) {
 			if (repository.metadata.indices[0]?.columnNamesWithOrderingMap) {
-				const entries: Entries<T> = Object.entries(repository.metadata.indices[0]?.columnNamesWithOrderingMap) as Entries<T>
+				const entries: Entries<T> = Object.entries(
+					repository.metadata.indices[0]?.columnNamesWithOrderingMap,
+				) as Entries<T>
 				for (const [key] of entries) {
-					uniques.push(key )
+					uniques.push(key)
 				}
 			}
 		}
@@ -192,11 +209,13 @@ export class TypeOrm {
 			return uniques
 		}
 
-		const unqiueKeys = compact(repository.metadata.uniques.map(e => Array.isArray(e.givenColumnNames) && e.givenColumnNames[0]))
+		const unqiueKeys = compact(
+			repository.metadata.uniques.map(e => Array.isArray(e.givenColumnNames) && e.givenColumnNames[0]),
+		)
 		return unqiueKeys as Array<keyof T>
 	}
 }
 
 export type Entries<T> = {
-    [K in keyof T]: [K, T[K]];
-}[keyof T][];
+	[K in keyof T]: [K, T[K]]
+}[keyof T][]

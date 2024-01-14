@@ -1,19 +1,19 @@
+import { Logger, Random, SupportedCurrencies } from '@juicyllama/utils'
 import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common'
-import { BeaconService } from '../beacon/beacon.service'
-import { Account } from './account.entity'
-import { Logger, SupportedCurrencies, Random, Env } from '@juicyllama/utils'
-import { BaseService } from '../../helpers/baseService'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
+import { BaseService } from '../../helpers/baseService'
 import { Query } from '../../utils/typeorm/Query'
-import { StorageService } from '../storage/storage.service'
-import { StorageFileFormat, StorageType } from '../storage/storage.enums'
 import { AuthService } from '../auth/auth.service'
-import { UsersService } from '../users/users.service'
-import { UserRole } from '../users/users.enums'
-import { OnboardAccountDto, OnboardAdditionalAccountDto, SuccessAccountDto } from './account.dto'
-import { AccountHooks } from './account.hooks'
+import { BeaconService } from '../beacon/beacon.service'
+import { StorageFileFormat, StorageType } from '../storage/storage.enums'
+import { StorageService } from '../storage/storage.service'
 import { User } from '../users/users.entity'
+import { UserRole } from '../users/users.enums'
+import { UsersService } from '../users/users.service'
+import { OnboardAccountDto, OnboardAdditionalAccountDto, SuccessAccountDto } from './account.dto'
+import { Account } from './account.entity'
+import { AccountHooks } from './account.hooks'
 
 const E = Account
 type T = Account
@@ -55,7 +55,9 @@ export class AccountService extends BaseService<T> {
 		const account_data = {
 			account_name: data.account_name,
 			currency:
-				data.currency ?? (SYSTEM_DEFAULT_CURRENCY && SupportedCurrencies[SYSTEM_DEFAULT_CURRENCY]) ?? SupportedCurrencies.USD,
+				data.currency ??
+				(SYSTEM_DEFAULT_CURRENCY && SupportedCurrencies[SYSTEM_DEFAULT_CURRENCY]) ??
+				SupportedCurrencies.USD,
 		}
 
 		const account = await super.create(account_data)
@@ -122,8 +124,7 @@ export class AccountService extends BaseService<T> {
 
 		const account_data = {
 			account_name: data.account_name,
-			currency:
-				data.currency ?? SupportedCurrencies[SYSTEM_DEFAULT_CURRENCY] ?? SupportedCurrencies.USD,
+			currency: data.currency ?? SupportedCurrencies[SYSTEM_DEFAULT_CURRENCY] ?? SupportedCurrencies.USD,
 		}
 
 		const account = await super.create(account_data)

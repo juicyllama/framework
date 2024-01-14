@@ -1,6 +1,6 @@
-import { TypeOrm } from './TypeOrm'
 import { Logger } from '@juicyllama/utils'
-import { Repository, ColumnType, ObjectLiteral, DeepPartial } from 'typeorm'
+import { ColumnType, ObjectLiteral, Repository } from 'typeorm'
+import { TypeOrm } from './TypeOrm'
 
 const logger = new Logger()
 

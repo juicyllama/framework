@@ -61,7 +61,11 @@ export class UsersController {
 	) {}
 
 	@CreateDecorator(constants)
-	async create(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Body() data: CreateUserDto): Promise<T> {
+	async create(
+		@Req() req: AuthenticatedRequest,
+		@AccountId() account_id: number,
+		@Body() data: CreateUserDto,
+	): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		const account = await this.accountService.findById(account_id)
 		return await this.service.invite(account, data)

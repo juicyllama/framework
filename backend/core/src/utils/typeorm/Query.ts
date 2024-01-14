@@ -8,6 +8,7 @@ import {
 	FindOneOptions,
 	FindOperator,
 	FindOptionsWhere,
+	FindOptionsWhereProperty,
 	In,
 	InsertResult,
 	IsNull,
@@ -19,7 +20,6 @@ import {
 	Not,
 	ObjectLiteral,
 	Repository,
-	FindOptionsWhereProperty
 } from 'typeorm'
 import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder'
 import { BulkUploadResponse, ChartResult, ImportMode } from '../../types/common'
@@ -145,7 +145,7 @@ export class Query<T extends ObjectLiteral> {
 
 		if (!result) {
 			throw new Error('Failed to upsert')
-		} 
+		}
 
 		logger.debug(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] Result`, result)
 		return result
@@ -243,7 +243,9 @@ export class Query<T extends ObjectLiteral> {
 
 		if (!data[this.getPrimaryKey(repository)]) {
 			throw new Error(
-				`Primary key ${<string>this.getPrimaryKey(repository)} missing from update to ${repository.metadata.tableName}`,
+				`Primary key ${<string>this.getPrimaryKey(repository)} missing from update to ${
+					repository.metadata.tableName
+				}`,
 			)
 		}
 
@@ -378,7 +380,10 @@ export class Query<T extends ObjectLiteral> {
 					return record.time_interval.toString() == r.time_interval.toString()
 				})
 
-				if (SupportedCurrencies[<keyof typeof SupportedCurrencies>r[currency.currency_field]] !== SupportedCurrencies[currency.currency]) {
+				if (
+					SupportedCurrencies[<keyof typeof SupportedCurrencies>r[currency.currency_field]] !==
+					SupportedCurrencies[currency.currency]
+				) {
 					r[field] = await currency.fxService.convert(
 						r[field],
 						r[currency.currency_field],
@@ -519,7 +524,7 @@ export class Query<T extends ObjectLiteral> {
 		if (!pk) {
 			throw new Error('no primary key was found')
 		}
-		return <keyof DeepPartial<T>>pk;
+		return <keyof DeepPartial<T>>pk
 	}
 
 	getTableName(repository: Repository<T>) {
@@ -589,7 +594,7 @@ export class Query<T extends ObjectLiteral> {
 
 	buildWhere(options: {
 		repository: Repository<T>
-		query?: Partial<Record< 'search' | keyof T, string | string[]>>
+		query?: Partial<Record<'search' | keyof T, string | string[]>>
 		account_id?: number
 		account_ids?: number[]
 		search_fields?: string[]
@@ -623,11 +628,18 @@ export class Query<T extends ObjectLiteral> {
 							}
 							return memo
 						}, [])
-						whereBase[key] = fieldLookupWhere.length === 1
-						? fieldLookupWhere[0] as (keyof T extends "toString" ? unknown : FindOptionsWhereProperty<NonNullable<T[keyof T]>, NonNullable<T[keyof T]>>)
-						: fieldLookupWhere.length > 0
-							? And(...fieldLookupWhere) as (keyof T extends "toString" ? unknown : FindOptionsWhereProperty<NonNullable<T[keyof T]>, NonNullable<T[keyof T]>>)
-							: value as (keyof T extends "toString" ? unknown : FindOptionsWhereProperty<NonNullable<T[keyof T]>, NonNullable<T[keyof T]>>)
+					whereBase[key] =
+						fieldLookupWhere.length === 1
+							? (fieldLookupWhere[0] as keyof T extends 'toString'
+									? unknown
+									: FindOptionsWhereProperty<NonNullable<T[keyof T]>, NonNullable<T[keyof T]>>)
+							: fieldLookupWhere.length > 0
+								? (And(...fieldLookupWhere) as keyof T extends 'toString'
+										? unknown
+										: FindOptionsWhereProperty<NonNullable<T[keyof T]>, NonNullable<T[keyof T]>>)
+								: (value as keyof T extends 'toString'
+										? unknown
+										: FindOptionsWhereProperty<NonNullable<T[keyof T]>, NonNullable<T[keyof T]>>)
 				}
 			}
 		}
@@ -826,7 +838,7 @@ export class Query<T extends ObjectLiteral> {
 					},
 				})
 
-				const entity = await this.upsert(repository, record, dedup_field)
+				await this.upsert(repository, record, dedup_field)
 
 				if (r) {
 					result.updated++
@@ -909,16 +921,18 @@ export class Query<T extends ObjectLiteral> {
 
 		const logger = new Logger()
 
-
-
-		logger.debug(`[QUERY][CONVERTCURRENCY] Converting ${castArray(result).length} Records to ${currency.currency}`, {
-			currency_field: currency.currency_field,
-			currency_fields: currency.currency_fields,
-		})
+		logger.debug(
+			`[QUERY][CONVERTCURRENCY] Converting ${castArray(result).length} Records to ${currency.currency}`,
+			{
+				currency_field: currency.currency_field,
+				currency_fields: currency.currency_fields,
+			},
+		)
 
 		for (const record of castArray(result)) {
 			if (
-				SupportedCurrencies[<keyof typeof SupportedCurrencies>record[currency.currency_field]] !== SupportedCurrencies[currency.currency]
+				SupportedCurrencies[<keyof typeof SupportedCurrencies>record[currency.currency_field]] !==
+				SupportedCurrencies[currency.currency]
 			) {
 				for (const field of currency.currency_fields) {
 					const converted: number = await currency.fxService.convert(
@@ -934,7 +948,6 @@ export class Query<T extends ObjectLiteral> {
 			}
 		}
 		return result
-		 
 	}
 
 	includeAccount(

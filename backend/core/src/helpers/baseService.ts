@@ -103,7 +103,7 @@ export class BaseService<T extends ObjectLiteral> {
 	 */
 
 	async findById(id: number, relations?: string[], currency?: CurrencyOptions<T>): Promise<T> {
-		if(!id){
+		if (!id) {
 			throw new Error('ID is required')
 		}
 		let result = await this.cacheFindById(id)
@@ -251,12 +251,11 @@ export class BaseService<T extends ObjectLiteral> {
 		if (this.options?.cache?.cacheManager && options?.where && this.getCacheField() !== undefined) {
 			const cacheKey = (Array.isArray(options.where) ? options.where[0] : options.where)[this.getCacheField()]
 			if (cacheKey) {
-				return await this.options.cache.cacheManager.get<T>(cacheKey as string);
+				return await this.options.cache.cacheManager.get<T>(cacheKey as string)
 			}
 		}
-		return undefined;
+		return undefined
 	}
-	
 
 	/**
 	 * Finds a record in the cache service if provided and cacheField is primary key or not provided

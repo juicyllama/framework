@@ -41,12 +41,20 @@ export class TagsController extends BaseController<T> {
 	}
 
 	@CreateDecorator(constants)
-	async create(@Req() req: AuthenticatedRequest, @Body() body: CreateDto, @AccountId() account_id: number): Promise<T> {
+	async create(
+		@Req() req: AuthenticatedRequest,
+		@Body() body: CreateDto,
+		@AccountId() account_id: number,
+	): Promise<T> {
 		return super.create(req, body, account_id)
 	}
 
 	@ReadManyDecorator(constants)
-	async findAll(@Req() req: AuthenticatedRequest, @Query() query: any, @AccountId() account_id: number): Promise<T[]> {
+	async findAll(
+		@Req() req: AuthenticatedRequest,
+		@Query() query: any,
+		@AccountId() account_id: number,
+	): Promise<T[]> {
 		return super.findAll(req, query, account_id)
 	}
 
@@ -75,12 +83,22 @@ export class TagsController extends BaseController<T> {
 	}
 
 	@ReadOneDecorator(constants)
-	async findOne(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Param() params: any, @Query() query: any): Promise<T> {
+	async findOne(
+		@Req() req: AuthenticatedRequest,
+		@AccountId() account_id: number,
+		@Param() params: any,
+		@Query() query: any,
+	): Promise<T> {
 		return super.findOne(req, account_id, params, query)
 	}
 
 	@UpdateDecorator(constants)
-	async update(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Body() data: UpdateDto, @Param() params: any): Promise<T> {
+	async update(
+		@Req() req: AuthenticatedRequest,
+		@AccountId() account_id: number,
+		@Body() data: UpdateDto,
+		@Param() params: any,
+	): Promise<T> {
 		return super.update(req, account_id, data, params)
 	}
 

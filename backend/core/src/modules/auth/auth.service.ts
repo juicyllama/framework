@@ -149,7 +149,8 @@ export class AuthService extends BaseService<T> {
 		const code = await this.generateVerificationCodeAndSavetoRedis(user)
 		if (!code) {
 			throw new BadRequestException(`Failed to generate verification code`)
-		}await this.sendLoginCode(user, <string>code)
+		}
+		await this.sendLoginCode(user, <string>code)
 		return !!user.user_id
 	}
 	async validateVerificationCode(data: ValidateCodeDto): Promise<SuccessResponseDto> {

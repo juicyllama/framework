@@ -80,7 +80,9 @@ export class UsersHooks {
 		} else {
 			markdown = `${user.first_name}, ${
 				account.account_name
-			} has added you to their account on ${Strings.capitalize(this.configService.get(`PROJECT_NAME`, 'PROJECT_NAME'))}!
+			} has added you to their account on ${Strings.capitalize(
+				this.configService.get(`PROJECT_NAME`, 'PROJECT_NAME'),
+			)}!
 			
 	You can [login here](${this.configService.get(`APP_BASE_URL`)}/login) with your existing credentials.`
 		}

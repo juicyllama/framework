@@ -11,7 +11,7 @@ export type ChartOptions<T = any> = FindManyOptions<T> & {
 
 export type CurrencyOptions<T> = {
 	fxService: FxService // the fx service we want to use
-	currency?: SupportedCurrencies; // the currency we want the results in
-	currency_field: keyof T & string; // the field used to determine the currency
+	currency?: SupportedCurrencies // the currency we want the results in
+	currency_field: keyof T & string // the field used to determine the currency
 	currency_fields: Array<keyof T> //the fields to convert
 }

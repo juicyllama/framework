@@ -46,7 +46,11 @@ export class SettingsController {
 		example: 1,
 	})
 	@Get(':key')
-	async findValueByKey(@AccountId() account_id: number, @Param('key') key: string, @Query('user_id') user_id: number): Promise<any> {
+	async findValueByKey(
+		@AccountId() account_id: number,
+		@Param('key') key: string,
+		@Query('user_id') user_id: number,
+	): Promise<any> {
 		const setting = await this.service.findOne(key)
 
 		if (!setting) {
@@ -105,7 +109,11 @@ export class SettingsController {
 		example: 'something::unique::key',
 	})
 	@Delete(':key')
-	async delete(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Param('key') key: string): Promise<SETTINGS_T> {
+	async delete(
+		@Req() req: AuthenticatedRequest,
+		@AccountId() account_id: number,
+		@Param('key') key: string,
+	): Promise<SETTINGS_T> {
 		const setting = await this.service.findOne(key)
 
 		if (!setting) {

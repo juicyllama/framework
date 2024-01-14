@@ -19,7 +19,11 @@ import { CurrencyOptions } from '../types'
 
 const logger = new Logger()
 
-export async function crudCreate<T extends ObjectLiteral>(options: { service: any; data: any; account_id?: number }): Promise<T> {
+export async function crudCreate<T extends ObjectLiteral>(options: {
+	service: any
+	data: any
+	account_id?: number
+}): Promise<T> {
 	return await options.service.create({
 		...options.data,
 		account_id: options.account_id ?? options.data.account_id ?? undefined,
@@ -349,7 +353,7 @@ export async function crudBulkUpload<T extends ObjectLiteral>(options: {
 			{} as DeepPartial<T>,
 		)
 		// @ts-ignore
-		dto['account_id']  = options.account_id
+		dto['account_id'] = options.account_id
 		return dto
 	})
 
@@ -365,7 +369,11 @@ export async function crudBulkUpload<T extends ObjectLiteral>(options: {
 	}
 }
 
-export async function crudDelete<T extends ObjectLiteral>(options: { service: any; primaryKey: number; account_id?: number }): Promise<T> {
+export async function crudDelete<T extends ObjectLiteral>(options: {
+	service: any
+	primaryKey: number
+	account_id?: number
+}): Promise<T> {
 	const record = await options.service.findById(options.primaryKey)
 
 	if (options.account_id && record.account.account_id !== options.account_id) {
@@ -377,7 +385,11 @@ export async function crudDelete<T extends ObjectLiteral>(options: { service: an
 	return await options.service.remove(record)
 }
 
-export async function crudPurge<T extends ObjectLiteral>(options: { service: any; primaryKey: number; account_id?: number }): Promise<T> {
+export async function crudPurge<T extends ObjectLiteral>(options: {
+	service: any
+	primaryKey: number
+	account_id?: number
+}): Promise<T> {
 	const record = await options.service.findById(options.primaryKey)
 
 	if (options.account_id && record.account.account_id !== options.account_id) {

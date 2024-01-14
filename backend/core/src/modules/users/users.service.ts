@@ -76,7 +76,7 @@ export class UsersService extends BaseService<T> {
 		if (data.password) {
 			data.password = Security.hashPassword(data.password)
 		}
-		if (!data.user_id){
+		if (!data.user_id) {
 			throw new Error('User ID is required')
 		}
 

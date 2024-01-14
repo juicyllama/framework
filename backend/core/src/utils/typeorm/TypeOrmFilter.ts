@@ -19,9 +19,7 @@ export class TypeOrmFilter implements ExceptionFilter {
 
 		response.status(500).json({
 			status: 500,
-			error: Env.IsDev()
-				? `[${code}] ${message} (${details})`
-				: 'Database Error',
+			error: Env.IsDev() ? `[${code}] ${message} (${details})` : 'Database Error',
 		})
 	}
 }

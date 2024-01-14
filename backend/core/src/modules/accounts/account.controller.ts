@@ -60,7 +60,10 @@ export class AccountController {
 	@UserAuth()
 	@ApiOperation({ summary: 'Create Additional Account' })
 	@Post('additional')
-	async createAdditionalAccount(@Req() req: AuthenticatedRequest, @Body() data: OnboardAdditionalAccountDto): Promise<SuccessAccountDto> {
+	async createAdditionalAccount(
+		@Req() req: AuthenticatedRequest,
+		@Body() data: OnboardAdditionalAccountDto,
+	): Promise<SuccessAccountDto> {
 		const user = await this.usersService.findById(req.user.user_id)
 		return await this.service.onboardAdditional(user, data)
 	}
@@ -73,7 +76,7 @@ export class AccountController {
 		relationsEnum: AccountRelations,
 		name: NAME,
 	})
-async findAll(@Req() req: AuthenticatedRequest, @Query() query: any): Promise<T[]> {
+	async findAll(@Req() req: AuthenticatedRequest, @Query() query: any): Promise<T[]> {
 		const where = this.tQuery.buildWhere({
 			repository: this.service.repository,
 			query: query,
@@ -87,7 +90,11 @@ async findAll(@Req() req: AuthenticatedRequest, @Query() query: any): Promise<T[
 
 	@UserAuth()
 	@ReadStatsDecorator({ name: NAME })
-	async stats(@Req() req: AuthenticatedRequest, @Query() query: any, @Query('method') method?: StatsMethods): Promise<StatsResponseDto> {
+	async stats(
+		@Req() req: AuthenticatedRequest,
+		@Query() query: any,
+		@Query('method') method?: StatsMethods,
+	): Promise<StatsResponseDto> {
 		if (!method) {
 			method = StatsMethods.COUNT
 		}
@@ -135,7 +142,11 @@ async findAll(@Req() req: AuthenticatedRequest, @Query() query: any): Promise<T[
 
 	@UserAuth()
 	@UpdateDecorator({ entity: E, primaryKey: PRIMARY_KEY, name: NAME })
-	async update(@Req() req: AuthenticatedRequest, @Body() data: UpdateAccountDto, @AccountId() account_id: number): Promise<T> {
+	async update(
+		@Req() req: AuthenticatedRequest,
+		@Body() data: UpdateAccountDto,
+		@AccountId() account_id: number,
+	): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		return await this.service.update({
 			account_id: account_id,

@@ -80,7 +80,9 @@ export class BaseController<T extends ObjectLiteral> {
 			searchFields: this.constants.searchFields,
 			order_by: this.constants.defaultOrderBy,
 			currency:
-				this.optional?.services?.fxService && this.constants.currencyField && this.constants.currencyFields?.length
+				this.optional?.services?.fxService &&
+				this.constants.currencyField &&
+				this.constants.currencyFields?.length
 					? {
 							fxService: this.optional.services.fxService,
 							currency_field: this.constants.currencyField,
@@ -139,7 +141,9 @@ export class BaseController<T extends ObjectLiteral> {
 			...(to && { to: new Date(to) }),
 			searchFields: this.constants.searchFields,
 			currency:
-				this.optional?.services?.fxService && this.constants.currencyField && this.constants.currencyFields?.length
+				this.optional?.services?.fxService &&
+				this.constants.currencyField &&
+				this.constants.currencyFields?.length
 					? {
 							fxService: this.optional.services.fxService,
 							currency_field: this.constants.currencyField, // e.g. 'currency'
@@ -164,7 +168,9 @@ export class BaseController<T extends ObjectLiteral> {
 			primaryKey: params[this.constants.primaryKey],
 			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : undefined,
 			currency:
-				this.optional?.services?.fxService && this.constants.currencyField && this.constants.currencyFields?.length
+				this.optional?.services?.fxService &&
+				this.constants.currencyField &&
+				this.constants.currencyFields?.length
 					? {
 							fxService: this.optional.services.fxService,
 							currency_field: this.constants.currencyField,

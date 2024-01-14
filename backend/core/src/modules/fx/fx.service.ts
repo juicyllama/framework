@@ -14,7 +14,6 @@ const calc = (amount: number, from: number, to: number): number => {
 
 const DOMAIN = 'core::fx::service::convert'
 
-
 @Injectable()
 export class FxService {
 	constructor(
@@ -35,7 +34,6 @@ export class FxService {
 	 */
 
 	async convert(amount: number, from: SupportedCurrencies, to: SupportedCurrencies, date?: Date): Promise<number> {
-
 		if (!amount) {
 			throw new CurrencyConversionError(from, to, amount, date, 'Amount is required')
 		}
@@ -114,7 +112,13 @@ export class FxService {
 				throw new CurrencyConversionError(from, to, amount, date, 'Error getting rates from apilayer`')
 			}
 		} else {
-			throw new CurrencyConversionError(from, to, amount, date, `No FX App Installed, options are @juicyllama/app-apilayer`)
+			throw new CurrencyConversionError(
+				from,
+				to,
+				amount,
+				date,
+				`No FX App Installed, options are @juicyllama/app-apilayer`,
+			)
 		}
 
 		if (!convertResult) {
@@ -145,7 +149,6 @@ export class FxService {
 			return convertResult
 		}
 
-		
 		throw new CurrencyConversionError(from, to, amount, date)
 	}
 
@@ -159,17 +162,22 @@ export class FxService {
 }
 
 class CurrencyConversionError extends Error {
-    from: string;
-    to: string;
-    amount: number;
-	date?: Date;
+	from: string
+	to: string
+	amount: number
+	date?: Date
 
-    constructor(from: string, to: string, amount: number, date?: Date, message?: string) {
-        super(`${DOMAIN} Error converting currency` + (message ? `: ${message}` : ``) + `; from ${from} to ${to} for amount ${amount}` + (date ? ` on ${Dates.format(date, 'YYYY-MM-DD')}` : ``));
-        this.name = 'CurrencyConversionError';
-        this.from = from;
-        this.to = to;
-		this.date = date;
-        this.amount = amount;
-    }
+	constructor(from: string, to: string, amount: number, date?: Date, message?: string) {
+		super(
+			`${DOMAIN} Error converting currency` +
+				(message ? `: ${message}` : ``) +
+				`; from ${from} to ${to} for amount ${amount}` +
+				(date ? ` on ${Dates.format(date, 'YYYY-MM-DD')}` : ``),
+		)
+		this.name = 'CurrencyConversionError'
+		this.from = from
+		this.to = to
+		this.date = date
+		this.amount = amount
+	}
 }
