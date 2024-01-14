@@ -51,7 +51,7 @@ export class InstalledAppsController {
 	//todo add swagger
 	@Post('precheck')
 	async preInstallCheck(
-		@Req() req: AuthenticatedRequest,
+		@Req() req,
 		@AccountId() account_id: number,
 		@Body() data: InstalledAppPreCheckDto,
 	): Promise<preInstallCheckResponse> {
@@ -68,7 +68,7 @@ export class InstalledAppsController {
 
 	@CreateDecorator({ entity: INSTALLED_APP_E, name: INSTALLED_APP_NAME })
 	async create(
-		@Req() req: AuthenticatedRequest,
+		@Req() req,
 		@AccountId() account_id: number,
 		@Body() data: CreateInstalledAppDto,
 	): Promise<INSTALLED_APP_T> {
@@ -118,7 +118,7 @@ export class InstalledAppsController {
 		relationsEnum: InstalledAppsRelations,
 		name: INSTALLED_APP_NAME,
 	})
-	async findAll(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Query() query: any): Promise<INSTALLED_APP_T[]> {
+	async findAll(@Req() req, @AccountId() account_id: number, @Query() query: any): Promise<INSTALLED_APP_T[]> {
 		await this.authService.check(req.user.user_id, account_id)
 		const records = await crudFindAll<INSTALLED_APP_T>({
 			service: this.service,
@@ -138,7 +138,7 @@ export class InstalledAppsController {
 
 	@ReadStatsDecorator({ name: INSTALLED_APP_NAME })
 	async stats(
-		@Req() req: AuthenticatedRequest,
+		@Req() req,
 		@AccountId() account_id: number,
 		@Query() query: any,
 		@Query('method') method?: StatsMethods,
@@ -162,7 +162,7 @@ export class InstalledAppsController {
 		name: INSTALLED_APP_NAME,
 	})
 	async findOne(
-		@Req() req: AuthenticatedRequest,
+		@Req() req,
 		@AccountId() account_id: number,
 		@Param() params: any,
 		@Query() query: any,
@@ -183,7 +183,7 @@ export class InstalledAppsController {
 		name: INSTALLED_APP_NAME,
 	})
 	async update(
-		@Req() req: AuthenticatedRequest,
+		@Req() req,
 		@AccountId() account_id: number,
 		@Body() data: UpdateInstalledAppDto,
 		@Param() params: any,
@@ -216,7 +216,7 @@ export class InstalledAppsController {
 		primaryKey: INSTALLED_APP_PRIMARY_KEY,
 		name: INSTALLED_APP_NAME,
 	})
-	async remove(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Param() params: any): Promise<INSTALLED_APP_T> {
+	async remove(@Req() req, @AccountId() account_id: number, @Param() params: any): Promise<INSTALLED_APP_T> {
 		await this.authService.check(req.user.user_id, account_id)
 		return await crudPurge<INSTALLED_APP_T>({
 			service: this.service,

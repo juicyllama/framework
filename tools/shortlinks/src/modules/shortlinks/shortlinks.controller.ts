@@ -20,14 +20,14 @@ export class ShortlinksController {
 	) {}
 
 	@CreateDecorator({ entity: E, name: NAME })
-	async create(@Req() req: AuthenticatedRequest, @Body() data: ShortenURLDto, @AccountId() account_id: number): Promise<T> {
+	async create(@Req() req, @Body() data: ShortenURLDto, @AccountId() account_id: number): Promise<T> {
 		const account = await this.accountService.findById(account_id)
 		return await this.service.shortenUrl(data, account)
 	}
 
 	@UpdateDecorator({ entity: E, primaryKey: PRIMARY_KEY, name: NAME })
 	async update(
-		@Req() req: AuthenticatedRequest,
+		@Req() req,
 		@AccountId() account_id: number,
 		@Body() data: UpdatShortenURLDto,
 		@Param() params: any,

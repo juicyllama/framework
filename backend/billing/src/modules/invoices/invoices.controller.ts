@@ -38,13 +38,13 @@ export class InvoicesController extends BaseController<T> {
 	}
 
 	@ReadManyDecorator(constants)
-	async findAll(@Req() req: AuthenticatedRequest, @Query() query: any, @AccountId() account_id: number): Promise<T[]> {
+	async findAll(@Req() req, @Query() query: any, @AccountId() account_id: number): Promise<T[]> {
 		return super.findAll(req, query, account_id)
 	}
 
 	@ReadStatsDecorator(constants)
 	async stats(
-		@Req() req: AuthenticatedRequest,
+		@Req() req,
 		@Query() query: any,
 		@AccountId() account_id: number,
 		@Query('method') method: StatsMethods,
@@ -54,7 +54,7 @@ export class InvoicesController extends BaseController<T> {
 
 	@ReadChartsDecorator(constants)
 	async charts(
-		@Req() req: AuthenticatedRequest,
+		@Req() req,
 		@AccountId() account_id: number,
 		@Query() query: any: any,
 		@Query('search') search: string,
@@ -67,13 +67,13 @@ export class InvoicesController extends BaseController<T> {
 	}
 
 	@ReadOneDecorator(constants)
-	async findOne(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Param() params: any, @Query() query: any): Promise<T> {
+	async findOne(@Req() req, @AccountId() account_id: number, @Param() params: any, @Query() query: any): Promise<T> {
 		return super.findOne(req, account_id, params, query)
 	}
 
 	@ApiOperation({ summary: `Download invoice file` })
 	@Post(`/download/:invoice_id`)
-	async downloadInvoice(@Req() req: AuthenticatedRequest, @AccountId() invoice_id: number, @AccountId() account_id: number): Promise<T> {
+	async downloadInvoice(@Req() req, @AccountId() invoice_id: number, @AccountId() account_id: number): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id)
 		return await this.service.downloadInvoice(req.user, invoice_id)
 	}

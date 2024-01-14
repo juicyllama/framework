@@ -28,7 +28,7 @@ export class OauthController {
 	})
 	@Get('start')
 	async start(
-		@Req() req: AuthenticatedRequest,
+		@Req() req,
 		@AccountId() account_id: number,
 		@Res() res,
 		@Query('integration_name') integration_name: AppStoreIntegrationName,

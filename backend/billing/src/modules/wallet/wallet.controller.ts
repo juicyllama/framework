@@ -25,7 +25,7 @@ export class WalletController {
 		type: Number,
 	})
 	@Get('balances')
-	async getBalances(@Req() req: AuthenticatedRequest, @AccountId() account_id: number): Promise<GetBalanceResponseDto[]> {
+	async getBalances(@Req() req, @AccountId() account_id: number): Promise<GetBalanceResponseDto[]> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		const account = await this.accountService.findById(account_id)
 		return await this.walletService.getBalances(account)
@@ -38,7 +38,7 @@ export class WalletController {
 		orderByEnum: WalletOrderBy,
 		relationsEnum: WalletRelations,
 	})
-	async listAll(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Query() query: any): Promise<BILLING_WALLET_T[]> {
+	async listAll(@Req() req, @AccountId() account_id: number, @Query() query: any): Promise<BILLING_WALLET_T[]> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 
 		const where = {
