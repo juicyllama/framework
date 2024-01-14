@@ -1,7 +1,7 @@
 import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common'
 import { BeaconService } from '../beacon/beacon.service'
 import { Account } from './account.entity'
-import { Logger, SupportedCurrencies, Random } from '@juicyllama/utils'
+import { Logger, SupportedCurrencies, Random, Env } from '@juicyllama/utils'
 import { BaseService } from '../../helpers/baseService'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
@@ -50,17 +50,12 @@ export class AccountService extends BaseService<T> {
 			data.account_name = Random.Words(' ', 3, 'noun', 'capitalize')
 		}
 
-		if (!process.env.SYSTEM_DEFAULT_CURRENCY) {
-			this.logger.error(`[${domain}] SYSTEM_DEFAULT_CURRENCY not set`)
-			throw new BadRequestException(`SYSTEM_DEFAULT_CURRENCY not set`)
-		}
-
 		const SYSTEM_DEFAULT_CURRENCY = <keyof typeof SupportedCurrencies>process.env.SYSTEM_DEFAULT_CURRENCY
 
 		const account_data = {
 			account_name: data.account_name,
 			currency:
-				data.currency ?? SupportedCurrencies[SYSTEM_DEFAULT_CURRENCY] ?? SupportedCurrencies.USD,
+				data.currency ?? (SYSTEM_DEFAULT_CURRENCY && SupportedCurrencies[SYSTEM_DEFAULT_CURRENCY]) ?? SupportedCurrencies.USD,
 		}
 
 		const account = await super.create(account_data)
