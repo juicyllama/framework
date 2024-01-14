@@ -16,19 +16,19 @@ export interface ChartData {
 	datasets: DataSet[]
 }
 
-interface DisplayElement {
-	display: boolean
-}
+// interface ChartDetailsDisplayElement {
+// 	display: boolean
+// }
 
 export interface ChartOptions {
 	options?: ChartUISettings
 	data?: ChartData
-	type: 'pie' | 'line' | 'bar' | 'gauge'
+	type: 'pie' | 'line' | 'bar'
 	endpoint?: string
 	title: string
 	dynamicData?: boolean
-	displayLegend?: boolean | DisplayElement
-	displayTooltip?: boolean | DisplayElement
+	displayLegend?: boolean | any
+	displayTooltip?: boolean | any
 	dataMapper?: (arg0: any) => any
 }
 
