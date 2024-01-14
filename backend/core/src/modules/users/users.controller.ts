@@ -46,7 +46,7 @@ import { crudBulkUpload } from '../../helpers/crudController'
 import { StorageService } from '../storage/storage.service'
 import { CrudUploadFieldsResponse, BulkUploadDto, BulkUploadResponse } from '../../types/common'
 import { TypeOrm } from '../../utils/typeorm/TypeOrm'
-import { AuthenticatedRequest } from '../auth/types'
+import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
 
 @ApiTags(Strings.capitalize(Strings.plural(NAME)))
 @UserAuth()

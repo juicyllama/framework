@@ -11,7 +11,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard'
 import { UsersService } from '../users/users.service'
 import { AuthGuard } from '@nestjs/passport'
 import { AccountId } from '../../decorators'
-import { AuthenticatedRequest } from './types'
+import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
 
 @ApiTags('Auth')
 @Controller('/auth')

@@ -38,5 +38,10 @@
     "dependencies": {
         "@juicyllama/dev": "workspace:^",
         "@juicyllama/utils": "workspace:^"
+    },
+    "devDependencies": {
+        "@types/passport-azure-ad": "^4.3.5",
+        "@types/passport-google-oauth20": "^2.0.14",
+        "@types/passport-linkedin-oauth2": "^1.5.6"
     }
 }

@@ -33,7 +33,7 @@ import { UserAuth } from '../../decorators/UserAuth.decorator'
 import { UserRole } from '../users/users.enums'
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { UsersService } from '../users/users.service'
-import { AuthenticatedRequest } from '../auth/types'
+import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
 
 const E = Account
 type T = Account

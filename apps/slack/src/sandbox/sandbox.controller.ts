@@ -7,7 +7,7 @@ export class SandboxController {
 	constructor(@Inject(forwardRef(() => SlackService)) private readonly slackService: SlackService) {}
 
 	@Post()
-	async message(@Req() req: AuthenticatedRequest, @Body() data: ChatPostMessageArguments) {
+	async message(@Req() req, @Body() data: ChatPostMessageArguments) {
 		try {
 			return await this.slackService.sendMessage(data)
 		} catch (e) {

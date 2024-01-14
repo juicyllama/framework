@@ -8,7 +8,7 @@ export class WiseWebhooksController {
 
 	@ApiHideProperty()
 	@Post()
-	async webhook(@Req() req: AuthenticatedRequest, @Body() data: any): Promise<void> {
+	async webhook(@Req() req, @Body() data: any): Promise<void> {
 		const domain = 'app::wise::webhooks::controller::webhook'
 		this.logger.log(`[${domain}] Request`, data)
 	}

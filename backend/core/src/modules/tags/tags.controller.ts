@@ -21,7 +21,7 @@ import {
 import { AccountId } from '../../decorators/AccountId.decorator'
 import { CreateTagDto as CreateDto, UpdateTagDto as UpdateDto } from './tags.dtos'
 import { BulkUploadDto, BulkUploadResponse, CrudUploadFieldsResponse } from '../../types/common'
-import { AuthenticatedRequest } from '../auth/types'
+import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
 
 @ApiTags('Tags')
 @UserAuth()

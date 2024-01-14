@@ -16,7 +16,7 @@ import { ApiQuery, ApiParam, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { SettingsService } from './settings.service'
 import { AccountId, CreateDecorator, UserAuth } from '../../decorators'
 import { SETTINGS_E, SETTINGS_T, SETTINGS_NAME } from './settings.constants'
-import { AuthenticatedRequest } from '../auth/types'
+import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
 
 @ApiTags('Settings')
 @UserAuth()

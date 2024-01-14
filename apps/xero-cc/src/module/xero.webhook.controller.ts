@@ -13,7 +13,7 @@ export class XeroWebhookController {
 	) {}
 
 	@Post('/cc')
-	async customConnection(@Req() req: AuthenticatedRequest, @Res() response): Promise<void> {
+	async customConnection(@Req() req, @Res() response): Promise<void> {
 		let webhook
 
 		try {
