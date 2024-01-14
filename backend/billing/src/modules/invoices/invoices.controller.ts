@@ -56,7 +56,7 @@ export class InvoicesController extends BaseController<T> {
 	async charts(
 		@Req() req,
 		@AccountId() account_id: number,
-		@Query() query: any: any,
+		@Query() query: any,
 		@Query('search') search: string,
 		@Query('from') from: string,
 		@Query('to') to: string,

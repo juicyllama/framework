@@ -32,7 +32,7 @@ export class OauthController {
 		@AccountId() account_id: number,
 		@Res() res,
 		@Query('integration_name') integration_name: AppStoreIntegrationName,
-		@Query() query: any: any, //allow passthrough of query params
+		@Query() query: any, //allow passthrough of query params
 	): Promise<void> {
 		await this.authService.check(req.user.user_id, account_id)
 
