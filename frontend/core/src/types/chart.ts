@@ -16,6 +16,10 @@ export interface ChartData {
 	datasets: DataSet[]
 }
 
+interface DisplayElement {
+	display: boolean
+}
+
 export interface ChartOptions {
 	options?: ChartUISettings
 	data?: ChartData
@@ -23,8 +27,8 @@ export interface ChartOptions {
 	endpoint?: string
 	title: string
 	dynamicData?: boolean
-	displayLegend?: boolean
-	displayTooltip?: boolean
+	displayLegend?: boolean | DisplayElement
+	displayTooltip?: boolean | DisplayElement
 	dataMapper?: (arg0: any) => any
 }
 

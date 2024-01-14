@@ -24,16 +24,27 @@ const loadedData: Ref<ChartData> = ref({
 })
 
 const extendedOptions = computed(() => {
-	const legendSettings = displayLegend.value ? labelsDefaultStyle : { display: false }
+	let legend = { display: false }
+	let tooltip = { display: false }
+	if (displayLegend.value) {
+		legend = displayLegend.value === true ? labelsDefaultStyle : displayLegend.value
+	}
+	if (displayTooltip.value) {
+		tooltip =
+			displayTooltip.value === true
+				? {
+						display: true,
+					}
+				: displayTooltip.value
+	}
 	const titleSettings = title.value ? { text: title.value, display: true } : { display: false }
-	const tooltipSettings = displayTooltip.value ? {} : { display: false }
 
 	return {
 		...props.options,
 		plugins: {
-			legend: legendSettings,
+			legend,
 			title: titleSettings,
-			tooltip: tooltipSettings,
+			tooltip,
 			decimation: {
 				enabled: true,
 			},
@@ -51,8 +62,7 @@ const dataDetails = computed<ChartData>(() => {
 const comps = {
 	line: LineChart,
 	bar: BarChart,
-	pie: PieChart,
-	gauge: GaugeChart,
+	pie: PieChart
 }
 
 const getData = async () => {
@@ -81,13 +91,10 @@ onMounted(async () => {
 })
 </script>
 
-
 <template>
 	<q-spinner v-if="isLoading" color="primary" size="3em" />
 	<template v-else>
-		<div v-if="isError">
-			<q-icon size="15" class="ml-2" name="error" /> Failed to load
-		</div>
+		<div v-if="isError"><q-icon size="15" class="ml-2" name="error" /> Failed to load</div>
 		<component v-else :is="comps[type]" :data="dataDetails" :options="extendedOptions" />
 	</template>
 </template>
