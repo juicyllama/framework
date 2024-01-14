@@ -304,7 +304,7 @@ export default {
 			onDragStart,
 			isShowHeader: props.showHeader,
 			title: ref('Widget editor'),
-			$q
+			$q,
 		}
 	},
 }
@@ -323,41 +323,39 @@ export default {
 	background: rgb(248, 142, 154);
 	border: 2x solid red;
 }
-</style>
-<style lang="sass">
-.JLWidget
-
-  &__toolbar
-    height: 64px
-
-  &__toolbar-input
-    width: 35%
-
-  &__drawer-item
-    line-height: 24px
-    border-radius: 0 24px 24px 0
-    margin-right: 12px
-
-    .q-item__section--avatar
-      padding-left: 12px
-      .q-icon
-        color: #5f6368
-
-    .q-item__label:not(.q-item__label--caption)
-      color: #3c4043
-      letter-spacing: .01785714em
-      font-size: .875rem
-      font-weight: 500
-      line-height: 1.25rem
-
-  &__side-btn
-    &__label
-      font-size: 12px
-      line-height: 24px
-      letter-spacing: .01785714em
-      font-weight: 500
-
-  @media (min-width: 1024px)
-    &__page-container
-      padding-left: 94px
+.JLWidget__toolbar {
+	height: 64px;
+}
+.JLWidget__toolbar-input {
+	width: 35%;
+}
+.JLWidget__drawer-item {
+	line-height: 24px;
+	border-radius: 0 24px 24px 0;
+	margin-right: 12px;
+}
+.JLWidget__drawer-item .q-item__section--avatar {
+	padding-left: 12px;
+}
+.JLWidget__drawer-item .q-item__section--avatar .q-icon {
+	color: #5f6368;
+}
+.JLWidget__drawer-item .q-item__label:not(.q-item__label--caption) {
+	color: #3c4043;
+	letter-spacing: 0.01785714em;
+	font-size: 0.875rem;
+	font-weight: 500;
+	line-height: 1.25rem;
+}
+.JLWidget__side-btn__label {
+	font-size: 12px;
+	line-height: 24px;
+	letter-spacing: 0.01785714em;
+	font-weight: 500;
+}
+@media (min-width: 1024px) {
+	.JLWidget__page-container {
+		padding-left: 94px;
+	}
+}
 </style>

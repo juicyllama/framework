@@ -72,9 +72,10 @@ export default {
 	border: 2x solid red;
 }
 </style>
-<style lang="sass">
-.JLWidget
-  @media (min-width: 1024px)
-    &__page-container
-      padding-left: 94px
+<style>
+@media (min-width: 1024px) {
+	.JLWidget__page-container {
+		padding-left: 94px;
+	}
+}
 </style>
