@@ -8,7 +8,7 @@ A list of all the dailing codes for countries around the world.
 
 #### Usage
 
-```typescript
+```ts
 import { dialingCodes } from '@juicyllama/utils'
 const country = dialingCodes.find(code => code.code === '44').name
 // country = 'United Kingdom'
@@ -34,7 +34,7 @@ A list of facts about llamas.
 
 #### Usage
 
-```typescript
+```ts
 import { llamaFacts } from '@juicyllama/utils'
 const fact = llamaFacts[Math.floor(Math.random() * llamaFacts.length)]
 // fact = 'Llamas are the only South American camelids that can spit.'

@@ -6,7 +6,7 @@ Common Enums used throughout the framework.
 
 ### CachePeriod
 
-```typescript
+```ts
 import { CachePeriod } from '@juicyllama/utils'
 
 enum CachePeriod {
@@ -25,7 +25,7 @@ enum CachePeriod {
 
 ### SupportedCurrencies
 
-```typescript
+```ts
 import { SupportedCurrencies } from '@juicyllama/utils'
 
 enum SupportedCurrencies {
@@ -56,7 +56,7 @@ enum SupportedCurrencies {
 
 ### SubscriptionFrequency
 
-```typescript
+```ts
 import { SubscriptionFrequency } from '@juicyllama/utils'
 
 enum SubscriptionFrequency {
@@ -75,7 +75,7 @@ enum SubscriptionFrequency {
 
 ### Enviroment
 
-```typescript
+```ts
 import { Enviroment } from '@juicyllama/utils'
 
 enum Enviroment {
@@ -90,7 +90,7 @@ enum Enviroment {
 
 ### SupportedLanguages
 
-```typescript
+```ts
 import { SupportedLanguages } from '@juicyllama/utils'
 
 enum SupportedLanguages {
@@ -102,7 +102,7 @@ enum SupportedLanguages {
 
 ### StatsMethods
 
-```typescript
+```ts
 import { StatsMethods } from '@juicyllama/utils'
 
 enum StatsMethods {
@@ -114,7 +114,7 @@ enum StatsMethods {
 
 ### StepType
 
-```typescript
+```ts
 import { StepType } from '@juicyllama/utils'
 
 enum StepType {

@@ -69,7 +69,7 @@ async function sync() {
 export async function setupDoppler(project: JL) {
 	let authed = false
 
-	if (!fileExists(currentPath + '.env')) {
+	if (!fileExists(currentPath() + '.env')) {
 		cli_log(`Login to Doppler for fetching .env secrets`)
 		authed = await login(project)
 	}

@@ -4,7 +4,7 @@ The following methods are available:
 
 ## Scrape
 
-```typescript
+```ts
 // app.service.ts
 import { ScrapingBeeService } from '@juicyllama/app-scrapingbee'
 

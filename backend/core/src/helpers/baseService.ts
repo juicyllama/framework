@@ -103,6 +103,9 @@ export class BaseService<T extends ObjectLiteral> {
 	 */
 
 	async findById(id: number, relations?: string[], currency?: CurrencyOptions<T>): Promise<T> {
+		if(!id){
+			throw new Error('ID is required')
+		}
 		let result = await this.cacheFindById(id)
 		if (result) return result
 

@@ -4,7 +4,7 @@ You can extend your services with this class to add the common CRUD methods.
 
 ## Usage
 
-```typescript
+```ts
 import { BaseService, BeaconService, Query } from '@juicyllama/core'
 
 const E = Example
@@ -38,7 +38,7 @@ The following methods are automatically available to your service.
 
 Creates a record in the database and returns the result. If the cache is enabled, it will also add the record to the cache. If the beacon is enabled, it will also send a push message to your frontend application.
 
-```typescript
+```ts
 import { ExampleService } from './example.service'
 
 @Injectable()
@@ -61,7 +61,7 @@ Returns all records from the database.
 This method skips the cache and returns results directly from the database.
 ::
 
-```typescript
+```ts
 import { ExampleService } from './example.service'
 
 @Injectable()
@@ -83,7 +83,7 @@ export class ExampleClass {
 
 Returns one record from the cache, if not found in the cache it will return from the database. If the cache is enabled, it will also add the record to the cache.
 
-```typescript
+```ts
 import { ExampleService } from './example.service'
 
 @Injectable()
@@ -104,7 +104,7 @@ export class ExampleClass {
 
 Does the same as [findById](#findById) but lets you pass in the `Id` of the record.
 
-```typescript
+```ts
 import { ExampleService } from './example.service'
 
 @Injectable()
@@ -121,7 +121,7 @@ export class ExampleClass {
 
 Returns the number of records in the database based on the [FindManyOptions](https://typeorm.delightful.studio/interfaces/_find_options_findmanyoptions_.findmanyoptions.html) provided.
 
-```typescript
+```ts
 import { ExampleService } from './example.service'
 
 @Injectable()
@@ -143,7 +143,7 @@ export class ExampleClass {
 
 Returns the sum value of the field provided in the database and using the [FindManyOptions](https://typeorm.delightful.studio/interfaces/_find_options_findmanyoptions_.findmanyoptions.html) provided.
 
-```typescript
+```ts
 import { ExampleService } from './example.service'
 
 @Injectable()
@@ -165,7 +165,7 @@ export class ExampleClass {
 
 Returns the average value of the field provided in the database and using the [FindManyOptions](https://typeorm.delightful.studio/interfaces/_find_options_findmanyoptions_.findmanyoptions.html) provided.
 
-```typescript
+```ts
 import { ExampleService } from './example.service'
 
 @Injectable()
@@ -187,7 +187,7 @@ export class ExampleClass {
 
 Returns a pie/line chart dataset from database, grouped by `field` and using the `ChartOptions` provided.
 
-```typescript
+```ts
 import { ExampleService } from './example.service'
 
 @Injectable()
@@ -210,7 +210,7 @@ export class ExampleClass {
 
 Updates a record in the database and returns the result. If the cache is enabled, it will also update the record in the cache. If the beacon is enabled, it will also send a push message to your frontend application.
 
-```typescript
+```ts
 import { ExampleService } from './example.service'
 
 @Injectable()
@@ -229,7 +229,7 @@ export class ExampleClass {
 
 Performs a soft delete. If the cache is enabled, it will also remove the record from the cache. If the beacon is enabled, it will also send a push message to your frontend application.
 
-```typescript
+```ts
 import { ExampleService } from './example.service'
 
 @Injectable()
@@ -246,7 +246,7 @@ export class ExampleClass {
 
 Performs a hard delete (removes the record from the database). If the cache is enabled, it will also remove the record from the cache. If the beacon is enabled, it will also send a push message to your frontend application.
 
-```typescript
+```ts
 import { ExampleService } from './example.service'
 
 @Injectable()
@@ -263,7 +263,7 @@ export class ExampleClass {
 
 Allows you to perform raw SQL query on the database.
 
-```typescript
+```ts
 import { ExampleService } from './example.service'
 
 @Injectable()

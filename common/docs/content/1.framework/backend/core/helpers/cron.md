@@ -8,7 +8,7 @@ This method takes the domain (for logging) and function you wish to run and exec
 
 The output includes the result from the cron and the time taken to execute.
 
-```typescript
+```ts
 import { CronRunner } from '@juicyllama/core'
 
 const result = await CronRunner('my-domain', async () => {

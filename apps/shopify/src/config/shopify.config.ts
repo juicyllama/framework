@@ -1,7 +1,7 @@
 import { InstalledApp, Oauth } from '@juicyllama/app-store'
 import { registerAs } from '@nestjs/config'
 import '@shopify/shopify-api/adapters/node'
-import { shopifyApi, LATEST_API_VERSION, Session } from '@shopify/shopify-api'
+import { shopifyApi, LATEST_API_VERSION, Session, Shopify } from '@shopify/shopify-api'
 import { ShopifyConfigDto } from './shopify.config.dto'
 
 export default registerAs(
@@ -30,7 +30,7 @@ export const ShopifyAuthScopes = [
 
 export const ShopifyAuthRedirect = '/app/shopify/auth/redirect'
 
-export function Shopify(config: ShopifyConfigDto) {
+export function Shopify(config: ShopifyConfigDto): Shopify {
 	return shopifyApi({
 		apiKey: config.SHOPIFY_APP_CLIENT_ID,
 		apiSecretKey: config.SHOPIFY_APP_CLIENT_SECRET,

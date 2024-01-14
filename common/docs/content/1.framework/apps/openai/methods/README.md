@@ -4,7 +4,7 @@ The following methods are available:
 
 ## Ask
 
-```typescript
+```ts
 // app.service.ts
 import { OpenaiService } from '@juicyllama/app-openai'
 
@@ -46,7 +46,7 @@ export class AppService {
 
 ## Ask
 
-```typescript
+```ts
 // app.service.ts
 import { OpenaiService } from '@juicyllama/app-openai'
 
