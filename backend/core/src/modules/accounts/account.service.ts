@@ -124,7 +124,7 @@ export class AccountService extends BaseService<T> {
 
 		const account_data = {
 			account_name: data.account_name,
-			currency: data.currency ?? SupportedCurrencies[SYSTEM_DEFAULT_CURRENCY] ?? SupportedCurrencies.USD,
+			currency: data.currency ?? (SYSTEM_DEFAULT_CURRENCY && SupportedCurrencies[SYSTEM_DEFAULT_CURRENCY]) ?? SupportedCurrencies.USD,
 		}
 
 		const account = await super.create(account_data)

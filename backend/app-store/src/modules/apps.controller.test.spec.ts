@@ -6,11 +6,12 @@ import { appWordpressMock } from './apps.mocks'
 describe(`${APP_NAME} Endpoints`, () => {
 	const scaffolding = new Scaffold<APP_T>()
 	let scaffold: ScaffoldDto<APP_T>
+	let record: APP_T
 
 	beforeAll(async () => {
 		scaffold = await scaffolding.up(APP_MODULE, APP_SERVICE)
 		scaffold.values.mock = appWordpressMock()
-		scaffold.values.record = await scaffold.services.service.create(scaffold.values.mock)
+		record = scaffold.values.record = await scaffold.services.service.create(scaffold.values.mock)
 	})
 
 	describe(`Retrieve ${Strings.plural(APP_NAME)}`, () => {
@@ -21,7 +22,7 @@ describe(`${APP_NAME} Endpoints`, () => {
 				url: APP_ENDPOINT_URL,
 				data: scaffold.values.mock,
 				PRIMARY_KEY: APP_PRIMARY_KEY,
-				primaryKey: scaffold.values.record[APP_PRIMARY_KEY],
+				primaryKey: record[APP_PRIMARY_KEY],
 			})
 		})
 
@@ -29,9 +30,9 @@ describe(`${APP_NAME} Endpoints`, () => {
 			await TestEndpoint<APP_T>({
 				type: METHOD.GET,
 				scaffold: scaffold,
-				url: `${APP_ENDPOINT_URL}/${scaffold.values.record[APP_PRIMARY_KEY]}`,
+				url: `${APP_ENDPOINT_URL}/${record[APP_PRIMARY_KEY]}`,
 				PRIMARY_KEY: APP_PRIMARY_KEY,
-				primaryKey: scaffold.values.record[APP_PRIMARY_KEY],
+				primaryKey: record[APP_PRIMARY_KEY],
 			})
 		})
 
