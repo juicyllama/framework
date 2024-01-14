@@ -35,7 +35,7 @@ By default `vitest` uses the same `vite.config.ts` as your project.
 If you want a different configuration during testing, you can create vitest.config.ts, which will have the higher priority.
 To configure `vitest` itself, add `test` property in your Vite config. You'll also need to add a reference to Vitest types using a triple slash command at the top of your config file, if you are importing `defineConfig` from `vite` itself.
 
-```typescript
+```ts
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
@@ -51,7 +51,7 @@ export default defineConfig({
 
 ### Basic test
 
-```typescript
+```ts
 import { describe, it, expect } from 'vitest'
 
 function sum(a, b) {
@@ -73,7 +73,7 @@ Both `c8` and `istanbul` support are optional. By default, `c8` will be used.
 
 You can select the coverage tool by setting `test.coverage.provider` to either `c8` or `istanbul`:
 
-```typescript
+```ts
 // vite.config.ts
 import { defineConfig } from 'vitest/config'
 
@@ -93,21 +93,21 @@ There are also different reporters from which you can choose. Read more: [https:
 In some cases you will need to provide mocked data objects to your tests.
 For the `User` and `Account` objects factories are provided:
 
-```typescript
+```ts
 import { UserFactory } from './mocks/factory'
 const user = UserFactory.createUser()
 ```
 
 It is also possible to get the latest created mock object to pass it somewhere else:
 
-```typescript
+```ts
 import { UserFactory } from './mocks/factory'
 const user = UserFactory.lastUser()
 ```
 
 Data that gets passed into these functions will override the mocked data from the factory:
 
-```typescript
+```ts
 import { UserFactory } from './mocks/factory'
 const user = UserFactory.createUser({ first_name: 'John' })
 

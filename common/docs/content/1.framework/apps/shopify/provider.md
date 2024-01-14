@@ -2,7 +2,7 @@
 
 To make use of the `Shopify` instance directly, import the module into your project:
 
-```typescript
+```ts
 // foo.module.ts
 import { ShopifyProviderModule } from '@juicyllamma/app-shopify'
 
@@ -15,7 +15,7 @@ export class FooModule {}
 
 Now inside of `FooService` you can use the `@InjectShopify()` decorator to get the `Shopify` instance
 
-```typescript
+```ts
 // foo.service.ts
 import { InjectShopify } from '@juicyllama/app-shopify'
 import { Shopify } from '@shopify/shopify-api'

@@ -4,7 +4,7 @@ The following methods are available:
 
 ## Image
 
-```typescript
+```ts
 // app.service.ts
 import { PexelsService } from '@juicyllama/app-pexels'
 

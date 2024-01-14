@@ -7,7 +7,7 @@ title: Login
 This component renders a fully functional login form, including SSO buttons if enabled.
 
 ::alert{type="info"}
-If you wish to use SSO buttons checkout our [backend setup instructions](/backend/core/modules/auth).
+If you wish to use SSO buttons checkout our [backend setup instructions](../../../../backend/core/modules/auth.md).
 ::
 
 ## Usage

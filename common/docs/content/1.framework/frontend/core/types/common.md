@@ -8,7 +8,7 @@ title: Common
 
 The find options for API lookups.
 
-```typescript
+```ts
 import type { FindOptions } from '@juicyllama/frontend-core'
 ```
 
@@ -28,7 +28,7 @@ import type { FindOptions } from '@juicyllama/frontend-core'
 
 The custom button object.
 
-```typescript
+```ts
 import type { CustomButton } from '@juicyllama/frontend-core'
 ```
 
@@ -45,7 +45,7 @@ import type { CustomButton } from '@juicyllama/frontend-core'
 
 Sets the default icon settings for the application.
 
-```typescript
+```ts
 import type { IconSettings } from '@juicyllama/frontend-core'
 ```
 

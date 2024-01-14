@@ -2,7 +2,7 @@
 
 Import the module into your project:
 
-```typescript
+```ts
 // app.module.ts
 import { ShopifyShopModule } from '@juicyllama/app-shopify'
 

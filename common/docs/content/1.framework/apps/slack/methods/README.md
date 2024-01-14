@@ -4,7 +4,7 @@ The following methods are available:
 
 ## Message
 
-```typescript
+```ts
 // app.service.ts
 import { SlackService } from '@juicyllama/app-slack'
 

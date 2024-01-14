@@ -2,7 +2,7 @@
 
 Import the module into your project:
 
-```typescript
+```ts
 // app.module.ts
 import { WordpressPostsModule } from '@juicyllama/app-wordpress'
 
@@ -14,7 +14,7 @@ export class AppModule {}
 
 Inject the service into your project:
 
-```typescript
+```ts
 // app.service.ts
 import { WordpressPostsService } from '@juicyllama/app-wordpress'
 
@@ -32,7 +32,7 @@ The following methods are available:
 
 ### Create
 
-```typescript
+```ts
 const result = await this.wordpressPostsService.create({
 	data: WordpressCreatePost,
 	config: wordpressConfigDto,
@@ -41,7 +41,7 @@ const result = await this.wordpressPostsService.create({
 
 #### Example
 
-```typescript
+```ts
 const options = {
 	data: <WordpressCreatePost>{
 		title: 'Hello World',
@@ -60,7 +60,7 @@ const result = await this.wordpressPostsService.create(data)
 
 ### FindAll
 
-```typescript
+```ts
 const result = await this.wordpressPostsService.findAll({
 	arguments: WordpressListPosts,
 	config: wordpressConfigDto,
@@ -69,7 +69,7 @@ const result = await this.wordpressPostsService.findAll({
 
 ### FindOne
 
-```typescript
+```ts
 const result = await this.wordpressPostsService.findOne({
 	postId: number,
 	arguments: WordpressGetPost,
@@ -79,7 +79,7 @@ const result = await this.wordpressPostsService.findOne({
 
 ### Update
 
-```typescript
+```ts
 const result = await this.wordpressPostsService.update({
 	postId: number,
 	data: WordpressUpdatePost,
@@ -89,7 +89,7 @@ const result = await this.wordpressPostsService.update({
 
 ### Remove
 
-```typescript
+```ts
 const result = await this.wordpressPostsService.remove({
 	postId: number,
 	config: wordpressConfigDto,

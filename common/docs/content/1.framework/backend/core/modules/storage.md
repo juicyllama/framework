@@ -4,7 +4,7 @@ The storage module abstracts away the saving of data (files, images, etc) to the
 
 This module currently supports:
 
-- [AWS S3](/framework/apps/aws/modules/s3)
+- [AWS S3](../../../apps/aws/modules/s3.md)
 
 ## Install
 
@@ -14,7 +14,7 @@ This module is part of our core framework and therefore does not need installing
 
 Import the module into your application:
 
-```typescript
+```ts
 //app.module.ts
 import { StorageModule } from '@juicyllama/core'
 
@@ -34,7 +34,7 @@ The system ships with the ability to have private and public buckets, alternativ
 - Private - Can only be read by the application and is not available online. This is helpful for storing client sensative data like invoices or document.
 - Public - Can be both read by the application and the public internet. This is good for saving public facing user avatars or other public files.
 
-Learn more about how to setup these buckets in the [AWS S3 docs](/framework/apps/aws/modules/s3).
+Learn more about how to setup these buckets in the [AWS S3 docs](../../../apps/aws/modules/s3.md).
 
 ## Services
 
@@ -42,7 +42,7 @@ Use the following operations to read, write, list and delete data in the cloud.
 
 First setup the service:
 
-```typescript
+```ts
 // app.service.ts
 import { StorageService, StorageFileType } from '@juicyllama/core'
 
@@ -58,7 +58,7 @@ Then you can call the following functions:
 
 Write files to the cloud
 
-```typescript
+```ts
 async function writeSomething(file: Blob){
     const result = await this.storageService.write({
         location: '/path/to/save/file/to/file.ext',
@@ -73,7 +73,7 @@ async function writeSomething(file: Blob){
 
 Read file from the cloud
 
-```typescript
+```ts
 async function readSomething(){
     const result = await this.storageService.read({
         location: '/path/to/read/file/from/file.ext',
@@ -87,7 +87,7 @@ async function readSomething(){
 
 List files from the cloud
 
-```typescript
+```ts
 async function listFiles(){
     const result = await this.storageService.list({
         location: '/path/to/read/file/from',
@@ -100,7 +100,7 @@ async function listFiles(){
 
 Delete a file from the cloud
 
-```typescript
+```ts
 async function readSomething(){
     const result = await this.storageService.del({
         location: '/path/to/delete/file/from/file.ext',

@@ -6,7 +6,7 @@ export enum File {
 	HOSTS = '/etc/hosts',
 }
 
-export const currentPath = process.cwd()
+export const currentPath = () => process.cwd()
 
 export function fileExists(location: string): boolean {
 	return fs.existsSync(location)

@@ -1,0 +1,21 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Start Docs",
+            "type": "shell",
+            "command": "cd common/docs && pnpm run dev",
+            "windows": {
+                "command": "cd common/docs && pnpm run dev"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "runOptions": {
+                "runOn": "folderOpen",
+            }
+        },
+    ]
+}
