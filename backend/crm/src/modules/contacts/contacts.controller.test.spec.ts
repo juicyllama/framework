@@ -39,9 +39,9 @@ describe(`${NAME} Endpoints`, () => {
 			await TestEndpoint<T>({
 				type: METHOD.GET,
 				scaffold: scaffold,
-				url: `${ENDPOINT_URL}/${scaffold.values.record[PRIMARY_KEY]}`,
+				url: `${ENDPOINT_URL}/${scaffold.values.record?.[PRIMARY_KEY]}`,
 				PRIMARY_KEY: PRIMARY_KEY,
-				primaryKey: scaffold.values.record[PRIMARY_KEY],
+				primaryKey: scaffold.values.record?.[PRIMARY_KEY],
 			})
 		})
 
@@ -70,7 +70,7 @@ describe(`${NAME} Endpoints`, () => {
 			await TestEndpoint<T>({
 				type: METHOD.UPDATE,
 				scaffold: scaffold,
-				url: `${ENDPOINT_URL}/${scaffold.values.record[PRIMARY_KEY]}`,
+				url: `${ENDPOINT_URL}/${scaffold.values.record?.[PRIMARY_KEY]}`,
 				PRIMARY_KEY: PRIMARY_KEY,
 				data: {
 					first_name: faker.person.firstName(),
@@ -84,7 +84,7 @@ describe(`${NAME} Endpoints`, () => {
 			await TestEndpoint<T>({
 				type: METHOD.DELETE,
 				scaffold: scaffold,
-				url: `${ENDPOINT_URL}/${scaffold.values.record[PRIMARY_KEY]}`,
+				url: `${ENDPOINT_URL}/${scaffold.values.record?.[PRIMARY_KEY]}`,
 				PRIMARY_KEY: PRIMARY_KEY,
 			})
 		})
