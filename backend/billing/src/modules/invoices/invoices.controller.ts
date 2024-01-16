@@ -1,22 +1,22 @@
-import { Controller, forwardRef, Post, Inject, Param, Query, Req } from '@nestjs/common'
-import { ApiOperation, ApiTags } from '@nestjs/swagger'
-import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
 import {
 	AccountId,
 	AuthService,
-	ReadManyDecorator,
-	UserAuth,
-	Query as TQuery,
-	ReadChartsDecorator,
-	ReadStatsDecorator,
-	ReadOneDecorator,
-	FxService,
+	AuthenticatedRequest,
 	BaseController,
+	FxService,
+	ReadChartsDecorator,
+	ReadManyDecorator,
+	ReadOneDecorator,
+	ReadStatsDecorator,
+	Query as TQuery,
+	UserAuth,
 } from '@juicyllama/core'
-import { InvoicesService } from './invoices.service'
-import { BILLING_INVOICES_T as T } from './invoices.constants'
+import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
+import { Controller, Inject, Param, Post, Query, Req, forwardRef } from '@nestjs/common'
+import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { billingRoles as roles } from '../billing.constants'
-import { billingInvoiceConstants as constants } from './invoices.constants'
+import { BILLING_INVOICES_T as T, billingInvoiceConstants as constants } from './invoices.constants'
+import { InvoicesService } from './invoices.service'
 
 @ApiTags('Invoices')
 @UserAuth()
@@ -38,13 +38,13 @@ export class InvoicesController extends BaseController<T> {
 	}
 
 	@ReadManyDecorator(constants)
-	async findAll(@Req() req, @Query() query: any, @AccountId() account_id: number): Promise<T[]> {
+	async findAll(@Req() req: AuthenticatedRequest, @Query() query: any, @AccountId() account_id: number): Promise<T[]> {
 		return super.findAll(req, query, account_id)
 	}
 
 	@ReadStatsDecorator(constants)
 	async stats(
-		@Req() req,
+		@Req() req: AuthenticatedRequest,
 		@Query() query: any,
 		@AccountId() account_id: number,
 		@Query('method') method: StatsMethods,
@@ -54,7 +54,7 @@ export class InvoicesController extends BaseController<T> {
 
 	@ReadChartsDecorator(constants)
 	async charts(
-		@Req() req,
+		@Req() req: AuthenticatedRequest,
 		@AccountId() account_id: number,
 		@Query() query: any,
 		@Query('search') search: string,
@@ -67,13 +67,13 @@ export class InvoicesController extends BaseController<T> {
 	}
 
 	@ReadOneDecorator(constants)
-	async findOne(@Req() req, @AccountId() account_id: number, @Param() params: any, @Query() query: any): Promise<T> {
+	async findOne(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Param() params: any, @Query() query: any): Promise<T> {
 		return super.findOne(req, account_id, params, query)
 	}
 
 	@ApiOperation({ summary: `Download invoice file` })
 	@Post(`/download/:invoice_id`)
-	async downloadInvoice(@Req() req, @AccountId() invoice_id: number, @AccountId() account_id: number): Promise<T> {
+	async downloadInvoice(@Req() req: AuthenticatedRequest, @AccountId() invoice_id: number, @AccountId() account_id: number): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id)
 		return await this.service.downloadInvoice(req.user, invoice_id)
 	}

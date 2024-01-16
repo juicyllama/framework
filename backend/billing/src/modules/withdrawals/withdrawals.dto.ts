@@ -8,7 +8,7 @@ export class WithdrawalRequestDto {
 		required: true,
 	})
 	@IsNumber()
-	amount: number
+	amount!: number
 
 	@ApiProperty({
 		description: 'The ID of the payment method you wish the funds to be sent to.',
@@ -16,5 +16,5 @@ export class WithdrawalRequestDto {
 		required: true,
 	})
 	@IsNumber()
-	payment_method_id: number
+	payment_method_id!: number
 }

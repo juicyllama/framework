@@ -38,7 +38,7 @@ describe(`${NAME} Service`, () => {
 			const result = await scaffold.services.service.findAll({
 				where: {
 					account: {
-						account_id: mock.account.account_id,
+						account_id: mock.account?.account_id,
 					},
 				},
 			})
@@ -51,7 +51,7 @@ describe(`${NAME} Service`, () => {
 			const result = await scaffold.services.service.findOne({
 				where: {
 					account: {
-						account_id: mock.account.account_id,
+						account_id: mock.account?.account_id,
 					},
 				},
 			})
@@ -63,7 +63,7 @@ describe(`${NAME} Service`, () => {
 			const result = await scaffold.services.service.count({
 				where: {
 					account: {
-						account_id: mock.account.account_id,
+						account_id: mock.account?.account_id,
 					},
 				},
 			})

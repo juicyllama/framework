@@ -34,14 +34,14 @@ describe('Wallet Controller', () => {
 
 	describe('List Transactions', () => {
 		it('Can we list the pre-generated charge?', async () => {
-			const records = await TestEndpoint<T>({
+			const records: T[] = await TestEndpoint<T>({
 				type: METHOD.LIST,
 				scaffold: scaffold,
 				url: ENDPOINT_URL,
 				PRIMARY_KEY: PRIMARY_KEY,
-			})
+			}) as T[]
 
-			expect(Number(records[0].debit_balance)).toBe(Number(charge.amount_total))
+			expect(Number(records?.[0].debit_balance)).toBe(Number(charge.amount_total))
 		})
 	})
 

@@ -28,8 +28,13 @@ export class WithdrawalsService extends BaseService<T> {
 
 	//@ts-ignore
 	async create(data: DeepPartial<T>, user: User): Promise<T> {
-		const balance = await this.walletService.getBalance(<Account>data.account, data.currency)
-
+		if (!data.currency) {
+			throw new BadRequestException('Currency is required')
+		}
+		if (!data.amount) {
+			throw new BadRequestException('Amount is required')
+		}
+		const balance = await this.walletService.getBalance(<Account>data.account, data.currency)		
 		if (balance < data.amount) {
 			throw new BadRequestException('Insufficient funds')
 		}

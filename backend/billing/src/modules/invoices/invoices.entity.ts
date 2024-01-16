@@ -19,7 +19,7 @@ import { SupportedCurrencies } from '@juicyllama/utils'
 export class Invoice extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	@IsNumber()
-	readonly invoice_id: number
+	readonly invoice_id!: number
 
 	@ManyToOne(() => Account, a => a.account_id, {
 		onDelete: 'CASCADE',
@@ -29,7 +29,7 @@ export class Invoice extends BaseEntity {
 
 	@Column()
 	@IsNumber()
-	account_id: number
+	account_id!: number
 
 	@Column({ default: null, nullable: true })
 	@IsEnum(AppIntegrationName)
@@ -43,7 +43,7 @@ export class Invoice extends BaseEntity {
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)
 	@MaxLength(3)
-	currency: SupportedCurrencies
+	currency!: SupportedCurrencies
 
 	@Column('decimal', { precision: 20, scale: 10, default: 0 })
 	@IsNumber()
@@ -55,7 +55,7 @@ export class Invoice extends BaseEntity {
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	amount_total: number // amount including tax
+	amount_total!: number // amount including tax
 
 	@Column('decimal', { precision: 20, scale: 10, default: 0 })
 	@IsNumber()

@@ -9,7 +9,7 @@ import { SupportedCurrencies } from '@juicyllama/utils'
 export class Wallet extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	@IsNumber()
-	readonly wallet_id: number
+	readonly wallet_id!: number
 
 	@ManyToOne(() => Account, account => account.account_id, {
 		onDelete: 'CASCADE',
@@ -18,7 +18,7 @@ export class Wallet extends BaseEntity {
 	readonly account?: Account
 
 	@Column()
-	readonly account_id: number
+	readonly account_id!: number
 
 	@Column('decimal', { precision: 20, scale: 10, default: null, nullable: true })
 	@IsNumber()
@@ -30,13 +30,13 @@ export class Wallet extends BaseEntity {
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	balance: number
+	balance!: number
 
 	@Column('varchar', { length: 3 })
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)
 	@MaxLength(3)
-	currency: SupportedCurrencies
+	currency!: SupportedCurrencies
 
 	@ManyToOne(() => Charge, charge => charge.charge_id, {
 		onDelete: 'SET NULL',
