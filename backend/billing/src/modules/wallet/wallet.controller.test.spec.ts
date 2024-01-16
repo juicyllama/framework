@@ -39,7 +39,7 @@ describe('Wallet Controller', () => {
 				scaffold: scaffold,
 				url: ENDPOINT_URL,
 				PRIMARY_KEY: PRIMARY_KEY,
-			}) as T[]
+			}) as unknown as T[]
 
 			expect(Number(records?.[0].debit_balance)).toBe(Number(charge.amount_total))
 		})
