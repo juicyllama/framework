@@ -47,7 +47,7 @@ export class AppsController extends BaseController<T> {
 		return super.stats(req, query, account_id, method)
 	}
 
-	@ReadOneDecorator(constants)
+	@ReadOneDecorator({...constants, primaryKey: 'app_id'})
 	async findOne(@Req() req, @AccountId() account_id: number, @Param() params: any, @Query() query: any): Promise<T> {
 		return super.findOne(req, account_id, params, query)
 	}
