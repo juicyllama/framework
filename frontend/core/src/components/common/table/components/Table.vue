@@ -337,7 +337,7 @@ watch(
 <template>
 	<div id="JLTable" class="JLTable">
 		<TableFilterDialog
-			v-model="advancedFilterDialog"
+			:dialog="advancedFilterDialog"
 			:activeFilters="activeFilters"
 			:labels="labels"
 			@clear="onClearFilters"

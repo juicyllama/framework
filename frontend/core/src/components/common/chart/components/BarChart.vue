@@ -15,20 +15,6 @@ const props = defineProps<{
 const extendedProps = {
 	...props.options,
 	borderRadius: 5,
-	scales: {
-		x: {
-			display: false,
-			grid: {
-				drawTicks: false,
-			},
-		},
-		y: {
-			grid: {
-				drawTicks: false,
-			},
-			display: false,
-		},
-	},
 }
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)

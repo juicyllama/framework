@@ -20,7 +20,7 @@ import apps from '../../../assets/json/apps.json'
             href="/framework/apps"
           >
             <Icon name="ph:puzzle-piece-duotone" class="flex-shrink-0 h-5 w-5" />
-            <span class="">See All Apps</span>
+            See All Apps
           </a>
         </div>
       </div>
