@@ -6,7 +6,7 @@ export class StorageWriteResponseDto {
 	 */
 
 	@IsBoolean()
-	success: boolean
+	success!: boolean
 
 	/**
 	 * The url of the file online

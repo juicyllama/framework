@@ -1,6 +1,6 @@
+import { Env, Logger } from '@juicyllama/utils'
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common'
 import { TypeORMError } from 'typeorm'
-import { Logger, Enviroment } from '@juicyllama/utils'
 
 @Catch(TypeORMError)
 export class TypeOrmFilter implements ExceptionFilter {
@@ -19,9 +19,7 @@ export class TypeOrmFilter implements ExceptionFilter {
 
 		response.status(500).json({
 			status: 500,
-			error: [Enviroment.development].includes(Enviroment[process.env.NODE_ENV])
-				? `[${code}] ${message} (${details})`
-				: 'Database Error',
+			error: Env.IsDev() ? `[${code}] ${message} (${details})` : 'Database Error',
 		})
 	}
 }

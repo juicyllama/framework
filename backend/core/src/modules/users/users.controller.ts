@@ -46,6 +46,7 @@ import { crudBulkUpload } from '../../helpers/crudController'
 import { StorageService } from '../storage/storage.service'
 import { CrudUploadFieldsResponse, BulkUploadDto, BulkUploadResponse } from '../../types/common'
 import { TypeOrm } from '../../utils/typeorm/TypeOrm'
+import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
 
 @ApiTags(Strings.capitalize(Strings.plural(NAME)))
 @UserAuth()
@@ -60,14 +61,18 @@ export class UsersController {
 	) {}
 
 	@CreateDecorator(constants)
-	async create(@Req() req, @AccountId() account_id: number, @Body() data: CreateUserDto): Promise<T> {
+	async create(
+		@Req() req: AuthenticatedRequest,
+		@AccountId() account_id: number,
+		@Body() data: CreateUserDto,
+	): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		const account = await this.accountService.findById(account_id)
 		return await this.service.invite(account, data)
 	}
 
 	@ReadManyDecorator(constants)
-	async findAll(@AccountId() account_id: number, @Query() query): Promise<T[]> {
+	async findAll(@AccountId() account_id: number, @Query() query: any): Promise<T[]> {
 		const where = this.tQuery.buildWhere({
 			repository: this.service.repository,
 			query: query,
@@ -87,7 +92,7 @@ export class UsersController {
 	@ReadStatsDecorator(constants)
 	async stats(
 		@AccountId() account_id: number,
-		@Query() query,
+		@Query() query: any,
 		@Query('method') method?: StatsMethods,
 	): Promise<StatsResponseDto> {
 		if (!method) {
@@ -119,7 +124,7 @@ export class UsersController {
 	//todo fix to restrict to correct account_id
 	// @ReadChartsDecorator({ entity: E, selectEnum: UserSelect, name: NAME })
 	// async charts(
-	// 	@Query() query: any,
+	// 	@Query() query: any: any,
 	// 	@Query('search') search: string,
 	// 	@Query('from') from: string,
 	// 	@Query('to') to: string,
@@ -140,7 +145,7 @@ export class UsersController {
 	// }
 
 	@ReadOneDecorator(constants)
-	async findOne(@AccountId() account_id: number, @Param() params): Promise<T> {
+	async findOne(@AccountId() account_id: number, @Param() params: any): Promise<T> {
 		const user = await this.service.findOne({
 			where: {
 				user_id: params[PRIMARY_KEY],
@@ -160,10 +165,10 @@ export class UsersController {
 
 	@UpdateDecorator(constants)
 	async update(
-		@Req() req,
+		@Req() req: AuthenticatedRequest,
 		@AccountId() account_id: number,
 		@Body() data: UpdateUserDto,
-		@Param() params,
+		@Param() params: any,
 	): Promise<T> {
 		let user = req.user
 		if (params[PRIMARY_KEY] !== req.user.user_id) {
@@ -185,10 +190,10 @@ export class UsersController {
 	@UploadImageDecorator({ entity: E })
 	@Patch(`:user_id/avatar`)
 	async uploadAvatarFile(
-		@Req() req,
+		@Req() req: AuthenticatedRequest,
 		@UploadedFile() file: Express.Multer.File,
 		@AccountId() account_id: number,
-		@Param() params,
+		@Param() params: any,
 	): Promise<T> {
 		if (!file) {
 			throw new BadRequestException(`Missing required field: file`)
@@ -213,7 +218,7 @@ export class UsersController {
 
 	@BulkUploadDecorator(constants)
 	async bulkUpload(
-		@Req() req,
+		@Req() req: AuthenticatedRequest,
 		@Body() body: BulkUploadDto,
 		@AccountId() account_id: number,
 		@UploadedFile() file?: Express.Multer.File,
@@ -263,9 +268,9 @@ export class UsersController {
 	})
 	@Patch(`:user_id/role`)
 	async update_role(
-		@Req() req,
+		@Req() req: AuthenticatedRequest,
 		@AccountId() account_id: number,
-		@Param() params,
+		@Param() params: any,
 		@Body('role') role: UserRole,
 	): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
@@ -275,7 +280,7 @@ export class UsersController {
 	}
 
 	@DeleteDecorator(constants)
-	async remove(@Req() req, @AccountId() account_id: number, @Param() params): Promise<T> {
+	async remove(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Param() params: any): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		return await crudDelete<T>({
 			service: this.service,

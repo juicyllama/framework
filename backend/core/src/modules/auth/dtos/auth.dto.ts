@@ -8,7 +8,7 @@ export class AuthDto {
 		description: 'The user id',
 		example: 1,
 	})
-	readonly user_id: number
+	readonly user_id!: number
 
 	@IsString()
 	@IsEmail()
@@ -16,7 +16,7 @@ export class AuthDto {
 		description: 'The users email address',
 		example: 'jon.doe@example.com',
 	})
-	readonly email: string
+	readonly email!: string
 
 	@IsEnum(UserRole)
 	@ApiProperty({

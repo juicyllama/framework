@@ -1,5 +1,6 @@
 import { ApiForbiddenResponse, ApiNotFoundResponse, ApiUnauthorizedResponse } from '@nestjs/swagger'
 import { Query as TQuery } from '../utils/typeorm/Query'
+import { ObjectLiteral } from 'typeorm'
 import {
 	crudBulkUpload,
 	crudCharts,
@@ -34,7 +35,7 @@ import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto } from 
 	description: 'User role does not have sufficient permissions to access this endpoint',
 })
 @ApiNotFoundResponse({ description: 'Not Found' })
-export class BaseController<T> {
+export class BaseController<T extends ObjectLiteral> {
 	constructor(
 		readonly service: any,
 		readonly tQuery: TQuery<T>,
@@ -51,14 +52,14 @@ export class BaseController<T> {
 			await this.optional.services.authService.check(
 				req.user.user_id,
 				account_id,
-				this.optional.roles?.create ? this.optional.roles.create : null,
+				this.optional.roles?.create ? this.optional.roles.create : undefined,
 			)
 		}
 
 		return await crudCreate<T>({
 			service: this.service,
 			data: new this.constants.entity(body),
-			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : null,
+			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : undefined,
 		})
 	}
 
@@ -67,25 +68,27 @@ export class BaseController<T> {
 			await this.optional.services.authService.check(
 				req.user.user_id,
 				account_id,
-				this.optional.roles?.create ? this.optional.roles.create : null,
+				this.optional.roles?.create ? this.optional.roles.create : undefined,
 			)
 		}
 
 		return await crudFindAll<T>({
 			service: this.service,
 			tQuery: this.tQuery,
-			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : null,
+			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : undefined,
 			query: query,
 			searchFields: this.constants.searchFields,
 			order_by: this.constants.defaultOrderBy,
 			currency:
-				this.optional.services.fxService && this.constants.currencyField && this.constants.currencyFields.length
+				this.optional?.services?.fxService &&
+				this.constants.currencyField &&
+				this.constants.currencyFields?.length
 					? {
 							fxService: this.optional.services.fxService,
 							currency_field: this.constants.currencyField,
 							currency_fields: this.constants.currencyFields,
 						}
-					: null,
+					: undefined,
 		})
 	}
 
@@ -94,14 +97,14 @@ export class BaseController<T> {
 			await this.optional.services.authService.check(
 				req.user.user_id,
 				account_id,
-				this.optional.roles?.create ? this.optional.roles.create : null,
+				this.optional.roles?.create ? this.optional.roles.create : undefined,
 			)
 		}
 
 		return await crudStats<T>({
 			service: this.service,
 			tQuery: this.tQuery,
-			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : null,
+			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : undefined,
 			query: query,
 			method: method,
 			searchFields: this.constants.searchFields,
@@ -122,12 +125,12 @@ export class BaseController<T> {
 			await this.optional.services.authService.check(
 				req.user.user_id,
 				account_id,
-				this.optional.roles?.create ? this.optional.roles.create : null,
+				this.optional.roles?.create ? this.optional.roles.create : undefined,
 			)
 		}
 
 		return await crudCharts<T>({
-			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : null,
+			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : undefined,
 			service: this.service,
 			tQuery: this.tQuery,
 			query,
@@ -138,22 +141,24 @@ export class BaseController<T> {
 			...(to && { to: new Date(to) }),
 			searchFields: this.constants.searchFields,
 			currency:
-				this.optional.services.fxService && this.constants.currencyField && this.constants.currencyFields.length
+				this.optional?.services?.fxService &&
+				this.constants.currencyField &&
+				this.constants.currencyFields?.length
 					? {
 							fxService: this.optional.services.fxService,
-							currency_field: this.constants.currencyField,
-							currency_fields: this.constants.currencyFields,
+							currency_field: this.constants.currencyField, // e.g. 'currency'
+							currency_fields: this.constants.currencyFields, // e.g. ['subtotal_price', 'total_shipping', 'total_price']
 						}
-					: null,
+					: undefined,
 		})
 	}
 
-	async findOne(req, account_id: number, params: any, query: any): Promise<T> {
+	async findOne(req: any, account_id: number, params: any, query: any): Promise<T> {
 		if (this.optional?.services?.authService) {
 			await this.optional.services.authService.check(
 				req.user.user_id,
 				account_id,
-				this.optional.roles?.create ? this.optional.roles.create : null,
+				this.optional.roles?.create ? this.optional.roles.create : undefined,
 			)
 		}
 
@@ -161,15 +166,17 @@ export class BaseController<T> {
 			service: this.service,
 			query: query,
 			primaryKey: params[this.constants.primaryKey],
-			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : null,
+			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : undefined,
 			currency:
-				this.optional.services.fxService && this.constants.currencyField && this.constants.currencyFields.length
+				this.optional?.services?.fxService &&
+				this.constants.currencyField &&
+				this.constants.currencyFields?.length
 					? {
 							fxService: this.optional.services.fxService,
 							currency_field: this.constants.currencyField,
 							currency_fields: this.constants.currencyFields,
 						}
-					: null,
+					: undefined,
 		})
 	}
 
@@ -178,7 +185,7 @@ export class BaseController<T> {
 			await this.optional.services.authService.check(
 				req.user.user_id,
 				account_id,
-				this.optional.roles?.create ? this.optional.roles.create : null,
+				this.optional.roles?.create ? this.optional.roles.create : undefined,
 			)
 		}
 
@@ -202,10 +209,16 @@ export class BaseController<T> {
 			await this.optional.services.authService.check(
 				req.user.user_id,
 				account_id,
-				this.optional.roles?.create ? this.optional.roles.create : null,
+				this.optional.roles?.create ? this.optional.roles.create : undefined,
 			)
 		}
 
+		if (!this.constants.uploadSupportedFields) {
+			throw new Error('Missing uploadSupportedFields')
+		}
+		if (!this.constants.uploadDedupField) {
+			throw new Error('Missing uploadDedupField')
+		}
 		return await crudBulkUpload<T>({
 			fields: this.constants.uploadSupportedFields,
 			dedup_field: this.constants.uploadDedupField,
@@ -216,6 +229,12 @@ export class BaseController<T> {
 	}
 
 	async uploadFileFields(): Promise<CrudUploadFieldsResponse> {
+		if (!this.constants.uploadSupportedFields) {
+			throw new Error('Missing uploadSupportedFields')
+		}
+		if (!this.constants.uploadDedupField) {
+			throw new Error('Missing uploadDedupField')
+		}
 		return {
 			fields: this.constants.uploadSupportedFields,
 			dedup_field: this.constants.uploadDedupField,
@@ -227,7 +246,7 @@ export class BaseController<T> {
 			await this.optional.services.authService.check(
 				req.user.user_id,
 				account_id,
-				this.optional.roles?.create ? this.optional.roles.create : null,
+				this.optional.roles?.create ? this.optional.roles.create : undefined,
 			)
 		}
 
@@ -236,14 +255,14 @@ export class BaseController<T> {
 				return await crudPurge<T>({
 					service: this.service,
 					primaryKey: params[this.constants.primaryKey],
-					account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : null,
+					account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : undefined,
 				})
 			case 'DELETE':
 			default:
 				return await crudDelete<T>({
 					service: this.service,
 					primaryKey: params[this.constants.primaryKey],
-					account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : null,
+					account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : undefined,
 				})
 		}
 	}

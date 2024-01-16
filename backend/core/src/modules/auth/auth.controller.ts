@@ -11,6 +11,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard'
 import { UsersService } from '../users/users.service'
 import { AuthGuard } from '@nestjs/passport'
 import { AccountId } from '../../decorators'
+import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
 
 @ApiTags('Auth')
 @Controller('/auth')
@@ -33,7 +34,7 @@ export class AuthController {
 	})
 	@UseGuards(LocalAuthGuard)
 	@Post('login')
-	async login(@Req() req): Promise<LoginResponseDto> {
+	async login(@Req() req: AuthenticatedRequest): Promise<LoginResponseDto> {
 		return this.authService.login(req.user)
 	}
 
@@ -47,7 +48,7 @@ export class AuthController {
 		type: User,
 	})
 	@Get('profile')
-	async getProfile(@Req() req): Promise<User> {
+	async getProfile(@Req() req: AuthenticatedRequest): Promise<User> {
 		return await this.usersService.validateEmail(req.user.email)
 	}
 
@@ -102,7 +103,7 @@ export class AuthController {
 	})
 	@Post('passwordless')
 	async initiatePasswordLessLogin(
-		@Req() req,
+		@Req() req: AuthenticatedRequest,
 		@Body() data: InitiatePasswordlessLoginDto,
 	): Promise<SuccessResponseDto> {
 		return {
@@ -144,7 +145,7 @@ export class AuthController {
 	})
 	@UseGuards(AuthGuard('google'))
 	@Get('google/redirect')
-	async googleAuthRedirect(@Req() req): Promise<LoginResponseDto> {
+	async googleAuthRedirect(@Req() req: AuthenticatedRequest): Promise<LoginResponseDto> {
 		return this.authService.login(req.user)
 	}
 
@@ -166,7 +167,7 @@ export class AuthController {
 	})
 	@UseGuards(AuthGuard('linkedin'))
 	@Get('linkedin/redirect')
-	async linkedinAuthRedirect(@Req() req): Promise<LoginResponseDto> {
+	async linkedinAuthRedirect(@Req() req: AuthenticatedRequest): Promise<LoginResponseDto> {
 		return this.authService.login(req.user)
 	}
 
@@ -174,7 +175,7 @@ export class AuthController {
 	@UserAuth()
 	@Get('account/check')
 	async accountCheck(
-		@Req() req,
+		@Req() req: AuthenticatedRequest,
 		@AccountId() account_id: number,
 	): Promise<{
 		passed: boolean

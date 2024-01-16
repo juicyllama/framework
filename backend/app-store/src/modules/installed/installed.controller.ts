@@ -118,7 +118,7 @@ export class InstalledAppsController {
 		relationsEnum: InstalledAppsRelations,
 		name: INSTALLED_APP_NAME,
 	})
-	async findAll(@Req() req, @AccountId() account_id: number, @Query() query): Promise<INSTALLED_APP_T[]> {
+	async findAll(@Req() req, @AccountId() account_id: number, @Query() query: any): Promise<INSTALLED_APP_T[]> {
 		await this.authService.check(req.user.user_id, account_id)
 		const records = await crudFindAll<INSTALLED_APP_T>({
 			service: this.service,
@@ -140,7 +140,7 @@ export class InstalledAppsController {
 	async stats(
 		@Req() req,
 		@AccountId() account_id: number,
-		@Query() query,
+		@Query() query: any,
 		@Query('method') method?: StatsMethods,
 	): Promise<StatsResponseDto> {
 		await this.authService.check(req.user.user_id, account_id)
@@ -164,8 +164,8 @@ export class InstalledAppsController {
 	async findOne(
 		@Req() req,
 		@AccountId() account_id: number,
-		@Param() params,
-		@Query() query,
+		@Param() params: any,
+		@Query() query: any,
 	): Promise<INSTALLED_APP_T> {
 		await this.authService.check(req.user.user_id, account_id)
 		const record = await crudFindOne<INSTALLED_APP_T>({
@@ -186,7 +186,7 @@ export class InstalledAppsController {
 		@Req() req,
 		@AccountId() account_id: number,
 		@Body() data: UpdateInstalledAppDto,
-		@Param() params,
+		@Param() params: any,
 	): Promise<INSTALLED_APP_T> {
 		await this.authService.check(req.user.user_id, account_id)
 		if (data.settings) {
@@ -216,7 +216,7 @@ export class InstalledAppsController {
 		primaryKey: INSTALLED_APP_PRIMARY_KEY,
 		name: INSTALLED_APP_NAME,
 	})
-	async remove(@Req() req, @AccountId() account_id: number, @Param() params): Promise<INSTALLED_APP_T> {
+	async remove(@Req() req, @AccountId() account_id: number, @Param() params: any): Promise<INSTALLED_APP_T> {
 		await this.authService.check(req.user.user_id, account_id)
 		return await crudPurge<INSTALLED_APP_T>({
 			service: this.service,

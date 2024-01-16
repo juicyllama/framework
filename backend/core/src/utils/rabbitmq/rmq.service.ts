@@ -15,17 +15,22 @@ export class RmqService {
 			options.noAck = false
 		}
 
+		const RABBIT_MQ_URI = this.configService.get<string>('RABBIT_MQ_URI')
+		if (!RABBIT_MQ_URI) {
+			throw new Error('RABBIT_MQ_URI is required')
+		}
+
 		return {
 			transport: Transport.RMQ,
 			options: {
-				urls: [this.configService.get<string>('RABBIT_MQ_URI')],
+				urls: [RABBIT_MQ_URI],
 				queue: this.configService.get<string>(`RABBIT_MQ_${options.queue}_QUEUE`),
 				noAck: options.noAck,
 				persistent: true,
 				socketOptions: {
 					heartbeatIntervalInSeconds: 30,
 				},
-				prefetchCount: options.prefetchCount ?? null,
+				prefetchCount: options.prefetchCount,
 			},
 		}
 	}

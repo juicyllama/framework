@@ -39,7 +39,7 @@ export class TransactionDiscountsController {
 		orderByEnum: TransactionDiscountOrderBy,
 		relationsEnum: TransactionDiscountRelations,
 	})
-	async findAll(@Query() query, @AccountId() account_id: number): Promise<TRANSACTION_DISCOUNT_T[]> {
+	async findAll(@Query() query: any, @AccountId() account_id: number): Promise<TRANSACTION_DISCOUNT_T[]> {
 		return await crudFindAll<TRANSACTION_DISCOUNT_T>({
 			service: this.service,
 			tQuery: this.tQuery,
@@ -52,7 +52,7 @@ export class TransactionDiscountsController {
 
 	@ReadStatsDecorator({ name: TRANSACTION_DISCOUNT_NAME })
 	async stats(
-		@Query() query,
+		@Query() query: any,
 		@AccountId() account_id: number,
 		@Query('method') method: StatsMethods,
 	): Promise<StatsResponseDto> {
@@ -73,7 +73,7 @@ export class TransactionDiscountsController {
 		relationsEnum: TransactionDiscountRelations,
 		primaryKey: TRANSACTION_DISCOUNT_PRIMARY_KEY,
 	})
-	async findOne(@AccountId() account_id: number, @Param() params, @Query() query): Promise<TRANSACTION_DISCOUNT_T> {
+	async findOne(@AccountId() account_id: number, @Param() params: any, @Query() query: any): Promise<TRANSACTION_DISCOUNT_T> {
 		return await crudFindOne<TRANSACTION_DISCOUNT_T>({
 			service: this.service,
 			query: query,

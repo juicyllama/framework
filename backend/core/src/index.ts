@@ -148,6 +148,7 @@ export {
 // Types
 export {
 	AppIntegrationName,
+	AuthenticatedRequest,
 	UploadType,
 	HTTP_METHODS,
 	CRUD_ACTIONS,

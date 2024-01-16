@@ -18,8 +18,8 @@ export const billingChargesConstants: ControllerConstants = {
 	primaryKey: BILLING_CHARGES_PRIMARY_KEY,
 	searchFields: BILLING_CHARGES_SEARCH_FIELDS,
 	defaultOrderBy: BILLING_CHARGES_ORDER_BY,
-	currencyField: BILLING_CHARGES_CURRENCY_FIELD,
-	currencyFields: BILLING_CHARGES_CURRENCY_FIELDS,
+	currencyField: BILLING_CHARGES_CURRENCY_FIELD, // e.g 'currency'. in a given entity, this field's value contains a SupportedCurrency e.g. 'USD'
+	currencyFields: BILLING_CHARGES_CURRENCY_FIELDS, // the fields that hold numeric values in the currency e.g. '123.45'  e.g. ['subtotal_price', 'total_shipping', 'total_price']
 	selectEnum: ChargeSelect,
 	orderByEnum: ChargeOrderBy,
 	relationsEnum: ChargeRelations,

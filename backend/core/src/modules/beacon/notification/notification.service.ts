@@ -37,7 +37,7 @@ export class BeaconNotificationService extends BaseService<T> {
 			where: {
 				roles: {
 					account: {
-						account_id: message.account.account_id,
+						account_id: message.account?.account_id,
 					},
 					role: message.options?.roles ? In(message.options?.roles) : null,
 				},
@@ -45,14 +45,17 @@ export class BeaconNotificationService extends BaseService<T> {
 		})
 
 		//If owner, add god users also
-		if (message.options?.roles.includes(UserRole.OWNER)) {
+		if (message.options?.roles?.includes(UserRole.OWNER)) {
 			const god_users = await this.authService.getGodUsers()
 			users = [...users, ...god_users]
 		}
 
-		if (message.unique && (await this.query.findOne(this.repository, { where: { unique: message.unique } }))) {
-			this.logger.log(`[${domain}] Skipping as message is already sent`)
-			return
+		if (message.unique) {
+			const olderMsg = await this.query.findOne(this.repository, { where: { unique: message.unique } })
+			if (olderMsg) {
+				this.logger.log(`[${domain}] Skipping as message is already sent`)
+				return olderMsg
+			}
 		}
 
 		const notification = await super.create({
@@ -68,7 +71,7 @@ export class BeaconNotificationService extends BaseService<T> {
 				push: true,
 			},
 			communication: {
-				event: `account_${message.account.account_id}_beacon_notification`,
+				event: `account_${message.account?.account_id}_beacon_notification`,
 			},
 		})
 

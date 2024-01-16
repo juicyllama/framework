@@ -16,8 +16,9 @@ export async function CronRunner(
 	try {
 		cron_result = await func
 	} catch (e) {
-		logger.error(e.message, e)
-		return e.stack
+		const error = e as Error
+		logger.error(error.message, error)
+		throw e
 	}
 
 	const time = stopwatch.stop()

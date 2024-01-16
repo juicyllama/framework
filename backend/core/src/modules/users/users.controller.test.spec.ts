@@ -32,7 +32,7 @@ describe(`${NAME} Endpoints`, () => {
 		})
 	})
 
-	async function testBulkUpload(first_name, last_name, email) {
+	async function testBulkUpload(first_name: string, last_name: string, email: string) {
 		const { csv_file, filePath, dirPath } = await Csv.createTempCSVFileFromString(
 			`first_name,last_name,email\n${first_name},${last_name},${email}`,
 		)
@@ -62,7 +62,7 @@ describe(`${NAME} Endpoints`, () => {
 			const email = faker.internet.email()
 
 			const res = await testBulkUpload(first_name, last_name, email)
-			expect(res.created).toEqual(1)
+			expect(res?.created).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
 			const lastUser = users.pop()
 			expect(lastUser.first_name).toEqual(first_name)
@@ -76,10 +76,10 @@ describe(`${NAME} Endpoints`, () => {
 			const email = faker.internet.email()
 
 			const res = await testBulkUpload(first_name, last_name, email)
-			expect(res.created).toEqual(1)
+			expect(res?.created).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
 			const lastUser = users.pop()
-			const account = lastUser.accounts?.find(a => a.account_id === scaffold.values.account.account_id)
+			const account = lastUser.accounts?.find((a: { account_id: number }) => a.account_id === scaffold.values.account.account_id)
 
 			expect(account).toBeDefined()
 			expect(account.account_id).toEqual(scaffold.values.account.account_id)

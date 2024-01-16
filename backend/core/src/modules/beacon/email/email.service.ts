@@ -20,7 +20,7 @@ export class BeaconEmailService {
 		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
 	) {}
 
-	async create(message: BeaconMessageDto): Promise<boolean> {
+	async create(message: BeaconMessageDto): Promise<boolean | undefined> {
 		const domain = 'utils::beacon::email::create'
 
 		this.logger.debug(`[${domain}] Beacon Email`, message)
@@ -36,8 +36,8 @@ export class BeaconEmailService {
 		}
 		if (!message.communication.email.from) {
 			message.communication.email.from = {
-				email: this.configService.get<string>('beacon.SYSTEM_EMAIL_ADDRESS'),
-				name: this.configService.get<string>('beacon.SYSTEM_EMAIL_NAME'),
+				email: this.configService.get<string>('beacon.SYSTEM_EMAIL_ADDRESS') || '',
+				name: this.configService.get<string>('beacon.SYSTEM_EMAIL_NAME') || '',
 			}
 		}
 

@@ -1,27 +1,29 @@
 import { Account } from '../../modules/accounts/account.entity'
-import { Scaffold, ScaffoldDto } from '../../test'
-import { AccountService } from '../../modules/accounts/account.service'
 import { AccountModule } from '../../modules/accounts/account.module'
+import { AccountService } from '../../modules/accounts/account.service'
+import { Scaffold } from '../../test'
+import { ScaffoldDtoWithRepository } from '../../test/scaffold'
 
 type T = Account
 const E = Account
 const MODULE = AccountModule
 const SERVICE = AccountService
+const MOCK = {
+	account_name: 'TestFiltering',
+	onboarding_step: 3,
+}
 
 describe('TypeORM query findAll filtering RHS Colon syntax', () => {
 	const scaffolding = new Scaffold<T>()
-	let scaffold: ScaffoldDto<T>
+	let scaffold: ScaffoldDtoWithRepository<T>
 
 	beforeAll(async () => {
-		scaffold = await scaffolding.up(MODULE, SERVICE)
-		scaffold.values.mock = {
-			account_name: 'TestFiltering',
-			onboarding_step: 3,
-		}
+		scaffold = await scaffolding.up(MODULE, SERVICE) as ScaffoldDtoWithRepository<T>
+		scaffold.values.mock = MOCK
 	})
 
 	it('Create a record for testing', async () => {
-		const result = await scaffold.query.create(scaffold.repository, scaffold.values.mock)
+		const result = await scaffold.query.create(scaffold.repository, MOCK)
 		expect(result).toBeDefined()
 		expect(result.account_id).toBeDefined()
 		scaffold.values.record = result

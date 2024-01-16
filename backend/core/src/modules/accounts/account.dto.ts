@@ -5,8 +5,8 @@ import { Account } from './account.entity'
 import { User } from '../users/users.entity'
 
 export class SuccessAccountDto {
-	readonly account: Account
-	readonly owner: User
+	readonly account!: Account
+	readonly owner!: User
 	readonly access_token?: string
 }
 
@@ -28,7 +28,7 @@ export class OnboardAccountDto {
 	@IsEmail()
 	@MinLength(2)
 	@MaxLength(50)
-	owners_email: string
+	owners_email!: string
 
 	@IsString()
 	@MinLength(8)
@@ -81,7 +81,7 @@ export class OnboardAdditionalAccountDto {
 	@IsString()
 	@MinLength(2)
 	@MaxLength(255)
-	account_name: string
+	account_name!: string
 
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)
@@ -97,13 +97,13 @@ export class OnboardAdditionalAccountDto {
 }
 
 export class AccountDto {
-	account_id: number
+	account_id!: number
 
 	@ApiProperty({ description: 'The name of your company', example: 'Example' })
 	@IsString()
 	@MinLength(2)
 	@MaxLength(255)
-	account_name: string
+	account_name!: string
 
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)

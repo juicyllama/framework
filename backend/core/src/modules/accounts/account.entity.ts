@@ -7,15 +7,15 @@ import { Role } from '../auth/role.entity'
 @Entity('accounts')
 export class Account extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	readonly account_id: number
+	readonly account_id!: number
 
 	@Column()
 	@IsString()
-	account_name: string
+	account_name!: string
 
 	@Column({ type: 'varchar', default: SupportedCurrencies.USD })
 	@IsEnum(SupportedCurrencies)
-	currency: SupportedCurrencies
+	currency!: SupportedCurrencies
 
 	@Column({ default: null, nullable: true })
 	@IsString()

@@ -30,7 +30,7 @@ export class ShortlinksController {
 		@Req() req,
 		@AccountId() account_id: number,
 		@Body() data: UpdatShortenURLDto,
-		@Param() params,
+		@Param() params: any,
 	): Promise<T> {
 		return await this.service.update({
 			[PRIMARY_KEY]: params[PRIMARY_KEY],
