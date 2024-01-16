@@ -22,7 +22,7 @@ import { ContactSubscriptionStatus } from './contacts.enums'
 @Entity('crm_contacts')
 export class Contact extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	readonly contact_id: number
+	readonly contact_id!: number
 
 	@ManyToOne(() => Account, account => account.account_id, {
 		onDelete: 'CASCADE',
@@ -31,7 +31,7 @@ export class Contact extends BaseEntity {
 	account?: Account
 
 	@Column()
-	account_id: number
+	account_id!: number
 
 	@IsString()
 	@MinLength(2)
@@ -96,7 +96,7 @@ export class Contact extends BaseEntity {
 
 	@Expose()
 	get tags_array(): string[] {
-		return this.tags.map(tag => tag.name)
+		return (this.tags || []).map(tag => tag.name)
 	}
 
 	constructor(partial: Partial<Contact>) {

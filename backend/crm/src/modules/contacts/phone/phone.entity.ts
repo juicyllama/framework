@@ -9,7 +9,7 @@ import { BaseEntity } from '@juicyllama/core'
 @Entity('crm_contacts_phones')
 export class ContactPhone extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	readonly phone_id: number
+	readonly phone_id!: number
 
 	@ManyToOne(() => Contact, contact => contact.contact_id, { onDelete: 'CASCADE' })
 	@JoinColumn({ name: 'contact_id' })
@@ -17,7 +17,7 @@ export class ContactPhone extends BaseEntity {
 
 	@Column()
 	@IsNumber()
-	contact_id: number
+	contact_id!: number
 
 	@Column({ default: null, nullable: true })
 	@IsEnum(ContactPhoneType)
@@ -27,11 +27,11 @@ export class ContactPhone extends BaseEntity {
 	@IsString()
 	@MinLength(2)
 	@MaxLength(2)
-	country_iso: string
+	country_iso!: string
 
 	@Column()
 	@IsString()
-	number: string
+	number!: string
 
 	@Column({ default: null, nullable: true })
 	@IsString()
