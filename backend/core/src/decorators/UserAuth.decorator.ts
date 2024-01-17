@@ -10,7 +10,6 @@ import {
 import { AZURE_AD, JWT } from '../modules/auth/auth.constants'
 import { enableAzureADStrategy } from '../modules/auth/strategies/azure.strategy'
 
-
 const guards = [JWT]
 if (enableAzureADStrategy) {
 	guards.push(AZURE_AD)
