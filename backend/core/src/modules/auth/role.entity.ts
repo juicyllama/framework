@@ -10,25 +10,25 @@ import { Unique } from 'typeorm'
 @Unique('users_accounts_roles_UNIQUE', ['user', 'account'])
 export class Role extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	readonly role_id: number
+	readonly role_id?: number
 
 	@ManyToOne(() => User, user => user.user_id, { onDelete: 'CASCADE' })
 	@JoinColumn({ name: 'user_id' })
 	user?: User
 
 	@Column()
-	user_id: number
+	user_id!: number
 
 	@ManyToOne(() => Account, account => account.account_id, { onDelete: 'CASCADE' })
 	@JoinColumn({ name: 'account_id' })
 	account?: Account
 
 	@Column()
-	account_id: number
+	account_id!: number
 
 	@IsEnum(UserRole)
 	@Column({ default: UserRole.MEMBER })
-	role: UserRole
+	role!: UserRole
 
 	constructor(partial: Partial<User>) {
 		super()

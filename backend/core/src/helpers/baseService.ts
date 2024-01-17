@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { Query } from '../utils/typeorm/Query'
-import { DeepPartial, FindOneOptions, Repository } from 'typeorm'
+import { DeepPartial, FindOneOptions, Repository, ObjectLiteral } from 'typeorm'
 import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
 import { BeaconService } from '../modules/beacon/beacon.service'
 import { Cache } from 'cache-manager'
@@ -17,7 +17,7 @@ import { ImportMode, BulkUploadResponse } from '../types/common'
  */
 
 @Injectable()
-export class BaseService<T> {
+export class BaseService<T extends ObjectLiteral> {
 	constructor(
 		readonly query: Query<T>,
 		readonly repository: Repository<T>,
@@ -78,7 +78,7 @@ export class BaseService<T> {
 	 * @param options
 	 */
 
-	async findAll(options?: FindManyOptions, currency?: CurrencyOptions): Promise<T[]> {
+	async findAll(options?: FindManyOptions, currency?: CurrencyOptions<T>): Promise<T[]> {
 		return await this.query.findAll(this.repository, options, currency)
 	}
 
@@ -87,7 +87,7 @@ export class BaseService<T> {
 	 * @param options
 	 */
 
-	async findOne(options?: FindOneOptions, currency?: CurrencyOptions): Promise<T> {
+	async findOne(options?: FindOneOptions, currency?: CurrencyOptions<T>): Promise<T> {
 		let result = await this.cacheFindOne(options)
 		if (result) return result
 
@@ -102,12 +102,10 @@ export class BaseService<T> {
 	 * @param relations
 	 */
 
-	async findById(id: number, relations?: string[], currency?: CurrencyOptions): Promise<T> {
-
-		if(!id){
+	async findById(id: number, relations?: string[], currency?: CurrencyOptions<T>): Promise<T> {
+		if (!id) {
 			throw new Error('ID is required')
 		}
-
 		let result = await this.cacheFindById(id)
 		if (result) return result
 
@@ -151,8 +149,8 @@ export class BaseService<T> {
 	 * @param options
 	 */
 
-	async charts(field: string, options?: ChartOptions, currency?: CurrencyOptions): Promise<any> {
-		return await this.query.charts(this.repository, field, options, currency)
+	async charts(field: string, options?: ChartOptions, currency?: CurrencyOptions<T>): Promise<any> {
+		return await this.query.charts(this.repository, field, options || {}, currency)
 	}
 
 	/**
@@ -218,11 +216,11 @@ export class BaseService<T> {
 	 * Gets the cache ttl to use for this entry
 	 */
 	getCacheTTL(): CachePeriod {
-		return this.options.cache.ttl || CachePeriod.DAY
+		return this.options?.cache?.ttl || CachePeriod.DAY
 	}
 
-	getCacheField(): string {
-		return this.options.cache.field || this.query.getPrimaryKey(this.repository)
+	getCacheField(): keyof T {
+		return this.options?.cache?.field || this.query.getPrimaryKey(this.repository)
 	}
 
 	/**
@@ -239,8 +237,9 @@ export class BaseService<T> {
 				)
 			}
 		} catch (e) {
+			const error = e as Error
 			const logger = new Logger()
-			logger.error(`[core::baseService::cacheRecord] ${e.message}`, e)
+			logger.error(`[core::baseService::cacheRecord] ${error.message}`, error)
 		}
 	}
 
@@ -248,12 +247,14 @@ export class BaseService<T> {
 	 * Finds a record in the cache service if provided and where includes the cacheField
 	 * @param options
 	 */
-
-	async cacheFindOne(options?: FindOneOptions): Promise<T> {
-		if (this.options?.cache?.cacheManager && options?.where[this.getCacheField()] !== undefined) {
-			return await this.options.cache.cacheManager.get(this.getCacheKey(options?.where[this.getCacheField()]))
+	async cacheFindOne(options?: FindOneOptions<T>): Promise<T | undefined> {
+		if (this.options?.cache?.cacheManager && options?.where && this.getCacheField() !== undefined) {
+			const cacheKey = (Array.isArray(options.where) ? options.where[0] : options.where)[this.getCacheField()]
+			if (cacheKey) {
+				return await this.options.cache.cacheManager.get<T>(cacheKey as string)
+			}
 		}
-		return
+		return undefined
 	}
 
 	/**
@@ -261,11 +262,10 @@ export class BaseService<T> {
 	 * @param id
 	 */
 
-	async cacheFindById(id: number): Promise<T> {
+	async cacheFindById(id: number): Promise<T | undefined> {
 		if (this.options?.cache?.cacheManager && this.getCacheField() === this.query.getPrimaryKey(this.repository)) {
 			return await this.options.cache.cacheManager.get(this.getCacheKey(id))
 		}
-
 		return
 	}
 

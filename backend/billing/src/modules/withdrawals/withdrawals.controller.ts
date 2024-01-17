@@ -89,7 +89,7 @@ export class WithdrawalsController {
 		required: false,
 		example: SupportedCurrencies.USD,
 	})
-	async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Promise<BILLING_WITHDRAWAL_T[]> {
+	async findAll(@Req() req, @Query() query: any, @AccountId() account_id: number): Promise<BILLING_WITHDRAWAL_T[]> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 
 		const where: FindOptionsWhere<BILLING_WITHDRAWAL_T>[] = [

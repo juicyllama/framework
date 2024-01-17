@@ -9,7 +9,7 @@ export class TagDto {
 	@IsString()
 	@MinLength(2)
 	@MaxLength(255)
-	name: string
+	name!: string
 }
 
 export class CreateTagDto extends TagDto {}
@@ -18,5 +18,5 @@ export class UpdateTagDto extends PartialType(TagDto) {}
 
 export class TagResponceDto extends Classes.ExtendsMultiple([TagDto, BaseResponseDto]) {
 	@SwaggerPropertyDecorator({ description: 'The Tag ID', example: 1 })
-	readonly tag_id: number
+	readonly tag_id!: number
 }

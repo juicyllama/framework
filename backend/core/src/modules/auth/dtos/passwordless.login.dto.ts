@@ -8,5 +8,5 @@ export class InitiatePasswordlessLoginDto {
 		description: 'The users email address',
 		example: 'jon.doe@example.com',
 	})
-	readonly email: string
+	readonly email!: string
 }

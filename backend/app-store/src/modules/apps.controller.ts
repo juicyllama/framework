@@ -33,22 +33,22 @@ export class AppsController extends BaseController<T> {
 	}
 
 	@ReadManyDecorator(constants)
-	async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Promise<T[]> {
+	async findAll(@Req() req, @Query() query: any, @AccountId() account_id: number): Promise<T[]> {
 		return super.findAll(req, query, account_id)
 	}
 
 	@ReadStatsDecorator(constants)
 	async stats(
 		@Req() req,
-		@Query() query,
+		@Query() query: any,
 		@AccountId() account_id: number,
 		@Query('method') method: StatsMethods,
 	): Promise<any> {
 		return super.stats(req, query, account_id, method)
 	}
 
-	@ReadOneDecorator(constants)
-	async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
+	@ReadOneDecorator({...constants, primaryKey: 'app_id'})
+	async findOne(@Req() req, @AccountId() account_id: number, @Param() params: any, @Query() query: any): Promise<T> {
 		return super.findOne(req, account_id, params, query)
 	}
 }

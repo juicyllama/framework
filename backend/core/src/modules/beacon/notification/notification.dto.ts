@@ -3,18 +3,18 @@ import { BeaconStatus } from '../beacon.enums'
 
 export class BeaconPushResponseDto {
 	@IsNumber()
-	app_push_id: number
+	app_push_id!: number
 
 	@IsEnum(BeaconStatus)
-	status: BeaconStatus
+	status!: BeaconStatus
 }
 
 export class BeaconPushRequestDto {
 	@IsString()
-	channel: string
+	channel!: string
 
 	@IsString()
-	event: string
+	event!: string
 
 	@IsObject()
 	data?: any

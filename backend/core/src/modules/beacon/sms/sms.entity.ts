@@ -7,11 +7,11 @@ import { BeaconCommunicationDto } from '../beacon.dto'
 export class BeaconSms {
 	@PrimaryGeneratedColumn()
 	@IsNumber()
-	readonly sms_id: number
+	readonly sms_id?: number
 
 	@Column({ type: 'json', default: null, nullable: true })
 	@IsObject()
-	communication: BeaconCommunicationDto
+	communication!: BeaconCommunicationDto
 
 	@Column({ default: null, nullable: true })
 	@IsString()
@@ -23,7 +23,7 @@ export class BeaconSms {
 
 	@Column({ type: 'mediumtext', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', default: null, nullable: true }) //support emojis
 	@IsString()
-	markdown: string
+	markdown!: string
 
 	@Column({ default: BeaconStatus.PENDING })
 	@IsEnum(BeaconStatus)
@@ -34,10 +34,10 @@ export class BeaconSms {
 	unique?: string
 
 	@CreateDateColumn()
-	readonly created_at: Date
+	readonly created_at?: Date
 
 	@UpdateDateColumn()
-	updated_at: Date
+	updated_at?: Date
 
 	@Column({ default: null, nullable: true })
 	@IsDate()

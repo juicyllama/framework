@@ -8,7 +8,8 @@ export default defineNuxtConfig({
 	  '@nuxthq/studio',
 	  '@nuxtjs/fontaine',
 	  '@nuxtjs/google-fonts',
-	  'nuxt-og-image'
+	  'nuxt-og-image',
+	  '@nuxtjs/tailwindcss'
 	],
 	hooks: {
 	  'components:extend': (components) => {

@@ -20,7 +20,7 @@ export class BeaconSmsService {
 		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
 	) {}
 
-	async create(message: BeaconMessageDto): Promise<boolean> {
+	async create(message: BeaconMessageDto): Promise<boolean | undefined> {
 		const domain = 'core::beacon::sms::create'
 
 		this.logger.debug(`[${domain}] Beacon SMS`, message)

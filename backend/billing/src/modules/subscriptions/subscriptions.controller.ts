@@ -26,7 +26,7 @@ export class SubscriptionsController extends BaseController<T> {
 	}
 
 	@ReadManyDecorator(constants)
-	async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Promise<T[]> {
+	async findAll(@Req() req, @Query() query: any, @AccountId() account_id: number): Promise<T[]> {
 		return super.findAll(req, query, account_id)
 	}
 }

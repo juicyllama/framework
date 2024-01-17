@@ -370,7 +370,7 @@ export function DeleteDecorator(options: Partial<ControllerConstants>) {
 }
 
 function generateResponseObject(
-	type,
+	type: any,
 	description: string,
 	isArray: boolean = false,
 ): {
@@ -400,7 +400,10 @@ function generateSelectRHSFilteringAPIQueries(selectEnum: any) {
 	)
 }
 
-function currencyFieldsDecorator(currency_field: string, currency_fields: string[]) {
+function currencyFieldsDecorator(
+	currency_field: string, // name of field that holds the currency used. e.g. 'currency'. its value could e.g. 'USD'
+	currency_fields: string[], // e.g. ['subtotal_price', 'total_shipping', 'total_price']
+) {
 	return ApiQuery({
 		name: 'convert_currencies_to',
 		description: `The currency you would like to return the results in, it will use \`${currency_field}\` and convert the values for fields: \`${currency_fields.join(

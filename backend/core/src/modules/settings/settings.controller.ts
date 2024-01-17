@@ -16,6 +16,7 @@ import { ApiQuery, ApiParam, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { SettingsService } from './settings.service'
 import { AccountId, CreateDecorator, UserAuth } from '../../decorators'
 import { SETTINGS_E, SETTINGS_T, SETTINGS_NAME } from './settings.constants'
+import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
 
 @ApiTags('Settings')
 @UserAuth()
@@ -45,7 +46,11 @@ export class SettingsController {
 		example: 1,
 	})
 	@Get(':key')
-	async findValueByKey(@AccountId() account_id: number, @Param('key') key, @Query('user_id') user_id): Promise<any> {
+	async findValueByKey(
+		@AccountId() account_id: number,
+		@Param('key') key: string,
+		@Query('user_id') user_id: number,
+	): Promise<any> {
 		const setting = await this.service.findOne(key)
 
 		if (!setting) {
@@ -73,10 +78,10 @@ export class SettingsController {
 	})
 	@Patch(':key')
 	async update(
-		@Req() req,
+		@Req() req: AuthenticatedRequest,
 		@AccountId() account_id: number,
 		@Body() data: UpdateSettingsDto,
-		@Param('key') key,
+		@Param('key') key: string,
 	): Promise<SETTINGS_T> {
 		const setting = await this.service.findOne(key)
 
@@ -104,7 +109,11 @@ export class SettingsController {
 		example: 'something::unique::key',
 	})
 	@Delete(':key')
-	async delete(@Req() req, @AccountId() account_id: number, @Param('key') key): Promise<SETTINGS_T> {
+	async delete(
+		@Req() req: AuthenticatedRequest,
+		@AccountId() account_id: number,
+		@Param('key') key: string,
+	): Promise<SETTINGS_T> {
 		const setting = await this.service.findOne(key)
 
 		if (!setting) {
@@ -119,7 +128,7 @@ export class SettingsController {
 			throw new BadRequestException(`Setting with key: ${key} not found`)
 		}
 
-		await this.service.purge(key)
+		await this.service.purge(setting)
 		return setting
 	}
 }

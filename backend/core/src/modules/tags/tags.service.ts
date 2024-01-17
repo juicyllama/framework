@@ -31,8 +31,8 @@ export class TagsService extends BaseService<T> {
 		})
 	}
 
-	async findByName(name: string): Promise<T> {
-		let tag = <Tag>await this.cacheManager.get(JLCache.cacheKey(cache_key, name))
+	async findByName(name: string): Promise<T | null> {
+		let tag: Tag | null = <Tag>await this.cacheManager.get(JLCache.cacheKey(cache_key, name))
 		if (tag) return tag
 
 		tag = await this.repository.findOne({

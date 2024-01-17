@@ -1,3 +1,5 @@
+import { ComparisonOperator, Enums, Env, Logger, SupportedCurrencies, getMySQLTimeInterval } from '@juicyllama/utils'
+import { castArray, isNil, omitBy } from 'lodash'
 import {
 	And,
 	DeepPartial,
@@ -5,8 +7,10 @@ import {
 	FindManyOptions,
 	FindOneOptions,
 	FindOperator,
-	InsertResult,
+	FindOptionsWhere,
+	FindOptionsWhereProperty,
 	In,
+	InsertResult,
 	IsNull,
 	LessThan,
 	LessThanOrEqual,
@@ -14,20 +18,17 @@ import {
 	MoreThan,
 	MoreThanOrEqual,
 	Not,
+	ObjectLiteral,
 	Repository,
-	FindOptionsWhere,
 } from 'typeorm'
-import _ from 'lodash'
-import { TypeOrm } from './TypeOrm'
-import { isNil, omitBy } from 'lodash'
-import { ComparisonOperator, Enums, Env, getMySQLTimeInterval, Logger, SupportedCurrencies } from '@juicyllama/utils'
 import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder'
+import { BulkUploadResponse, ChartResult, ImportMode } from '../../types/common'
 import { ChartOptions, CurrencyOptions } from '../../types/typeorm'
-import { ImportMode, BulkUploadResponse, ChartResult } from '../../types/common'
+import { Entries, TypeOrm } from './TypeOrm'
 
 const logger = new Logger()
 
-export class Query<T> {
+export class Query<T extends ObjectLiteral> {
 	/**
 	 * Perform a raw SQL query
 	 * @param repository
@@ -56,7 +57,8 @@ export class Query<T> {
 
 			return result
 		} catch (e: any) {
-			return await this.handleCreateError(e, repository, data)
+			this.logCreateError(e, repository, data)
+			throw e
 		}
 	}
 
@@ -101,7 +103,7 @@ export class Query<T> {
 			},
 		})
 
-		let result: BulkUploadResponse
+		let result: BulkUploadResponse | undefined = undefined
 
 		switch (import_mode) {
 			case ImportMode.CREATE:
@@ -137,6 +139,12 @@ export class Query<T> {
 					await this.restoreTable(repository)
 				}
 				break
+			default:
+				throw new Error(`${import_mode} is not a supported import mode`)
+		}
+
+		if (!result) {
+			throw new Error('Failed to upsert')
 		}
 
 		logger.debug(`[QUERY][BULK][${repository.metadata.tableName}][${import_mode}] Result`, result)
@@ -154,15 +162,15 @@ export class Query<T> {
 		repository: Repository<T>,
 		id: number,
 		relations?: string[],
-		currency?: CurrencyOptions,
+		currency?: CurrencyOptions<T>,
 	): Promise<T> {
-		const where = {}
-		where[this.getPrimaryKey(repository)] = id
+		const where: FindOptionsWhere<T> = {}
+		where[this.getPrimaryKey(repository)] = <T[keyof T]>id
 		const result = <T>await this.findOne(repository, {
 			where: where,
 			relations: relations?.length ? relations : this.getRelations(repository),
 		})
-		return <T>await this.convertCurrency<T>(result, currency)
+		return <T>await this.convertCurrency(result, currency)
 	}
 
 	/**
@@ -176,14 +184,14 @@ export class Query<T> {
 		repository: Repository<T>,
 		where: FindOptionsWhere<T>[] | FindOptionsWhere<T>,
 		options?: FindManyOptions,
-		currency?: CurrencyOptions,
+		currency?: CurrencyOptions<T>,
 	): Promise<T> {
 		options = TypeOrm.findOneOptionsWrapper<T>(repository, options)
 		const result = <T>await this.findOne(repository, {
 			...options,
 			where: where,
 		})
-		return <T>await this.convertCurrency<T>(result, currency)
+		return <T>await this.convertCurrency(result, currency)
 	}
 
 	/**
@@ -192,14 +200,14 @@ export class Query<T> {
 	 * @param options
 	 */
 
-	async findOne(repository: Repository<T>, options?: FindOneOptions, currency?: CurrencyOptions): Promise<T> {
+	async findOne(repository: Repository<T>, options?: FindOneOptions, currency?: CurrencyOptions<T>): Promise<T> {
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}]`, { options: options })
 		}
 
 		options = TypeOrm.findOneOptionsWrapper<T>(repository, options)
 		const result = <T>await repository.findOne(options)
-		const convertedResult = <T>await this.convertCurrency<T>(result, currency)
+		const convertedResult = <T>await this.convertCurrency(result, currency)
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}] Result`, convertedResult)
 		}
@@ -212,14 +220,14 @@ export class Query<T> {
 	 * @param options
 	 */
 
-	async findAll(repository: Repository<T>, options?: FindManyOptions, currency?: CurrencyOptions): Promise<T[]> {
+	async findAll(repository: Repository<T>, options?: FindManyOptions, currency?: CurrencyOptions<T>): Promise<T[]> {
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][FIND][MANY][${repository.metadata.tableName}]`, { options: options })
 		}
 
 		options = TypeOrm.findAllOptionsWrapper<T>(repository, options)
 		const result = <T[]>await repository.find(options)
-		return <T[]>await this.convertCurrency<T>(result, currency)
+		return <T[]>await this.convertCurrency(result, currency)
 	}
 
 	/**
@@ -235,7 +243,9 @@ export class Query<T> {
 
 		if (!data[this.getPrimaryKey(repository)]) {
 			throw new Error(
-				`Primary key ${this.getPrimaryKey(repository)} missing from update to ${repository.metadata.tableName}`,
+				`Primary key ${<string>this.getPrimaryKey(repository)} missing from update to ${
+					repository.metadata.tableName
+				}`,
 			)
 		}
 
@@ -243,7 +253,8 @@ export class Query<T> {
 			await repository.update(data[this.getPrimaryKey(repository)], <any>data)
 			return await this.findOneById(repository, data[this.getPrimaryKey(repository)])
 		} catch (e) {
-			return await this.handleUpdateError(e, repository, data)
+			this.logUpdateError(e, repository, data)
+			throw e
 		}
 	}
 
@@ -269,7 +280,7 @@ export class Query<T> {
 	 * @param options
 	 */
 
-	async sum(repository: Repository<T>, metric: string, options?: FindManyOptions): Promise<number> {
+	async sum(repository: Repository<T>, metric: string, options?: FindManyOptions<T>): Promise<number> {
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][SUM][${repository.metadata.tableName}]`, { metric: metric, options: options })
 		}
@@ -277,7 +288,7 @@ export class Query<T> {
 		options = TypeOrm.findAllOptionsWrapper<T>(repository, options)
 
 		const result = await repository
-			.createQueryBuilder()
+			.createQueryBuilder() // @ts-ignore: options.where is FindOptionsWhere which is actually a valid ObjectLiteral
 			.where(options.where)
 			.select(`SUM(${metric}) as sum`)
 			.execute()
@@ -292,7 +303,7 @@ export class Query<T> {
 	 * @param options
 	 */
 
-	async avg(repository: Repository<T>, metric: string, options?: FindManyOptions): Promise<number> {
+	async avg(repository: Repository<T>, metric: string, options?: FindManyOptions<T>): Promise<number> {
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][AVG][${repository.metadata.tableName}]`, { metric: metric, options: options })
 		}
@@ -300,7 +311,7 @@ export class Query<T> {
 		options = TypeOrm.findAllOptionsWrapper<T>(repository, options)
 
 		const result = await repository
-			.createQueryBuilder()
+			.createQueryBuilder() // @ts-ignore options.where is FindOptionsWhere which is actually a valid ObjectLiteral
 			.where(options.where)
 			.select(`AVG(${metric}) as average`)
 			.execute()
@@ -319,7 +330,7 @@ export class Query<T> {
 		repository: Repository<T>,
 		field: string,
 		options: ChartOptions,
-		currency?: CurrencyOptions,
+		currency?: CurrencyOptions<T>,
 	): Promise<ChartResult[]> {
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][CHARTS][${repository.metadata.tableName}]`, { field, options: options })
@@ -339,6 +350,7 @@ export class Query<T> {
 		if (options.period) {
 			queryBuilder = queryBuilder.addSelect(getMySQLTimeInterval(options.period), 'time_interval')
 		}
+		// @ts-ignore options.where is FindOptionsWhere which is actually a valid ObjectLiteral
 		queryBuilder.where(options.where)
 		if (options.from) {
 			queryBuilder = queryBuilder.andWhere('created_at >= :from', { from: options.from })
@@ -368,11 +380,14 @@ export class Query<T> {
 					return record.time_interval.toString() == r.time_interval.toString()
 				})
 
-				if (SupportedCurrencies[r[currency.currency_field]] !== SupportedCurrencies[currency.currency]) {
+				if (
+					SupportedCurrencies[<keyof typeof SupportedCurrencies>r[currency.currency_field]] !==
+					SupportedCurrencies[currency.currency]
+				) {
 					r[field] = await currency.fxService.convert(
 						r[field],
-						SupportedCurrencies[r[currency.currency_field]],
-						SupportedCurrencies[currency.currency],
+						r[currency.currency_field],
+						currency.currency,
 						r.time_interval,
 					)
 				}
@@ -382,7 +397,7 @@ export class Query<T> {
 						count: 1,
 						[field]: Number(r[field]) * Number(r.count),
 						time_interval: r.time_interval,
-						currency: r.currency ?? null,
+						currency: r.currency,
 					})
 				} else {
 					reduced[reducedIndex][field] += Number(r[field]) * Number(r.count)
@@ -500,22 +515,26 @@ export class Query<T> {
 		await this.raw(repository, sql_drop)
 	}
 
-	getPrimaryKey(repository: Repository<T>) {
-		return repository.metadata.columns.find(column => {
+	getPrimaryKey(repository: Repository<T>): keyof DeepPartial<T> {
+		const pk = repository.metadata.columns.find(column => {
 			if (column.isPrimary) {
 				return column
 			}
-		}).propertyName
+		})?.propertyName
+		if (!pk) {
+			throw new Error('no primary key was found')
+		}
+		return <keyof DeepPartial<T>>pk
 	}
 
 	getTableName(repository: Repository<T>) {
 		return repository.metadata.tableName
 	}
 
-	getRelations(repository: Repository<T>) {
-		const result = {}
+	getRelations(repository: Repository<T>): Record<string, boolean> {
+		const result: Record<string, boolean> = {}
 
-		const relations = repository.metadata.relations.map(column => {
+		const relations: string[] = repository.metadata.relations.map(column => {
 			return column.propertyName
 		})
 
@@ -575,33 +594,34 @@ export class Query<T> {
 
 	buildWhere(options: {
 		repository: Repository<T>
-		query?: any
+		query?: Partial<Record<'search' | keyof T, string | string[]>>
 		account_id?: number
 		account_ids?: number[]
 		search_fields?: string[]
 	}): FindOptionsWhere<T>[] | FindOptionsWhere<T> {
 		const where = []
 
-		let whereBase = {}
+		let whereBase: FindOptionsWhere<T> = {}
 
+		const entries: Entries<T> = Object.entries(options.query ?? {}) as Entries<T>
 		if (options.query) {
-			for (const [key, value] of Object.entries(options.query)) {
+			for (const [key, value] of entries) {
 				if (options.repository.metadata.columns.find(column => column.propertyName === key)) {
 					// @ts-ignore
-					const fieldLookupWhere: FindOperator<string>[] = _.castArray(value) // value may be a string or an array of strings
-						.reduce((memo: FindOperator<string>[], currentValue: string) => {
+					const fieldLookupWhere: FindOperator<string>[] = castArray(value) // value may be a string or an array of strings
+						.reduce((memo: FindOperator<string>[], currentValue: keyof typeof ComparisonOperator) => {
 							if (typeof currentValue !== 'string') return memo
 							// checking if value is of the form "operator:value"
 							const [operator, lookupValue] = splitStringByFirstColon(currentValue)
 							const opKeyName =
-								Enums.getKeyName(ComparisonOperator, operator.toUpperCase()) ||
+								Enums.getKeyName(ComparisonOperator, operator.toUpperCase()) || // @ts-ignore
 								Enums.getKeyName(ComparisonOperator, ComparisonOperator[currentValue.toUpperCase()])
 							if (opKeyName) {
 								// if operator is a valid ComparisonOperator
 								return [
 									...memo,
 									this.mapComparisonOperatorToTypeORMFindOperators(
-										ComparisonOperator[opKeyName],
+										ComparisonOperator[<keyof typeof ComparisonOperator>opKeyName],
 										lookupValue,
 									),
 								]
@@ -610,10 +630,16 @@ export class Query<T> {
 						}, [])
 					whereBase[key] =
 						fieldLookupWhere.length === 1
-							? fieldLookupWhere[0]
+							? (fieldLookupWhere[0] as keyof T extends 'toString'
+									? unknown
+									: FindOptionsWhereProperty<NonNullable<T[keyof T]>, NonNullable<T[keyof T]>>)
 							: fieldLookupWhere.length > 0
-								? And(...fieldLookupWhere)
-								: value // if no valid operator is found, return the value as is - backward compatibility
+								? (And(...fieldLookupWhere) as keyof T extends 'toString'
+										? unknown
+										: FindOptionsWhereProperty<NonNullable<T[keyof T]>, NonNullable<T[keyof T]>>)
+								: (value as keyof T extends 'toString'
+										? unknown
+										: FindOptionsWhereProperty<NonNullable<T[keyof T]>, NonNullable<T[keyof T]>>)
 				}
 			}
 		}
@@ -704,7 +730,7 @@ export class Query<T> {
 	 * Duplicate key error
 	 */
 
-	async handleCreateError(e: any, repository: Repository<T>, data: DeepPartial<T>): Promise<T> {
+	logCreateError(e: any, repository: Repository<T>, data: DeepPartial<T>): void {
 		const logger = new Logger()
 
 		if (e.message.startsWith('Duplicate entry')) {
@@ -715,14 +741,6 @@ export class Query<T> {
 				data: data,
 				error: e,
 			})
-
-			const uniqueKeyWhere = {}
-
-			for (const key of TypeOrm.getUniqueKeyFields(repository)) {
-				uniqueKeyWhere[key] = data[key]
-			}
-
-			return this.findOne(repository, { where: uniqueKeyWhere })
 		} else {
 			logger.error(`[SQL][CREATE] Error: ${e.message}`, {
 				repository: {
@@ -734,12 +752,10 @@ export class Query<T> {
 					stack: e.stack,
 				},
 			})
-
-			return undefined
 		}
 	}
 
-	async handleUpdateError(e: any, repository: Repository<T>, data: DeepPartial<T>): Promise<T> {
+	logUpdateError(e: any, repository: Repository<T>, data: DeepPartial<T>): void {
 		const logger = new Logger()
 
 		if (e.message.startsWith('Duplicate entry')) {
@@ -750,14 +766,6 @@ export class Query<T> {
 				data: data,
 				error: e,
 			})
-
-			const uniqueKeyWhere = {}
-
-			for (const key of TypeOrm.getUniqueKeyFields(repository)) {
-				uniqueKeyWhere[key] = data[key]
-			}
-
-			return this.findOne(repository, { where: uniqueKeyWhere })
 		} else {
 			logger.error(`[SQL][UPDATE]  ${e.message}`, {
 				repository: {
@@ -769,8 +777,6 @@ export class Query<T> {
 					stack: e.stack,
 				},
 			})
-
-			return undefined
 		}
 	}
 
@@ -798,6 +804,7 @@ export class Query<T> {
 				result.created++
 			} catch (e: any) {
 				result.errored++
+				result.errors ||= []
 				result.errors.push(e.message)
 			}
 			result.processed++
@@ -831,16 +838,17 @@ export class Query<T> {
 					},
 				})
 
-				const entity = await this.upsert(repository, record, dedup_field)
+				await this.upsert(repository, record, dedup_field)
 
 				if (r) {
 					result.updated++
 				} else {
 					result.created++
 				}
-				result.ids.push(entity[this.getPrimaryKey(repository)])
+				result.ids.push(r[this.getPrimaryKey(repository)])
 			} catch (e: any) {
 				result.errored++
+				result.errors ||= []
 				result.errors.push(e.message)
 			}
 			result.processed++
@@ -865,7 +873,7 @@ export class Query<T> {
 			updated: 0,
 			deleted: 0,
 			errored: 0,
-			errors: [],
+			ids: [],
 		}
 
 		const records: any[] = []
@@ -888,6 +896,7 @@ export class Query<T> {
 				}
 			} catch (e: any) {
 				result.errored++
+				result.errors ||= []
 				result.errors.push(e.message)
 			}
 			result.processed++
@@ -900,7 +909,7 @@ export class Query<T> {
 	 * Converts currency_fields to a spcific currency
 	 */
 
-	async convertCurrency<T>(result: T | T[], currency?: CurrencyOptions): Promise<T | T[]> {
+	async convertCurrency(result: T | T[], currency?: CurrencyOptions<T>): Promise<T | T[]> {
 		if (
 			!currency ||
 			!currency.currency ||
@@ -912,50 +921,36 @@ export class Query<T> {
 
 		const logger = new Logger()
 
-		if (Array.isArray(result)) {
-			logger.debug(`[QUERY][CONVERTCURRENCY] Converting ${result.length} Records to ${currency.currency}`, {
+		logger.debug(
+			`[QUERY][CONVERTCURRENCY] Converting ${castArray(result).length} Records to ${currency.currency}`,
+			{
 				currency_field: currency.currency_field,
 				currency_fields: currency.currency_fields,
-			})
+			},
+		)
 
-			for (const r in result) {
-				if (
-					SupportedCurrencies[result[r][currency.currency_field]] !== SupportedCurrencies[currency.currency]
-				) {
-					for (const field of currency.currency_fields) {
-						result[r][field] = await currency.fxService.convert(
-							result[r][field],
-							SupportedCurrencies[result[r][currency.currency_field]],
-							SupportedCurrencies[currency.currency],
-							result[r]['created_at'] ?? new Date(),
-						)
-					}
-					result[r][currency.currency_field] = SupportedCurrencies[currency.currency]
-				}
-			}
-			return <T[]>result
-		} else {
-			logger.debug(`[QUERY][CONVERTCURRENCY] Converting record to ${currency.currency}`, {
-				currency_field: currency.currency_field,
-				currency_fields: currency.currency_fields,
-			})
-
-			if (result[currency.currency_field] != SupportedCurrencies[currency.currency]) {
+		for (const record of castArray(result)) {
+			if (
+				SupportedCurrencies[<keyof typeof SupportedCurrencies>record[currency.currency_field]] !==
+				SupportedCurrencies[currency.currency]
+			) {
 				for (const field of currency.currency_fields) {
-					result[field] = await currency.fxService.convert(
-						result[field],
-						SupportedCurrencies[field[currency.currency_field]],
+					const converted: number = await currency.fxService.convert(
+						record[field],
+						record[currency.currency_field],
 						SupportedCurrencies[currency.currency],
-						result['created_at'] ?? new Date(),
+						record['created_at'] ?? new Date(),
 					)
+					// @ts-ignore
+					record[field] = converted
 				}
-				result[currency.currency_field] = SupportedCurrencies[currency.currency]
+				record[currency.currency_field] = SupportedCurrencies[currency.currency]
 			}
-			return <T>result
 		}
+		return result
 	}
 
-	includeAccount<T>(
+	includeAccount(
 		whereBase: any,
 		options: {
 			repository: Repository<T>

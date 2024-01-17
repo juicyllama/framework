@@ -7,11 +7,11 @@ import { BeaconCommunicationDto } from '../beacon.dto'
 export class BeaconEmail {
 	@PrimaryGeneratedColumn()
 	@IsNumber()
-	readonly email_id: number
+	readonly email_id!: number
 
 	@Column({ type: 'json', default: null, nullable: true })
 	@IsObject()
-	communication: BeaconCommunicationDto
+	communication!: BeaconCommunicationDto
 
 	@Column({ default: null, nullable: true })
 	@IsString()
@@ -23,11 +23,11 @@ export class BeaconEmail {
 
 	@Column({ type: 'varchar', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', default: null, nullable: true }) //support emojis
 	@IsString()
-	subject: string
+	subject!: string
 
 	@Column({ type: 'mediumtext', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', default: null, nullable: true }) //support emojis
 	@IsString()
-	markdown: string
+	markdown!: string
 
 	@Column({ type: 'json', default: null, nullable: true })
 	@IsObject()
@@ -42,10 +42,10 @@ export class BeaconEmail {
 	unique?: string
 
 	@CreateDateColumn()
-	readonly created_at: Date
+	readonly created_at?: Date
 
 	@UpdateDateColumn()
-	updated_at: Date
+	updated_at?: Date
 
 	@Column({ default: null, nullable: true })
 	@IsDate()

@@ -19,6 +19,7 @@ describe('Core Bootup', () => {
 					providers: [],
 				}).compile()
 			} catch (e) {
+				// @ts-ignore
 				expect(e.message).toEqual('Bootup failed')
 			}
 		})

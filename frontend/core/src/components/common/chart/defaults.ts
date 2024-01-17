@@ -12,6 +12,7 @@ export const defaultChartSettings = {
 
 // label position, label shape
 export const labelsDefaultStyle = {
+	display: true,
 	position: 'bottom',
 	labels: {
 		usePointStyle: true,

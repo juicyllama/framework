@@ -43,8 +43,8 @@ export class SettingsService {
 		return setting
 	}
 
-	async findOne(key: string): Promise<Setting> {
-		let setting = <Setting>await this.cacheManager.get(JLCache.cacheKey(cache_key, key))
+	async findOne(key: string): Promise<Setting | null> {
+		let setting: Setting | null = <Setting>await this.cacheManager.get(JLCache.cacheKey(cache_key, key))
 
 		if (setting) return setting
 

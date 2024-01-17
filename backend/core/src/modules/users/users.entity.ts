@@ -20,7 +20,7 @@ import { Role } from '../auth/role.entity'
 @Entity('users')
 export class User extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	readonly user_id: number
+	readonly user_id!: number
 
 	@IsString()
 	@MinLength(2)
@@ -38,7 +38,7 @@ export class User extends BaseEntity {
 	@Column({ unique: true })
 	@IsEmail()
 	@Expose({ groups: ['ADMIN', 'OWNER'] })
-	readonly email: string
+	readonly email!: string
 
 	@Column({ default: null, nullable: true })
 	@IsString()
@@ -52,7 +52,7 @@ export class User extends BaseEntity {
 
 	@Column({ default: UserAvatarType.NONE })
 	@IsEnum(UserAvatarType)
-	avatar_type: UserAvatarType
+	avatar_type!: UserAvatarType
 
 	@Column({ default: null, nullable: true })
 	@IsUrl()
@@ -73,7 +73,7 @@ export class User extends BaseEntity {
 		inverseJoinColumn: { name: 'account_id', referencedColumnName: 'account_id' },
 	})
 	@IsArray()
-	accounts?: Account[]
+	accounts!: Account[]
 
 	@OneToMany(() => Role, role => role.user, { cascade: true })
 	roles?: Role[]

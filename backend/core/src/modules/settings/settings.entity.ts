@@ -8,13 +8,13 @@ import { User } from '../users/users.entity'
 @Unique(['key'])
 export class Setting extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	id: number
+	id!: number
 
 	@Column()
 	@IsString()
 	@MinLength(1)
 	@MaxLength(255)
-	key: string
+	key!: string
 
 	@Column({ type: 'json', nullable: false })
 	@IsJSON()
