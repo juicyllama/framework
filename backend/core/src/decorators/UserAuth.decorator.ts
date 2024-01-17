@@ -8,15 +8,15 @@ import {
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 import { AZURE_AD, JWT } from '../modules/auth/auth.constants'
-import { enableAzureADStrategy } from '../modules/auth/strategies/azure.strategy'
-
-const guards = [JWT]
-if (enableAzureADStrategy) {
-	guards.push(AZURE_AD)
-}
 
 export function UserAuth(options?: { skipAccountId?: boolean }) {
-	const decorators = [ApiBearerAuth(), UseGuards(AuthGuard(guards))]
+	const decorators = [ApiBearerAuth()]
+
+	if (process.env.AZURE_AD_CLIENT_ID) {
+		decorators.push(UseGuards(AuthGuard([JWT, AZURE_AD])))
+	} else {
+		decorators.push(UseGuards(AuthGuard(JWT)))
+	}
 
 	if (!options?.skipAccountId) {
 		decorators.push(
