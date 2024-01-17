@@ -3,7 +3,7 @@ import { forwardRef, HttpServer, INestApplication, ValidationPipe } from '@nestj
 import { AccountService } from '../modules/accounts/account.service'
 import { Account } from '../modules/accounts/account.entity'
 import { User } from '../modules/users/users.entity'
-import { Env, Logger } from '@juicyllama/utils'
+import { Api, Env, Logger } from '@juicyllama/utils'
 import { MockAccountRequest } from './mocks'
 import { testCleanup } from './closedown'
 import { AccountModule } from '../modules/accounts/account.module'
@@ -17,6 +17,7 @@ import { validationPipeOptions } from '../configs/nest.config'
 let httpServer: HttpServer
 let moduleRef: TestingModule
 let logger: Logger
+let api: Api
 
 export class ScaffoldDto<T extends ObjectLiteral> {
 	server!: HttpServer
@@ -27,6 +28,7 @@ export class ScaffoldDto<T extends ObjectLiteral> {
 		accountService: AccountService
 		authService: AuthService
 		logger: Logger
+		api: Api
 		service: any
 	}
 	values!: {
@@ -73,7 +75,7 @@ export class Scaffold<T extends ObjectLiteral>  {
 		try {
 			moduleRef = await Test.createTestingModule({
 				imports: imports,
-				providers: [Query, Logger],
+				providers: [Query, Logger, Api],
 			}).compile()
 		} catch (e) {
 			const error = e as Error
@@ -88,6 +90,7 @@ export class Scaffold<T extends ObjectLiteral>  {
 		accountService = await moduleRef.resolve(AccountService)
 		authService = await moduleRef.resolve(AuthService)
 		logger = await moduleRef.resolve(Logger)
+		api = await moduleRef.resolve(Api)
 		query = await moduleRef.resolve(Query<T>)
 
 		if (SERVICE) {
@@ -111,6 +114,7 @@ export class Scaffold<T extends ObjectLiteral>  {
 				accountService: accountService,
 				authService: authService,
 				logger: logger,
+				api: api,
 				service: service,
 			},
 			values: {
