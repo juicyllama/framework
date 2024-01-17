@@ -12,7 +12,7 @@ import { AZURE_AD, JWT } from '../modules/auth/auth.constants'
 export function UserAuth(options?: { skipAccountId?: boolean }) {
 	const decorators = [ApiBearerAuth()]
 
-	if (process.env.AZURE_AD_CLIENT_ID) {
+	if (process.env.AZURE_AD_CLIENT_ID && process.env.AZURE_AD_TENANT_ID && process.env.AZURE_AD_CLIENT_SECRET) {
 		decorators.push(UseGuards(AuthGuard([JWT, AZURE_AD])))
 	} else {
 		decorators.push(UseGuards(AuthGuard(JWT)))
