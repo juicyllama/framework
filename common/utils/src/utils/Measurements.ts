@@ -45,7 +45,7 @@ export class Measurements {
 		const totalInches = Number(number) / 2.54
 		const feet = Math.floor(totalInches / 12)
 		const inches = Number(totalInches.toFixed(2)) - feet * 12
-		return Number(`${feet}.${inches}`)
+		return Number(`${feet}.${inches.toFixed(0)}`)
 	}
 	
 }
