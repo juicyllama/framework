@@ -1,4 +1,5 @@
 import { applyDecorators, UseGuards } from '@nestjs/common'
+import { AuthGuard } from '@nestjs/passport'
 import {
 	ApiBearerAuth,
 	ApiForbiddenResponse,
@@ -6,11 +7,17 @@ import {
 	ApiNotFoundResponse,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
-import { AuthGuard } from '@nestjs/passport'
 import { AZURE_AD, JWT } from '../modules/auth/auth.constants'
+import { enableAzureADStrategy } from '../modules/auth/strategies/azure.strategy'
+
+
+const guards = [JWT]
+if (enableAzureADStrategy) {
+	guards.push(AZURE_AD)
+}
 
 export function UserAuth(options?: { skipAccountId?: boolean }) {
-	const decorators = [ApiBearerAuth(), UseGuards(AuthGuard([JWT, AZURE_AD]))]
+	const decorators = [ApiBearerAuth(), UseGuards(AuthGuard(guards))]
 
 	if (!options?.skipAccountId) {
 		decorators.push(
