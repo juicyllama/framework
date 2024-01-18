@@ -19,13 +19,19 @@ export class RmqModule {
 				ClientsModule.registerAsync([
 					{
 						name,
-						useFactory: (configService: ConfigService) => ({
-							transport: Transport.RMQ,
-							options: {
-								urls: [configService.get<string>('RABBIT_MQ_URI')],
-								queue: configService.get<string>(`RABBIT_MQ_${name}_QUEUE`),
-							},
-						}),
+						useFactory: (configService: ConfigService) => {
+							const rabbitMqUri = configService.get<string>('RABBIT_MQ_URI')
+							if (!rabbitMqUri) {
+								throw new Error('RABBIT_MQ_URI is not defined in the configuration.')
+							}
+							return {
+								transport: Transport.RMQ,
+								options: {
+									urls: [rabbitMqUri], // Ensured it's not undefined
+									queue: configService.get<string>(`RABBIT_MQ_${name}_QUEUE`),
+								},
+							}
+						},
 						inject: [ConfigService],
 					},
 				]),

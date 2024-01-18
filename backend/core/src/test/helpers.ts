@@ -1,14 +1,14 @@
 import request from 'supertest'
 import { Account } from '../modules/accounts/account.entity'
 import { Logger, StatsMethods } from '@juicyllama/utils'
-import { DeepPartial } from 'typeorm'
+import { DeepPartial, ObjectLiteral } from 'typeorm'
 import { ScaffoldDto } from './scaffold'
 import { METHOD } from '../types'
 import * as querystring from 'querystring'
 
 //todo is there a way to pass the request type dynamically to merge some of these switch statements?
 
-export async function TestEndpoint<T>(options: {
+export async function TestEndpoint<T extends ObjectLiteral>(options: {
 	type: METHOD
 	scaffold: ScaffoldDto<T>
 	url: string
@@ -24,8 +24,8 @@ export async function TestEndpoint<T>(options: {
 	account?: Account // If not provided, will use owner_account
 	emitCheckResultKeys?: string[] //if values are not provided back in the result
 	skipResultCheck?: boolean // if true results will be returned without checking
-}): Promise<T> {
-	let E: T
+}): Promise<T | undefined> { 
+	let E: T | undefined = undefined
 
 	const headers = {
 		Authorization: 'Bearer ' + (options.access_token ?? options.scaffold.values.owner_access_token),
@@ -259,22 +259,25 @@ export async function TestEndpoint<T>(options: {
 	}
 }
 
-export async function TestService<T>(options: {
+export async function TestService<T extends ObjectLiteral>(options: {
 	type: METHOD
 	scaffold: ScaffoldDto<T>
 	mock?: DeepPartial<T>
 	PRIMARY_KEY?: string
 	record?: T
-}): Promise<T> {
-	let E: T
+}): Promise<T | T[] | undefined> {
 
 	switch (options.type) {
 		case METHOD.CREATE:
 			try {
-				E = await options.scaffold.services.service.create(options.mock)
-				expect(E[options.PRIMARY_KEY]).toBeDefined()
-				checkResult<T>(<any>options.mock, E)
-				return E
+				const record = await options.scaffold.services.service.create(options.mock)
+				if (!options.PRIMARY_KEY) {
+					throw new Error('PRIMARY_KEY is required')
+				}		
+				//@ts-ignore	
+				expect(record[options.PRIMARY_KEY]).toBeDefined()
+				checkResult<T>(<any>options.mock, record)
+				return record
 			} catch (e) {
 				outputError<T>({
 					error: e,
@@ -286,10 +289,14 @@ export async function TestService<T>(options: {
 
 		case METHOD.LIST:
 			try {
-				E = await options.scaffold.services.service.findAll()
-				expect(E[0][options.PRIMARY_KEY]).toBeDefined()
-				checkResult<T>(<any>options.mock, E[0])
-				return E
+				if (!options.PRIMARY_KEY) {
+					throw new Error('PRIMARY_KEY is required')
+				}
+				const arr = await options.scaffold.services.service.findAll()
+				expect(arr.length).toBeGreaterThan(0)
+				expect(arr[0][options.PRIMARY_KEY]).toBeDefined()
+				checkResult<T>(<any>options.mock, arr[0])
+				return arr
 			} catch (e) {
 				outputError<T>({
 					error: e,
@@ -301,10 +308,14 @@ export async function TestService<T>(options: {
 
 		case METHOD.GET:
 			try {
-				E = await options.scaffold.services.service.findOne()
-				expect(E[options.PRIMARY_KEY]).toBeDefined()
-				checkResult<T>(<any>options.mock, E)
-				return E
+				if (!options.PRIMARY_KEY) {
+					throw new Error('PRIMARY_KEY is required')
+				}
+				const record = await options.scaffold.services.service.findOne()
+				//@ts-ignore
+				expect(record[options.PRIMARY_KEY]).toBeDefined()						
+				checkResult<T>(<any>options.mock, record)
+				return record
 			} catch (e) {
 				outputError<T>({
 					error: e,
@@ -316,10 +327,10 @@ export async function TestService<T>(options: {
 
 		case METHOD.COUNT:
 			try {
-				E = await options.scaffold.services.service.count()
-				expect(E).toBeDefined()
-				expect(E).toBeGreaterThan(0)
-				return E
+				const result = await options.scaffold.services.service.count()
+				expect(result).toBeDefined()
+				expect(result).toBeGreaterThan(0)
+				return result
 			} catch (e) {
 				outputError<T>({
 					error: e,
@@ -332,13 +343,19 @@ export async function TestService<T>(options: {
 		case METHOD.PATCH:
 		case METHOD.UPDATE:
 			try {
-				E = await options.scaffold.services.service.update({
-					[options.PRIMARY_KEY]: options.record[options.PRIMARY_KEY],
+				if (!options.PRIMARY_KEY) {
+					throw new Error('PRIMARY_KEY is required')
+				}
+				if (!options.mock) {
+					throw new Error('mock is required')
+				}
+				const record = await options.scaffold.services.service.update({
+					[options.PRIMARY_KEY]: options?.record?.[<keyof T>options.PRIMARY_KEY],
 					...options.mock,
 				})
-				expect(E[options.PRIMARY_KEY]).toBeDefined()
-				checkResult(options.mock, E)
-				return E
+				expect(record[options.PRIMARY_KEY]).toBeDefined()
+				checkResult(options.mock, record)
+				return record
 			} catch (e) {
 				outputError<T>({
 					error: e,
@@ -360,7 +377,7 @@ export async function TestService<T>(options: {
 	}
 }
 
-function outputError<T>(options: {
+function outputError<T extends ObjectLiteral>(options: {
 	error: any
 	response?: any
 	type: METHOD
@@ -396,15 +413,15 @@ function outputError<T>(options: {
 	expect(options.error).toMatch('error')
 }
 
-function checkResult<T>(data: DeepPartial<T>, result: T, emitCheckResultKeys?: string[]) {
-	for (const [key] of Object.entries(data)) {
-		if (emitCheckResultKeys && emitCheckResultKeys.includes(key)) continue
-
+function checkResult<T extends ObjectLiteral>(data: DeepPartial<T>, result: T, emitCheckResultKeys?: string[]) {
+	for (const key of Object.keys(data)) {
+		if (emitCheckResultKeys && emitCheckResultKeys.includes(key)) continue	
 		try {
 			switch (typeof data[key]) {
 				case 'object':
 					continue
 				case 'number':
+					const logger = new Logger()				
 					expect(Number(result[key]).toFixed(2)).toBe(Number(data[key]).toFixed(2))
 					break
 				default:

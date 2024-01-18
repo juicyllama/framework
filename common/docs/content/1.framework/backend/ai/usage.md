@@ -2,7 +2,7 @@
 
 ## Endpointsc
 
-Once you have [installed](/backend/ai/readme#install) the Ai package, new endpoint will be available in your project.
+Once you have [installed](../ai/0.index.md#install) the Ai package, new endpoint will be available in your project.
 
 Documentation will also be added to your project for full details on each endpoint.
 
@@ -10,7 +10,7 @@ Documentation will also be added to your project for full details on each endpoi
 
 The chat endpoint allows you to interact with the AI in a chat like manner.
 
-```typescript
+```ts
 //app.service.js
 import { AiService } from '@juicyllama/ai'
 
@@ -41,7 +41,7 @@ export class AppService {
 
 The image endpoint allows you to interact with the AI to generate an image.
 
-```typescript
+```ts
 //app.service.js
 import { AiService } from '@juicyllama/ai'
 

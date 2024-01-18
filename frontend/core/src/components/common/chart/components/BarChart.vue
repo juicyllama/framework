@@ -6,6 +6,7 @@
 import type { ChartUISettings, ChartData } from '../../../../types/chart'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
 import { Bar } from 'vue-chartjs'
+import 'chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm';
 
 const props = defineProps<{
 	options: ChartUISettings
@@ -15,20 +16,6 @@ const props = defineProps<{
 const extendedProps = {
 	...props.options,
 	borderRadius: 5,
-	scales: {
-		x: {
-			display: false,
-			grid: {
-				drawTicks: false,
-			},
-		},
-		y: {
-			grid: {
-				drawTicks: false,
-			},
-			display: false,
-		},
-	},
 }
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)

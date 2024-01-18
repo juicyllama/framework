@@ -61,14 +61,14 @@ export class TransactionsController extends BaseController<T> {
 	}
 
 	@ReadManyDecorator(constants)
-	async findAll(@Req() req, @Query() query, @AccountId() account_id: number): Promise<T[]> {
+	async findAll(@Req() req, @Query() query: any, @AccountId() account_id: number): Promise<T[]> {
 		return super.findAll(req, query, account_id)
 	}
 
 	@ReadStatsDecorator(constants)
 	async stats(
 		@Req() req,
-		@Query() query,
+		@Query() query: any,
 		@AccountId() account_id: number,
 		@Query('method') method: StatsMethods,
 	): Promise<any> {
@@ -90,12 +90,12 @@ export class TransactionsController extends BaseController<T> {
 	}
 
 	@ReadOneDecorator(constants)
-	async findOne(@Req() req, @AccountId() account_id: number, @Param() params, @Query() query): Promise<T> {
+	async findOne(@Req() req, @AccountId() account_id: number, @Param() params: any, @Query() query: any): Promise<T> {
 		return super.findOne(req, account_id, params, query)
 	}
 
 	@UpdateDecorator(constants)
-	async update(@Req() req, @AccountId() account_id: number, @Body() data: UpdateDto, @Param() params): Promise<T> {
+	async update(@Req() req, @AccountId() account_id: number, @Body() data: UpdateDto, @Param() params: any): Promise<T> {
 		return super.update(req, account_id, data, params)
 	}
 
@@ -115,7 +115,7 @@ export class TransactionsController extends BaseController<T> {
 	}
 
 	@DeleteDecorator(constants)
-	async remove(@Req() req, @Param() params, @AccountId() account_id: number): Promise<T> {
+	async remove(@Req() req, @Param() params: any, @AccountId() account_id: number): Promise<T> {
 		return super.remove(req, params, account_id)
 	}
 

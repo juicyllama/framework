@@ -3,43 +3,49 @@ import { forwardRef, HttpServer, INestApplication, ValidationPipe } from '@nestj
 import { AccountService } from '../modules/accounts/account.service'
 import { Account } from '../modules/accounts/account.entity'
 import { User } from '../modules/users/users.entity'
-import { Env, Logger } from '@juicyllama/utils'
+import { Api, Env, Logger } from '@juicyllama/utils'
 import { MockAccountRequest } from './mocks'
 import { testCleanup } from './closedown'
 import { AccountModule } from '../modules/accounts/account.module'
 import { AuthModule } from '../modules/auth/auth.module'
 import { AuthService } from '../modules/auth/auth.service'
 import { Query } from '../utils/typeorm/Query'
-import { DeepPartial, Repository } from 'typeorm'
+import { DeepPartial, Repository, ObjectLiteral } from 'typeorm'
 import { faker } from '@faker-js/faker'
 import { validationPipeOptions } from '../configs/nest.config'
 
 let httpServer: HttpServer
 let moduleRef: TestingModule
 let logger: Logger
+let api: Api
 
-export class ScaffoldDto<T> {
-	server: HttpServer
-	module: TestingModule
-	query: Query<T>
-	repository: Repository<T>
-	services: {
+export class ScaffoldDto<T extends ObjectLiteral> {
+	server!: HttpServer
+	module!: TestingModule
+	query!: Query<T>
+	repository?: Repository<T>
+	services!: {
 		accountService: AccountService
 		authService: AuthService
 		logger: Logger
+		api: Api
 		service: any
 	}
-	values: {
+	values!: {
 		account: Account
 		owner: User
 		owner_access_token: string
 		owner_password: string
-		record: T
-		mock: DeepPartial<T>
+		record: T | undefined
+		mock: DeepPartial<T> | undefined
 	}
 }
 
-export class Scaffold<T> {
+export class ScaffoldDtoWithRepository<T extends ObjectLiteral> extends ScaffoldDto<T> {
+	repository!: Repository<T>
+}
+
+export class Scaffold<T extends ObjectLiteral>  {
 	async up(MODULE?: any, SERVICE?: any): Promise<ScaffoldDto<T>> {
 		if (Env.IsNotTest()) {
 			throw new Error(`Test suite should not be ran outside the test environment`)
@@ -49,7 +55,7 @@ export class Scaffold<T> {
 		let authService: AuthService
 		let service: any
 		let query: Query<T>
-		let repository: Repository<T>
+		let repository: Repository<T> | undefined = undefined
 
 		let account: Account
 		let owner: User
@@ -69,10 +75,11 @@ export class Scaffold<T> {
 		try {
 			moduleRef = await Test.createTestingModule({
 				imports: imports,
-				providers: [Query, Logger],
+				providers: [Query, Logger, Api],
 			}).compile()
 		} catch (e) {
-			console.error(e.message, e)
+			const error = e as Error
+			console.error(error.message, error)
 		}
 
 		const app: INestApplication = moduleRef.createNestApplication()
@@ -83,6 +90,7 @@ export class Scaffold<T> {
 		accountService = await moduleRef.resolve(AccountService)
 		authService = await moduleRef.resolve(AuthService)
 		logger = await moduleRef.resolve(Logger)
+		api = await moduleRef.resolve(Api)
 		query = await moduleRef.resolve(Query<T>)
 
 		if (SERVICE) {
@@ -106,6 +114,7 @@ export class Scaffold<T> {
 				accountService: accountService,
 				authService: authService,
 				logger: logger,
+				api: api,
 				service: service,
 			},
 			values: {
@@ -123,7 +132,7 @@ export class Scaffold<T> {
 		try {
 			await testCleanup(moduleRef, E)
 		} catch (e) {
-			logger.warn(e.message, e)
-		}
+			const error = e as Error
+			console.warn(error.message, error)		}
 	}
 }

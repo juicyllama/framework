@@ -14,7 +14,7 @@ The scaffolding is provided via the `@juicyllama/core` package and provides ever
 Pass into the scaffolding the NestJs Module and Service you wish to test. This will build the test suite with all the imports required and a bunch of pre-build services to leverage including the one you pass in.
 ::
 
-```typescript
+```ts
 //example.test.spec.ts
 
 describe(`Example Test Suite`, () => {
@@ -48,7 +48,7 @@ You can then use the `scaffold` object to access the following (use the Scaffold
 
 A `TestEndpoint` helper is provided to make testing CRUD endpoints easier.
 
-```typescript
+```ts
 await TestEndpoint<T>({
 	type: METHOD.GET,
 	scaffold: scaffold,
@@ -76,7 +76,7 @@ The following properties are available:
 
 A `TestService` helper is provided to make testing your services easier.
 
-```typescript
+```ts
 await TestService<T>({
 	type: METHOD.GET,
 	scaffold: scaffold,

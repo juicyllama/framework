@@ -16,6 +16,7 @@ import {
 	Legend,
 } from 'chart.js'
 import { Line } from 'vue-chartjs'
+import 'chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm';
 
 const props = defineProps<{
 	options: ChartUISettings
@@ -25,20 +26,6 @@ const props = defineProps<{
 const extendedProps = {
 	...props.options,
 	borderRadius: 20,
-	scales: {
-		x: {
-			display: false,
-			grid: {
-				drawTicks: false,
-			},
-		},
-		y: {
-			grid: {
-				drawTicks: false,
-			},
-			display: false,
-		},
-	},
 }
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)

@@ -10,7 +10,7 @@ export class SettingsDto {
 		required: true,
 	})
 	@IsString()
-	key: string
+	key!: string
 
 	@ApiProperty({
 		description: 'The json data for the key',

@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/core",
-    "version": "0.6.0",
+    "version": "0.7.4",
     "description": "Juicyllama Backend Core",
     "author": {
         "name": "JuicyLlama Studio",
@@ -32,10 +32,16 @@
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests",
+        "test:auth": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests  --testPathPattern=auth",
         "before:commit": "pnpm run lint && pnpm run format && pnpm run test && pnpm run build"
     },
     "dependencies": {
         "@juicyllama/dev": "workspace:^",
         "@juicyllama/utils": "workspace:^"
+    },
+    "devDependencies": {
+        "@types/passport-azure-ad": "^4.3.5",
+        "@types/passport-google-oauth20": "^2.0.14",
+        "@types/passport-linkedin-oauth2": "^1.5.6"
     }
 }

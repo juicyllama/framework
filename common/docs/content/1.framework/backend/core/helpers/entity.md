@@ -4,7 +4,7 @@ You can extend your entities with this class to add some common fields.
 
 ## Usage
 
-```typescript
+```ts
 import { BaseEntity } from '@juicyllama/core'
 
 @Entity()

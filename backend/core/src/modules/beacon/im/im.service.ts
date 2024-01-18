@@ -20,7 +20,7 @@ export class BeaconImService {
 		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
 	) {}
 
-	async create(message: BeaconMessageDto): Promise<boolean> {
+	async create(message: BeaconMessageDto): Promise<boolean | undefined> {
 		const domain = 'core::beacon::im::create'
 
 		this.logger.debug(`[${domain}] Beacon IM`, message)
@@ -53,7 +53,7 @@ export class BeaconImService {
 				service = slackModule.get(SlackService)
 
 				const slackMessage = {
-					channel: message.communication.im.slack.channel,
+					channel: message.communication?.im?.slack.channel,
 					text: message.markdown,
 					mrkdwn: message.markdown,
 				}

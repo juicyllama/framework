@@ -8,7 +8,7 @@ Common DTOs used throughout the framework.
 
 A DTO for a date range.
 
-```typescript
+```ts
 import { DateRangeDto } from '@juicyllama/utils'
 
 class DateRangeDto {
@@ -23,7 +23,7 @@ class DateRangeDto {
 
 A DTO for an error response.
 
-```typescript
+```ts
 import { ErrorResponseDto } from '@juicyllama/utils'
 
 class ErrorResponseDto {
@@ -37,7 +37,7 @@ class ErrorResponseDto {
 
 A DTO for a stats response.
 
-```typescript
+```ts
 import { StatsResponseDto } from '@juicyllama/utils'
 
 class StatsResponseDto {
@@ -51,7 +51,7 @@ class StatsResponseDto {
 
 A DTO for a success response.
 
-```typescript
+```ts
 import { SuccessResponseDto } from '@juicyllama/utils'
 
 class SuccessResponseDto {
@@ -63,7 +63,7 @@ class SuccessResponseDto {
 
 A DTO for a processed response.
 
-```typescript
+```ts
 import { ProcessedResponseDto } from '@juicyllama/utils'
 
 class ProcessedResponseDto {

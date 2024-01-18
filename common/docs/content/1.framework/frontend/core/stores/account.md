@@ -1,6 +1,6 @@
 # Account
 
-```typescript
+```ts
 import { accountStore } from '@juicyllama/frontend-core'
 ```
 
@@ -10,7 +10,7 @@ import { accountStore } from '@juicyllama/frontend-core'
 
 The account which the user is currently acting as.
 
-```typescript
+```ts
 console.log(accountStore.state.selected_account)
 
 // {
@@ -34,7 +34,7 @@ console.log(accountStore.state.selected_account)
 
 ### getAccountId
 
-```typescript
+```ts
 
 ```
 

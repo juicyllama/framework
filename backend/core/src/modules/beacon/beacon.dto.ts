@@ -40,10 +40,10 @@ export class BeaconCommunicationDto {
 
 export class BeaconMessageCtaDto {
 	@IsString()
-	text: string
+	text!: string
 
 	@IsUrl()
-	url: string
+	url!: string
 }
 
 export class BeaconOptionsDto {
@@ -65,10 +65,10 @@ export class BeaconOptionsDto {
 
 export class BeaconMessageDto {
 	@IsObject()
-	methods: BeaconMethodsDto
+	methods!: BeaconMethodsDto
 
 	@IsObject()
-	communication: BeaconCommunicationDto
+	communication!: BeaconCommunicationDto
 
 	@IsString()
 	subject?: string

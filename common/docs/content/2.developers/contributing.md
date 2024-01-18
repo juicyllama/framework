@@ -31,7 +31,7 @@ If you have specific features, apps, tools or support you want to build into the
 ### Contributing Flow 
 
 1. Install the framework locally by first [folking the framework](https://docs.github.com/en/get-started/quickstart/contributing-to-projects) into your github account.
-2. Follow the [installation instructions here](../gettingstarted.md#installation) by cloning your folked version of the framework.
+2. Follow the [installation instructions here](../1.framework/0.index.md#installation) by cloning your folked version of the framework.
 2. Branch off `main` and include your `issue number` along with the `task description` e.g. `feature/123-my-new-feature`. We use the following prefixes:
     - `feature/` for new features
     - `bug/` for bug fixes
@@ -39,7 +39,7 @@ If you have specific features, apps, tools or support you want to build into the
     - `docs/` for documentation changes
     - `test/` for test changes
     - `misc/` for other changes<br><br>
-4. Write your code follow the [Code Style Guide](./code-style-guide) and commit your changes to your branch.<br><br>
+4. Write your code follow the [Code Style Guide](code-style-guide) and commit your changes to your branch.<br><br>
 5. Ensure you have written tests for your changes and that they pass.<br><br>
 6. If you have added a new feature (or updated an existing one), please update this [documentation](#documentation) to reflect the changes.<br><br>
 7. Once complete initiate a pull request from your folked version to the framework. This will trigger a review process and automated tests. If the tests fail, please fix the issues and push the changes to your branch. The tests will automatically re-run.<br><br>
@@ -47,7 +47,7 @@ If you have specific features, apps, tools or support you want to build into the
 
 ## Code
 
-Please follow the [Code Style Guide](./code-style-guide) when contributing.
+Please follow the [Code Style Guide](code-style-guide) when contributing.
 
 ## Testing
 

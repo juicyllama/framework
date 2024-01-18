@@ -22,7 +22,7 @@ export class BeaconService {
 	 */
 
 	async notify(message: BeaconMessageDto): Promise<boolean> {
-		let result = false
+		let result: boolean | undefined = false
 
 		if (message.methods.email) {
 			result = await this.beaconEmailService.create(message)
@@ -47,7 +47,7 @@ export class BeaconService {
 			result = !!(await this.beaconNotificationService.create(message))
 		}
 
-		return result
+		return result || false
 	}
 
 	async sendPush(event: string, json: any): Promise<void> {

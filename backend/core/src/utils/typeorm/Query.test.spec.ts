@@ -1,24 +1,25 @@
-import { Account } from '../../modules/accounts/account.entity'
-import { Scaffold, ScaffoldDto } from '../../test'
 import { faker } from '@faker-js/faker'
-import { AccountService } from '../../modules/accounts/account.service'
+import { Account } from '../../modules/accounts/account.entity'
 import { AccountModule } from '../../modules/accounts/account.module'
+import { AccountService } from '../../modules/accounts/account.service'
+import { Scaffold } from '../../test'
+import { ScaffoldDtoWithRepository } from '../../test/scaffold'
 
 type T = Account
 const E = Account
 const MODULE = AccountModule
 const SERVICE = AccountService
+const MOCK_ACCOUNT = {
+	account_name: faker.word.sample(),
+}
 
 describe('TypeORM query', () => {
 	const scaffolding = new Scaffold<T>()
-	let scaffold: ScaffoldDto<T>
+	let scaffold: ScaffoldDtoWithRepository<T>
 
 	beforeAll(async () => {
-		scaffold = await scaffolding.up(MODULE, SERVICE)
-
-		scaffold.values.mock = {
-			account_name: faker.word.sample(),
-		}
+		scaffold = await scaffolding.up(MODULE, SERVICE) as ScaffoldDtoWithRepository<T>
+		scaffold.values.mock = MOCK_ACCOUNT
 	})
 
 	describe('Raw', () => {
@@ -33,7 +34,7 @@ describe('TypeORM query', () => {
 
 	describe('Create', () => {
 		it('Perform a create query', async () => {
-			const result = await scaffold.query.create(scaffold.repository, scaffold.values.mock)
+			const result = await scaffold.query.create(scaffold.repository, MOCK_ACCOUNT)
 			expect(result).toBeDefined()
 			expect(result.account_id).toBeDefined()
 			scaffold.values.record = result
@@ -56,7 +57,7 @@ describe('TypeORM query', () => {
 			expect(result.account_id).toBeDefined()
 			expect(result.account_id).toEqual(scaffold.values.account.account_id)
 			expect(result.roles).toBeDefined()
-			expect(result.roles[0]).toBeDefined()
+			expect(result.roles?.[0]).toBeDefined()
 		})
 	})
 
@@ -80,7 +81,7 @@ describe('TypeORM query', () => {
 			expect(result.account_id).toBeDefined()
 			expect(result.account_id).toEqual(scaffold.values.account.account_id)
 			expect(result.roles).toBeDefined()
-			expect(result.roles[0]).toBeDefined()
+			expect(result.roles?.[0]).toBeDefined()
 		})
 	})
 
@@ -109,7 +110,7 @@ describe('TypeORM query', () => {
 			expect(result.account_id).toBeDefined()
 			expect(result.account_id).toEqual(scaffold.values.account.account_id)
 			expect(result.roles).toBeDefined()
-			expect(result.roles[0]).toBeDefined()
+			expect(result.roles?.[0]).toBeDefined()
 		})
 	})
 
@@ -147,7 +148,7 @@ describe('TypeORM query', () => {
 			expect(result[0]).toBeDefined()
 			expect(result[0].account_id).toBeDefined()
 			expect(result[0].roles).toBeDefined()
-			expect(result[0].roles[0]).toBeDefined()
+			expect(result[0]?.roles?.[0]).toBeDefined()
 		})
 
 		it('Filter out invalid select items', async () => {
@@ -252,7 +253,7 @@ describe('TypeORM query', () => {
 				repository: scaffold.repository,
 				account_id: scaffold.values.account.account_id,
 				query: {
-					onboarding_complete: false,
+					onboarding_complete: 'false',
 				},
 			})
 
@@ -336,16 +337,21 @@ describe('TypeORM query', () => {
 
 	describe('Remove', () => {
 		it('Perform a remove query', async () => {
-			const result = await scaffold.query.remove(scaffold.repository, scaffold.values.record)
-			expect(result).toBeDefined()
-			expect(result.account_id).toEqual(scaffold.values.record.account_id)
+			expect(scaffold.values.record).toBeDefined()
+			if (scaffold.values.record) {
+				const result = await scaffold.query.remove(scaffold.repository, scaffold.values.record)
+				expect(result).toBeDefined()
+				expect(result.account_id).toEqual(scaffold.values.record?.account_id)
+			}
 		})
 	})
 
 	describe('Purge', () => {
 		it('Perform a purge query', async () => {
 			try {
-				await scaffold.query.remove(scaffold.repository, scaffold.values.record)
+				if (scaffold.values.record) {
+					await scaffold.query.remove(scaffold.repository, scaffold.values.record)
+				}
 			} catch (e) {
 				console.error(e)
 				expect(e).toEqual('error')

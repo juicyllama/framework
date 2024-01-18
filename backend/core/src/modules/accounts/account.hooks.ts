@@ -38,7 +38,7 @@ export class AccountHooks {
 		} else {
 			markdown = `${owner.first_name ?? 'Hello'}, we are really pleased to welcome ${
 				account.account_name
-			} to ${Strings.capitalize(process.env.SYSTEM_EMAIL_NAME ?? process.env.npm_package_name)}!`
+			} to ${Strings.capitalize(process.env.SYSTEM_EMAIL_NAME ?? process.env.npm_package_name ?? '')}!`
 		}
 
 		await this.beaconService.notify({

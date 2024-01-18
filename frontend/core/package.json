@@ -1,6 +1,6 @@
 {
 	"name": "@juicyllama/frontend-core",
-	"version": "0.4.5",
+	"version": "0.4.10",
 	"description": "Juicyllama Frontend Core",
 	"author": {
 		"name": "JuicyLlama Studio",
@@ -25,7 +25,7 @@
 	],
 	"scripts": {
 		"prepare": "pnpm run build",
-		"build": "vite build && pnpm run build:types",
+		"build": "pnpm run build:vite && pnpm run build:types",
 		"build:vite": "vite build",
 		"build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types ",
 		"format": "prettier --write \"src/**/*.ts\"",

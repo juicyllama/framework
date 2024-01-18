@@ -31,7 +31,7 @@ Pass a unique string as part of your request to avoid duplicate notifications be
 
 Import the module into your application:
 
-```typescript
+```ts
 //app.module.ts
 import { forwardRef, Module } from '@nestjs/common'
 import { BeaconModule } from '@juicyllama/core'
@@ -44,7 +44,7 @@ export class AppModule {}
 
 Inject the service into your classes:
 
-```typescript
+```ts
 //example.service.ts
 import { BeaconService } from '@juicyllama/core'
 
@@ -56,7 +56,7 @@ export class ExampleService {
 
 Send notifications using the service:
 
-```typescript
+```ts
 //example.service.ts
 
 await this.beaconService.notify(options)
@@ -70,7 +70,7 @@ The following methods are available:
 
 The main method for sending notifications, this method takes a single options object as a parameter which can be used to configure which types of notifications to send and their contents.
 
-```typescript
+```ts
 await this.beaconService.notify({})
 ```
 
@@ -78,25 +78,25 @@ await this.beaconService.notify({})
 
 ### Send an email
 
-```typescript
+```ts
 
 ```
 
 ### Send a push notification
 
-```typescript
+```ts
 
 ```
 
 ### Send a In-app notification
 
-```typescript
+```ts
 
 ```
 
 ### Send an IM
 
-```typescript
+```ts
 await this.beaconService.notify({
 	methods: {
 		im: true,
@@ -122,7 +122,7 @@ The beacon module can integrate with the following modules:
 | Email  | [app-aws]()                     |
 | SMS    | [app-aws]()                     |
 | Push   | [app-pusher]()                  |
-| IM     | [app-slack](/apps/slack/readme) |
+| IM     | [app-slack](../../../apps/slack/0.index.md) |
 
 
 ## Templates

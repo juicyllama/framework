@@ -9,7 +9,7 @@ config()
 const DATABASE_SHARED = {
 	type: 'mysql',
 	host: process.env.MYSQL_HOSTNAME,
-	port: +process.env.MYSQL_PORT,
+	port: Number(process.env.MYSQL_PORT),
 	username: process.env.MYSQL_USERNAME,
 	password: process.env.MYSQL_PASSWORD,
 	namingStrategy: new CustomNamingStrategy(),

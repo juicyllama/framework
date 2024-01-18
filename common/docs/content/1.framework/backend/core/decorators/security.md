@@ -12,7 +12,7 @@ They do this by providing the `account-id` header.
 
 Your application should then get this `accountId` from the request and use it to determine which account the user is acting on behalf of.
 
-```typescript
+```ts
 import { AccountId, UserAuth } from '@juicyllama/core'
 
 @Get('example')
@@ -28,7 +28,7 @@ This will validate that the header record exists and return that number to the c
 
 Endpoints which require user authentication can be decorated with the `@UserAuth()` decorator.
 
-```typescript
+```ts
 import { UserAuth } from '@juicyllama/core'
 
 @Get('example')
@@ -44,7 +44,7 @@ It will also add some useful Swagger properties to the endpoint, including the r
 
 Should you wish to have more granular control, you can import the important decorators directly:
 
-```typescript
+```ts
 import { UseGuards } from '@nestjs/common'
 import { ApiBearerAuth } from '@nestjs/swagger'
 import { JwtAuthGuard } from '@juicyllama/core'

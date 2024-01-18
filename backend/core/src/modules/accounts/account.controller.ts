@@ -33,6 +33,7 @@ import { UserAuth } from '../../decorators/UserAuth.decorator'
 import { UserRole } from '../users/users.enums'
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { UsersService } from '../users/users.service'
+import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
 
 const E = Account
 type T = Account
@@ -59,7 +60,10 @@ export class AccountController {
 	@UserAuth()
 	@ApiOperation({ summary: 'Create Additional Account' })
 	@Post('additional')
-	async createAdditionalAccount(@Req() req, @Body() data: OnboardAdditionalAccountDto): Promise<SuccessAccountDto> {
+	async createAdditionalAccount(
+		@Req() req: AuthenticatedRequest,
+		@Body() data: OnboardAdditionalAccountDto,
+	): Promise<SuccessAccountDto> {
 		const user = await this.usersService.findById(req.user.user_id)
 		return await this.service.onboardAdditional(user, data)
 	}
@@ -72,7 +76,7 @@ export class AccountController {
 		relationsEnum: AccountRelations,
 		name: NAME,
 	})
-	async findAll(@Req() req, @Query() query): Promise<T[]> {
+	async findAll(@Req() req: AuthenticatedRequest, @Query() query: any): Promise<T[]> {
 		const where = this.tQuery.buildWhere({
 			repository: this.service.repository,
 			query: query,
@@ -86,7 +90,11 @@ export class AccountController {
 
 	@UserAuth()
 	@ReadStatsDecorator({ name: NAME })
-	async stats(@Req() req, @Query() query, @Query('method') method?: StatsMethods): Promise<StatsResponseDto> {
+	async stats(
+		@Req() req: AuthenticatedRequest,
+		@Query() query: any,
+		@Query('method') method?: StatsMethods,
+	): Promise<StatsResponseDto> {
 		if (!method) {
 			method = StatsMethods.COUNT
 		}
@@ -121,7 +129,7 @@ export class AccountController {
 		relationsEnum: AccountRelations,
 		name: NAME,
 	})
-	async findOne(@Req() req, @Param() params, @Query() query): Promise<T> {
+	async findOne(@Req() req: AuthenticatedRequest, @Param() params: any, @Query() query: any): Promise<T> {
 		await this.authService.check(req.user.user_id, params[Number(PRIMARY_KEY)])
 
 		const where = {
@@ -134,7 +142,11 @@ export class AccountController {
 
 	@UserAuth()
 	@UpdateDecorator({ entity: E, primaryKey: PRIMARY_KEY, name: NAME })
-	async update(@Req() req, @Body() data: UpdateAccountDto, @AccountId() account_id: number): Promise<T> {
+	async update(
+		@Req() req: AuthenticatedRequest,
+		@Body() data: UpdateAccountDto,
+		@AccountId() account_id: number,
+	): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		return await this.service.update({
 			account_id: account_id,
@@ -147,7 +159,7 @@ export class AccountController {
 	@UploadImageDecorator({ entity: E })
 	@Patch(`avatar`)
 	async uploadAvatarFile(
-		@Req() req,
+		@Req() req: AuthenticatedRequest,
 		@UploadedFile() file: Express.Multer.File,
 		@AccountId() account_id: number,
 	): Promise<T> {
@@ -168,7 +180,7 @@ export class AccountController {
 	@Post(`transfer/:user_id`)
 	//transfer
 	async transfer(
-		@Req() req,
+		@Req() req: AuthenticatedRequest,
 		@AccountId() account_id: number,
 		@Param(':user_id') user_id: number,
 	): Promise<SuccessResponseDto> {
@@ -184,7 +196,7 @@ export class AccountController {
 	@UserAuth()
 	@ApiOperation({ summary: 'Close Account' })
 	@Delete()
-	async close(@Req() req, @AccountId() account_id: number): Promise<T> {
+	async close(@Req() req: AuthenticatedRequest, @AccountId() account_id: number): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		const account = await this.service.findById(account_id)
 		return await this.service.remove(account)

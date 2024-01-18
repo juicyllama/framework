@@ -53,8 +53,9 @@ export interface AvatarOptions {
 
 export interface IconSettings {
 	type?: string
+	cssPrefix?: string
 	icons?: {
-		[key: string]: string;
+		[key: string]: string
 	}
 }
 

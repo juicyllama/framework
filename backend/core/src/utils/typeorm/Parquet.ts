@@ -1,6 +1,6 @@
-import { TypeOrm } from './TypeOrm'
 import { Logger } from '@juicyllama/utils'
-import { Repository, ColumnType } from 'typeorm'
+import { ColumnType, ObjectLiteral, Repository } from 'typeorm'
+import { TypeOrm } from './TypeOrm'
 
 const logger = new Logger()
 
@@ -9,8 +9,8 @@ export class TypemOrmParquet {
 	 * Generate a parquet schema from a TypeORM repository
 	 */
 
-	static schema<T>(repository: Repository<T>, skipColumns: string[]): any {
-		const schema = {}
+	static schema<T extends ObjectLiteral>(repository: Repository<T>, skipColumns: string[]): any {
+		const schema: Record<string, any> = {}
 
 		const fields = TypeOrm.getColumnNames(repository)
 

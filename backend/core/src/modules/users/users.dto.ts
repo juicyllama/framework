@@ -33,7 +33,7 @@ export class UserDto {
 	})
 	@IsString()
 	@IsEmail()
-	email: string
+	email!: string
 
 	@ApiProperty({
 		example: 'S7rOngP@s7',
@@ -72,5 +72,5 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {}
 
 export class UserResponeDto extends Classes.ExtendsMultiple([UserDto, BaseResponseDto]) {
 	@SwaggerPropertyDecorator({ description: 'The User ID', example: 1, type: SwaggerPropertyType.NUMBER })
-	readonly user_id: number
+	readonly user_id!: number
 }

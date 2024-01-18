@@ -37,7 +37,8 @@ export class RedocModule {
 			const _options = await this.validateOptionsObject(options, document, debug)
 			const redocDocument = this.addVendorExtensions(_options, <RedocDocument>document)
 			return await this.setupExpress(path, <NestExpressApplication>app, redocDocument, _options)
-		} catch (error) {
+		} catch (e) {
+			const error = e as Error
 			if (debug) {
 				logger.error(`[${domain}] ${error.message}`, {
 					document: document,
@@ -58,7 +59,8 @@ export class RedocModule {
 
 		try {
 			return schema(document).validateAsync(options) as RedocOptions
-		} catch (error) {
+		} catch (e) {
+			const error = e as Error
 			if (debug) {
 				logger.error(`[${domain}] ${error.message}`, {
 					document: document,
@@ -121,6 +123,7 @@ export class RedocModule {
 		// get handlebars rendered HTML
 		const redocHTML = await hbs.render(redocFilePath, renderData)
 		// Serve ReDoc Frontend
+		//@ts-ignore
 		httpAdapter.get(finalPath, async (req: Request, res: Response) => {
 			const sendPage = () => {
 				// Content-Security-Policy: worker-src 'self' blob:
@@ -141,6 +144,7 @@ export class RedocModule {
 			}
 		})
 		// Serve swagger spec json
+		//@ts-ignore
 		httpAdapter.get(docUrl, (req: Request, res: Response) => {
 			res.setHeader('Content-Type', 'application/json')
 			res.send(document)

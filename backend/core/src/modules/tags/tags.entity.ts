@@ -7,21 +7,21 @@ import { ApiProperty } from '@nestjs/swagger'
 export class Tag {
 	@PrimaryGeneratedColumn()
 	@ApiProperty({ description: 'The tag ID', example: 1 })
-	readonly tag_id: number
+	readonly tag_id?: number
 
 	@ApiProperty({ description: 'The name of your tag', example: 'TAG' })
 	@Column()
 	@IsString()
 	@MinLength(1)
 	@MaxLength(255)
-	readonly name: string
+	readonly name!: string
 
 	@CreateDateColumn()
-	readonly created_at: Date
+	readonly created_at?: Date
 
 	@DeleteDateColumn()
 	@IsDate()
-	deleted_at: Date
+	deleted_at?: Date
 
 	constructor(partial: Partial<Tag>) {
 		Object.assign(this, partial)

@@ -1,8 +1,0 @@
-{
-	"outputDirectory": ".output/public",
-	"framework": "nuxtjs",
-	"installCommand": "pnpm install --no-frozen-lockfile",
-	"git": {
-		"deploymentEnabled": false
-	}
-}

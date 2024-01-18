@@ -27,7 +27,7 @@
 	</q-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { computed } from 'vue'
 import { useWidgetsStore } from '../../store/widgets'
 import { JLChart } from '../../components/common/chart/'
@@ -36,26 +36,15 @@ import JLForm from './components/JLForm.vue'
 import JLTable from './components/JLTable.vue'
 import { widgetClass } from './utils'
 
-export default {
-	setup() {
-		const comps = {
-			JLChart,
-			JLStats,
-			JLForm,
-			JLTable,
-		}
-
-		const widgetsStore = useWidgetsStore()
-		const widgets2 = computed(() => widgetsStore.widgets)
-
-		return {
-			widgetClass,
-			close,
-			widgets2,
-			comps,
-		}
-	},
+const comps = {
+	JLChart,
+	JLStats,
+	JLForm,
+	JLTable,
 }
+
+const widgetsStore = useWidgetsStore()
+const widgets2 = computed(() => widgetsStore.widgets)
 </script>
 
 <style>

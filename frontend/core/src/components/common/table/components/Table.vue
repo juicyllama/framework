@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { Ref, ref, reactive, computed, watch } from 'vue'
+import { Strings } from '@juicyllama/vue-utils'
+import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 import FieldContents from './FieldContents.vue'
+import TableFilterDialog from './TableFilterDialog.vue'
 import TableActions from './TableActions.vue'
 import {
 	FormField,
@@ -12,9 +16,6 @@ import {
 	TableSchema,
 } from '../../../../types'
 import { IFilter } from '../../../../types/table'
-import { Strings } from '@juicyllama/vue-utils'
-import { useQuasar } from 'quasar'
-import { useRouter } from 'vue-router'
 import { default as JLForm } from '../../form/Form.vue'
 import { ColumnsFilter, CustomButtons, TextSearchFilter } from './index'
 import { logger } from '../../../../index'
@@ -298,14 +299,14 @@ watch(
 )
 
 const advancedFilterDialog = ref<boolean>(false)
-const labels = computed(() => JLToQColumns.map(el => el.label))
+const labels = computed(() => JLToQColumns.value.map(el => el.label))
 const activeLabels = computed<string[]>(() => activeFilters.value.map(el => el.label))
 
 const activeFilters = ref<IFilter[]>([])
 
 const perCollumnFilterQuery = computed<Array<string | number>[]>(() => {
 	return activeFilters.value.map(el => {
-		const item = JLToQColumns.find(i => i.label === el.label)
+		const item = JLToQColumns.value.find(i => i.label === el.label)
 		const method: string = typeof el.type === 'object' ? el.type.method : ''
 		if (item && ['NULL', '!NULL'].includes(method)) return [item.name, method]
 		if (item) return [item.name, method, el.value]
@@ -336,7 +337,7 @@ watch(
 <template>
 	<div id="JLTable" class="JLTable">
 		<TableFilterDialog
-			v-model="advancedFilterDialog"
+			:dialog="advancedFilterDialog"
 			:activeFilters="activeFilters"
 			:labels="labels"
 			@clear="onClearFilters"

@@ -16,5 +16,5 @@ module.exports = {
 			},
 		],
 	},
-	testTimeout: 60000,
+	testTimeout: 60000
 }

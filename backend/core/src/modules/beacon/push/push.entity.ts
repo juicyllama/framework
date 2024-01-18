@@ -6,11 +6,11 @@ import { BeaconStatus } from '../beacon.enums'
 export class BeaconPush {
 	@PrimaryGeneratedColumn()
 	@IsNumber()
-	readonly push_id: number
+	readonly push_id?: number
 
 	@Column()
 	@IsString()
-	event: string
+	event!: string
 
 	@Column({ type: 'json', default: null, nullable: true })
 	@IsObject()
@@ -22,17 +22,17 @@ export class BeaconPush {
 
 	@Column({ default: BeaconStatus.PENDING })
 	@IsEnum(BeaconStatus)
-	status: BeaconStatus
+	status!: BeaconStatus
 
 	@Column({ default: null, nullable: true })
 	@IsString()
 	unique?: string
 
 	@CreateDateColumn()
-	readonly created_at: Date
+	readonly created_at?: Date
 
 	@UpdateDateColumn()
-	updated_at: Date
+	updated_at?: Date
 
 	@Column({ default: null, nullable: true })
 	@IsDate()

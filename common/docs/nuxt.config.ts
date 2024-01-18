@@ -1,55 +1,50 @@
-import vitePluginRequire from "vite-plugin-require";
+// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	extends: ['@nuxt-themes/docus'],
+	ssr: true,
+	extends: ['@nuxt/ui-pro'],
 	modules: [
-		'@nuxt/content',
-		'@nuxtjs/google-fonts',
-		'nuxt-quasar-ui',
-		'@pinia/nuxt',
-		'@nuxt/ui',
-		'nuxt-icon',
-		'@nuxtjs/color-mode',
-		'@nuxtjs/tailwindcss'
+	  '@nuxt/content',
+	  '@nuxt/ui',
+	  '@nuxthq/studio',
+	  '@nuxtjs/fontaine',
+	  '@nuxtjs/google-fonts',
+	  'nuxt-og-image',
+	  '@nuxtjs/tailwindcss'
 	],
+	hooks: {
+	  'components:extend': (components) => {
+		const globals = components.filter((c) => ['UButton', 'UIcon'].includes(c.pascalName))
+  
+		globals.forEach((c) => c.global = true)
+	  }
+	},
 	colorMode: {
 		preference: 'dark',
 		fallback: 'dark',
 		storageKey: 'jl-docs-color-mode'
 	},
 	ui: {
-		global: true,
-		icons: 'all'
+	  icons: ['heroicons', 'simple-icons']
 	},
+	// Fonts
+	fontMetrics: {
+	  fonts: ['DM Sans']
+	},
+	googleFonts: {
+	  display: 'swap',
+	  download: true,
+	  families: {
+		Nunito:  [400, 500, 600, 700, 800, 900],
+	  }
+	},
+	routeRules: {
+	  '/api/search.json': { prerender: true },
+	},
+	// Devtools / Typescript
 	devtools: { enabled: true },
-	typescript: {
-		tsConfig: {
-			compilerOptions: {
-				verbatimModuleSyntax: false
-			}
-		}
-	},
-	sourcemap: {
-		server: false,
-		client: false
-	},
-	nitro: {
-		prerender: {
-			crawlLinks: true,
-			failOnError: false
-		}
-	},
-	runtimeConfig: {
-		public: {
-			siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://docs.juicyllama.com/'
-		}
-	},
+	typescript: { strict: false },
 	content: {
 		defaultLocale: 'en',
-		experimental: {
-		search: {
-			indexed: false
-		}
-		},
 		markdown: {
 			mdc: true,
 		},
@@ -57,14 +52,9 @@ export default defineNuxtConfig({
 			preload: ['sql'],
 		  }
 	},
-	googleFonts: {
-		families: {
-		  Nunito:  [400, 500, 600, 700, 800, 900],
+	nitro: {
+		prerender: {
+		  failOnError: false
 		}
-	  },
-	vite: {
-		plugins: [
-			vitePluginRequire()
-		]
 	}
-})
+  })

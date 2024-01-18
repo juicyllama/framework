@@ -4,18 +4,18 @@ import { BeaconCommunicationDto, BeaconMessageCtaDto } from '../beacon.dto'
 
 export class BeaconEmailResponseDto {
 	@IsNumber()
-	app_email_id: number
+	app_email_id!: number
 
 	@IsEnum(BeaconStatus)
-	status: BeaconStatus
+	status!: BeaconStatus
 }
 
 export class BeaconCommunicationEmailDetailsDto {
 	@IsString()
-	name: string
+	name!: string
 
 	@IsEmail()
-	email: string
+	email!: string
 }
 
 export class BeaconCommunicationEmailDto {
@@ -23,18 +23,18 @@ export class BeaconCommunicationEmailDto {
 	from?: BeaconCommunicationEmailDetailsDto
 
 	@IsObject()
-	to: BeaconCommunicationEmailDetailsDto
+	to!: BeaconCommunicationEmailDetailsDto
 }
 
 export class BeaconEmailRequestDto {
 	@IsObject()
-	communication: BeaconCommunicationDto
+	communication!: BeaconCommunicationDto
 
 	@IsString()
-	subject: string
+	subject!: string
 
 	@IsString()
-	markdown: string
+	markdown!: string
 
 	@IsObject()
 	cta?: BeaconMessageCtaDto

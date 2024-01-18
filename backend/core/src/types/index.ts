@@ -14,5 +14,6 @@ export {
 	BaseResponseDto,
 } from './common'
 export { OauthInterface } from './oauth.interface'
+export { AuthenticatedRequest } from './authenticated-request.interface'
 
 export { ChartOptions, CurrencyOptions } from './typeorm'
