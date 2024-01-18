@@ -581,12 +581,17 @@ export class Query<T> {
 		search_fields?: string[]
 	}): FindOptionsWhere<T>[] | FindOptionsWhere<T> {
 		const where = []
+		const relationsProperty = options.repository.metadata.relations.map(relation => relation.propertyName)
 
 		let whereBase = {}
-
 		if (options.query) {
 			for (const [key, value] of Object.entries(options.query)) {
-				if (options.repository.metadata.columns.find(column => column.propertyName === key)) {
+				const isRelation = key.includes('.')
+				const k = isRelation ? key.split('.')[0] : key
+				if (
+					options.repository.metadata.columns.find(column => column.propertyName === k) ||
+					relationsProperty.find(r => r === k)
+				) {
 					// @ts-ignore
 					const fieldLookupWhere: FindOperator<string>[] = _.castArray(value) // value may be a string or an array of strings
 						.reduce((memo: FindOperator<string>[], currentValue: string) => {
@@ -608,12 +613,18 @@ export class Query<T> {
 							}
 							return memo
 						}, [])
-					whereBase[key] =
+
+					const queryValue =
 						fieldLookupWhere.length === 1
 							? fieldLookupWhere[0]
 							: fieldLookupWhere.length > 0
 								? And(...fieldLookupWhere)
 								: value // if no valid operator is found, return the value as is - backward compatibility
+					if (isRelation) {
+						whereBase = createWhereRelations(key, queryValue, relationsProperty)
+					} else {
+						whereBase = { [key]: queryValue }
+					}
 				}
 			}
 		}
@@ -632,11 +643,20 @@ export class Query<T> {
 			delete options.query.relations
 		}
 
-		for (const search in options.search_fields) {
+		for (const search of options.search_fields) {
 			// behind the scenes typeORM converts the different array members to OR clauses, and ObjectLiterals to AND clauses
+			let whereToMerge = {}
+			if (search.includes('.')) {
+				whereToMerge = {
+					...whereToMerge,
+					...createWhereRelations(search, Like(`%${options.query.search}%`), relationsProperty),
+				}
+			} else {
+				whereToMerge = { ...whereToMerge, [search]: Like(`%${options.query.search}%`) }
+			}
 			where.push({
 				...whereBase,
-				[options.search_fields[search]]: Like(`%${options.query.search}%`),
+				...whereToMerge,
 			})
 		}
 		return where
@@ -1007,4 +1027,23 @@ function splitStringByFirstColon(inputString: string): string[] {
 	} else {
 		return [inputString]
 	}
+}
+
+function createWhereRelations(keyString, value, relations) {
+	const keys = keyString.split('.')
+
+	const result = {}
+	if (!relations.includes(keys[0])) {
+		return result
+	}
+
+	let current = result
+
+	for (let i = 0; i < keys.length - 1; i++) {
+		const key = keys[i]
+		current = current[key] = {}
+	}
+
+	current[keys[keys.length - 1]] = value
+	return result
 }
