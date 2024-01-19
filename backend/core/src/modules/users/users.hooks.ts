@@ -28,7 +28,7 @@ export class UsersHooks {
 				account: account,
 				user: user,
 				hrefs: {
-					reset: process.env.BASE_URL_APP + '/reset',
+					reset: process.env.BASE_URL_APP + '/reset?email=' + user.email,
 				},
 			})
 		} else {

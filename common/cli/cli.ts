@@ -7,6 +7,7 @@ import { version } from './package.json'
 import { cli_error, cli_log } from './helpers/logging'
 import { Script } from './scripts.enums'
 import { install } from './scripts/install'
+import { boot } from './scripts/boot'
 
 const sep = os.EOL
 
@@ -35,6 +36,7 @@ async function runScript(script: Script) {
 
 async function run() {
 	cli_log(`JL Cli v${version}`)
+	await boot()
 
 	const { argv } = yargs(getMainArgs())
 
