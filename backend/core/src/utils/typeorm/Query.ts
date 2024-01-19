@@ -594,7 +594,7 @@ export class Query<T extends ObjectLiteral> {
 
 	buildWhere(options: {
 		repository: Repository<T>
-		query?: Partial<Record<'search' | keyof T, string | string[]>>
+		query?: Partial<Record<'search' | keyof T | string, string | string[]>>
 		account_id?: number
 		account_ids?: number[]
 		search_fields?: string[]
@@ -685,6 +685,7 @@ export class Query<T extends ObjectLiteral> {
 				...whereToMerge,
 			})
 		}
+
 		return where
 	}
 

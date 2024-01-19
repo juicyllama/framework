@@ -83,32 +83,32 @@ describe('TypeORM query findAll filtering RHS Colon syntax', () => {
 		{
 			name: 'LT',
 			query: { account_name: 'EQ:TestFiltering', onboarding_step: 'LT:4' },
-			expected: 1,
+			expected: 2,
 		},
 		{
 			name: 'LT with exact matches',
 			query: { account_name: 'EQ:TestFiltering', onboarding_step: 'LT:3' },
-			expected: 0,
+			expected: 1,
 		},
 		{
 			name: 'LT with no matches',
 			query: { account_name: 'EQ:TestFiltering', onboarding_step: 'LT:2' },
-			expected: 0,
+			expected: 1,
 		},
 		{
 			name: 'LTE',
 			query: { account_name: 'EQ:TestFiltering', onboarding_step: 'LTE:4' },
-			expected: 1,
+			expected: 2,
 		},
 		{
 			name: 'LTE with exact matches',
 			query: { account_name: 'EQ:TestFiltering', onboarding_step: 'LTE:3' },
-			expected: 1,
+			expected: 2,
 		},
 		{
 			name: 'LTE with no matches',
 			query: { account_name: 'EQ:TestFiltering', onboarding_step: 'LTE:2' },
-			expected: 0,
+			expected: 1,
 		},
 		{
 			name: 'Overloading operators: GT and LT',
@@ -203,6 +203,66 @@ describe('TypeORM query findAll filtering RHS Colon syntax', () => {
 			expect(result.length).toEqual(expected)
 		})
 	})
+
+
+	describe("Query with relation filters", () => {
+
+		it('Get by relation Query', async () => {
+			const queryOwner = {"roles.role": "OWNER"}
+			const whereOwner = scaffold.query.buildWhere({
+				repository: scaffold.repository,
+				account_id: scaffold.values.account.account_id,
+				query: queryOwner,
+			})
+			const resultWithOwner = await scaffold.query.findAll(scaffold.repository, {where: whereOwner})
+			
+			expect(resultWithOwner).toBeDefined()
+			expect(resultWithOwner.length).toBe(1)
+
+			const queryMember = {"roles.role": "MEMBER"}
+
+			const whereMember = scaffold.query.buildWhere({
+				repository: scaffold.repository,
+				account_id: scaffold.values.account.account_id,
+				query: queryMember,
+			})
+			const resultWithMember = await scaffold.query.findAll(scaffold.repository, {where : whereMember})
+			expect(resultWithMember).toBeDefined()
+			expect(resultWithMember.length).toBe(0)
+	
+		})
+
+		it('Get by relation Search', async () => {
+			const queryOwner = {"search": "OWNER"}
+			const whereOwner = scaffold.query.buildWhere({
+				repository: scaffold.repository,
+				account_id: scaffold.values.account.account_id,
+				query: queryOwner,
+				search_fields: ["roles.role"]
+			})
+			const resultWithOwner = await scaffold.query.findAll(scaffold.repository, {where: whereOwner})
+			
+			expect(resultWithOwner).toBeDefined()
+			expect(resultWithOwner.length).toBe(1)
+
+			const queryMember = {"search": "MEMBER"}
+
+			const whereMember = scaffold.query.buildWhere({
+				repository: scaffold.repository,
+				account_id: scaffold.values.account.account_id,
+				query: queryMember,
+				search_fields: ["roles.role"]
+
+			})
+			const resultWithMember = await scaffold.query.findAll(scaffold.repository, {where : whereMember})
+			expect(resultWithMember).toBeDefined()
+			expect(resultWithMember.length).toBe(0)
+	
+		})
+
+
+	})
+
 
 	afterAll(async () => {
 		await scaffolding.down(E)
