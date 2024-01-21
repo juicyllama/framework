@@ -31,8 +31,6 @@ export async function install(app: string, pkm: 'brew' | 'npm' | 'pnpm') {
 
     let command 
 
-
-    
         switch(pkm) {
             case 'brew':
                 command = `brew install ${app}`

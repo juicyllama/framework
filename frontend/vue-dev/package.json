@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/vue-dev",
-    "version": "0.0.53",
+    "version": "0.0.54",
     "description": "Frontend Development Dependencies",
     "author": {
         "name": "JuicyLlama Studio",
@@ -70,8 +70,8 @@
         "ts-jest": "^29.1.1",
         "typescript": "^5.2.2",
         "uuid": "^9.0.1",
-        "vite": "^4.4.9",
-        "vite-plugin-require": "^1.1.11",
+        "vite": "^5.0.12",
+        "vite-plugin-require": "^1.1.14",
         "vitest": "^0.33.0",
         "vue": "^3.3.4",
         "vue-chartjs": "^5.2.0",
