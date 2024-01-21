@@ -56,11 +56,17 @@ function updatedField(value: string) {
 
 async function buttonPressed(button: FormCustomButton) {
 	logger({ severity: LogSeverity.VERBOSE, message: `Form Button Pressed`, object: button })
-	switch (button.type) {
-		case FormFieldButtonType.ACTION:
-			button.action({ button: button, formData: formData, schema: props.options, q: $q })
-			break
+	
+	if(button.type){
+		switch (button.type) {
+			case FormFieldButtonType.ACTION:
+				button.action({ button: button, formData: formData, schema: props.options, q: $q })
+				break
+		}
+	}else{
+		submittedForm()
 	}
+	
 }
 
 async function submittedForm() {
