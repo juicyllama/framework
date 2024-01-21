@@ -28,12 +28,12 @@ export class AiService {
 			return <any>mock
 		}
 
-		let ai: Ai
+		let ai: Ai | undefined = undefined
 
 		if (options.use_local_cache) {
 			ai = await this.db_query.findOne(this.repository, {
 				where: {
-					request: options.question.toLowerCase(),
+					request: options.question?.toLowerCase(),
 					is_general: true,
 					is_sql: false,
 				},
@@ -48,7 +48,7 @@ export class AiService {
 
 		if (!ai) {
 			ai = await this.db_query.create(this.repository, {
-				request: options.question.toLowerCase(),
+				request: options.question?.toLowerCase(),
 				is_general: true,
 				is_sql: false,
 			})
@@ -102,6 +102,7 @@ export class AiService {
 
 			return await this.db_query.update(this.repository, ai)
 		}
+		throw new Error('No AI module installed, please contact your system admin.')
 	}
 
 	// async sql(options: AiSQLRequest): Promise<Ai> {
@@ -275,10 +276,13 @@ export class AiService {
 	 * @param data
 	 */
 	async update(data: DeepPartial<Ai>): Promise<Ai> {
+		if (!data.ai_id) {
+			throw new Error('ai_id is required')
+		}
 		const lana = await this.db_query.findOneById(this.repository, data.ai_id)
 
 		if (!lana) {
-			throw new NotFoundException(`Ai #${lana.ai_id} not found`)
+			throw new NotFoundException(`Ai #${data.ai_id} not found`)
 		}
 
 		return await this.db_query.update(this.repository, {

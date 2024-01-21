@@ -33,7 +33,8 @@ describe('AI', () => {
 				})
 				expect(result).toBeDefined()
 				expect(result.response).toBeDefined()
-			} catch (e) {
+			} catch (err) {
+				const e = err as Error
 				logger.error(`[${domain}] Error: ${e.message}`, e)
 				throw new Error(e.message)
 			}
