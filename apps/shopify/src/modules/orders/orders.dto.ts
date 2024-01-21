@@ -6,39 +6,39 @@ import { ShopifyOrderDicountCodeType, ShopifyOrderFinancialStatus, ShopifyOrderF
 
 export class ShopifyOrderDiscountCodes {
 	@IsString()
-	code: string
+	code!: string
 
 	@IsString()
-	amount: string
+	amount!: string
 
 	@IsEnum(ShopifyOrderDicountCodeType)
-	type: ShopifyOrderDicountCodeType
+	type!: ShopifyOrderDicountCodeType
 }
 
 export class ShopifyPriceSet {
 	@IsObject()
-	shop_money: ShopifyMoney
+	shop_money!: ShopifyMoney
 
 	@IsObject()
-	presentment_money: ShopifyMoney
+	presentment_money!: ShopifyMoney
 }
 
 export class ShopifyOrder {
 	@IsNumber()
-	id: number
+	id!: number
 
 	@IsString()
-	admin_graphql_api_id: string
+	admin_graphql_api_id!: string
 
 	@IsNumber()
-	app_id: number
+	app_id!: number
 
 	@IsString()
 	@IsOptional()
 	browser_ip?: string
 
 	@IsBoolean()
-	buyer_accepts_marketing: boolean
+	buyer_accepts_marketing!: boolean
 
 	@IsOptional()
 	cancel_reason?: string
@@ -52,7 +52,7 @@ export class ShopifyOrder {
 	cart_token?: string
 
 	@IsNumber()
-	checkout_id: number
+	checkout_id!: number
 
 	@IsString()
 	@IsOptional()
@@ -67,17 +67,17 @@ export class ShopifyOrder {
 	company?: string
 
 	@IsBoolean()
-	confirmed: boolean
+	confirmed!: boolean
 
 	@IsString()
 	@IsOptional()
 	contact_email?: string
 
 	@IsDateString()
-	created_at: Date
+	created_at!: Date
 
 	@IsString()
-	currency: string
+	currency!: string
 
 	@IsString()
 	@IsOptional()
@@ -120,14 +120,14 @@ export class ShopifyOrder {
 	merchant_of_record_app_id?: number
 
 	@IsString()
-	name: string
+	name!: string
 
 	@IsString()
 	@IsOptional()
 	notes?: string
 
 	@IsNumber()
-	number: number
+	number!: number
 
 	@IsNumber()
 	@IsOptional()
@@ -150,17 +150,17 @@ export class ShopifyOrder {
 	processed_at?: Date
 
 	@IsBoolean()
-	taxes_included: boolean
+	taxes_included!: boolean
 
 	@IsBoolean()
-	test: boolean
+	test!: boolean
 
 	@IsString()
 	@IsOptional()
 	token?: string
 
 	@IsNumber()
-	subtotal_price: number
+	subtotal_price!: number
 
 	@IsObject()
 	@IsOptional()
@@ -179,17 +179,17 @@ export class ShopifyOrder {
 	total_discounts_set?: ShopifyPriceSet
 
 	@IsNumber()
-	total_outstanding: number
+	total_outstanding!: number
 
 	@IsNumber()
-	total_price: number
+	total_price!: number
 
 	@IsObject()
 	@IsOptional()
 	total_price_set?: ShopifyPriceSet
 
 	@IsNumber()
-	total_tax: number
+	total_tax!: number
 
 	@IsObject()
 	@IsOptional()
@@ -200,7 +200,7 @@ export class ShopifyOrder {
 	total_weight?: number
 
 	@IsDateString()
-	updated_at: Date
+	updated_at!: Date
 
 	@IsNumber()
 	@IsOptional()
@@ -251,5 +251,5 @@ export class ShopifyRestListOrders extends ShopifyRestList {
 
 export class ShopifyQueryListOrders extends OmitType(ShopifyRestListOrders, ['status', 'api_version'] as const) {
 	@IsNumber()
-	installed_app_id: number
+	installed_app_id!: number
 }

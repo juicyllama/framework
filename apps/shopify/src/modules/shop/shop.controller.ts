@@ -22,7 +22,7 @@ export class ShopifyShopController {
 	async webhookRedact(
 		@Query('installed_app_id') installed_app_id: number,
 		@Body() data: any, //todo type this
-	): Promise<Transaction> {
+	): Promise<Transaction | null> {
 		const domain = 'app::shopify::shop::controller::webhookRedact'
 
 		this.logger.error(`[${domain}] Redact Shop`, {
@@ -30,6 +30,6 @@ export class ShopifyShopController {
 			data: data,
 		})
 
-		return
+		return null
 	}
 }
