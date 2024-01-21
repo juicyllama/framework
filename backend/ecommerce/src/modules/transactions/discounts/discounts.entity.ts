@@ -9,7 +9,7 @@ import { IsNumber, IsString, IsEnum } from 'class-validator'
 @Entity('ecommerce_transactions_discounts')
 export class TransactionDiscount extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	readonly transaction_discount_id: number
+	readonly transaction_discount_id!: number
 
 	@ManyToOne(() => Account, account => account.account_id, {
 		onDelete: 'CASCADE',
@@ -18,7 +18,7 @@ export class TransactionDiscount extends BaseEntity {
 	account?: Account
 
 	@Column()
-	account_id: number
+	account_id!: number
 
 	@ManyToOne(() => Transaction, transaction => transaction.transaction_id, {
 		onDelete: 'CASCADE',
@@ -31,15 +31,15 @@ export class TransactionDiscount extends BaseEntity {
 
 	@Column({ type: 'decimal', precision: 10, scale: 2, default: 0.0 })
 	@IsNumber({ maxDecimalPlaces: 2 })
-	amount: number
+	amount!: number
 
 	@Column()
 	@IsString()
-	code: string
+	code!: string
 
 	@Column({ default: null, nullable: true })
 	@IsEnum(TransactionDiscountType)
-	type: TransactionDiscountType
+	type!: TransactionDiscountType
 
 	constructor(partial: Partial<TransactionDiscount>) {
 		super()
