@@ -459,7 +459,7 @@ if (props.options.onFormLoad) {
 						:dense="button?.dense ?? field.settings?.button_style?.dense ?? false"
 						:round="button?.round ?? field.settings?.button_style?.round ?? false"
 						@click="buttonPressed(button)"
-						:disabled="field.disabled || field.loading">
+						:disable="field.disabled || field.loading">
 						<span
 							v-if="field.loading"
 							:class="`JLButtonLoader JLButtonLoader${Strings.capitalize(
