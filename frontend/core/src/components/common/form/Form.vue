@@ -446,7 +446,7 @@ if (props.options.onFormLoad) {
 						v-for="(button, key) in field.buttons"
 						:class="`${field.settings?.button_style?.classes} JLButton JLButton${Strings.capitalize(button.type)} JLButton${Strings.capitalize(
 							field.key,
-						)} ${field.classes}`"
+						)} ${field.classes ?? ''} ${button.classes ?? ''}`"
 						:key="key"
 						:color="(!button?.classes && !field.settings?.button_style?.classes) ? button.color ? button.color : field.settings?.button_style?.color ? field.settings?.button_style?.color : 'primary' : 'primary'"
 						:type="button?.type === FormFieldButtonType.SUBMIT ? 'submit' : 'button'"
