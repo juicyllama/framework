@@ -8,6 +8,7 @@ import {
 	AuthService,
 	BaseController,
 	ControllerOptionalProps,
+	AuthenticatedRequest,
 } from '@juicyllama/core'
 import { StatsMethods } from '@juicyllama/utils'
 import { forwardRef, Inject, Param, Query, Controller, Req } from '@nestjs/common'
@@ -33,13 +34,13 @@ export class AppsController extends BaseController<T> {
 	}
 
 	@ReadManyDecorator(constants)
-	async findAll(@Req() req, @Query() query: any, @AccountId() account_id: number): Promise<T[]> {
+	async findAll(@Req() req: AuthenticatedRequest, @Query() query: any, @AccountId() account_id: number): Promise<T[]> {
 		return super.findAll(req, query, account_id)
 	}
 
 	@ReadStatsDecorator(constants)
 	async stats(
-		@Req() req,
+		@Req() req: AuthenticatedRequest,
 		@Query() query: any,
 		@AccountId() account_id: number,
 		@Query('method') method: StatsMethods,
@@ -48,7 +49,7 @@ export class AppsController extends BaseController<T> {
 	}
 
 	@ReadOneDecorator({...constants, primaryKey: 'app_id'})
-	async findOne(@Req() req, @AccountId() account_id: number, @Param() params: any, @Query() query: any): Promise<T> {
+	async findOne(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Param() params: any, @Query() query: any): Promise<T> {
 		return super.findOne(req, account_id, params, query)
 	}
 }

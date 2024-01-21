@@ -8,31 +8,31 @@ import { AppSettingsDto } from './apps.dto'
 @Unique('apps_UNIQUE', ['integration_name'])
 export class App extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	app_id: number
+	app_id!: number
 
 	@IsString()
 	@MinLength(2)
 	@MaxLength(255)
 	@Column()
-	name: string
+	name!: string
 
 	@IsString()
 	@MinLength(2)
 	@MaxLength(255)
 	@Column()
-	url: string
+	url!: string
 
 	@IsEnum(AppIntegrationType)
 	@Column()
-	integration_type: AppIntegrationType
+	integration_type!: AppIntegrationType
 
 	@IsEnum(AppStoreIntegrationName)
 	@Column()
-	integration_name: AppStoreIntegrationName
+	integration_name!: AppStoreIntegrationName
 
 	@IsEnum(AppCategory)
 	@Column()
-	category: AppCategory
+	category!: AppCategory
 
 	//Allow apps to have parent apps (pass through apps) which can be used for whitelabel / saas based applications which have multiple clients
 	@ManyToOne(() => App, service => service.children, { onDelete: 'CASCADE' })
@@ -54,11 +54,11 @@ export class App extends BaseEntity {
 
 	@Column({ default: true })
 	@IsBoolean()
-	active: boolean
+	active!: boolean
 
 	@Column({ default: false })
 	@IsBoolean()
-	hidden: boolean
+	hidden!: boolean
 
 	@IsArray()
 	@Column({ type: 'json', default: null, nullable: true })
