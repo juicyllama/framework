@@ -48,7 +48,7 @@ instance.interceptors.response.use(
 		// Any status codes that falls outside the range of 2xx cause this function to trigger
 		// Do something with response error
 
-		switch(error.response.data.statusCode){
+		switch(error.response?.data?.statusCode){
 			case 401:
 
 				//if route is /login return error otherwise logout
@@ -66,7 +66,6 @@ instance.interceptors.response.use(
 				}
 
 				break
-			
 			case 403:
 				return {
 					data: {
