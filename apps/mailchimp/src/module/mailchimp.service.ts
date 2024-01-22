@@ -1,6 +1,6 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Repository } from 'typeorm'
-import { Api, Enviroment, Logger } from '@juicyllama/utils'
+import { Api, Env, Logger } from '@juicyllama/utils'
 import { ConfigService } from '@nestjs/config'
 import { MailchimpScaffold } from '../configs/mailchimp.scaffold'
 import { Query } from '@juicyllama/core'
@@ -25,15 +25,19 @@ export class MailchimpService {
 	async patchContact(contact: any): Promise<boolean> {
 		const domain = 'app-mailchimp::patchContact'
 
-		if (Enviroment.test === Enviroment[process.env.NODE_ENV]) {
+		if (Env.IsTest()) {
 			this.logger.verbose(`[${domain}] Skipping as testing`)
 			return true
 		}
 
+		if (!this.configService.get<string>('mailchimp.MAILCHIMP_API_KEY') || !this.configService.get<string>('mailchimp.MAILCHIMP_SERVER_PREFIX')) {
+			throw new Error('Mailchimp API Key or Server Prefix not set')
+		}
+
 		try {
 			const mailchimp = MailchimpScaffold(
-				this.configService.get<string>('mailchimp.MAILCHIMP_API_KEY'),
-				this.configService.get<string>('mailchimp.MAILCHIMP_SERVER_PREFIX'),
+				this.configService.get<string>('mailchimp.MAILCHIMP_API_KEY') as string,
+				this.configService.get<string>('mailchimp.MAILCHIMP_SERVER_PREFIX') as string,
 			)
 
 			const member = mapperContactToMember(contact)
@@ -85,15 +89,20 @@ export class MailchimpService {
 	async deleteContact(contact: any): Promise<boolean> {
 		const domain = 'app-mailchimp::deleteContact'
 
-		if (Enviroment.test === Enviroment[process.env.NODE_ENV]) {
+		if (Env.IsTest()) {
 			this.logger.verbose(`[${domain}] Skipping as testing`)
 			return true
 		}
 
+
+		if (!this.configService.get<string>('mailchimp.MAILCHIMP_API_KEY') || !this.configService.get<string>('mailchimp.MAILCHIMP_SERVER_PREFIX')) {
+			throw new Error('Mailchimp API Key or Server Prefix not set')
+		}
+
 		try {
 			const mailchimp = MailchimpScaffold(
-				this.configService.get<string>('mailchimp.MAILCHIMP_API_KEY'),
-				this.configService.get<string>('mailchimp.MAILCHIMP_SERVER_PREFIX'),
+				this.configService.get<string>('mailchimp.MAILCHIMP_API_KEY') as string,
+				this.configService.get<string>('mailchimp.MAILCHIMP_SERVER_PREFIX') as string,
 			)
 
 			const mailchimp_member = await this.query.findOneByWhere(this.repository, {

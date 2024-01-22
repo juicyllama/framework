@@ -6,13 +6,13 @@ import { BaseEntity } from '@juicyllama/core'
 @Entity('apps_logs')
 export class Log extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	readonly log_id: number
+	readonly log_id!: number
 
 	@ManyToOne(() => InstalledApp, installed_app => installed_app.installed_app_id, {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn({ name: 'installed_app_id' })
-	installed_app: InstalledApp
+	installed_app!: InstalledApp
 
 	@Index('fk_e8c3b8c9310b161f8e023a5ef090e213')
 	@Column()
@@ -28,7 +28,7 @@ export class Log extends BaseEntity {
 
 	@Column()
 	@IsString()
-	message: string
+	message!: string
 
 	@Column({ type: 'json', default: null, nullable: true })
 	@IsObject()

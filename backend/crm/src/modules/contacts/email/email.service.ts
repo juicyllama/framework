@@ -40,7 +40,7 @@ export class ContactEmailService extends BaseService<T> {
 		const domain = 'crm::contacts::email::service::updateEmails'
 
 		if (!emails || !emails.length) {
-			return null
+			return []
 		}
 
 		for (const e in emails) {

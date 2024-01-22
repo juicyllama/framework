@@ -18,95 +18,95 @@ export class GoogleMapsPlace extends BaseEntity {
 	id?: ObjectId
 
 	@Column({ type: 'json' })
-	address_components: AddressComponent[]
+	address_components!: AddressComponent[]
 
 	@Column()
 	@IsString()
-	adr_address: string
+	adr_address!: string
 
 	@Column()
 	@IsString()
-	business_status: string
+	business_status!: string
 
 	@Column()
 	@IsString()
-	formatted_address: string
+	formatted_address!: string
 
 	@Column()
 	@IsString()
-	formatted_phone_number: string
+	formatted_phone_number!: string
 
 	@Column({ type: 'json' })
-	geometry: AddressGeometry
+	geometry!: AddressGeometry
 
 	@Column()
 	@IsString()
-	icon: string
+	icon!: string
 
 	@Column()
 	@IsString()
-	icon_background_color: string
+	icon_background_color!: string
 
 	@Column()
 	@IsString()
-	icon_mask_base_uri: string
+	icon_mask_base_uri!: string
 
 	@Column()
 	@IsString()
-	international_phone_number: string
+	international_phone_number!: string
 
 	@Column()
 	@IsString()
-	name: string
+	name!: string
 
 	@Column({ type: 'json' })
-	opening_hours: OpeningHours
+	opening_hours!: OpeningHours
 
 	@Column()
 	@IsBoolean()
-	permanently_closed: boolean
+	permanently_closed!: boolean
 
 	@Column({ type: 'json' })
-	photos: PlacePhoto[]
+	photos!: PlacePhoto[]
 
 	@Column()
 	@IsString()
-	place_id: string
+	place_id!: string
 
 	@Column({ type: 'json' })
-	plus_code: PlusCode
+	plus_code!: PlusCode
 
 	@Column()
 	@IsNumber()
-	price_level: number
+	price_level!: number
 
 	@Column()
 	@IsNumber()
-	rating: number
+	rating!: number
 
 	@Column({ type: 'json' })
-	reviews: PlaceReview[]
+	reviews!: PlaceReview[]
 
 	@Column({ type: 'json' })
-	types: AddressType[]
+	types!: AddressType[]
 
 	@Column()
 	@IsString()
-	url: string
+	url!: string
 
 	@Column()
 	@IsNumber()
-	user_ratings_total: number
+	user_ratings_total!: number
 
 	@Column()
 	@IsNumber()
-	utc_offset: number
+	utc_offset!: number
 
 	@Column()
 	@IsString()
-	vicinity: string
+	vicinity!: string
 
 	@Column()
 	@IsString()
-	website: string
+	website!: string
 }

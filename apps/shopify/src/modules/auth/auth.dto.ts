@@ -2,24 +2,24 @@ import { IsString, IsNumber, IsOptional } from 'class-validator'
 
 export class ShopifyAuthRedirectQuery {
 	@IsString()
-	hmac: string
+	hmac!: string
 
 	@IsString()
 	@IsOptional()
 	code?: string
 
 	@IsString()
-	host: string
+	host!: string
 
 	@IsString()
-	shop: string
+	shop!: string
 
 	@IsString()
 	@IsOptional()
 	state?: string
 
 	@IsString()
-	timestamp: string
+	timestamp!: string
 
 	@IsString()
 	@IsOptional()
@@ -32,8 +32,8 @@ export class ShopifyAuthRedirectQuery {
 
 export class ShopifyAuthCreateRequest {
 	@IsNumber()
-	installed_app_id: number //The installed_app_id for the shopify app you want to authenticate
+	installed_app_id!: number //The installed_app_id for the shopify app you want to authenticate
 
 	@IsString()
-	shop: string // The name of the user's shop. e.g. https://{shop}.myshopify.com
+	shop!: string // The name of the user's shop. e.g. https://{shop}.myshopify.com
 }

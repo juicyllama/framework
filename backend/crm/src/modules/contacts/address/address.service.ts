@@ -42,7 +42,7 @@ export class ContactAddressService extends BaseService<T> {
 		const domain = 'crm::contacts::addresses::service::updateAddresses'
 
 		if (!addresses || !addresses.length) {
-			return null
+			return []
 		}
 
 		for (const a in addresses) {

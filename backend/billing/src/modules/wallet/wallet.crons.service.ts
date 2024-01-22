@@ -78,7 +78,7 @@ export class WalletCronService {
 			}
 
 			this.logger.log(
-				`[${domain}] Charge attempt #${payment_method.attempts + 1} for account #${wallet.account_id}`,
+				`[${domain}] Charge attempt #${(payment_method.attempts || 0) + 1} for account #${wallet.account_id}`,
 			)
 			await this.paymentMethodsService.charge(payment_method, Number(0 - wallet.balance))
 			rebills_attempted++

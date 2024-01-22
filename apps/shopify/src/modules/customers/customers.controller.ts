@@ -22,7 +22,7 @@ export class ShopifyCustomersController {
 	async webhookDataRequest(
 		@Query('installed_app_id') installed_app_id: number,
 		@Body() data: any, //todo type this
-	): Promise<Transaction> {
+	): Promise<Transaction | null> {
 		const domain = 'app::shopify::customers::controller::webhookDataRequest'
 
 		this.logger.error(`[${domain}] Customer Data Request`, {
@@ -32,7 +32,7 @@ export class ShopifyCustomersController {
 
 		//todo find contact and alert client (how?!?)
 
-		return
+		return null
 	}
 
 	/**
@@ -44,7 +44,7 @@ export class ShopifyCustomersController {
 	async webhookRedact(
 		@Query('installed_app_id') installed_app_id: number,
 		@Body() data: any, //todo type this
-	): Promise<Transaction> {
+	): Promise<Transaction | null> {
 		const domain = 'app::shopify::customers::controller::webhookRedact'
 
 		this.logger.error(`[${domain}] Redact Customer`, {
@@ -54,6 +54,6 @@ export class ShopifyCustomersController {
 
 		//todo find contact and delete data
 
-		return
+		return null
 	}
 }

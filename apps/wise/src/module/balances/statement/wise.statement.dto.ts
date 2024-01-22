@@ -4,141 +4,141 @@ import { WiseAddressDto, WiseAmountDto } from '../../wise.dto'
 
 export class WiseGetTransactionsRequestDto {
 	@IsNumber()
-	balanceId: number
+	balanceId!: number
 
 	@IsDate()
-	intervalStart: Date
+	intervalStart!: Date
 
 	@IsDate()
-	intervalEnd: Date
+	intervalEnd!: Date
 }
 
 export class WiseStatementAccountHolderDto {
 	@IsEnum(WiseStatementAccountHolderType)
-	type: WiseStatementAccountHolderType
+	type!: WiseStatementAccountHolderType
 
 	@IsObject()
-	address: WiseAddressDto
+	address!: WiseAddressDto
 
 	@IsString()
-	firstName: string
+	firstName!: string
 
 	@IsString()
-	lastName: string
+	lastName!: string
 }
 
 export class WiseStatementIssuerDto extends WiseAddressDto {
 	@IsString()
-	name: string
+	name!: string
 }
 
 export class WiseTransactionDetailsMerchantDto extends WiseAddressDto {
 	@IsString()
-	name: string
+	name!: string
 
 	@IsString()
-	category: string
+	category!: string
 }
 
 export class WiseTransactionDetailsDto {
 	@IsEnum(WiseTransactionDetailsType)
-	type: WiseTransactionDetailsType
+	type!: WiseTransactionDetailsType
 
 	@IsString()
-	description: string
+	description!: string
 
 	@IsObject()
-	amount: WiseAmountDto
+	amount!: WiseAmountDto
 
 	@IsObject()
-	sourceAmount: WiseAmountDto
+	sourceAmount!: WiseAmountDto
 
 	@IsObject()
-	targetAmount: WiseAmountDto
+	targetAmount!: WiseAmountDto
 
 	@IsObject()
-	fee: WiseAmountDto
+	fee!: WiseAmountDto
 
 	@IsNumber()
-	rate: number
+	rate!: number
 
 	@IsString()
-	senderName: string
+	senderName!: string
 
 	@IsString()
-	senderAccount: string
+	senderAccount!: string
 
 	@IsString()
-	paymentReference: string // Deposit payment reference text
+	paymentReference!: string // Deposit payment reference text
 
 	@IsString()
-	category: string
+	category!: string
 
 	@IsObject()
-	merchant: WiseTransactionDetailsMerchantDto
+	merchant!: WiseTransactionDetailsMerchantDto
 }
 
 export class WiseTransactionExchangeDetailsDto {
 	@IsObject()
-	forAmount: WiseAmountDto
+	forAmount!: WiseAmountDto
 
 	@IsNumber()
-	rate: number
+	rate!: number
 }
 
 export class WiseTransactionDto {
 	@IsEnum(WiseTransactionType)
-	type: WiseTransactionType
+	type!: WiseTransactionType
 
 	@IsDate()
-	date: Date
+	date!: Date
 
 	@IsObject()
-	amount: WiseAmountDto
+	amount!: WiseAmountDto
 
 	@IsObject()
-	totalFees: WiseAmountDto
+	totalFees!: WiseAmountDto
 
 	@IsObject()
-	details: WiseTransactionDetailsDto
+	details!: WiseTransactionDetailsDto
 
 	@IsObject()
-	exchangeDetails: WiseTransactionExchangeDetailsDto
+	exchangeDetails!: WiseTransactionExchangeDetailsDto
 
 	@IsObject()
-	runningBalance: WiseAmountDto
+	runningBalance!: WiseAmountDto
 
 	@IsString()
-	referenceNumber: string // Wise assigned unique transaction reference number
+	referenceNumber!: string // Wise assigned unique transaction reference number
 }
 
 export class WiseStatementQueryDto {
 	@IsDate()
-	intervalStart: Date
+	intervalStart!: Date
 
 	@IsDate()
-	intervalEnd: Date
+	intervalEnd!: Date
 
 	@IsString()
-	currency: string
+	currency!: string
 
 	@IsNumber()
-	accountId: number
+	accountId!: number
 }
 
 export class WiseStatementDto {
 	@IsObject()
-	accountHolder: WiseStatementAccountHolderDto
+	accountHolder!: WiseStatementAccountHolderDto
 
 	@IsObject()
-	issuer: WiseStatementIssuerDto
+	issuer!: WiseStatementIssuerDto
 
 	@IsArray()
-	transactions: []
+	transactions!: []
 
 	@IsObject()
-	endOfStatementBalance: WiseAmountDto
+	endOfStatementBalance!: WiseAmountDto
 
 	@IsObject()
-	query: WiseStatementQueryDto
+	query!: WiseStatementQueryDto
 }

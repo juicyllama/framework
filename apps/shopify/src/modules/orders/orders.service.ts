@@ -101,16 +101,19 @@ export class ShopifyOrdersService {
 	): Promise<Transaction[]> {
 		const orders = await this.listOrders(installed_app, options, store)
 
-		const transactions = []
+		const transactions: Transaction[] = []
 
 		if (orders?.length === 0) return transactions
 
 		for (const order of orders) {
 			let transaction = await this.transactionsService.findOne({
-				where: { store_id: store.store_id, order_id: order.id.toString() },
+				where: { store_id: store?.store_id, order_id: order.id.toString() },
 			})
 
 			if (!transaction) {
+				if (!store) {
+					throw new Error(`Store must be provided to create a new transaction`)
+				}
 				transaction = await this.mapperService.createEcommerceTransaction(order, store, installed_app)
 			} else {
 				transaction = await this.mapperService.updateEcommerceTransaction(transaction, order)

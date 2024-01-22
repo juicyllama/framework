@@ -1,3 +1,4 @@
+import { Tag } from '@juicyllama/core'
 import { lists } from '@mailchimp/mailchimp_marketing'
 import { isNil, omitBy } from 'lodash'
 
@@ -26,6 +27,6 @@ export function mapperContactToMember(contact: any): lists.AddListMemberBody {
 		email_address: contact?.emails[0]?.email,
 		status: 'subscribed',
 		merge_fields: merge_fields,
-		tags: contact?.tags?.map(tag => tag.name),
+		tags: contact?.tags?.map((tag: Tag) => tag.name),
 	}
 }

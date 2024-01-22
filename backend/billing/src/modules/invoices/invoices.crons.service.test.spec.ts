@@ -66,7 +66,7 @@ describe('Invoices Cron', () => {
 			const invoices = await invoicesService.findAll()
 			invoice = invoices[0]
 			expect(invoices.length).toEqual(1)
-			expect(invoices[0].account.account_id).toEqual(scaffold.values.account.account_id)
+			expect(invoices[0]?.account?.account_id).toEqual(scaffold.values.account.account_id)
 			expect(Number(invoices[0].amount_total)).toEqual(
 				Number(charges.reduce((a: number, b: Charge) => Number(a) + Number(b.amount_total), 0)),
 			)
