@@ -9,12 +9,12 @@ import { AppIntegrationName, BaseEntity } from '@juicyllama/core'
 @Entity('ai')
 export class Ai extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	readonly ai_id: number
+	readonly ai_id!: number
 
 	//The value the user passes to Lana
 	@IsString()
 	@Column({ type: 'longtext' })
-	request: string
+	request!: string
 
 	//Is this a general AI question?
 	@IsBoolean()
@@ -61,7 +61,7 @@ export class Ai extends BaseEntity {
 
 	@Expose()
 	get is_error(): boolean {
-		return [AiSuccessType.ERROR, AiSuccessType.SQL_ERROR].includes(this.success)
+		return !!this.success && [AiSuccessType.ERROR, AiSuccessType.SQL_ERROR].includes(this.success)
 	}
 
 	constructor(partial: Partial<Ai>) {

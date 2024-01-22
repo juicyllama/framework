@@ -9,7 +9,7 @@ import {
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
-import { AuthService, JwtAuthGuard, AccountId } from '@juicyllama/core'
+import { AuthService, JwtAuthGuard, AccountId, AuthenticatedRequest } from '@juicyllama/core'
 import { AiService } from './ai.service'
 import { Ai } from './ai.entity'
 import { AiChatRequest } from './ai.dto'
@@ -38,7 +38,11 @@ export class AiController {
 		type: Ai,
 	})
 	@Post('ask')
-	async ask(@Req() req, @AccountId() account_id: number, @Body() data: AiChatRequest): Promise<Ai> {
+	async ask(
+		@Req() req: AuthenticatedRequest,
+		@AccountId() account_id: number,
+		@Body() data: AiChatRequest,
+	): Promise<Ai> {
 		await this.authService.check(req.user.user_id, account_id)
 		return await this.aiService.chat(data)
 	}
@@ -71,7 +75,7 @@ export class AiController {
 	})
 	@Patch('update/:ai_id')
 	async update(
-		@Req() req,
+		@Req() req: AuthenticatedRequest,
 		@AccountId() account_id: number,
 		@Param('ai_id') ai_id: number,
 		@Body() ai_data: DeepPartial<Ai>,

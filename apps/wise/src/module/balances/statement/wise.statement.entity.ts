@@ -7,7 +7,7 @@ import { SupportedCurrencies } from '@juicyllama/utils'
 export class WiseTransaction extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	@IsNumber()
-	readonly wise_transaction_id: number
+	readonly wise_transaction_id!: number
 
 	@Column({ default: null, nullable: true })
 	@IsString()
@@ -15,13 +15,13 @@ export class WiseTransaction extends BaseEntity {
 
 	@Column({ type: 'decimal', precision: 10, scale: 2, default: 0.0 })
 	@IsNumber({ maxDecimalPlaces: 2 })
-	amount: number
+	amount!: number
 
 	@Column({ length: 3 })
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)
 	@MaxLength(3)
-	currency: SupportedCurrencies
+	currency!: SupportedCurrencies
 
 	@Column({ default: null, nullable: true })
 	@IsString()

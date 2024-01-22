@@ -7,7 +7,7 @@ import { Account, BaseEntity, User } from '@juicyllama/core'
 @Entity('apps_installed')
 export class InstalledApp extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	readonly installed_app_id: number
+	readonly installed_app_id!: number
 
 	@ManyToOne(() => App, app => app.app_id, {
 		onDelete: 'CASCADE',
@@ -17,15 +17,15 @@ export class InstalledApp extends BaseEntity {
 
 	@Index('fk_b88a70959c375ee29e8f7746c4c41211')
 	@Column()
-	app_id: number
+	app_id!: number
 
 	@Column()
 	@IsString()
-	name: string
+	name!: string
 
 	@IsEnum(AppScope)
 	@Column({ default: AppScope.ACCOUNT })
-	scope: AppScope
+	scope!: AppScope
 
 	@Column('json', { default: null, nullable: true })
 	@IsObject()
@@ -42,7 +42,7 @@ export class InstalledApp extends BaseEntity {
 
 	@Column({ default: true })
 	@IsBoolean()
-	readonly active: boolean
+	readonly active!: boolean
 
 	@ManyToOne(() => Account, account => account.account_id, {
 		onDelete: 'CASCADE',

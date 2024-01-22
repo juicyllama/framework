@@ -10,7 +10,7 @@ import { SupportedCurrencies } from '@juicyllama/utils'
 export class Withdrawal extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	@IsNumber()
-	readonly withdrawal_id: number
+	readonly withdrawal_id!: number
 
 	@ManyToOne(() => Account, account => account.account_id, {
 		onDelete: 'CASCADE',
@@ -20,23 +20,23 @@ export class Withdrawal extends BaseEntity {
 
 	@Column()
 	@IsNumber()
-	account_id: number
+	account_id!: number
 
 	@Column('decimal', { precision: 20, scale: 10, default: null, nullable: true })
 	@IsNumber()
-	amount: number
+	amount!: number
 
 	@Column('varchar', { length: 3 })
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)
 	@MaxLength(3)
-	currency: SupportedCurrencies
+	currency!: SupportedCurrencies
 
 	@ManyToOne(() => PaymentMethod, payment_method => payment_method.payment_method_id, {
 		onDelete: 'SET NULL',
 	})
 	@JoinColumn({ name: 'payment_method_id' })
-	readonly payment_method: PaymentMethod
+	readonly payment_method!: PaymentMethod
 
 	@Column({ default: WithdrawalStatus.PENDING })
 	@IsEnum(WithdrawalStatus)

@@ -7,7 +7,7 @@ import { SettingsStore } from './store/settings'
 import instance from './services/index'
 import classes from './assets/JLCore.module.css'
 import { ThemeStore } from './store/theme'
-import { JLLogin, JLSignup, JLPasswordless, JLResetPassword } from './components/core/auth'
+import { JLLogin, JLSignup, JLPasswordless, JLResetPassword, OTP } from './components/core/auth'
 import {
 	JLForm,
 	JLTable,
@@ -56,6 +56,7 @@ export default {
 		Vue.component('JLPasswordless', JLPasswordless)
 		Vue.component('JLResetPassword', JLResetPassword)
 		Vue.component('JLLogin', JLLogin)
+		Vue.component('OTP', OTP)
 		Vue.component('JLForm', JLForm)
 		Vue.component('JLTable', JLTable)
 		Vue.component('JLUpload', JLUpload)
@@ -111,5 +112,6 @@ export {
 	WidgetsComponent,
 	JLUsersTable,
 	JLBillingPage,
-	JLInvoicePage
+	JLInvoicePage,
+	OTP
 }

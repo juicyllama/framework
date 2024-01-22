@@ -6,45 +6,45 @@ import { BaseEntity } from '@juicyllama/core'
 @Unique('number_verification_UNIQUE', ['number'])
 export class NumberVerification extends BaseEntity {
 	@ObjectIdColumn()
-	id: ObjectId
+	id!: ObjectId
 
 	@Column()
 	@IsBoolean()
-	valid: boolean
+	valid!: boolean
 
 	@Column()
 	@IsString()
-	carrier: string
+	carrier!: string
 
 	@Column()
 	@IsString()
-	country_code: string
+	country_code!: string
 
 	@Column()
 	@IsString()
-	country_name: string
+	country_name!: string
 
 	@Column()
 	@IsString()
-	country_prefix: string
+	country_prefix!: string
 
 	@Column()
 	@IsString()
-	international_format: string
+	international_format!: string
 
 	@Column()
 	@IsString()
-	line_type: string
+	line_type!: string
 
 	@Column()
 	@IsString()
-	local_format: string
+	local_format!: string
 
 	@Column()
 	@IsString()
-	location: string
+	location!: string
 
 	@Column()
 	@IsString()
-	number: string
+	number!: string
 }

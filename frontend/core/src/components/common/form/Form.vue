@@ -56,11 +56,17 @@ function updatedField(value: string) {
 
 async function buttonPressed(button: FormCustomButton) {
 	logger({ severity: LogSeverity.VERBOSE, message: `Form Button Pressed`, object: button })
-	switch (button.type) {
-		case FormFieldButtonType.ACTION:
-			button.action({ button: button, formData: formData, schema: props.options, q: $q })
-			break
+	
+	if(button.type){
+		switch (button.type) {
+			case FormFieldButtonType.ACTION:
+				button.action({ button: button, formData: formData, schema: props.options, q: $q })
+				break
+		}
+	}else{
+		submittedForm()
 	}
+	
 }
 
 async function submittedForm() {
@@ -159,7 +165,7 @@ if (props.options.onFormLoad) {
 					:placeholder="field.placeholder"
 					:input-class="`JLInput JLInput${Strings.capitalize(field.field)} JLInput${Strings.capitalize(
 						field.key,
-					)} ${field.classes}`"
+					)} ${field.classes ?? ''}`"
 					:dense="field.settings?.dense"
 					:counter="field.settings?.counter"
 					:hide-bottom-space="field.settings?.hideBottomSpace"
@@ -202,7 +208,7 @@ if (props.options.onFormLoad) {
 					:placeholder="field.placeholder"
 					:input-class="`JLInput JLTextarea JLInput${Strings.capitalize(
 						field.field,
-					)} JLInput${Strings.capitalize(field.key)} ${field.classes}`"
+					)} JLInput${Strings.capitalize(field.key)} ${field.classes ?? ''}`"
 					:dense="field.settings?.dense"
 					:hide-bottom-space="field.settings?.hideBottomSpace"
 					:lazy-rules="field.settings?.lazy_rules"
@@ -242,7 +248,7 @@ if (props.options.onFormLoad) {
 					:name="field.key"
 					:input-class="`JLSelect JLSelect${Strings.capitalize(field.field)} JLSelect${Strings.capitalize(
 						field.key,
-					)} ${field.classes}`"
+					)} ${field.classes ?? ''}`"
 					:dense="field.settings?.dense"
 					:hide-bottom-space="field.settings?.hideBottomSpace"
 					:disable="field.disabled"
@@ -293,7 +299,7 @@ if (props.options.onFormLoad) {
 					:name="field.key"
 					:input-class="`JLSelect JLSelect${Strings.capitalize(field.field)} JLSelect${Strings.capitalize(
 						field.key,
-					)} ${field.classes}`"
+					)} ${field.classes ?? ''}`"
 					:dense="field.settings?.dense"
 					:hide-bottom-space="field.settings?.hideBottomSpace"
 					:disable="field.disabled"
@@ -341,7 +347,7 @@ if (props.options.onFormLoad) {
 					:name="field.key"
 					:input-class="`JLSelect JLSelect${Strings.capitalize(field.field)} JLSelect${Strings.capitalize(
 						field.key,
-					)} ${field.classes}`"
+					)} ${field.classes ?? ''}`"
 					:dense="field.settings?.dense"
 					:hide-bottom-space="field.settings?.hideBottomSpace"
 					:disable="field.disabled"
@@ -387,7 +393,7 @@ if (props.options.onFormLoad) {
 					v-model="formData[field.key]"
 					:class="`JLToggle JLToggle${Strings.capitalize(field.field)} JLToggle${Strings.capitalize(
 						field.key,
-					)} ${field.classes}`"
+					)} ${field.classes ?? ''}`"
 					:checked-icon="field.icon ?? 'done'"
 					:color="field.settings?.color ?? 'primary'"
 					:label="!field.settings?.stack_label ? field.label : ''"
@@ -401,7 +407,7 @@ if (props.options.onFormLoad) {
 					v-model="formData[field.key]"
 					:name="field.key"
 					mask="YYYY-MM-DD"
-					:class="`JLDate JLDate${Strings.capitalize(field.field)} JLDate${Strings.capitalize(field.key)} ${field.classes}`"
+					:class="`JLDate JLDate${Strings.capitalize(field.field)} JLDate${Strings.capitalize(field.key)} ${field.classes ?? ''}`"
 					:minimal="field.settings?.dense" />
 
 				<JLNotice
@@ -433,14 +439,14 @@ if (props.options.onFormLoad) {
 					:type="field.type"
 					:class="`hidden JLHidden JLHidden${Strings.capitalize(field.field)} JLHidden${Strings.capitalize(
 						field.key,
-					)} ${field.classes}`" />
+					)} ${field.classes ?? ''}`" />
 
 				<div v-if="field.field === FormFieldField.BUTTON && field.buttons.length" class="JLButtonGroup">
 					<q-btn
 						v-for="(button, key) in field.buttons"
-						:class="`${field.settings?.button_style?.classes} JLButton JLButton${Strings.capitalize(button.type)} JLButton${Strings.capitalize(
+						:class="`${field.settings?.button_style?.classes ?? ''} JLButton JLButton${Strings.capitalize(button.type)} JLButton${Strings.capitalize(
 							field.key,
-						)} ${field.classes}`"
+						)} ${field.classes ?? ''} ${button.classes ?? ''}`"
 						:key="key"
 						:color="(!button?.classes && !field.settings?.button_style?.classes) ? button.color ? button.color : field.settings?.button_style?.color ? field.settings?.button_style?.color : 'primary' : 'primary'"
 						:type="button?.type === FormFieldButtonType.SUBMIT ? 'submit' : 'button'"
@@ -459,7 +465,7 @@ if (props.options.onFormLoad) {
 						:dense="button?.dense ?? field.settings?.button_style?.dense ?? false"
 						:round="button?.round ?? field.settings?.button_style?.round ?? false"
 						@click="buttonPressed(button)"
-						:disabled="field.disabled || field.loading">
+						:disable="field.disabled || field.loading">
 						<span
 							v-if="field.loading"
 							:class="`JLButtonLoader JLButtonLoader${Strings.capitalize(

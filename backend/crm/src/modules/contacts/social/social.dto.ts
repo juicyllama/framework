@@ -14,5 +14,5 @@ export class ContactSocialDto {
 
 	@ApiProperty({ description: 'Your contacts social handle', example: '@richardbranson' })
 	@IsString()
-	handle: string
+	handle!: string
 }

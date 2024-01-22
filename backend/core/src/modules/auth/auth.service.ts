@@ -88,6 +88,10 @@ export class AuthService extends BaseService<T> {
 		return user
 	}
 
+	async getAccessToken(user: User) {
+		return this.jwtService.sign(await this.constructLoginPayload(user), { secret: process.env.JWT_KEY })
+	}
+
 	async login(user: User) {
 		const payload = await this.constructLoginPayload(user)
 		if (!['development', 'test'].includes(Env.get())) {
@@ -450,7 +454,7 @@ export class AuthService extends BaseService<T> {
 		}
 	}
 
-	referrerCheck(referrer: string | URL, allowed: string, domain: any) {
+	referrerCheck(referrer: string | URL, allowed: string | string[], domain: any) {
 		if (Env.IsProd()) {
 			if (!referrer) {
 				this.logger.warn(`[${domain}] No referrer found`, {
@@ -460,13 +464,25 @@ export class AuthService extends BaseService<T> {
 				throw new UnauthorizedException()
 			}
 			const referrer_url = new URL(referrer)
-			if (referrer_url.origin !== allowed) {
-				this.logger.error(`[${domain}] Referrer does not match`, {
-					referrer: referrer_url,
-					allowed: allowed,
-					NODE_ENV: process.env.NODE_ENV,
-				})
-				throw new UnauthorizedException()
+			
+			if(allowed instanceof Array) {
+				if (!allowed.includes(referrer_url.origin)) {
+					this.logger.error(`[${domain}] Referrer does not match`, {
+						referrer: referrer_url,
+						allowed: allowed,
+						NODE_ENV: process.env.NODE_ENV,
+					})
+					throw new UnauthorizedException()
+				}
+			} else {
+				if (referrer_url.origin !== allowed) {
+					this.logger.error(`[${domain}] Referrer does not match`, {
+						referrer: referrer_url,
+						allowed: allowed,
+						NODE_ENV: process.env.NODE_ENV,
+					})
+					throw new UnauthorizedException()
+				}
 			}
 		}
 		return true

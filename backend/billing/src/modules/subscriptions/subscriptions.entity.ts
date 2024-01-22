@@ -9,7 +9,7 @@ import { SubscriptionFrequency, SupportedCurrencies } from '@juicyllama/utils'
 export class Subscription extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	@IsNumber()
-	readonly subscription_id: number
+	readonly subscription_id!: number
 
 	@ManyToOne(() => Account, account => account, {
 		onDelete: 'CASCADE',
@@ -23,11 +23,11 @@ export class Subscription extends BaseEntity {
 
 	@Column()
 	@IsString()
-	name: string
+	name!: string
 
 	@Column({ default: null, nullable: true })
 	@IsString()
-	description: string
+	description!: string
 
 	@Column('decimal', { precision: 20, scale: 10, default: 0 })
 	@IsNumber()
@@ -39,17 +39,17 @@ export class Subscription extends BaseEntity {
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	amount_total: number // amount including tax
+	amount_total!: number // amount including tax
 
 	@Column('varchar', { length: 3 })
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)
 	@MaxLength(3)
-	currency: SupportedCurrencies
+	currency!: SupportedCurrencies
 
 	@Column()
 	@IsEnum(SubscriptionFrequency)
-	frequency: SubscriptionFrequency
+	frequency!: SubscriptionFrequency
 
 	@ManyToMany(() => Tag, tag => tag, { cascade: true })
 	@JoinTable({

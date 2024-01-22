@@ -3,6 +3,7 @@ import { Charge } from './charges.entity'
 import { ScaffoldDto, Scaffold } from '@juicyllama/core'
 import { MockChargeRequest } from '../../test/mocks'
 import { ChargesModule } from './charges.module'
+import { DeepPartial } from 'typeorm'
 
 const E = Charge
 type T = Charge
@@ -14,7 +15,7 @@ describe('Charge Service', () => {
 	let scaffold: ScaffoldDto<T>
 
 	let charge: T
-	let mock
+	let mock: DeepPartial<T>
 
 	beforeAll(async () => {
 		scaffold = await scaffolding.up(MODULE, SERVICE)
@@ -33,7 +34,7 @@ describe('Charge Service', () => {
 			const result = await scaffold.services.service.findAll({
 				where: {
 					account: {
-						account_id: mock.account.account_id,
+						account_id: mock.account?.account_id,
 					},
 				},
 			})
@@ -45,7 +46,7 @@ describe('Charge Service', () => {
 			const result = await scaffold.services.service.findOne({
 				where: {
 					account: {
-						account_id: mock.account.account_id,
+						account_id: mock.account?.account_id,
 					},
 				},
 			})

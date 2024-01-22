@@ -21,5 +21,5 @@ export class UpdateStoreDto extends PartialType(StoreDto) {}
 
 export class StoreResponeDto extends Classes.ExtendsMultiple([StoreDto, BaseResponseDto]) {
 	@SwaggerPropertyDecorator({ description: 'The store ID', example: 1 })
-	readonly store_id: number
+	readonly store_id!: number
 }

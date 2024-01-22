@@ -9,21 +9,21 @@ import { SupportedCurrencies } from '@juicyllama/utils'
 export class PaymentMethod extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	@IsNumber()
-	readonly payment_method_id: number
+	readonly payment_method_id!: number
 
 	@ManyToOne(() => Account, account => account.account_id, {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn({ name: 'account_id' })
-	readonly account?: Account
+	readonly account!: Account
 
 	@Column()
 	@IsNumber()
-	account_id: number
+	account_id!: number
 
 	@Column({ default: PaymentMethodType.creditcard })
 	@IsEnum(PaymentMethodType)
-	method: PaymentMethodType
+	method!: PaymentMethodType
 
 	@Column({ type: 'json', default: null, nullable: true })
 	@IsObject()
@@ -33,7 +33,7 @@ export class PaymentMethod extends BaseEntity {
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)
 	@MaxLength(3)
-	currency: SupportedCurrencies
+	currency!: SupportedCurrencies
 
 	@Column({ default: false })
 	@IsBoolean()

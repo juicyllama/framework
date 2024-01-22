@@ -73,7 +73,11 @@ export class TransactionDiscountsController {
 		relationsEnum: TransactionDiscountRelations,
 		primaryKey: TRANSACTION_DISCOUNT_PRIMARY_KEY,
 	})
-	async findOne(@AccountId() account_id: number, @Param() params: any, @Query() query: any): Promise<TRANSACTION_DISCOUNT_T> {
+	async findOne(
+		@AccountId() account_id: number,
+		@Param() params: any,
+		@Query() query: any,
+	): Promise<TRANSACTION_DISCOUNT_T> {
 		return await crudFindOne<TRANSACTION_DISCOUNT_T>({
 			service: this.service,
 			query: query,

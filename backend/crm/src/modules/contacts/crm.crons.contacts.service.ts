@@ -1,9 +1,9 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { CachePeriod, Enviroment, Logger, Modules } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
 import { SettingsService } from '@juicyllama/core'
-import { ContactPhoneService } from './phone/phone.service'
+import { CachePeriod, Env, Logger, Modules } from '@juicyllama/utils'
+import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { ContactPhoneStatus } from './phone/phone.enums'
+import { ContactPhoneService } from './phone/phone.service'
 
 @Injectable()
 export class CrmCronsContactsService {
@@ -17,7 +17,7 @@ export class CrmCronsContactsService {
 	async validatePhoneNumbers() {
 		const domain = 'cron::crm::validatePhoneNumbers'
 
-		if (![Enviroment.test].includes(this.configService.get('NODE_ENV'))) {
+		if (!Env.IsTest()) {
 			let Bugsnag: any
 
 			if (Modules.bugsnag.isInstalled) {
@@ -55,7 +55,7 @@ export class CrmCronsContactsService {
 					failed++
 				}
 			} catch (e) {
-				failures.push(e.message)
+				failures.push((e as Error).message)
 			}
 		}
 

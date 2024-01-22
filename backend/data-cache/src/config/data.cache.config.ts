@@ -28,6 +28,9 @@ export default registerAs(
 )
 
 function buildMongoURLFromAPIKey(): string {
+	if (!process.env.JUICYLLAMA_DATA_CACHE_API_KEY) {
+		throw new Error('JUICYLLAMA_DATA_CACHE_API_KEY is not set')
+	}
 	const { username, password } = <{ client_id: number; username: string; password: string }>(
 		Security.decode(process.env.JUICYLLAMA_DATA_CACHE_API_KEY)
 	)

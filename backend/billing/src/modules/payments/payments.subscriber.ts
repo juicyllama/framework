@@ -12,7 +12,8 @@ export class PaymentsSubscriber implements EntitySubscriberInterface<Payment> {
 			dataSource.subscribers.push(this)
 			logger.verbose(`PaymentsSubscriber: Registered`)
 		} catch (e) {
-			logger.warn(`PaymentsSubscriber Failed: ${e.message}`, e)
+			const error = e as Error
+			logger.warn(`PaymentsSubscriber Failed: ${error.message}`, error)
 		}
 	}
 	listenTo() {

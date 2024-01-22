@@ -4,41 +4,41 @@ import { WiseAmountDto } from '../wise.dto'
 
 export class WiseBalanceDto {
 	@IsNumber()
-	id: number
+	id!: number
 
 	@IsString()
-	currency: string
+	currency!: string
 
 	@IsEnum(WiseBalanceType)
-	type: WiseBalanceType
+	type!: WiseBalanceType
 
 	@IsString()
-	name: string
+	name!: string
 
 	@IsString()
-	icon: string
+	icon!: string
 
 	@IsEnum(WiseBalanceInvestmentState)
-	investmentState: WiseBalanceInvestmentState
+	investmentState!: WiseBalanceInvestmentState
 
 	@IsObject()
-	amount: WiseAmountDto
+	amount!: WiseAmountDto
 
 	@IsObject()
-	reservedAmount: WiseAmountDto
+	reservedAmount!: WiseAmountDto
 
 	@IsObject()
-	cashAmount: WiseAmountDto
+	cashAmount!: WiseAmountDto
 
 	@IsObject()
-	totalWorth: WiseAmountDto
+	totalWorth!: WiseAmountDto
 
 	@IsDate()
-	creationTime: Date
+	creationTime!: Date
 
 	@IsDate()
-	modificationTime: Date
+	modificationTime!: Date
 
 	@IsBoolean()
-	visible: boolean
+	visible!: boolean
 }

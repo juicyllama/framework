@@ -8,7 +8,7 @@ import { InstalledApp } from '@juicyllama/app-store'
 @Entity('ecommerce_stores')
 export class Store extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	readonly store_id: number
+	readonly store_id!: number
 
 	@ManyToOne(() => Account, account => account.account_id, {
 		onDelete: 'CASCADE',
@@ -17,7 +17,7 @@ export class Store extends BaseEntity {
 	account?: Account
 
 	@Column()
-	account_id: number
+	account_id!: number
 
 	@ManyToOne(() => Website, website => website.website_id, {
 		onDelete: 'SET NULL',

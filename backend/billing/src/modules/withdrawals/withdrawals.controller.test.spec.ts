@@ -1,4 +1,4 @@
-import { Enviroment } from '@juicyllama/utils'
+import { Env, Enviroment } from '@juicyllama/utils'
 //@ts-ignore
 import request from 'supertest'
 import { Scaffold, ScaffoldDto } from '@juicyllama/core'
@@ -29,7 +29,7 @@ describe('Withdrawals Controller', () => {
 	let paymentsService: PaymentsService
 
 	beforeAll(async () => {
-		if (Enviroment[process.env.NODE_ENV] !== Enviroment.test) {
+		if (!Env.IsTest()) {
 			throw new Error(`Test suite should not be ran outside the test environment`)
 		}
 

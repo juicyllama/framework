@@ -4,6 +4,7 @@ import { Subscription } from './subscriptions.entity'
 import { Scaffold, ScaffoldDto } from '@juicyllama/core'
 import { MockSubscriptionRequest } from '../../test/mocks'
 import { SubscriptionsModule } from './subscriptions.module'
+import { DeepPartial } from 'typeorm'
 
 const E = Subscription
 type T = Subscription
@@ -15,7 +16,7 @@ describe('Subscription Service', () => {
 	let scaffold: ScaffoldDto<T>
 
 	let subscription: Subscription
-	let mock
+	let mock: DeepPartial<T>
 
 	beforeAll(async () => {
 		scaffold = await scaffolding.up(MODULE, SERVICE)
@@ -34,7 +35,7 @@ describe('Subscription Service', () => {
 			const result = await scaffold.services.service.findAll({
 				where: {
 					account: {
-						account_id: mock.account.account_id,
+						account_id: mock.account?.account_id,
 					},
 				},
 			})
@@ -46,7 +47,7 @@ describe('Subscription Service', () => {
 			const result = await scaffold.services.service.findOne({
 				where: {
 					account: {
-						account_id: mock.account.account_id,
+						account_id: mock.account?.account_id,
 					},
 				},
 			})

@@ -1,7 +1,7 @@
 import { InstalledApp, Oauth } from '@juicyllama/app-store'
 import { registerAs } from '@nestjs/config'
+import { LATEST_API_VERSION, Session, Shopify, shopifyApi } from '@shopify/shopify-api'
 import '@shopify/shopify-api/adapters/node'
-import { shopifyApi, LATEST_API_VERSION, Session, Shopify } from '@shopify/shopify-api'
 import { ShopifyConfigDto } from './shopify.config.dto'
 
 export default registerAs(
@@ -31,6 +31,9 @@ export const ShopifyAuthScopes = [
 export const ShopifyAuthRedirect = '/app/shopify/auth/redirect'
 
 export function Shopify(config: ShopifyConfigDto): Shopify {
+	if (!process.env.BASE_URL_API) {
+		throw new Error('BASE_URL_API is not set')
+	}
 	return shopifyApi({
 		apiKey: config.SHOPIFY_APP_CLIENT_ID,
 		apiSecretKey: config.SHOPIFY_APP_CLIENT_SECRET,

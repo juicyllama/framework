@@ -13,7 +13,7 @@ export class WebsiteDto {
 	@IsString()
 	@MinLength(2)
 	@MaxLength(50)
-	name: string
+	name!: string
 
 	@SwaggerPropertyDecorator({
 		description: 'The website URL',
@@ -23,7 +23,7 @@ export class WebsiteDto {
 	})
 	@IsString()
 	@IsUrl()
-	url: string
+	url!: string
 
 	@SwaggerPropertyDecorator({
 		description: 'The URL of your website screenshot',
@@ -52,5 +52,5 @@ export class UpdateWebsiteDto extends PartialType(WebsiteDto) {}
 
 export class WebsiteResponeDto extends Classes.ExtendsMultiple([WebsiteDto, BaseResponseDto]) {
 	@SwaggerPropertyDecorator({ description: 'The website ID', example: 1 })
-	readonly website_id: number
+	readonly website_id!: number
 }

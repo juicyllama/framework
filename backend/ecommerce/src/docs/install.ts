@@ -8,6 +8,7 @@ export function installEcommerceDocs(docs: RedocOptions, exclude_tags?: string[]
 		tags = tags.filter(tag => !exclude_tags.includes(tag))
 	}
 
+	docs.tagGroups ||= []
 	docs.tagGroups.push({
 		name: group,
 		tags: tags,

@@ -8,7 +8,7 @@ import { SupportedCurrencies } from '@juicyllama/utils'
 export class Charge extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	@IsNumber()
-	readonly charge_id: number
+	readonly charge_id!: number
 
 	@ManyToOne(() => Account, account => account.account_id, {
 		onDelete: 'CASCADE',
@@ -18,15 +18,15 @@ export class Charge extends BaseEntity {
 
 	@Column()
 	@IsNumber()
-	account_id: number
+	account_id!: number
 
 	@Column()
 	@IsString()
-	name: string
+	name!: string
 
 	@Column({ default: null, nullable: true })
 	@IsString()
-	description: string
+	description!: string
 
 	@Column('decimal', { precision: 20, scale: 10, default: 0 })
 	@IsNumber()
@@ -38,13 +38,13 @@ export class Charge extends BaseEntity {
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	amount_total: number // amount including tax
+	amount_total!: number // amount including tax
 
 	@Column('varchar', { length: 3 })
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)
 	@MaxLength(3)
-	currency: SupportedCurrencies
+	currency!: SupportedCurrencies
 
 	@ManyToMany(() => Tag, tag => tag, { cascade: true })
 	@JoinTable({

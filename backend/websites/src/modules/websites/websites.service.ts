@@ -101,6 +101,7 @@ export class WebsitesService extends BaseService<T> {
 
 		let location = `accounts/${website.account_id}/images/websites/${website.website_id}`
 
+		//@ts-ignore
 		import('get-website-favicon').then(async getFavicons => {
 			const favicons = await getFavicons.default(website.url)
 
@@ -109,7 +110,7 @@ export class WebsitesService extends BaseService<T> {
 				throw new Error(`No icons found for ${website.url}`)
 			}
 
-			const icons = favicons.icons.sort((a, b) => {
+			const icons = favicons.icons.sort((a: any, b: any) => {
 				if (!a.sizes || a.sizes === '') {
 					return 1
 				}

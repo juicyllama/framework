@@ -5,7 +5,7 @@ import { AppStoreIntegrationName } from '../apps.enums'
 import { ConfigService } from '@nestjs/config'
 import { ApiOperation, ApiQuery } from '@nestjs/swagger'
 import { oauthQueryMappers } from './oauth.mappers'
-import { AuthService, AccountId } from '@juicyllama/core'
+import { AuthService, AccountId, AuthenticatedRequest } from '@juicyllama/core'
 
 @ApiTags('Oauth')
 @Controller('oauth')
@@ -28,9 +28,9 @@ export class OauthController {
 	})
 	@Get('start')
 	async start(
-		@Req() req,
+		@Req() req: AuthenticatedRequest,
 		@AccountId() account_id: number,
-		@Res() res,
+		@Res() res: any,
 		@Query('integration_name') integration_name: AppStoreIntegrationName,
 		@Query() query: any, //allow passthrough of query params
 	): Promise<void> {
