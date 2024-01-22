@@ -56,11 +56,17 @@ function updatedField(value: string) {
 
 async function buttonPressed(button: FormCustomButton) {
 	logger({ severity: LogSeverity.VERBOSE, message: `Form Button Pressed`, object: button })
-	switch (button.type) {
-		case FormFieldButtonType.ACTION:
-			button.action({ button: button, formData: formData, schema: props.options, q: $q })
-			break
+	
+	if(button.type){
+		switch (button.type) {
+			case FormFieldButtonType.ACTION:
+				button.action({ button: button, formData: formData, schema: props.options, q: $q })
+				break
+		}
+	}else{
+		submittedForm()
 	}
+	
 }
 
 async function submittedForm() {
@@ -440,7 +446,7 @@ if (props.options.onFormLoad) {
 						v-for="(button, key) in field.buttons"
 						:class="`${field.settings?.button_style?.classes} JLButton JLButton${Strings.capitalize(button.type)} JLButton${Strings.capitalize(
 							field.key,
-						)} ${field.classes}`"
+						)} ${field.classes ?? ''} ${button.classes ?? ''}`"
 						:key="key"
 						:color="(!button?.classes && !field.settings?.button_style?.classes) ? button.color ? button.color : field.settings?.button_style?.color ? field.settings?.button_style?.color : 'primary' : 'primary'"
 						:type="button?.type === FormFieldButtonType.SUBMIT ? 'submit' : 'button'"
@@ -459,7 +465,7 @@ if (props.options.onFormLoad) {
 						:dense="button?.dense ?? field.settings?.button_style?.dense ?? false"
 						:round="button?.round ?? field.settings?.button_style?.round ?? false"
 						@click="buttonPressed(button)"
-						:disabled="field.disabled || field.loading">
+						:disable="field.disabled || field.loading">
 						<span
 							v-if="field.loading"
 							:class="`JLButtonLoader JLButtonLoader${Strings.capitalize(
