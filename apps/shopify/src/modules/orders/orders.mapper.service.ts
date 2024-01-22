@@ -94,14 +94,14 @@ export class ShopifyOrdersMapperService {
 		if (order.billing_address) {
 			billing_address = await this.contactAddressService.create({
 				contact_id: contact.contact_id,
-				address_1: order.shipping_address.address1,
-				address_2: order.shipping_address.address2,
-				city: order.shipping_address.city,
-				state: order.shipping_address.province,
-				post_code: order.shipping_address.zip,
-				country_iso: order.shipping_address.country_code,
-				latitude: order.shipping_address.latitude,
-				longitude: order.shipping_address.longitude,
+				address_1: order.billing_address.address1,
+				address_2: order.billing_address.address2,
+				city: order.billing_address.city,
+				state: order.billing_address.province,
+				post_code: order.billing_address.zip,
+				country_iso: order.billing_address.country_code,
+				latitude: order.billing_address.latitude,
+				longitude: order.billing_address.longitude,
 			})
 		}
 
