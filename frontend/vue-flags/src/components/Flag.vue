@@ -27,7 +27,7 @@ if(!width || !height) {
 	}
 }
 
-let src = `../assets/flags/${type}/${image_type}/${props.country_code.toUpperCase()}.${image_type}`
+let src = `/flags/${type}/${image_type}/${props.country_code.toUpperCase()}.${image_type}`
 
 </script>
 
