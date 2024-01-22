@@ -9,7 +9,6 @@ export enum FlagType {
 
 export enum FlagImageType {
 	SVG = 'svg',
-	PNG = 'png'
 }
 
 export interface FlagProps {
