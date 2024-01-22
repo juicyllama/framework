@@ -2,7 +2,7 @@ import { Controller, forwardRef, Get, Inject, Query, Req } from '@nestjs/common'
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { IsNull } from 'typeorm'
 import { WalletService } from './wallet.service'
-import { AccountId, AccountService, AuthService, ReadManyDecorator, UserAuth, UserRole } from '@juicyllama/core'
+import { AccountId, AccountService, AuthenticatedRequest, AuthService, ReadManyDecorator, UserAuth, UserRole } from '@juicyllama/core'
 import { WalletOrderBy, WalletRelations, WalletSelect } from './wallet.enums'
 import { GetBalanceResponseDto } from './wallet.dto'
 import { Query as JLQuery } from '@juicyllama/core/dist/utils/typeorm/Query'
@@ -25,7 +25,7 @@ export class WalletController {
 		type: Number,
 	})
 	@Get('balances')
-	async getBalances(@Req() req, @AccountId() account_id: number): Promise<GetBalanceResponseDto[]> {
+	async getBalances(@Req() req: AuthenticatedRequest, @AccountId() account_id: number): Promise<GetBalanceResponseDto[]> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		const account = await this.accountService.findById(account_id)
 		return await this.walletService.getBalances(account)
@@ -38,7 +38,7 @@ export class WalletController {
 		orderByEnum: WalletOrderBy,
 		relationsEnum: WalletRelations,
 	})
-	async listAll(@Req() req, @AccountId() account_id: number, @Query() query: any): Promise<BILLING_WALLET_T[]> {
+	async listAll(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Query() query: any): Promise<BILLING_WALLET_T[]> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 
 		const where = {

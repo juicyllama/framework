@@ -28,12 +28,12 @@ export class AppInputValidationDto {
 	readonly max?: number
 
 	@IsEnum(AppInputValidationType)
-	readonly type: AppInputValidationType
+	readonly type!: AppInputValidationType
 }
 
 export class AppDropdownDto {
 	@IsArray()
-	readonly options: object
+	readonly options!: object
 
 	@IsBoolean()
 	@IsOptional()
@@ -53,7 +53,7 @@ export class AppUploadDto {
 export class AppCheckboxDto {
 	@IsBoolean()
 	@IsOptional()
-	readonly default: boolean
+	readonly default!: boolean
 
 	@IsBoolean()
 	@IsOptional()
@@ -62,7 +62,7 @@ export class AppCheckboxDto {
 
 export class AppInputDto {
 	@IsEnum(AppInputType)
-	readonly type: AppInputType
+	readonly type!: AppInputType
 
 	@IsBoolean()
 	@IsOptional()
@@ -77,12 +77,12 @@ export class AppSettingsDto {
 	@IsString()
 	@MinLength(2)
 	@MaxLength(255)
-	readonly key: string
+	readonly key!: string
 
 	@IsString()
 	@MinLength(2)
 	@MaxLength(255)
-	readonly name: string
+	readonly name!: string
 
 	@IsObject()
 	@MinLength(2)
@@ -134,7 +134,7 @@ export class AppDto {
 		example: 'Slack',
 		required: true,
 	})
-	name: string
+	name!: string
 
 	@SwaggerPropertyDecorator({
 		type: SwaggerPropertyType.STRING,
@@ -142,7 +142,7 @@ export class AppDto {
 		example: 'https://slack.com',
 		required: true,
 	})
-	url: string
+	url!: string
 
 	@SwaggerPropertyDecorator({
 		enum: AppIntegrationType,
@@ -158,7 +158,7 @@ export class AppDto {
 		example: AppStoreIntegrationName.wordpress,
 		required: true,
 	})
-	integration_name: AppStoreIntegrationName
+	integration_name!: AppStoreIntegrationName
 
 	@SwaggerPropertyDecorator({
 		enum: AppCategory,
@@ -166,7 +166,7 @@ export class AppDto {
 		example: AppCategory.communication,
 		required: true,
 	})
-	category: AppCategory
+	category!: AppCategory
 
 	@SwaggerPropertyDecorator({
 		type: SwaggerPropertyType.STRING,

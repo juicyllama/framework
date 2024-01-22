@@ -17,7 +17,7 @@ export class SlackChatService {
 
 		if (Env.IsTest()) {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
-			return
+			return { ok: true } as ChatPostMessageResponse
 		}
 
 		const creds = {
@@ -32,10 +32,12 @@ export class SlackChatService {
 			const response = await app.client.chat.postMessage(message)
 			this.logger.debug(`[${domain}] Response`, response)
 			return response
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] ${e.message}`, {
 				message: message,
 			})
+			throw e
 		}
 	}
 }

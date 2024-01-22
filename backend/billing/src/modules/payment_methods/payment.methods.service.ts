@@ -124,7 +124,7 @@ export class PaymentMethodsService extends BaseService<T> {
 				await super.update({
 					payment_method_id: payment_method.payment_method_id,
 					next_attempt_at: next_attempt_at,
-					attempts: payment_method.attempts + 1,
+					attempts: (payment_method.attempts || 0) + 1,
 				})
 				break
 		}
@@ -149,6 +149,8 @@ export class PaymentMethodsService extends BaseService<T> {
 					} catch (e: any) {
 						this.logger.error(`[${domain}] Failed to add card: ${e.message}`)
 					}*/
+					// TODO temporary
+					return false
 				} else {
 					this.logger.warn(`[${domain}] Wise is not installed`)
 					return false
@@ -325,9 +327,9 @@ export class PaymentMethodsService extends BaseService<T> {
 		if (!process.env.BEACON_BILLING_PAYMENT_METHOD_EXPIRY) {
 			return
 		}
-
-		if (!payment_method.account.finance_email) {
-			const user = await this.accountService.getOwner(payment_method.account.account_id)
+		
+		if (!payment_method.account?.finance_email) {
+			const user = await this.accountService.getOwner(payment_method.account_id)
 			payment_method.account.finance_email = user.email
 		}
 

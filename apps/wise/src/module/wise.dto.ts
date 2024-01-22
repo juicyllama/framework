@@ -2,28 +2,28 @@ import { IsNumber, IsString } from 'class-validator'
 
 export class WiseAddressDto {
 	@IsString()
-	addressFirstLine: string
+	addressFirstLine!: string
 
 	@IsString()
-	city: string
+	city!: string
 
 	@IsString()
-	postCode: string
+	postCode!: string
 
 	@IsString()
-	stateCode: string
+	stateCode!: string
 
 	@IsString()
-	countryName: string
+	countryName!: string
 
 	@IsString()
-	country: string
+	country!: string
 }
 
 export class WiseAmountDto {
 	@IsString()
-	currency: string
+	currency!: string
 
 	@IsNumber()
-	value: number
+	value!: number
 }

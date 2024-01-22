@@ -3,8 +3,8 @@ import { AppIntegrationType } from '../apps.enums'
 
 export class OAuthAuthorizeResponseDto {
 	@IsString()
-	type: AppIntegrationType.OAUTH2
+	type!: AppIntegrationType.OAUTH2
 
 	@IsUrl()
-	redirect_url: string
+	redirect_url!: string
 }

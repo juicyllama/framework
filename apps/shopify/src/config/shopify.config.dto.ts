@@ -2,10 +2,10 @@ import { IsString, IsOptional } from 'class-validator'
 
 export class ShopifyConfigDto {
 	@IsString()
-	SHOPIFY_APP_CLIENT_ID: string
+	SHOPIFY_APP_CLIENT_ID!: string
 
 	@IsString()
-	SHOPIFY_APP_CLIENT_SECRET: string
+	SHOPIFY_APP_CLIENT_SECRET!: string
 
 	@IsString()
 	@IsOptional()

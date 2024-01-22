@@ -7,7 +7,7 @@ import { Account, BaseEntity } from '@juicyllama/core'
 @Entity('websites')
 export class Website extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	readonly website_id: number
+	readonly website_id!: number
 
 	@ManyToOne(() => Account, account => account.account_id, {
 		onDelete: 'CASCADE',
@@ -16,18 +16,18 @@ export class Website extends BaseEntity {
 	account?: Account
 
 	@Column()
-	account_id: number
+	account_id!: number
 
 	@IsString()
 	@MinLength(2)
 	@MaxLength(50)
 	@Column()
-	name: string
+	name!: string
 
 	@IsString()
 	@IsUrl()
 	@Column()
-	url: string
+	url!: string
 
 	@Column({ default: null, nullable: true })
 	@IsString()

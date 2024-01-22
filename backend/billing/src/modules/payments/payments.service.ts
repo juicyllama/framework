@@ -202,7 +202,7 @@ export class PaymentsService extends BaseService<T> {
 
 		await this.sendBeaconOnDecline(payment_method, owner, amount, currency)
 
-		if (payment_method.attempts >= 5) {
+		if (payment_method.attempts && payment_method.attempts >= 5) {
 			this.logger.log(`[${domain}] Disabling payment method as 5 declined attempts`, {
 				account_id: account_id,
 				payment_method: payment_method,
@@ -243,7 +243,7 @@ export class PaymentsService extends BaseService<T> {
 				})
 			} else {
 				markdown = `A payment of ${amount} has been received via ${Strings.capitalize(
-					payment.method,
+					payment?.method || 'unknown',
 				)} and applied to your account.`
 			}
 

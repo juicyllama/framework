@@ -17,7 +17,7 @@ export class ContactPhoneDto {
 
 	@ApiProperty({ description: 'Your contacts phone number', example: '650-762-7000' })
 	@IsString()
-	number: string
+	number!: string
 
 	@IsString()
 	@IsOptional()

@@ -39,8 +39,8 @@ export class ShopifyOrdersMapperService {
 		installed_app: InstalledApp,
 	): Promise<Transaction> {
 		let contact: Contact
-		let shipping_address: ContactAddress
-		let billing_address: ContactAddress
+		let shipping_address: ContactAddress | undefined = undefined
+		let billing_address: ContactAddress | undefined = undefined
 
 		if (!order.email) {
 			order.email = `${order.id}@${installed_app.settings.SHOPIFY_SHOP_NAME}.myshopify.com`
@@ -105,6 +105,9 @@ export class ShopifyOrdersMapperService {
 			})
 		}
 
+		if (!order.order_number) {
+			throw new Error(`Order number not found`)
+		}
 		const transaction = await this.transactionsService.create({
 			account_id: store.account_id,
 			store_id: store.store_id,
@@ -114,10 +117,12 @@ export class ShopifyOrdersMapperService {
 			contact_id: contact?.contact_id,
 			shipping_address_id: shipping_address?.address_id,
 			billing_address_id: billing_address?.address_id,
-			payment_status: this.shopifyOrderFinancialStatusToEcommerceTransactionStatus(order.financial_status),
-			fulfillment_status: this.shopifyOrderFulfillmentStatusToEcommerceTransactionStatus(
-				order.fulfillment_status,
-			),
+			payment_status:
+				order.financial_status &&
+				this.shopifyOrderFinancialStatusToEcommerceTransactionStatus(order.financial_status),
+			fulfillment_status:
+				order.fulfillment_status &&
+				this.shopifyOrderFulfillmentStatusToEcommerceTransactionStatus(order.fulfillment_status),
 			currency: order.currency,
 			subtotal_price: order.subtotal_price,
 			total_shipping: Number(order.total_shipping_price_set?.shop_money?.amount),
@@ -135,7 +140,7 @@ export class ShopifyOrdersMapperService {
 		transaction.shipping_address = shipping_address
 		transaction.billing_address = billing_address
 		transaction.discounts = await this.shopifyDiscountCodesToEcommerceDicounts(
-			order.discount_codes,
+			order.discount_codes || [],
 			store.account_id,
 			transaction.transaction_id,
 		)
@@ -147,14 +152,18 @@ export class ShopifyOrdersMapperService {
 		let has_changed = false
 		const changed: UpdateTransactionDto = {}
 
-		const newPaymentStatus = this.shopifyOrderFinancialStatusToEcommerceTransactionStatus(order.financial_status)
-		if (transaction.payment_status !== newPaymentStatus) {
-			changed.payment_status = newPaymentStatus
-			has_changed = true
+		if (order.financial_status) {
+			const newPaymentStatus = this.shopifyOrderFinancialStatusToEcommerceTransactionStatus(
+				order.financial_status,
+			)
+			if (transaction.payment_status !== newPaymentStatus) {
+				changed.payment_status = newPaymentStatus
+				has_changed = true
+			}
 		}
 
 		const newFulfillmentStatus = this.shopifyOrderFulfillmentStatusToEcommerceTransactionStatus(
-			order.fulfillment_status,
+			order.fulfillment_status || ShopifyOrderFulfillmentStatus.null,
 		)
 		if (transaction.fulfillment_status !== newFulfillmentStatus) {
 			changed.fulfillment_status = newFulfillmentStatus

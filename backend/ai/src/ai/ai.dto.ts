@@ -23,25 +23,25 @@ export class AiChatRequest extends AiRequest {
 
 export class AiAskSQLDto {
 	@IsEnum(AiSQLTypes)
-	type: AiSQLTypes
+	type!: AiSQLTypes
 
 	@IsArray()
-	repos: Repository<any>[]
+	repos!: Repository<any>[]
 }
 
 export class AiSQLRequest extends AiRequest {
 	@ApiProperty({ description: 'Your database query question', example: 'How many countries are there in africa?' })
 	@IsString()
-	question: string
+	question!: string
 
 	@IsObject()
-	sql: AiAskSQLDto
+	sql!: AiAskSQLDto
 }
 
 export class AiImageRequest {
 	@ApiProperty({ description: 'The image you would like', example: 'A cute baby sea otter' })
 	@IsString()
-	image_description: string
+	image_description!: string
 
 	@ApiProperty({ description: 'If you are using OpenAI and wish to provide OpenAi configuration' })
 	@IsOptional()
@@ -51,13 +51,13 @@ export class AiImageRequest {
 
 export class AiTrainingDataDto {
 	@IsString()
-	prompt: string
+	prompt!: string
 
 	@IsString()
-	completion: string
+	completion!: string
 }
 
 export class AiTrainingRequestDto {
 	@IsArray()
-	training_data: AiTrainingDataDto[]
+	training_data!: AiTrainingDataDto[]
 }

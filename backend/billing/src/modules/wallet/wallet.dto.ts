@@ -3,8 +3,8 @@ import { SupportedCurrencies } from '@juicyllama/utils'
 
 export class GetBalanceResponseDto {
 	@IsNumber()
-	balance: number
+	balance!: number
 
 	@IsEnum(SupportedCurrencies)
-	currency: SupportedCurrencies
+	currency!: SupportedCurrencies
 }

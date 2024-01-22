@@ -41,7 +41,7 @@ export class InstalledAppsService extends BaseService<T> {
 			installed_app.app = await this.appsService.findOne({ where: { app_id: installed_app.app_id } })
 		}
 
-		const public_settings = {}
+		const public_settings: { [key: string]: any } = {};
 		if (installed_app.app?.settings) {
 			for (const app_creds of installed_app.app.settings) {
 				if (!app_creds.private) {
@@ -52,7 +52,7 @@ export class InstalledAppsService extends BaseService<T> {
 			}
 		}
 
-		installed_app.settings = <any>public_settings
+		installed_app.settings = public_settings;
 		return installed_app
 	}
 
@@ -62,12 +62,12 @@ export class InstalledAppsService extends BaseService<T> {
 	 * @returns string
 	 */
 	createOauthLink(installed_app: T): string {
-		switch (installed_app.app.integration_name) {
+		switch (installed_app.app?.integration_name) {
 			case AppStoreIntegrationName.shopify:
 				return `${process.env.BASE_URL_API}/app/shopify/auth/install?installed_app_id=${installed_app.installed_app_id}`
 
 			default:
-				throw new BadRequestException(`${installed_app.app.integration_name} OAUTH2 LINK NOT IMPLEMENTED`)
+				throw new BadRequestException(`${installed_app.app?.integration_name} OAUTH2 LINK NOT IMPLEMENTED`)
 		}
 	}
 
@@ -83,7 +83,7 @@ export class InstalledAppsService extends BaseService<T> {
 		}
 
 		for (const setting of app.settings) {
-			if (setting.input.required) {
+			if (setting.input?.required) {
 				if (!installed_app.settings || !installed_app.settings[setting.key]) {
 					return false
 				}

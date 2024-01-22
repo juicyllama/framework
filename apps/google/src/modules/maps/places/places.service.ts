@@ -45,7 +45,7 @@ export class PlacesService {
 			cachedDate.setDate(cachedDate.getDate() - CACHE_DAYS)
 
 			// if the number is cached and is not older than cachedDate
-			if (cachedDate < result.created_at) {
+			if (result.created_at && cachedDate < result.created_at) {
 				this.logger.debug(`[${domain}] Result found in the data lake`)
 				return result
 			}

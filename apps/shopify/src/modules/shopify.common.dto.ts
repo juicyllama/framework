@@ -3,7 +3,7 @@ import { IsString, IsNumber, IsOptional, IsDateString } from 'class-validator'
 
 export class ShopifyRest {
 	@IsString()
-	api_version: ApiVersion
+	api_version!: ApiVersion
 }
 
 export class ShopifyRestList extends ShopifyRest {
@@ -118,8 +118,8 @@ export class ShopifyAddress {
 
 export class ShopifyMoney {
 	@IsString()
-	amount: string
+	amount!: string
 
 	@IsString()
-	currency_code: string
+	currency_code!: string
 }

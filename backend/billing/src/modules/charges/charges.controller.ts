@@ -9,6 +9,7 @@ import {
 	Query as TQuery,
 	FxService,
 	BaseController,
+	AuthenticatedRequest,
 } from '@juicyllama/core'
 import { billingChargesConstants as constants, BILLING_CHARGES_T as T } from './charges.constants'
 import { billingRoles as roles } from '../billing.constants'
@@ -33,7 +34,7 @@ export class ChargesController extends BaseController<T> {
 	}
 
 	@ReadManyDecorator(constants)
-	async findAll(@Req() req, @Query() query: any, @AccountId() account_id: number): Promise<T[]> {
+	async findAll(@Req() req: AuthenticatedRequest, @Query() query: any, @AccountId() account_id: number): Promise<T[]> {
 		return super.findAll(req, query, account_id)
 	}
 }

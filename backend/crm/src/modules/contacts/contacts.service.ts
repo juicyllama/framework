@@ -46,13 +46,6 @@ export class ContactsService extends BaseService<T> {
 
 		const contact = await super.create(data)
 
-		if (!contact) {
-			this.logger.error(`[${domain}] Failed to create contact`, {
-				data: data,
-			})
-			return
-		}
-
 		this.logger.verbose(`[${domain}] Contact created`, contact)
 		await this.patchMailchimp(contact)
 		return contact
@@ -71,10 +64,13 @@ export class ContactsService extends BaseService<T> {
 	async update(data: DeepPartial<T>): Promise<T> {
 		const domain = 'crm::contacts::service::update'
 
-		data.phones = await this.contactPhoneService.updatePhones(data.phones, data.contact_id)
-		data.emails = await this.contactEmailService.updateEmails(data.emails, data.contact_id)
-		data.socials = await this.contactSocialService.updateSocials(data.socials, data.contact_id)
-		data.addresses = await this.contactAddressService.updateAddresses(data.addresses, data.contact_id)
+		if (!data.contact_id) throw new Error('Contact ID is required')
+
+		if (data.phones) data.phones = await this.contactPhoneService.updatePhones(data.phones, data.contact_id)
+		if (data.emails) data.emails = await this.contactEmailService.updateEmails(data.emails, data.contact_id)
+		if (data.socials) data.socials = await this.contactSocialService.updateSocials(data.socials, data.contact_id)
+		if (data.addresses)
+			data.addresses = await this.contactAddressService.updateAddresses(data.addresses, data.contact_id)
 
 		data = omitBy(data, isNil)
 
@@ -103,7 +99,7 @@ export class ContactsService extends BaseService<T> {
 
 	async uploadAvatar(contact: T, file: Express.Multer.File): Promise<T> {
 		const result = await this.storageService.write({
-			location: `account/${contact.account.account_id}/contacts/${contact.contact_id}/avatars/${file.originalname}`,
+			location: `account/${contact.account_id}/contacts/${contact.contact_id}/avatars/${file.originalname}`,
 			permissions: StorageType.PUBLIC,
 			format: StorageFileFormat.Express_Multer_File,
 			file: file,

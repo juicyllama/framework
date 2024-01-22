@@ -23,6 +23,10 @@ export class ShopifyWebhooksService {
 	): Promise<ShopifyWebhook> {
 		const domain = 'app::shopify::webhook::getWebhooks'
 
+		if (!data.topic) {
+			throw new Error(`Topic is required`)
+		}
+
 		const oath = await this.oauthService.findOne({ where: { installed_app_id: installed_app.installed_app_id } })
 		const session = ShopifySession(installed_app, oath)
 

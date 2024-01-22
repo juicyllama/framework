@@ -12,5 +12,5 @@ export class ContactEmailDto {
 	@IsEmail()
 	@MinLength(2)
 	@MaxLength(2)
-	email: string
+	email!: string
 }
