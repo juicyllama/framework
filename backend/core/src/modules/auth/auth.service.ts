@@ -88,6 +88,10 @@ export class AuthService extends BaseService<T> {
 		return user
 	}
 
+	async getAccessToken(user: User) {
+		return this.jwtService.sign(await this.constructLoginPayload(user), { secret: process.env.JWT_KEY })
+	}
+
 	async login(user: User) {
 		const payload = await this.constructLoginPayload(user)
 		if (!['development', 'test'].includes(Env.get())) {
