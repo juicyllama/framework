@@ -20,6 +20,8 @@ import { UsersModule } from '../users/users.module'
 import { AuthModule } from '../auth/auth.module'
 import { BeaconIm } from './im/im.entity'
 import { BeaconImService } from './im/im.service'
+import { BeaconWebhook } from './webhook/webhook.entity'
+import { BeaconWebhookService } from './webhook/webhook.service'
 
 @Module({
 	imports: [
@@ -29,7 +31,7 @@ import { BeaconImService } from './im/im.service'
 			validationSchema: Env.IsNotTest() ? Joi.object(beaconConfigJoi) : null,
 		}),
 		TypeOrmModule.forRoot(databaseConfig()),
-		TypeOrmModule.forFeature([BeaconEmail, BeaconSms, BeaconPush, BeaconIm, BeaconNotification]),
+		TypeOrmModule.forFeature([BeaconEmail, BeaconSms, BeaconPush, BeaconIm, BeaconNotification, BeaconWebhook]),
 		forwardRef(() => AuthModule),
 		forwardRef(() => UsersModule),
 	],
@@ -41,6 +43,7 @@ import { BeaconImService } from './im/im.service'
 		BeaconPushService,
 		BeaconImService,
 		BeaconNotificationService,
+		BeaconWebhookService,
 		Logger,
 		Query,
 	],
