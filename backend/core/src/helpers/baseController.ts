@@ -59,7 +59,7 @@ export class BaseController<T extends ObjectLiteral> {
 		return await crudCreate<T>({
 			service: this.service,
 			data: new this.constants.entity(body),
-			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : undefined,
+			account_id: this.tQuery.requiresAccountId(this.service.repository) ? account_id : undefined,		
 		})
 	}
 
@@ -89,6 +89,8 @@ export class BaseController<T extends ObjectLiteral> {
 							currency_fields: this.constants.currencyFields,
 						}
 					: undefined,
+			geo: this.constants.geoFields,
+			lang: this.constants.langFields,
 		})
 	}
 
@@ -177,6 +179,8 @@ export class BaseController<T extends ObjectLiteral> {
 							currency_fields: this.constants.currencyFields,
 						}
 					: undefined,
+			geo: this.constants.geoFields,
+			lang: this.constants.langFields,
 		})
 	}
 

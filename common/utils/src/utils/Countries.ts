@@ -1,6 +1,7 @@
 import COUNTRIES from '../assets/countries.json'
 import { isNil } from 'lodash'
 import { Logger } from './Logger'
+import { Country } from '../types/countries'
 
 export class Countries {
 	/**
@@ -295,15 +296,15 @@ export class Countries {
 	 * @param ISO2
 	 */
 
-	static getCountry(ISO2: string) {
-		if (!ISO2 || isNil(ISO2)) return null
+	static getCountry(ISO2: string): Country | undefined {
+		if (!ISO2 || isNil(ISO2)) return
 
 		try {
-			return COUNTRIES.find(country => country.ISO2 === ISO2)
+			return <Country>COUNTRIES.find(country => country.ISO2 === ISO2.toUpperCase())
 		} catch (e: any) {
 			const logger = new Logger()
 			logger.error(`[Utils::Countries::getCountry] ${e.message}`, e.stack)
-			return null
+			return
 		}
 	}
 }
