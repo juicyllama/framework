@@ -23,6 +23,7 @@ export function getAhrefsApiKey(options?: {
 	}else if(process.env.AHREFS_API_KEY) {
 		return process.env.AHREFS_API_KEY
 	}
+	throw new Error('AHREFS_API_KEY not found')
 }
 
 export function getAhrefsAxiosConfig(options?: {
