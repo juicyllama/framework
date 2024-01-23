@@ -20,19 +20,22 @@ export class WordpressPostsService {
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 	) {}
 
-	async create(options: { data: WordpressCreatePost; config?: wordpressConfigDto }): Promise<WordpressPost> {
+	async create(options?: { data: WordpressCreatePost; config?: wordpressConfigDto }): Promise<WordpressPost> {
 		const domain = 'app::wordpress::posts::create'
 
 		if (Env.IsTest()) {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return <any>mock
 		}
+		if (!options?.config) throw new Error('Missing config');
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
 			return await this.api.post(domain, url.toString(), options.data, getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error creating post: ${e.message}`, e)
+			throw e
 		}
 	}
 
@@ -43,13 +46,17 @@ export class WordpressPostsService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return [<any>mock]
 		}
+		if (!options?.config) throw new Error('Missing config');
+
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString())
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error finding all posts: ${e.message}`, e)
+			throw e
 		}
 	}
 
@@ -64,13 +71,16 @@ export class WordpressPostsService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return <any>mock
 		}
+		if (!options.config) throw new Error('Missing config');
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString(), getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error finding one post: ${e.message}`, e)
+			throw e
 		}
 	}
 
@@ -85,12 +95,14 @@ export class WordpressPostsService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return <any>mock
 		}
-
+		if (!options.config) throw new Error('Missing config');
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
 			return await this.api.post(domain, url.toString(), options.data, getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error updating post: ${e.message}`, e)
+			throw e
 		}
 	}
 
@@ -101,12 +113,15 @@ export class WordpressPostsService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return
 		}
+		if (!options.config) throw new Error('Missing config');
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
 			await this.api.delete(domain, url.toString(), getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error removing post: ${e.message}`, e)
+			throw e
 		}
 	}
 }

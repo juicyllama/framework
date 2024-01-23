@@ -27,12 +27,15 @@ export class WordpressUsersService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return <any>mock
 		}
+		if (!options.config) throw new Error('Missing config');
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
 			return await this.api.post(domain, url.toString(), options.data, getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error creating user: ${e.message}`, e)
+			throw e
 		}
 	}
 
@@ -43,13 +46,16 @@ export class WordpressUsersService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return [<any>mock]
 		}
+		if (!options?.config) throw new Error('Missing config');
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString(), getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error finding all users: ${e.message}`, e)
+			throw e
 		}
 	}
 
@@ -64,13 +70,16 @@ export class WordpressUsersService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return <any>mock
 		}
+		if (!options.config) throw new Error('Missing config');
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString(), getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error finding one user: ${e.message}`, e)
+			throw e
 		}
 	}
 
@@ -85,12 +94,15 @@ export class WordpressUsersService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return <any>mock
 		}
+		if (!options.config) throw new Error('Missing config');
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
 			return await this.api.post(domain, url.toString(), options.data, getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error updating user: ${e.message}`, e)
+			throw e
 		}
 	}
 
@@ -101,12 +113,16 @@ export class WordpressUsersService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return
 		}
+		if (!options.config) throw new Error('Missing config');
+
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
 			await this.api.delete(domain, url.toString(), getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error removing user: ${e.message}`, e)
+			throw e
 		}
 	}
 }

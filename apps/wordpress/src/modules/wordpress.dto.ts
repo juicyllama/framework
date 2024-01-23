@@ -2,7 +2,7 @@ import { IsArray, IsBoolean, IsNumber, IsString } from 'class-validator'
 
 export class WordpressLink {
 	@IsString()
-	href: string
+	href?: string
 
 	@IsBoolean()
 	embeddable?: boolean
@@ -27,7 +27,7 @@ export class WordpressMeta {
 
 export class WordpressRenderedObject {
 	@IsString()
-	rendered: string
+	rendered!: string
 
 	@IsBoolean()
 	protected?: boolean
@@ -35,19 +35,19 @@ export class WordpressRenderedObject {
 
 export class WordpressLinks {
 	@IsArray()
-	self: WordpressLink[]
+	self!: WordpressLink[]
 
 	@IsArray()
-	collection: WordpressLink[]
+	collection!: WordpressLink[]
 
 	@IsArray()
-	about: WordpressLink[]
+	about!: WordpressLink[]
 
 	@IsArray()
-	auther: WordpressLink[]
+	auther!: WordpressLink[]
 
 	@IsArray()
-	replies: WordpressLink[]
+	replies!: WordpressLink[]
 
 	@IsArray()
 	'version-history': WordpressLink[]
