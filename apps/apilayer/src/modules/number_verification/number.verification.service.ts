@@ -24,8 +24,8 @@ export class NumberVerificationService {
 
 		phone_number = phone_number.replace(/\D/g, '') // remove all non-digits
 
-		if (iso2 && !phone_number.startsWith(dailcodes[iso2])) {
-			phone_number = `${dailcodes[iso2]}${phone_number}`
+		if (iso2 && !phone_number.startsWith(dailcodes[iso2 as keyof typeof dailcodes])) {
+			phone_number = `${dailcodes[iso2 as keyof typeof dailcodes]}${phone_number}`
 		}
 
 		const config = {
