@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { Logger } from '@juicyllama/utils'
 import { XeroInvoice } from './invoice.entity'
-import { Dates, Enviroment } from '@juicyllama/utils'
+import { Dates, Env } from '@juicyllama/utils'
 import invoiceMock from './invoice.mock'
 import { Invoice, Payment } from 'xero-node'
 import { AuthService } from '../xero.auth.service'
@@ -39,7 +39,7 @@ export class InvoiceService {
 			return result
 		}
 
-		if (Enviroment[process.env.NODE_ENV] === Enviroment.test) {
+		if (Env.IsTest()) {
 			this.logger.verbose(`[${domain}][Test] Mock xero invoice`)
 
 			return await this.query.create(this.repository, {
@@ -61,18 +61,22 @@ export class InvoiceService {
 		this.logger.debug(`[${domain}] Create xero invoice - request`, data)
 		const xero = await this.authService.accessToken()
 
-		const response = await xero.accountingApi.createInvoices('', { invoices: [data] }, null, true, 4)
+		const response = await xero.accountingApi.createInvoices('', { invoices: [data] }, undefined, true, 4)
 		this.logger.debug(`[${domain}] Create xero invoice - response`, response)
 
 		const xero_response_body = response?.body
 		this.logger.debug(`[${domain}] Xero Invoice`, xero_response_body)
 
-		if (!xero_response_body.invoices.length || !xero_response_body.invoices[0].invoiceID) {
+		if (!xero_response_body?.invoices?.length || !xero_response_body.invoices[0].invoiceID) {
 			this.logger.error(`[${domain}] Xero invoice not in the response body`, xero_response_body)
-			return
+			throw new Error('Xero invoice not in the response body')
 		}
 
 		const xero_invoice = xero_response_body.invoices[0]
+
+		if (!xero_invoice.invoiceID) {
+			throw new Error('Xero invoice not in the response body')
+		}
 
 		if (options.email) {
 			const emailed = await xero.accountingApi.emailInvoice('', xero_invoice.invoiceID, {})
@@ -94,7 +98,7 @@ export class InvoiceService {
 		const invoice = await this.findById(xero_invoice_id)
 
 		try {
-			if (Enviroment[process.env.NODE_ENV] === Enviroment.test) {
+			if (Env.IsTest()) {
 				this.logger.verbose(`[${domain}][Test] Mock xero invoice payment`)
 			} else {
 				const new_xero_payment: Payment = {
@@ -111,11 +115,16 @@ export class InvoiceService {
 				this.logger.debug(`[${domain}] Create xero invoice payment`, new_xero_payment)
 				const xero = await this.authService.accessToken()
 				const response = await xero.accountingApi.createPayment('', new_xero_payment)
+				if (!response.body.payments?.length) {
+					this.logger.error(`[${domain}] Xero payment not in the response body`, response.body)
+					throw new Error('Xero payment not in the response body')
+				}
 				this.logger.debug(`[${domain}] Create xero invoice payment response:`, response.body.payments[0])
 			}
 
 			return await this.syncInvoice(invoice)
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error: ${e.message}`, {
 				error: {
 					message: e.message,
@@ -125,6 +134,7 @@ export class InvoiceService {
 					invoice: invoice,
 				},
 			})
+			throw e
 		}
 	}
 
@@ -138,20 +148,26 @@ export class InvoiceService {
 		let xero_response: Invoice
 
 		try {
-			if (Enviroment[process.env.NODE_ENV] === Enviroment.test) {
+			if (Env.IsTest()) {
 				this.logger.verbose(`[${domain}][Test] Mock xero invoice`)
 				xero_response = invoiceMock()
 			} else {
 				this.logger.debug(`[${domain}] Get xero invoice`)
 				const xero = await this.authService.accessToken()
-				const response = await xero.accountingApi.getInvoices('', null, null, null, [invoice.ext_invoice_id])
+				const response = await xero.accountingApi.getInvoices('', undefined, undefined, undefined, [
+					invoice.ext_invoice_id,
+				])
+				if (!response.body.invoices?.length) {
+					this.logger.error(`[${domain}] Xero invoice not in the response body`, response.body)
+					throw new Error('Xero invoice not in the response body')
+				}
 				xero_response = response.body.invoices[0]
 				this.logger.debug(`[${domain}] Create xero invoice response:`, xero_response)
 			}
 
 			if (!xero_response.invoiceID) {
 				this.logger.error(`[${domain}] Xero invoiceID not in the response`)
-				return
+				throw new Error('Xero invoiceID not in the response')
 			}
 
 			return await this.query.create(this.repository, {
@@ -159,7 +175,8 @@ export class InvoiceService {
 				amount_due: xero_response.amountDue,
 				amount_paid: xero_response.amountPaid,
 			})
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`Error: ${e.message}`, {
 				error: {
 					message: e.message,
@@ -169,6 +186,7 @@ export class InvoiceService {
 					invoice: invoice,
 				},
 			})
+			throw e
 		}
 	}
 }

@@ -20,8 +20,13 @@ export class ScrapingBeeScrapeService {
 			return
 		}
 
+		const key = this.configService.get<string>('scrapingbee.SCRAPINGBEE_API_KEY')
+		if (!key) {
+			this.logger.error(`[${domain}] Error: SCRAPINGBEE_API_KEY not found`)
+			throw new Error('SCRAPINGBEE_API_KEY not found')
+		}
 		try {
-			const client = new ScrapingBeeClient(this.configService.get('scrapingbee.SCRAPINGBEE_API_KEY'))
+			const client = new ScrapingBeeClient(key)
 			this.logger.debug(`[${domain}] Request`, options)
 			const response = await client.get(options)
 
@@ -30,7 +35,8 @@ export class ScrapingBeeScrapeService {
 
 			this.logger.debug(`[${domain}] Response`, text)
 			return text
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] ${e.message}`, options)
 		}
 	}

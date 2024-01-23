@@ -9,7 +9,7 @@ export class SandboxController {
 	) {}
 
 	@Post()
-	async message(@Req() req, @Body() options: SpbConfig) {
+	async message(@Req() req: any, @Body() options: SpbConfig) {
 		try {
 			return await this.scrapingBeeService.scrape(options)
 		} catch (e) {

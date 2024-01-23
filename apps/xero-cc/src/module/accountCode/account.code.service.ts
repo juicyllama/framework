@@ -8,6 +8,8 @@ import { Logger } from '@juicyllama/utils'
 const E = XeroAccountCode
 type T = XeroAccountCode
 
+const DEFAULT_XERO_CC_DEFAULT_ACCOUNT_CODE = 'MISC'
+
 @Injectable()
 export class AccountCodeService extends BaseService<T> {
 	constructor(
@@ -39,7 +41,7 @@ export class AccountCodeService extends BaseService<T> {
 		this.logger.debug(
 			`[${domain}] No account code found for tag #${tag.tag_id}, returning ${process.env.XERO_CC_DEFAULT_ACCOUNT_CODE}`,
 		)
-		return process.env.XERO_CC_DEFAULT_ACCOUNT_CODE
+		return process.env.XERO_CC_DEFAULT_ACCOUNT_CODE || DEFAULT_XERO_CC_DEFAULT_ACCOUNT_CODE
 	}
 
 	async getTaxTypeByTag(tag: Tag): Promise<string> {

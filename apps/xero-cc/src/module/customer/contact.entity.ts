@@ -1,40 +1,22 @@
-import {
-	Column,
-	CreateDateColumn,
-	DeleteDateColumn,
-	Entity,
-	JoinColumn,
-	ManyToOne,
-	PrimaryGeneratedColumn,
-	Unique,
-	UpdateDateColumn,
-} from 'typeorm'
+import { Account, BaseEntity } from '@juicyllama/core'
 import { IsDate, IsString } from 'class-validator'
-import { Account } from '@juicyllama/core'
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
 
 @Entity('apps_xero_cc_contacts')
 @Unique('apps_xero_cc_contacts_UNIQUE', ['account'])
-export class XeroContact {
+export class XeroContact extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	readonly xero_contact_id: number
+	readonly xero_contact_id!: number
 
 	@Column()
 	@IsString()
-	ext_contact_id: string
+	ext_contact_id!: string
 
 	@ManyToOne(() => Account, account => account.account_id, {
 		onDelete: 'SET NULL',
 	})
 	@JoinColumn({ name: 'account_id' })
-	account: Account
-
-	@CreateDateColumn()
-	@IsDate()
-	readonly created_at: Date
-
-	@UpdateDateColumn()
-	@IsDate()
-	readonly updated_at: Date
+	account!: Account
 
 	@Column({ default: null, nullable: true })
 	@IsDate()
@@ -43,11 +25,4 @@ export class XeroContact {
 	@Column({ default: null, nullable: true })
 	@IsDate()
 	next_check_at?: Date
-
-	@DeleteDateColumn()
-	deleted_at: Date
-
-	constructor(partial: Partial<XeroContact>) {
-		Object.assign(this, partial)
-	}
 }

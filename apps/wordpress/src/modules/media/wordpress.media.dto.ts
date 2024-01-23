@@ -67,33 +67,33 @@ export class WordpressGetMedia {
 
 export class WordPressMediaDetailsSize {
 	@IsString()
-	file: string
+	file!: string
 
 	@IsNumber()
-	width: number
+	width!: number
 
 	@IsNumber()
-	height: number
+	height!: number
 
 	@IsNumber()
-	filesize: number
+	filesize!: number
 
 	@IsString()
-	mime_type: string
+	mime_type!: string
 
 	@IsString()
-	source_url: string
+	source_url!: string
 }
 
 export class WordPressMediaDetailsSizes {
 	@IsObject()
-	medium: WordPressMediaDetailsSize
+	medium!: WordPressMediaDetailsSize
 
 	@IsObject()
-	thumbnail: WordPressMediaDetailsSize
+	thumbnail!: WordPressMediaDetailsSize
 
 	@IsObject()
-	full: WordPressMediaDetailsSize
+	full!: WordPressMediaDetailsSize
 }
 
 export class WordPressMediaDetailsImageMeta {
@@ -186,7 +186,7 @@ export class WordpressMedia {
 	link?: string
 
 	@IsObject()
-	title: WordpressRenderedObject
+	title!: WordpressRenderedObject
 
 	@IsNumber()
 	author?: number
@@ -204,10 +204,10 @@ export class WordpressMedia {
 	meta?: WordpressMeta[]
 
 	@IsObject()
-	description: WordpressRenderedObject
+	description!: WordpressRenderedObject
 
 	@IsObject()
-	caption: WordpressRenderedObject
+	caption!: WordpressRenderedObject
 
 	@IsString()
 	alt_text?: string

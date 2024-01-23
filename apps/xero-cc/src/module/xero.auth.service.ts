@@ -18,13 +18,19 @@ export class AuthService {
 	async accessToken(): Promise<XeroClient> {
 		const domain = 'apps::xero_cc::accessToken'
 
+		const clientId = this.configService.get<string>('xero_cc.XERO_CC_CLIENT_ID')
+		const clientSecret = this.configService.get<string>('xero_cc.XERO_CC_CLIENT_SECRET')
+		if (!clientId || !clientSecret) {
+			throw new Error(`[${domain}] XERO_CC_CLIENT_ID or XERO_CC_CLIENT_SECRET not set`)
+		}
+
 		const cache_key = JLCache.cacheKey(domain, {
-			clientId: this.configService.get<string>('xero_cc.XERO_CC_CLIENT_ID'),
+			clientId,
 		})
 
 		const xero = new XeroClient({
-			clientId: this.configService.get<string>('xero_cc.XERO_CC_CLIENT_ID'),
-			clientSecret: this.configService.get<string>('xero_cc.XERO_CC_CLIENT_SECRET'),
+			clientId,
+			clientSecret,
 			grantType: 'client_credentials',
 		})
 
@@ -53,7 +59,7 @@ export class AuthService {
 		if (oauth.expires_at < new Date()) {
 			this.logger.debug(`[${domain}] OAuth expired renewing access token`)
 
-			await xero.setTokenSet({
+			xero.setTokenSet({
 				access_token: oauth.access_token,
 				refresh_token: oauth.refresh_token,
 				token_type: oauth.token_type,
