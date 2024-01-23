@@ -19,7 +19,7 @@ export class EverflowAffiliateReportingClicksService {
 
 	async findAll(options: {
 		arguments: EverflowAffiliateReportingClicksBody
-		config?: everflowConfigDto
+		config: everflowConfigDto
 	}): Promise<EverflowClick[]> {
 		const domain = 'app::everflow::affiliate::reporting::clicks::findAll'
 
@@ -34,8 +34,10 @@ export class EverflowAffiliateReportingClicksService {
 
 		try {
 			return await this.api.post(domain, ENDPOINT, options.arguments, getEverflowAxiosConfig(options.config))
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error finding clicks: ${e.message}`, e)
+			throw e
 		}
 	}
 }
