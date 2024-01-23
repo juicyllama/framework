@@ -27,7 +27,7 @@ export class WordpressPostsService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return <any>mock
 		}
-		if (!options?.config) throw new Error('Missing config');
+		if (!options?.config) throw new Error('Missing config')
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
@@ -46,8 +46,7 @@ export class WordpressPostsService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return [<any>mock]
 		}
-		if (!options?.config) throw new Error('Missing config');
-
+		if (!options?.config) throw new Error('Missing config')
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
@@ -71,7 +70,7 @@ export class WordpressPostsService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return <any>mock
 		}
-		if (!options.config) throw new Error('Missing config');
+		if (!options.config) throw new Error('Missing config')
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
@@ -95,7 +94,7 @@ export class WordpressPostsService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return <any>mock
 		}
-		if (!options.config) throw new Error('Missing config');
+		if (!options.config) throw new Error('Missing config')
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
 			return await this.api.post(domain, url.toString(), options.data, getWordpressAxiosConfig(options.config))
@@ -113,7 +112,7 @@ export class WordpressPostsService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return
 		}
-		if (!options.config) throw new Error('Missing config');
+		if (!options.config) throw new Error('Missing config')
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)

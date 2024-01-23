@@ -27,7 +27,7 @@ export class WordpressCategoriesService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return <any>mock
 		}
-		if (!options.config) throw new Error('Missing config');
+		if (!options.config) throw new Error('Missing config')
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
@@ -49,8 +49,7 @@ export class WordpressCategoriesService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return [<any>mock]
 		}
-		if (!options?.config) throw new Error('Missing config');
-
+		if (!options?.config) throw new Error('Missing config')
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
@@ -74,7 +73,7 @@ export class WordpressCategoriesService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return <any>mock
 		}
-		if (!options.config) throw new Error('Missing config');
+		if (!options.config) throw new Error('Missing config')
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
@@ -98,7 +97,7 @@ export class WordpressCategoriesService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return <any>mock
 		}
-		if (!options.config) throw new Error('Missing config');
+		if (!options.config) throw new Error('Missing config')
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)
@@ -118,7 +117,7 @@ export class WordpressCategoriesService {
 			return
 		}
 
-		if (!options.config) throw new Error('Missing config');
+		if (!options.config) throw new Error('Missing config')
 
 		try {
 			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.postId)

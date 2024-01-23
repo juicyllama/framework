@@ -14,11 +14,7 @@ async function bootstrap() {
 	})
 
 	app.listen(Number(process.env.PORT_SANDBOX) || 3000)
-	logger.debug(
-		`[${domain}] ${Env.get()} server running: ${process.env.BASE_URL_SANDBOX}:${
-			process.env.PORT_SANDBOX
-		}`,
-	)
+	logger.debug(`[${domain}] ${Env.get()} server running: ${process.env.BASE_URL_SANDBOX}:${process.env.PORT_SANDBOX}`)
 }
 
 try {

@@ -17,7 +17,7 @@ export class PexelsService {
 		},
 	): Promise<PhotosWithTotalResults | ErrorResponse> {
 		const domain = 'app::pexels::image'
-		const key = this.configService.get<string>('pexels.PEXELS_API_KEY');
+		const key = this.configService.get<string>('pexels.PEXELS_API_KEY')
 		if (!key) {
 			this.logger.error(`[${domain}] Error: PEXELS_API_KEY not found`)
 			throw new Error('PEXELS_API_KEY not found')

@@ -19,11 +19,7 @@ async function bootstrap() {
 	app.useGlobalFilters(new TypeOrmFilter())
 
 	app.listen(Number(process.env.PORT) || 3000)
-	logger.debug(
-		`[${domain}] ${Env.get()} server running: ${process.env.BASE_URL_API}:${
-			process.env.PORT
-		}`,
-	)
+	logger.debug(`[${domain}] ${Env.get()} server running: ${process.env.BASE_URL_API}:${process.env.PORT}`)
 }
 
 try {
