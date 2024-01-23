@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import VOtpInput from 'vue3-otp-input'
-import { Ref } from 'vue'
 
 const emit = defineEmits(['complete'])
-const props = defineProps<{
-	code?: string
-}>()
 
 const handleOnComplete = (value: string) => {
 	emit('complete', value)
