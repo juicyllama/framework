@@ -19,7 +19,7 @@ export class EverflowAffiliateReportingConversionsService {
 
 	async findAll(options: {
 		arguments: EverflowAffiliateReportingConversionBody
-		config?: everflowConfigDto
+		config: everflowConfigDto
 	}): Promise<EverflowConversion[]> {
 		const domain = 'app::everflow::affiliate::reporting::conversions::findAll'
 
@@ -43,8 +43,10 @@ export class EverflowAffiliateReportingConversionsService {
 				},
 				getEverflowAxiosConfig(options.config),
 			)
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error finding conversions: ${e.message}`, e)
+			throw e
 		}
 	}
 }

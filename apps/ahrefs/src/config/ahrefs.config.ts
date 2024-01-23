@@ -11,24 +11,21 @@ export default registerAs(
 		},
 )
 
-export function getAhrefsApiKey(options?: {
-	config?: AhrefsConfigDto,
-	instlled_app?: InstalledApp,
-	}): string 
-{
-	if(options?.instlled_app?.settings?.AHREFS_API_KEY) {
+export function getAhrefsApiKey(options?: { config?: AhrefsConfigDto; instlled_app?: InstalledApp }): string {
+	if (options?.instlled_app?.settings?.AHREFS_API_KEY) {
 		return options.instlled_app.settings.AHREFS_API_KEY
-	}else if(options?.config?.AHREFS_API_KEY) {
+	} else if (options?.config?.AHREFS_API_KEY) {
 		return options.config.AHREFS_API_KEY
-	}else if(process.env.AHREFS_API_KEY) {
+	} else if (process.env.AHREFS_API_KEY) {
 		return process.env.AHREFS_API_KEY
 	}
+	throw new Error('AHREFS_API_KEY not found')
 }
 
 export function getAhrefsAxiosConfig(options?: {
-	config?: AhrefsConfigDto,
-	instlled_app?: InstalledApp,
-	}): RawAxiosRequestConfig {
+	config?: AhrefsConfigDto
+	instlled_app?: InstalledApp
+}): RawAxiosRequestConfig {
 	return {
 		headers: {
 			'Content-Type': 'application/json',

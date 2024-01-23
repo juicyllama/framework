@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { Env, Images } from '@juicyllama/utils'
+import { Env, File } from '@juicyllama/utils'
 import { WordpressMediaService } from './wordpress.media.service'
 import { WordpressMediaModule } from './wordpress.media.module'
 import { forwardRef } from '@nestjs/common'
@@ -24,13 +24,13 @@ describe('WordPress Media Service', () => {
 
 	describe('Create Media', () => {
 		it('Able to create a media', async () => {
-			const image = await Images.downloadImage(
+			const image = await File.downloadFile(
 				'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
 			)
 
 			const response = await wordpressMediaService.create({
 				data: <any>mock,
-				imageBuffer: image,
+				imageBuffer: image.buffer,
 				filename: 'cropped-icon.png',
 			})
 			expect(response).toBeDefined()
