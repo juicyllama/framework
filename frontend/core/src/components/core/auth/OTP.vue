@@ -3,6 +3,11 @@ import VOtpInput from 'vue3-otp-input'
 
 const emit = defineEmits(['complete'])
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const props = defineProps<{
+	code?: string
+}>()
+
 const handleOnComplete = (value: string) => {
 	emit('complete', value)
 }
