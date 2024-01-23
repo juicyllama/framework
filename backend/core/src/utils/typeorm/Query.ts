@@ -162,15 +162,27 @@ export class Query<T extends ObjectLiteral> {
 		repository: Repository<T>,
 		id: number,
 		relations?: string[],
-		currency?: CurrencyOptions<T>,
+		currency?: CurrencyOptions<T>
 	): Promise<T> {
+
+		if (Env.IsNotProd()) {
+			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}]`, { [this.getPrimaryKey(repository)]: id })
+		}
+
 		const where: FindOptionsWhere<T> = {}
 		where[this.getPrimaryKey(repository)] = <T[keyof T]>id
-		const result = <T>await this.findOne(repository, {
+
+		let result = <T>await this.findOne(repository, {
 			where: where,
 			relations: relations?.length ? relations : this.getRelations(repository),
 		})
-		return <T>await this.convertCurrency(result, currency)
+		result = <T>await this.convertCurrency(result, currency)
+
+		if (Env.IsNotProd()) {
+			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}] Result`, result)
+		}
+
+		return result
 	}
 
 	/**
@@ -184,14 +196,25 @@ export class Query<T extends ObjectLiteral> {
 		repository: Repository<T>,
 		where: FindOptionsWhere<T>[] | FindOptionsWhere<T>,
 		options?: FindManyOptions,
-		currency?: CurrencyOptions<T>,
+		currency?: CurrencyOptions<T>
 	): Promise<T> {
 		options = TypeOrm.findOneOptionsWrapper<T>(repository, options)
-		const result = <T>await this.findOne(repository, {
+
+		if (Env.IsNotProd()) {
+			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}]`, { options: options })
+		}
+
+		let result = <T>await this.findOne(repository, {
 			...options,
 			where: where,
 		})
-		return <T>await this.convertCurrency(result, currency)
+		result = <T>await this.convertCurrency(result, currency)
+
+		if (Env.IsNotProd()) {
+			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}] Result`, result)
+		}
+
+		return result
 	}
 
 	/**
@@ -201,17 +224,20 @@ export class Query<T extends ObjectLiteral> {
 	 */
 
 	async findOne(repository: Repository<T>, options?: FindOneOptions, currency?: CurrencyOptions<T>): Promise<T> {
+		
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}]`, { options: options })
 		}
 
 		options = TypeOrm.findOneOptionsWrapper<T>(repository, options)
-		const result = <T>await repository.findOne(options)
-		const convertedResult = <T>await this.convertCurrency(result, currency)
+		let result = <T>await repository.findOne(options)
+		result = <T>await this.convertCurrency(result, currency)
+		
 		if (Env.IsNotProd()) {
-			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}] Result`, convertedResult)
+			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}] Result`, result)
 		}
-		return convertedResult
+
+		return result
 	}
 
 	/**
@@ -221,13 +247,20 @@ export class Query<T extends ObjectLiteral> {
 	 */
 
 	async findAll(repository: Repository<T>, options?: FindManyOptions, currency?: CurrencyOptions<T>): Promise<T[]> {
+	
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][FIND][MANY][${repository.metadata.tableName}]`, { options: options })
 		}
 
 		options = TypeOrm.findAllOptionsWrapper<T>(repository, options)
-		const result = <T[]>await repository.find(options)
-		return <T[]>await this.convertCurrency(result, currency)
+		let result = <T[]>await repository.find(options)
+		result = <T[]>await this.convertCurrency(result, currency)
+
+		if (Env.IsNotProd()) {
+			logger.debug(`[QUERY][FIND][MANY][${repository.metadata.tableName}] Result`, { first: result[0], last: result[result.length - 1] })
+		}
+
+		return result
 	}
 
 	/**
@@ -949,6 +982,10 @@ export class Query<T extends ObjectLiteral> {
 		}
 		return result
 	}
+
+	/**
+	 * Expands any lang fields
+	 */
 
 	includeAccount(
 		whereBase: any,

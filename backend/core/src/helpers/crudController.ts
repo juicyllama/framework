@@ -8,6 +8,8 @@ import {
 	Json,
 	Logger,
 	Objects,
+	Countries,
+	Languages
 } from '@juicyllama/utils'
 import { Query as TQuery } from '../utils/typeorm/Query'
 import { TypeOrm } from '../utils/typeorm/TypeOrm'
@@ -38,6 +40,8 @@ export async function crudFindAll<T extends ObjectLiteral>(options: {
 	searchFields?: string[]
 	order_by?: string
 	currency?: CurrencyOptions<T>
+	geo?: string[]
+	lang?: string[]
 }): Promise<T[]> {
 	if (options.query.convert_currencies_to && options.currency) {
 		options.currency.currency = options.query.convert_currencies_to
@@ -55,7 +59,11 @@ export async function crudFindAll<T extends ObjectLiteral>(options: {
 	const PRIMARY_KEY = TypeOrm.getPrimaryKey<T>(options.service.repository)
 
 	const sql_options = TypeOrm.findOptions<T>(options.query, where, PRIMARY_KEY as string)
-	return await options.service.findAll(sql_options, options.currency)
+	let result = await options.service.findAll(sql_options, options.currency)
+	result = await expandGeoFields(result, options.geo)
+	result = await expandLanguageFields(result, options.lang)
+	return result
+
 }
 
 export async function crudFindOne<T extends ObjectLiteral>(options: {
@@ -64,6 +72,8 @@ export async function crudFindOne<T extends ObjectLiteral>(options: {
 	primaryKey: number
 	account_id?: number
 	currency?: CurrencyOptions<T>
+	geo?: string[]
+	lang?: string[]
 }): Promise<T> {
 	const PRIMARY_KEY = TypeOrm.getPrimaryKey<T>(options.service.repository)
 
@@ -81,7 +91,10 @@ export async function crudFindOne<T extends ObjectLiteral>(options: {
 	}
 
 	const sql_options = TypeOrm.findOneOptions<T>(options.query, where)
-	return await options.service.findOne(sql_options, options.currency)
+	let result = await options.service.findOne(sql_options, options.currency)
+	result = await expandGeoFields(result, options.geo)
+	result = await expandLanguageFields(result, options.lang)
+	return result
 }
 
 export async function crudStats<T extends ObjectLiteral>(options: {
@@ -426,4 +439,36 @@ function cleanDtos<T extends ObjectLiteral>(dtos: DeepPartial<T>[], options: any
 	)
 
 	return clean
+}
+
+/**
+ * Expands geo fields
+*/
+
+function expandGeoFields<T>(result: T | T[], geo_fields?: string[]): T | T[] {
+	if (!geo_fields || !geo_fields.length) return result
+
+	for (const record of _.castArray(result)) {
+		for (const field of geo_fields) {
+			//@ts-ignore
+			record[`${field}_details`] = Countries.getCountry(record[field])
+		}
+	}
+	return result
+}
+
+/**
+ * Expands language fields
+*/
+
+function expandLanguageFields<T>(result: T | T[], lang_fields?: string[]): T | T[] {
+	if (!lang_fields || !lang_fields.length) return result
+
+	for (const record of _.castArray(result)) {
+		for (const field of lang_fields) {
+			//@ts-ignore
+			record[`${field}_details`] = Languages.getLanguage(record[field])
+		}
+	}
+	return result
 }
