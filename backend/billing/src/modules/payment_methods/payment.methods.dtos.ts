@@ -26,27 +26,27 @@ export class PaymentMethodCreditCardDetails {
 export class PaymentMethodBankTransferGBPDetails {
 	@ApiProperty({ description: 'Your bank account sort code', example: '12-34-56' })
 	@IsString()
-	sort_code: string
+	sort_code!: string
 
 	@ApiProperty({ description: 'Your bank account number', example: '12345678' })
 	@IsString()
-	account_number: string
+	account_number!: string
 }
 
 export class PaymentMethodBankTransferEURDetails {
 	@ApiProperty({ description: 'Your bank account IBAN', example: 'DE75512108001245126199' })
 	@IsString()
-	iban: string
+	iban!: string
 }
 
 export class PaymentMethodBankTransferUSDDetails {
 	@ApiProperty({ description: 'Your bank account routing number', example: '123456789' })
 	@IsString()
-	routing_number: string
+	routing_number!: string
 
 	@ApiProperty({ description: 'Your bank account number', example: '000123456789' })
 	@IsString()
-	account_number: string
+	account_number!: string
 }
 
 export class PaymentMethodBankTransferDetails {
@@ -55,7 +55,7 @@ export class PaymentMethodBankTransferDetails {
 	bank_name?: string
 
 	@IsObject()
-	account_details:
+	account_details!:
 		| PaymentMethodBankTransferGBPDetails
 		| PaymentMethodBankTransferEURDetails
 		| PaymentMethodBankTransferUSDDetails
@@ -68,7 +68,7 @@ export class PaymentMethodDetails {
 		example: PaymentMethodType.creditcard,
 	})
 	@IsEnum(PaymentMethodType)
-	method: PaymentMethodType
+	method!: PaymentMethodType
 
 	@ApiProperty({
 		description: 'The currency of the payment method',
@@ -76,19 +76,19 @@ export class PaymentMethodDetails {
 		example: SupportedCurrencies.USD,
 	})
 	@IsEnum(SupportedCurrencies)
-	currency: SupportedCurrencies
+	currency!: SupportedCurrencies
 
 	@ApiProperty({
 		description: 'The location to redirect the user to after completing the payment',
 		example: 'https://your.app/address',
 	})
 	@IsString()
-	redirect_url: string
+	redirect_url!: string
 }
 
 export class CreatePaymentMethodDto {
 	@IsObject()
-	payment_method: PaymentMethodDetails
+	payment_method!: PaymentMethodDetails
 
 	@ApiProperty({
 		description: 'A description of the payment method',

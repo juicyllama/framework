@@ -23,6 +23,7 @@ import {
 	Query as TQuery,
 	crudFindAll,
 	DeleteDecorator,
+	AuthenticatedRequest,
 } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
 import { PaymentMethodsService } from './payment.methods.service'
@@ -127,7 +128,7 @@ export class PaymentMethodsController {
 	@UserAuth()
 	@Post()
 	async create(
-		@Req() req,
+		@Req() req: AuthenticatedRequest,
 		@AccountId() account_id: number,
 		@Body() data: CreatePaymentMethodDto,
 	): Promise<BILLING_PAYMENT_MENTHODS_T> {
@@ -167,7 +168,7 @@ export class PaymentMethodsController {
 		relationsEnum: PaymentMethodRelations,
 	})
 	@UserAuth()
-	async findAll(@Req() req, @Query() query: any, @AccountId() account_id: number): Promise<BILLING_PAYMENT_MENTHODS_T[]> {
+	async findAll(@Req() req: AuthenticatedRequest, @Query() query: any, @AccountId() account_id: number): Promise<BILLING_PAYMENT_MENTHODS_T[]> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		return await crudFindAll<BILLING_PAYMENT_MENTHODS_T>({
 			service: this.service,
@@ -185,7 +186,7 @@ export class PaymentMethodsController {
 		name: BILLING_PAYMENT_MENTHODS_NAME,
 	})
 	@UserAuth()
-	async delete(@Req() req, @AccountId() account_id: number, @Param() params: any): Promise<BILLING_PAYMENT_MENTHODS_T> {
+	async delete(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Param() params: any): Promise<BILLING_PAYMENT_MENTHODS_T> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 		return await crudDelete<BILLING_PAYMENT_MENTHODS_T>({
 			service: this.service,

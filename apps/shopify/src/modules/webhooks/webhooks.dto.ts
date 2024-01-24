@@ -5,17 +5,17 @@ import { PartialType } from '@nestjs/swagger'
 
 export class ShopifyWebhook {
 	@IsNumber()
-	id: number
+	id!: number
 
 	@IsString()
-	address: string
+	address!: string
 
 	@IsEnum(ShopifyWebhooksTopics)
 	@IsOptional()
 	topic?: ShopifyWebhooksTopics
 
 	@IsString()
-	format: string
+	format!: string
 
 	@IsDateString()
 	@IsOptional()
@@ -35,5 +35,5 @@ export class ShopifyWebhookCreate extends PartialType(ShopifyWebhook) {}
 export class ShopifyRestListWebhooks extends ShopifyRestList {
 	@IsEnum(ShopifyWebhooksTopics)
 	@IsOptional()
-	topic: ShopifyWebhooksTopics
+	topic!: ShopifyWebhooksTopics
 }

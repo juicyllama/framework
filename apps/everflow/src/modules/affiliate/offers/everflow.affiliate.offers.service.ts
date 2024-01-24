@@ -16,7 +16,7 @@ export class EverflowAffiliateOffersService {
 		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
 	) {}
 
-	async findAllVisable(options: { config?: everflowConfigDto }): Promise<EverflowOffer[]> {
+	async findAllVisable(options: { config: everflowConfigDto }): Promise<EverflowOffer[]> {
 		const domain = 'app::everflow::affiliate::offers::findAllVisable'
 
 		if (Env.IsTest()) {
@@ -26,8 +26,10 @@ export class EverflowAffiliateOffersService {
 
 		try {
 			return await this.api.get(domain, ENDPOINT, getEverflowAxiosConfig(options.config))
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error finding offers: ${e.message}`, e)
+			throw e
 		}
 	}
 }

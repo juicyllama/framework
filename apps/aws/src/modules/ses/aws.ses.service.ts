@@ -1,9 +1,9 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { Env, Logger, Markdown } from '@juicyllama/utils'
-import { SESv2Client, SendEmailRequest, SendEmailCommand } from '@aws-sdk/client-sesv2'
-import { ConfigService } from '@nestjs/config'
-import type { BeaconMessageDto } from '@juicyllama/core'
 import { S3ClientConfig } from '@aws-sdk/client-s3/dist-types/S3Client'
+import { SendEmailCommand, SendEmailRequest, SESv2Client } from '@aws-sdk/client-sesv2'
+import type { BeaconMessageDto } from '@juicyllama/core'
+import { Env, Logger, Markdown } from '@juicyllama/utils'
+import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class AwsSesService {
@@ -49,14 +49,14 @@ export class AwsSesService {
 			this.logger.debug(`[${domain}] Result`, data)
 
 			return data.$metadata.httpStatusCode === 200
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.warn(
 				`[${domain}] Error: ${e.message}`,
 				e.response
 					? {
 							status: e.response.status,
 							data: e.response.data,
-					  }
+						}
 					: null,
 			)
 			return false
@@ -64,14 +64,18 @@ export class AwsSesService {
 	}
 
 	async mapEmail(message: BeaconMessageDto): Promise<SendEmailRequest> {
+		const to = message.communication.email?.to
+		if (!to) {
+			throw new Error('No to address set')
+		}
 		const request = <SendEmailRequest>{
 			FromEmailAddress: `${this.fromName(message)}<${this.fromEmail(message)}>`,
 			Destination: {
-				ToAddresses: [`${message.communication.email.to.name}<${message.communication.email.to.email}>`],
+				ToAddresses: [`${to.name}<${to.email}>`],
 			},
 			Content: {
-				Simple: null,
-				Template: null,
+				Simple: undefined,
+				Template: undefined,
 			},
 		}
 
@@ -96,6 +100,8 @@ export class AwsSesService {
 			[${message.cta.text}](${message.cta.url})`
 		}
 
+		request.Content ||= {}
+
 		request.Content.Simple = {
 			Subject: {
 				Data: message.subject,
@@ -104,9 +110,11 @@ export class AwsSesService {
 				Text: {
 					Data: text,
 				},
-				Html: {
-					Data: await this.markdown.markdownToHTML(markdown),
-				},
+				...(markdown && {
+					Html: {
+						Data: await this.markdown.markdownToHTML(markdown),
+					},
+				}),
 			},
 		}
 
@@ -116,7 +124,7 @@ export class AwsSesService {
 	async mapEmailTemplate(email: BeaconMessageDto): Promise<SendEmailRequest> {
 		const domain = 'app::aws::ses::AwsSesService::mapEmailTemplate'
 		this.logger.error(`[${domain}] Not Implemented`, email)
-		return
+		throw new Error('Not Implemented')
 	}
 
 	private fromName(message: BeaconMessageDto): string {
@@ -124,7 +132,11 @@ export class AwsSesService {
 			return message.communication.email.from.name
 		}
 
-		return this.configService.get<string>('system.SYSTEM_EMAIL_NAME')
+		const val = this.configService.get<string>('system.SYSTEM_EMAIL_NAME')
+		if (!val) {
+			throw new Error('No from name set')
+		}
+		return val
 	}
 
 	private fromEmail(message: BeaconMessageDto): string {
@@ -132,6 +144,10 @@ export class AwsSesService {
 			return message.communication.email.from.email
 		}
 
-		return this.configService.get<string>('system.SYSTEM_EMAIL_ADDRESS')
+		const val = this.configService.get<string>('system.SYSTEM_EMAIL_ADDRESS')
+		if (!val) {
+			throw new Error('No from email set')
+		}
+		return val
 	}
 }

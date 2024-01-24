@@ -3,6 +3,7 @@ import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
 import {
 	AccountId,
 	AccountService,
+	AuthenticatedRequest,
 	AuthService,
 	ReadManyDecorator,
 	UserAuth,
@@ -38,7 +39,7 @@ export class WithdrawalsController {
 	})
 	@Post()
 	async create(
-		@Req() req,
+		@Req() req: AuthenticatedRequest,
 		@AccountId() account_id: number,
 		@Body() data: WithdrawalRequestDto,
 	): Promise<BILLING_WITHDRAWAL_T> {
@@ -89,7 +90,7 @@ export class WithdrawalsController {
 		required: false,
 		example: SupportedCurrencies.USD,
 	})
-	async findAll(@Req() req, @Query() query: any, @AccountId() account_id: number): Promise<BILLING_WITHDRAWAL_T[]> {
+	async findAll(@Req() req: AuthenticatedRequest, @Query() query: any, @AccountId() account_id: number): Promise<BILLING_WITHDRAWAL_T[]> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 
 		const where: FindOptionsWhere<BILLING_WITHDRAWAL_T>[] = [

@@ -85,13 +85,13 @@ export class InvoicesCronService {
 
 		this.logger.log(`[${domain}] ${charges.length} Chargers Found`)
 
-		const account_ids = [...new Set(charges.map(c => c.account.account_id))]
+		const account_ids = [...new Set(charges.map(c => c.account_id))]
 
 		const invoicePromises = []
 		const invoices = []
 		for (const account_id of account_ids) {
 			const promise = new Promise((res, rej) => {
-				const account_charges = charges.filter(c => c.account.account_id === account_id)
+				const account_charges = charges.filter(c => c.account_id === account_id)
 
 				const invoice: DeepPartial<Invoice> = {
 					account: account_charges[0].account,

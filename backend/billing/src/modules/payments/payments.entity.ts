@@ -13,7 +13,7 @@ import { PaymentType } from './payments.enums'
 export class Payment extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	@IsNumber()
-	readonly payment_id: number
+	readonly payment_id!: number
 
 	@ManyToOne(() => Account, account => account.account_id, {
 		onDelete: 'CASCADE',
@@ -22,17 +22,17 @@ export class Payment extends BaseEntity {
 	account?: Account
 
 	@Column()
-	account_id: number
+	account_id!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	amount: number
+	amount!: number
 
 	@Column('varchar', { length: 3 })
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)
 	@MaxLength(3)
-	currency: SupportedCurrencies
+	currency!: SupportedCurrencies
 
 	@ManyToOne(() => PaymentMethod, payment_method => payment_method, { cascade: true })
 	@JoinColumn({ name: 'payment_method_id' })
@@ -40,12 +40,12 @@ export class Payment extends BaseEntity {
 
 	@Column()
 	@IsNumber()
-	payment_method_id: number
+	payment_method_id!: number
 
 	//The actual payment ID from the app
 	@Column()
 	@IsNumber()
-	app_payment_id: number
+	app_payment_id!: number
 
 	@Column({ default: PaymentType.payment })
 	@IsEnum(PaymentType)

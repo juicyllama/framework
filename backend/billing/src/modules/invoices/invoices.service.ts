@@ -1,13 +1,13 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
-import { LazyModuleLoader } from '@nestjs/core'
-import { DeepPartial, Repository } from 'typeorm'
+import { AccountService, AppIntegrationName, BaseService, Query, StorageService, StorageType, User } from '@juicyllama/core'
 import { Logger, Modules } from '@juicyllama/utils'
-import { AccountService, AppIntegrationName, BaseService, Query, StorageService, StorageType } from '@juicyllama/core'
+import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { LazyModuleLoader } from '@nestjs/core'
+import { InjectRepository } from '@nestjs/typeorm'
+import { DeepPartial, Repository } from 'typeorm'
 
-import { Invoice } from './invoices.entity'
-import { toXeroInvoice } from './invoice.mapper.xero'
 import { XeroService } from '@juicyllama/app-xero-cc'
+import { toXeroInvoice } from './invoice.mapper.xero'
+import { Invoice } from './invoices.entity'
 
 const E = Invoice
 type T = Invoice
@@ -70,7 +70,7 @@ export class InvoicesService extends BaseService<T> {
 
 				const lineItems = []
 
-				for (const charge of invoice.charges) {
+				for (const charge of (invoice.charges ?? [])) {
 					let accountCode = process.env.XERO_CC_DEFAULT_ACCOUNT_CODE
 					let taxType = 'NONE'
 
@@ -80,7 +80,7 @@ export class InvoicesService extends BaseService<T> {
 					}
 
 					lineItems.push({
-						code: charge.tags[0] ?? 'MISC',
+						code: charge.tags?.[0] ?? 'MISC',
 						name: charge.name,
 						description: charge.description,
 						quantity: 1,
@@ -92,14 +92,18 @@ export class InvoicesService extends BaseService<T> {
 					})
 				}
 
+				if (!invoice.account) {
+					invoice.account = await this.accountService.findById(invoice.account_id)
+				}
+
 				const xeroInvoice = toXeroInvoice({
 					account: invoice.account,
 					currency: invoice.currency,
-					amount_subtotal: invoice.amount_subtotal,
-					amount_tax: invoice.amount_tax,
+					amount_subtotal: invoice.amount_subtotal || 0,
+					amount_tax: invoice.amount_tax || 0,
 					amount_total: invoice.amount_total,
 					lineItems: lineItems,
-					invoice_date: invoice.created_at,
+					invoice_date: invoice.created_at || new Date(),
 				})
 
 				const app_invoice = await xeroService.createInvoice({
@@ -116,7 +120,8 @@ export class InvoicesService extends BaseService<T> {
 					})
 				}
 			} catch (e) {
-				this.logger.error(`[${domain}] Error: ${e.message}`, e)
+				const error = e as Error
+				this.logger.error(`[${domain}] Error: ${error.message}`, error)
 			}
 		}
 
@@ -134,12 +139,12 @@ export class InvoicesService extends BaseService<T> {
 				const xeroService = xeroModule.get(XeroService)
 				await xeroService.createInvoicePayment(invoice.app_invoice_id, amount)
 			} catch (e) {
-				this.logger.error(`[${domain}] Error: ${e.message}`, e)
-			}
+				const error = e as Error
+				this.logger.error(`[${domain}] Error: ${error.message}`, error)			}
 		}
 	}
 
-	async downloadInvoice(user, invoice_id): Promise<T> {
+	async downloadInvoice(user: User, invoice_id: number): Promise<T> {
 		const file = await this.storageService.read(`invoices/${user.user_id}/${invoice_id}`, StorageType.PUBLIC)
 		return file
 	}

@@ -127,5 +127,5 @@ export class UpdateContactDto {
 
 export class ContactResponeDto extends Classes.ExtendsMultiple([ContactDto, BaseResponseDto]) {
 	@SwaggerPropertyDecorator({ description: 'The Contact ID', example: 1 })
-	readonly contact_id: number
+	readonly contact_id!: number
 }

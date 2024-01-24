@@ -143,8 +143,8 @@ export class ShopifyOrdersCronService {
 				success: promiseResults.filter(o => o.status === 'fulfilled').length,
 				failed: promiseResults.filter(o => o.status === 'rejected').length,
 				failures: promiseResults
-					.filter(o => o.status === 'rejected')
-					.map((rej: PromiseRejectedResult) => rej.reason),
+					.filter((rej: PromiseSettledResult<unknown>) => rej.status === 'rejected')
+					.map((rej: PromiseSettledResult<unknown>) => (rej as PromiseRejectedResult).reason),
 			},
 		}
 	}

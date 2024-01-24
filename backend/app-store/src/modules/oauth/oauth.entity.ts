@@ -6,13 +6,13 @@ import { BaseEntity } from '@juicyllama/core'
 @Entity('apps_oauth')
 export class Oauth extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	readonly oauth_id: number
+	readonly oauth_id!: number
 
 	@ManyToOne(() => InstalledApp, installed_app => installed_app.installed_app_id, {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn({ name: 'installed_app_id' })
-	installed_app: InstalledApp
+	installed_app!: InstalledApp
 
 	@Index('fk_b98a3c7ab28db3bede8c62f0cf1a0161')
 	@Column()

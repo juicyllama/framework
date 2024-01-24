@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-shopify",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "description": "Juicyllama Shopify App ",
     "author": {
         "name": "JuicyLlama Studio",
@@ -43,5 +43,8 @@
         "@juicyllama/ecommerce": "workspace:^",
         "@juicyllama/utils": "workspace:^",
         "@shopify/shopify-api": "latest"
+    },
+    "devDependencies": {
+        "@types/uuid": "^9.0.7"
     }
 }

@@ -41,7 +41,7 @@ export class ContactSocialService extends BaseService<T> {
 		const domain = 'crm::contacts::socials::service::updateSocials'
 
 		if (!socials || !socials.length) {
-			return null
+			return []
 		}
 
 		for (const s in socials) {

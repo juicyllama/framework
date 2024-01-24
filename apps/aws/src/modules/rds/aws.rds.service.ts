@@ -1,6 +1,15 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Env, Logger } from '@juicyllama/utils'
-import { ExportTask, RDSClient, RDSClientConfig, StartExportTaskCommand, StartExportTaskCommandInput, DescribeExportTasksCommand, DescribeExportTasksCommandInput, DescribeExportTasksCommandOutput } from '@aws-sdk/client-rds'
+import {
+	ExportTask,
+	RDSClient,
+	RDSClientConfig,
+	StartExportTaskCommand,
+	StartExportTaskCommandInput,
+	DescribeExportTasksCommand,
+	DescribeExportTasksCommandInput,
+	DescribeExportTasksCommandOutput,
+} from '@aws-sdk/client-rds'
 import { ConfigService } from '@nestjs/config'
 import { mockRDSExportTask } from './aws.rds.mock'
 
@@ -27,18 +36,18 @@ export class AwsRdsService {
 			return mockRDSExportTask
 		}
 
-			const client = new RDSClient(<RDSClientConfig>{
-				region:
-					this.configService.get<string>('awsRds.AWS_RDS_JL_REGION') ??
-					this.configService.get<string>('aws.AWS_JL_REGION'),
-				credentials: {
-					accessKeyId: this.configService.get<string>('aws.AWS_JL_ACCESS_KEY_ID'),
-					secretAccessKey: this.configService.get<string>('aws.AWS_JL_SECRET_KEY_ID'),
-				},
-			})
+		const client = new RDSClient(<RDSClientConfig>{
+			region:
+				this.configService.get<string>('awsRds.AWS_RDS_JL_REGION') ??
+				this.configService.get<string>('aws.AWS_JL_REGION'),
+			credentials: {
+				accessKeyId: this.configService.get<string>('aws.AWS_JL_ACCESS_KEY_ID'),
+				secretAccessKey: this.configService.get<string>('aws.AWS_JL_SECRET_KEY_ID'),
+			},
+		})
 
-			const command = new StartExportTaskCommand(params);
-			return <ExportTask>await client.send(command);
+		const command = new StartExportTaskCommand(params)
+		return <ExportTask>await client.send(command)
 	}
 
 	/**
@@ -48,7 +57,6 @@ export class AwsRdsService {
 	 */
 
 	async describeExportTask(input: DescribeExportTasksCommandInput): Promise<DescribeExportTasksCommandOutput> {
-
 		const domain = 'app::aws::rds::AwsRdsService::describeExportTask'
 
 		this.logger.debug(`[${domain}] Describe Export Task`, input)
@@ -58,21 +66,17 @@ export class AwsRdsService {
 			return <any>[mockRDSExportTask]
 		}
 
-	
-			const client = new RDSClient(<RDSClientConfig>{
-				region:
-					this.configService.get<string>('awsRds.AWS_RDS_JL_REGION') ??
-					this.configService.get<string>('aws.AWS_JL_REGION'),
-				credentials: {
-					accessKeyId: this.configService.get<string>('aws.AWS_JL_ACCESS_KEY_ID'),
-					secretAccessKey: this.configService.get<string>('aws.AWS_JL_SECRET_KEY_ID'),
-				},
-			})
+		const client = new RDSClient(<RDSClientConfig>{
+			region:
+				this.configService.get<string>('awsRds.AWS_RDS_JL_REGION') ??
+				this.configService.get<string>('aws.AWS_JL_REGION'),
+			credentials: {
+				accessKeyId: this.configService.get<string>('aws.AWS_JL_ACCESS_KEY_ID'),
+				secretAccessKey: this.configService.get<string>('aws.AWS_JL_SECRET_KEY_ID'),
+			},
+		})
 
-			const command = new DescribeExportTasksCommand(input);
-			return <DescribeExportTasksCommandOutput>await client.send(command);
-
+		const command = new DescribeExportTasksCommand(input)
+		return <DescribeExportTasksCommandOutput>await client.send(command)
 	}
-
-
 }

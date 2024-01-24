@@ -70,6 +70,7 @@ export class ContactPhoneService extends BaseService<T> {
 				}
 			} catch (e: any) {
 				this.logger.error(`[${domain}] ${e.message}`, e)
+				return false
 			}
 		}
 
@@ -120,6 +121,7 @@ export class ContactPhoneService extends BaseService<T> {
 			)
 			return true
 		}
+		return false
 	}
 
 	async cleanPhoneNumbers(phone: T): Promise<boolean> {
@@ -173,7 +175,7 @@ export class ContactPhoneService extends BaseService<T> {
 		const domain = 'crm::contacts::phones::service::updatePhones'
 
 		if (!phones || !phones.length) {
-			return null
+			return []
 		}
 
 		for (const p in phones) {

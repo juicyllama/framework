@@ -7,7 +7,7 @@ import { Dates } from '@juicyllama/utils'
 @Unique('fx_UNIQUE', ['date'])
 export class Fx extends BaseEntity {
 	@ObjectIdColumn()
-	id: ObjectId
+	id!: ObjectId
 
 	@IsDateString()
 	@Column('date', {
@@ -21,81 +21,81 @@ export class Fx extends BaseEntity {
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly AUD: number
+	readonly AUD!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly CAD: number
+	readonly CAD!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly CHF: number
+	readonly CHF!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly EUR: number
+	readonly EUR!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly GBP: number
+	readonly GBP!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly INR: number
+	readonly INR!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly MXN: number
+	readonly MXN!: number
 
 	@Column('decimal', { default: 1.0, precision: 20, scale: 10 })
 	@IsNumber()
-	readonly USD: number
+	readonly USD!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly JPY: number
+	readonly JPY!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly CNY: number
+	readonly CNY!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly HKD: number
+	readonly HKD!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly NZD: number
+	readonly NZD!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly SEK: number
+	readonly SEK!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly KRW: number
+	readonly KRW!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly SGD: number
+	readonly SGD!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly NOK: number
+	readonly NOK!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly RUB: number
+	readonly RUB!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly ZAR: number
+	readonly ZAR!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly TRY: number
+	readonly TRY!: number
 
 	@Column('decimal', { precision: 20, scale: 10 })
 	@IsNumber()
-	readonly BRL: number
+	readonly BRL!: number
 }

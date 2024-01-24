@@ -24,7 +24,7 @@ export class CreateInstalledAppDto {
 		example: 'Virgins Amazon Seller Account',
 		required: true,
 	})
-	name: string
+	name!: string
 
 	@SwaggerPropertyDecorator({
 		enum: AppScope,
@@ -49,7 +49,7 @@ export class CreateInstalledAppDto {
 		hidden: true,
 		required: false,
 	})
-	integration_status: AppIntegrationStatus
+	integration_status!: AppIntegrationStatus
 
 	@SwaggerPropertyDecorator({
 		type: SwaggerPropertyType.BOOLEAN,
@@ -76,14 +76,14 @@ export class UpdateInstalledAppDto {
 		example: 'Virgins Amazon Seller Account',
 		required: true,
 	})
-	name: string
+	name!: string
 
 	@SwaggerPropertyDecorator({
 		enum: AppScope,
 		description: 'The application scope',
 		example: AppScope.ACCOUNT,
 	})
-	scope: AppScope
+	scope!: AppScope
 
 	@SwaggerPropertyDecorator({
 		type: SwaggerPropertyType.OBJECT,
@@ -101,7 +101,7 @@ export class InstalledAppPreCheckDto {
 		required: true,
 	})
 	@IsNumber()
-	app_id: number
+	app_id!: number
 
 	@SwaggerPropertyDecorator({
 		type: SwaggerPropertyType.OBJECT,
@@ -120,7 +120,7 @@ export class preInstallCheckResponse {
 		example: true,
 		required: true,
 	})
-	result: boolean
+	result!: boolean
 
 	@SwaggerPropertyDecorator({
 		type: SwaggerPropertyType.STRING,

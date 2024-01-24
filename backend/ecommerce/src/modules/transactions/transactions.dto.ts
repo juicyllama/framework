@@ -12,7 +12,7 @@ export class TransactionDto {
 
 	@SwaggerPropertyDecorator({ description: 'The order id of the transaction' })
 	@IsString()
-	order_id: string
+	order_id!: string
 
 	@SwaggerPropertyDecorator({ description: 'An optional additional order number' })
 	@IsOptional()
@@ -48,11 +48,11 @@ export class TransactionDto {
 	@IsString()
 	@MinLength(3)
 	@MaxLength(3)
-	currency: string
+	currency!: string
 
 	@SwaggerPropertyDecorator({ description: 'The subtotal of the transaction' })
 	@IsNumber()
-	subtotal_price: number
+	subtotal_price!: number
 
 	@SwaggerPropertyDecorator({ description: 'The total shipping cost for the transaction' })
 	@IsNumber()
@@ -71,11 +71,11 @@ export class TransactionDto {
 
 	@SwaggerPropertyDecorator({ description: 'The total price of the transaction' })
 	@IsNumber()
-	total_price: number
+	total_price!: number
 
 	@SwaggerPropertyDecorator({ description: 'The total tax of the transaction' })
 	@IsNumber()
-	total_tax: number
+	total_tax!: number
 
 	@SwaggerPropertyDecorator({ description: 'If this transaction is a test' })
 	@IsOptional()
@@ -104,5 +104,5 @@ export class UpdateTransactionDto extends PartialType(TransactionDto) {}
 
 export class TransactionResponeDto extends Classes.ExtendsMultiple([TransactionDto, BaseResponseDto]) {
 	@SwaggerPropertyDecorator({ description: 'The Transaction ID', example: 1 })
-	readonly transaction_id: number
+	readonly transaction_id!: number
 }

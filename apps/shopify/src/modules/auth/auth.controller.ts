@@ -120,9 +120,12 @@ export class ShopifyAuthController {
 		this.logger.log(`[${domain}] Redirect`, query)
 
 		res.setHeader('Set-Cookie', [`app_shopify_state=${query.state}; Path=/;`])
-
+		const sanitizedShop = this.shopify.utils.sanitizeShop(query.shop, true)
+		if (!sanitizedShop) {
+			throw new BadRequestException('Invalid Shop')
+		}
 		await this.shopify.auth.begin({
-			shop: this.shopify.utils.sanitizeShop(query.shop, true),
+			shop: sanitizedShop,
 			callbackPath: `/app/shopify/auth/complete`,
 			isOnline: false,
 			rawRequest: req,

@@ -13,7 +13,7 @@ import { InstalledApp } from '@juicyllama/app-store'
 @Entity('ecommerce_transactions')
 export class Transaction extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	readonly transaction_id: number
+	readonly transaction_id!: number
 
 	@ManyToOne(() => Account, account => account.account_id, {
 		onDelete: 'CASCADE',
@@ -22,7 +22,7 @@ export class Transaction extends BaseEntity {
 	account?: Account
 
 	@Column()
-	account_id: number
+	account_id!: number
 
 	@ManyToOne(() => Store, store => store.store_id, {
 		onDelete: 'CASCADE',
@@ -31,7 +31,7 @@ export class Transaction extends BaseEntity {
 	store?: Store
 
 	@Column()
-	store_id: number
+	store_id!: number
 
 	@ManyToOne(() => InstalledApp, installed_app => installed_app.installed_app_id, {
 		onDelete: 'CASCADE',
@@ -40,11 +40,11 @@ export class Transaction extends BaseEntity {
 	installed_app?: InstalledApp
 
 	@Column()
-	installed_app_id: number
+	installed_app_id!: number
 
 	@Column()
 	@IsString()
-	order_id: string
+	order_id!: string
 
 	@Column({ nullable: true, default: null })
 	@IsString()
@@ -82,21 +82,21 @@ export class Transaction extends BaseEntity {
 
 	@Column({ default: TransactionPaymentStatus.PENDING })
 	@IsEnum(TransactionPaymentStatus)
-	payment_status: TransactionPaymentStatus
+	payment_status!: TransactionPaymentStatus
 
 	@Column({ default: TransactionFulfillmentStatus.PENDING })
 	@IsEnum(TransactionFulfillmentStatus)
-	fulfillment_status: TransactionFulfillmentStatus
+	fulfillment_status!: TransactionFulfillmentStatus
 
 	@Column()
 	@IsString()
 	@MinLength(3)
 	@MaxLength(3)
-	currency: string
+	currency!: string
 
 	@Column({ type: 'decimal', precision: 10, scale: 2, default: 0.0 })
 	@IsNumber({ maxDecimalPlaces: 2 })
-	subtotal_price: number
+	subtotal_price!: number
 
 	@Column({ type: 'decimal', precision: 10, scale: 2, default: 0.0 })
 	@IsNumber({ maxDecimalPlaces: 2 })
@@ -108,7 +108,7 @@ export class Transaction extends BaseEntity {
 
 	@Column({ type: 'decimal', precision: 10, scale: 2, default: 0.0 })
 	@IsNumber({ maxDecimalPlaces: 2 })
-	total_tax: number
+	total_tax!: number
 
 	@Column({ type: 'decimal', precision: 10, scale: 2, default: 0.0 })
 	@IsNumber({ maxDecimalPlaces: 2 })
@@ -116,7 +116,7 @@ export class Transaction extends BaseEntity {
 
 	@Column({ type: 'decimal', precision: 10, scale: 2, default: 0.0 })
 	@IsNumber({ maxDecimalPlaces: 2 })
-	total_price: number
+	total_price!: number
 
 	@OneToMany(() => TransactionDiscount, td => td.transaction)
 	discounts?: TransactionDiscount[]

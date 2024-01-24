@@ -16,7 +16,7 @@ export function accountToContact(account: Account): Contact {
 		accountNumber: account.account_id.toString(),
 		emailAddress: account.finance_email,
 		isCustomer: true,
-		defaultCurrency: CurrencyCode[account.currency],
+		defaultCurrency: CurrencyCode[account.currency as keyof typeof CurrencyCode],
 		addresses:
 			account.address_1 && account.country
 				? [
@@ -29,7 +29,7 @@ export function accountToContact(account: Account): Contact {
 							region: account.state,
 							country: account.country,
 						},
-				  ]
-				: null,
+					]
+				: [],
 	}
 }

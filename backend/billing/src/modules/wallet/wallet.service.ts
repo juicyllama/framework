@@ -63,11 +63,7 @@ export class WalletService {
 	}
 
 	async findNegativeAccounts(): Promise<Wallet[]> {
-		let lessThan = 0
-
-		if (this.configService.get('billing.BILLING_MINIMUM_CHARGE')) {
-			lessThan = this.configService.get('billing.BILLING_MINIMUM_CHARGE')
-		}
+		let lessThan: number = this.configService.get('billing.BILLING_MINIMUM_CHARGE') || 0
 
 		const sql = `SELECT *
                      FROM billing_wallet

@@ -7,14 +7,8 @@ export enum FlagType {
 	ROUNDED_RECTANGLE = 'rounded_rectangle'
 }
 
-export enum FlagImageType {
-	SVG = 'svg',
-	PNG = 'png'
-}
-
 export interface FlagProps {
 	country_code: string
-	image_type?: FlagImageType
 	type?: FlagType
 	classes?: string[]
 	size?: {
