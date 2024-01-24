@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { FlagProps, FlagType } from '../types/flags'
+import { computed } from 'vue'
 
 const props = defineProps<FlagProps>()
-
 const type = props.type ?? FlagType.RECTANGULAR
 const image_type = 'svg'
 let width = props.size?.width
@@ -19,19 +19,21 @@ if(!width || !height) {
 		case FlagType.ROUND:
 		case FlagType.SQUARE:
 		case FlagType.HEXAGONAL:
-		case FlagType.ROUNDED_SQUARE:
 		default:
 			width = '32px'
 			height = '32px'
 			break
 	}
 }
+const PATH_TO_FLAGS = '../assets/flags/'
+const glob = import.meta.glob(`../assets/flags/**/*.svg`, { eager: true })
 
-let src = `/flags/${type}/${image_type}/${props.country_code.toUpperCase()}.${image_type}`
-
+const images = computed(() => Object.fromEntries(
+  Object.entries(glob).map(([key, value]) => [key.replace(PATH_TO_FLAGS, ''), value['default']])
+))
+const pathToRightFile = computed(() => images.value[`${type}/${image_type}/${props.country_code.toUpperCase()}.${image_type}`])
 </script>
 
 <template>
-	{{ src }}
-	<img :class="`flag flag--${type} ${props.classes?.join(' ')}`" :src="src" :width="width" :height="height" />
+	<img :class="`flag flag--${type} ${props.classes?.join(' ') ?? ''}`" :src="pathToRightFile" :width="width" :height="height" />
 </template>
