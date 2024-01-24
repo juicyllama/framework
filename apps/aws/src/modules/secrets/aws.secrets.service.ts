@@ -1,7 +1,7 @@
+import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager'
+import { Env, Logger } from '@juicyllama/utils'
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { Logger, Env } from '@juicyllama/utils'
 import { ConfigService } from '@nestjs/config'
-import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager'
 
 @Injectable()
 export class AwsSecretsService {
@@ -21,16 +21,21 @@ export class AwsSecretsService {
 
 		this.logger.debug(`[${domain}] Get Secrets`, secret_name)
 
+		const accessKeyId = this.configService.get<string>('aws.AWS_JL_ACCESS_KEY_ID')
+		const secretAccessKey = this.configService.get<string>('aws.AWS_JL_SECRET_KEY_ID')
+		if (!accessKeyId || !secretAccessKey) {
+			throw new Error('AWS Credentials not set')
+		}
+
 		try {
 			const client = new SecretsManagerClient({
 				region: this.configService.get<string>('aws.AWS_S3_JL_REGION'),
-				credentials: Env.IsProd
+				credentials: Env.IsProd() // Call the Env.IsProd() function instead of referencing it directly
 					? undefined
 					: {
-							// we don't have/need these in AWS
-							accessKeyId: this.configService.get<string>('aws.AWS_JL_ACCESS_KEY_ID'),
-							secretAccessKey: this.configService.get<string>('aws.AWS_JL_SECRET_KEY_ID'),
-					  },
+							accessKeyId,
+							secretAccessKey,
+						},
 			})
 
 			const response = await client.send(
@@ -40,18 +45,18 @@ export class AwsSecretsService {
 				}),
 			)
 
-			return JSON.parse(response.SecretString)
-		} catch (e) {
+			return JSON.parse(response.SecretString || '{}')
+		} catch (e: any) {
 			this.logger.error(
 				`[${domain}] Error: ${e.message}`,
 				e.response
 					? {
 							status: e.response.status,
 							data: e.response.data,
-					  }
+						}
 					: null,
 			)
-			return
+			throw e
 		}
 	}
 }

@@ -1,30 +1,30 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
-import { IsString, IsNumber, IsOptional } from 'class-validator'
 import { Account, BaseEntity } from '@juicyllama/core'
+import { IsNumber, IsOptional, IsString } from 'class-validator'
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
 
 @Entity('tools_shortlinks')
 @Unique('tools_shortlinks_UNIQUE', ['url_code'])
 export class Shortlink extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	shortlink_id: number
+	shortlink_id!: number
 
 	@IsString()
 	@Column()
-	url_code: string
+	url_code!: string
 
 	@IsString()
 	@Column()
-	long_url: string
+	long_url!: string
 
 	@IsString()
 	@Column()
-	short_url: string
+	short_url!: string
 
 	@ManyToOne(() => Account, account => account.account_id, {
 		cascade: true,
 	})
 	@JoinColumn({ name: 'account_id' })
-	account: Account
+	account!: Account
 
 	@IsOptional()
 	@IsString()

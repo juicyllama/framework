@@ -67,7 +67,8 @@ export class ShortlinksService extends BaseService<T> {
 				resource_type: data.resource_type,
 				resource_id: data.resource_id,
 			})
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] ${e.message}`, e)
 			throw new UnprocessableEntityException('Server Error')
 		}
@@ -76,7 +77,7 @@ export class ShortlinksService extends BaseService<T> {
 	/**
 	 * To be called in your microservice to handle the redirect
 	 */
-	async redirect(@Req() req, url_code: string) {
+	async redirect(@Req() req: any, url_code: string) {
 		//const domain = 'tools::shortlinks::service::redirect'
 
 		const shortlink = await this.query.findOneByWhere(this.repository, { url_code: url_code })
@@ -89,7 +90,7 @@ export class ShortlinksService extends BaseService<T> {
 		})
 
 		if (!req.session?.useragent) {
-			const userAgentIs = useragent => {
+			const userAgentIs = (useragent: any) => {
 				const r = []
 				for (const i in useragent) if (useragent[i] === true) r.push(i)
 				return r
