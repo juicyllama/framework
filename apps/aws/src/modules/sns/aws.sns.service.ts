@@ -28,14 +28,25 @@ export class AwsSnsService {
 			return true
 		}
 
+		const region =
+			this.configService.get<string>('awsSns.AWS_SES_JL_REGION') ??
+			this.configService.get<string>('aws.AWS_JL_REGION')
+		if (!region) {
+			throw new Error('AWS Region not set')
+		}
+
+		const accessKeyId = this.configService.get<string>('aws.AWS_JL_ACCESS_KEY_ID')
+		const secretAccessKey = this.configService.get<string>('aws.AWS_JL_SECRET_KEY_ID')
+		if (!accessKeyId || !secretAccessKey) {
+			throw new Error('AWS Credentials not set')
+		}
+
 		try {
 			const client = new SNSClient({
-				region:
-					this.configService.get<string>('awsSns.AWS_SES_JL_REGION') ??
-					this.configService.get<string>('aws.AWS_JL_REGION'),
+				region,
 				credentials: {
-					accessKeyId: this.configService.get<string>('aws.AWS_JL_ACCESS_KEY_ID'),
-					secretAccessKey: this.configService.get<string>('aws.AWS_JL_SECRET_KEY_ID'),
+					accessKeyId,
+					secretAccessKey,
 				},
 			})
 
@@ -48,14 +59,14 @@ export class AwsSnsService {
 			this.logger.debug(`[${domain}] Result`, data)
 
 			return data.$metadata.httpStatusCode === 200
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.warn(
 				`[${domain}] Error: ${e.message}`,
 				e.response
 					? {
 							status: e.response.status,
 							data: e.response.data,
-					  }
+						}
 					: null,
 			)
 			return false

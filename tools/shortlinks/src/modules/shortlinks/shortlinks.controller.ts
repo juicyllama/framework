@@ -1,6 +1,14 @@
 import { Body, Controller, forwardRef, Inject, Param, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { AccountId, AccountService, AuthService, CreateDecorator, UpdateDecorator, UserAuth } from '@juicyllama/core'
+import {
+	AccountId,
+	AccountService,
+	AuthenticatedRequest,
+	AuthService,
+	CreateDecorator,
+	UpdateDecorator,
+	UserAuth,
+} from '@juicyllama/core'
 import { Query as JLQuery } from '@juicyllama/core/dist/utils/typeorm/Query'
 import { E, T, NAME } from './shortlinks.constants'
 import { ShortlinksService } from './shortlinks.service'
@@ -20,14 +28,18 @@ export class ShortlinksController {
 	) {}
 
 	@CreateDecorator({ entity: E, name: NAME })
-	async create(@Req() req, @Body() data: ShortenURLDto, @AccountId() account_id: number): Promise<T> {
+	async create(
+		@Req() req: AuthenticatedRequest,
+		@Body() data: ShortenURLDto,
+		@AccountId() account_id: number,
+	): Promise<T> {
 		const account = await this.accountService.findById(account_id)
 		return await this.service.shortenUrl(data, account)
 	}
 
 	@UpdateDecorator({ entity: E, primaryKey: PRIMARY_KEY, name: NAME })
 	async update(
-		@Req() req,
+		@Req() req: AuthenticatedRequest,
 		@AccountId() account_id: number,
 		@Body() data: UpdatShortenURLDto,
 		@Param() params: any,
