@@ -56,9 +56,9 @@ if(route.query.code){
 
 const loading = ref(false)
 
-async function login(state: AuthFormState) {
+async function resetPassword(state: AuthFormState) {
 	loading.value = true
-	const sent = await userStore.reset(state.email.trim())
+	const sent = await userStore.reset(state.email.trim(), $q)
 	if (sent) {
 		state.stage = 1
 	}
@@ -85,7 +85,7 @@ async function newEmail(state: AuthFormState) {
 
 <template>
 	<div>
-		<q-form autofocus @submit="login(state)" v-if="state.stage === 0">
+		<q-form autofocus @submit="resetPassword(state)" v-if="state.stage === 0">
 			<slot name="header">
 				<q-card-section>
 					<div class="text-h6">Reset Password</div>
@@ -166,8 +166,8 @@ async function newEmail(state: AuthFormState) {
 				:square-outlined="props.settings?.design === FormViewDesignSettings.SQUARE_OUTLINED"
 				:square-standout="props.settings?.design === FormViewDesignSettings.SQUARE_STANDOUT"
 				:no-error-icon="props.settings?.no_error_icon"
-			
-					
+
+
 					>
 				</q-input>
 

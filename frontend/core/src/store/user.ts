@@ -78,12 +78,12 @@ export const UserStore = defineStore('user', {
 			}
 		},
 
-		async reset(email: string): Promise<boolean> {
+		async reset(email: string, q?: QVueGlobals): Promise<boolean> {
 			try {
 				await resetPassword(email)
 				return true
 			} catch (e: any) {
-				logger({ severity: LogSeverity.ERROR, message: e.message })
+				logger({ severity: LogSeverity.ERROR, message: e.message, q: q })
 				return false
 			}
 		},
@@ -120,7 +120,7 @@ export const UserStore = defineStore('user', {
 					router.push(`/login?r=${route.fullPath}`)
 				}else{
 					this.logout(router, '/login')
-				}				
+				}
 				return false
 			}
 
