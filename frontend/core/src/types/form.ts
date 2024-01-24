@@ -63,6 +63,7 @@ export enum FormFieldField {
 	COUNTRY_DROPDOWN = 'country_dropdown',
 	LANGUAGE_DROPDOWN = 'language_dropdown',
 	HIDDEN = 'hidden',
+	HTML = 'html',
 }
 
 export enum FormFieldPlugin {
