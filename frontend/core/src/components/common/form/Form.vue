@@ -154,6 +154,16 @@ if (props.options.onFormLoad) {
 					)}`">
 					{{ field.label }}
 				</div>
+
+				<div
+					v-if="field.field === FormFieldField.HTML"
+					:class="`JLHTML JLHTML${Strings.capitalize(field.field)} JLHTML${Strings.capitalize(
+						field.key,
+					)} ${field.classes ?? ''}`"
+					v-html="field.value"
+					>
+				</div>
+
 				<q-input
 					v-if="field.field === FormFieldField.INPUT"
 					v-model="formData[field.key]"
