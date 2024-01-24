@@ -3,8 +3,7 @@ import VOtpInput from 'vue3-otp-input'
 
 const emit = defineEmits(['complete'])
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = defineProps<{
+defineProps<{
 	code?: string
 }>()
 
@@ -29,3 +28,20 @@ const handleOnComplete = (value: string) => {
 			@on-complete="handleOnComplete" />
 	</div>
 </template>
+<style>
+.otp-input {
+    width: 40px;
+    border: 1px solid #eee;
+    text-align: center;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    font-size: 20px;
+}
+div[is-input-num='true'] {
+    width: 100%;
+    justify-content: space-between;
+}
+.auth_otp_box {
+	width: 100%;
+}
+</style>
