@@ -15,10 +15,10 @@
 		"strictNullChecks": false,
 		"baseUrl": ".",
 		"types": ["vite/client", "node"],
-		"lib": ["esnext", "dom"]
-	},
-	"paths": {
-		"@/*": ["./src/*"]
+		"lib": ["esnext", "dom"],
+		"paths": {
+			"@/*": ["./src/*"]
+		},
 	},
 	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "tests/**/*.ts", "tests/**/*.tsx"],
 	"exclude": ["node_modules"],

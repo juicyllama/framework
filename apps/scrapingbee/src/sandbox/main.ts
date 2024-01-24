@@ -1,7 +1,7 @@
 import 'module-alias/register'
 import { NestFactory } from '@nestjs/core'
 import 'reflect-metadata'
-import { Enviroment, Logger } from '@juicyllama/utils'
+import { Env, Logger } from '@juicyllama/utils'
 import { SandboxModule } from './sandbox.module'
 
 const domain = 'main::bootstrap'
@@ -13,16 +13,13 @@ async function bootstrap() {
 		cors: true,
 	})
 
-	app.listen(process.env.PORT_SANDBOX)
-	logger.debug(
-		`[${domain}] ${Enviroment[process.env.NODE_ENV]} server running: ${process.env.BASE_URL_SANDBOX}:${
-			process.env.PORT_SANDBOX
-		}`,
-	)
+	app.listen(Number(process.env.PORT_SANDBOX) || 3000)
+	logger.debug(`[${domain}] ${Env.get()} server running: ${process.env.BASE_URL_SANDBOX}:${process.env.PORT_SANDBOX}`)
 }
 
 try {
 	bootstrap()
-} catch (e) {
+} catch (err) {
+	const e = err as Error
 	logger.error(`[${domain}] ${e.message}`, e)
 }

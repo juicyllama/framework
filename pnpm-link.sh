@@ -9,6 +9,7 @@ pnpm link --global --dir common/utils
 pnpm link --global --dir frontend/core
 pnpm link --global --dir frontend/vue-dev
 pnpm link --global --dir frontend/vue-utils
+pnpm link --global --dir frontend/vue-flags
 
 ### BACKEND ###
 pnpm link --global --dir backend/core

@@ -17,15 +17,24 @@ export class PexelsService {
 		},
 	): Promise<PhotosWithTotalResults | ErrorResponse> {
 		const domain = 'app::pexels::image'
-
+		const key = this.configService.get<string>('pexels.PEXELS_API_KEY')
+		if (!key) {
+			this.logger.error(`[${domain}] Error: PEXELS_API_KEY not found`)
+			throw new Error('PEXELS_API_KEY not found')
+		}
 		try {
-			const client = createClient(this.configService.get<string>('pexels.PEXELS_API_KEY'))
+			const client = createClient(key)
 			this.logger.debug(`[${domain}] Request: ${JSON.stringify(options, null, 2)}`)
 			const result = await client.photos.search(options)
+			if (typeof result === 'object' && 'error' in result) {
+				throw new Error(result.error)
+			}
 			this.logger.debug(`[${domain}] Response: ${JSON.stringify(result, null, 2)}`)
 			return result
-		} catch (e) {
-			this.logger.warn(`[${domain}] Error: ${JSON.stringify(e.message, null, 2)}`, e.response)
+		} catch (err) {
+			const e = err as Error
+			this.logger.warn(`[${domain}] Error: ${e.message}, Request: ${JSON.stringify(options, null, 2)}`, e)
+			throw e
 		}
 	}
 }

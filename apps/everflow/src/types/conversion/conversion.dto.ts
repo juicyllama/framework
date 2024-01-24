@@ -3,7 +3,7 @@ import { EverflowOffer } from '../offer/offer.dto'
 
 export class EverflowConversionRelationships {
 	@IsObject()
-	offer: EverflowOffer
+	offer!: EverflowOffer
 
 	@IsNumber()
 	events_count?: number
@@ -11,10 +11,10 @@ export class EverflowConversionRelationships {
 
 export class EverflowConversion {
 	@IsString()
-	conversion_id: string
+	conversion_id!: string
 
 	@IsNumber()
-	conversion_unix_timestamp: number
+	conversion_unix_timestamp!: number
 
 	@IsString()
 	sub1?: string
@@ -86,7 +86,7 @@ export class EverflowConversion {
 	is_event?: boolean
 
 	@IsString()
-	event: string
+	event!: string
 
 	@IsString()
 	transaction_id?: string
@@ -158,5 +158,5 @@ export class EverflowConversion {
 	sale_amount?: number
 
 	@IsObject()
-	relationship: EverflowConversionRelationships
+	relationship!: EverflowConversionRelationships
 }

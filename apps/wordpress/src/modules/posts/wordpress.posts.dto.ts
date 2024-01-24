@@ -71,25 +71,25 @@ export class WordpressListPosts {
 
 export class WordpressPostTag {
 	@IsNumber()
-	id: number
+	id!: number
 
 	@IsString()
-	name: string
+	name!: string
 
 	@IsString()
-	slug: string
+	slug!: string
 
 	@IsString()
-	description: string
+	description!: string
 
 	@IsNumber()
-	parent: number
+	parent!: number
 
 	@IsNumber()
-	count: number
+	count!: number
 
 	@IsString()
-	link: string
+	link!: string
 }
 
 export class WordpressGetPost {
@@ -141,10 +141,10 @@ export class WordpressPost {
 	generated_slug?: string
 
 	@IsObject()
-	title: WordpressRenderedObject
+	title!: WordpressRenderedObject
 
 	@IsObject()
-	content: WordpressRenderedObject
+	content!: WordpressRenderedObject
 
 	@IsObject()
 	excerpt?: WordpressRenderedObject
@@ -206,10 +206,10 @@ export class WordpressCreatePost {
 	permalink_template?: string
 
 	@IsString()
-	title: string
+	title!: string
 
 	@IsString()
-	content: string
+	content!: string
 
 	@IsString()
 	excerpt?: string

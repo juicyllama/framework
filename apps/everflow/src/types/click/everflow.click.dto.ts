@@ -5,13 +5,13 @@ import { EverflowGeolocation } from '../everflow.geolocation.dto'
 
 export class EverflowClickRelationships {
 	@IsObject()
-	offer: EverflowOffer
+	offer!: EverflowOffer
 
 	@IsObject()
-	geolocation: EverflowGeolocation
+	geolocation!: EverflowGeolocation
 
 	@IsObject()
-	device_information: EverflowDevice
+	device_information!: EverflowDevice
 
 	@IsObject()
 	query_parameters?: any
@@ -19,13 +19,13 @@ export class EverflowClickRelationships {
 
 export class EverflowClick {
 	@IsString()
-	transaction_id: string
+	transaction_id!: string
 
 	@IsNumber()
-	is_unique: number
+	is_unique!: number
 
 	@IsNumber()
-	unix_timestamp: number
+	unix_timestamp!: number
 
 	@IsString()
 	tracking_url?: string
@@ -97,5 +97,5 @@ export class EverflowClick {
 	currency_id?: string
 
 	@IsObject()
-	relationship: EverflowClickRelationships
+	relationship!: EverflowClickRelationships
 }

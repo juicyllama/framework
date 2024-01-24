@@ -12,6 +12,7 @@ export { File } from './utils/File'
 export { Functions } from './utils/Functions'
 export { BoundingBox, Coordinates, Geocoding } from './utils/Geocoding'
 export { Json } from './utils/Json'
+export { Languages } from './utils/Languages'
 export { Locale } from './utils/Locale'
 export { Logger } from './utils/Logger'
 export { Markdown } from './utils/Markdown'
@@ -44,6 +45,9 @@ export {
 } from './dto/responses.dto'
 export { ChartsPeriod, getMySQLTimeInterval } from './enums/charts'
 export { ComparisonOperator } from './enums/ComparisonOperator'
+export { Country } from './types/countries'
+export { Language } from './types/languages'
 
 import dayjs from 'dayjs'
 export { dayjs }
+
