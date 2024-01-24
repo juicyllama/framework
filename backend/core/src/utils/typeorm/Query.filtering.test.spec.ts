@@ -83,32 +83,32 @@ describe('TypeORM query findAll filtering RHS Colon syntax', () => {
 		{
 			name: 'LT',
 			query: { account_name: 'EQ:TestFiltering', onboarding_step: 'LT:4' },
-			expected: 2,
+			expected: 1,
 		},
 		{
 			name: 'LT with exact matches',
 			query: { account_name: 'EQ:TestFiltering', onboarding_step: 'LT:3' },
-			expected: 1,
+			expected: 0,
 		},
 		{
 			name: 'LT with no matches',
 			query: { account_name: 'EQ:TestFiltering', onboarding_step: 'LT:2' },
-			expected: 1,
+			expected: 0,
 		},
 		{
 			name: 'LTE',
 			query: { account_name: 'EQ:TestFiltering', onboarding_step: 'LTE:4' },
-			expected: 2,
+			expected: 1,
 		},
 		{
 			name: 'LTE with exact matches',
 			query: { account_name: 'EQ:TestFiltering', onboarding_step: 'LTE:3' },
-			expected: 2,
+			expected: 1,
 		},
 		{
 			name: 'LTE with no matches',
 			query: { account_name: 'EQ:TestFiltering', onboarding_step: 'LTE:2' },
-			expected: 1,
+			expected: 0,
 		},
 		{
 			name: 'Overloading operators: GT and LT',

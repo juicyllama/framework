@@ -647,9 +647,12 @@ export class Query<T extends ObjectLiteral> {
 										? unknown
 										: FindOptionsWhereProperty<NonNullable<T[keyof T]>, NonNullable<T[keyof T]>>)
 					if (isRelation) {
-						whereBase = this.createWhereRelations(key as string, queryValue as string, relationsProperty)
+						whereBase = {
+							...whereBase,
+							...this.createWhereRelations(key as string, queryValue as string, relationsProperty),
+						}
 					} else {
-						whereBase = { [key]: queryValue } as FindOptionsWhere<T>
+						whereBase = { ...whereBase, [key]: queryValue } as FindOptionsWhere<T>
 					}
 				}
 			}
