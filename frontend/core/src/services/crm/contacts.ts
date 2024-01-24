@@ -17,7 +17,7 @@ export class ContactsService extends Api<T> {
 	}
 
 	async updateContactAvatar(contact_id: number, file: any): Promise<T> {
-		instance.defaults.headers.common['account-id'] = accountStore.selected_account.account_id
+		instance.defaults.headers.common['account-id'] = accountStore.selected_account?.account_id
 		const url = `${CONTACTS_ENDPOINT}/${contact_id}/avatar`
 		const formData = new FormData()
 		formData.append('file', file)

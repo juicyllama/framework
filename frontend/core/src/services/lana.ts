@@ -6,7 +6,7 @@ import { Lana } from '../types/lana'
 import { accountStore } from '../index'
 
 export async function askLana(question: string, sql: boolean, q?: QVueGlobals): Promise<Lana> {
-	instance.defaults.headers.common['account-id'] = accountStore.selected_account.account_id
+	instance.defaults.headers.common['account-id'] = accountStore.selected_account?.account_id
 	try {
 		if (sql) {
 			const response = await instance.post(`lana/data`, {
@@ -26,7 +26,7 @@ export async function askLana(question: string, sql: boolean, q?: QVueGlobals): 
 }
 
 export async function updateLana(lana_id: number, data: DeepPartial<Lana>, q?: QVueGlobals): Promise<Lana> {
-	instance.defaults.headers.common['account-id'] = accountStore.selected_account.account_id
+	instance.defaults.headers.common['account-id'] = accountStore.selected_account?.account_id
 	try {
 		const response = await instance.patch(`lana/update/${lana_id}`, data)
 		logger({ severity: LogSeverity.LOG, message: `Update Successful!`, q: q })
