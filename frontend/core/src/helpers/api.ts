@@ -20,7 +20,7 @@ export async function apiRequest<T>(options: {
 }): Promise<T> {
 	try {
 		const accountStore = (await import('../index')).accountStore
-		instance.defaults.headers.common['account-id'] = accountStore.selected_account.account_id
+		instance.defaults.headers.common['account-id'] = accountStore.selected_account?.account_id
 
 		let response: any
 

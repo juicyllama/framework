@@ -8,6 +8,7 @@ export function installToolsShortlinkDocs(docs: RedocOptions, exclude_tags?: str
 		tags = tags.filter(tag => !exclude_tags.includes(tag))
 	}
 
+	docs.tagGroups = docs.tagGroups || []
 	docs.tagGroups.push({
 		name: group,
 		tags: tags,

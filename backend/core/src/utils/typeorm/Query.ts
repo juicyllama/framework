@@ -627,19 +627,24 @@ export class Query<T extends ObjectLiteral> {
 
 	buildWhere(options: {
 		repository: Repository<T>
-		query?: Partial<Record<'search' | keyof T, string | string[]>>
+		query?: Partial<Record<'search' | keyof T | string, string | string[]>>
 		account_id?: number
 		account_ids?: number[]
 		search_fields?: string[]
 	}): FindOptionsWhere<T>[] | FindOptionsWhere<T> {
 		const where = []
+		const relationsProperty = options.repository.metadata.relations.map(relation => relation.propertyName)
 
 		let whereBase: FindOptionsWhere<T> = {}
-
 		const entries: Entries<T> = Object.entries(options.query ?? {}) as Entries<T>
 		if (options.query) {
 			for (const [key, value] of entries) {
-				if (options.repository.metadata.columns.find(column => column.propertyName === key)) {
+				const isRelation = (key as string).includes('.')
+				const k = isRelation ? (key as string).split('.')[0] : key
+				if (
+					options.repository.metadata.columns.find(column => column.propertyName === k) ||
+					relationsProperty.find(r => r === k)
+				) {
 					// @ts-ignore
 					const fieldLookupWhere: FindOperator<string>[] = castArray(value) // value may be a string or an array of strings
 						.reduce((memo: FindOperator<string>[], currentValue: keyof typeof ComparisonOperator) => {
@@ -661,7 +666,8 @@ export class Query<T extends ObjectLiteral> {
 							}
 							return memo
 						}, [])
-					whereBase[key] =
+
+					const queryValue =
 						fieldLookupWhere.length === 1
 							? (fieldLookupWhere[0] as keyof T extends 'toString'
 									? unknown
@@ -673,6 +679,14 @@ export class Query<T extends ObjectLiteral> {
 								: (value as keyof T extends 'toString'
 										? unknown
 										: FindOptionsWhereProperty<NonNullable<T[keyof T]>, NonNullable<T[keyof T]>>)
+					if (isRelation) {
+						whereBase = {
+							...whereBase,
+							...this.createWhereRelations(key as string, queryValue as string, relationsProperty),
+						}
+					} else {
+						whereBase = { ...whereBase, [key]: queryValue } as FindOptionsWhere<T>
+					}
 				}
 			}
 		}
@@ -691,13 +705,23 @@ export class Query<T extends ObjectLiteral> {
 			delete options.query.relations
 		}
 
-		for (const search in options.search_fields) {
+		for (const search of options.search_fields) {
 			// behind the scenes typeORM converts the different array members to OR clauses, and ObjectLiterals to AND clauses
+			let whereToMerge = {}
+			if (search.includes('.')) {
+				whereToMerge = {
+					...whereToMerge,
+					...this.createWhereRelations(search, Like(`%${options.query.search}%`), relationsProperty),
+				}
+			} else {
+				whereToMerge = { ...whereToMerge, [search]: Like(`%${options.query.search}%`) }
+			}
 			where.push({
 				...whereBase,
-				[options.search_fields[search]]: Like(`%${options.query.search}%`),
+				...whereToMerge,
 			})
 		}
+
 		return where
 	}
 
@@ -1026,6 +1050,29 @@ export class Query<T extends ObjectLiteral> {
 		}
 
 		return whereBase
+	}
+
+	private createWhereRelations(
+		keyString: string,
+		value: string | FindOperator<string>,
+		relations: string[],
+	): FindOptionsWhere<T> {
+		const keys = keyString.split('.')
+
+		const result: { [key: string]: string | {} } = {}
+		if (!relations.includes(keys[0])) {
+			return result as FindOptionsWhere<T>
+		}
+
+		let current = result
+
+		for (let i = 0; i < keys.length - 1; i++) {
+			const key = keys[i]
+			current = current[key] = {}
+		}
+
+		current[keys[keys.length - 1]] = value
+		return result as FindOptionsWhere<T>
 	}
 }
 

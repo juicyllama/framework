@@ -25,7 +25,7 @@ export class UsersService extends Api<T> {
 	}
 
 	async updateUserAvatar(user_id: number, file: any): Promise<T> {
-		instance.defaults.headers.common['account-id'] = accountStore.selected_account.account_id
+		instance.defaults.headers.common['account-id'] = accountStore.selected_account?.account_id
 		const url = `${USERS_ENDPOINT}/${user_id}/avatar`
 		const formData = new FormData()
 		formData.append('file', file)

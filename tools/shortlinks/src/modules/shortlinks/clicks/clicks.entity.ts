@@ -6,13 +6,13 @@ import { Shortlink } from '../shortlinks.entity'
 @Entity('tools_shortlinks_clicks')
 export class ShortlinkClick extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	shortlink_click_id: number
+	shortlink_click_id!: number
 
 	@ManyToOne(() => Shortlink, sl => sl.shortlink_id, {
 		cascade: true,
 	})
 	@JoinColumn({ name: 'shortlink_id' })
-	shortlink: Shortlink
+	shortlink!: Shortlink
 
 	@IsOptional()
 	@IsString()

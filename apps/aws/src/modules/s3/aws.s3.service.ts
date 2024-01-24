@@ -1,18 +1,26 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { DeleteObjectCommand, GetObjectCommand, ListObjectsCommand, S3Client, PutObjectCommandInput } from '@aws-sdk/client-s3'
+import { Readable } from 'stream'
+import {
+	DeleteObjectCommand,
+	GetObjectCommand,
+	ListObjectsCommand,
+	S3Client,
+	PutObjectCommandInput,
+} from '@aws-sdk/client-s3'
 import { Upload, Configuration } from '@aws-sdk/lib-storage'
 import { getApplyMd5BodyChecksumPlugin } from '@smithy/middleware-apply-body-checksum'
 import { awsS3Config } from './config/aws.s3.config'
 import { Logger } from '@juicyllama/utils'
 import { AwsS3Bucket, AwsS3BucketType, AwsS3Format } from './aws.s3.enums'
 
-const streamToString = stream =>
-	new Promise((resolve, reject) => {
-		const chunks = []
-		stream.on('data', chunk => chunks.push(chunk))
-		stream.on('error', reject)
-		stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')))
+function streamToString(stream: Readable): Promise<string> {
+	return new Promise((resolve, reject) => {
+		const chunks: Buffer[] = []
+		stream.on('data', (chunk: Buffer) => chunks.push(chunk))
+		stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf-8')))
+		stream.on('error', (error: Error) => reject(error))
 	})
+}
 
 @Injectable()
 export class AwsS3Service {
@@ -31,19 +39,18 @@ export class AwsS3Service {
 	 */
 
 	async create(options: {
-		location: string,
-		bucket: AwsS3Bucket,
-		format?: AwsS3Format,
-		file: any,
-		params?: PutObjectCommandInput,
+		location: string
+		bucket: AwsS3Bucket
+		format?: AwsS3Format
+		file: any
+		params?: PutObjectCommandInput
 		sizing?: Configuration
-	}
-	): Promise<any> {
+	}): Promise<any> {
 		const domain = 'app::aws::s3::AwsSecretsService::create'
 
 		this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}] create: ${options.location}`)
 
-		if(options.format){
+		if (options.format) {
 			switch (options.format) {
 				case AwsS3Format.JSON:
 					options.file = Buffer.from(JSON.stringify(options.file))
@@ -60,29 +67,29 @@ export class AwsS3Service {
 				Bucket: this.getBucket(options.bucket),
 				Key: options.location,
 				Body: options.file,
-				...options.params
+				...options.params,
 			}
 
-			if(!options.sizing){
+			if (!options.sizing) {
 				options.sizing = <Configuration>{
-				queueSize: 4,
-				partSize: 1024 * 1024 * 5, 
-				leavePartsOnError: false,
+					queueSize: 4,
+					partSize: 1024 * 1024 * 5,
+					leavePartsOnError: false,
 				}
 			}
 
 			const upload = new Upload({
 				client,
 				params,
-				...options.sizing
+				...options.sizing,
 			})
 
-			upload.on("httpUploadProgress", (progress) => {
-				this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}] Progress: `, progress)	
-			  });
+			upload.on('httpUploadProgress', progress => {
+				this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}] Progress: `, progress)
+			})
 
 			return await upload.done()
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.warn(
 				`[${domain}] Error: ${e.message}`,
 				e.response
@@ -90,7 +97,7 @@ export class AwsS3Service {
 							status: e.response.status,
 							data: e.response.data,
 							options: options,
-					  }
+						}
 					: null,
 			)
 			return false
@@ -99,14 +106,14 @@ export class AwsS3Service {
 
 	/**
 	 * List files in a s3 directory
-	 * 
+	 *
 	 * @param {
 	 * 		{String} location where in the bucket to store the file
 	 * 		{AwsS3Bucket} bucket the bucket to access
 	 * } options
 	 */
 
-	async findAll(options: {location: string, bucket: AwsS3Bucket}): Promise<any> {
+	async findAll(options: { location: string; bucket: AwsS3Bucket }): Promise<any> {
 		const domain = 'app::aws::s3::AwsSecretsService::findAll'
 
 		this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}] ${options.location}`)
@@ -123,6 +130,10 @@ export class AwsS3Service {
 		if (data && data.Contents) {
 			for (const file of data.Contents) {
 				let fileName = file.Key
+				if (!fileName) {
+					this.logger.warn(`[${domain}] No file name found`)
+					continue
+				}
 				fileName = fileName.replace(options.location, '')
 				files.push(fileName)
 			}
@@ -134,7 +145,7 @@ export class AwsS3Service {
 
 	/**
 	 * Return the content from S3
-	 * 
+	 *
 	 * @param {
 	 * 		{String} location where in the bucket to store the file
 	 * 		{AwsS3Bucket} bucket the bucket to access
@@ -142,7 +153,7 @@ export class AwsS3Service {
 	 * } options
 	 */
 
-	async findOne(options: { location: string, bucket: AwsS3Bucket, format: AwsS3Format}): Promise<any> {
+	async findOne(options: { location: string; bucket: AwsS3Bucket; format: AwsS3Format }): Promise<any> {
 		const domain = 'app::aws::s3::AwsSecretsService::findOne'
 
 		this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}] ${options.location}`)
@@ -158,8 +169,12 @@ export class AwsS3Service {
 
 		try {
 			const data = await client.send(command)
-			result = await streamToString(data.Body)
-		} catch (e) {
+			if (data.Body && data.Body instanceof Readable) {
+				result = await streamToString(data.Body)
+			} else {
+				throw new Error('No body found in response')
+			}
+		} catch (e: any) {
 			this.logger.warn(
 				`[${domain}] Error: ${e.message}`,
 				e.response
@@ -167,7 +182,7 @@ export class AwsS3Service {
 							status: e.response.status,
 							data: e.response.data,
 							options: options,
-					  }
+						}
 					: null,
 			)
 			return false
@@ -175,12 +190,13 @@ export class AwsS3Service {
 
 		this.logger.debug(`[${domain}] File found`)
 
-		if(options.format){
+		if (options.format) {
 			switch (options.format) {
 				case AwsS3Format.JSON:
 					try {
 						result = JSON.parse(result.toString())
-					} catch (e) {
+					} catch (err) {
+						const e = err as Error
 						this.logger.error(`[${domain}] ${e.message}`, {
 							location: options.location,
 							bucket: this.getBucket(options.bucket),
@@ -196,14 +212,14 @@ export class AwsS3Service {
 
 	/**
 	 * Deletes the content to S3
-	 * 
+	 *
 	 * @param {
 	 * 		{String} location where in the bucket to store the file
 	 * 		{AwsS3Bucket} bucket the bucket to access
 	 * } options
 	 */
 
-	async remove(options: {location: string, bucket: AwsS3Bucket}): Promise<any> {
+	async remove(options: { location: string; bucket: AwsS3Bucket }): Promise<any> {
 		const domain = 'app::aws::s3::AwsSecretsService::remove'
 
 		this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}] ${options.location}`)
@@ -218,12 +234,15 @@ export class AwsS3Service {
 	}
 
 	private getBucket(bucket: AwsS3Bucket): string {
+		let bucketName
 		if (bucket === AwsS3BucketType.PUBLIC) {
-			return awsS3Config().s3buckets[AwsS3BucketType.PUBLIC]
-		}else if (bucket === AwsS3BucketType.PRIVATE) {
-			return awsS3Config().s3buckets[AwsS3BucketType.PRIVATE]
-		}else{
-			return bucket
+			bucketName = awsS3Config().s3buckets[AwsS3BucketType.PUBLIC]
+		} else if (bucket === AwsS3BucketType.PRIVATE) {
+			bucketName = awsS3Config().s3buckets[AwsS3BucketType.PRIVATE]
 		}
+		if (!bucketName) {
+			throw new Error(`Bucket ${bucket} not found`)
+		}
+		return bucketName
 	}
 }
