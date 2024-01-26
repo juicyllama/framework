@@ -374,9 +374,17 @@ onMounted(async () => {
 			@toggleButton="tableToggled"
 			@advancedFilter="onAdvancedFilterChange"></Table>
 
-			<JLAreYouSure :confirm="confirm" @cancel="confirm = false" @proceed="confirmedDeleteRecord" :button_proceed="{label: 'Delete Record'}" :icon="{classes: 'JLIcon JLIconDelete', size: '1em', type: options.icon?.type, name: options.icon?.icons?.delete ?? 'delete' }" />
-
-
+		<JLAreYouSure
+			:confirm="confirm"
+			@cancel="confirm = false"
+			@proceed="confirmedDeleteRecord"
+			:button_proceed="{ label: 'Delete Record' }"
+			:icon="{
+				classes: 'JLIcon JLIconDelete',
+				size: '1em',
+				type: options.icon?.type,
+				name: options.icon?.icons?.delete ?? 'delete',
+			}" />
 	</div>
 </template>
 <style scoped></style>
