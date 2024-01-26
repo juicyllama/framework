@@ -30,7 +30,7 @@ export const UserStore = defineStore('user', {
 		preferences: window.localStorage.getItem('user_preferences')
 			? <UserPreferences>JSON.parse(window.localStorage.getItem('user_preferences'))
 			: null,
-		preLoginRedirect: window.localStorage.getItem('preLoginRedirect') ? <string>JSON.parse(window.localStorage.getItem('preLoginRedirect')) : null,
+		preLoginRedirect: window.localStorage.getItem('preLoginRedirect') ? <string>window.localStorage.getItem('preLoginRedirect') : null,
 	}),
 	actions: {
 		async setUser(user: T): Promise<T> {
