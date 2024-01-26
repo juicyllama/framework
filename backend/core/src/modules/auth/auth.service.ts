@@ -308,11 +308,11 @@ export class AuthService extends BaseService<T> {
 		})
 		this.logger.log(`[${domain}] Email sent to ${user.email} with subject: ${subject}`, result)
 	}
-	async generateVerificationCodeAndSavetoRedis(user: User) {
+	async generateVerificationCodeAndSavetoRedis(user: User, cache_period?: CachePeriod) {
 		const verificationCode = OTP.generateVerificationCode(6)
 		const cache_key = JLCache.cacheKey(AUTH_CODE, { user_id: user.user_id })
 		this.logger.log(`[CACHE][SET] ${cache_key} = ${verificationCode}`)
-		await this.cacheManager.set(cache_key, verificationCode, CachePeriod.TWENTY)
+		await this.cacheManager.set(cache_key, verificationCode, cache_period ?? CachePeriod.TWENTY)
 		return await this.cacheManager.get(cache_key)
 	}
 	async clearUserAuthCache(user: User) {
