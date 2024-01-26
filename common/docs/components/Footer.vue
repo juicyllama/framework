@@ -1,11 +1,12 @@
 <script setup lang="ts">
 const { footer } = useAppConfig()
+
 </script>
 
 <template>
   <UFooter>
     <template #left>
-      {{ footer?.credits }}
+      v.{{footer?.PACKAGE_VERSION}} {{ footer?.credits }}
     </template>
 
     <template #right>
