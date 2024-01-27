@@ -1,4 +1,4 @@
-const PACKAGE_VERSION =  require('./package.json').version
+import * as pkg from './package.json'
 
 const links = [
 	{
@@ -60,7 +60,7 @@ export default defineAppConfig({
 	  credits: 'Copyright © '+ new Date().getFullYear(),
 	  colorMode: false,
 	  links: links,
-	  PACKAGE_VERSION,
+	  PACKAGE_VERSION: pkg.version,
 	},
 	toc: {
 	  title: 'Table of Contents',
