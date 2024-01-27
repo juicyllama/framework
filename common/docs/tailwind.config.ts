@@ -5,6 +5,7 @@ export default <Partial<Config>>{
   content: [
 	'content/**/*.md',
 	'pages/**/*.vue',
+	'components/**/*.vue',
 	'layouts/**/*.vue',
   ],
   theme: {
