@@ -18,6 +18,9 @@ export default defineNuxtConfig({
 		globals.forEach((c) => c.global = true)
 	  }
 	},
+	experimental: {
+		inlineSSRStyles: false
+	},
 	components: {
 		dirs: ['~/components']
 	},
