@@ -6,7 +6,7 @@ const { footer } = useAppConfig()
 <template>
   <UFooter>
     <template #left>
-      v.{{footer?.PACKAGE_VERSION}} {{ footer?.credits }}
+      Docs v.{{footer?.PACKAGE_VERSION}} {{ footer?.credits }}
     </template>
 
     <template #right>
