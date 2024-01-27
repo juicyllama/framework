@@ -2,6 +2,11 @@ import type { Config } from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme'
 
 export default <Partial<Config>>{
+  content: [
+	'content/**/*.md',
+	'pages/**/*.vue',
+	'layouts/**/*.vue',
+  ],
   theme: {
     extend: {
       colors: {
