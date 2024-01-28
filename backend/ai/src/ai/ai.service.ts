@@ -1,21 +1,21 @@
-import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { AppIntegrationName, Query } from '@juicyllama/core'
 import { Env, Logger, Modules } from '@juicyllama/utils'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Ai } from './ai.entity'
 import { DeepPartial, Repository } from 'typeorm'
-import { AppIntegrationName, Query } from '@juicyllama/core'
-import { AiSuccessType } from './ai.enums'
 import { AiChatRequest } from './ai.dto'
+import { Ai } from './ai.entity'
+import { AiSuccessType } from './ai.enums'
 import * as mock from './ai.mock.json'
 
 @Injectable()
 export class AiService {
 	constructor(
 		@InjectRepository(Ai) private readonly repository: Repository<Ai>,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => Query)) private readonly db_query: Query<Ai>,
-		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
+		private readonly logger: Logger,
+		private readonly db_query: Query<Ai>,
+		private readonly lazyModuleLoader: LazyModuleLoader,
 	) {}
 
 	async chat(options: AiChatRequest): Promise<Ai> {
