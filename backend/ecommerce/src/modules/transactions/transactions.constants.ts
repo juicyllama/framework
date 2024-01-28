@@ -1,7 +1,7 @@
 import { ControllerConstants } from '@juicyllama/core'
+import { CreateTransactionDto, TransactionDto, UpdateTransactionDto, TransactionResponeDto } from './transactions.dto'
 import { Transaction } from './transactions.entity'
 import { TransactionSelect, TransactionOrderBy, TransactionRelations } from './transactions.enums'
-import { CreateTransactionDto, TransactionDto, UpdateTransactionDto, TransactionResponeDto } from './transactions.dto'
 
 export const TRANSACTION_E = Transaction
 export type TRANSACTION_T = Transaction
