@@ -1,7 +1,7 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { IsDateString, IsString, MaxLength } from 'class-validator'
-import { InstalledApp } from '../installed/installed.entity'
 import { BaseEntity } from '@juicyllama/core'
+import { IsDateString, IsString, MaxLength } from 'class-validator'
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { InstalledApp } from '../installed/installed.entity'
 
 @Entity('apps_oauth')
 export class Oauth extends BaseEntity {

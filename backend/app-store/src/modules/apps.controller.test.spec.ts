@@ -1,6 +1,6 @@
 import { METHOD, Scaffold, ScaffoldDto, TestEndpoint } from '@juicyllama/core'
-import { APP_E, APP_ENDPOINT_URL, APP_NAME, APP_PRIMARY_KEY, APP_T, APP_MODULE, APP_SERVICE } from './apps.constants'
 import { Strings } from '@juicyllama/utils'
+import { APP_E, APP_ENDPOINT_URL, APP_NAME, APP_PRIMARY_KEY, APP_T, APP_MODULE, APP_SERVICE } from './apps.constants'
 import { appWordpressMock } from './apps.mocks'
 
 describe(`${APP_NAME} Endpoints`, () => {

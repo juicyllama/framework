@@ -2,8 +2,8 @@
  * Takes a query object and returns a new object with mapped values to APP SETTINGS based on the app type, this helps with the Oauth flow
  */
 
-import { AppStoreIntegrationName } from '../apps.enums'
 import _ from 'lodash'
+import { AppStoreIntegrationName } from '../apps.enums'
 
 export function oauthQueryMappers(query: any): any {
 	switch (query.integration_name) {

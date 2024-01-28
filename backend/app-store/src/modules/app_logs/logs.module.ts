@@ -1,13 +1,12 @@
-import { forwardRef, Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { BeaconModule, Query } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
+import { Module } from '@nestjs/common'
+import { TypeOrmModule } from '@nestjs/typeorm'
 import { Log } from './logs.entity'
 import { LogsService } from './logs.service'
-import { InstalledAppsModule } from '../installed/installed.module'
-import { BeaconModule, Query } from '@juicyllama/core'
 
 @Module({
-	imports: [TypeOrmModule.forFeature([Log]), forwardRef(() => BeaconModule), forwardRef(() => InstalledAppsModule)],
+	imports: [TypeOrmModule.forFeature([Log]), BeaconModule],
 	controllers: [],
 	providers: [LogsService, Logger, Query],
 	exports: [LogsService],
