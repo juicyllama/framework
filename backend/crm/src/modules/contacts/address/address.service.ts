@@ -1,9 +1,9 @@
 import { BaseService, BeaconService, Query } from '@juicyllama/core'
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { Logger } from '@juicyllama/utils'
+import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
 import { ContactAddress } from './address.entity'
-import { Logger } from '@juicyllama/utils'
 
 const E = ContactAddress
 type T = ContactAddress
@@ -11,10 +11,10 @@ type T = ContactAddress
 @Injectable()
 export class ContactAddressService extends BaseService<T> {
 	constructor(
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
+		@Inject(Query) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
+		private readonly logger: Logger,
+		readonly beaconService: BeaconService,
 	) {
 		super(query, repository, {
 			beacon: beaconService,

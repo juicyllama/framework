@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker'
-import { ContactEmailType } from './email/email.enums'
 import { Account } from '@juicyllama/core'
 import { DeepPartial } from 'typeorm'
 import { Contact } from './contacts.entity'
+import { ContactEmailType } from './email/email.enums'
 
 type T = Contact
 
