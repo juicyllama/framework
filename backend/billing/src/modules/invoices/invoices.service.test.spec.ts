@@ -1,8 +1,8 @@
-import { InvoicesService } from './invoices.service'
-import { Invoice } from './invoices.entity'
 import { ScaffoldDto, Scaffold } from '@juicyllama/core'
 import { MockInvoiceRequest } from '../../test/mocks'
+import { Invoice } from './invoices.entity'
 import { InvoicesModule } from './invoices.module'
+import { InvoicesService } from './invoices.service'
 
 const E = Invoice
 type T = Invoice

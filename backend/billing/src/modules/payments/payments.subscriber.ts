@@ -1,5 +1,5 @@
-import { EventSubscriber, EntitySubscriberInterface, InsertEvent, DataSource } from 'typeorm'
 import { Logger } from '@juicyllama/utils'
+import { EventSubscriber, EntitySubscriberInterface, InsertEvent, DataSource } from 'typeorm'
 import { Wallet } from '../wallet/wallet.entity'
 import { Payment } from './payments.entity'
 

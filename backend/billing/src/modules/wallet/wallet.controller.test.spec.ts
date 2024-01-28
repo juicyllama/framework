@@ -1,11 +1,11 @@
 //@ts-ignore
-import request from 'supertest'
 import { METHOD, Scaffold, ScaffoldDto, TestEndpoint } from '@juicyllama/core'
+import request from 'supertest'
 import { MockChargeRequest } from '../../test/mocks'
-import { ChargesService } from '../charges/charges.service'
 import { Charge } from '../charges/charges.entity'
-import { WalletModule } from './wallet.module'
+import { ChargesService } from '../charges/charges.service'
 import { Wallet } from './wallet.entity'
+import { WalletModule } from './wallet.module'
 import { WalletService } from './wallet.service'
 
 const E = Wallet
@@ -34,12 +34,12 @@ describe('Wallet Controller', () => {
 
 	describe('List Transactions', () => {
 		it('Can we list the pre-generated charge?', async () => {
-			const records: T[] = await TestEndpoint<T>({
+			const records: T[] = (await TestEndpoint<T>({
 				type: METHOD.LIST,
 				scaffold: scaffold,
 				url: ENDPOINT_URL,
 				PRIMARY_KEY: PRIMARY_KEY,
-			}) as unknown as T[]
+			})) as unknown as T[]
 
 			expect(Number(records?.[0].debit_balance)).toBe(Number(charge.amount_total))
 		})

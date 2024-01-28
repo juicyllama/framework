@@ -1,15 +1,15 @@
-import { SupportedCurrencies } from '@juicyllama/utils'
 import { AppIntegrationName, Scaffold, ScaffoldDto } from '@juicyllama/core'
+import { SupportedCurrencies } from '@juicyllama/utils'
 import { MockPaymentMethodCCRequest } from '../../test/mocks'
-import { ChargesService } from '../charges/charges.service'
 import { BillingModule } from '../billing.module'
-import { WalletService } from './wallet.service'
-import { PaymentMethodsService } from '../payment_methods/payment.methods.service'
+import { Charge } from '../charges/charges.entity'
+import { ChargesService } from '../charges/charges.service'
+import { PaymentStatus, PaymentType } from '../payments/payments.enums'
 import { PaymentsService } from '../payments/payments.service'
 import { PaymentMethod } from '../payment_methods/payment.methods.entity'
-import { PaymentStatus, PaymentType } from '../payments/payments.enums'
-import { Charge } from '../charges/charges.entity'
+import { PaymentMethodsService } from '../payment_methods/payment.methods.service'
 import { WalletCronService } from './wallet.crons.service'
+import { WalletService } from './wallet.service'
 
 const E = Charge
 type T = Charge

@@ -1,5 +1,5 @@
 import { Cron, CronExpression } from '@nestjs/schedule'
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { CachePeriod, Logger, Modules } from '@juicyllama/utils'
 import { DeepPartial, IsNull } from 'typeorm'
 import { Env } from '@juicyllama/utils'
@@ -19,11 +19,11 @@ import {
 @Injectable()
 export class InvoicesCronService {
 	constructor(
-		@Inject(forwardRef(() => ChargesService)) private readonly chargesService: ChargesService,
-		@Inject(forwardRef(() => InvoicesService)) private readonly invoicesService: InvoicesService,
-		@Inject(forwardRef(() => PaymentsService)) private readonly paymentsService: PaymentsService,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => SettingsService)) private readonly settingsService: SettingsService,
+		private readonly chargesService: ChargesService,
+		private readonly invoicesService: InvoicesService,
+		private readonly paymentsService: PaymentsService,
+		private readonly logger: Logger,
+		private readonly settingsService: SettingsService,
 	) {}
 
 	/**

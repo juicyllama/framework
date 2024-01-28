@@ -1,5 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm'
 import { IsNumber, IsString, MaxLength, MinLength } from 'class-validator'
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm'
 
 @Entity('billing_tax')
 @Unique('billing_tax_UNIQUE', ['seller_country_code', 'buyer_country_code'])
