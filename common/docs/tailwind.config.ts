@@ -14,7 +14,11 @@ export default <Partial<Config>>{
     `/app.{js,ts,vue}`,
     `/Error.{js,ts,vue}`,
     `/error.{js,ts,vue}`,
-    `/app.config.{js,ts}`
+    `/app.config.{js,ts}`,
+	'nuxt.config.ts',
+	'app.config.ts',
+	'app.vue',
+	'nuxt.schema.ts',
   ],
   theme: {
     extend: {

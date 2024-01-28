@@ -11,6 +11,10 @@ export default defineNuxtConfig({
 	  'nuxt-og-image',
 	//   '@nuxtjs/tailwindcss'
 	],
+	css: [
+		'@/assets/css/classes-that-nuxt-missing.css',
+	  ],
+	})
 	hooks: {
 	  'components:extend': (components) => {
 		const globals = components.filter((c) => ['UButton', 'UIcon'].includes(c.pascalName))
