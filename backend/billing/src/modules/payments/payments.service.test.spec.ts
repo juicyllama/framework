@@ -1,9 +1,9 @@
-import { PaymentsService } from './payments.service'
-import { Payment } from './payments.entity'
 import { ScaffoldDto, Scaffold } from '@juicyllama/core'
-import { MockPaymentRequest } from '../../test/mocks'
-import { PaymentsModule } from './payments.module'
 import { DeepPartial } from 'typeorm'
+import { MockPaymentRequest } from '../../test/mocks'
+import { Payment } from './payments.entity'
+import { PaymentsModule } from './payments.module'
+import { PaymentsService } from './payments.service'
 
 const E = Payment
 type T = Payment

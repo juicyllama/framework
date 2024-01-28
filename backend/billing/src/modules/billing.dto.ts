@@ -1,6 +1,6 @@
+import { SupportedCurrencies } from '@juicyllama/utils'
 import { ApiProperty } from '@nestjs/swagger'
 import { IsEnum, IsNumber, MaxLength, MinLength } from 'class-validator'
-import { SupportedCurrencies } from '@juicyllama/utils'
 
 export class PricingDto {
 	@ApiProperty({ description: 'The amount to charge for this package', example: 9.99 })
