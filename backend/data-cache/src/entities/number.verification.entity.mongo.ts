@@ -1,6 +1,6 @@
-import { Entity, ObjectId, ObjectIdColumn, Column, Unique } from 'typeorm'
-import { IsBoolean, IsString } from 'class-validator'
 import { BaseEntity } from '@juicyllama/core'
+import { IsBoolean, IsString } from 'class-validator'
+import { Entity, ObjectId, ObjectIdColumn, Column, Unique } from 'typeorm'
 
 @Entity()
 @Unique('number_verification_UNIQUE', ['number'])

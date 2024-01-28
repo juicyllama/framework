@@ -1,7 +1,7 @@
-import { Entity, ObjectId, ObjectIdColumn, Column, Unique } from 'typeorm'
-import { IsNumber, IsDateString } from 'class-validator'
 import { BaseEntity } from '@juicyllama/core'
 import { Dates } from '@juicyllama/utils'
+import { IsNumber, IsDateString } from 'class-validator'
+import { Entity, ObjectId, ObjectIdColumn, Column, Unique } from 'typeorm'
 
 @Entity()
 @Unique('fx_UNIQUE', ['date'])
