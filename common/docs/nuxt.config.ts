@@ -9,7 +9,7 @@ export default defineNuxtConfig({
 	  '@nuxtjs/fontaine',
 	  '@nuxtjs/google-fonts',
 	  'nuxt-og-image',
-	  '@nuxtjs/tailwindcss'
+	//   '@nuxtjs/tailwindcss'
 	],
 	hooks: {
 	  'components:extend': (components) => {
