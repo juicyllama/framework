@@ -1,7 +1,3 @@
-import { Controller, forwardRef, Inject, Param, Query } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
-import { StatsMethods, StatsResponseDto } from '@juicyllama/utils'
-import { TransactionDiscountsService } from './discounts.service'
 import {
 	Query as TQuery,
 	AccountId,
@@ -13,7 +9,9 @@ import {
 	ReadStatsDecorator,
 	UserAuth,
 } from '@juicyllama/core'
-import { TransactionDiscountOrderBy, TransactionDiscountRelations, TransactionDiscountSelect } from './discounts.enums'
+import { StatsMethods, StatsResponseDto } from '@juicyllama/utils'
+import { Controller, Inject, Param, Query } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import {
 	TRANSACTION_DISCOUNT_T,
 	TRANSACTION_DISCOUNT_E,
@@ -22,14 +20,16 @@ import {
 	TRANSACTION_DISCOUNT_SEARCH_FIELDS,
 	TRANSACTION_DISCOUNT_DEFAULT_ORDER_BY,
 } from './discounts.constants'
+import { TransactionDiscountOrderBy, TransactionDiscountRelations, TransactionDiscountSelect } from './discounts.enums'
+import { TransactionDiscountsService } from './discounts.service'
 
 @ApiTags('Discounts')
 @UserAuth()
 @Controller('ecommerce/transactions/discounts')
 export class TransactionDiscountsController {
 	constructor(
-		@Inject(forwardRef(() => TransactionDiscountsService)) private readonly service: TransactionDiscountsService,
-		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<TRANSACTION_DISCOUNT_T>,
+		private readonly service: TransactionDiscountsService,
+		@Inject(TQuery) private readonly tQuery: TQuery<TRANSACTION_DISCOUNT_T>,
 	) {}
 
 	@ReadManyDecorator({

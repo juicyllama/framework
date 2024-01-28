@@ -1,14 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, Unique } from 'typeorm'
-import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
+import { InstalledApp } from '@juicyllama/app-store'
 import { Account, BaseEntity } from '@juicyllama/core'
+import { Contact, ContactAddress } from '@juicyllama/crm'
 import { IsNumber, IsString, IsEnum, MinLength, MaxLength, IsBoolean, IsDate } from 'class-validator'
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, Unique } from 'typeorm'
 import { Store } from '../stores/stores.entity'
 import { TransactionDiscount } from './discounts/discounts.entity'
-import { Contact, ContactAddress } from '@juicyllama/crm'
 import { TransactionFulfillmentStatus, TransactionPaymentStatus } from './transactions.enums'
-import { InstalledApp } from '@juicyllama/app-store'
 
-@UseInterceptors(ClassSerializerInterceptor)
 @Unique('ecommerce_transactions_UNIQUE', ['store_id', 'order_id'])
 @Entity('ecommerce_transactions')
 export class Transaction extends BaseEntity {
