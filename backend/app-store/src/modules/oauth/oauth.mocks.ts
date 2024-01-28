@@ -1,5 +1,5 @@
-import { InstalledApp } from '../installed/installed.entity'
 import { faker } from '@faker-js/faker'
+import { InstalledApp } from '../installed/installed.entity'
 import { OAUTH_APP_T } from './oauth.constants'
 
 export function oauthMock(installed_app: InstalledApp): Partial<OAUTH_APP_T> {
