@@ -1,10 +1,10 @@
+import { Logger, StatsMethods } from '@juicyllama/utils'
+import * as querystring from 'querystring'
+import { DeepPartial, ObjectLiteral } from 'typeorm'
 import request from 'supertest'
 import { Account } from '../modules/accounts/account.entity'
-import { Logger, StatsMethods } from '@juicyllama/utils'
-import { DeepPartial, ObjectLiteral } from 'typeorm'
-import { ScaffoldDto } from './scaffold'
 import { METHOD } from '../types'
-import * as querystring from 'querystring'
+import { ScaffoldDto } from './scaffold'
 
 //todo is there a way to pass the request type dynamically to merge some of these switch statements?
 
@@ -24,7 +24,7 @@ export async function TestEndpoint<T extends ObjectLiteral>(options: {
 	account?: Account // If not provided, will use owner_account
 	emitCheckResultKeys?: string[] //if values are not provided back in the result
 	skipResultCheck?: boolean // if true results will be returned without checking
-}): Promise<T | undefined> { 
+}): Promise<T | undefined> {
 	let E: T | undefined = undefined
 
 	const headers = {
@@ -266,15 +266,14 @@ export async function TestService<T extends ObjectLiteral>(options: {
 	PRIMARY_KEY?: string
 	record?: T
 }): Promise<T | T[] | undefined> {
-
 	switch (options.type) {
 		case METHOD.CREATE:
 			try {
 				const record = await options.scaffold.services.service.create(options.mock)
 				if (!options.PRIMARY_KEY) {
 					throw new Error('PRIMARY_KEY is required')
-				}		
-				//@ts-ignore	
+				}
+				//@ts-ignore
 				expect(record[options.PRIMARY_KEY]).toBeDefined()
 				checkResult<T>(<any>options.mock, record)
 				return record
@@ -313,7 +312,7 @@ export async function TestService<T extends ObjectLiteral>(options: {
 				}
 				const record = await options.scaffold.services.service.findOne()
 				//@ts-ignore
-				expect(record[options.PRIMARY_KEY]).toBeDefined()						
+				expect(record[options.PRIMARY_KEY]).toBeDefined()
 				checkResult<T>(<any>options.mock, record)
 				return record
 			} catch (e) {
@@ -415,13 +414,13 @@ function outputError<T extends ObjectLiteral>(options: {
 
 function checkResult<T extends ObjectLiteral>(data: DeepPartial<T>, result: T, emitCheckResultKeys?: string[]) {
 	for (const key of Object.keys(data)) {
-		if (emitCheckResultKeys && emitCheckResultKeys.includes(key)) continue	
+		if (emitCheckResultKeys && emitCheckResultKeys.includes(key)) continue
 		try {
 			switch (typeof data[key]) {
 				case 'object':
 					continue
 				case 'number':
-					const logger = new Logger()				
+					const logger = new Logger()
 					expect(Number(result[key]).toFixed(2)).toBe(Number(data[key]).toFixed(2))
 					break
 				default:

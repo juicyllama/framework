@@ -1,14 +1,14 @@
-import { Strategy } from 'passport-local'
-import { PassportStrategy } from '@nestjs/passport'
-import { ForbiddenException, forwardRef, Inject, Injectable, UnauthorizedException } from '@nestjs/common'
 import { Logger } from '@juicyllama/utils'
+import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common'
+import { PassportStrategy } from '@nestjs/passport'
+import { Strategy } from 'passport-local'
 import { UsersService } from '../../users/users.service'
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
 	constructor(
-		@Inject(forwardRef(() => UsersService)) private usersService: UsersService,
-		@Inject(forwardRef(() => Logger)) private logger: Logger,
+		private usersService: UsersService,
+		private logger: Logger,
 	) {
 		super({ usernameField: 'email' })
 	}

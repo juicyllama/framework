@@ -1,7 +1,7 @@
 import { ControllerConstants } from '../../types/common'
+import { CreateUserDto, UpdateUserDto, UserDto, UserResponeDto } from './users.dto'
 import { User } from './users.entity'
 import { UserOrderBy, UserRelations, UserSelect } from './users.enums'
-import { CreateUserDto, UpdateUserDto, UserDto, UserResponeDto } from './users.dto'
 
 export const E = User
 export type T = User

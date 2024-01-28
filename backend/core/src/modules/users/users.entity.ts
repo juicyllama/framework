@@ -1,4 +1,3 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm'
 import { Exclude, Expose } from 'class-transformer'
 import {
 	IsArray,
@@ -12,10 +11,11 @@ import {
 	MaxLength,
 	MinLength,
 } from 'class-validator'
+import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm'
 import { BaseEntity } from '../../helpers/baseEntity'
 import { Account } from '../accounts/account.entity'
-import { UserAvatarType } from './users.enums'
 import { Role } from '../auth/role.entity'
+import { UserAvatarType } from './users.enums'
 
 @Entity('users')
 export class User extends BaseEntity {

@@ -1,18 +1,18 @@
-import { Test, TestingModule } from '@nestjs/testing'
-import { forwardRef, HttpServer, INestApplication, ValidationPipe } from '@nestjs/common'
-import { AccountService } from '../modules/accounts/account.service'
-import { Account } from '../modules/accounts/account.entity'
-import { User } from '../modules/users/users.entity'
+import { faker } from '@faker-js/faker'
 import { Api, Env, Logger } from '@juicyllama/utils'
-import { MockAccountRequest } from './mocks'
-import { testCleanup } from './closedown'
+import { forwardRef, HttpServer, INestApplication, ValidationPipe } from '@nestjs/common'
+import { Test, TestingModule } from '@nestjs/testing'
+import { DeepPartial, Repository, ObjectLiteral } from 'typeorm'
+import { validationPipeOptions } from '../configs/nest.config'
+import { Account } from '../modules/accounts/account.entity'
 import { AccountModule } from '../modules/accounts/account.module'
+import { AccountService } from '../modules/accounts/account.service'
+import { User } from '../modules/users/users.entity'
 import { AuthModule } from '../modules/auth/auth.module'
 import { AuthService } from '../modules/auth/auth.service'
 import { Query } from '../utils/typeorm/Query'
-import { DeepPartial, Repository, ObjectLiteral } from 'typeorm'
-import { faker } from '@faker-js/faker'
-import { validationPipeOptions } from '../configs/nest.config'
+import { testCleanup } from './closedown'
+import { MockAccountRequest } from './mocks'
 
 let httpServer: HttpServer
 let moduleRef: TestingModule
@@ -45,7 +45,7 @@ export class ScaffoldDtoWithRepository<T extends ObjectLiteral> extends Scaffold
 	repository!: Repository<T>
 }
 
-export class Scaffold<T extends ObjectLiteral>  {
+export class Scaffold<T extends ObjectLiteral> {
 	async up(MODULE?: any, SERVICE?: any): Promise<ScaffoldDto<T>> {
 		if (Env.IsNotTest()) {
 			throw new Error(`Test suite should not be ran outside the test environment`)
@@ -133,6 +133,7 @@ export class Scaffold<T extends ObjectLiteral>  {
 			await testCleanup(moduleRef, E)
 		} catch (e) {
 			const error = e as Error
-			console.warn(error.message, error)		}
+			console.warn(error.message, error)
+		}
 	}
 }

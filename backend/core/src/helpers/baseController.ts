@@ -1,6 +1,14 @@
+import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto } from '@juicyllama/utils'
 import { ApiForbiddenResponse, ApiNotFoundResponse, ApiUnauthorizedResponse } from '@nestjs/swagger'
-import { Query as TQuery } from '../utils/typeorm/Query'
 import { ObjectLiteral } from 'typeorm'
+import {
+	BulkUploadDto,
+	BulkUploadResponse,
+	ControllerConstants,
+	ControllerOptionalProps,
+	CrudUploadFieldsResponse,
+} from '../types/common'
+import { Query as TQuery } from '../utils/typeorm/Query'
 import {
 	crudBulkUpload,
 	crudCharts,
@@ -12,14 +20,6 @@ import {
 	crudStats,
 	crudUpdate,
 } from './crudController'
-import {
-	BulkUploadDto,
-	BulkUploadResponse,
-	ControllerConstants,
-	ControllerOptionalProps,
-	CrudUploadFieldsResponse,
-} from '../types/common'
-import { ChartsPeriod, ChartsResponseDto, StatsMethods, StatsResponseDto } from '@juicyllama/utils'
 
 /**
  * Base controller for endpoints

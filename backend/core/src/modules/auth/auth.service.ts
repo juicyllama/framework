@@ -1,15 +1,4 @@
 import {
-	BadRequestException,
-	ForbiddenException,
-	forwardRef,
-	ImATeapotException,
-	Inject,
-	Injectable,
-	NotFoundException,
-	UnauthorizedException,
-} from '@nestjs/common'
-import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import {
 	CachePeriod,
 	Enums,
 	Env,
@@ -21,23 +10,34 @@ import {
 	Strings,
 	SuccessResponseDto,
 } from '@juicyllama/utils'
-import { InjectRepository } from '@nestjs/typeorm'
-import { In, Like, Repository } from 'typeorm'
-import { UsersService } from '../users/users.service'
-import { Role } from './role.entity'
-import { AccountService } from '../accounts/account.service'
-import { SettingsService } from '../settings/settings.service'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import {
+	BadRequestException,
+	ForbiddenException,
+	forwardRef,
+	ImATeapotException,
+	Inject,
+	Injectable,
+	NotFoundException,
+	UnauthorizedException,
+} from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
+import { InjectRepository } from '@nestjs/typeorm'
 import { Cache } from 'cache-manager'
+import { In, Like, Repository } from 'typeorm'
 import { BaseService } from '../../helpers'
 import { Query } from '../../utils/typeorm/Query'
-import { BeaconService } from '../beacon/beacon.service'
-import { LoginResponseDto, ValidateCodeDto } from './dtos/login.dto'
-import { AUTH_ACCOUNT_IDS, AUTH_ACCOUNT_ROLE, AUTH_CODE } from './auth.constants'
-import { UserRole, UserRoleNum } from '../users/users.enums'
-import { User } from '../users/users.entity'
 import { Account } from '../accounts/account.entity'
+import { AccountService } from '../accounts/account.service'
+import { BeaconService } from '../beacon/beacon.service'
+import { SettingsService } from '../settings/settings.service'
+import { User } from '../users/users.entity'
+import { UserRole, UserRoleNum } from '../users/users.enums'
+import { UsersService } from '../users/users.service'
+import { AUTH_ACCOUNT_IDS, AUTH_ACCOUNT_ROLE, AUTH_CODE } from './auth.constants'
+import { LoginResponseDto, ValidateCodeDto } from './dtos/login.dto'
 import { CompletePasswordResetDto, InitiateResetPasswordDto } from './dtos/password.reset.dto'
+import { Role } from './role.entity'
 
 const E = Role
 type T = Role
@@ -45,14 +45,15 @@ type T = Role
 @Injectable()
 export class AuthService extends BaseService<T> {
 	constructor(
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
+		@Inject(Query) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
+		readonly logger: Logger,
 		@Inject(forwardRef(() => AccountService)) readonly accountService: AccountService,
-		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
-		@Inject(forwardRef(() => SettingsService)) readonly settingsService: SettingsService,
+		@Inject(forwardRef(() => BeaconService))
+		readonly beaconService: BeaconService,
+		readonly settingsService: SettingsService,
 		@Inject(forwardRef(() => UsersService)) readonly usersService: UsersService,
-		@Inject(forwardRef(() => JwtService)) readonly jwtService: JwtService,
+		readonly jwtService: JwtService,
 		@Inject(CACHE_MANAGER) private cacheManager: Cache,
 	) {
 		super(query, repository, { beacon: beaconService })
@@ -464,8 +465,8 @@ export class AuthService extends BaseService<T> {
 				throw new UnauthorizedException()
 			}
 			const referrer_url = new URL(referrer)
-			
-			if(allowed instanceof Array) {
+
+			if (allowed instanceof Array) {
 				if (!allowed.includes(referrer_url.origin)) {
 					this.logger.error(`[${domain}] Referrer does not match`, {
 						referrer: referrer_url,
