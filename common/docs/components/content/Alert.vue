@@ -8,7 +8,7 @@ const cssClassesMap = {
 const cssClass = computed(() => cssClassesMap[props.type])
 </script>
 <template>
-  <div :class="cssClass">
+  <div :class="[cssClass, `alert-${props.type}`]" class="app-content-alert-component">
     <ContentSlot :use="$slots.default" unwrap="p" />
   </div>
 </template>
