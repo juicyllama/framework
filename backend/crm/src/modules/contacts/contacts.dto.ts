@@ -1,11 +1,11 @@
+import { BaseResponseDto, SwaggerPropertyDecorator, UserAvatarType } from '@juicyllama/core'
+import { Classes } from '@juicyllama/utils'
 import { ApiProperty, PartialType } from '@nestjs/swagger'
 import { IsArray, IsDateString, IsEnum, IsOptional, IsString, MaxLength, MinLength } from 'class-validator'
+import { ContactAddressDto } from './address/address.dto'
 import { ContactEmailDto } from './email/email.dto'
 import { ContactPhoneDto } from './phone/phone.dto'
 import { ContactSocialDto } from './social/social.dto'
-import { ContactAddressDto } from './address/address.dto'
-import { BaseResponseDto, SwaggerPropertyDecorator, UserAvatarType } from '@juicyllama/core'
-import { Classes } from '@juicyllama/utils'
 
 export class ContactDto {
 	@ApiProperty({ description: 'Your contacts first name', example: 'John' })
