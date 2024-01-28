@@ -1,7 +1,7 @@
 import { IsArray, IsBoolean, IsObject, IsString, IsUrl } from 'class-validator'
-import { BeaconCommunicationEmailDto } from './email/email.dto'
-import { UserRole } from '../users/users.enums'
 import { Account } from '../accounts/account.entity'
+import { UserRole } from '../users/users.enums'
+import { BeaconCommunicationEmailDto } from './email/email.dto'
 import { BeaconCommunicationImDto } from './im/im.dto'
 
 export class BeaconMethodsDto {

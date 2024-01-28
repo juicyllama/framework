@@ -79,7 +79,9 @@ describe(`${NAME} Endpoints`, () => {
 			expect(res?.created).toEqual(1)
 			const users = await scaffold.services.service.findAll({})
 			const lastUser = users.pop()
-			const account = lastUser.accounts?.find((a: { account_id: number }) => a.account_id === scaffold.values.account.account_id)
+			const account = lastUser.accounts?.find(
+				(a: { account_id: number }) => a.account_id === scaffold.values.account.account_id,
+			)
 
 			expect(account).toBeDefined()
 			expect(account.account_id).toEqual(scaffold.values.account.account_id)

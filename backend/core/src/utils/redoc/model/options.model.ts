@@ -1,5 +1,5 @@
-import Joi from 'joi'
 import { OpenAPIObject } from '@nestjs/swagger'
+import Joi from 'joi'
 
 export const schema = (document: OpenAPIObject) =>
 	Joi.object().keys({

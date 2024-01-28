@@ -1,9 +1,9 @@
+import { SupportedCurrencies } from '@juicyllama/utils'
 import { IsArray, IsBoolean, IsEmail, IsEnum, IsNumber, IsString, IsUrl, MaxLength, MinLength } from 'class-validator'
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { BaseEntity } from '../../helpers/baseEntity'
-import { SupportedCurrencies } from '@juicyllama/utils'
-import { Tag } from '../tags/tags.entity'
 import { Role } from '../auth/role.entity'
+import { Tag } from '../tags/tags.entity'
 @Entity('accounts')
 export class Account extends BaseEntity {
 	@PrimaryGeneratedColumn()

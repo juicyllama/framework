@@ -1,18 +1,18 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { BeaconMessageDto } from './beacon.dto'
 import { BeaconEmailService } from './email/email.service'
+import { BeaconImService } from './im/im.service'
+import { BeaconNotificationService } from './notification/notification.service'
 import { BeaconPushService } from './push/push.service'
 import { BeaconSmsService } from './sms/sms.service'
-import { BeaconNotificationService } from './notification/notification.service'
-import { BeaconImService } from './im/im.service'
 
 @Injectable()
 export class BeaconService {
 	constructor(
-		@Inject(forwardRef(() => BeaconEmailService)) private readonly beaconEmailService: BeaconEmailService,
-		@Inject(forwardRef(() => BeaconPushService)) private readonly beaconPushService: BeaconPushService,
-		@Inject(forwardRef(() => BeaconSmsService)) private readonly beaconSmsService: BeaconSmsService,
-		@Inject(forwardRef(() => BeaconImService)) private readonly beaconImService: BeaconImService,
+		private readonly beaconEmailService: BeaconEmailService,
+		private readonly beaconPushService: BeaconPushService,
+		private readonly beaconSmsService: BeaconSmsService,
+		private readonly beaconImService: BeaconImService,
 		@Inject(forwardRef(() => BeaconNotificationService))
 		private readonly beaconNotificationService: BeaconNotificationService,
 	) {}

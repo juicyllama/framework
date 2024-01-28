@@ -9,15 +9,15 @@ import {
 	Logger,
 	Objects,
 	Countries,
-	Languages
+	Languages,
 } from '@juicyllama/utils'
-import { Query as TQuery } from '../utils/typeorm/Query'
-import { TypeOrm } from '../utils/typeorm/TypeOrm'
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common'
 import _ from 'lodash'
 import { DeepPartial, ObjectLiteral, FindOptionsWhere } from 'typeorm'
-import { UploadType, ImportMode, BulkUploadResponse } from '../types/common'
 import { CurrencyOptions } from '../types'
+import { UploadType, ImportMode, BulkUploadResponse } from '../types/common'
+import { Query as TQuery } from '../utils/typeorm/Query'
+import { TypeOrm } from '../utils/typeorm/TypeOrm'
 
 const logger = new Logger()
 
@@ -63,7 +63,6 @@ export async function crudFindAll<T extends ObjectLiteral>(options: {
 	result = await expandGeoFields(result, options.geo)
 	result = await expandLanguageFields(result, options.lang)
 	return result
-
 }
 
 export async function crudFindOne<T extends ObjectLiteral>(options: {
@@ -443,7 +442,7 @@ function cleanDtos<T extends ObjectLiteral>(dtos: DeepPartial<T>[], options: any
 
 /**
  * Expands geo fields
-*/
+ */
 
 function expandGeoFields<T>(result: T | T[], geo_fields?: string[]): T | T[] {
 	if (!geo_fields || !geo_fields.length) return result
@@ -459,7 +458,7 @@ function expandGeoFields<T>(result: T | T[], geo_fields?: string[]): T | T[] {
 
 /**
  * Expands language fields
-*/
+ */
 
 function expandLanguageFields<T>(result: T | T[], lang_fields?: string[]): T | T[] {
 	if (!lang_fields || !lang_fields.length) return result

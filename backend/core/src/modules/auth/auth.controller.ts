@@ -1,24 +1,24 @@
-import { Body, Controller, forwardRef, Get, Inject, Post, Req, UseGuards } from '@nestjs/common'
+import { SuccessResponseDto } from '@juicyllama/utils'
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common'
 import { ApiHideProperty, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
+import { AccountId, UserAuth } from '../../decorators'
+import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
+import { User } from '../users/users.entity'
+import { UsersService } from '../users/users.service'
+import { AuthService } from './auth.service'
 import { LoginResponseDto, ValidateCodeDto } from './dtos/login.dto'
 import { CompletePasswordResetDto, InitiateResetPasswordDto } from './dtos/password.reset.dto'
-import { User } from '../users/users.entity'
 import { InitiatePasswordlessLoginDto } from './dtos/passwordless.login.dto'
-import { UserAuth } from '../../decorators'
-import { AuthService } from './auth.service'
-import { SuccessResponseDto } from '@juicyllama/utils'
+import { LinkedinOauthGuard } from './guards/linkedin-oauth.guard'
 import { LocalAuthGuard } from './guards/local-auth.guard'
-import { UsersService } from '../users/users.service'
-import { AuthGuard } from '@nestjs/passport'
-import { AccountId } from '../../decorators'
-import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
+import { GoogleOauthGuard } from './guards/google-oauth.guard'
 
 @ApiTags('Auth')
 @Controller('/auth')
 export class AuthController {
 	constructor(
-		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
-		@Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,
+		private readonly authService: AuthService,
+		private readonly usersService: UsersService,
 	) {}
 
 	@ApiOperation({
@@ -130,7 +130,7 @@ export class AuthController {
 	@ApiOperation({
 		summary: 'Google Login - Start',
 	})
-	@UseGuards(AuthGuard('google'))
+	@UseGuards(GoogleOauthGuard)
 	@Get('google')
 	async initiateGoogleLogin(): Promise<void> {
 		// initiates the Google login
@@ -143,7 +143,7 @@ export class AuthController {
 		description: 'OK',
 		type: LoginResponseDto,
 	})
-	@UseGuards(AuthGuard('google'))
+	@UseGuards(GoogleOauthGuard)
 	@Get('google/redirect')
 	async googleAuthRedirect(@Req() req: AuthenticatedRequest): Promise<LoginResponseDto> {
 		return this.authService.login(req.user)
@@ -152,7 +152,7 @@ export class AuthController {
 	@ApiOperation({
 		summary: 'Linkedin Login - Start',
 	})
-	@UseGuards(AuthGuard('linkedin'))
+	@UseGuards(LinkedinOauthGuard)
 	@Get('linkedin')
 	async initiateLinkedinLogin(): Promise<void> {
 		// initiates the Linkedin login
@@ -165,7 +165,7 @@ export class AuthController {
 		description: 'OK',
 		type: LoginResponseDto,
 	})
-	@UseGuards(AuthGuard('linkedin'))
+	@UseGuards(LinkedinOauthGuard)
 	@Get('linkedin/redirect')
 	async linkedinAuthRedirect(@Req() req: AuthenticatedRequest): Promise<LoginResponseDto> {
 		return this.authService.login(req.user)
