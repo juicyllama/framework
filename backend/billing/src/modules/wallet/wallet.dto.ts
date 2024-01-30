@@ -1,5 +1,5 @@
-import { IsEnum, IsNumber } from 'class-validator'
 import { SupportedCurrencies } from '@juicyllama/utils'
+import { IsEnum, IsNumber } from 'class-validator'
 
 export class GetBalanceResponseDto {
 	@IsNumber()

@@ -18,11 +18,11 @@ export type T = InstalledApp
 export class InstalledAppsService extends BaseService<T> {
 	constructor(
 		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
-		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
-		@Inject(forwardRef(() => AppsService)) readonly appsService: AppsService,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => WordPressService)) readonly wordPressService: WordPressService,
+		@Inject(Query) readonly query: Query<T>,
+		readonly beaconService: BeaconService,
+		readonly appsService: AppsService,
+		private readonly logger: Logger,
+		readonly wordPressService: WordPressService,
 		@Inject(forwardRef(() => ShopifyService)) readonly shopifyService: ShopifyService,
 	) {
 		super(query, repository, {
@@ -41,7 +41,7 @@ export class InstalledAppsService extends BaseService<T> {
 			installed_app.app = await this.appsService.findOne({ where: { app_id: installed_app.app_id } })
 		}
 
-		const public_settings: { [key: string]: any } = {};
+		const public_settings: { [key: string]: any } = {}
 		if (installed_app.app?.settings) {
 			for (const app_creds of installed_app.app.settings) {
 				if (!app_creds.private) {
@@ -52,7 +52,7 @@ export class InstalledAppsService extends BaseService<T> {
 			}
 		}
 
-		installed_app.settings = public_settings;
+		installed_app.settings = public_settings
 		return installed_app
 	}
 

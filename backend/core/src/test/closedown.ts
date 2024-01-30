@@ -1,5 +1,5 @@
-import { getRepositoryToken } from '@nestjs/typeorm'
 import { TestingModule } from '@nestjs/testing'
+import { getRepositoryToken } from '@nestjs/typeorm'
 import { Account } from '../modules/accounts/account.entity'
 
 export async function testCleanup(moduleRef: TestingModule, repo?: any) {

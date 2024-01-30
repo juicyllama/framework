@@ -8,14 +8,16 @@ import {
 	Json,
 	Logger,
 	Objects,
+	Countries,
+	Languages,
 } from '@juicyllama/utils'
-import { Query as TQuery } from '../utils/typeorm/Query'
-import { TypeOrm } from '../utils/typeorm/TypeOrm'
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common'
 import _ from 'lodash'
 import { DeepPartial, ObjectLiteral, FindOptionsWhere } from 'typeorm'
-import { UploadType, ImportMode, BulkUploadResponse } from '../types/common'
 import { CurrencyOptions } from '../types'
+import { UploadType, ImportMode, BulkUploadResponse } from '../types/common'
+import { Query as TQuery } from '../utils/typeorm/Query'
+import { TypeOrm } from '../utils/typeorm/TypeOrm'
 
 const logger = new Logger()
 
@@ -55,7 +57,10 @@ export async function crudFindAll<T extends ObjectLiteral>(options: {
 	const PRIMARY_KEY = TypeOrm.getPrimaryKey<T>(options.service.repository)
 
 	const sql_options = TypeOrm.findOptions<T>(options.query, where, PRIMARY_KEY as string)
-	return await options.service.findAll(sql_options, options.currency)
+	let result = await options.service.findAll(sql_options, options.currency)
+	result = await expandGeoFields(result, options.geo)
+	result = await expandLanguageFields(result, options.lang)
+	return result
 }
 
 export async function crudFindOne<T extends ObjectLiteral>(options: {
@@ -426,4 +431,36 @@ function cleanDtos<T extends ObjectLiteral>(dtos: DeepPartial<T>[], options: any
 	)
 
 	return clean
+}
+
+/**
+ * Expands geo fields
+ */
+
+function expandGeoFields<T>(result: T | T[], geo_fields?: string[]): T | T[] {
+	if (!geo_fields || !geo_fields.length) return result
+
+	for (const record of _.castArray(result)) {
+		for (const field of geo_fields) {
+			//@ts-ignore
+			record[`${field}_details`] = Countries.getCountry(record[field])
+		}
+	}
+	return result
+}
+
+/**
+ * Expands language fields
+ */
+
+function expandLanguageFields<T>(result: T | T[], lang_fields?: string[]): T | T[] {
+	if (!lang_fields || !lang_fields.length) return result
+
+	for (const record of _.castArray(result)) {
+		for (const field of lang_fields) {
+			//@ts-ignore
+			record[`${field}_details`] = Languages.getLanguage(record[field])
+		}
+	}
+	return result
 }

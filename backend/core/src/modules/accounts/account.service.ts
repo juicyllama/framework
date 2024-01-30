@@ -21,14 +21,14 @@ type T = Account
 @Injectable()
 export class AccountService extends BaseService<T> {
 	constructor(
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
+		@Inject(Query) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
+		readonly logger: Logger,
 		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
-		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
-		@Inject(forwardRef(() => StorageService)) readonly storageService: StorageService,
+		readonly beaconService: BeaconService,
+		readonly storageService: StorageService,
 		@Inject(forwardRef(() => UsersService)) readonly usersService: UsersService,
-		@Inject(forwardRef(() => AccountHooks)) readonly accountHooks: AccountHooks,
+		readonly accountHooks: AccountHooks,
 	) {
 		super(query, repository, { beacon: beaconService })
 	}

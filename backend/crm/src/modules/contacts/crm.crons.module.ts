@@ -1,16 +1,16 @@
-import { Logger } from '@juicyllama/utils'
-import { forwardRef, Module } from '@nestjs/common'
-import { CacheModule } from '@nestjs/cache-manager'
-import { ConfigModule } from '@nestjs/config'
 import { BeaconModule, cacheConfig, databaseConfig, jwtConfig, Query, SettingsModule } from '@juicyllama/core'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { Logger } from '@juicyllama/utils'
+import { CacheModule } from '@nestjs/cache-manager'
+import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { Contact } from './contacts.entity'
+import { ContactsModule } from './contacts.module'
 import { CrmCronsContactsService } from './crm.crons.contacts.service'
 import { CRMCronsController } from './crm.cron.controller'
-import { ContactsModule } from './contacts.module'
-import { ContactPhoneService } from './phone/phone.service'
-import { Contact } from './contacts.entity'
 import { ContactPhone } from './phone/phone.entity'
+import { ContactPhoneService } from './phone/phone.service'
 
 @Module({
 	imports: [
@@ -23,9 +23,9 @@ import { ContactPhone } from './phone/phone.entity'
 		TypeOrmModule.forRoot(databaseConfig()),
 		TypeOrmModule.forFeature([Contact, ContactPhone]),
 		JwtModule.register(jwtConfig()),
-		forwardRef(() => BeaconModule),
-		forwardRef(() => ContactsModule),
-		forwardRef(() => SettingsModule),
+		BeaconModule,
+		ContactsModule,
+		SettingsModule,
 	],
 	controllers: [CRMCronsController],
 	providers: [Logger, Query, CrmCronsContactsService, ContactPhoneService],

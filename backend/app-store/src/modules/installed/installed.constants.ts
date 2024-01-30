@@ -1,7 +1,7 @@
-import { InstalledAppsModule } from './installed.module'
 import { InstalledAppsController } from './installed.controller'
-import { InstalledAppsService } from './installed.service'
 import { InstalledApp } from './installed.entity'
+import { InstalledAppsModule } from './installed.module'
+import { InstalledAppsService } from './installed.service'
 
 export const INSTALLED_APP_E = InstalledApp
 export type INSTALLED_APP_T = InstalledApp

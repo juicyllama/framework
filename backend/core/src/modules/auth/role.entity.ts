@@ -1,10 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
 import { IsEnum } from 'class-validator'
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Unique } from 'typeorm'
 import { BaseEntity } from '../../helpers/baseEntity'
 import { Account } from '../accounts/account.entity'
 import { User } from '../users/users.entity'
 import { UserRole } from '../users/users.enums'
-import { Unique } from 'typeorm'
 
 @Entity('users_accounts_roles')
 @Unique('users_accounts_roles_UNIQUE', ['user', 'account'])

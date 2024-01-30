@@ -1,3 +1,5 @@
+import { Dates } from '@juicyllama/utils'
+import { IsDateString, IsNumber } from 'class-validator'
 import {
 	Column,
 	CreateDateColumn,
@@ -7,8 +9,6 @@ import {
 	Unique,
 	UpdateDateColumn,
 } from 'typeorm'
-import { IsDateString, IsNumber } from 'class-validator'
-import { Dates } from '@juicyllama/utils'
 
 @Entity('fx_rates')
 @Unique(['date'])

@@ -1,8 +1,8 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique, JoinColumn } from 'typeorm'
 import { BaseEntity } from '@juicyllama/core'
 import { IsArray, IsBoolean, IsEnum, IsString, MaxLength, MinLength, IsNumber } from 'class-validator'
-import { AppCategory, AppIntegrationType, AppStoreIntegrationName } from './apps.enums'
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique, JoinColumn } from 'typeorm'
 import { AppSettingsDto } from './apps.dto'
+import { AppCategory, AppIntegrationType, AppStoreIntegrationName } from './apps.enums'
 
 @Entity('apps')
 @Unique('apps_UNIQUE', ['integration_name'])

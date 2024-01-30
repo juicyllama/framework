@@ -1,11 +1,11 @@
+import { Account, BaseEntity } from '@juicyllama/core'
+import { SupportedCurrencies } from '@juicyllama/utils'
+import { Expose } from 'class-transformer'
 import { IsArray, IsEnum, IsNumber, MaxLength, MinLength } from 'class-validator'
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
-import { Account, BaseEntity } from '@juicyllama/core'
-import { Expose } from 'class-transformer'
 import { Invoice } from '../invoices/invoices.entity'
-import { PaymentMethodType } from '../payment_methods/payment.methods.enums'
 import { PaymentMethod } from '../payment_methods/payment.methods.entity'
-import { SupportedCurrencies } from '@juicyllama/utils'
+import { PaymentMethodType } from '../payment_methods/payment.methods.enums'
 import { PaymentType } from './payments.enums'
 
 @Entity('billing_payments')

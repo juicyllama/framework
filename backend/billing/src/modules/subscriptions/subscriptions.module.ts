@@ -1,23 +1,16 @@
-import { forwardRef, Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { AuthModule, FxModule, Query, SettingsModule } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
-import { Subscription } from './subscriptions.entity'
+import { Module } from '@nestjs/common'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { ChargesModule } from '../charges/charges.module'
 import { SubscriptionsController } from './subscriptions.controller'
-import { SubscriptionsService } from './subscriptions.service'
-import { AccountModule, AuthModule, FxModule, Query, SettingsModule } from '@juicyllama/core'
 import { SubscriptionsCronController } from './subscriptions.cron.controller'
 import { SubscriptionsCronService } from './subscriptions.crons.service'
-import { ChargesModule } from '../charges/charges.module'
+import { Subscription } from './subscriptions.entity'
+import { SubscriptionsService } from './subscriptions.service'
 
 @Module({
-	imports: [
-		TypeOrmModule.forFeature([Subscription]),
-		forwardRef(() => AuthModule),
-		forwardRef(() => AccountModule),
-		forwardRef(() => ChargesModule),
-		forwardRef(() => SettingsModule),
-		forwardRef(() => FxModule),
-	],
+	imports: [TypeOrmModule.forFeature([Subscription]), AuthModule, ChargesModule, SettingsModule, FxModule],
 	controllers: [SubscriptionsController, SubscriptionsCronController],
 	providers: [SubscriptionsService, SubscriptionsCronService, Logger, Query],
 	exports: [SubscriptionsService],

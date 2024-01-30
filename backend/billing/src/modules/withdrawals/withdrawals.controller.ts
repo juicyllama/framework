@@ -1,37 +1,37 @@
-import { BadRequestException, Body, Controller, forwardRef, Inject, Post, Query, Req } from '@nestjs/common'
-import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
 import {
 	AccountId,
 	AccountService,
 	AuthenticatedRequest,
 	AuthService,
+	Query as JLQuery,
 	ReadManyDecorator,
 	UserAuth,
 	UserRole,
 	UsersService,
 } from '@juicyllama/core'
 import { SupportedCurrencies } from '@juicyllama/utils'
-import { WithdrawalsService } from './withdrawals.service'
-import { WithdrawalRequestDto } from './withdrawals.dto'
+import { BadRequestException, Body, Controller, Inject, Post, Query, Req } from '@nestjs/common'
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
+import { FindOptionsWhere, In } from 'typeorm'
 import { PaymentMethodsService } from '../payment_methods/payment.methods.service'
 import { WalletService } from '../wallet/wallet.service'
-import { FindOptionsWhere, In } from 'typeorm'
-import { WithdrawalOrderBy, WithdrawalRelations, WithdrawalSelect } from './withdrawals.enums'
-import { Query as JLQuery } from '@juicyllama/core/dist/utils/typeorm/Query'
 import { BILLING_WITHDRAWAL_NAME, BILLING_WITHDRAWAL_T, BILLING_WITHDRAWAL_E } from './withdrawals.constants'
+import { WithdrawalRequestDto } from './withdrawals.dto'
+import { WithdrawalOrderBy, WithdrawalRelations, WithdrawalSelect } from './withdrawals.enums'
+import { WithdrawalsService } from './withdrawals.service'
 
 @ApiTags('Withdrawals')
 @UserAuth()
 @Controller('billing/withdrawals')
 export class WithdrawalsController {
 	constructor(
-		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
-		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
-		@Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,
-		@Inject(forwardRef(() => PaymentMethodsService)) private readonly paymentMethodsService: PaymentMethodsService,
-		@Inject(forwardRef(() => WalletService)) private readonly walletService: WalletService,
-		@Inject(forwardRef(() => WithdrawalsService)) private readonly withdrawalsService: WithdrawalsService,
-		@Inject(forwardRef(() => JLQuery)) private readonly query: JLQuery<BILLING_WITHDRAWAL_T>,
+		private readonly accountService: AccountService,
+		private readonly authService: AuthService,
+		private readonly usersService: UsersService,
+		private readonly paymentMethodsService: PaymentMethodsService,
+		private readonly walletService: WalletService,
+		private readonly withdrawalsService: WithdrawalsService,
+		@Inject(JLQuery) private readonly query: JLQuery<BILLING_WITHDRAWAL_T>,
 	) {}
 
 	@ApiOperation({
@@ -90,7 +90,11 @@ export class WithdrawalsController {
 		required: false,
 		example: SupportedCurrencies.USD,
 	})
-	async findAll(@Req() req: AuthenticatedRequest, @Query() query: any, @AccountId() account_id: number): Promise<BILLING_WITHDRAWAL_T[]> {
+	async findAll(
+		@Req() req: AuthenticatedRequest,
+		@Query() query: any,
+		@AccountId() account_id: number,
+	): Promise<BILLING_WITHDRAWAL_T[]> {
 		await this.authService.check(req.user.user_id, account_id, [UserRole.OWNER, UserRole.ADMIN])
 
 		const where: FindOptionsWhere<BILLING_WITHDRAWAL_T>[] = [

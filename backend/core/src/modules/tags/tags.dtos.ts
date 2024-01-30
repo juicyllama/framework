@@ -1,8 +1,8 @@
-import { IsString, MaxLength, MinLength } from 'class-validator'
+import { Classes } from '@juicyllama/utils'
 import { PartialType } from '@nestjs/swagger'
+import { IsString, MaxLength, MinLength } from 'class-validator'
 import { SwaggerPropertyDecorator } from '../../decorators/Swagger.decorator'
 import { BaseResponseDto } from '../../types/common'
-import { Classes } from '@juicyllama/utils'
 
 export class TagDto {
 	@SwaggerPropertyDecorator({ description: 'The name of your tag', example: 'TAG' })

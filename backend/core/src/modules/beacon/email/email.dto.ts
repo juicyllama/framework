@@ -1,6 +1,6 @@
 import { IsEmail, IsEnum, IsNumber, IsObject, IsString } from 'class-validator'
-import { BeaconStatus } from '../beacon.enums'
 import { BeaconCommunicationDto, BeaconMessageCtaDto } from '../beacon.dto'
+import { BeaconStatus } from '../beacon.enums'
 
 export class BeaconEmailResponseDto {
 	@IsNumber()

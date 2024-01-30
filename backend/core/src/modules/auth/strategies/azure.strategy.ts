@@ -1,9 +1,9 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { Env } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
 import { PassportStrategy, AuthGuard } from '@nestjs/passport'
 import { BearerStrategy, IBearerStrategyOption } from 'passport-azure-ad'
-import { Env } from '@juicyllama/utils'
 import { defaultSSOString } from '../../../configs/sso.config.joi'
-import { UsersService } from '../../..'
+import { UsersService } from '../../users/users.service'
 import { AZURE_AD } from '../auth.constants'
 
 const AZURE_AD_CLIENT_ID = process.env.AZURE_AD_CLIENT_ID ?? defaultSSOString
@@ -33,7 +33,7 @@ export const enableAzureADStrategy =
 
 @Injectable()
 export class AzureADStrategy extends PassportStrategy(BearerStrategy, AZURE_AD) {
-	constructor(@Inject(forwardRef(() => UsersService)) private usersService: UsersService) {
+	constructor(private usersService: UsersService) {
 		if (!enableAzureADStrategy) throw new Error('Azure AD is not enabled')
 		super({
 			identityMetadata: `https://${config.metadata.authority}/${config.credentials.tenantID}/${config.metadata.version}/${config.metadata.discovery}`,
@@ -47,8 +47,6 @@ export class AzureADStrategy extends PassportStrategy(BearerStrategy, AZURE_AD) 
 			loggingNoPII: false,
 		} as IBearerStrategyOption)
 	}
-
-	
 
 	async validate(payload: any) {
 		return enableAzureADStrategy && payload['email'] && (await this.usersService.validateEmail(payload.email))
