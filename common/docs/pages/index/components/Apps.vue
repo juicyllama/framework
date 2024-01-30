@@ -3,7 +3,7 @@ import apps from '../../../assets/json/apps.json'
 </script>
 
 <template>
-  <div class="py-24 sm:py-32 dark bg-gray-900">
+  <div class="py-24 sm:py-32 bg-gray-900">
     <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl gap-16 sm:gap-y-24 grid lg:grid-cols-2 lg:items-center">
       <div class="">
         <h2 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl lg:text-5xl">

@@ -9,14 +9,23 @@ export default defineNuxtConfig({
 	  '@nuxtjs/fontaine',
 	  '@nuxtjs/google-fonts',
 	  'nuxt-og-image',
-	  '@nuxtjs/tailwindcss'
+	//   '@nuxtjs/tailwindcss'
 	],
+	css: [
+		'@/assets/css/classes-that-nuxt-missing.css',
+	  ],
 	hooks: {
 	  'components:extend': (components) => {
 		const globals = components.filter((c) => ['UButton', 'UIcon'].includes(c.pascalName))
-  
+
 		globals.forEach((c) => c.global = true)
 	  }
+	},
+	experimental: {
+		inlineSSRStyles: false
+	},
+	components: {
+		dirs: ['~/components']
 	},
 	colorMode: {
 		preference: 'dark',
