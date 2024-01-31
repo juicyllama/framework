@@ -36,6 +36,8 @@ pnpm link --global --dir apps/slack
 pnpm link --global --dir apps/wise
 pnpm link --global --dir apps/wordpress
 pnpm link --global --dir apps/xero-cc
+pnpm link --global --dir apps/semrush
+
 
 # NestJS DI
 pnpm link --global --dir node_modules/@nestjs/core
