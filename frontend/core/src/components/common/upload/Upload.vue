@@ -2,7 +2,7 @@
 	<q-btn @click="openUpload">
 		<slot />
 	</q-btn>
-	<UploadWizard v-model="show" :endpoint="endpoint" :allowedFileType="allowedFileType" />
+	<UploadWizard v-model="show" :endpoint="endpoint" :allowedFileType="allowedFileType" :columnsToPick="columnsToPick" />
 </template>
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
@@ -13,6 +13,7 @@ import { logger } from '../../../helpers/logger'
 const props = defineProps({
 	allowedFileType: String,
 	endpoint: String,
+	columnsToPick: Array<string>,
 })
 
 onMounted(() => {

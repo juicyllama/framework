@@ -9,10 +9,10 @@
 			</q-card-section>
 			<q-separator class="q-pa-none" />
 			<q-card-section class="q-pr-none q-pl-none">
-				<FirstScreen v-if="screen === 1" />
-				<SecondScreen v-else-if="screen === 2" />
-				<ThirdScreen v-else-if="screen === 3" />
-				<FourthScreen v-else-if="screen === 4" />
+				<FirstScreen v-if="store.getStep === 1" />
+				<SecondScreen v-else-if="store.getStep === 2" />
+				<ThirdScreen v-else-if="store.getStep === 3" />
+				<FourthScreen v-else-if="store.getStep === 4" />
 				<FifthScreen v-else :uploadResult="uploadResult" />
 			</q-card-section>
 			<q-card-actions class="footer q-pb-none">
@@ -47,8 +47,8 @@ const props = defineProps({
 	show: Boolean,
 	allowedFileType: String,
 	endpoint: String,
+	columnsToPick: Array<string>,
 })
-const screen = ref(1)
 const uploadResult = ref(null)
 
 const isOpen = computed({
@@ -61,31 +61,32 @@ const isOpen = computed({
 })
 
 const isNextButtonActive = computed(() => {
-	return screen.value != 5
+	return store.getStep != 5
 })
 const isBackButtonActive = computed(() => {
-	return screen.value != 1
+	return store.getStep
 })
 const isStartButtonActive = computed(() => {
-	return false
+	return store.getStep == 5
 })
 
 const onNextButtonClicked = () => {
-	if (screen.value == 1 && (!store.getFile || store.getFile.file == null)) {
+	if (store.getStep == 1 && (!store.getFile || store.getFile.file == null)) {
 		return
 	}
-	screen.value++
+	store.setNextStep()
 }
 const onBackButtonClicked = () => {
-	screen.value--
+	store.setPrevStep()
 }
 
 onMounted(() => {
 	store.setFileType(props.allowedFileType)
+	store.setColumnsToPick(props.columnsToPick)
 })
 
 watch(screen, () => {
-	if (screen.value === 5) {
+	if (store.getStep === 5) {
 		onStartButtonClicked()
 	}
 })
@@ -111,7 +112,7 @@ const onStartButtonClicked = async () => {
 		const res = await uploadFile(props.endpoint, form)
 		uploadResult.value = {
 			status: 'SUCCESS',
-			details: res,
+			details: res.data,
 		}
 	} catch (e) {
 		console.log(e)
@@ -120,7 +121,7 @@ const onStartButtonClicked = async () => {
 			details: e,
 		}
 	} finally {
-		screen.value = 5
+		store.setStep(5)
 		store.setUploadResult(uploadResult.value)
 	}
 }

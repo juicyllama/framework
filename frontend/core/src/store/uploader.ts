@@ -7,7 +7,7 @@ export const useUploaderStore = defineStore('uploader', {
 		urls: [],
 		encoding: 'utf-8',
 		delimeters: {},
-		collumnsToPick: [],
+		columnsToPick: [],
 		allowedFileType: '',
 		importMode: '',
 		mappers: [],
@@ -25,6 +25,9 @@ export const useUploaderStore = defineStore('uploader', {
 		},
 	},
 	actions: {
+		setColumnsToPick(data: Array<string>) {
+			this.columnsToPick = data
+		},
 		setDelimetersData(data) {
 			this.delimeters = data
 		},
@@ -42,6 +45,12 @@ export const useUploaderStore = defineStore('uploader', {
 		},
 		setImportMode(importMode) {
 			this.importMode = importMode
+		},
+		setStep(step: number) {
+			this.step = step
+		},
+		setPrevStep() {
+			this.step--
 		},
 		setNextStep() {
 			this.step++

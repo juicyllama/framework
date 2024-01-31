@@ -20,7 +20,7 @@
 					<br />
 				</q-banner>
 				<p>
-					{{ uploadResult.details.error[0] }}
+					{{ uploadResult.details.errors[0] }}
 				</p>
 			</template>
 			<q-banner v-else inline-actions class="text-white bg-green">
@@ -33,6 +33,14 @@
 				Updated: {{ uploadResult.details.updated }}<br />
 				Deleted: {{ uploadResult.details.deleted }}<br />
 				Errored: {{ uploadResult.details.errored }}<br />
+				<div v-if="uploadResult.details.errored > 0">
+					First 5 errors:
+					<ul>
+						<li v-for="error in uploadResult.details.errors.slice(0,5)">
+							{{ error }}
+						</li>
+					</ul>
+				</div>
 			</p>
 		</template>
 	</q-card-section>
@@ -46,12 +54,12 @@ type uploadResult = {
 	status: string
 	details?: {
 		total: number
-		processed: string
-		created: string
-		updated: string
-		deleted: string
-		errored: string
-		error: string[]
+		processed: number
+		created: number
+		updated: number
+		deleted: number
+		errored: number
+		errors: string[]
 	}
 }
 
