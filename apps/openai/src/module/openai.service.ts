@@ -16,8 +16,6 @@ export class OpenaiService {
 	): Promise<OpenAI.Chat.ChatCompletion> {
 		const domain = 'app::openai::ask'
 
-		this.logger.debug(`[${domain}] Request: ${JSON.stringify(options, null, 2)}`)
-
 		const params = options as OpenAI.Chat.ChatCompletionCreateParamsNonStreaming
 
 		if (!params.model) {
@@ -29,11 +27,9 @@ export class OpenaiService {
 				apiKey: this.configService.get<string>('openai.OPENAI_API_KEY'),
 			})
 
-			const chatCompletion = (await openai.chat.completions.create(params)) as OpenAI.Chat.ChatCompletion
-			this.logger.debug(`[${domain}] Response: ${JSON.stringify(chatCompletion, null, 2)}`)
-			return chatCompletion
+			return (await openai.chat.completions.create(params)) as OpenAI.Chat.ChatCompletion
 		} catch (e) {
-			this.logger.warn(`[${domain}] Error: ${JSON.stringify(e.message, null, 2)}`, e.response)
+			this.logger.error(`[${domain}] Error: ${JSON.stringify(e.message, null, 2)}`, e.response)
 		}
 	}
 

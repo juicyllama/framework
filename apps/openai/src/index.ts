@@ -12,3 +12,8 @@ import { OpenaiService } from './module/openai.service'
 
 // DTOs
 export { OpenaiModule, OpenaiService }
+
+//Typing
+import OpenAI from 'openai'
+import { DeepPartial } from 'typeorm'
+export type OpenAiOptions = DeepPartial<OpenAI.Chat.ChatCompletionCreateParamsNonStreaming>
