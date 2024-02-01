@@ -6,14 +6,9 @@
 		</div>
 	</q-card-section>
 	<q-card-section>
-		<q-linear-progress
-			v-if="uploadResult.status === 'LOADING'"
-			dark
-			rounded
-			indeterminate
-			color="secondary"
+		<q-linear-progress v-if="uploadResult.status === 'LOADING'" dark rounded indeterminate color="secondary"
 			class="q-mt-sm" />
-		<template v-else>
+		<template v-else-if="uploadResult.status !== 'IDLE'">
 			<template v-if="uploadResult.status === 'ERROR'">
 				<q-banner inline-actions class="text-white bg-red">
 					There was one or more errors during the import process.
@@ -26,22 +21,24 @@
 			<q-banner v-else inline-actions class="text-white bg-green">
 				Import file was successfully uploaded!
 			</q-banner>
-			<p>
-				Total processed: {{ uploadResult.details.total }}<br />
-				Processed: {{ uploadResult.details.processed }}<br />
-				Created: {{ uploadResult.details.created }}<br />
-				Updated: {{ uploadResult.details.updated }}<br />
-				Deleted: {{ uploadResult.details.deleted }}<br />
-				Errored: {{ uploadResult.details.errored }}<br />
+			<div>
+				<p>
+					Total processed: {{ uploadResult.details.total }}<br />
+					Processed: {{ uploadResult.details.processed }}<br />
+					Created: {{ uploadResult.details.created }}<br />
+					Updated: {{ uploadResult.details.updated }}<br />
+					Deleted: {{ uploadResult.details.deleted }}<br />
+					Errored: {{ uploadResult.details.errored }}
+				</p>
 				<div v-if="uploadResult.details.errored > 0">
-					First 5 errors:
-					<ul>
-						<li v-for="error in uploadResult.details.errors.slice(0,5)">
-							{{ error }}
+					Errors:
+					<ol :style="{ overflowY: 'scroll', overflowX: 'scroll', maxHeight: '400px', width: '100%' }">
+						<li v-for="(error, index) in uploadResult.details.errors" :key="index">
+							<pre>{{ error }}</pre>
 						</li>
-					</ul>
+					</ol>
 				</div>
-			</p>
+			</div>
 		</template>
 	</q-card-section>
 </template>

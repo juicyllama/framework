@@ -3,6 +3,7 @@
 		<div class="text-weight-bold">
 			You can define the field mappings. Set mappings to specify the correspondence between fields in the Source
 			and fields in the Destination.
+			<b>Choose a single Primary Key</b>
 
 		</div>
 	</q-card-section>
@@ -123,7 +124,7 @@ watch(
 )
 
 const readCSVFileHeaders = (): Promise<string[]> => {
-	const promise = new Promise<string[]>((resolve, reject) => {
+	const promise = new Promise<string[]>((resolve) => {
 		const file = store.getFile.file as File
 		const reader = new FileReader()
 		reader.onload = () => {
@@ -140,7 +141,7 @@ const readCSVFileHeaders = (): Promise<string[]> => {
 }
 
 const readJSONHeaders = (): Promise<string[]> => {
-	const promise = new Promise<string[]>((resolve, reject) => {
+	const promise = new Promise<string[]>((resolve) => {
 		const file = store.getFile.file as File
 		const reader = new FileReader()
 		reader.onload = () => {

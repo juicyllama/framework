@@ -13,7 +13,7 @@
 				<SecondScreen v-else-if="store.getStep === 2" />
 				<ThirdScreen v-else-if="store.getStep === 3" />
 				<FourthScreen v-else-if="store.getStep === 4" />
-				<FifthScreen v-else :uploadResult="uploadResult" />
+				<FifthScreen v-else :uploadResult="store.getUploadResult" />
 			</q-card-section>
 			<q-card-actions class="footer q-pb-none">
 				<WizardFooter
@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch, onMounted } from 'vue'
+import { computed, watch, onMounted } from 'vue'
 import WizardFooter from './WizardFooter.vue'
 import FirstScreen from './FirstScreen.vue'
 import SecondScreen from './SecondScreen.vue'
@@ -38,7 +38,8 @@ import FourthScreen from './FourthScreen.vue'
 import FifthScreen from './FifthScreen.vue'
 
 import { uploadFile } from '../../../../services/upload'
-import { useUploaderStore } from '../../../../store/uploader'
+import { UploadStatus, useUploaderStore } from '../../../../store/uploader'
+import { FILE_TYPES } from '../config'
 
 const store = useUploaderStore()
 
@@ -49,7 +50,6 @@ const props = defineProps({
 	endpoint: String,
 	columnsToPick: Array<string>,
 })
-const uploadResult = ref(null)
 
 const isOpen = computed({
 	get() {
@@ -61,13 +61,16 @@ const isOpen = computed({
 })
 
 const isNextButtonActive = computed(() => {
-	return store.getStep != 5
+	return store.getStep < 3 || (
+		store.getStep < 5 &&
+		store.getMappers.filter(m => !!m['primaryKey']).length === 1
+	)
 })
 const isBackButtonActive = computed(() => {
 	return store.getStep
 })
 const isStartButtonActive = computed(() => {
-	return store.getStep == 5
+	return store.getStep == 5 && store.getUploadResult.status !== UploadStatus.LOADING
 })
 
 const onNextButtonClicked = () => {
@@ -81,7 +84,7 @@ const onBackButtonClicked = () => {
 }
 
 onMounted(() => {
-	store.setFileType(props.allowedFileType)
+	store.setFileType(FILE_TYPES[props.allowedFileType])
 	store.setColumnsToPick(props.columnsToPick)
 })
 
@@ -92,6 +95,10 @@ watch(screen, () => {
 })
 const onStartButtonClicked = async () => {
 	const resultingMap = {}
+	store.setUploadResult({
+		status: UploadStatus.LOADING,
+		details: {},
+	})
 	store.mappers.forEach(line => {
 		resultingMap[line.source] = line.target || line.source
 	})
@@ -101,6 +108,7 @@ const onStartButtonClicked = async () => {
 	form.append('upload_type', props.allowedFileType)
 	form.append('mappers', JSON.stringify(resultingMap))
 	form.append('import_mode', store.importMode)
+	form.append('dedup_field', store.getPrimaryKey)
 
 	try {
 		// await uploadMetadata({
@@ -110,19 +118,18 @@ const onStartButtonClicked = async () => {
 		// })
 
 		const res = await uploadFile(props.endpoint, form)
-		uploadResult.value = {
-			status: 'SUCCESS',
+		store.setUploadResult({
+			status: UploadStatus.SUCCESS,
 			details: res.data,
-		}
+		})
 	} catch (e) {
 		console.log(e)
-		uploadResult.value = {
-			status: 'ERROR',
+		store.setUploadResult({
+			status: UploadStatus.ERROR,
 			details: e,
-		}
+		})
 	} finally {
 		store.setStep(5)
-		store.setUploadResult(uploadResult.value)
 	}
 }
 </script>
