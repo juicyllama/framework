@@ -464,8 +464,8 @@ export class AuthService extends BaseService<T> {
 				throw new UnauthorizedException()
 			}
 			const referrer_url = new URL(referrer)
-			
-			if(allowed instanceof Array) {
+
+			if (allowed instanceof Array) {
 				if (!allowed.includes(referrer_url.origin)) {
 					this.logger.error(`[${domain}] Referrer does not match`, {
 						referrer: referrer_url,

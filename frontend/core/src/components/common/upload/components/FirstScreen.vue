@@ -17,14 +17,13 @@
 	</q-dialog> -->
 
 	<q-card-section class="q-pt-none q-pb-none">
-		<div class="text-weight-bold">Please provide the file(s) and/or URL(s) to import.</div>
+		<div class="text-weight-bold">Please provide the file(s) and/or URL(s) to import. Max 10Mb.</div>
 	</q-card-section>
 	<q-card-section>
 		<q-table
 			flat
 			bordered
 			hide-bottom
-			:row-per-page-options="[0]"
 			class="table"
 			virtual-scroll
 			:columns="columns"
@@ -102,7 +101,7 @@ const rows = ref<SourceEntry[]>([])
 watch(file, fileValue => {
 	if (fileValue) {
 		const file = { source: fileValue.name, file: fileValue, type: SourceType.FILE }
-		rows.value.push(file)
+		rows.value = [file]
 		store.setFile(file)
 	}
 })
