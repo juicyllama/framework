@@ -48,4 +48,4 @@ pnpm link --global --dir node_modules/@nestjs/config
 pnpm link --global --dir node_modules/@nestjs/platform-express
 pnpm link --global --dir node_modules/@nestjs/microservices
 pnpm link --global --dir node_modules/@nestjs/serve-static
-pnpm link --global --dir node_modules/joi
+pnpm link --global --dir node_modules/@nestjs/swagger

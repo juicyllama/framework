@@ -269,9 +269,10 @@ export class Query<T extends ObjectLiteral> {
 	 * Update a record - must include primary_key for lookup
 	 * @param repository
 	 * @param data
+	 * @param relations - specify any relations you would like to return with the result
 	 */
 
-	async update(repository: Repository<T>, data: DeepPartial<T>): Promise<T> {
+	async update(repository: Repository<T>, data: DeepPartial<T>, relations: string[] = []): Promise<T> {
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][UPDATE][${repository.metadata.tableName}]`, data)
 		}
@@ -286,7 +287,7 @@ export class Query<T extends ObjectLiteral> {
 
 		try {
 			await repository.update(data[this.getPrimaryKey(repository)], <any>data)
-			return await this.findOneById(repository, data[this.getPrimaryKey(repository)])
+			return await this.findOneById(repository, data[this.getPrimaryKey(repository)], relations)
 		} catch (e) {
 			this.logUpdateError(e, repository, data)
 			throw e
