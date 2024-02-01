@@ -19,15 +19,15 @@ export class BacklinksService {
 
     }
 
-	async overview(queryParams: Partial<BacklinksParams>) {
-		const domain = 'app::semrush::becklinks::overview'
+	async authorityScore(queryParams: Partial<BacklinksParams>) {
+		const domain = 'app::semrush::backlinks::authorityScore'
 
 		const qs = querystring.stringify(queryParams)
 
 		try {
 			const response = await this.api.get(
 				domain,
-				`${ENDPOINT}/analytics/?key=${this.key}&type=backlinks_ascore_profile&${qs}`,
+				`${ENDPOINT}/analytics/v1/?key=${this.key}&type=backlinks_ascore_profile&${qs}`,
 			)
 
 			return parseTextData(response)
