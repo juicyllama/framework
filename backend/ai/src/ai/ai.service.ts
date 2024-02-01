@@ -83,9 +83,9 @@ export class AiService {
 					ai.success = AiSuccessType.SUCCESS
 				} else {
 					const error = `Failed to parse response from OpenAI`
-					this.logger.log(`[${domain}] ${error}`)
 					ai.success = AiSuccessType.ERROR
 					ai.error_message = error
+					this.logger.error(`[${domain}] ${error}`, result)
 				}
 			} catch (e: any) {
 				this.logger.error(`[${domain}] ${e.message}`, e)
