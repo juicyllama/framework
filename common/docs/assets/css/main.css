@@ -110,15 +110,4 @@ button[aria-label="Color Mode"] {
     font-size: 3rem;
     line-height: 1;
   }
-/* to fix the problem that in production that Desktop size doesn't show
-	collumns strangely */
-	/* main > div > div, main > div > div > div > div {
-		gap: 2rem !important;
-	}
-	main > div > div, main > div > div > div > div {
-		grid-template-columns: repeat(10,minmax(0,1fr)) !important;
-	}
-	main > div > div, main > div > div > div > div {
-		display: grid !important;
-	} */
 }
