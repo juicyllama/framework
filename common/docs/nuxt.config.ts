@@ -12,7 +12,8 @@ export default defineNuxtConfig({
 	//   '@nuxtjs/tailwindcss'
 	],
 	css: [
-		'@/assets/css/classes-that-nuxt-missing.css',
+		// '@/assets/css/classes-that-nuxt-missing.css',
+		'@/assets/css/main.css',
 	  ],
 	hooks: {
 	  'components:extend': (components) => {
