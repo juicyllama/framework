@@ -49,16 +49,17 @@ import type { TableColumn } from '@juicyllama/frontend-core'
 
 Control what options are shown/hidden for the table.
 
-| Property         | Type        | Description                                                                             |
-| ---------------- | ----------- | --------------------------------------------------------------------------------------- |
-| `clickable`      | `[boolean]` | If the row is clickable                                                                 |
-| `column_filter`  | `[boolean]` | If the column filter is enabled                                                         |
-| `search_filter`  | `[object]`  | If the search filter is enabled, pass the [SearchFilterOptions](#search-filter-options) |
-| `add_record`     | `[boolean]` | If the add record button is enabled                                                     |
-| `update_inline`  | `[boolean]` | If the inline update is enabled                                                         |
-| `update_record`  | `[boolean]` | If the update record icon is added                                                      |
-| `delete_record`  | `[boolean]` | If the delete record icon is added                                                      |
-| `custom_buttons` | `[array]`   | The array of [TableCustomButton](#table-custom-button) objects                          |
+| Property           | Type        | Description                                                                             |
+| ------------------ | ----------- | --------------------------------------------------------------------------------------- |
+| `clickable`        | `[boolean]` | If the row is clickable                                                                 |
+| `column_filter`    | `[boolean]` | If the column filter is enabled                                                         |
+| `search_filter`    | `[object]`  | If the search filter is enabled, pass the [SearchFilterOptions](#search-filter-options) |
+| `advanced_filters` | `[boolean]` | Display button that shows popum with detailed filter per each collumn                  |
+| `add_record`       | `[boolean]` | If the add record button is enabled                                                     |
+| `update_inline`    | `[boolean]` | If the inline update is enabled                                                         |
+| `update_record`    | `[boolean]` | If the update record icon is added                                                      |
+| `delete_record`    | `[boolean]` | If the delete record icon is added                                                      |
+| `custom_buttons`   | `[array]`   | The array of [TableCustomButton](#table-custom-button) objects                          |
 
 ## Redirects
 

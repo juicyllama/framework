@@ -9,11 +9,11 @@
 			</q-card-section>
 			<q-separator class="q-pa-none" />
 			<q-card-section class="q-pr-none q-pl-none">
-				<FirstScreen v-if="screen === 1" />
-				<SecondScreen v-else-if="screen === 2" />
-				<ThirdScreen v-else-if="screen === 3" />
-				<FourthScreen v-else-if="screen === 4" />
-				<FifthScreen v-else :uploadResult="uploadResult" />
+				<FirstScreen v-if="store.getStep === 1" />
+				<SecondScreen v-else-if="store.getStep === 2" />
+				<ThirdScreen v-else-if="store.getStep === 3" />
+				<FourthScreen v-else-if="store.getStep === 4" />
+				<FifthScreen v-else :uploadResult="store.getUploadResult" />
 			</q-card-section>
 			<q-card-actions class="footer q-pb-none">
 				<WizardFooter
@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch, onMounted } from 'vue'
+import { computed, watch, onMounted } from 'vue'
 import WizardFooter from './WizardFooter.vue'
 import FirstScreen from './FirstScreen.vue'
 import SecondScreen from './SecondScreen.vue'
@@ -38,7 +38,8 @@ import FourthScreen from './FourthScreen.vue'
 import FifthScreen from './FifthScreen.vue'
 
 import { uploadFile } from '../../../../services/upload'
-import { useUploaderStore } from '../../../../store/uploader'
+import { UploadStatus, useUploaderStore } from '../../../../store/uploader'
+import { FILE_TYPES } from '../config'
 
 const store = useUploaderStore()
 
@@ -47,9 +48,8 @@ const props = defineProps({
 	show: Boolean,
 	allowedFileType: String,
 	endpoint: String,
+	columnsToPick: Array<string>,
 })
-const screen = ref(1)
-const uploadResult = ref(null)
 
 const isOpen = computed({
 	get() {
@@ -61,36 +61,44 @@ const isOpen = computed({
 })
 
 const isNextButtonActive = computed(() => {
-	return screen.value != 5
+	return store.getStep < 3 || (
+		store.getStep < 5 &&
+		store.getMappers.filter(m => !!m['primaryKey']).length === 1
+	)
 })
 const isBackButtonActive = computed(() => {
-	return screen.value != 1
+	return store.getStep
 })
 const isStartButtonActive = computed(() => {
-	return false
+	return store.getStep == 5 && store.getUploadResult.status !== UploadStatus.LOADING
 })
 
 const onNextButtonClicked = () => {
-	if (screen.value == 1 && (!store.getFile || store.getFile.file == null)) {
+	if (store.getStep == 1 && (!store.getFile || store.getFile.file == null)) {
 		return
 	}
-	screen.value++
+	store.setNextStep()
 }
 const onBackButtonClicked = () => {
-	screen.value--
+	store.setPrevStep()
 }
 
 onMounted(() => {
-	store.setFileType(props.allowedFileType)
+	store.setFileType(FILE_TYPES[props.allowedFileType])
+	store.setColumnsToPick(props.columnsToPick)
 })
 
 watch(screen, () => {
-	if (screen.value === 5) {
+	if (store.getStep === 5) {
 		onStartButtonClicked()
 	}
 })
 const onStartButtonClicked = async () => {
 	const resultingMap = {}
+	store.setUploadResult({
+		status: UploadStatus.LOADING,
+		details: {},
+	})
 	store.mappers.forEach(line => {
 		resultingMap[line.source] = line.target || line.source
 	})
@@ -100,6 +108,7 @@ const onStartButtonClicked = async () => {
 	form.append('upload_type', props.allowedFileType)
 	form.append('mappers', JSON.stringify(resultingMap))
 	form.append('import_mode', store.importMode)
+	form.append('dedup_field', store.getPrimaryKey)
 
 	try {
 		// await uploadMetadata({
@@ -109,19 +118,18 @@ const onStartButtonClicked = async () => {
 		// })
 
 		const res = await uploadFile(props.endpoint, form)
-		uploadResult.value = {
-			status: 'SUCCESS',
-			details: res,
-		}
+		store.setUploadResult({
+			status: UploadStatus.SUCCESS,
+			details: res.data,
+		})
 	} catch (e) {
 		console.log(e)
-		uploadResult.value = {
-			status: 'ERROR',
+		store.setUploadResult({
+			status: UploadStatus.ERROR,
 			details: e,
-		}
+		})
 	} finally {
-		screen.value = 5
-		store.setUploadResult(uploadResult.value)
+		store.setStep(5)
 	}
 }
 </script>

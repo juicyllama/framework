@@ -47,7 +47,7 @@ const links = computed(() => [toc?.bottom?.edit && {
 
 <template>
   <UPage>
-    <UPageHeader :title="page.title" :description="page.description" :links="page.links" :headline="headline" />
+    <!-- <UPageHeader :title="page.title" :description="page.description" :links="page.links" :headline="headline" /> -->
 
     <UPageBody prose>
       <ContentRenderer v-if="page.body" :value="page" />

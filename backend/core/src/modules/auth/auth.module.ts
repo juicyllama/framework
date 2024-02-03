@@ -1,10 +1,5 @@
 import { forwardRef, MiddlewareConsumer, Module } from '@nestjs/common'
-import { CacheModule } from '@nestjs/cache-manager'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { JwtModule } from '@nestjs/jwt'
-import { ConfigModule } from '@nestjs/config'
-import cacheConfig from '../../configs/cache.config'
-import { databaseConfig, jwtConfig, ssoConfig } from '../../configs'
 import { PassportModule } from '@nestjs/passport'
 import { UsersModule } from '../users/users.module'
 import { AccountModule } from '../accounts/account.module'
@@ -16,15 +11,15 @@ import { CronStrategy } from './strategies/cron.strategy'
 import { BasicStrategy } from './strategies/basic.strategy'
 import { GoogleStrategy, enableGoogleStrategy } from './strategies/google.strategy'
 import { AzureADStrategy, enableAzureADStrategy } from './strategies/azure.strategy'
-import { Env, Logger } from '@juicyllama/utils'
+import { Logger } from '@juicyllama/utils'
 import { Query } from '../../utils/typeorm/Query'
 import { BeaconModule } from '../beacon/beacon.module'
 import { SettingsModule } from '../settings/settings.module'
 import { AuthController } from './auth.controller'
 import { MiddlewareAccountId } from '../../middleware'
-import Joi from 'joi'
-import { ssoConfigJoi } from '../../configs/sso.config.joi'
 import { enableLinkedinStrategy, LinkedinStrategy } from './strategies/linkedin.strategy'
+import { JwtModule } from '@nestjs/jwt'
+import { jwtConfig } from '../../configs'
 
 const strategies = []
 if (enableAzureADStrategy) {
@@ -39,15 +34,7 @@ if (enableLinkedinStrategy) {
 
 @Module({
 	imports: [
-		ConfigModule.forRoot({
-			load: [cacheConfig, jwtConfig, databaseConfig, ssoConfig],
-			isGlobal: true,
-			envFilePath: '.env',
-			validationSchema: Env.IsNotTest() ? Joi.object(ssoConfigJoi) : null,
-		}),
-		CacheModule.registerAsync(cacheConfig()),
 		JwtModule.register(jwtConfig()),
-		TypeOrmModule.forRoot(databaseConfig()),
 		TypeOrmModule.forFeature([Role]),
 		forwardRef(() => AccountModule),
 		forwardRef(() => BeaconModule),
