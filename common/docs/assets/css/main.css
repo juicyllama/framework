@@ -83,13 +83,6 @@ p a:hover {
   }
 }
 
-@media (min-width: 1024px) {
-  .lg\:text-5xl {
-    font-size: 3rem;
-    line-height: 1;
-  }
-}
-
 .card {
   border-radius: 0.5rem;
   background-color: var(--card-backgound-color);
@@ -110,4 +103,22 @@ button[aria-label="Color Mode"] {
 .app-content-alert-component.alert-warning a{
 	color: rgb(194 65 12 / var(--tw-text-opacity));
 	text-decoration: underline;
+}
+
+@media (min-width: 1024px) {
+  .lg\:text-5xl {
+    font-size: 3rem;
+    line-height: 1;
+  }
+/* to fix the problem that in production that Desktop size doesn't show
+	collumns strangely */
+	main > div > div, main > div > div > div > div {
+		gap: 2rem !important;
+	}
+	main > div > div, main > div > div > div > div {
+		grid-template-columns: repeat(10,minmax(0,1fr)) !important;
+	}
+	main > div > div, main > div > div > div > div {
+		display: grid !important;
+	}
 }
