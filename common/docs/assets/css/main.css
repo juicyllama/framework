@@ -112,7 +112,7 @@ button[aria-label="Color Mode"] {
   }
 /* to fix the problem that in production that Desktop size doesn't show
 	collumns strangely */
-	main > div > div, main > div > div > div > div {
+	/* main > div > div, main > div > div > div > div {
 		gap: 2rem !important;
 	}
 	main > div > div, main > div > div > div > div {
@@ -120,5 +120,5 @@ button[aria-label="Color Mode"] {
 	}
 	main > div > div, main > div > div > div > div {
 		display: grid !important;
-	}
+	} */
 }
