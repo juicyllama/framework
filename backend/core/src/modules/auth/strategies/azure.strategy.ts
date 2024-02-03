@@ -48,8 +48,6 @@ export class AzureADStrategy extends PassportStrategy(BearerStrategy, AZURE_AD) 
 		} as IBearerStrategyOption)
 	}
 
-	
-
 	async validate(payload: any) {
 		return enableAzureADStrategy && payload['email'] && (await this.usersService.validateEmail(payload.email))
 	}

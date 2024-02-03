@@ -30,6 +30,7 @@ export const UserStore = defineStore('user', {
 		preferences: window.localStorage.getItem('user_preferences')
 			? <UserPreferences>JSON.parse(window.localStorage.getItem('user_preferences'))
 			: null,
+		preLoginRedirect: window.localStorage.getItem('preLoginRedirect') ? <string>window.localStorage.getItem('preLoginRedirect') : null,
 	}),
 	actions: {
 		async setUser(user: T): Promise<T> {
@@ -47,6 +48,12 @@ export const UserStore = defineStore('user', {
 			window.localStorage.setItem('user_preferences', JSON.stringify(merged))
 			this.$state.preferences = merged
 			return merged
+		},
+
+		async setPreLoginRedirect(redirect: string): Promise<string> {
+			window.localStorage.setItem('preLoginRedirect', redirect)
+			this.$state.preLoginRedirect = redirect
+			return redirect
 		},
 
 		async login(data: UserLogin, q?: QVueGlobals, router?: Router): Promise<User> {
@@ -232,5 +239,8 @@ export const UserStore = defineStore('user', {
 		getUser(state): User {
 			return state.user ?? null
 		},
+		getPreLoginRedirect(state): string {
+			return state.preLoginRedirect ?? null
+		}
 	}
 })

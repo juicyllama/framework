@@ -46,6 +46,11 @@ const state = reactive(<AuthFormState>{
 
 const loading = ref(false)
 
+//if there is a prelogin redirect, redirect to it (useful for onboaridng flows, oauth etc)
+if(userStore.getPreLoginRedirect){
+	window.location.href = userStore.getPreLoginRedirect
+}
+
 if (route.query.code) {
 	try {
 		switch (localStorage.getItem('OAuthType')) {

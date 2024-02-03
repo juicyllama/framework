@@ -1,7 +1,7 @@
 {
-    "name": "@juicyllama/ai",
-    "version": "0.2.1",
-    "description": "Juicyllama NestJs AI Module",
+    "name": "@juicyllama/app-semrush",
+    "version": "0.1.0",
+    "description": "Juicyllama Semrush App",
     "author": {
         "name": "JuicyLlama Studio",
         "email": "studio@juicyllama.com",
@@ -13,7 +13,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/juicyllama/framework/tree/main/backend/ai"
+        "url": "https://github.com/juicyllama/framework/tree/main/apps/semrush"
     },
     "bugs": "https://github.com/juicyllama/framework",
     "license": "0BSD",
@@ -28,6 +28,7 @@
         "prebuild": "rimraf dist",
         "prepare": "pnpm run build",
         "build": "tsc",
+        "start:dev": "tsc -w",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests",
