@@ -11,7 +11,7 @@ export interface DomainVsDomainParams {
 }
 
 
-export interface BacklinksParams{
+export interface AuthorityScoreParams{
     target: string
     target_type: string
 }

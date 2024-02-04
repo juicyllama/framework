@@ -4,7 +4,7 @@ import { Api, Logger } from '@juicyllama/utils'
 import { ENDPOINT } from '../../utils/constants'
 import { parseTextData } from '../../utils/textToObj'
 import querystring from 'querystring'
-import { BacklinksParams } from '../../utils/intefaces'
+import { AuthorityScoreParams } from '../../utils/intefaces'
 
 @Injectable()
 export class BacklinksService {
@@ -16,10 +16,9 @@ export class BacklinksService {
 		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
 	) {
         this.key = this.configService.get<string>('semrush.SEMRUSH_API_KEY');
-
     }
 
-	async authorityScore(queryParams: Partial<BacklinksParams>) {
+	async authorityScore(queryParams: Partial<AuthorityScoreParams>) {
 		const domain = 'app::semrush::backlinks::authorityScore'
 
 		const qs = querystring.stringify(queryParams)
