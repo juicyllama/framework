@@ -6,9 +6,13 @@ export function parseTextData(input: string): object[] {
 		const obj: any = {}
 		headers.forEach((header, index) => {
 			// transform key to camelCase
-			let key = header.replace(/[^a-zA-Z0-9]+(.)/g, (_match, chr) => chr.toUpperCase())
+			let key: string
+			if (header.includes('.')) {
+				key = header
+			} else {
+				key = header.replace(/[^a-zA-Z0-9]+(.)/g, (_match, chr) => chr.toUpperCase())
+			}
 			key = key.charAt(0).toLowerCase() + key.slice(1)
-
 			obj[key] = values[index]
 		})
 		return obj
