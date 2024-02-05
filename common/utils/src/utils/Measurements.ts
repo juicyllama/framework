@@ -1,4 +1,17 @@
 export class Measurements {
+
+	static Grams = {
+		abbreviation: 'g',
+		name: 'gram',
+		name_plural: 'grams',
+	}
+
+	static Ounces = {
+		abbreviation: 'oz',
+		name: 'ounce',
+		name_plural: 'ounces',
+	}
+
 	/**
 	 * Convert lbs to kg
 	 *
@@ -19,6 +32,14 @@ export class Measurements {
 
 	static KgsToLbs(number: number): number {
 		return Number((Number(number) * 2.20462).toFixed(2))
+	}
+
+	/**
+	 * Convert grams to oz
+	 */
+
+	static GramsToOz(number: number): number {
+		return Number((Number(number) * 0.035274).toFixed(2))
 	}
 
 	/**
