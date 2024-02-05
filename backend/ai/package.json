@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/ai",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "Juicyllama NestJs AI Module",
     "author": {
         "name": "JuicyLlama Studio",

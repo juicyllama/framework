@@ -13,6 +13,7 @@ export default defineNuxtConfig({
 	],
 	css: [
 		'@/assets/css/classes-that-nuxt-missing.css',
+		'@/assets/css/main.css',
 	  ],
 	hooks: {
 	  'components:extend': (components) => {

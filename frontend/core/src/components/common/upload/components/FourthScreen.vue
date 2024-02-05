@@ -10,29 +10,29 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { useUploaderStore } from '../../../../store/uploader'
+import { useUploaderStore, UploadMode } from '../../../../store/uploader'
 
 const store = useUploaderStore()
 
-const options = [
+const options: Array<{ label: string, value: UploadMode }> = [
 	{
-		label: 'Update: update records in the destination with matching records from source',
-		value: 'UPSERT',
+		label: 'Append/Update: update records in the destination with matching records from source',
+		value: UploadMode.UPSERT,
 	},
 	{
-		label: 'Append/Update: if records exist in destination, update it. Otherwise, add it',
-		value: 'CREATE',
+		label: 'Create: create new records in the destination from the source',
+		value: UploadMode.CREATE,
 	},
 	{
 		label: 'Delete: delete records in destination that match records in source',
-		value: 'DELETE',
+		value: UploadMode.DELETE,
 	},
 	{
-		label: 'Copy: delete all records in destination, repopulate from the source',
-		value: 'REPOPULATE',
+		label: 'Repopulate: delete all records in destination, repopulate from the source',
+		value: UploadMode.REPOPULATE,
 	},
 ]
-const chosenImportMode = ref(options[0])
+const chosenImportMode = ref<UploadMode>(store.importMode || options[0].value)
 
 watch(chosenImportMode, () => {
 	store.setImportMode(chosenImportMode.value)

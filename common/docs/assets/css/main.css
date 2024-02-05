@@ -83,13 +83,6 @@ p a:hover {
   }
 }
 
-@media (min-width: 1024px) {
-  .lg\:text-5xl {
-    font-size: 3rem;
-    line-height: 1;
-  }
-}
-
 .card {
   border-radius: 0.5rem;
   background-color: var(--card-backgound-color);
@@ -110,4 +103,11 @@ button[aria-label="Color Mode"] {
 .app-content-alert-component.alert-warning a{
 	color: rgb(194 65 12 / var(--tw-text-opacity));
 	text-decoration: underline;
+}
+
+@media (min-width: 1024px) {
+  .lg\:text-5xl {
+    font-size: 3rem;
+    line-height: 1;
+  }
 }

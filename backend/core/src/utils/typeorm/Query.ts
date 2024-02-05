@@ -162,11 +162,12 @@ export class Query<T extends ObjectLiteral> {
 		repository: Repository<T>,
 		id: number,
 		relations?: string[],
-		currency?: CurrencyOptions<T>
+		currency?: CurrencyOptions<T>,
 	): Promise<T> {
-
 		if (Env.IsNotProd()) {
-			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}]`, { [this.getPrimaryKey(repository)]: id })
+			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}]`, {
+				[this.getPrimaryKey(repository)]: id,
+			})
 		}
 
 		const where: FindOptionsWhere<T> = {}
@@ -196,7 +197,7 @@ export class Query<T extends ObjectLiteral> {
 		repository: Repository<T>,
 		where: FindOptionsWhere<T>[] | FindOptionsWhere<T>,
 		options?: FindManyOptions,
-		currency?: CurrencyOptions<T>
+		currency?: CurrencyOptions<T>,
 	): Promise<T> {
 		options = TypeOrm.findOneOptionsWrapper<T>(repository, options)
 
@@ -224,7 +225,6 @@ export class Query<T extends ObjectLiteral> {
 	 */
 
 	async findOne(repository: Repository<T>, options?: FindOneOptions, currency?: CurrencyOptions<T>): Promise<T> {
-		
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}]`, { options: options })
 		}
@@ -232,7 +232,7 @@ export class Query<T extends ObjectLiteral> {
 		options = TypeOrm.findOneOptionsWrapper<T>(repository, options)
 		let result = <T>await repository.findOne(options)
 		result = <T>await this.convertCurrency(result, currency)
-		
+
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][FIND][ONE][${repository.metadata.tableName}] Result`, result)
 		}
@@ -247,7 +247,6 @@ export class Query<T extends ObjectLiteral> {
 	 */
 
 	async findAll(repository: Repository<T>, options?: FindManyOptions, currency?: CurrencyOptions<T>): Promise<T[]> {
-	
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][FIND][MANY][${repository.metadata.tableName}]`, { options: options })
 		}
@@ -257,7 +256,10 @@ export class Query<T extends ObjectLiteral> {
 		result = <T[]>await this.convertCurrency(result, currency)
 
 		if (Env.IsNotProd()) {
-			logger.debug(`[QUERY][FIND][MANY][${repository.metadata.tableName}] Result`, { first: result[0], last: result[result.length - 1] })
+			logger.debug(`[QUERY][FIND][MANY][${repository.metadata.tableName}] Result`, {
+				first: result[0],
+				last: result[result.length - 1],
+			})
 		}
 
 		return result
@@ -267,9 +269,10 @@ export class Query<T extends ObjectLiteral> {
 	 * Update a record - must include primary_key for lookup
 	 * @param repository
 	 * @param data
+	 * @param relations - specify any relations you would like to return with the result
 	 */
 
-	async update(repository: Repository<T>, data: DeepPartial<T>): Promise<T> {
+	async update(repository: Repository<T>, data: DeepPartial<T>, relations: string[] = []): Promise<T> {
 		if (Env.IsNotProd()) {
 			logger.debug(`[QUERY][UPDATE][${repository.metadata.tableName}]`, data)
 		}
@@ -284,7 +287,7 @@ export class Query<T extends ObjectLiteral> {
 
 		try {
 			await repository.update(data[this.getPrimaryKey(repository)], <any>data)
-			return await this.findOneById(repository, data[this.getPrimaryKey(repository)])
+			return await this.findOneById(repository, data[this.getPrimaryKey(repository)], relations)
 		} catch (e) {
 			this.logUpdateError(e, repository, data)
 			throw e
@@ -906,6 +909,7 @@ export class Query<T extends ObjectLiteral> {
 			} catch (e: any) {
 				result.errored++
 				result.errors ||= []
+				logger.debug(`[QUERY][UPSERT][${repository.metadata.tableName}] Error`, e)
 				result.errors.push(e.message)
 			}
 			result.processed++
