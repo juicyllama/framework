@@ -43,6 +43,7 @@ pnpm link --global --dir apps/semrush
 pnpm link --global --dir node_modules/@nestjs/core
 pnpm link --global --dir node_modules/@nestjs/typeorm
 pnpm link --global --dir node_modules/typeorm
+pnpm link --global --dir node_modules/class-validator
 pnpm link --global --dir node_modules/@nestjs/common
 pnpm link --global --dir node_modules/@nestjs/config
 pnpm link --global --dir node_modules/@nestjs/platform-express

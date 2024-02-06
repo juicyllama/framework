@@ -1,6 +1,6 @@
 import { DateRangeDto } from '../dto/date.dto'
 import { StepType } from '../enums/stats'
-import { month_names, month_names_short, SubscriptionFrequency } from '../enums/dates'
+import { MonthNames, MonthNamesShort, SubscriptionFrequency } from '../enums/dates'
 
 const nth = function (d: number) {
 	if (d > 3 && d < 21) return 'th'
@@ -36,8 +36,8 @@ export class Dates {
 
 		return format
 			.replace('YYYY', year)
-			.replace('MMMM', month_names[date.getMonth()])
-			.replace('MMM', month_names_short[date.getMonth()])
+			.replace('MMMM', MonthNames[date.getMonth()])
+			.replace('MMM', MonthNamesShort[date.getMonth()])
 			.replace('MM', month.length === 1 ? '0' + month : month)
 			.replace('DD', day.length === 1 ? '0' + day : day)
 			.replace('Do', day + nth(parseInt(day)))

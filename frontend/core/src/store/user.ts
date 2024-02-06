@@ -56,6 +56,11 @@ export const UserStore = defineStore('user', {
 			return redirect
 		},
 
+		async deletePreLoginRedirect(): Promise<void> {
+			window.localStorage.removeItem('preLoginRedirect')
+			this.$state.preLoginRedirect = null
+		},
+
 		async login(data: UserLogin, q?: QVueGlobals, router?: Router): Promise<User> {
 			try {
 				const access_token = await loginUser(data, q, router)
@@ -184,8 +189,7 @@ export const UserStore = defineStore('user', {
 
 		async logout(router?: Router, redirect?: string) {
 			logger({ severity: LogSeverity.VERBOSE, message: `[Store][User][Logout] Logout User` })
-			window.localStorage.removeItem('user')
-			window.localStorage.removeItem('selected_account')
+			window.localStorage.clear()
 			this.$state.user = null
 			await token.remove()
 

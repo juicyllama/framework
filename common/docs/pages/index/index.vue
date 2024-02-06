@@ -11,6 +11,11 @@ useHead({
     { name: 'description', content: 'Developer portal for working with our open source framework' }
   ],
 })
+defineOgImage({
+  component: 'Docs',
+  title: 'JuicyLlama Rapid Development Framework',
+  description: 'Developer portal for working with our fullstack open source framework'
+})
 </script>
 
 
