@@ -43,11 +43,27 @@ const links = computed(() => [toc?.bottom?.edit && {
   to: `${toc.bottom.edit}/${page?.value?._file}`,
   target: '_blank',
 }, ...(toc?.bottom?.links || [])].filter(Boolean))
+
+const getCrumbs = () => {
+      const pathArray = route.path.split('/')
+      pathArray.shift()
+      const breadcrumbs = pathArray.reduce((breadcrumbArray, path, idx) => {
+        breadcrumbArray.push({
+          to: breadcrumbArray[idx - 1]
+            ? '/' + breadcrumbArray[idx - 1].label + '/' + path
+            : '/' + path,
+          label: path
+        })
+        return breadcrumbArray
+      }, [])
+      return breadcrumbs
+    }
 </script>
 
 <template>
   <UPage>
     <!-- <UPageHeader :title="page.title" :description="page.description" :links="page.links" :headline="headline" /> -->
+	<UBreadcrumb v-if="getCrumbs().length > 1" :links="getCrumbs()" />
 
     <UPageBody prose>
       <ContentRenderer v-if="page.body" :value="page" />
