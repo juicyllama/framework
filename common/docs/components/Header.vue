@@ -13,12 +13,11 @@ const { header } = useAppConfig()
     </template>
 
     <template v-if="header?.search" #center>
-		<!-- disabled search due to github.com/nuxt/ui/issues/1264 -->
-      <!-- <UDocsSearchButton class="hidden lg:flex" /> -->
+      <UDocsSearchButton class="hidden lg:flex" />
     </template>
 
     <template #right>
-      <!-- <UDocsSearchButton v-if="header?.search" :label="null" class="lg:hidden" /> -->
+      <UDocsSearchButton v-if="header?.search" :label="null" class="lg:hidden" />
 
       <UColorModeButton v-if="header?.colorMode" />
 
