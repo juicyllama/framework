@@ -13,7 +13,6 @@ const { header } = useAppConfig()
     </template>
 
     <template v-if="header?.search" #center>
-		<!-- disabled search due to github.com/nuxt/ui/issues/1264 -->
       <UDocsSearchButton class="hidden lg:flex" />
     </template>
 
@@ -32,7 +31,7 @@ const { header } = useAppConfig()
     </template>
 
     <template #panel>
-      <UNavigationTree :links="mapContentNavigation(navigation)" />
+      <UNavigationTree default-open :multiple="false" :links="mapContentNavigation(navigation)" />
     </template>
   </UHeader>
 </template>
