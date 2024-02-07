@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 import { withoutTrailingSlash } from 'ufo'
+import CommonForFolders from './commonForFolders.vue';
 
 definePageMeta({
   layout: 'docs',
@@ -10,9 +11,14 @@ definePageMeta({
 const route = useRoute()
 const { toc, seo } = useAppConfig()
 
+const subpages = ref(null)
 const { data: page } = await useAsyncData(route.path, () => queryContent(route.path).findOne())
 if (!page.value) {
-  throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
+	subpages.value = await useAsyncData(route.path, () => queryContent(route.path).only(['title', 'description', '_path']).find())
+
+	if (subpages.value?.data?.length === 0) {
+		throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
+	}
 }
 
 const { data: surround } = await useAsyncData(`${route.path}-surround`, () => queryContent()
@@ -66,14 +72,16 @@ const getCrumbs = () => {
 <template>
   <UPage>
     <!-- <UPageHeader :title="page.title" :description="page.description" :links="page.links" :headline="headline" /> -->
-	<UBreadcrumb v-if="getCrumbs().length > 1" :links="getCrumbs()" />
-
+    <UBreadcrumb v-if="getCrumbs().length > 1" class="app-breadcrumbs" :links="getCrumbs()" />
     <UPageBody prose>
-      <ContentRenderer v-if="page.body" :value="page" />
-
-      <hr v-if="surround?.length">
-
-      <UDocsSurround :surround="surround" />
+      <template v-if="page.body">
+        <ContentRenderer :value="page" />
+        <hr v-if="surround?.length">
+        <UDocsSurround :surround="surround" />
+      </template>
+      <template v-else>
+        <CommonForFolders :path="route.path" />
+      </template>
     </UPageBody>
 
     <template v-if="page.toc !== false" #right>
@@ -89,3 +97,8 @@ const getCrumbs = () => {
     </template>
   </UPage>
 </template>
+<style>
+.app-breadcrumbs a span {
+	text-transform: capitalize;
+}
+</style>
