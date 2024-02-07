@@ -21,18 +21,20 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => qu
   .findSurround(withoutTrailingSlash(route.path))
 )
 
+const descriptionOrTitle = computed(() => page.value.description || page.value.title)
+
 useSeoMeta({
   titleTemplate: `%s - ${seo?.siteName}`,
   title: page.value.title,
   ogTitle: `${page.value.title} - ${seo?.siteName}`,
-  description: page.value.description,
-  ogDescription: page.value.description
+  description: descriptionOrTitle.value,
+  ogDescription: descriptionOrTitle.value
 })
 
 defineOgImage({
   component: 'Docs',
   title: page.value.title,
-  description: page.value.description
+  description: descriptionOrTitle.value
 })
 
 const headline = computed(() => findPageHeadline(page.value))
@@ -45,19 +47,20 @@ const links = computed(() => [toc?.bottom?.edit && {
 }, ...(toc?.bottom?.links || [])].filter(Boolean))
 
 const getCrumbs = () => {
-      const pathArray = route.path.split('/')
-      pathArray.shift()
-      const breadcrumbs = pathArray.reduce((breadcrumbArray, path, idx) => {
-        breadcrumbArray.push({
-          to: breadcrumbArray[idx - 1]
-            ? '/' + breadcrumbArray[idx - 1].label + '/' + path
-            : '/' + path,
-          label: path
-        })
-        return breadcrumbArray
-      }, [])
-      return breadcrumbs
-    }
+  const array = route.path.split('/');
+
+  let i = 1;
+  const final = []
+  while (i < array.length) {
+    final.push({
+		label: array[i],
+		to: `/${array.slice(1,i+1).join('/').toString()}`
+	})
+    i++;
+  }
+  return final
+}
+
 </script>
 
 <template>
