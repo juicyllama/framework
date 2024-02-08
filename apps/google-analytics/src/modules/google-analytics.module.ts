@@ -1,13 +1,15 @@
+import { Module } from '@nestjs/common'
+
 import { AppsModule } from '@juicyllama/app-store'
 import { Logger } from '@juicyllama/utils'
-import { Module } from '@nestjs/common'
-import { GoogleAnalyticsProviderModule } from './provider/provider.module'
+
 import { GoogleAnalyticsInstallationService } from './google-analytics.installation'
-import { PropertyModule } from './property/property.module';
+import { PropertyModule } from './property/property.module'
+import { AuthModule } from './auth/auth.module'
+import { GoogleAnalyticsConfigModule } from './config/google-analytics.config.module'
 
 @Module({
-	imports: [AppsModule, GoogleAnalyticsProviderModule, PropertyModule],
+	imports: [AppsModule, PropertyModule, AuthModule, GoogleAnalyticsConfigModule],
 	providers: [GoogleAnalyticsInstallationService, Logger],
-	exports: [GoogleAnalyticsProviderModule],
 })
 export class GoogleAnalyticsModule {}

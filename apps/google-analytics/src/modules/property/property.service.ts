@@ -1,34 +1,34 @@
-import { BetaAnalyticsDataClient } from '@google-analytics/data';
-import { Injectable } from '@nestjs/common';
+import { BetaAnalyticsDataClient } from '@google-analytics/data'
+import { Injectable } from '@nestjs/common'
 
-import { InjectGoogleAnalytics } from '../provider/provider.constants';
-import { PropertyInstalledApp } from './property-app.entity';
+import { PropertyInstalledApp } from './property-app.entity'
+import { AuthService } from '../auth/auth.service'
+import { InstalledAppAuthService } from '../auth/installed-app-auth.service'
 
 @Injectable()
 export class PropertyService {
-	constructor(@InjectGoogleAnalytics() private readonly api: BetaAnalyticsDataClient) {}
+	constructor(
+		private readonly authService: AuthService,
+		private readonly installedAppAuthService: InstalledAppAuthService,
+	) {}
 
-	async runReport(installedApp: PropertyInstalledApp) {
-		const [response] = await this.api.runReport({
+	async runReport(installedApp: PropertyInstalledApp, payload: Object) {
+		const analyticsData = await this.createAnalyticsDataClient(installedApp)
+
+		const [response] = await analyticsData.runReport({
+			...payload,
 			property: `properties/${installedApp.settings.GOOGLE_ANALYTICS_PROPERTY_ID}`,
-			dateRanges: [
-				{
-					startDate: '2020-03-31',
-					endDate: 'today',
-				},
-			],
-			dimensions: [
-				{
-					name: 'city',
-				},
-			],
-			metrics: [
-				{
-					name: 'activeUsers',
-				},
-			],
-		});
+		})
 
-		return response;
+		return response
+	}
+
+	private async createAnalyticsDataClient(installedApp: PropertyInstalledApp) {
+		const tokens = await this.installedAppAuthService.loadSavedCredentials(installedApp)
+
+		const client = this.authService.getAuthenticatedClient(tokens)
+		const credentials = this.authService.createDataClientCredentials(client)
+
+		return new BetaAnalyticsDataClient({ sslCreds: credentials })
 	}
 }

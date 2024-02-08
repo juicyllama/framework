@@ -29,7 +29,7 @@ export class GoogleAnalyticsInstallationService implements OnModuleInit {
 				await this.appsService.create({
 					name: 'Google Analytics 4',
 					url: 'https://analytics.google.com/',
-					integration_type: AppIntegrationType.API_KEY,
+					integration_type: AppIntegrationType.OAUTH2,
 					integration_name: AppStoreIntegrationName.ga4,
 					category: AppCategory.seo,
 					hexcode: '96bf48',

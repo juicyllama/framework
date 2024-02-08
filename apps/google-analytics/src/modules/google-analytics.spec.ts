@@ -4,7 +4,7 @@ import { Env } from '@juicyllama/utils'
 import { GoogleAnalyticsModule } from './google-analytics.module'
 import { GoogleAnalyticsInstallationService } from './google-analytics.installation'
 
-describe('Shopify', () => {
+describe('Google Analytics', () => {
 	let moduleRef: TestingModule
 
 	beforeAll(async () => {

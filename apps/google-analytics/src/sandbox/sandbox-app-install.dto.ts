@@ -1,6 +1,6 @@
 import { IsNumberString } from 'class-validator'
 
-export class PropertyInstallDto {
+export class SandboxAppInstallDto {
 	@IsNumberString()
-	propertyId: string;
+	propertyId: string
 }

@@ -28,8 +28,7 @@
         "prebuild": "rimraf dist",
         "prepare": "pnpm run build",
         "build": "tsc",
-        "sandbox": "export $(grep -v '^#' ../../.env.development) && export $(grep -v '^#' .env.development) && BASE_URL_API=https://juicyllama.ngrok.io && nest start --config src/sandbox/nest-cli.json --watch ",
-        "sandbox:ngrok": "~/ngrok http http://localhost:3000 --subdomain=juicyllama",
+        "sandbox": "export $(grep -v '^#' ../../.env.development) && export $(grep -v '^#' .env.development) && nest start --config src/sandbox/nest-cli.json --watch ",
         "start:dev": "tsc -w",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
@@ -41,6 +40,8 @@
         "@juicyllama/app-store": "workspace:^",
         "@juicyllama/core": "workspace:^",
         "@juicyllama/utils": "workspace:^",
-        "class-validator": "^0.14.0"
+        "@nestjs/common": "^10.2.7",
+        "class-validator": "^0.14.0",
+        "google-auth-library": "^9.6.2"
     }
 }

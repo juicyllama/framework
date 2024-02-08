@@ -41,7 +41,7 @@ export class InstalledAppsService extends BaseService<T> {
 			installed_app.app = await this.appsService.findOne({ where: { app_id: installed_app.app_id } })
 		}
 
-		const public_settings: { [key: string]: any } = {};
+		const public_settings: { [key: string]: any } = {}
 		if (installed_app.app?.settings) {
 			for (const app_creds of installed_app.app.settings) {
 				if (!app_creds.private) {
@@ -52,7 +52,7 @@ export class InstalledAppsService extends BaseService<T> {
 			}
 		}
 
-		installed_app.settings = public_settings;
+		installed_app.settings = public_settings
 		return installed_app
 	}
 
@@ -65,6 +65,9 @@ export class InstalledAppsService extends BaseService<T> {
 		switch (installed_app.app?.integration_name) {
 			case AppStoreIntegrationName.shopify:
 				return `${process.env.BASE_URL_API}/app/shopify/auth/install?installed_app_id=${installed_app.installed_app_id}`
+
+			case AppStoreIntegrationName.ga4:
+				return `${process.env.BASE_URL_API}/app/google-analytics/auth/init?installed_app_id=${installed_app.installed_app_id}`
 
 			default:
 				throw new BadRequestException(`${installed_app.app?.integration_name} OAUTH2 LINK NOT IMPLEMENTED`)
