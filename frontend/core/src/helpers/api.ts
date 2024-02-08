@@ -16,11 +16,13 @@ export async function apiRequest<T>(options: {
 	method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 	data?: any
 	params?: any
-	q?: QVueGlobals
+	q?: QVueGlobals,
+	headers?: { [key: string]: string }
 }): Promise<T> {
 	try {
 		const accountStore = (await import('../index')).accountStore
 		instance.defaults.headers.common['account-id'] = accountStore.selected_account?.account_id
+		instance.defaults.headers.common = { ...instance.defaults.headers.common, ...options.headers }
 
 		let response: any
 
@@ -109,10 +111,12 @@ export async function apiRequest<T>(options: {
 
 export class Api<T> {
 	url: string
-	constructor(url?: string) {
+	options?: { headers?: { [key: string]: string } }
+	constructor(url?: string, options?: { headers?: { [key: string]: string } }) {
 		if (url){
 			this.url = url;
 		}
+		this.options = options
 	}
 
 	async create(options: FormApiOptionsCreate): Promise<T> {
@@ -122,6 +126,7 @@ export class Api<T> {
 			method: 'POST',
 			data: options.data,
 			q: options.q,
+			headers: this.options?.headers,
 		})
 	}
 
@@ -141,6 +146,7 @@ export class Api<T> {
 			url: url,
 			method: 'GET',
 			q: options?.q,
+			headers: this.options?.headers,
 		})
 	}
 
@@ -151,6 +157,7 @@ export class Api<T> {
 			method: 'GET',
 			params: options?.find,
 			q: options?.q,
+			headers: this.options?.headers,
 		})
 	}
 
@@ -170,6 +177,7 @@ export class Api<T> {
 			method: 'GET',
 			params: options?.find,
 			q: options?.q,
+			headers: this.options?.headers,
 		})
 
 		if(!options?.method) return response.count
@@ -194,6 +202,7 @@ export class Api<T> {
 			method: 'PATCH',
 			data: options.data,
 			q: options.q,
+			headers: this.options?.headers,
 		})
 	}
 
@@ -211,6 +220,7 @@ export class Api<T> {
 			url: options.url ?? this.url + `/${options.record_id}`,
 			method: 'DELETE',
 			q: options.q,
+			headers: this.options?.headers,
 		})
 	}
 }

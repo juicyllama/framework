@@ -112,6 +112,7 @@ export {
 	SwaggerPropertyReference,
 	SwaggerPropertyDecorator,
 	UserAuth,
+	UserId
 } from './decorators'
 
 // Helpers
