@@ -31,7 +31,7 @@ const { header } = useAppConfig()
     </template>
 
     <template #panel>
-      <UNavigationTree :links="mapContentNavigation(navigation)" />
+      <UNavigationTree default-open :multiple="false" :links="mapContentNavigation(navigation)" />
     </template>
   </UHeader>
 </template>

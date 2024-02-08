@@ -1,3 +1,4 @@
+import { Client } from '@googlemaps/google-maps-services-js';
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	ssr: true,
@@ -46,6 +47,10 @@ export default defineNuxtConfig({
 	  families: {
 		Nunito:  [400, 500, 600, 700, 800, 900],
 	  }
+	},
+	sourcemap: {
+		client: false,
+		server: false
 	},
 	routeRules: {
 	  '/api/search.json': { prerender: true },

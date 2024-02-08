@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 import { withoutTrailingSlash } from 'ufo'
+import CommonForFolders from './commonForFolders.vue';
 
 definePageMeta({
   layout: 'docs',
@@ -10,9 +11,14 @@ definePageMeta({
 const route = useRoute()
 const { toc, seo } = useAppConfig()
 
+const subpages = ref(null)
 const { data: page } = await useAsyncData(route.path, () => queryContent(route.path).findOne())
 if (!page.value) {
-  throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
+	subpages.value = await useAsyncData(route.path, () => queryContent(route.path).only(['title', 'description', '_path']).find())
+
+	if (subpages.value?.data?.length === 0) {
+		throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
+	}
 }
 
 const { data: surround } = await useAsyncData(`${route.path}-surround`, () => queryContent()
@@ -21,18 +27,20 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => qu
   .findSurround(withoutTrailingSlash(route.path))
 )
 
+const descriptionOrTitle = computed(() => page.value.description || page.value.title)
+
 useSeoMeta({
   titleTemplate: `%s - ${seo?.siteName}`,
   title: page.value.title,
   ogTitle: `${page.value.title} - ${seo?.siteName}`,
-  description: page.value.description,
-  ogDescription: page.value.description
+  description: descriptionOrTitle.value,
+  ogDescription: descriptionOrTitle.value
 })
 
 defineOgImage({
   component: 'Docs',
   title: page.value.title,
-  description: page.value.description
+  description: descriptionOrTitle.value
 })
 
 const headline = computed(() => findPageHeadline(page.value))
@@ -43,18 +51,37 @@ const links = computed(() => [toc?.bottom?.edit && {
   to: `${toc.bottom.edit}/${page?.value?._file}`,
   target: '_blank',
 }, ...(toc?.bottom?.links || [])].filter(Boolean))
+
+const getCrumbs = () => {
+  const array = route.path.split('/');
+
+  let i = 1;
+  const final = []
+  while (i < array.length) {
+    final.push({
+		label: array[i],
+		to: `/${array.slice(1,i+1).join('/').toString()}`
+	})
+    i++;
+  }
+  return final
+}
+
 </script>
 
 <template>
   <UPage>
     <!-- <UPageHeader :title="page.title" :description="page.description" :links="page.links" :headline="headline" /> -->
-
+    <UBreadcrumb v-if="getCrumbs().length > 1" class="app-breadcrumbs mt-8" :links="getCrumbs()" />
     <UPageBody prose>
-      <ContentRenderer v-if="page.body" :value="page" />
-
-      <hr v-if="surround?.length">
-
-      <UDocsSurround :surround="surround" />
+      <template v-if="page.body">
+        <ContentRenderer :value="page" />
+        <hr v-if="surround?.length">
+        <UDocsSurround :surround="surround" />
+      </template>
+      <template v-else>
+        <CommonForFolders :path="route.path" />
+      </template>
     </UPageBody>
 
     <template v-if="page.toc !== false" #right>
@@ -70,3 +97,8 @@ const links = computed(() => [toc?.bottom?.edit && {
     </template>
   </UPage>
 </template>
+<style>
+.app-breadcrumbs a span {
+	text-transform: capitalize;
+}
+</style>
