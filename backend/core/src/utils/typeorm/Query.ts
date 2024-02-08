@@ -898,14 +898,15 @@ export class Query<T extends ObjectLiteral> {
 					},
 				})
 
-				await this.upsert(repository, record, dedup_field)
+				const res = await this.upsert(repository, record, dedup_field)
 
 				if (r) {
 					result.updated++
 				} else {
 					result.created++
 				}
-				result.ids.push(r[this.getPrimaryKey(repository)])
+
+				result.ids.push(res.identifiers[0][this.getPrimaryKey(repository).toString()])
 			} catch (e: any) {
 				result.errored++
 				result.errors ||= []
