@@ -72,7 +72,7 @@ const getCrumbs = () => {
 <template>
   <UPage>
     <!-- <UPageHeader :title="page.title" :description="page.description" :links="page.links" :headline="headline" /> -->
-    <UBreadcrumb v-if="getCrumbs().length > 1" class="app-breadcrumbs" :links="getCrumbs()" />
+    <UBreadcrumb v-if="getCrumbs().length > 1" class="app-breadcrumbs mt-8" :links="getCrumbs()" />
     <UPageBody prose>
       <template v-if="page.body">
         <ContentRenderer :value="page" />

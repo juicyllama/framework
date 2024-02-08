@@ -8,13 +8,13 @@ defineProps({
 </script>
 <template>
 <div class="py-8">
-    <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl gap-4 sm:gap-y-8 flex flex-col">
+    <div class="mx-auto max-w-7xl gap-4 sm:gap-y-8 flex flex-col">
       <!-- <div class="flex flex-col">
         <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl lg:text-4xl text-center">
           ...
         </h2>
       </div> -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 xl:grid-cols-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 xl:grid-cols-2">
 	 <ContentList v-slot="{ list }" :path="path">
           <div
             v-for="article in list"
