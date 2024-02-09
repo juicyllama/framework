@@ -20,6 +20,7 @@ pnpm link --global --dir backend/billing
 pnpm link --global --dir backend/data-cache
 pnpm link --global --dir backend/websites
 pnpm link --global --dir backend/ecommerce
+pnpm link --global --dir backend/social
 
 ### APPS ###
 pnpm link --global --dir apps/apilayer
