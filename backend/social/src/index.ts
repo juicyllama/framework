@@ -7,7 +7,6 @@ export { ChatUsers } from './modules/chat/users/chat.users.entity'
 export { SocialModule } from './social.module'
 export { ChatModule } from './modules/chat/chat.module'
 
-
 // Controllers
 export { ChatController } from './modules/chat/chat.controller'
 

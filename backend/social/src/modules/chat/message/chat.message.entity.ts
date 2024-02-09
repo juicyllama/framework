@@ -7,7 +7,6 @@ import { Chat } from '../chat.entity'
 @UseInterceptors(ClassSerializerInterceptor)
 @Entity('social_chat_message')
 export class ChatMessage extends BaseEntity {
-
 	@PrimaryGeneratedColumn()
 	readonly chat_message_id!: number
 
@@ -15,8 +14,8 @@ export class ChatMessage extends BaseEntity {
 	@IsNumber()
 	chat_id!: number
 
-	@ManyToOne(() => Chat, (chat) => chat.messages)
-    chat!: Chat
+	@ManyToOne(() => Chat, chat => chat.messages)
+	chat!: Chat
 
 	@ManyToOne(() => User, user => user.user_id, {
 		onDelete: 'CASCADE',

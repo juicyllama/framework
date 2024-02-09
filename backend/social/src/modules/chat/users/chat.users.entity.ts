@@ -7,16 +7,15 @@ import { Chat } from '../chat.entity'
 @UseInterceptors(ClassSerializerInterceptor)
 @Entity('social_chat_users')
 export class ChatUsers {
-	
 	@PrimaryColumn({ name: 'chat_id' })
-	chat_id!: number;
-  
+	chat_id!: number
+
 	@ManyToOne(() => Chat)
 	@JoinColumn({ name: 'chat_id' })
 	chat?: Chat
 
 	@PrimaryColumn({ name: 'user_id' })
-	user_id!: number;
+	user_id!: number
 
 	@ManyToOne(() => User)
 	@JoinColumn({ name: 'user_id' })
