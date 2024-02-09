@@ -43,7 +43,7 @@ export class Chat extends BaseEntity {
 	})
 	users?: User[]
 
-	@OneToMany(() => ChatMessage, (message: ChatMessage) => message.chat)
+	@OneToMany(() => ChatMessage, (message: ChatMessage) => message.chat, { onDelete: 'CASCADE' })
 	messages?: ChatMessage[]
 
 	@Column({ default: null, nullable: true })

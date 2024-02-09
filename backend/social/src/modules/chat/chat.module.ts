@@ -19,6 +19,6 @@ import { ChatController } from './chat.controller'
 	],
 	controllers: [ChatController],
 	providers: [ChatService, ChatMessageService, ChatUsersService, Logger, Query],
-	exports: [ChatService],
+	exports: [ChatService, ChatMessageService, ChatUsersService],
 })
 export class ChatModule {}

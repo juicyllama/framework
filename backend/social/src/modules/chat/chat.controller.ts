@@ -9,8 +9,6 @@ import {
 	UserAuth,
 	BaseController,
 	AuthenticatedRequest,
-	UserId,
-	UserCheck,
 } from '@juicyllama/core'
 import { CHAT_T as T, chatConstants as constants } from './chat.constants'
 import { ChatService } from './chat.service'
@@ -18,6 +16,7 @@ import { ChatMessageService } from './message/chat.message.service'
 import { ChatUsersService } from './users/chat.users.service'
 import { In, IsNull, Not } from 'typeorm'
 import { CreateChatMessageDto } from './chat.dto'
+import { ChatMessage } from '../..'
 
 @ApiTags('Chat')
 @UserAuth()
@@ -42,14 +41,14 @@ export class ChatController extends BaseController<T> {
 	async getUnreadChats(
 		@Req() req: AuthenticatedRequest,
 		@AccountId() account_id: number,
-		@UserId() user_id: number,
 	): Promise<any> {
-		await UserCheck(req.user, user_id, 'You can only access your own chats')
 		await this.authService.check(req.user.user_id, account_id)
 
 		const chats = await this.chatService.findAll({
 			where: {
-				users: In(req.user),
+				users: {
+					user_id: req.user.user_id,
+				},
 				last_message_at: Not(IsNull()),
 			},
 		})
@@ -74,10 +73,8 @@ export class ChatController extends BaseController<T> {
 	async getChat(
 		@Req() req: AuthenticatedRequest,
 		@AccountId() account_id: number,
-		@UserId() user_id: number,
 		@Param('chat_id') chat_id: number,
 	): Promise<T> {
-		await UserCheck(req.user, user_id, 'You can only access your own chats')
 		await this.authService.check(req.user.user_id, account_id)
 
 		const chat = await this.chatService.findById(chat_id)
@@ -86,9 +83,9 @@ export class ChatController extends BaseController<T> {
 			throw new BadRequestException('Chat not found')
 		}
 
-		// if ((!chat.users?.includes(req.user)) || ( chat.account_id && chat.account_id !== account_id)) {
-		// 	throw new BadRequestException('Permission Denied', { cause: new Error(), description: 'You can only access your own chats' })
-		// }
+		if ((!chat.users?.includes(req.user)) || ( chat.account_id && chat.account_id !== account_id)) {
+			throw new BadRequestException('Permission Denied', { cause: new Error(), description: 'You can only access your own chats' })
+		}
 
 		return chat
 	}
@@ -98,9 +95,7 @@ export class ChatController extends BaseController<T> {
 	async getChats(
 		@Req() req: AuthenticatedRequest,
 		@AccountId() account_id: number,
-		@UserId() user_id: number,
 	): Promise<T[]> {
-		await UserCheck(req.user, user_id, 'You can only access your own chats')
 		await this.authService.check(req.user.user_id, account_id)
 
 		return this.chatService.findAll({
@@ -115,10 +110,9 @@ export class ChatController extends BaseController<T> {
 	async markRead(
 		@Req() req: AuthenticatedRequest,
 		@AccountId() account_id: number,
-		@UserId() user_id: number,
 		@Param('chat_id') chat_id: number,
 	): Promise<void> {
-		await UserCheck(req.user, user_id, 'You can only access your own chats')
+		
 		await this.authService.check(req.user.user_id, account_id)
 
 		const chat = await this.chatService.findById(chat_id)
@@ -134,11 +128,8 @@ export class ChatController extends BaseController<T> {
 			})
 		}
 
-		await this.chatUsersService.update({
-			chat: chat,
-			user: req.user,
-			last_read_at: new Date(),
-		})
+		await this.chatService.markAsRead(chat_id, req.user.user_id)
+		
 	}
 
 	@ApiOperation({ summary: 'Post Message' })
@@ -146,11 +137,10 @@ export class ChatController extends BaseController<T> {
 	async postMessage(
 		@Req() req: AuthenticatedRequest,
 		@AccountId() account_id: number,
-		@UserId() user_id: number,
 		@Param('chat_id') chat_id: number,
 		@Body() body: CreateChatMessageDto,
-	): Promise<T> {
-		await UserCheck(req.user, user_id, 'You can only access your own chats')
+	): Promise<ChatMessage> {
+	
 		await this.authService.check(req.user.user_id, account_id)
 
 		const chat = await this.chatService.findById(chat_id)
@@ -166,10 +156,7 @@ export class ChatController extends BaseController<T> {
 			})
 		}
 
-		return await this.chatMessageService.create({
-			...body,
-			chat_id: chat.chat_id,
-			user_id: req.user.user_id,
-		})
+		return this.chatService.postMessage(chat.chat_id, req.user.user_id, body.message)
+		
 	}
 }
