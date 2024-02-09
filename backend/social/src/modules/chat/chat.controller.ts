@@ -38,10 +38,7 @@ export class ChatController extends BaseController<T> {
 
 	@ApiOperation({ summary: 'Get Unread Chat Count' })
 	@Get('/unread')
-	async getUnreadChats(
-		@Req() req: AuthenticatedRequest,
-		@AccountId() account_id: number,
-	): Promise<any> {
+	async getUnreadChats(@Req() req: AuthenticatedRequest, @AccountId() account_id: number): Promise<any> {
 		await this.authService.check(req.user.user_id, account_id)
 
 		const chats = await this.chatService.findAll({
@@ -83,8 +80,11 @@ export class ChatController extends BaseController<T> {
 			throw new BadRequestException('Chat not found')
 		}
 
-		if ((!chat.users?.includes(req.user)) || ( chat.account_id && chat.account_id !== account_id)) {
-			throw new BadRequestException('Permission Denied', { cause: new Error(), description: 'You can only access your own chats' })
+		if (!chat.users?.includes(req.user) || (chat.account_id && chat.account_id !== account_id)) {
+			throw new BadRequestException('Permission Denied', {
+				cause: new Error(),
+				description: 'You can only access your own chats',
+			})
 		}
 
 		return chat
@@ -92,10 +92,7 @@ export class ChatController extends BaseController<T> {
 
 	@ReadManyDecorator(constants)
 	@Get()
-	async getChats(
-		@Req() req: AuthenticatedRequest,
-		@AccountId() account_id: number,
-	): Promise<T[]> {
+	async getChats(@Req() req: AuthenticatedRequest, @AccountId() account_id: number): Promise<T[]> {
 		await this.authService.check(req.user.user_id, account_id)
 
 		return this.chatService.findAll({
@@ -112,7 +109,6 @@ export class ChatController extends BaseController<T> {
 		@AccountId() account_id: number,
 		@Param('chat_id') chat_id: number,
 	): Promise<void> {
-		
 		await this.authService.check(req.user.user_id, account_id)
 
 		const chat = await this.chatService.findById(chat_id)
@@ -129,7 +125,6 @@ export class ChatController extends BaseController<T> {
 		}
 
 		await this.chatService.markAsRead(chat_id, req.user.user_id)
-		
 	}
 
 	@ApiOperation({ summary: 'Post Message' })
@@ -140,7 +135,6 @@ export class ChatController extends BaseController<T> {
 		@Param('chat_id') chat_id: number,
 		@Body() body: CreateChatMessageDto,
 	): Promise<ChatMessage> {
-	
 		await this.authService.check(req.user.user_id, account_id)
 
 		const chat = await this.chatService.findById(chat_id)
@@ -157,6 +151,5 @@ export class ChatController extends BaseController<T> {
 		}
 
 		return this.chatService.postMessage(chat.chat_id, req.user.user_id, body.message)
-		
 	}
 }
