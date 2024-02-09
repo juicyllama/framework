@@ -1,5 +1,5 @@
 import bboxPolygon from '@turf/bbox-polygon'
-import { point } from '@turf/helpers'
+import { point, polygon } from '@turf/helpers'
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon'
 //@ts-ignore
 import buffer from '@turf/buffer'
@@ -28,6 +28,16 @@ export class Geocoding {
 
 		// Check if the point lies within the bounding box polygon
 		const isPointInBbox = booleanPointInPolygon(pointToCheck, _bboxPolygon)
+
+		return isPointInBbox
+	}
+
+	static areCoordinatesInPolygon(coordinates: Coordinates, polygonCords: Coordinates[]): boolean {
+		const pointToCheck = point([coordinates.longitude, coordinates.latitude])
+		const poly = polygon([polygonCords.map((p: Coordinates) => [p.longitude, p.latitude])])
+
+		// Check if the point lies within the bounding box polygon
+		const isPointInBbox = booleanPointInPolygon(pointToCheck, poly)
 
 		return isPointInBbox
 	}
