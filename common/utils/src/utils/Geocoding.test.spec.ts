@@ -4,6 +4,11 @@
 
 import { Coordinates, BoundingBox, Geocoding } from './Geocoding'
 
+// this is the actual polygon for Aruba
+const ARUBA_POLYGON: Coordinates[] = [
+	[-69.99693762899992, 12.577582098000036], [-69.93639075399994, 12.53172435100005], [-69.92467200399994, 12.519232489000046], [-69.91576087099992, 12.497015692000076], [-69.88019771999984, 12.453558661000045], [-69.87682044199994, 12.427394924000097], [-69.88809160099993, 12.417669989000046], [-69.90880286399994, 12.417792059000107], [-69.93053137899989, 12.425970770000035], [-69.94513912699992, 12.44037506700009], [-69.92467200399994, 12.44037506700009], [-69.92467200399994, 12.447211005000014], [-69.95856686099992, 12.463202216000099], [-70.02765865799992, 12.522935289000088], [-70.04808508999989, 12.53115469000008], [-70.05809485599988, 12.537176825000088], [-70.06240800699987, 12.546820380000057], [-70.06037350199995, 12.556952216000113], [-70.0510961579999, 12.574042059000064], [-70.04873613199993, 12.583726304000024], [-70.05264238199993, 12.600002346000053], [-70.05964107999992, 12.614243882000054], [-70.06110592399997, 12.625392971000068], [-70.04873613199993, 12.632147528000104], [-70.00715084499987, 12.5855166690001], [-69.99693762899992, 12.577582098000036]
+].map((p: number[]) => ({ latitude: p[1], longitude: p[0] }))
+
 describe('areCoordinatesInBoundingBox', () => {
 	it('Check if London is in UK', async () => {
 		const location: Coordinates = { latitude: 51.5072, longitude: 0.1276 } //london
@@ -47,6 +52,44 @@ describe('areCoordinatesInBoundingBox', () => {
 		expect(Geocoding.areCoordinatesInBoundingBox(location, boundingBox)).toBeTruthy();
 	});
 })
+
+describe('areCoordinatesInPolygon', () => {
+	it('Check if London is in UK bounding box', async () => {
+		const location: Coordinates = { latitude: 51.5072, longitude: 0.1276 } //london
+		const boundingBox: Coordinates[] = [
+			{ latitude: 59.144688, longitude: -11.398745 },
+			{ latitude: 59.144688, longitude: 3.147154 },
+			{ latitude: 50.194155, longitude: 3.147154 },
+			{ latitude: 50.194155, longitude: -11.398745 },
+			{ latitude: 59.144688, longitude: -11.398745 },
+		] 
+		expect(Geocoding.areCoordinatesInPolygon(location, boundingBox)).toBeTruthy()
+	})
+
+	it('Check if NY is in UK bounding box', async () => {
+		const location: Coordinates = { latitude: 40.7128, longitude: 74.006 } //New york
+		const boundingBox: Coordinates[] = [
+			{ latitude: 59.144688, longitude: -11.398745 },
+			{ latitude: 59.144688, longitude: 3.147154 },
+			{ latitude: 50.194155, longitude: 3.147154 },
+			{ latitude: 50.194155, longitude: -11.398745 },
+			{ latitude: 59.144688, longitude: -11.398745 },
+		] 
+		expect(Geocoding.areCoordinatesInPolygon(location, boundingBox)).toBeFalsy()
+	})
+
+	it('Check if Santa Cruz, Aruba is in Aruba ', async () => {
+		const location: Coordinates = { latitude: 12.502822778603539, longitude: -69.9510456940452 } 
+		expect(Geocoding.areCoordinatesInPolygon(location, ARUBA_POLYGON)).toBeTruthy()
+	})
+
+
+	it('Check that a point in sea next to aruba is not Aruba ', async () => {
+		const location: Coordinates = { latitude: 12.459087440267027, longitude:-70.0325548262595 } 
+		expect(Geocoding.areCoordinatesInPolygon(location, ARUBA_POLYGON)).toBeFalsy()
+	})
+})
+
 
 describe('areCoordinatesBetweenTwoPoints', () => {
 	it('Check if London is in UK', async () => {
