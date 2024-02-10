@@ -4,7 +4,7 @@ import type { User, UserLogin } from '../types'
 import { UserPreferences } from '../types'
 import {
 	accountAuthCheck,
-	getUser,
+	getUser as loadUserFromApi,
 	loginUser,
 	passwordlessLogin,
 	passwordlessLoginCode,
@@ -27,9 +27,9 @@ const usersService = new UsersService()
 
 export const UserStore = defineStore('user', {
 	state: () => ({
-		user: Json.getLocalStorageObject<User>('user'), 
-		preferences: Json.getLocalStorageObject<UserPreferences>('user_preferences'), 
-		preLoginRedirect: Json.getLocalStorageObject<string>('preLoginRedirect'), 
+		user: Json.getLocalStorageObject<User>('user'),
+		preferences: Json.getLocalStorageObject<UserPreferences>('user_preferences'),
+		preLoginRedirect: Json.getLocalStorageObject<string>('preLoginRedirect'),
 	}),
 	actions: {
 		async setUser(user: T): Promise<T> {
@@ -114,8 +114,8 @@ export const UserStore = defineStore('user', {
 				return await this.processAccessToken(access_token, q)
 		},
 
-		async getUser(): Promise<T> {
-			const userData = await getUser()
+		async getUserAsync(): Promise<T> {
+			const userData = await loadUserFromApi()
 			return await this.setUser(userData)
 		},
 
@@ -205,7 +205,7 @@ export const UserStore = defineStore('user', {
 
 		async processAccessToken(access_token: string, q?: QVueGlobals): Promise<T> {
 			await token.set(access_token)
-			const user = await getUser()
+			const user = await loadUserFromApi()
 
 			if (!user?.user_id) {
 				logger({ severity: LogSeverity.ERROR, message: `Authentication Error`, q: q })
