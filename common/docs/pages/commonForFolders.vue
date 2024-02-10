@@ -1,4 +1,11 @@
 <script setup>
+/*
+Common disply component for content folders that don't have
+a specific component to customize the view. Examples of customized view:
+ - pages/framework/apps/index.vue
+ - pages/framework/backend/index.vue
+If you create .vue in pages/... it will overwrite this component
+*/
 defineProps({
   path: {
 	type: String,

@@ -19,6 +19,7 @@ import { UsersService, USERS_ENDPOINT } from '../services/users'
 import { AccountStore } from './account'
 import { QVueGlobals } from 'quasar'
 import { LogSeverity } from '../types'
+import { Json } from '@juicyllama/vue-utils'
 
 type T = User
 
@@ -26,11 +27,9 @@ const usersService = new UsersService()
 
 export const UserStore = defineStore('user', {
 	state: () => ({
-		user: window.localStorage.getItem('user') ? <User>JSON.parse(window.localStorage.getItem('user')) : null,
-		preferences: window.localStorage.getItem('user_preferences')
-			? <UserPreferences>JSON.parse(window.localStorage.getItem('user_preferences'))
-			: null,
-		preLoginRedirect: window.localStorage.getItem('preLoginRedirect') ? <string>window.localStorage.getItem('preLoginRedirect') : null,
+		user: Json.getLocalStorageObject<User>('user'), 
+		preferences: Json.getLocalStorageObject<UserPreferences>('user_preferences'), 
+		preLoginRedirect: Json.getLocalStorageObject<string>('preLoginRedirect'), 
 	}),
 	actions: {
 		async setUser(user: T): Promise<T> {
