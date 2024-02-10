@@ -6,6 +6,8 @@ title: Form
 
 This component renders a form with configurable fields that allow to create/edit data objects.
 
+::CodeDemo{demo="https://stackblitz.com/edit/vitejs-vite-7b6ghm?ctl=1&embed=1&file=src%2Fcomponents%2FHelloWorld.vue&view=editor"}
+
 ## Props
 
 This component accepts the following props:
