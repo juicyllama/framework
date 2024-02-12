@@ -1,47 +1,15 @@
 import { Credentials } from 'google-auth-library'
 
 import { Injectable } from '@nestjs/common'
-import { AppIntegrationStatus, InstalledAppsService, OauthService } from '@juicyllama/app-store'
+import { OauthService } from '@juicyllama/app-store'
 
-import { InstalledAppLocator, PropertyInstalledApp } from '../property/property-app.entity'
+import { InstalledAppLocator } from '../property/property-app.entity'
 
 @Injectable()
 export class InstalledAppAuthService {
-	public static readonly AppNotFoundException = class AppNotFoundException extends Error {}
-	public static readonly AppNotConfiguredException = class AppNotFoundException extends Error {
-		constructor(public readonly property: string) {
-			super()
-		}
-	}
 	public static readonly OauthNotFoundException = class OauthNotFoundException extends Error {}
 
-	public constructor(
-		private readonly oauthService: OauthService,
-		private readonly installedAppsService: InstalledAppsService,
-	) {}
-
-	public async loadInstalledApp(id: number, accountId: number): Promise<PropertyInstalledApp> {
-		const installedApp = (await this.installedAppsService.findOne({
-			where: {
-				installed_app_id: id,
-				account_id: accountId,
-			},
-		})) as PropertyInstalledApp
-
-		this.validateInstalledApp(installedApp)
-
-		return installedApp
-	}
-
-	private validateInstalledApp(installedApp: PropertyInstalledApp) {
-		if (!installedApp) {
-			throw new InstalledAppAuthService.AppNotFoundException()
-		}
-
-		if (!installedApp.settings.GOOGLE_ANALYTICS_PROPERTY_ID) {
-			throw new InstalledAppAuthService.AppNotConfiguredException('GOOGLE_ANALYTICS_PROPERTY_ID')
-		}
-	}
+	public constructor(private readonly oauthService: OauthService) {}
 
 	public async initOauth(
 		installedApp: InstalledAppLocator,
@@ -82,13 +50,6 @@ export class InstalledAppAuthService {
 			scope: tokens.scope,
 			token_type: tokens.token_type,
 			expires_at: new Date(tokens.expiry_date),
-		})
-	}
-
-	public async recordInstalledAppConnected(installedApp: InstalledAppLocator) {
-		await this.installedAppsService.update({
-			installed_app_id: installedApp.installed_app_id,
-			integration_status: AppIntegrationStatus.CONNECTED,
 		})
 	}
 

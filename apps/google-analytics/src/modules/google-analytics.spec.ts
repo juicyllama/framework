@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { ConfigModule } from '@nestjs/config'
 import { Env } from '@juicyllama/utils'
+
 import { GoogleAnalyticsModule } from './google-analytics.module'
 import { GoogleAnalyticsInstallationService } from './google-analytics.installation'
 

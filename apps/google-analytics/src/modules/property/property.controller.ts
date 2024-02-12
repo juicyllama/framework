@@ -1,41 +1,29 @@
-import { Controller, Post, Body, Query, BadRequestException } from '@nestjs/common'
+import { Controller, Post, Body, Query } from '@nestjs/common'
 
-import { Logger } from '@juicyllama/utils'
-import { InstalledAppsService } from '@juicyllama/app-store'
+import { AccountId, UserAuth } from '@juicyllama/core'
 
-import { GoogleAnalyticsApp } from '../google-analytics.app'
 import { PropertyService } from './property.service'
-import { PropertyInstalledApp } from './property-app.entity'
+import { GoogleAnalyticsInstalledAppService } from '../google-analytics-installed-app/google-analytics-installed-app.service'
+import { GoogleAnalyticsBaseController } from '../google-analytics.base-controller'
 
-@Controller(GoogleAnalyticsApp.createRoute('/property'))
-export class PropertyController {
-	constructor(
-		private readonly logger: Logger,
-		private readonly installedAppsService: InstalledAppsService,
+@UserAuth()
+@Controller('/property')
+export class PropertyController extends GoogleAnalyticsBaseController {
+	public constructor(
+		gaInstalledAppService: GoogleAnalyticsInstalledAppService,
 		private readonly propertyService: PropertyService,
-	) {}
-
-	@Post('run-report')
-	async runReport(@Query('installed_app_id') installedAppId: number, @Body() payload: Object) {
-		const domain = 'app::google-analytics::property::controller::run-report'
-
-		const app = await this.loadInstalledApp(installedAppId, domain)
-
-		return await this.propertyService.runReport(app, payload)
+	) {
+		super(gaInstalledAppService)
 	}
 
-	private async loadInstalledApp(id: number, domain: string): Promise<PropertyInstalledApp> {
-		const app = await this.installedAppsService.findOne({
-			where: { installed_app_id: id },
-		})
+	@Post('run-report')
+	public async runReport(
+		@AccountId() accountId: number,
+		@Query('installed_app_id') installedAppId: number,
+		@Body() payload: Object,
+	) {
+		const app = await this.loadInstalledApp(installedAppId, accountId)
 
-		if (!app) {
-			this.logger.error(`[${domain}] Authentication Error: Installed App not found`, {
-				installed_app_id: id,
-			})
-			throw new BadRequestException(`Authentication Error: Installed App not found`)
-		}
-
-		return app as PropertyInstalledApp
+		return this.propertyService.runReport(app, payload)
 	}
 }

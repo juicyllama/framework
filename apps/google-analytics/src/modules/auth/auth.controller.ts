@@ -1,39 +1,35 @@
-import { BadRequestException, Controller, Get, NotFoundException, ParseIntPipe, Query } from '@nestjs/common'
+import { BadRequestException, Controller, Get, ParseIntPipe, Query } from '@nestjs/common'
 
-import { GoogleAnalyticsApp } from '../google-analytics.app'
+import { AccountId, UserAuth } from '@juicyllama/core'
+
+import { GoogleAnalyticsInstalledAppService } from '../google-analytics-installed-app/google-analytics-installed-app.service'
+
 import { AuthService } from './auth.service'
 import { InstalledAppAuthService } from './installed-app-auth.service'
+import { GoogleAnalyticsBaseController } from '../google-analytics.base-controller'
 
-@Controller(GoogleAnalyticsApp.createRoute('/auth'))
-export class AuthController {
+@Controller('/auth')
+export class AuthController extends GoogleAnalyticsBaseController {
 	constructor(
+		gaInstalledAppService: GoogleAnalyticsInstalledAppService,
 		private readonly authService: AuthService,
 		private readonly installedAppAuthService: InstalledAppAuthService,
-	) {}
+	) {
+		super(gaInstalledAppService)
+	}
 
+	@UserAuth()
 	@Get('/init')
 	public async init(
 		@Query('installed_app_id', new ParseIntPipe()) installedAppId: number,
-		@Query('account_id', new ParseIntPipe()) accountId: number,
+		@AccountId() accountId: number,
 	) {
-		try {
-			const oauth = this.authService.generateAuthUrl()
-			const installedApp = await this.installedAppAuthService.loadInstalledApp(installedAppId, accountId)
+		const oauth = this.authService.generateAuthUrl()
+		const installedApp = await this.loadInstalledApp(installedAppId, accountId)
 
-			await this.installedAppAuthService.initOauth(installedApp, oauth)
+		await this.installedAppAuthService.initOauth(installedApp, oauth)
 
-			return { redirect_url: oauth.authUrl }
-		} catch (e) {
-			if (e instanceof InstalledAppAuthService.AppNotFoundException) {
-				throw new NotFoundException(`Installed App ${installedAppId} not found`)
-			}
-
-			if (e instanceof InstalledAppAuthService.AppNotConfiguredException) {
-				throw new BadRequestException(`Google Analytics Property ID not found in App settings`)
-			}
-
-			throw e
-		}
+		return { redirect_url: oauth.authUrl }
 	}
 
 	@Get('/callback')
@@ -43,9 +39,7 @@ export class AuthController {
 
 			const oauth = await this.installedAppAuthService.storeOauth(state, tokens)
 
-			await this.installedAppAuthService.recordInstalledAppConnected({
-				installed_app_id: oauth.installed_app_id,
-			})
+			await this.gaInstalledAppService.recordConnected({ installed_app_id: oauth.installed_app_id })
 
 			return { success: true }
 		} catch (e) {

@@ -10,12 +10,13 @@ import { SandboxController } from './sandbox.controller'
 
 @Module({
 	imports: [
-		GoogleAnalyticsModule,
 		ConfigModule.forRoot({ isGlobal: true }),
 		TypeOrmModule.forRoot(databaseConfig()),
 		AccountModule,
 		AppsModule,
 		InstalledAppsModule,
+
+		GoogleAnalyticsModule.forRoot(),
 	],
 	controllers: [SandboxController],
 })
