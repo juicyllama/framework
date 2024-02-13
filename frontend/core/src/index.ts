@@ -21,6 +21,8 @@ import {
 	JLUpload,
 	JLBillingPage,
 	JLInvoicePage,
+	JLAvatar,
+	JLAiAsk,
 } from './components'
 import { JLAccountProfile, JLAccountAvatar, JLAccountSwitcher, JLAccountBrand } from './components/core/account'
 import { JLUserAvatar, JLUserProfile, JLUserMenu } from './components/core/user'
@@ -79,6 +81,8 @@ export default {
 		Vue.component('JLOauthStart', JLOauthStart)
 		Vue.component('JLBillingPage', JLBillingPage)
 		Vue.component('JLInvoicePage', JLInvoicePage)
+		Vue.component('JLAvatar', JLAvatar)
+		Vue.component('JLAiAsk', JLAiAsk)
 	},
 } as Plugin
 
@@ -116,5 +120,7 @@ export {
 	JLUsersTable,
 	JLBillingPage,
 	JLInvoicePage,
-	OTP
+	OTP,
+	JLAvatar,
+	JLAiAsk
 }

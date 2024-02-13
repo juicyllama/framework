@@ -74,19 +74,28 @@ export class ChatController extends BaseController<T> {
 	): Promise<T> {
 		await this.authService.check(req.user.user_id, account_id)
 
-		const chat = await this.chatService.findById(chat_id)
+		let chat = await this.chatService.findById(chat_id, ['users', 'messages', 'messages.user'])
 
 		if (!chat) {
 			throw new BadRequestException('Chat not found')
 		}
 
-		if (!chat.users?.includes(req.user) || (chat.account_id && chat.account_id !== account_id)) {
+		const match = chat.users?.find(user => user.user_id === req.user.user_id)
+
+		if (!match) {
 			throw new BadRequestException('Permission Denied', {
 				cause: new Error(),
 				description: 'You can only access your own chats',
 			})
 		}
 
+		chat = this.chatService.cleanse(chat)
+		chat.messages = await this.chatMessageService.markReadMessages(chat.messages, chat.chat_id, req.user.user_id)
+		if(chat.messages.length > 1) {
+			chat.messages = chat.messages.sort((a, b) => {
+				return a.chat_message_id - b.chat_message_id
+			})
+		}
 		return chat
 	}
 
@@ -95,11 +104,31 @@ export class ChatController extends BaseController<T> {
 	async getChats(@Req() req: AuthenticatedRequest, @AccountId() account_id: number): Promise<T[]> {
 		await this.authService.check(req.user.user_id, account_id)
 
-		return this.chatService.findAll({
+		const chats = await this.chatService.findAll({
 			where: {
-				users: In(req.user),
+				users: {
+					user_id: req.user.user_id,
+				}
 			},
+			relations: ['messages', 'messages.user'],
+			order: {
+				last_message_at: 'DESC',
+				messages: {
+					created_at: 'ASC'
+				}
+			}
 		})
+
+		for (const c in chats) {
+			chats[c] = this.chatService.cleanse(chats[c]);
+			chats[c].messages = await this.chatMessageService.markReadMessages(
+				chats[c].messages,
+				chats[c].chat_id,
+				req.user.user_id
+			)
+		}
+
+		return chats
 	}
 
 	@ApiOperation({ summary: 'Mark Chat Read' })
@@ -117,7 +146,9 @@ export class ChatController extends BaseController<T> {
 			throw new BadRequestException('Chat not found')
 		}
 
-		if (!chat.users?.includes(req.user) || (chat.account_id && chat.account_id !== account_id)) {
+		const match = chat.users?.find(user => user.user_id === req.user.user_id)
+
+		if (!match) {
 			throw new BadRequestException('Permission Denied', {
 				cause: new Error(),
 				description: 'You can only access your own chats',
@@ -143,13 +174,15 @@ export class ChatController extends BaseController<T> {
 			throw new BadRequestException('Chat not found')
 		}
 
-		if (!chat.users?.includes(req.user) || (chat.account_id && chat.account_id !== account_id)) {
+		const match = chat.users?.find(user => user.user_id === req.user.user_id)
+
+		if (!match) {
 			throw new BadRequestException('Permission Denied', {
 				cause: new Error(),
 				description: 'You can only access your own chats',
 			})
 		}
 
-		return this.chatService.postMessage(chat.chat_id, req.user.user_id, body.message)
+		return await this.chatService.postMessage(chat.chat_id, req.user.user_id, body.message)
 	}
 }

@@ -44,6 +44,7 @@ export class ChatMessageDto {
 }
 
 export class CreateChatMessageDto {
+	@SwaggerPropertyDecorator({ description: 'The message you wish to post', example: 'Hello World!' })
 	@IsString()
 	message!: string
 }

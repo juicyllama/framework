@@ -1,6 +1,6 @@
 import { Logger } from '@juicyllama/utils'
 import { forwardRef, Module } from '@nestjs/common'
-import { AccountModule, AuthModule, BeaconModule, Query } from '@juicyllama/core'
+import { AccountModule, AuthModule, BeaconModule, Query, UsersModule } from '@juicyllama/core'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Chat } from './chat.entity'
 import { ChatUsers } from './users/chat.users.entity'
@@ -16,6 +16,7 @@ import { ChatController } from './chat.controller'
 		forwardRef(() => AuthModule),
 		forwardRef(() => AccountModule),
 		forwardRef(() => BeaconModule),
+		forwardRef(() => UsersModule),
 	],
 	controllers: [ChatController],
 	providers: [ChatService, ChatMessageService, ChatUsersService, Logger, Query],

@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
 import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
 import { BaseEntity, User } from '@juicyllama/core'
-import { IsNumber, IsString } from 'class-validator'
+import { IsNumber, IsString, IsBoolean } from 'class-validator'
 import { Chat } from '../chat.entity'
 
 @UseInterceptors(ClassSerializerInterceptor)
@@ -31,6 +31,11 @@ export class ChatMessage extends BaseEntity {
 	@Column('text')
 	@IsString()
 	message!: string
+
+	//built in runtime
+
+	@IsBoolean()
+	is_read?: boolean = false
 
 	constructor(partial: Partial<ChatMessage>) {
 		super()

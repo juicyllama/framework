@@ -9,6 +9,8 @@ export const CHAT_PRIMARY_KEY = 'chat_id'
 export const CHAT_NAME = 'chat'
 export const CHAT_SEARCH_FIELDS = []
 export const CHAT_DEFAULT_ORDER_BY = 'last_message_at'
+export const CHAT_PUSHER_EVENT = 'user_${user_id}_social_chat' //all chats for user
+export const CHAT_MESSAGE_PUSHER_EVENT = 'user_${user_id}_social_chat_${chat_id}_messages' //all messages for chat
 
 export const chatConstants: ControllerConstants = {
 	entity: CHAT_E,

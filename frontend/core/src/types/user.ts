@@ -37,15 +37,15 @@ export interface AddUser {
 	email: string
 }
 
-export interface UserPreferencesLanaFilters {
+export interface UserPreferencesAiFilters {
 	sql: boolean
 }
 
-export interface UserPreferencesLana {
-	filters?: UserPreferencesLanaFilters
+export interface UserPreferencesAi {
+	filters?: UserPreferencesAiFilters
 	question?: string
 }
 
 export interface UserPreferences {
-	lana: UserPreferencesLana
+	ai: UserPreferencesAi
 }

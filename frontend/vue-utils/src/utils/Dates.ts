@@ -176,4 +176,45 @@ export class Dates {
 	static daysAgo(days: number): Date {
 		return new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * days)
 	}
+
+	static ago(date: Date, decimals: number = 0): string {
+		const seconds = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000)
+
+		let interval = Math.floor(seconds / 31536000)
+
+		if (interval >= 1) {
+			if (interval === 1) return '1 year ago'
+			return interval + ' years ago'
+		}
+
+		interval = Math.floor(seconds / 2592000)
+		if (interval >= 1) {
+			if (interval === 1) return '1 month ago'
+			return interval + ' months ago'
+		}
+
+		interval = Math.floor(seconds / 86400)
+		if (interval >= 1) {
+			if (interval === 1) return '1 day ago'
+			return interval + ' days ago'
+		}
+
+		interval = Math.floor(seconds / 3600)
+		if (interval >= 1) {
+			if (interval === 1) return '1 hour ago'
+			return (seconds / 3600).toFixed(decimals) + ' hours ago'
+		}
+
+		interval = Math.floor(seconds / 60)
+		if (interval >= 1) {
+			if (interval === 1) return '1 minute ago'
+			return (seconds / 60).toFixed(decimals) + ' minute ago'
+		}
+
+		if (seconds <= 1) {
+			return '1 second ago'
+		}
+
+		return Math.floor(seconds) + ' seconds ago'
+	}
 }
