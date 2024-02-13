@@ -91,7 +91,7 @@ export class ChatController extends BaseController<T> {
 
 		chat = this.chatService.cleanse(chat)
 		chat.messages = await this.chatMessageService.markReadMessages(chat.messages, chat.chat_id, req.user.user_id)
-		if(chat.messages.length > 1) {
+		if (chat.messages.length > 1) {
 			chat.messages = chat.messages.sort((a, b) => {
 				return a.chat_message_id - b.chat_message_id
 			})
@@ -108,23 +108,23 @@ export class ChatController extends BaseController<T> {
 			where: {
 				users: {
 					user_id: req.user.user_id,
-				}
+				},
 			},
 			relations: ['messages', 'messages.user'],
 			order: {
 				last_message_at: 'DESC',
 				messages: {
-					created_at: 'ASC'
-				}
-			}
+					created_at: 'ASC',
+				},
+			},
 		})
 
 		for (const c in chats) {
-			chats[c] = this.chatService.cleanse(chats[c]);
+			chats[c] = this.chatService.cleanse(chats[c])
 			chats[c].messages = await this.chatMessageService.markReadMessages(
 				chats[c].messages,
 				chats[c].chat_id,
-				req.user.user_id
+				req.user.user_id,
 			)
 		}
 

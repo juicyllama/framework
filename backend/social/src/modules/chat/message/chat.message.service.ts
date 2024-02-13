@@ -21,9 +21,12 @@ export class ChatMessageService extends BaseService<T> {
 		})
 	}
 
-	async markReadMessages(messages: ChatMessage[] | undefined, chat_id: number, user_id: number): Promise<ChatMessage[]> {
-		
-		if(!messages || !messages.length) return []
+	async markReadMessages(
+		messages: ChatMessage[] | undefined,
+		chat_id: number,
+		user_id: number,
+	): Promise<ChatMessage[]> {
+		if (!messages || !messages.length) return []
 
 		const user = await this.chatUsersService.findOne({
 			where: {
@@ -32,10 +35,10 @@ export class ChatMessageService extends BaseService<T> {
 			},
 		})
 
-		if(!user) return []
+		if (!user) return []
 
-		messages.forEach( (message) => {
-				message.is_read = user.last_read_at && message.created_at ? (message.created_at < user.last_read_at) : false
+		messages.forEach(message => {
+			message.is_read = user.last_read_at && message.created_at ? message.created_at < user.last_read_at : false
 		})
 
 		return messages

@@ -54,14 +54,17 @@ export class ChatService extends BaseService<T> {
 
 		const chat = await super.create(data)
 
-		for(const user of chat.users){
-			await this.beaconService.sendPush(Strings.replacer(CHAT_PUSHER_EVENT, {
-				user_id: user.user_id,
-				chat_id: chat.chat_id
-			}), {
-				action: 'CREATE',
-				data: chat
-			})
+		for (const user of chat.users) {
+			await this.beaconService.sendPush(
+				Strings.replacer(CHAT_PUSHER_EVENT, {
+					user_id: user.user_id,
+					chat_id: chat.chat_id,
+				}),
+				{
+					action: 'CREATE',
+					data: chat,
+				},
+			)
 		}
 
 		return chat
@@ -81,7 +84,6 @@ export class ChatService extends BaseService<T> {
 	}
 
 	async postMessage(chat_id: number, user_id: number, message: string): Promise<ChatMessage> {
-		
 		const result = await this.chatMessageService.create({
 			chat_id: chat_id,
 			user_id: user_id,
@@ -109,22 +111,28 @@ export class ChatService extends BaseService<T> {
 		result.user = this.cleanseUser(await this.usersService.findById(user_id))
 
 		const chat = await this.findById(chat_id)
-		
-		for(const user of chat.users){
-			await this.beaconService.sendPush(Strings.replacer(CHAT_MESSAGE_PUSHER_EVENT, {
-				user_id: user.user_id,
-				chat_id: chat.chat_id
-			}), {
-				action: 'CREATE',
-				data: result
-			})
-			await this.beaconService.sendPush(Strings.replacer(CHAT_PUSHER_EVENT, {
-				user_id: user.user_id,
-				chat_id: chat.chat_id
-			}), {
-				action: 'UPDATE',
-				data: chat
-			})
+
+		for (const user of chat.users) {
+			await this.beaconService.sendPush(
+				Strings.replacer(CHAT_MESSAGE_PUSHER_EVENT, {
+					user_id: user.user_id,
+					chat_id: chat.chat_id,
+				}),
+				{
+					action: 'CREATE',
+					data: result,
+				},
+			)
+			await this.beaconService.sendPush(
+				Strings.replacer(CHAT_PUSHER_EVENT, {
+					user_id: user.user_id,
+					chat_id: chat.chat_id,
+				}),
+				{
+					action: 'UPDATE',
+					data: chat,
+				},
+			)
 		}
 
 		return result
@@ -142,13 +150,13 @@ export class ChatService extends BaseService<T> {
 	}
 
 	cleanse(chat: Chat): Chat {
-		if(chat.users) {
+		if (chat.users) {
 			chat.users = <any>chat.users.map(user => this.cleanseUser(user))
 		}
 
-		if(chat.messages){
+		if (chat.messages) {
 			chat.messages = <any>chat.messages.map(message => {
-				if(message.user) {
+				if (message.user) {
 					message.user = this.cleanseUser(message.user)
 				}
 				return message
@@ -167,5 +175,4 @@ export class ChatService extends BaseService<T> {
 			avatar_image_url: user.avatar_image_url,
 		}
 	}
-
 }

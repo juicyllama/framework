@@ -10,7 +10,7 @@ import {
 } from 'typeorm'
 import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
 import { Account, BaseEntity, User } from '@juicyllama/core'
-import { IsDate, IsNumber, IsBoolean } from 'class-validator'
+import { IsDate, IsNumber } from 'class-validator'
 import { ChatMessage } from './message/chat.message.entity'
 
 @UseInterceptors(ClassSerializerInterceptor)
