@@ -31,6 +31,7 @@
 
 <script setup lang="ts">
 import { IFilterType, IFilter } from '../../../../types/table'
+import { useQuasar } from 'quasar'
 interface Props {
 	filter: IFilter
 	labels: string[]
@@ -41,6 +42,7 @@ interface Props {
 defineEmits(['add', 'remove'])
 defineProps<Props>()
 
+const $q = useQuasar()
 const typeWithoutInput = ['NULL', '!NULL']
 const FILTERS: IFilterType[] = [
 	{ label: 'Greater than', method: 'GTE' },
