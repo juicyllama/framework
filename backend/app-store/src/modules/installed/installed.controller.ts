@@ -105,7 +105,7 @@ export class InstalledAppsController {
 		installed_app.app = app
 
 		if (app.integration_type === AppIntegrationType.OAUTH2) {
-			installed_app.oauth_redirect_url = this.service.createOauthLink(installed_app)
+			installed_app.oauth_redirect_url = await this.service.createOauthLink(installed_app)
 
 			await this.service.update({
 				installed_app_id: installed_app.installed_app_id,
@@ -123,7 +123,11 @@ export class InstalledAppsController {
 		relationsEnum: InstalledAppsRelations,
 		name: INSTALLED_APP_NAME,
 	})
-	async findAll(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Query() query: any): Promise<INSTALLED_APP_T[]> {
+	async findAll(
+		@Req() req: AuthenticatedRequest,
+		@AccountId() account_id: number,
+		@Query() query: any,
+	): Promise<INSTALLED_APP_T[]> {
 		await this.authService.check(req.user.user_id, account_id)
 		const records = await crudFindAll<INSTALLED_APP_T>({
 			service: this.service,
@@ -230,7 +234,11 @@ export class InstalledAppsController {
 		primaryKey: INSTALLED_APP_PRIMARY_KEY,
 		name: INSTALLED_APP_NAME,
 	})
-	async remove(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Param() params: any): Promise<INSTALLED_APP_T> {
+	async remove(
+		@Req() req: AuthenticatedRequest,
+		@AccountId() account_id: number,
+		@Param() params: any,
+	): Promise<INSTALLED_APP_T> {
 		await this.authService.check(req.user.user_id, account_id)
 		return await crudPurge<INSTALLED_APP_T>({
 			service: this.service,

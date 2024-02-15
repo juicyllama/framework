@@ -6,10 +6,10 @@ import { InstalledApp } from './installed.entity'
 import { InstalledAppsController } from './installed.controller'
 import { InstalledAppsService } from './installed.service'
 import { AppsModule } from '../apps.module'
-import { JwtModule } from '@nestjs/jwt'
-import { AuthModule, AccountModule, Query, UsersModule, jwtConfig, BeaconModule } from '@juicyllama/core'
+import { AuthModule, AccountModule, Query, UsersModule, BeaconModule } from '@juicyllama/core'
 import { WordPressService } from './preinstall/wordpress.service'
 import { ShopifyService } from './preinstall/shopify.service'
+import { GoogleAnalyticsService } from './preinstall/google-analytics.service'
 
 @Module({
 	imports: [
@@ -22,7 +22,7 @@ import { ShopifyService } from './preinstall/shopify.service'
 		forwardRef(() => OAuthModule),
 	],
 	controllers: [InstalledAppsController],
-	providers: [InstalledAppsService, WordPressService, ShopifyService, Logger, Query],
+	providers: [InstalledAppsService, WordPressService, ShopifyService, GoogleAnalyticsService, Logger, Query],
 	exports: [InstalledAppsService, WordPressService, ShopifyService],
 })
 export class InstalledAppsModule {}

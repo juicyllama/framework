@@ -33,7 +33,7 @@ export class SandboxController {
 		return this.installedAppsService.removePrivateSettings(
 			await this.installedAppsService.update({
 				installed_app_id: installedApp.installed_app_id,
-				oauth_redirect_url: this.installedAppsService.createOauthLink(installedApp),
+				oauth_redirect_url: await this.installedAppsService.createOauthLink(installedApp),
 			}),
 		)
 	}
