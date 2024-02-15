@@ -1,9 +1,9 @@
-import { Api, Logger, Env } from '@juicyllama/utils'
+import { Api, Env, Logger } from '@juicyllama/utils'
 import { Injectable } from '@nestjs/common'
-import * as mock from '../../../../types/conversion/conversions.mock.json'
-import { EverflowConfigDto } from '../../../../config/everflow.config.dto'
 import { getEverflowAxiosConfig } from '../../../../config/everflow.config'
+import { EverflowConfigDto } from '../../../../config/everflow.config.dto'
 import { EverflowConversion } from '../../../../types/conversion/conversion.dto'
+import * as mock from '../../../../types/conversion/conversions.mock.json'
 import { EverflowAffiliateReportingConversionBody } from './everflow.affiliate.reporting.conversion.dto'
 
 const ENDPOINT = 'https://api.eflow.team/v1/affiliates/reporting/conversions'
@@ -17,7 +17,7 @@ export class EverflowAffiliateReportingConversionsService {
 
 	async findAll(options: {
 		arguments: EverflowAffiliateReportingConversionBody
-		config?: EverflowConfigDto
+		config: EverflowConfigDto
 	}): Promise<EverflowConversion[]> {
 		const domain = 'app::everflow::affiliate::reporting::conversions::findAll'
 
@@ -41,8 +41,10 @@ export class EverflowAffiliateReportingConversionsService {
 				},
 				getEverflowAxiosConfig(options.config),
 			)
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error finding conversions: ${e.message}`, e)
+			throw e
 		}
 	}
 }

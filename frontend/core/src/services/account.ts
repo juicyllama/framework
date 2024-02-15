@@ -15,7 +15,7 @@ export const createAccount = async (payload: CreateAccount): Promise<NewAccountD
 }
 
 export const createAdditionalAccount = async (account_name: string): Promise<NewAccountDetails> => {
-	instance.defaults.headers.common['account-id'] = accountStore.selected_account.account_id
+	instance.defaults.headers.common['account-id'] = accountStore.selected_account?.account_id
 	const response = await instance.post(`/account/additional`, {
 		account_name: account_name,
 	})
@@ -23,19 +23,19 @@ export const createAdditionalAccount = async (account_name: string): Promise<New
 }
 
 export const getAccount = async (account_id: number): Promise<Account> => {
-	instance.defaults.headers.common['account-id'] = accountStore.selected_account.account_id
+	instance.defaults.headers.common['account-id'] = accountStore.selected_account?.account_id
 	const response = await instance.get(`/account/${account_id}`)
 	return response.data
 }
 
 export const updateAccount = async (account_id: number, payload: DeepPartial<Account>): Promise<Account> => {
-	instance.defaults.headers.common['account-id'] = accountStore.selected_account.account_id
+	instance.defaults.headers.common['account-id'] = accountStore.selected_account?.account_id
 	const response = await instance.patch(`/account/${account_id}`, payload)
 	return response.data
 }
 
 export async function updateAccountAvatar(account_id: number, file: any): Promise<Account> {
-	instance.defaults.headers.common['account-id'] = accountStore.selected_account.account_id
+	instance.defaults.headers.common['account-id'] = accountStore.selected_account?.account_id
 	const url = `account/avatar`
 	const formData = new FormData()
 	formData.append('file', file)

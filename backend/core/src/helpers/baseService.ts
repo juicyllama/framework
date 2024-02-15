@@ -156,10 +156,11 @@ export class BaseService<T extends ObjectLiteral> {
 	/**
 	 * Updates the record in the database
 	 * @param data
+	 * @param relations - any relations to include in the response 
 	 */
 
-	async update(data: DeepPartial<T>): Promise<T> {
-		const result = await this.query.update(this.repository, data)
+	async update(data: DeepPartial<T>, relations: string[] = []): Promise<T> {
+		const result = await this.query.update(this.repository, data, relations)
 		await this.cacheRecord(result)
 		await this.sendBeacon({ action: 'UPDATE', data: result })
 		return result
@@ -198,6 +199,14 @@ export class BaseService<T extends ObjectLiteral> {
 	 */
 	async sendBeacon(options: { action: 'CREATE' | 'UPDATE' | 'DELETE' | 'RELOAD'; data: T }) {
 		if (this.options?.beacon) {
+
+			// If the data is too large, only send the primary key
+			if(Buffer.byteLength(JSON.stringify(options.data)) > 10000){
+				options.data = <any>{
+					[this.query.getPrimaryKey(this.repository)]: options.data[this.query.getPrimaryKey(this.repository)]
+				}
+			}
+
 			await this.options?.beacon.sendPush(this.query.getEventName(this.repository, options.data), options)
 		}
 	}

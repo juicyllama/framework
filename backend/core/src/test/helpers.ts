@@ -24,7 +24,8 @@ export async function TestEndpoint<T extends ObjectLiteral>(options: {
 	account?: Account // If not provided, will use owner_account
 	emitCheckResultKeys?: string[] //if values are not provided back in the result
 	skipResultCheck?: boolean // if true results will be returned without checking
-}): Promise<T | undefined> {
+	headers?: { [key: string]: string }
+}): Promise<T | undefined> { 
 	let E: T | undefined = undefined
 
 	const headers = {
@@ -32,6 +33,7 @@ export async function TestEndpoint<T extends ObjectLiteral>(options: {
 		'account-id': options.account
 			? options.account.account_id.toString()
 			: options.scaffold.values.account.account_id.toString(),
+		...options.headers,
 	}
 
 	switch (options.type) {

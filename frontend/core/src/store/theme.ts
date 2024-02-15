@@ -1,10 +1,9 @@
+import { Json } from '@juicyllama/vue-utils'
 import { defineStore } from 'pinia'
 
 export const ThemeStore = defineStore('theme', {
 	state: () => ({
-		left_draw: window.localStorage.getItem('theme_left_draw')
-			? <boolean>JSON.parse(window.localStorage.getItem('theme_left_draw'))
-			: true,
+		left_draw: Json.getLocalStorageObject<boolean>('theme_left_draw') ?? true
 	}),
 	actions: {
 		setLeftDraw(boolean: boolean): boolean {

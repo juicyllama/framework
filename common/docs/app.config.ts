@@ -1,3 +1,5 @@
+import * as pkg from './package.json'
+
 const links = [
 	{
 		'aria-label': 'Wesbite',
@@ -57,7 +59,8 @@ export default defineAppConfig({
 	footer: {
 	  credits: 'Copyright © '+ new Date().getFullYear(),
 	  colorMode: false,
-	  links: links
+	  links: links,
+	  PACKAGE_VERSION: pkg.version,
 	},
 	toc: {
 	  title: 'Table of Contents',

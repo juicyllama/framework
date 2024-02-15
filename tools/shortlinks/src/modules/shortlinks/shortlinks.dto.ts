@@ -8,7 +8,7 @@ export class ShortenURLDto {
 		required: true,
 	})
 	@IsString()
-	long_url: string
+	long_url!: string
 
 	@ApiProperty({
 		description: 'The resource type you would like to associate with this shortlink',

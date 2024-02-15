@@ -224,6 +224,8 @@ export type ControllerConstants = {
 	relationsEnum?: any
 	currencyField?: string // e.g 'currency'. in a given entity, this field's value contains a SupportedCurrency e.g. 'USD'
 	currencyFields?: string[] // the fields that hold numeric values in the currency e.g. '123.45'  e.g. ['subtotal_price', 'total_shipping', 'total_price']
+	geoFields?: string[] // e.g. 'country' the ISO2 country code e.g. 'US'
+	langFields?: string[] // e.g. 'language' the ISO2 language code e.g. 'en'
 	uploadSupportedFields?: string[]
 	uploadDedupField?: string
 	dtos?: {

@@ -1,4 +1,4 @@
-import { Api, Env, Images, Logger } from '@juicyllama/utils'
+import { Api, Env, File, Logger } from '@juicyllama/utils'
 import { Test, TestingModule } from '@nestjs/testing'
 // @ts-ignore
 import * as mock from './mock.json'
@@ -43,13 +43,13 @@ describe('WordPress Media Service', () => {
 
 	describe('Create Media', () => {
 		it('Able to create a media', async () => {
-			const image = await Images.downloadImage(
+			const image = await File.downloadFile(
 				'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
 			)
 
 			const response = await wordpressMediaService.create({
 				data: <any>mock,
-				imageBuffer: image,
+				imageBuffer: image.buffer,
 				filename: 'cropped-icon.png',
 			})
 			expect(response).toBeDefined()

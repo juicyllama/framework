@@ -44,6 +44,7 @@ describe('WordPress', () => {
 			try {
 				await api.get(domain, url.toString(), getWordpressAxiosConfig(options.config))
 			} catch (e) {
+				//@ts-ignore
 				expect(e.response.status).not.toEqual(200)
 			}
 		})
@@ -68,6 +69,7 @@ describe('WordPress', () => {
 			try {
 				await api.get(domain, url.toString(), getWordpressAxiosConfig(options.config))
 			} catch (e) {
+				//@ts-ignore
 				expect(e.response.status).not.toEqual(200)
 			}
 		})

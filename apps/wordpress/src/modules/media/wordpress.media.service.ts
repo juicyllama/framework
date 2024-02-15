@@ -32,6 +32,7 @@ export class WordpressMediaService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return <any>mock
 		}
+		if (!options.config) throw new Error('Missing config')
 
 		try {
 			const url = new URL(this.urlBase)
@@ -45,8 +46,10 @@ export class WordpressMediaService {
 			})
 
 			return await this.update({ mediaId: media.id, data: options.data, config: options.config })
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error creating media: ${e.message}`, e)
+			throw e
 		}
 	}
 
@@ -60,13 +63,16 @@ export class WordpressMediaService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return [<any>mock]
 		}
+		if (!options?.config) throw new Error('Missing config')
 
 		try {
 			const url = new URL(this.urlBase)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString())
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error finding all media: ${e.message}`, e)
+			throw e
 		}
 	}
 
@@ -81,13 +87,16 @@ export class WordpressMediaService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return <any>mock
 		}
+		if (!options.config) throw new Error('Missing config')
 
 		try {
 			const url = new URL(`${this.urlBase}/${options.mediaId}`)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString(), getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error finding one media: ${e.message}`, e)
+			throw e
 		}
 	}
 
@@ -102,12 +111,15 @@ export class WordpressMediaService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return <any>mock
 		}
+		if (!options.config) throw new Error('Missing config')
 
 		try {
 			const url = new URL(`${this.urlBase}/${options.mediaId}`)
 			return await this.api.post(domain, url.toString(), options.data, getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error updating media: ${e.message}`, e)
+			throw e
 		}
 	}
 
@@ -118,12 +130,15 @@ export class WordpressMediaService {
 			this.logger.debug(`[${domain}] Skipping as in test mode`)
 			return
 		}
+		if (!options.config) throw new Error('Missing config')
 
 		try {
 			const url = new URL(`${this.urlBase}/${options.mediaId}`)
 			await this.api.delete(domain, url.toString(), getWordpressAxiosConfig(options.config))
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] Error deleting media: ${e.message}`, e)
+			throw e
 		}
 	}
 }

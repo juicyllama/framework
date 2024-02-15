@@ -27,6 +27,7 @@ export class Modules {
 	public static readonly wise = new Module('@juicyllama/app-wise')
 	public static readonly wordpress = new Module('@juicyllama/app-wordpress')
 	public static readonly xerocc = new Module('@juicyllama/app-xero-cc')
+	public static readonly semrush = new Module('@juicyllama/app-semrush')
 
 	//framework lazyload modules
 	public static readonly datacache = new Module('@juicyllama/data-cache')

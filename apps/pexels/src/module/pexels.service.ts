@@ -16,14 +16,15 @@ export class PexelsService {
 		},
 	): Promise<PhotosWithTotalResults | ErrorResponse> {
 		const domain = 'app::pexels::image'
-
 		try {
 			this.logger.debug(`[${domain}] Request: ${JSON.stringify(options, null, 2)}`)
 			const result = await this.client.photos.search(options)
 			this.logger.debug(`[${domain}] Response: ${JSON.stringify(result, null, 2)}`)
 			return result
-		} catch (e) {
-			this.logger.warn(`[${domain}] Error: ${JSON.stringify(e.message, null, 2)}`, e.response)
+		} catch (err) {
+			const e = err as Error
+			this.logger.warn(`[${domain}] Error: ${e.message}, Request: ${JSON.stringify(options, null, 2)}`, e)
+			throw e
 		}
 	}
 }

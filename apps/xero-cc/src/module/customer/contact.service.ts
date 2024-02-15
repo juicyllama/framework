@@ -1,12 +1,12 @@
 import { Account, Query } from '@juicyllama/core'
-import { Enviroment, Logger } from '@juicyllama/utils'
+import { Logger, Env } from '@juicyllama/utils'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { XeroContact } from './contact.entity'
-import contactMock from './contact.mock'
 import { AuthService } from '../auth'
+import { XeroContact } from './contact.entity'
 import { accountToContact } from './contact.mapper'
+import contactMock from './contact.mock'
 
 @Injectable()
 export class ContactService {
@@ -32,7 +32,7 @@ export class ContactService {
 			return result
 		}
 
-		if (Enviroment[process.env.NODE_ENV] === Enviroment.test) {
+		if (Env.IsTest()) {
 			this.logger.verbose(`[${domain}][Test] Mock xero contact`)
 
 			return await this.query.create(this.repository, {
@@ -46,7 +46,7 @@ export class ContactService {
 		const response = await xero.accountingApi.createContacts(
 			'',
 			{ contacts: [accountToContact(account)] },
-			null,
+			undefined,
 			true,
 		)
 		this.logger.debug(`[${domain}] Create xero contact - response:`, response)
@@ -54,9 +54,9 @@ export class ContactService {
 		const xero_response_body = response?.body
 		this.logger.debug(`[${domain}] Xero Contact`, xero_response_body)
 
-		if (!xero_response_body.contacts.length || !xero_response_body.contacts[0].contactID) {
+		if (!xero_response_body?.contacts?.length || !xero_response_body.contacts[0].contactID) {
 			this.logger.error(`[${domain}] Xero contact not in the response body`, xero_response_body)
-			return
+			throw new Error('Xero contact not in the response body')
 		}
 
 		const xero_contact = xero_response_body.contacts[0]

@@ -1,4 +1,5 @@
 import { ButtonStyle } from './common/button'
+import { AvatarType } from './user'
 
 export * from './common/index'
 
@@ -45,6 +46,12 @@ export interface StatsResponse {
 	sum?: number
 }
 
+export interface Avatar {
+	options: AvatarOptions
+	name: string
+	type?: AvatarType
+	image_url?: string
+}
 export interface AvatarOptions {
 	size?: string
 	background_color?: string

@@ -18,7 +18,7 @@ import { AwsSecretsService } from './aws.secrets.service'
 			useFactory: (config: AwsConfigDto) => {
 				return new SecretsManagerClient({
 					region: config.AWS_JL_REGION,
-					credentials: Env.IsProd
+					credentials: Env.IsProd()
 						? undefined
 						: {
 								accessKeyId: config.AWS_JL_ACCESS_KEY_ID,

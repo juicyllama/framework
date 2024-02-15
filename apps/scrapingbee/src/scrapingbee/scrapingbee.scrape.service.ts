@@ -27,7 +27,8 @@ export class ScrapingBeeScrapeService {
 
 			this.logger.debug(`[${domain}] Response`, text)
 			return text
-		} catch (e) {
+		} catch (err) {
+			const e = err as Error
 			this.logger.error(`[${domain}] ${e.message}`, options)
 		}
 	}

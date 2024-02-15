@@ -16,14 +16,14 @@ const uploadFile = async (UPLOAD_URL: string, fileData: object): Promise<UploadA
 }
 
 // const uploadMetadata = async (obj: object): Promise<UploadAPIResponse> => {
-// 	instance.defaults.headers.common['account-id'] = accountStore.selected_account.account_id
+// 	instance.defaults.headers.common['account-id'] = accountStore.selected_account?.account_id
 // 	return await instance.post(UPLOAD_URL, obj)
 // }
 
 const getUploadFields = async (): Promise<{
 	data: string[]
 }> => {
-	instance.defaults.headers.common['account-id'] = accountStore.selected_account.account_id
+	instance.defaults.headers.common['account-id'] = accountStore.selected_account?.account_id
 	return await instance.get(UPLOAD_FIELDS)
 }
 

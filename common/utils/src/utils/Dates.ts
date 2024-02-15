@@ -1,6 +1,6 @@
 import { DateRangeDto } from '../dto/date.dto'
 import { StepType } from '../enums/stats'
-import { month_names, month_names_short, SubscriptionFrequency } from '../enums/dates'
+import { MonthNames, MonthNamesShort, SubscriptionFrequency } from '../enums/dates'
 
 const nth = function (d: number) {
 	if (d > 3 && d < 21) return 'th'
@@ -36,8 +36,8 @@ export class Dates {
 
 		return format
 			.replace('YYYY', year)
-			.replace('MMMM', month_names[date.getMonth()])
-			.replace('MMM', month_names_short[date.getMonth()])
+			.replace('MMMM', MonthNames[date.getMonth()])
+			.replace('MMM', MonthNamesShort[date.getMonth()])
 			.replace('MM', month.length === 1 ? '0' + month : month)
 			.replace('DD', day.length === 1 ? '0' + day : day)
 			.replace('Do', day + nth(parseInt(day)))
@@ -267,8 +267,8 @@ export class Dates {
 		return Math.floor(seconds) + ' seconds'
 	}
 
-	static ago(date: Date): string {
-		const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000)
+	static ago(date: Date, decimals: number = 2): string {
+		const seconds = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000)
 
 		let interval = Math.floor(seconds / 31536000)
 
@@ -292,13 +292,13 @@ export class Dates {
 		interval = Math.floor(seconds / 3600)
 		if (interval >= 1) {
 			if (interval === 1) return '1 hour ago'
-			return seconds / 3600 + ' hours ago'
+			return (seconds / 3600).toFixed(decimals) + ' hours ago'
 		}
 
 		interval = Math.floor(seconds / 60)
 		if (interval >= 1) {
 			if (interval === 1) return '1 minute ago'
-			return seconds / 60 + ' minute ago'
+			return (seconds / 60).toFixed(decimals) + ' minute ago'
 		}
 
 		if (seconds <= 1) {

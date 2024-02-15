@@ -2,11 +2,11 @@ import { IsString, IsUrl } from 'class-validator'
 
 export class WordpressConfigDto {
 	@IsUrl()
-	WORDPRESS_URL: string
+	WORDPRESS_URL!: string
 
 	@IsString()
-	WORDPRESS_USERNAME: string
+	WORDPRESS_USERNAME!: string
 
 	@IsString()
-	WORDPRESS_APPLICATION_PASSWORD: string
+	WORDPRESS_APPLICATION_PASSWORD!: string
 }

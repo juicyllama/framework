@@ -2,32 +2,32 @@ import { IsString, IsBoolean } from 'class-validator'
 
 export class NumberVerification {
 	@IsString()
-	carrier: string
+	carrier!: string
 
 	@IsString()
-	country_code: string
+	country_code!: string
 
 	@IsString()
-	country_name: string
+	country_name!: string
 
 	@IsString()
-	country_prefix: string
+	country_prefix!: string
 
 	@IsString()
-	international_format: string
+	international_format!: string
 
 	@IsString()
-	line_type: string
+	line_type!: string
 
 	@IsString()
-	local_format: string
+	local_format!: string
 
 	@IsString()
-	location: string
+	location!: string
 
 	@IsString()
-	number: string
+	number!: string
 
 	@IsBoolean()
-	valid: boolean
+	valid!: boolean
 }

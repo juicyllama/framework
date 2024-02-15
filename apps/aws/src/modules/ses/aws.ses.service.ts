@@ -1,4 +1,4 @@
-import { SESv2Client, SendEmailRequest, SendEmailCommand } from '@aws-sdk/client-sesv2'
+import { SESv2Client, SendEmailCommand, SendEmailRequest } from '@aws-sdk/client-sesv2'
 import { InjectConfig, type BeaconMessageDto } from '@juicyllama/core'
 import { Env, Logger, Markdown } from '@juicyllama/utils'
 import { Injectable } from '@nestjs/common'
@@ -42,7 +42,7 @@ export class AwsSesService {
 			this.logger.debug(`[${domain}] Result`, data)
 
 			return data.$metadata.httpStatusCode === 200
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.warn(
 				`[${domain}] Error: ${e.message}`,
 				e.response
@@ -57,14 +57,18 @@ export class AwsSesService {
 	}
 
 	async mapEmail(message: BeaconMessageDto): Promise<SendEmailRequest> {
+		const to = message.communication.email?.to
+		if (!to) {
+			throw new Error('No to address set')
+		}
 		const request = <SendEmailRequest>{
 			FromEmailAddress: `${this.fromName(message)}<${this.fromEmail(message)}>`,
 			Destination: {
-				ToAddresses: [`${message.communication.email.to.name}<${message.communication.email.to.email}>`],
+				ToAddresses: [`${to.name}<${to.email}>`],
 			},
 			Content: {
-				Simple: null,
-				Template: null,
+				Simple: undefined,
+				Template: undefined,
 			},
 		}
 
@@ -88,7 +92,7 @@ export class AwsSesService {
 
 			[${message.cta.text}](${message.cta.url})`
 		}
-
+		request.Content ||= {}
 		request.Content.Simple = {
 			Subject: {
 				Data: message.subject,
@@ -98,7 +102,7 @@ export class AwsSesService {
 					Data: text,
 				},
 				Html: {
-					Data: await this.markdown.markdownToHTML(markdown),
+					Data: markdown ? await this.markdown.markdownToHTML(markdown) : undefined,
 				},
 			},
 		}
@@ -109,22 +113,28 @@ export class AwsSesService {
 	async mapEmailTemplate(email: BeaconMessageDto): Promise<SendEmailRequest> {
 		const domain = 'app::aws::ses::AwsSesService::mapEmailTemplate'
 		this.logger.error(`[${domain}] Not Implemented`, email)
-		return
+		throw new Error('Not Implemented')
 	}
 
 	private fromName(message: BeaconMessageDto): string {
 		if (message?.communication?.email?.from?.name) {
 			return message.communication.email.from.name
 		}
-
-		return this.configService.get<string>('SYSTEM_EMAIL_NAME')
+		const emailName = this.configService.get<string>('SYSTEM_EMAIL_NAME')
+		if (emailName) {
+			return emailName
+		}
+		throw new Error('No SYSTEM_EMAIL_NAME set')
 	}
 
 	private fromEmail(message: BeaconMessageDto): string {
 		if (message?.communication?.email?.from?.email) {
 			return message.communication.email.from.email
 		}
-
-		return this.configService.get<string>('SYSTEM_EMAIL_ADDRESS')
+		const email = this.configService.get<string>('SYSTEM_EMAIL_ADDRESS')
+		if (email) {
+			return email
+		}
+		throw new Error('No SYSTEM_EMAIL_ADDRESS set')
 	}
 }

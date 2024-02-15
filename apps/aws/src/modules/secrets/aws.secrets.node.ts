@@ -10,9 +10,13 @@ export async function getSecret(secret_name: string): Promise<any> {
 	try {
 		const region = process.env.AWS_JL_REGION ?? 'eu-west-2'
 
-		const config = {
+		const config: { region: string; credentials: any } = {
 			region: region,
 			credentials: undefined,
+		}
+
+		if (!process.env.AWS_JL_ACCESS_KEY_ID || !process.env.AWS_JL_SECRET_KEY_ID) {
+			throw new Error('AWS Credentials not set')
 		}
 
 		//If inside AWS, we don't need to set credentials
@@ -32,8 +36,8 @@ export async function getSecret(secret_name: string): Promise<any> {
 			}),
 		)
 
-		return JSON.parse(response.SecretString)
-	} catch (e) {
+		return JSON.parse(response.SecretString || '{}')
+	} catch (e: any) {
 		logger.error(
 			`[${domain}] Error: ${e.message}`,
 			e.response
@@ -56,9 +60,13 @@ export async function listSecrets(): Promise<object> {
 	try {
 		const region = process.env.AWS_JL_REGION ?? 'eu-west-2'
 
-		const config = {
+		const config: { region: string; credentials: any } = {
 			region: region,
 			credentials: undefined,
+		}
+
+		if (!process.env.AWS_JL_ACCESS_KEY_ID || !process.env.AWS_JL_SECRET_KEY_ID) {
+			throw new Error('AWS Credentials not set')
 		}
 
 		//If inside AWS, we don't need to set credentials
@@ -73,8 +81,8 @@ export async function listSecrets(): Promise<object> {
 
 		const response = await client.send(new ListSecretsCommand({}))
 
-		return response.SecretList
-	} catch (e) {
+		return response.SecretList || {}
+	} catch (e: any) {
 		logger.error(
 			`[${domain}] Error: ${e.message}`,
 			e.response
@@ -84,6 +92,6 @@ export async function listSecrets(): Promise<object> {
 					}
 				: null,
 		)
-		return
+		throw e
 	}
 }

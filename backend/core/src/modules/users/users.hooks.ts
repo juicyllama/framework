@@ -1,5 +1,5 @@
 import { Strings, File } from '@juicyllama/utils'
-import { Injectable } from '@nestjs/common'
+import { Injectable, Inject, forwardRef } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { BeaconService } from '../beacon/beacon.service'
 import { Account } from '../accounts/account.entity'
@@ -9,7 +9,7 @@ import { User } from '../users/users.entity'
 export class UsersHooks {
 	constructor(
 		private readonly configService: ConfigService,
-		private readonly beaconService: BeaconService,
+		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
 	) {}
 
 	async invited(account: Account, user: User) {

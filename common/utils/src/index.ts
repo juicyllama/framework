@@ -12,6 +12,7 @@ export { File } from './utils/File'
 export { Functions } from './utils/Functions'
 export { BoundingBox, Coordinates, Geocoding } from './utils/Geocoding'
 export { Json } from './utils/Json'
+export { Languages } from './utils/Languages'
 export { Locale } from './utils/Locale'
 export { Logger } from './utils/Logger'
 export { Markdown } from './utils/Markdown'
@@ -33,7 +34,7 @@ export { Enviroment } from './enums/env'
 export { StatsMethods, StepType } from './enums/stats'
 export { SupportedCurrencies } from './enums/currencies'
 export { SupportedLanguages } from './enums/languages'
-export { FrequencyPerYear, SubscriptionFrequency } from './enums/dates'
+export { FrequencyPerYear, SubscriptionFrequency, DayNames, MonthNames, MonthNamesShort } from './enums/dates'
 export {
 	ChartsResponseDto,
 	ErrorResponseDto,
@@ -44,6 +45,9 @@ export {
 } from './dto/responses.dto'
 export { ChartsPeriod, getMySQLTimeInterval } from './enums/charts'
 export { ComparisonOperator } from './enums/ComparisonOperator'
+export { Country } from './types/countries'
+export { Language } from './types/languages'
 
 import dayjs from 'dayjs'
 export { dayjs }
+

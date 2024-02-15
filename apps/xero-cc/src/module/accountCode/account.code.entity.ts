@@ -6,20 +6,20 @@ import { IsString } from 'class-validator'
 @Unique('apps_xero_cc_account_codes_UNIQUE', ['tag'])
 export class XeroAccountCode {
 	@PrimaryGeneratedColumn()
-	readonly xero_account_code_id: number
+	readonly xero_account_code_id!: number
 
 	@ManyToOne(() => Tag, tag => tag.tag_id, { cascade: true })
 	@JoinColumn({ name: 'tag_id' })
-	tag: Tag
+	tag!: Tag
 
 	@Column()
 	@IsString()
-	account_code: string
+	account_code!: string
 
 	//https://developer.xero.com/documentation/api/accounting/types#tax-types
 	@Column({ default: 'NONE' })
 	@IsString()
-	tax_type: string
+	tax_type!: string
 
 	constructor(partial: Partial<XeroAccountCode>) {
 		Object.assign(this, partial)

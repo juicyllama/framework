@@ -1,4 +1,4 @@
-import { SecretsManagerClient, GetSecretValueCommand, ListSecretsCommand } from '@aws-sdk/client-secrets-manager'
+import { GetSecretValueCommand, ListSecretsCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager'
 import { Logger } from '@juicyllama/utils'
 import { Injectable } from '@nestjs/common'
 import { InjectSecretsManager } from './aws.secrets.constants'
@@ -28,9 +28,11 @@ export class AwsSecretsService {
 					VersionStage: 'AWSCURRENT', // VersionStage defaults to AWSCURRENT if unspecified
 				}),
 			)
-
-			return JSON.parse(response.SecretString)
-		} catch (e) {
+			if (response.SecretString) {
+				return JSON.parse(response.SecretString)
+			}
+			throw new Error('No secret found')
+		} catch (e: any) {
 			this.logger.error(
 				`[${domain}] Error: ${e.message}`,
 				e.response
@@ -40,7 +42,7 @@ export class AwsSecretsService {
 						}
 					: null,
 			)
-			return
+			throw e
 		}
 	}
 
@@ -57,8 +59,11 @@ export class AwsSecretsService {
 				}),
 			)
 
-			return JSON.parse(response.SecretString)
-		} catch (e) {
+			if (response.SecretString) {
+				return JSON.parse(response.SecretString)
+			}
+			throw new Error('No secret found')
+		} catch (e: any) {
 			this.logger.error(
 				`[${domain}] Error: ${e.message}`,
 				e.response
@@ -68,7 +73,7 @@ export class AwsSecretsService {
 						}
 					: null,
 			)
-			return
+			throw e
 		}
 	}
 
@@ -79,9 +84,9 @@ export class AwsSecretsService {
 
 		try {
 			const response = await this.secretsClient.send(new ListSecretsCommand({}))
-
-			return response.SecretList
-		} catch (e) {
+			if (response.SecretList) return response.SecretList
+			throw new Error('No secret found')
+		} catch (e: any) {
 			this.logger.error(
 				`[${domain}] Error: ${e.message}`,
 				e.response
@@ -91,7 +96,7 @@ export class AwsSecretsService {
 						}
 					: null,
 			)
-			return
+			throw e
 		}
 	}
 }

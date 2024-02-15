@@ -7,16 +7,16 @@ export class EverflowOfferRelations {
 
 export class EverflowOffer {
 	@IsNumber()
-	network_offer_id: number
+	network_offer_id!: number
 
 	@IsNumber()
-	network_id: number
+	network_id!: number
 
 	@IsString()
-	name: string
+	name!: string
 
 	@IsString()
-	offer_status: string
+	offer_status!: string
 
 	@IsNumber()
 	network_tracking_domain_id?: number

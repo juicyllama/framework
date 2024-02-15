@@ -50,6 +50,7 @@ describe('OpenAI', () => {
 			const domain = 'app::openai::test::chat'
 			openAI.chat.completions.create.mockResolvedValueOnce({
 				choices: [
+					// @ts-ignore
 					{
 						message: {
 							role: 'assistant',

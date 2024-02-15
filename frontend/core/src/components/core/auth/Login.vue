@@ -46,6 +46,11 @@ const state = reactive(<AuthFormState>{
 
 const loading = ref(false)
 
+//if there is a prelogin redirect, redirect to it (useful for onboaridng flows, oauth etc)
+if(userStore.getPreLoginRedirect){
+	window.location.href = userStore.getPreLoginRedirect
+}
+
 if (route.query.code) {
 	try {
 		switch (localStorage.getItem('OAuthType')) {
@@ -59,7 +64,7 @@ if (route.query.code) {
 				new Error('OAuthType not found')
 		}
 
-		await redirect()
+		await redirect(router)
 	} catch (e) {
 		logger({
 			severity: LogSeverity.ERROR,
@@ -77,12 +82,12 @@ async function login(state: AuthFormState, router: Router) {
 	const user = await userStore.login({ email: state.email, password: state.password.value }, $q, router)
 
 	if (user?.user_id) {
-		await redirect()
+		await redirect(router)
 	}
 	loading.value = false
 }
 
-async function redirect(){
+async function redirect(router: Router){
 	if(route?.query?.r){
 		goToLoginRedirect(router, <string>route?.query?.r)
 	}

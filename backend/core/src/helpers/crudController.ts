@@ -1,21 +1,21 @@
 import {
 	ChartsPeriod,
 	ChartsResponseDto,
-	StatsMethods,
-	StatsResponseDto,
+	Countries,
 	Csv,
 	File,
 	Json,
+	Languages,
 	Logger,
 	Objects,
-	Countries,
-	Languages,
+	StatsMethods,
+	StatsResponseDto
 } from '@juicyllama/utils'
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common'
 import _ from 'lodash'
-import { DeepPartial, ObjectLiteral, FindOptionsWhere } from 'typeorm'
+import { DeepPartial, FindOptionsWhere, ObjectLiteral } from 'typeorm'
 import { CurrencyOptions } from '../types'
-import { UploadType, ImportMode, BulkUploadResponse } from '../types/common'
+import { BulkUploadResponse, ImportMode, UploadType } from '../types/common'
 import { Query as TQuery } from '../utils/typeorm/Query'
 import { TypeOrm } from '../utils/typeorm/TypeOrm'
 
@@ -40,6 +40,8 @@ export async function crudFindAll<T extends ObjectLiteral>(options: {
 	searchFields?: string[]
 	order_by?: string
 	currency?: CurrencyOptions<T>
+	geo?: string[]
+	lang?: string[]
 }): Promise<T[]> {
 	if (options.query.convert_currencies_to && options.currency) {
 		options.currency.currency = options.query.convert_currencies_to
@@ -69,6 +71,8 @@ export async function crudFindOne<T extends ObjectLiteral>(options: {
 	primaryKey: number
 	account_id?: number
 	currency?: CurrencyOptions<T>
+	geo?: string[]
+	lang?: string[]
 }): Promise<T> {
 	const PRIMARY_KEY = TypeOrm.getPrimaryKey<T>(options.service.repository)
 
@@ -86,7 +90,10 @@ export async function crudFindOne<T extends ObjectLiteral>(options: {
 	}
 
 	const sql_options = TypeOrm.findOneOptions<T>(options.query, where)
-	return await options.service.findOne(sql_options, options.currency)
+	let result = await options.service.findOne(sql_options, options.currency)
+	result = await expandGeoFields(result, options.geo)
+	result = await expandLanguageFields(result, options.lang)
+	return result
 }
 
 export async function crudStats<T extends ObjectLiteral>(options: {
@@ -409,7 +416,7 @@ export async function crudPurge<T extends ObjectLiteral>(options: {
 function cleanDtos<T extends ObjectLiteral>(dtos: DeepPartial<T>[], options: any, domain: string): DeepPartial<T>[] {
 	//remove empty values
 	for (const d in dtos) {
-		dtos[d] = <DeepPartial<T>>_.omitBy<DeepPartial<T>>(dtos[d], _.isUndefined)
+		dtos[d] = <DeepPartial<T>>_.omitBy<DeepPartial<T>>(dtos[d], _.isEmpty)
 	}
 
 	const unique = _.uniqBy(dtos, options.dedup_field)
@@ -418,14 +425,7 @@ function cleanDtos<T extends ObjectLiteral>(dtos: DeepPartial<T>[], options: any
 	)
 
 	// Remove any records with no dedup_field
-	const clean = unique.filter(
-		record =>
-			!_.isEmpty(record) &&
-			record[options.dedup_field] &&
-			!_.isNil(record[options.dedup_field]) &&
-			!_.isEmpty(record[options.dedup_field]) &&
-			!_.isEqual(record[options.dedup_field], ''),
-	)
+	const clean = unique.filter(record => !_.isEmpty(record) && !_.isEmpty(record[options.dedup_field]))
 	logger.debug(
 		`[${domain}] Removed ${unique.length - clean.length} records with no value in ${options.dedup_field} field`,
 	)

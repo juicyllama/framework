@@ -267,7 +267,7 @@ describe('TypeORM query', () => {
 	})
 
 	describe('Update', () => {
-		it('Perform a create query', async () => {
+		it('Perform a update query', async () => {
 			const mockAccountUpdate = {
 				account_id: scaffold.values.account.account_id,
 				account_name: faker.word.sample(),
@@ -350,7 +350,7 @@ describe('TypeORM query', () => {
 		it('Perform a purge query', async () => {
 			try {
 				if (scaffold.values.record) {
-					await scaffold.query.remove(scaffold.repository, scaffold.values.record)
+					await scaffold.query.purge(scaffold.repository, scaffold.values.record)
 				}
 			} catch (e) {
 				console.error(e)

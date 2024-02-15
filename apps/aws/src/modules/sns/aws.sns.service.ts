@@ -1,7 +1,7 @@
-import { SNSClient, PublishCommand, PublishCommandInput } from '@aws-sdk/client-sns'
-import { Injectable } from '@nestjs/common'
+import { PublishCommand, PublishCommandInput, SNSClient } from '@aws-sdk/client-sns'
 import type { BeaconMessageDto } from '@juicyllama/core'
 import { Env, Logger } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
 import { InjectSns } from './aws.sns.constants'
 
 @Injectable()
@@ -37,8 +37,8 @@ export class AwsSnsService {
 			this.logger.debug(`[${domain}] Result`, data)
 
 			return data.$metadata.httpStatusCode === 200
-		} catch (e) {
-			this.logger.warn(
+		} catch (e: any) {
+			this.logger.error(
 				`[${domain}] Error: ${e.message}`,
 				e.response
 					? {
@@ -47,7 +47,7 @@ export class AwsSnsService {
 						}
 					: null,
 			)
-			return false
+			throw e
 		}
 	}
 

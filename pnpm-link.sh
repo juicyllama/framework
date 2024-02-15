@@ -9,6 +9,7 @@ pnpm link --global --dir common/utils
 pnpm link --global --dir frontend/core
 pnpm link --global --dir frontend/vue-dev
 pnpm link --global --dir frontend/vue-utils
+pnpm link --global --dir frontend/vue-flags
 
 ### BACKEND ###
 pnpm link --global --dir backend/core
@@ -19,6 +20,7 @@ pnpm link --global --dir backend/billing
 pnpm link --global --dir backend/data-cache
 pnpm link --global --dir backend/websites
 pnpm link --global --dir backend/ecommerce
+pnpm link --global --dir backend/social
 
 ### APPS ###
 pnpm link --global --dir apps/apilayer
@@ -35,13 +37,17 @@ pnpm link --global --dir apps/slack
 pnpm link --global --dir apps/wise
 pnpm link --global --dir apps/wordpress
 pnpm link --global --dir apps/xero-cc
+pnpm link --global --dir apps/semrush
+
 
 # NestJS DI
 pnpm link --global --dir node_modules/@nestjs/core
 pnpm link --global --dir node_modules/@nestjs/typeorm
 pnpm link --global --dir node_modules/typeorm
+pnpm link --global --dir node_modules/class-validator
 pnpm link --global --dir node_modules/@nestjs/common
 pnpm link --global --dir node_modules/@nestjs/config
 pnpm link --global --dir node_modules/@nestjs/platform-express
 pnpm link --global --dir node_modules/@nestjs/microservices
 pnpm link --global --dir node_modules/@nestjs/serve-static
+pnpm link --global --dir node_modules/@nestjs/swagger

@@ -56,17 +56,16 @@ function updatedField(value: string) {
 
 async function buttonPressed(button: FormCustomButton) {
 	logger({ severity: LogSeverity.VERBOSE, message: `Form Button Pressed`, object: button })
-	
-	if(button.type){
+
+	if (button.type) {
 		switch (button.type) {
 			case FormFieldButtonType.ACTION:
 				button.action({ button: button, formData: formData, schema: props.options, q: $q })
 				break
 		}
-	}else{
+	} else {
 		submittedForm()
 	}
-	
 }
 
 async function submittedForm() {
@@ -138,7 +137,7 @@ if (props.options.onFormLoad) {
 
 <template>
 	<div id="JLForm">
-		<q-form @submit="submittedForm" class="row">
+		<q-form :id="options.name" @submit="submittedForm" class="row">
 			<div
 				v-for="field in props.options?.fields"
 				:key="field.key"
@@ -154,6 +153,14 @@ if (props.options.onFormLoad) {
 					)}`">
 					{{ field.label }}
 				</div>
+
+				<div
+					v-if="field.field === FormFieldField.HTML"
+					:class="`JLHTML JLHTML${Strings.capitalize(field.field)} JLHTML${Strings.capitalize(
+						field.key,
+					)} ${field.classes ?? ''}`"
+					v-html="field.value"></div>
+
 				<q-input
 					v-if="field.field === FormFieldField.INPUT"
 					v-model="formData[field.key]"
@@ -177,8 +184,8 @@ if (props.options.onFormLoad) {
 								? inputEmailRequired()
 								: inputEmailNotRequired()
 							: field.required
-							? inputRequired(field)
-							: null
+								? inputRequired(field)
+								: null
 					"
 					:loading="field.loading"
 					:disable="field.disabled"
@@ -199,7 +206,7 @@ if (props.options.onFormLoad) {
 					@keyup.enter="updatedField(field.key)"
 					@blur="updatedField(field.key)"></q-input>
 
-				<q-input 
+				<q-input
 					v-if="field.field === FormFieldField.TEXTAREA"
 					v-model="formData[field.key]"
 					:label="!field.settings?.stack_label ? field.label : null"
@@ -219,8 +226,8 @@ if (props.options.onFormLoad) {
 								? inputEmailRequired()
 								: inputEmailNotRequired()
 							: field.required
-							? inputRequired(field)
-							: null
+								? inputRequired(field)
+								: null
 					"
 					:loading="field.loading"
 					:disable="field.disabled"
@@ -241,7 +248,7 @@ if (props.options.onFormLoad) {
 					@keyup.enter="updatedField(field.key)"
 					@blur="updatedField(field.key)"></q-input>
 
-				<q-select 
+				<q-select
 					v-if="field.field === FormFieldField.DROPDOWN"
 					v-model="formData[field.key]"
 					:options="field.dropdown"
@@ -292,7 +299,7 @@ if (props.options.onFormLoad) {
 					</template>
 				</q-select>
 
-				<q-select 
+				<q-select
 					v-if="field.field === FormFieldField.COUNTRY_DROPDOWN"
 					v-model="formData[field.key]"
 					:options="countries"
@@ -340,7 +347,7 @@ if (props.options.onFormLoad) {
 					</template>
 				</q-select>
 
-				<q-select 
+				<q-select
 					v-if="field.field === FormFieldField.LANGUAGE_DROPDOWN"
 					v-model="formData[field.key]"
 					:options="languages"
@@ -432,7 +439,7 @@ if (props.options.onFormLoad) {
 					:field="field"
 					@installed="installedApp($event, field)" />
 
-				<q-input 
+				<q-input
 					v-if="field.field === FormFieldField.HIDDEN"
 					v-model="formData[field.key]"
 					:name="field.key"
@@ -448,7 +455,15 @@ if (props.options.onFormLoad) {
 							field.key,
 						)} ${field.classes ?? ''} ${button.classes ?? ''}`"
 						:key="key"
-						:color="(!button?.classes && !field.settings?.button_style?.classes) ? button.color ? button.color : field.settings?.button_style?.color ? field.settings?.button_style?.color : 'primary' : 'primary'"
+						:color="
+							!button?.classes && !field.settings?.button_style?.classes
+								? button.color
+									? button.color
+									: field.settings?.button_style?.color
+										? field.settings?.button_style?.color
+										: 'primary'
+								: 'primary'
+						"
 						:type="button?.type === FormFieldButtonType.SUBMIT ? 'submit' : 'button'"
 						:text-color="button?.text_color ?? field.settings?.button_style?.text_color ?? null"
 						:size="button?.size ?? field.settings?.button_style?.size ?? null"
@@ -497,12 +512,11 @@ if (props.options.onFormLoad) {
 					<div class="q-field__bottom row items-start q-field__bottom--animated">
 						<div class="q-field__messages col">
 							<div role="alert">
-								{{field.error}}
+								{{ field.error }}
 							</div>
 						</div>
 					</div>
 				</div>
-			
 			</div>
 		</q-form>
 	</div>

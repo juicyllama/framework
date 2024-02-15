@@ -10,6 +10,7 @@ export function getAhrefsApiKey(options?: { config?: AhrefsConfigDto; installed_
 	} else if (process.env.AHREFS_API_KEY) {
 		return process.env.AHREFS_API_KEY
 	}
+	throw new Error('Ahrefs API key not found')
 }
 
 export function getAhrefsAxiosConfig(options?: {

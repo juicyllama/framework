@@ -89,6 +89,8 @@ export class BaseController<T extends ObjectLiteral> {
 							currency_fields: this.constants.currencyFields,
 						}
 					: undefined,
+			geo: this.constants.geoFields,
+			lang: this.constants.langFields,
 		})
 	}
 
@@ -177,6 +179,8 @@ export class BaseController<T extends ObjectLiteral> {
 							currency_fields: this.constants.currencyFields,
 						}
 					: undefined,
+			geo: this.constants.geoFields,
+			lang: this.constants.langFields,
 		})
 	}
 

@@ -14,3 +14,4 @@ export {
 } from './crud.decorator'
 export { SwaggerPropertyType, SwaggerPropertyReference, SwaggerPropertyDecorator } from './Swagger.decorator'
 export { UserAuth } from './UserAuth.decorator'
+export { UserId, UserCheck } from './UserId.decorator'

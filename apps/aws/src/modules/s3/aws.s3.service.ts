@@ -1,26 +1,29 @@
+
 import {
 	DeleteObjectCommand,
 	GetObjectCommand,
 	ListObjectsCommand,
-	S3Client,
 	PutObjectCommandInput,
+	S3Client,
 } from '@aws-sdk/client-s3'
-import { Upload, Configuration } from '@aws-sdk/lib-storage'
+import { Configuration, Upload } from '@aws-sdk/lib-storage'
 import { InjectConfig } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
 import { Injectable } from '@nestjs/common'
 import { getApplyMd5BodyChecksumPlugin } from '@smithy/middleware-apply-body-checksum'
+import { Readable } from 'stream'
 import { InjectS3 } from './aws.s3.constants'
 import { AwsS3Bucket, AwsS3BucketType, AwsS3Format } from './aws.s3.enums'
 import { AwsS3ConfigDto } from './config/aws.s3.config.dto'
 
-const streamToString = stream =>
-	new Promise((resolve, reject) => {
-		const chunks = []
-		stream.on('data', chunk => chunks.push(chunk))
-		stream.on('error', reject)
-		stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')))
+function streamToString(stream: Readable): Promise<string> {
+	return new Promise((resolve, reject) => {
+		const chunks: Buffer[] = []
+		stream.on('data', (chunk: Buffer) => chunks.push(chunk))
+		stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf-8')))
+		stream.on('error', (error: Error) => reject(error))
 	})
+}
 
 @Injectable()
 export class AwsS3Service {
@@ -92,7 +95,7 @@ export class AwsS3Service {
 			})
 
 			return await upload.done()
-		} catch (e) {
+		} catch (e: any) {
 			this.logger.warn(
 				`[${domain}] Error: ${e.message}`,
 				e.response
@@ -132,6 +135,10 @@ export class AwsS3Service {
 		if (data && data.Contents) {
 			for (const file of data.Contents) {
 				let fileName = file.Key
+				if (!fileName) {
+					this.logger.warn(`[${domain}] No file name found`)
+					continue
+				}
 				fileName = fileName.replace(options.location, '')
 				files.push(fileName)
 			}
@@ -165,8 +172,12 @@ export class AwsS3Service {
 
 		try {
 			const data = await this.s3Client.send(command)
-			result = await streamToString(data.Body)
-		} catch (e) {
+			if (data.Body && data.Body instanceof Readable) {
+				result = await streamToString(data.Body)
+			} else {
+				throw new Error('No body found in response')
+			}
+		} catch (e: any) {
 			this.logger.warn(
 				`[${domain}] Error: ${e.message}`,
 				e.response
@@ -187,7 +198,8 @@ export class AwsS3Service {
 				case AwsS3Format.JSON:
 					try {
 						result = JSON.parse(result.toString())
-					} catch (e) {
+					} catch (err) {
+						const e = err as Error
 						this.logger.error(`[${domain}] ${e.message}`, {
 							location: options.location,
 							bucket: this.getBucket(options.bucket),
@@ -224,12 +236,15 @@ export class AwsS3Service {
 	}
 
 	private getBucket(bucket: AwsS3Bucket): string {
+		let bucketName
 		if (bucket === AwsS3BucketType.PUBLIC) {
-			return this.s3Config.AWS_S3_JL_PUBLIC_BUCKET
+			bucketName = this.s3Config.AWS_S3_JL_PUBLIC_BUCKET
 		} else if (bucket === AwsS3BucketType.PRIVATE) {
-			return this.s3Config.AWS_S3_JL_PRIVATE_BUCKET
-		} else {
-			return bucket
+			bucketName = this.s3Config.AWS_S3_JL_PRIVATE_BUCKET
 		}
+		if (!bucketName) {
+			throw new Error(`Bucket ${bucket} not found`)
+		}
+		return bucketName
 	}
 }
