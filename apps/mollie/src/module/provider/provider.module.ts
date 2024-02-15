@@ -13,5 +13,6 @@ import { MollieClientToken } from './provider.constants'
 			useFactory: (config: MollieConfigDto) => createMollieClient({ apiKey: config.MOLLIE_API_KEY }),
 		},
 	],
+	exports: [MollieClientToken],
 })
 export class MollieProviderModule {}

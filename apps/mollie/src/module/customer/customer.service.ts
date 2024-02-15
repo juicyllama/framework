@@ -1,5 +1,5 @@
 import { Account, BaseService, Query } from '@juicyllama/core'
-import { Enviroment, Logger } from '@juicyllama/utils'
+import { Env, Logger } from '@juicyllama/utils'
 import { Customer, MollieClient } from '@mollie/api-client'
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
@@ -30,7 +30,7 @@ export class CustomerService extends BaseService<T> {
 		let mollie_response: Customer
 
 		try {
-			if (Enviroment[process.env.NODE_ENV] === Enviroment.test) {
+			if (Env.IsTest()) {
 				this.logger.verbose(`[Test] Mock mollie customer`)
 				mollie_response = customerMock()
 			} else {

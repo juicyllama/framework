@@ -70,7 +70,7 @@ export class MollieService {
 		amount: number,
 		currency: SupportedCurrencies,
 		account: Account,
-		mollie_mandate_id?: number,
+		mollie_mandate_id: number,
 	): Promise<MolliePayment> {
 		const mandate = await this.mandateService.findById(mollie_mandate_id)
 		if (!mandate) {
