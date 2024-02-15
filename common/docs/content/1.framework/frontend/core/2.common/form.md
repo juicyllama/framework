@@ -6,13 +6,11 @@ title: Form
 
 This component renders a form with configurable fields that allow to create/edit data objects.
 
-::CodeDemo{demo="https://stackblitz.com/edit/vitejs-vite-7b6ghm?ctl=1&embed=1&file=src%2Fcomponents%2FHelloWorld.vue&view=editor"}
-
 ## Props
 
 This component accepts the following props:
 
--   `options` - The table options, see [FormSchema](../../types/form.md) for more information.
+- `options` - The table options, see [FormSchema](../../types/form.md) for more information.
 
 ## Button on form
 
@@ -37,6 +35,10 @@ This component emits:
 ::alert{type="info"}
 These are [Tailwind CSS](https://tailwindcss.com/docs/reusing-styles#extracting-classes-with-apply) @Apply classes, you can override them in your own CSS file.
 ::
+
+## Live demo
+
+::CodeDemo{demo="https://stackblitz.com/github/shershen08/jl-components-demos-ui?embed=1&file=src%2Fcomponents%2FFormDemo.vue&view=editor"}
 
 ## Examples
 
