@@ -206,6 +206,20 @@ export class Api<T> {
 		})
 	}
 
+	async put(options: FormApiOptionsUpdate): Promise<T> {
+		if(!this.url && !options.url) throw new Error('No url provided')
+		let url = options.url ?? this.url
+		if (options.record_id) url = url + `/${options.record_id}`
+
+		return await apiRequest<T>({
+			url: url,
+			method: 'PUT',
+			data: options.data,
+			q: options.q,
+			headers: this.options?.headers,
+		})
+	}
+
 	async patch(options: FormApiOptionsUpdate): Promise<T> {
 		if(!this.url && !options.url) throw new Error('No url provided')
 		return this.update({
