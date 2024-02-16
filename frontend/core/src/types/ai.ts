@@ -1,4 +1,4 @@
-export enum LanaSuccessType {
+export enum AiSuccessType {
 	SUCCESS = 'SUCCESS', //The AI responses with a result
 	SQL_ERROR = 'SQL_ERROR', //The SQL command failed and needs more training
 	ERROR = 'ERROR', // Unknown error, we need to check the logs
@@ -6,10 +6,10 @@ export enum LanaSuccessType {
 	USER_NEUTRAL = 'USER_NEUTRAL', //User has signalled a neural response
 	USER_SAD = 'USER_SAD', //User has signalled a negative response, more training needed
 }
-export interface Lana {
-	readonly lana_id: number
+export interface Ai {
+	readonly ai_id: number
 
-	//The value the user passes to Lana
+	//The value the user passes to ai
 	request: string
 
 	//Is this a general AI question?
@@ -33,7 +33,7 @@ export interface Lana {
 	training_response?: string
 
 	//Did the AI generate the correct answer?
-	success?: LanaSuccessType
+	success?: AiSuccessType
 
 	error_message?: string
 
@@ -43,5 +43,6 @@ export interface Lana {
 
 	deleted_at?: Date
 
-	is_error: boolean
+	is_error?: boolean
+
 }

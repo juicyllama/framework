@@ -29,6 +29,11 @@ export async function goToLoginRedirect(router: Router, redirect?: string) {
 
 export async function goToLogin(router: Router, redirect?: string) {
 	logger({ severity: LogSeverity.VERBOSE, message: `[Helpers][goToLogin] Redirecting to /login?r=${redirect}` })
+
+	if(redirect === '/login') {
+		redirect = null
+	}
+
 	if (redirect) {
 		settingsStore.setSettings({ return_path: redirect })
 		await goTo(`/login?r=${redirect}`, router)

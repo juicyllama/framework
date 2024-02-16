@@ -267,8 +267,8 @@ export class Dates {
 		return Math.floor(seconds) + ' seconds'
 	}
 
-	static ago(date: Date): string {
-		const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000)
+	static ago(date: Date, decimals: number = 2): string {
+		const seconds = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000)
 
 		let interval = Math.floor(seconds / 31536000)
 
@@ -292,13 +292,13 @@ export class Dates {
 		interval = Math.floor(seconds / 3600)
 		if (interval >= 1) {
 			if (interval === 1) return '1 hour ago'
-			return seconds / 3600 + ' hours ago'
+			return (seconds / 3600).toFixed(decimals) + ' hours ago'
 		}
 
 		interval = Math.floor(seconds / 60)
 		if (interval >= 1) {
 			if (interval === 1) return '1 minute ago'
-			return seconds / 60 + ' minute ago'
+			return (seconds / 60).toFixed(decimals) + ' minute ago'
 		}
 
 		if (seconds <= 1) {

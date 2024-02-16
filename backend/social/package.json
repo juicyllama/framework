@@ -1,0 +1,41 @@
+{
+    "name": "@juicyllama/social",
+    "version": "0.0.3",
+    "description": "Juicyllama Social Module - Chat, Posts, Forums, Comments, Likes, Shares, Connections, Streaks etc.",
+    "author": {
+        "name": "JuicyLlama Studio",
+        "email": "studio@juicyllama.com",
+        "url": "https://juicyllama.com"
+    },
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/juicyllama/framework/tree/main/backend/social"
+    },
+    "bugs": "https://github.com/juicyllama/framework",
+    "license": "0BSD",
+    "readmeFilename": "README.md",
+    "main": "dist/index.js",
+    "files": [
+        "dist/**/*",
+        "*.md"
+    ],
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "prebuild": "rimraf dist",
+        "prepare": "pnpm run build",
+        "build": "tsc",
+        "format": "prettier --write \"src/**/*.ts\"",
+        "lint": "eslint \"src/**/*.ts\" --fix",
+        "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests",
+        "sandbox": "export $(grep -v '^#' ../../.env.development) && nest start --config ./src/sandbox/nest-cli.json --watch ",
+        "before:commit": "pnpm run lint && pnpm run format && pnpm run test && pnpm run build"
+    },
+    "dependencies": {
+        "@juicyllama/core": "workspace:^",
+        "@juicyllama/utils": "workspace:^"
+    }
+}

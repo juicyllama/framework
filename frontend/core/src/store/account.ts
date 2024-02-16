@@ -7,12 +7,11 @@ import { UserStore } from './user'
 import { LogSeverity } from '../types'
 import { QVueGlobals } from 'quasar'
 import { getUser } from '../services/auth'
+import { Json } from '@juicyllama/vue-utils'
 
 export const AccountStore = defineStore('account', {
 	state: () => ({
-		selected_account: window.localStorage.getItem('selected_account')
-			? <Account>JSON.parse(window.localStorage.getItem('selected_account'))
-			: null,
+		selected_account: Json.getLocalStorageObject<Account>('selected_account'),
 	}),
 	actions: {
 		async setAccountByUser(user?: User): Promise<void> {

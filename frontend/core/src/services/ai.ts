@@ -2,33 +2,27 @@ import instance from './index'
 import { DeepPartial, QVueGlobals } from 'quasar'
 import { logger } from '../helpers/logger'
 import { LogSeverity } from '../types/common'
-import { Lana } from '../types/lana'
+import { Ai } from '../types/ai'
 import { accountStore } from '../index'
 
-export async function askLana(question: string, sql: boolean, q?: QVueGlobals): Promise<Lana> {
+export async function askAi(question: string, q?: QVueGlobals): Promise<Ai> {
 	instance.defaults.headers.common['account-id'] = accountStore.selected_account?.account_id
 	try {
-		if (sql) {
-			const response = await instance.post(`lana/data`, {
-				question: question,
-				sql: sql,
-			})
-			return response.data
-		} else {
-			const response = await instance.post(`lana/ask`, {
+		
+			const response = await instance.post(`ai/ask`, {
 				question: question,
 			})
 			return response.data
-		}
+		
 	} catch (e: any) {
 		logger({ severity: LogSeverity.ERROR, message: e.message(), q: q })
 	}
 }
 
-export async function updateLana(lana_id: number, data: DeepPartial<Lana>, q?: QVueGlobals): Promise<Lana> {
+export async function updateAi(ai_id: number, data: DeepPartial<Ai>, q?: QVueGlobals): Promise<Ai> {
 	instance.defaults.headers.common['account-id'] = accountStore.selected_account?.account_id
 	try {
-		const response = await instance.patch(`lana/update/${lana_id}`, data)
+		const response = await instance.patch(`ai/update/${ai_id}`, data)
 		logger({ severity: LogSeverity.LOG, message: `Update Successful!`, q: q })
 		return response.data
 	} catch (e: any) {
