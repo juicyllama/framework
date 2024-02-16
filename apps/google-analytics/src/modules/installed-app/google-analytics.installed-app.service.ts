@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 
 import { AppIntegrationStatus, InstalledAppsService } from '@juicyllama/app-store'
-import { InstalledAppLocator, PropertyInstalledApp } from '../property/property-app.entity'
+import { InstalledAppLocator, GoogleAnalyticsInstalledApp } from '../property/google-analytics.installed-app.entity'
 
 @Injectable()
 export class GoogleAnalyticsInstalledAppService {
@@ -14,20 +14,20 @@ export class GoogleAnalyticsInstalledAppService {
 
 	public constructor(private readonly installedAppsService: InstalledAppsService) {}
 
-	public async load(id: number, accountId: number): Promise<PropertyInstalledApp> {
+	public async load(id: number, accountId: number): Promise<GoogleAnalyticsInstalledApp> {
 		const installedApp = (await this.installedAppsService.findOne({
 			where: {
 				installed_app_id: id,
 				account_id: accountId,
 			},
-		})) as PropertyInstalledApp
+		})) as GoogleAnalyticsInstalledApp
 
 		this.validate(installedApp)
 
 		return installedApp
 	}
 
-	private validate(installedApp: PropertyInstalledApp) {
+	private validate(installedApp: GoogleAnalyticsInstalledApp) {
 		if (!installedApp) {
 			throw new GoogleAnalyticsInstalledAppService.AppNotFoundException()
 		}

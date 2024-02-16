@@ -3,11 +3,11 @@ import { Credentials } from 'google-auth-library'
 import { Injectable } from '@nestjs/common'
 import { OauthService } from '@juicyllama/app-store'
 
-import { InstalledAppLocator } from '../property/property-app.entity'
+import { InstalledAppLocator } from '../property/google-analytics.installed-app.entity'
 
 @Injectable()
-export class InstalledAppAuthService {
-	public static readonly OauthNotFoundException = class OauthNotFoundException extends Error {}
+export class GoogleAnalyticsInstalledAppOAuthService {
+	public static readonly OAuthNotFoundException = class OAuthNotFoundException extends Error {}
 
 	public constructor(private readonly oauthService: OauthService) {}
 
@@ -40,7 +40,7 @@ export class InstalledAppAuthService {
 		const oauth = await this.oauthService.findOne({ where: { state } })
 
 		if (!oauth) {
-			throw new InstalledAppAuthService.OauthNotFoundException()
+			throw new GoogleAnalyticsInstalledAppOAuthService.OAuthNotFoundException()
 		}
 
 		return this.oauthService.update({
@@ -57,7 +57,7 @@ export class InstalledAppAuthService {
 		const oauth = await this.oauthService.findOne({ where: { installed_app_id: installedApp.installed_app_id } })
 
 		if (!oauth) {
-			throw new InstalledAppAuthService.OauthNotFoundException()
+			throw new GoogleAnalyticsInstalledAppOAuthService.OAuthNotFoundException()
 		}
 
 		return {

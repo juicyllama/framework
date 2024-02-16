@@ -7,8 +7,8 @@ import { Logger } from '@juicyllama/utils'
 import { GoogleAnalyticsApp } from './google-analytics.app'
 import { GoogleAnalyticsInstallationService } from './google-analytics.installation'
 import { GoogleAnalyticsConfigModule } from './config/google-analytics.config.module'
-import { AuthModule } from './auth/auth.module'
-import { PropertyModule } from './property/property.module'
+import { GoogleAnalyticsOAuthModule } from './oauth/google-analytics.oauth.module'
+import { GoogleAnalyticsPropertyModule } from './property/google-analytics.property.module'
 
 export class GoogleAnalyticsModule {
 	static forRoot(mountAt = GoogleAnalyticsApp.mountRoutePrefix): DynamicModule {
@@ -21,16 +21,16 @@ export class GoogleAnalyticsModule {
 
 				GoogleAnalyticsConfigModule,
 
-				PropertyModule,
-				AuthModule,
+				GoogleAnalyticsPropertyModule,
+				GoogleAnalyticsOAuthModule,
 				RouterModule.register([
 					{
 						path: mountAt,
-						module: AuthModule,
+						module: GoogleAnalyticsOAuthModule,
 					},
 					{
 						path: mountAt,
-						module: PropertyModule,
+						module: GoogleAnalyticsPropertyModule,
 					},
 				]),
 			],

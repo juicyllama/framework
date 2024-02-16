@@ -9,7 +9,7 @@ import { GoogleAnalyticsApp } from '../google-analytics.app'
 import { GoogleAnalyticsConfigDto } from '../config/google-analytics.config.dto'
 
 @Injectable()
-export class AuthService {
+export class GoogleAnalyticsOAuthService {
 	private serviceClient: OAuth2Client
 
 	public constructor(private readonly config: GoogleAnalyticsConfigDto) {
@@ -20,7 +20,7 @@ export class AuthService {
 		return new OAuth2Client(
 			this.config.GA4_OAUTH_CLIENT_ID,
 			this.config.GA4_OAUTH_CLIENT_SECRET,
-			this.config.BASE_URL_API + GoogleAnalyticsApp.createRoute('/auth/callback'),
+			this.config.BASE_URL_API + GoogleAnalyticsApp.createRoute('/oauth/callback'),
 		)
 	}
 

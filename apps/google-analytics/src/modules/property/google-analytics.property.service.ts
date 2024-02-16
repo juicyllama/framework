@@ -1,18 +1,18 @@
 import { BetaAnalyticsDataClient } from '@google-analytics/data'
 import { Injectable } from '@nestjs/common'
 
-import { PropertyInstalledApp } from './property-app.entity'
-import { AuthService } from '../auth/auth.service'
-import { InstalledAppAuthService } from '../auth/installed-app-auth.service'
+import { GoogleAnalyticsInstalledApp } from './google-analytics.installed-app.entity'
+import { GoogleAnalyticsOAuthService } from '../oauth/google-analytics.oauth.service'
+import { GoogleAnalyticsInstalledAppOAuthService } from '../oauth/google-analytics.installed-app-oauth.service'
 
 @Injectable()
-export class PropertyService {
+export class GoogleAnalyticsPropertyService {
 	constructor(
-		private readonly authService: AuthService,
-		private readonly installedAppAuthService: InstalledAppAuthService,
+		private readonly authService: GoogleAnalyticsOAuthService,
+		private readonly installedAppAuthService: GoogleAnalyticsInstalledAppOAuthService,
 	) {}
 
-	async runReport(installedApp: PropertyInstalledApp, payload: Object) {
+	async runReport(installedApp: GoogleAnalyticsInstalledApp, payload: Object) {
 		const analyticsData = await this.createAnalyticsDataClient(installedApp)
 
 		const [response] = await analyticsData.runReport({
@@ -23,7 +23,7 @@ export class PropertyService {
 		return response
 	}
 
-	private async createAnalyticsDataClient(installedApp: PropertyInstalledApp) {
+	private async createAnalyticsDataClient(installedApp: GoogleAnalyticsInstalledApp) {
 		const tokens = await this.installedAppAuthService.loadSavedCredentials(installedApp)
 
 		const client = this.authService.getAuthenticatedClient(tokens)

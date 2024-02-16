@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-google-analytics4",
-    "version": "0.1.1",
+    "version": "1.0.0",
     "description": "Juicyllama Google Analytics 4 App",
     "author": {
         "name": "JuicyLlama Studio",
@@ -32,7 +32,7 @@
         "start:dev": "tsc -w",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
-        "test": "export $(grep -v '^#' ../../.env.development) && export $(grep -v '^#' .env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests",
+        "test": "NODE_ENV=test && jest --runInBand --passWithNoTests",
         "before:commit": "pnpm run lint && pnpm run format && pnpm run test && pnpm run build"
     },
     "dependencies": {
@@ -41,7 +41,12 @@
         "@juicyllama/core": "workspace:^",
         "@juicyllama/utils": "workspace:^",
         "@nestjs/common": "^10.2.7",
+        "@nestjs/core": "^10.2.7",
         "class-validator": "^0.14.0",
         "google-auth-library": "^9.6.2"
+    },
+    "devDependencies": {
+        "@nestjs/swagger": "^7.1.12",
+        "@nestjs/testing": "^10.2.7"
     }
 }

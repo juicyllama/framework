@@ -74,7 +74,7 @@ export class InstalledAppsService extends BaseService<T> {
 			case AppStoreIntegrationName.ga4:
 				const { GoogleAnalyticsApp } = await Modules.googleAnalytics.load()
 
-				const url = new URL(GoogleAnalyticsApp.createRoute('/auth/init'), process.env.BASE_URL_API)
+				const url = new URL(GoogleAnalyticsApp.createRoute('/oauth/init'), process.env.BASE_URL_API)
 				url.searchParams.set('installed_app_id', installed_app.installed_app_id.toString())
 
 				return url.toString()

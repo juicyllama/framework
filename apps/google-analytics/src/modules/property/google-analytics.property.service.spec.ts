@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { PropertyService } from './property.service'
+import { GoogleAnalyticsPropertyService } from './google-analytics.property.service'
 
 describe('PropertyService', () => {
-	let service: PropertyService
+	let service: GoogleAnalyticsPropertyService
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			providers: [PropertyService],
+			providers: [GoogleAnalyticsPropertyService],
 		}).compile()
 
-		service = module.get<PropertyService>(PropertyService)
+		service = module.get<GoogleAnalyticsPropertyService>(GoogleAnalyticsPropertyService)
 	})
 
 	it('should be defined', () => {

@@ -1,6 +1,6 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common'
 
-import { GoogleAnalyticsInstalledAppService } from './google-analytics-installed-app/google-analytics-installed-app.service'
+import { GoogleAnalyticsInstalledAppService } from './installed-app/google-analytics.installed-app.service'
 
 export abstract class GoogleAnalyticsBaseController {
 	protected constructor(protected readonly gaInstalledAppService: GoogleAnalyticsInstalledAppService) {}

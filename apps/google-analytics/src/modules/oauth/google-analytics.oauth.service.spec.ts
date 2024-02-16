@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { AuthService } from './auth.service'
+import { GoogleAnalyticsOAuthService } from './google-analytics.oauth.service'
 
 describe('AuthService', () => {
-	let service: AuthService
+	let service: GoogleAnalyticsOAuthService
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			providers: [AuthService],
+			providers: [GoogleAnalyticsOAuthService],
 		}).compile()
 
-		service = module.get<AuthService>(AuthService)
+		service = module.get<GoogleAnalyticsOAuthService>(GoogleAnalyticsOAuthService)
 	})
 
 	it('should be defined', () => {

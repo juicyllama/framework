@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { ConfigModule } from '@nestjs/config'
 import { Env } from '@juicyllama/utils'
 
 import { GoogleAnalyticsModule } from './google-analytics.module'
@@ -14,14 +13,10 @@ describe('Google Analytics', () => {
 		}
 
 		moduleRef = await Test.createTestingModule({
-			imports: [
-				ConfigModule.forRoot({
-					isGlobal: true,
-				}),
-				GoogleAnalyticsModule,
-			],
+			imports: [GoogleAnalyticsModule],
 		}).compile()
-	}, 180000)
+	})
+
 	it('should allow for the use of the GoogleAnalytics4Module', () => {
 		expect(moduleRef.get(GoogleAnalyticsInstallationService, { strict: false })).toBeDefined()
 	})

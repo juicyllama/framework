@@ -1,6 +1,6 @@
 # Property
 
-Property module is imported by the GoogleAnalyticsModule and exposes endpoint
+`GoogleAnalyticsPropertyModule` module is imported by the GoogleAnalyticsModule and exposes endpoint
 to runReport
 
 - `POST /property/run-report?installed_app_id=X`
