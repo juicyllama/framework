@@ -73,13 +73,11 @@ export class InstalledAppsService extends BaseService<T> {
 
 			case AppStoreIntegrationName.ga4:
 				const { GoogleAnalyticsApp } = await Modules.googleAnalytics.load()
-				const path =
-					`/${GoogleAnalyticsApp.mountRoutePrefix}/auth/init?installed_app_id=${installed_app.installed_app_id}`.replace(
-						/\/+/g,
-						'/',
-					)
 
-				return process.env.BASE_URL_API + path
+				const url = new URL(GoogleAnalyticsApp.createRoute('/auth/init'), process.env.BASE_URL_API)
+				url.searchParams.set('installed_app_id', installed_app.installed_app_id.toString())
+
+				return url.toString()
 
 			default:
 				throw new BadRequestException(`${installed_app.app?.integration_name} OAUTH2 LINK NOT IMPLEMENTED`)
