@@ -15,8 +15,8 @@ import { GoogleAnalyticsApp } from '../google-analytics.app'
 export class GoogleAnalyticsOAuthController extends GoogleAnalyticsBaseController {
 	constructor(
 		gaInstalledAppService: GoogleAnalyticsInstalledAppService,
-		private readonly authService: GoogleAnalyticsOAuthService,
-		private readonly installedAppAuthService: GoogleAnalyticsInstalledAppOAuthService,
+		private readonly googleAnalyticsOAuthService: GoogleAnalyticsOAuthService,
+		private readonly googleAnalyticsInstalledAppOAuthService: GoogleAnalyticsInstalledAppOAuthService,
 	) {
 		super(gaInstalledAppService)
 	}
@@ -35,12 +35,12 @@ export class GoogleAnalyticsOAuthController extends GoogleAnalyticsBaseControlle
 		@Query('installed_app_id', new ParseIntPipe()) installedAppId: number,
 		@AccountId() accountId: number,
 	) {
-		const oauth = this.authService.generateAuthUrl()
+		const oauthStarter = this.googleAnalyticsOAuthService.generateAuthUrl()
 		const installedApp = await this.loadInstalledApp(installedAppId, accountId)
 
-		await this.installedAppAuthService.initOauth(installedApp, oauth)
+		await this.googleAnalyticsInstalledAppOAuthService.initOauth(installedApp, oauthStarter)
 
-		return { redirect_url: oauth.authUrl }
+		return { redirect_url: oauthStarter.authUrl }
 	}
 
 	@ApiOperation({
@@ -57,9 +57,9 @@ export class GoogleAnalyticsOAuthController extends GoogleAnalyticsBaseControlle
 	@Get('/callback')
 	public async callback(@Query('state') state: string, @Query('code') code: string) {
 		try {
-			const tokens = await this.authService.getTokensFromCallbackCode(code)
+			const tokens = await this.googleAnalyticsOAuthService.getTokensFromCallbackCode(code)
 
-			const oauth = await this.installedAppAuthService.storeOauth(state, tokens)
+			const oauth = await this.googleAnalyticsInstalledAppOAuthService.storeOauth(state, tokens)
 
 			await this.gaInstalledAppService.recordConnected({ installed_app_id: oauth.installed_app_id })
 

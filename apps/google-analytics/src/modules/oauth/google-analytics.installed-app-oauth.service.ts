@@ -1,7 +1,7 @@
 import { Credentials } from 'google-auth-library'
 
 import { Injectable } from '@nestjs/common'
-import { OauthService } from '@juicyllama/app-store'
+import { OauthService, Oauth } from '@juicyllama/app-store'
 
 import { InstalledAppLocator } from '../property/google-analytics.installed-app.entity'
 
@@ -37,11 +37,7 @@ export class GoogleAnalyticsInstalledAppOAuthService {
 	}
 
 	public async storeOauth(state: string, tokens: Credentials) {
-		const oauth = await this.oauthService.findOne({ where: { state } })
-
-		if (!oauth) {
-			throw new GoogleAnalyticsInstalledAppOAuthService.OAuthNotFoundException()
-		}
+		const oauth = await this.getOauth({ state })
 
 		return this.oauthService.update({
 			oauth_id: oauth.oauth_id,
@@ -54,11 +50,7 @@ export class GoogleAnalyticsInstalledAppOAuthService {
 	}
 
 	public async loadSavedCredentials(installedApp: InstalledAppLocator): Promise<Credentials> {
-		const oauth = await this.oauthService.findOne({ where: { installed_app_id: installedApp.installed_app_id } })
-
-		if (!oauth) {
-			throw new GoogleAnalyticsInstalledAppOAuthService.OAuthNotFoundException()
-		}
+		const oauth = await this.getOauth({ installed_app_id: installedApp.installed_app_id })
 
 		return {
 			refresh_token: oauth.refresh_token,
@@ -67,5 +59,15 @@ export class GoogleAnalyticsInstalledAppOAuthService {
 			token_type: oauth.token_type,
 			scope: oauth.scope,
 		}
+	}
+
+	private async getOauth(search: Partial<Oauth>) {
+		const oauth = await this.oauthService.findOne({ where: search })
+
+		if (!oauth) {
+			throw new GoogleAnalyticsInstalledAppOAuthService.OAuthNotFoundException()
+		}
+
+		return oauth
 	}
 }

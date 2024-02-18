@@ -46,6 +46,7 @@
         "google-auth-library": "^9.6.2"
     },
     "devDependencies": {
+        "@faker-js/faker": "^8.1.0",
         "@nestjs/swagger": "^7.1.12",
         "@nestjs/testing": "^10.2.7"
     }

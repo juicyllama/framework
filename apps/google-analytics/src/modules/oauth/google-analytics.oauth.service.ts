@@ -16,7 +16,7 @@ export class GoogleAnalyticsOAuthService {
 		this.serviceClient = this.createClient()
 	}
 
-	public createClient() {
+	private createClient() {
 		return new OAuth2Client(
 			this.config.GA4_OAUTH_CLIENT_ID,
 			this.config.GA4_OAUTH_CLIENT_SECRET,
