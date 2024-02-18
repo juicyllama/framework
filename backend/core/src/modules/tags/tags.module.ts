@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { Module, forwardRef } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Query } from '../../utils/typeorm/Query'
 import { AuthModule } from '../auth/auth.module'
@@ -7,7 +7,7 @@ import { Tag } from './tags.entity'
 import { TagsService } from './tags.service'
 
 @Module({
-	imports: [TypeOrmModule.forFeature([Tag]), AuthModule, BeaconModule],
+	imports: [TypeOrmModule.forFeature([Tag]), forwardRef(() => AuthModule), forwardRef(() => BeaconModule)],
 	controllers: [],
 	providers: [TagsService, Query],
 	exports: [TagsService],

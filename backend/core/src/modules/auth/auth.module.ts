@@ -49,7 +49,7 @@ if (enableLinkedinStrategy) {
 		TypeOrmModule.forRoot(databaseConfig()),
 		TypeOrmModule.forFeature([Role]),
 		forwardRef(() => AccountModule),
-		BeaconModule,
+		forwardRef(() => BeaconModule),
 		PassportModule,
 		SettingsModule,
 		forwardRef(() => UsersModule),

@@ -23,7 +23,7 @@ import { AccountService } from './account.service'
 		TypeOrmModule.forRoot(databaseConfig()),
 		TypeOrmModule.forFeature([Account]),
 		forwardRef(() => AuthModule),
-		BeaconModule,
+		forwardRef(() => BeaconModule),
 		SettingsModule,
 		StorageModule,
 		TagsModule,

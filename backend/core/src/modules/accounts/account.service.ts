@@ -25,7 +25,7 @@ export class AccountService extends BaseService<T> {
 		@InjectRepository(E) readonly repository: Repository<T>,
 		readonly logger: Logger,
 		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
-		readonly beaconService: BeaconService,
+		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
 		readonly storageService: StorageService,
 		@Inject(forwardRef(() => UsersService)) readonly usersService: UsersService,
 		readonly accountHooks: AccountHooks,
