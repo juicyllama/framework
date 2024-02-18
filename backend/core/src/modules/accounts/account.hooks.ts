@@ -1,12 +1,12 @@
 import { File, Strings } from '@juicyllama/utils'
-import { Injectable } from '@nestjs/common'
+import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { BeaconService } from '../beacon/beacon.service'
 import { User } from '../users/users.entity'
 import { Account } from './account.entity'
 
 @Injectable()
 export class AccountHooks {
-	constructor(private readonly beaconService: BeaconService) {}
+	constructor(@Inject(forwardRef(() => BeaconService)) private readonly beaconService: BeaconService) {}
 
 	/**
 	 * Send a new account opening notification to the account owner
