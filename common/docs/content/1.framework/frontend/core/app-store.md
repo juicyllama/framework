@@ -12,9 +12,7 @@ Create video overview with
 
 ## Apps Component
 
-::alert{type="danger"}
-TODO Document this
-::
+::Incomplete
 
 ## Oauth > Start
 

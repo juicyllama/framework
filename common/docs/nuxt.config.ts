@@ -10,7 +10,6 @@ export default defineNuxtConfig({
 	  '@nuxtjs/fontaine',
 	  '@nuxtjs/google-fonts',
 	  'nuxt-og-image',
-	//   '@nuxtjs/tailwindcss'
 	],
 	css: [
 		'@/assets/css/classes-that-nuxt-missing.css',
