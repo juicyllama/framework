@@ -1,6 +1,6 @@
-import { AccountModule, AuthModule, StorageModule, Query, SettingsModule, FxModule } from '@juicyllama/core'
+import { AccountModule, AuthModule, FxModule, Query, SettingsModule, StorageModule } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
-import { Module } from '@nestjs/common'
+import { Module, forwardRef } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ChargesModule } from '../charges/charges.module'
@@ -16,9 +16,10 @@ import { InvoicesService } from './invoices.service'
 		TypeOrmModule.forFeature([Invoice]),
 		AuthModule,
 		AccountModule,
-		ChargesModule,
+		forwardRef(() => ChargesModule),
 		FxModule,
 		StorageModule,
+		InvoicesModule,
 		PaymentsModule,
 		SettingsModule,
 	],

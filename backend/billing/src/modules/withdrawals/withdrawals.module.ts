@@ -1,7 +1,8 @@
 import { AccountModule, AuthModule, BeaconModule, Query, SettingsModule, UsersModule } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
-import { Module } from '@nestjs/common'
+import { Module, forwardRef } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { PaymentsModule } from '../..'
 import { PaymentMethodsModule } from '../payment_methods/payment.methods.module'
 import { WalletModule } from '../wallet/wallet.module'
 import { WithdrawalsController } from './withdrawals.controller'
@@ -18,8 +19,10 @@ import { WithdrawalsService } from './withdrawals.service'
 		BeaconModule,
 		UsersModule,
 		PaymentMethodsModule,
+		PaymentsModule,
 		SettingsModule,
-		WalletModule,
+		forwardRef(() => WalletModule),
+
 	],
 	controllers: [WithdrawalsController, WithdrawalsCronsController],
 	providers: [WithdrawalsService, WithdrawalsCronService, Logger, Query],

@@ -1,6 +1,6 @@
 import { AccountModule, AuthModule, Query, SettingsModule } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
-import { Module } from '@nestjs/common'
+import { Module, forwardRef } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ChargesModule } from '../charges/charges.module'
 import { PaymentMethodsModule } from '../payment_methods/payment.methods.module'
@@ -15,7 +15,7 @@ import { WalletService } from './wallet.service'
 		TypeOrmModule.forFeature([Wallet]),
 		AuthModule,
 		AccountModule,
-		ChargesModule,
+		forwardRef(() => ChargesModule),
 		PaymentMethodsModule,
 		SettingsModule,
 	],
