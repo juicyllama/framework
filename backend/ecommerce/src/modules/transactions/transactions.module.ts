@@ -1,3 +1,4 @@
+import { InstalledAppsModule } from '@juicyllama/app-store'
 import { AuthModule, BeaconModule, cacheConfig, databaseConfig, FxModule, jwtConfig, Query } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
 import { CacheModule } from '@nestjs/cache-manager'
@@ -27,6 +28,7 @@ import { TransactionsService } from './transactions.service'
 		StoresModule,
 		TransactionDiscountsModule,
 		FxModule,
+		InstalledAppsModule,
 	],
 	controllers: [TransactionsController],
 	providers: [TransactionsService, Logger, Query],
