@@ -1,5 +1,5 @@
 import { Logger } from '@juicyllama/utils'
-import { forwardRef, MiddlewareConsumer, Module,  } from '@nestjs/common'
+import { forwardRef, MiddlewareConsumer, Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { TypeOrmModule } from '@nestjs/typeorm'

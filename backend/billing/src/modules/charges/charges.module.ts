@@ -16,7 +16,6 @@ import { Invoice } from '../..'
 		TypeOrmModule.forFeature([Charge, Invoice]),
 		forwardRef(() => AuthModule),
 		forwardRef(() => FxModule),
-
 	],
 	controllers: [ChargesController],
 	providers: [ChargesService, ChargesSubscriber, Logger, Query],

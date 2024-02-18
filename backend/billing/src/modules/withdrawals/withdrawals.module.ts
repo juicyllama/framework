@@ -22,7 +22,6 @@ import { WithdrawalsService } from './withdrawals.service'
 		PaymentsModule,
 		SettingsModule,
 		forwardRef(() => WalletModule),
-
 	],
 	controllers: [WithdrawalsController, WithdrawalsCronsController],
 	providers: [WithdrawalsService, WithdrawalsCronService, Logger, Query],

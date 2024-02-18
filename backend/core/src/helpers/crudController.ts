@@ -9,7 +9,7 @@ import {
 	Logger,
 	Objects,
 	StatsMethods,
-	StatsResponseDto
+	StatsResponseDto,
 } from '@juicyllama/utils'
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common'
 import _ from 'lodash'
