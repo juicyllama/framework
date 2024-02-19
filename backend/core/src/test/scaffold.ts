@@ -13,6 +13,11 @@ import { Query } from '../utils/typeorm/Query'
 import { DeepPartial, Repository, ObjectLiteral } from 'typeorm'
 import { faker } from '@faker-js/faker'
 import { validationPipeOptions } from '../configs/nest.config'
+import { UsersModule, UsersService, cacheConfig, databaseConfig, jwtConfig } from '..'
+import { CacheModule } from '@nestjs/cache-manager'
+import { ConfigModule } from '@nestjs/config'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { JwtModule } from '@nestjs/jwt'
 
 let httpServer: HttpServer
 let moduleRef: TestingModule
@@ -27,6 +32,7 @@ export class ScaffoldDto<T extends ObjectLiteral> {
 	services!: {
 		accountService: AccountService
 		authService: AuthService
+		usersService: UsersService
 		logger: Logger
 		api: Api
 		service: any
@@ -56,6 +62,7 @@ export class Scaffold<T extends ObjectLiteral>  {
 		let service: any
 		let query: Query<T>
 		let repository: Repository<T> | undefined = undefined
+		let usersService: UsersService
 
 		let account: Account
 		let owner: User
@@ -66,7 +73,19 @@ export class Scaffold<T extends ObjectLiteral>  {
 			pattern: /[!-~]/,
 		})
 
-		const imports = [forwardRef(() => AccountModule), forwardRef(() => AuthModule)]
+		const imports = [
+			ConfigModule.forRoot({
+				load: [cacheConfig],
+				isGlobal: true,
+				envFilePath: '.env',
+			}),
+			CacheModule.registerAsync(cacheConfig()),
+			TypeOrmModule.forRoot(databaseConfig()),
+			JwtModule.register(jwtConfig()),
+			forwardRef(() => AccountModule), 
+			forwardRef(() => AuthModule), 
+			forwardRef(() => UsersModule)
+		]
 
 		if (MODULE) {
 			imports.push(forwardRef(() => MODULE))
@@ -92,6 +111,7 @@ export class Scaffold<T extends ObjectLiteral>  {
 		logger = await moduleRef.resolve(Logger)
 		api = await moduleRef.resolve(Api)
 		query = await moduleRef.resolve(Query<T>)
+		usersService = await moduleRef.resolve(UsersService)
 
 		if (SERVICE) {
 			service = await moduleRef.resolve(SERVICE)
@@ -116,6 +136,7 @@ export class Scaffold<T extends ObjectLiteral>  {
 				logger: logger,
 				api: api,
 				service: service,
+				usersService: usersService,
 			},
 			values: {
 				account: account,

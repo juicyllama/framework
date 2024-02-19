@@ -36,3 +36,22 @@ export async function loadPusher(event: string, callback: Function): Promise<voi
 	})
 	logger({ severity: LogSeverity.VERBOSE, message: `[Pusher] Listening for events: ${event}` })
 }
+
+export async function unloadPusher(event: string): Promise<void> {
+	const Pusher = await import('pusher-js')
+
+	if (!Pusher) {
+		logger({ severity: LogSeverity.WARN, message: `[Pusher] Not installed` })
+		return
+	}
+
+	if (!pusherCreds.PUSHER_KEY || !pusherCreds.PUSHER_CHANNEL) {
+		logger({ severity: LogSeverity.WARN, message: `[Pusher] Missing Credentials` })
+		return
+	}
+
+	const pusher = new Pusher.default(pusherCreds.PUSHER_KEY, { cluster: 'eu' })
+	pusher.subscribe(pusherCreds.PUSHER_CHANNEL)
+	pusher.unbind(event)
+	logger({ severity: LogSeverity.VERBOSE, message: `[Pusher] Unbind for events: ${event}` })
+}
