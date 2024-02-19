@@ -1,5 +1,6 @@
 import { SuccessResponseDto } from '@juicyllama/utils'
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common'
+import { Response } from 'express'
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common'
 import { ApiHideProperty, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { AccountId, UserAuth } from '../../decorators'
 import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
@@ -34,8 +35,38 @@ export class AuthController {
 	})
 	@UseGuards(LocalAuthGuard)
 	@Post('login')
-	async login(@Req() req: AuthenticatedRequest): Promise<LoginResponseDto> {
-		return this.authService.login(req.user)
+	async login(@Req() req: AuthenticatedRequest, @Res({ passthrough: true }) res: Response) {
+		const loginResponseDto = this.authService.login(req.user)
+		const refreshToken = await this.authService.createRefreshToken(req.user)
+		res.cookie('refreshToken', refreshToken, {
+			httpOnly: true,
+			secure: true,
+			sameSite: 'strict',
+		})
+		return loginResponseDto
+	}
+
+	@ApiOperation({
+		summary: 'Refresh Token',
+		description:
+			'Posting with a refesh token cookie will return a new access token and set a cookie with the new refresh token',
+	})
+	@ApiOkResponse({
+		description: 'OK',
+		type: LoginResponseDto,
+	})
+	@Post('refresh')
+	async refresh(@Req() req: AuthenticatedRequest, @Res({ passthrough: true }) res: Response) {
+		const oldRefreshToken = req.cookies['refreshToken']
+		const loginPayload = this.authService.decodeRefreshToken(oldRefreshToken)
+		const loginResponseDto = this.authService.login(loginPayload)
+		const newRefreshToken = await this.authService.createRefreshToken(loginPayload)
+		res.cookie('refreshToken', newRefreshToken, {
+			httpOnly: true,
+			secure: true,
+			sameSite: 'strict',
+		})
+		return loginResponseDto
 	}
 
 	@UserAuth({ skipAccountId: true })

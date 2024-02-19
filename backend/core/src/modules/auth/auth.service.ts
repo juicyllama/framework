@@ -42,6 +42,12 @@ import { Role } from './role.entity'
 const E = Role
 type T = Role
 
+type LoginPayload = {
+	email: string
+	user_id: number
+	account_ids: number[]
+}
+
 @Injectable()
 export class AuthService extends BaseService<T> {
 	constructor(
@@ -93,8 +99,26 @@ export class AuthService extends BaseService<T> {
 		return this.jwtService.sign(await this.constructLoginPayload(user), { secret: process.env.JWT_KEY })
 	}
 
-	async login(user: User) {
-		const payload = await this.constructLoginPayload(user)
+	async createRefreshToken(user: User | LoginPayload) {
+		const payload = user instanceof User ? await this.constructLoginPayload(user) : user
+		return this.jwtService.sign(payload, {
+			secret: process.env.JWT_REFRESH_KEY,
+			expiresIn: '7d',
+		})
+	}
+
+	decodeRefreshToken(token: string): LoginPayload {
+		try {
+			return this.jwtService.verify(token, {
+				secret: process.env.JWT_REFRESH_KEY,
+			})
+		} catch (error) {
+			throw new UnauthorizedException('Invalid refresh token')
+		}
+	}
+
+	async login(user: User | LoginPayload) {
+		const payload = user instanceof User ? await this.constructLoginPayload(user) : user
 		if (!['development', 'test'].includes(Env.get())) {
 			let Bugsnag
 			if (Modules.bugsnag.isInstalled) {
@@ -102,12 +126,11 @@ export class AuthService extends BaseService<T> {
 				Bugsnag.setUser(user.user_id, user.email)
 			}
 		}
-		user.last_login_at = new Date()
-		delete user.password
-		await this.usersService.update(user)
+		await this.usersService.update({ user_id: user.user_id, last_login_at: new Date() })
 		return new LoginResponseDto(this.jwtService.sign(payload, { secret: process.env.JWT_KEY }))
 	}
-	async constructLoginPayload(user: User) {
+
+	async constructLoginPayload(user: User): Promise<LoginPayload> {
 		if (!user.accounts) {
 			throw new ImATeapotException(`Missing accounts on login payload, go grab a cuppa while you seek help!`)
 		}
