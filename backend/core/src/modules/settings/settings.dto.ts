@@ -1,5 +1,5 @@
-import { IsString, IsNumber, IsOptional, IsJSON } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
+import { IsString, IsNumber, IsOptional, IsJSON } from 'class-validator'
 
 export class SettingsDto {
 	id?: number

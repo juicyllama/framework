@@ -1,8 +1,8 @@
+import { BaseResponseDto, SwaggerPropertyDecorator } from '@juicyllama/core'
+import { Classes } from '@juicyllama/utils'
 import { PartialType } from '@nestjs/swagger'
 import { IsNumber, IsOptional, IsString, IsEnum, MinLength, MaxLength, IsBoolean, IsDate } from 'class-validator'
 import { TransactionFulfillmentStatus, TransactionPaymentStatus } from './transactions.enums'
-import { Classes } from '@juicyllama/utils'
-import { BaseResponseDto, SwaggerPropertyDecorator } from '@juicyllama/core'
 
 export class TransactionDto {
 	@SwaggerPropertyDecorator({ description: 'The store you would like to link the transaction to' })

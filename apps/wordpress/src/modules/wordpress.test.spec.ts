@@ -1,11 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing'
 import { Api, Env } from '@juicyllama/utils'
-import { forwardRef } from '@nestjs/common'
+import { Test, TestingModule } from '@nestjs/testing'
+import { WordpressConfigDto } from '../config/wordpress.config.dto'
 import { getWordpressAxiosConfig } from '../config/wordpress.config'
-import { WordpressContext } from './wordpress.enums'
-import { WordpressUsersService } from './users/wordpress.users.service'
 import { WordpressUsersModule } from './users/wordpress.users.module'
-import { wordpressConfigDto } from '../config/wordpress.config.dto'
+import { WordpressUsersService } from './users/wordpress.users.service'
+import { WordpressContext } from './wordpress.enums'
 describe('WordPress', () => {
 	let moduleRef: TestingModule
 
@@ -18,7 +17,7 @@ describe('WordPress', () => {
 		}
 
 		moduleRef = await Test.createTestingModule({
-			imports: [forwardRef(() => WordpressUsersModule)],
+			imports: [WordpressUsersModule],
 		}).compile()
 
 		wordpressUsersService = moduleRef.get<WordpressUsersService>(WordpressUsersService)
@@ -29,8 +28,8 @@ describe('WordPress', () => {
 			const domain = 'app::wordpress::test::auth'
 
 			const options = {
-				config: <wordpressConfigDto>{
-					WORDPRESS_URL: 'https://slackvc.com/wp-json/wp/v2/users',
+				config: <WordpressConfigDto>{
+					WORDPRESS_URL: 'https://juicyllama.com/wp-json/wp/v2/users',
 					WORDPRESS_USERNAME: 'test',
 					WORDPRESS_APPLICATION_PASSWORD: 'test',
 				},
@@ -54,7 +53,7 @@ describe('WordPress', () => {
 			const domain = 'app::wordpress::test::auth'
 
 			const options = {
-				config: <wordpressConfigDto>{
+				config: <WordpressConfigDto>{
 					WORDPRESS_URL: 'https://none/wp-json/wp/v2/users',
 					WORDPRESS_USERNAME: 'test',
 					WORDPRESS_APPLICATION_PASSWORD: 'test',

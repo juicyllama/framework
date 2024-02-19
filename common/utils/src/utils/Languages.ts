@@ -4,7 +4,6 @@ import { Logger } from './Logger'
 import { Language } from '../types/languages'
 
 export class Languages {
-
 	/**
 	 * get a language by ISO2 code
 	 * @param ISO2

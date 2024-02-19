@@ -1,13 +1,13 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { InjectRepository } from '@nestjs/typeorm'
-import { MoreThanOrEqual, Repository } from 'typeorm'
-import { Tag } from './tags.entity'
-import { Cache } from 'cache-manager'
 import { CachePeriod, JLCache } from '@juicyllama/utils'
-import { Query } from '../../utils/typeorm/Query'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { Inject, Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Cache } from 'cache-manager'
+import { MoreThanOrEqual, Repository } from 'typeorm'
 import { BaseService } from '../../helpers/baseService'
+import { Query } from '../../utils/typeorm/Query'
 import { BeaconService } from '../beacon/beacon.service'
+import { Tag } from './tags.entity'
 
 const cache_key = 'utils::tags'
 const E = Tag
@@ -16,9 +16,9 @@ type T = Tag
 @Injectable()
 export class TagsService extends BaseService<T> {
 	constructor(
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
+		@Inject(Query) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
+		readonly beaconService: BeaconService,
 		@Inject(CACHE_MANAGER) private cacheManager: Cache,
 	) {
 		super(query, repository, {

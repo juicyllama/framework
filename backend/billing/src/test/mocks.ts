@@ -1,13 +1,13 @@
 import { faker } from '@faker-js/faker'
-import { DeepPartial } from 'typeorm'
-import { Subscription } from '../modules/subscriptions/subscriptions.entity'
 import { Account, AppIntegrationName, User } from '@juicyllama/core'
 import { SubscriptionFrequency, SupportedCurrencies } from '@juicyllama/utils'
+import { DeepPartial } from 'typeorm'
 import { Charge } from '../modules/charges/charges.entity'
-import { Payment } from '../modules/payments/payments.entity'
 import { Invoice } from '../modules/invoices/invoices.entity'
+import { Payment } from '../modules/payments/payments.entity'
 import { PaymentMethod } from '../modules/payment_methods/payment.methods.entity'
 import { PaymentMethodStatus, PaymentMethodType } from '../modules/payment_methods/payment.methods.enums'
+import { Subscription } from '../modules/subscriptions/subscriptions.entity'
 import { Withdrawal } from '../modules/withdrawals/withdrawals.entity'
 
 export function MockSubscriptionRequest(account: Account, added_by: User): DeepPartial<Subscription> {

@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker'
-import { Tag } from './tags.entity'
-import { TagsService } from './tags.service'
 import { Scaffold, ScaffoldDto } from '../../test'
+import { Tag } from './tags.entity'
 import { TagsModule } from './tags.module'
+import { TagsService } from './tags.service'
 
 const E = Tag
 type T = Tag

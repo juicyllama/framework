@@ -1,9 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
-import { IsOptional, IsString, MaxLength, MinLength, IsUrl } from 'class-validator'
-import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
 import { Account, BaseEntity } from '@juicyllama/core'
+import { IsOptional, IsString, MaxLength, MinLength, IsUrl } from 'class-validator'
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
 
-@UseInterceptors(ClassSerializerInterceptor)
 @Entity('websites')
 export class Website extends BaseEntity {
 	@PrimaryGeneratedColumn()

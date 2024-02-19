@@ -1,18 +1,16 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { Readable } from 'stream'
 import {
 	DeleteObjectCommand,
 	GetObjectCommand,
 	ListObjectsCommand,
-	S3Client,
 	PutObjectCommandInput,
+	S3Client,
 } from '@aws-sdk/client-s3'
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { Upload, Configuration } from '@aws-sdk/lib-storage'
 import { getApplyMd5BodyChecksumPlugin } from '@smithy/middleware-apply-body-checksum'
-import { awsS3Config } from './config/aws.s3.config'
-import { Logger } from '@juicyllama/utils'
+import { Readable } from 'stream'
+import { InjectS3 } from './aws.s3.constants'
 import { AwsS3Bucket, AwsS3BucketType, AwsS3Format } from './aws.s3.enums'
+import { AwsS3ConfigDto } from './config/aws.s3.config.dto'
 
 function streamToString(stream: Readable): Promise<string> {
 	return new Promise((resolve, reject) => {
@@ -25,7 +23,11 @@ function streamToString(stream: Readable): Promise<string> {
 
 @Injectable()
 export class AwsS3Service {
-	constructor(@Inject(forwardRef(() => Logger)) private readonly logger: Logger) {}
+	constructor(
+		private readonly logger: Logger,
+		@InjectS3() private readonly s3Client: S3Client,
+		@InjectConfig(AwsS3ConfigDto) private readonly s3Config: AwsS3ConfigDto,
+	) {}
 
 	/**
 	 * Writes the content to S3
@@ -60,9 +62,8 @@ export class AwsS3Service {
 		}
 
 		try {
-			const client = new S3Client(awsS3Config().client)
 			//bug fix for aws s3 checksum on large files: https://github.com/aws/aws-sdk-js-v3/issues/4321
-			client.middlewareStack.use(getApplyMd5BodyChecksumPlugin(client.config))
+			this.s3Client.middlewareStack.use(getApplyMd5BodyChecksumPlugin(this.s3Client.config))
 
 			const params = {
 				Bucket: this.getBucket(options.bucket),
@@ -80,7 +81,7 @@ export class AwsS3Service {
 			}
 
 			const upload = new Upload({
-				client,
+				client: this.s3Client,
 				params,
 				...options.sizing,
 			})
@@ -119,12 +120,11 @@ export class AwsS3Service {
 
 		this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}] ${options.location}`)
 
-		const client = new S3Client(awsS3Config().client)
 		const command = new ListObjectsCommand({
 			Bucket: this.getBucket(options.bucket),
 			Prefix: options.location,
 		})
-		const data = await client.send(command)
+		const data = await this.s3Client.send(command)
 
 		const files = []
 
@@ -159,8 +159,6 @@ export class AwsS3Service {
 
 		this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}] ${options.location}`)
 
-		const client = new S3Client(awsS3Config().client)
-
 		const command = new GetObjectCommand({
 			Bucket: this.getBucket(options.bucket),
 			Key: options.location,
@@ -169,7 +167,7 @@ export class AwsS3Service {
 		let result
 
 		try {
-			const data = await client.send(command)
+			const data = await this.s3Client.send(command)
 			if (data.Body && data.Body instanceof Readable) {
 				result = await streamToString(data.Body)
 			} else {
@@ -267,21 +265,20 @@ export class AwsS3Service {
 
 		this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}] ${options.location}`)
 
-		const client = new S3Client(awsS3Config().client)
 		const command = new DeleteObjectCommand({
 			Bucket: this.getBucket(options.bucket),
 			Key: options.location,
 		})
 
-		return await client.send(command)
+		return await this.s3Client.send(command)
 	}
 
 	private getBucket(bucket: AwsS3Bucket): string {
 		let bucketName
 		if (bucket === AwsS3BucketType.PUBLIC) {
-			bucketName = awsS3Config().s3buckets[AwsS3BucketType.PUBLIC]
+			bucketName = this.s3Config.AWS_S3_JL_PUBLIC_BUCKET
 		} else if (bucket === AwsS3BucketType.PRIVATE) {
-			bucketName = awsS3Config().s3buckets[AwsS3BucketType.PRIVATE]
+			bucketName = this.s3Config.AWS_S3_JL_PRIVATE_BUCKET
 		}
 		if (!bucketName) {
 			throw new Error(`Bucket ${bucket} not found`)

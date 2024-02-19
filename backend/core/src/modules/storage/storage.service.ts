@@ -9,7 +9,7 @@ import { StorageFileFormat, StorageFileType } from './storage.enums'
 @Injectable()
 export class StorageService {
 	constructor(
-		@Inject(Logger) private readonly logger: Logger,
+		private readonly logger: Logger,
 		@Inject(CACHE_MANAGER) private cacheManager: Cache,
 		private readonly lazyModuleLoader: LazyModuleLoader,
 	) {}

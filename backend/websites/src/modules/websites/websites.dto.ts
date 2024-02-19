@@ -1,7 +1,7 @@
-import { PartialType } from '@nestjs/swagger'
-import { IsUrl, IsOptional, IsString, MaxLength, MinLength } from 'class-validator'
 import { BaseResponseDto, SwaggerPropertyDecorator, SwaggerPropertyType } from '@juicyllama/core'
 import { Classes } from '@juicyllama/utils'
+import { PartialType } from '@nestjs/swagger'
+import { IsUrl, IsOptional, IsString, MaxLength, MinLength } from 'class-validator'
 
 export class WebsiteDto {
 	@SwaggerPropertyDecorator({

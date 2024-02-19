@@ -1,12 +1,10 @@
-import { Body, Controller, forwardRef, Inject, Req, Post } from '@nestjs/common'
+import { Body, Controller, Post, Req } from '@nestjs/common'
+import { SpbConfig } from 'scrapingbee'
 import { ScrapingBeeService } from '../scrapingbee/scrapingbee.service'
-import { SpbConfig } from 'scrapingbee/src'
 
 @Controller('/')
 export class SandboxController {
-	constructor(
-		@Inject(forwardRef(() => ScrapingBeeService)) private readonly scrapingBeeService: ScrapingBeeService,
-	) {}
+	constructor(private readonly scrapingBeeService: ScrapingBeeService) {}
 
 	@Post()
 	async message(@Req() req: any, @Body() options: SpbConfig) {

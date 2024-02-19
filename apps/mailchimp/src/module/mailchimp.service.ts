@@ -1,21 +1,22 @@
+import { InjectConfig, Query } from '@juicyllama/core'
+import { Env, Logger } from '@juicyllama/utils'
+import * as Client from '@mailchimp/mailchimp_marketing'
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { Repository } from 'typeorm'
-import { Api, Env, Logger } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
-import { MailchimpScaffold } from '../configs/mailchimp.scaffold'
-import { Query } from '@juicyllama/core'
-import { MailchimpContact } from './mailchimp.entity'
 import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { MailchimpConfigDto } from '../configs/mailchimp.config.dto'
+import { InjectMailchimp } from './mailchimp.constants'
+import { MailchimpContact } from './mailchimp.entity'
 import { mapperContactToMember } from './mappers/mailchimp.list.member.mapper'
 
 @Injectable()
 export class MailchimpService {
 	constructor(
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => Api)) private readonly api: Api,
+		private readonly logger: Logger,
 		@InjectRepository(MailchimpContact) private readonly repository: Repository<MailchimpContact>,
 		@Inject(forwardRef(() => Query)) private readonly query: Query<MailchimpContact>,
+		@InjectConfig(MailchimpConfigDto) private readonly config: MailchimpConfigDto,
+		@InjectMailchimp() private readonly client: typeof Client,
 	) {}
 
 	/**
@@ -30,16 +31,11 @@ export class MailchimpService {
 			return true
 		}
 
-		if (!this.configService.get<string>('mailchimp.MAILCHIMP_API_KEY') || !this.configService.get<string>('mailchimp.MAILCHIMP_SERVER_PREFIX')) {
+		if (!this.config.MAILCHIMP_API_KEY || !this.config.MAILCHIMP_SERVER_PREFIX) {
 			throw new Error('Mailchimp API Key or Server Prefix not set')
 		}
 
 		try {
-			const mailchimp = MailchimpScaffold(
-				this.configService.get<string>('mailchimp.MAILCHIMP_API_KEY') as string,
-				this.configService.get<string>('mailchimp.MAILCHIMP_SERVER_PREFIX') as string,
-			)
-
 			const member = mapperContactToMember(contact)
 
 			const mailchimp_member = await this.query.findOneByWhere(this.repository, {
@@ -49,20 +45,17 @@ export class MailchimpService {
 			let response
 
 			if (mailchimp_member) {
-				response = await mailchimp.lists.updateListMember(
-					this.configService.get<string>('mailchimp.MAILCHIMP_LIST_ID'),
+				response = await this.client.lists.updateListMember(
+					this.config.MAILCHIMP_LIST_ID,
 					mailchimp_member.mailchimp_id,
 					member,
 				)
 				this.logger.debug(`[${domain}] Mailchimp contact updated #${mailchimp_member.mailchimp_id}`, response)
 				return true
 			} else {
-				response = await mailchimp.lists.addListMember(
-					this.configService.get<string>('mailchimp.MAILCHIMP_LIST_ID'),
-					member,
-				)
+				response = await this.client.lists.addListMember(this.config.MAILCHIMP_LIST_ID, member)
 
-				if (response?.id) {
+				if (response && 'id' in response) {
 					await this.query.create(this.repository, {
 						mailchimp_id: response.id,
 						contact_id: contact.contact_id,
@@ -94,17 +87,11 @@ export class MailchimpService {
 			return true
 		}
 
-
-		if (!this.configService.get<string>('mailchimp.MAILCHIMP_API_KEY') || !this.configService.get<string>('mailchimp.MAILCHIMP_SERVER_PREFIX')) {
+		if (!this.config.MAILCHIMP_API_KEY || !this.config.MAILCHIMP_SERVER_PREFIX) {
 			throw new Error('Mailchimp API Key or Server Prefix not set')
 		}
 
 		try {
-			const mailchimp = MailchimpScaffold(
-				this.configService.get<string>('mailchimp.MAILCHIMP_API_KEY') as string,
-				this.configService.get<string>('mailchimp.MAILCHIMP_SERVER_PREFIX') as string,
-			)
-
 			const mailchimp_member = await this.query.findOneByWhere(this.repository, {
 				contact_id: contact.contact_id,
 			})
@@ -112,8 +99,8 @@ export class MailchimpService {
 			let response
 
 			if (mailchimp_member) {
-				response = await mailchimp.lists.deleteListMember(
-					this.configService.get<string>('mailchimp.MAILCHIMP_LIST_ID'),
+				response = await this.client.lists.deleteListMember(
+					this.config.MAILCHIMP_LIST_ID,
 					mailchimp_member.mailchimp_id,
 				)
 				await this.query.purge(this.repository, mailchimp_member)

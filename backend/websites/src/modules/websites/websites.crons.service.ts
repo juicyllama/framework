@@ -1,21 +1,20 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { SettingsService, CronRunner } from '@juicyllama/core'
+import { Logger } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
 import { Cron, CronExpression } from '@nestjs/schedule'
 import { MoreThan, IsNull } from 'typeorm'
-import { WebsitesService } from './websites.service'
-import { SettingsService, StorageService, CronRunner } from '@juicyllama/core'
 import {
 	CRON_WEBSITES_WEBSITE_ICON_GENERATE_DOMAIN,
 	CRON_WEBSITES_WEBSITE_SCREENSHOT_GENERATE_DOMAIN,
 } from './websites.constants'
-import { Logger } from '@juicyllama/utils'
+import { WebsitesService } from './websites.service'
 
 @Injectable()
 export class WebsitesCronsService {
 	constructor(
-		@Inject(forwardRef(() => SettingsService)) private readonly settingsService: SettingsService,
-		@Inject(forwardRef(() => StorageService)) private readonly storageService: StorageService,
-		@Inject(forwardRef(() => WebsitesService)) readonly websitesService: WebsitesService,
-		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
+		private readonly settingsService: SettingsService,
+		readonly websitesService: WebsitesService,
+		readonly logger: Logger,
 	) {}
 
 	/**

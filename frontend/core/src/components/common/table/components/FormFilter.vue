@@ -43,6 +43,7 @@ defineEmits(['add', 'remove'])
 defineProps<Props>()
 
 const $q = useQuasar()
+
 const typeWithoutInput = ['NULL', '!NULL']
 const FILTERS: IFilterType[] = [
 	{ label: 'Greater than', method: 'GTE' },

@@ -1,32 +1,34 @@
-import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common'
+import { PaymentsService, PaymentType } from '@juicyllama/billing'
+import { Account, AccountService, AppIntegrationName, BaseService, Query } from '@juicyllama/core'
+import { Enviroment, SupportedCurrencies, Logger, Env } from '@juicyllama/utils'
+import { MollieClient, Payment, PaymentMethod, PaymentStatus, SequenceType } from '@mollie/api-client'
+import { BadRequestException, Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
-import { Enviroment, SupportedCurrencies, Logger, Env } from '@juicyllama/utils'
-import { MolliePayment } from './payment.entity'
-import { ConfigService } from '@nestjs/config'
-import { createMollieClient, Payment, PaymentMethod, PaymentStatus, SequenceType } from '@mollie/api-client'
-import { MandateService } from '../mandate/mandate.service'
-import paymentMock from './payment.mock'
-import { CustomerService } from '../customer/customer.service'
-import { Account, AccountService, AppIntegrationName, BaseService, Query } from '@juicyllama/core'
-import { MollieMandate } from '../mandate/mandate.entity'
 import { MollieCustomer } from '../customer/customer.entity'
+import { CustomerService } from '../customer/customer.service'
+import { MollieMandate } from '../mandate/mandate.entity'
+import { MandateService } from '../mandate/mandate.service'
 import { molliePaymentStatus } from '../mollie.mapper'
-import { PaymentsService, PaymentType } from '@juicyllama/billing'
+import { InjectMollie } from '../provider'
+import { MolliePayment } from './payment.entity'
+import paymentMock from './payment.mock'
 
 const E = MolliePayment
 type T = MolliePayment
 @Injectable()
 export class PaymentService extends BaseService<T> {
 	constructor(
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
+		private readonly logger: Logger,
+		readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
-		@Inject(forwardRef(() => CustomerService)) private readonly customerService: CustomerService,
-		@Inject(forwardRef(() => MandateService)) private readonly mandateService: MandateService,
-		@Inject(forwardRef(() => PaymentsService)) private readonly paymentsService: PaymentsService,
+		private readonly accountService: AccountService,
+		private readonly configService: ConfigService,
+		private readonly customerService: CustomerService,
+		private readonly mandateService: MandateService,
+		private readonly paymentsService: PaymentsService,
+		@InjectMollie() private readonly client: MollieClient,
 	) {
 		super(query, repository)
 	}
@@ -58,10 +60,7 @@ export class PaymentService extends BaseService<T> {
 				mollie_response = paymentMock(mollie_payment)
 			} else {
 				this.logger.debug(`Create mollie payment`, mollie_payment)
-				const mollieClient = createMollieClient({
-					apiKey: this.configService.get<string>('mollie.MOLLIE_API_KEY'),
-				})
-				mollie_response = await mollieClient.payments.create({
+				mollie_response = await this.client.payments.create({
 					amount: {
 						value: mollie_payment.amount.toString(),
 						currency: mollie_payment.currency,
@@ -130,10 +129,7 @@ export class PaymentService extends BaseService<T> {
 				mollie_response = paymentMock(payment)
 			} else {
 				this.logger.debug(`Get mollie payment`, payment)
-				const mollieClient = createMollieClient({
-					apiKey: this.configService.get<string>('mollie.MOLLIE_API_KEY'),
-				})
-				mollie_response = await mollieClient.payments.get(payment.ext_payment_id)
+				mollie_response = await this.client.payments.get(payment.ext_payment_id)
 				this.logger.debug(`Get mollie payment response: `, mollie_response)
 			}
 		} catch (e) {
@@ -213,10 +209,7 @@ export class PaymentService extends BaseService<T> {
 				mollie_response = paymentMock(mollie_payment)
 			} else {
 				this.logger.debug(`Create mollie payment`, mollie_payment)
-				const mollieClient = createMollieClient({
-					apiKey: this.configService.get<string>('mollie.MOLLIE_API_KEY'),
-				})
-				mollie_response = await mollieClient.payments.create({
+				mollie_response = await this.client.payments.create({
 					amount: {
 						value: mollie_payment.amount.toString(),
 						currency: mollie_payment.currency,

@@ -1,12 +1,12 @@
-import { Module } from '@nestjs/common'
+import { Logger } from '@juicyllama/utils'
 import { CacheModule } from '@nestjs/cache-manager'
+import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import cacheConfig from '../../configs/cache.config'
+import { Query } from '../../utils/typeorm/Query'
 import { FxRate } from './fx.entity'
 import { FxService } from './fx.service'
-import { Logger } from '@juicyllama/utils'
-import cacheConfig from '../../configs/cache.config'
-import { ConfigModule } from '@nestjs/config'
-import { Query } from '../../utils/typeorm/Query'
 
 @Module({
 	imports: [

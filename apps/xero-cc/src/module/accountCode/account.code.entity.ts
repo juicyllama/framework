@@ -1,5 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
 import { Tag } from '@juicyllama/core'
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
 import { IsString } from 'class-validator'
 
 @Entity('apps_xero_cc_account_codes')

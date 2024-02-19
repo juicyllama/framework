@@ -1,3 +1,4 @@
+import { SwaggerPropertyDecorator, SwaggerPropertyType } from '@juicyllama/core'
 import {
 	IsArray,
 	IsBoolean,
@@ -16,7 +17,6 @@ import {
 	AppIntegrationType,
 	AppStoreIntegrationName,
 } from './apps.enums'
-import { SwaggerPropertyDecorator, SwaggerPropertyType } from '@juicyllama/core'
 
 export class AppInputValidationDto {
 	@IsNumber()

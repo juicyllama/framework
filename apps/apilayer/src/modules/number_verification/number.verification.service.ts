@@ -1,7 +1,8 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { InjectConfig } from '@juicyllama/core'
 import { Api, Logger, Env } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
+import { Injectable } from '@nestjs/common'
 import * as dailcodes from '../../assets/codes.json'
+import { ApilayerConfigDto } from '../../config/apilayer.config.dto'
 import mock from './mock'
 import { NumberVerification } from './number.verification.dto'
 
@@ -9,9 +10,9 @@ const endpoint = 'https://api.apilayer.com/number_verification'
 @Injectable()
 export class NumberVerificationService {
 	constructor(
-		@Inject(forwardRef(() => Api)) private readonly api: Api,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		private readonly api: Api,
+		private readonly logger: Logger,
+		@InjectConfig(ApilayerConfigDto) private readonly configService: ApilayerConfigDto,
 	) {}
 
 	async verify(phone_number: string, iso2?: string): Promise<NumberVerification> {
@@ -30,7 +31,7 @@ export class NumberVerificationService {
 
 		const config = {
 			headers: {
-				apikey: this.configService.get<string>('apilayer.apikey'),
+				apikey: this.configService.APILAYER_API_KEY,
 			},
 		}
 

@@ -1,4 +1,5 @@
 export { AppIntegrationName } from './apps.enums'
+export { AuthenticatedRequest } from './authenticated-request.interface'
 export {
 	UploadType,
 	HTTP_METHODS,
@@ -14,6 +15,5 @@ export {
 	BaseResponseDto,
 } from './common'
 export { OauthInterface } from './oauth.interface'
-export { AuthenticatedRequest } from './authenticated-request.interface'
 
 export { ChartOptions, CurrencyOptions } from './typeorm'

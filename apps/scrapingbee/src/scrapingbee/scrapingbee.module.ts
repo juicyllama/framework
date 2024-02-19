@@ -1,23 +1,25 @@
+import { ConfigValidationModule, getConfigToken } from '@juicyllama/core'
+import { Logger } from '@juicyllama/utils'
 import { Module } from '@nestjs/common'
-import { ScrapingBeeService } from './scrapingbee.service'
+import { ScrapingBeeClient } from 'scrapingbee'
+import { ScrapingbeeConfigDto } from '../config/scrapingbee.config.dto'
+import { ScrapingbeeClientToken } from './scrapingbee.constants'
 import { ScrapingBeeScrapeService } from './scrapingbee.scrape.service'
-import { Api, Env, Logger } from '@juicyllama/utils'
-import scrapingbeeConfig from '../config/scrapingbee.config'
-import { scrapingbeeConfigJoi } from '../config/scrapingbee.config.joi'
-import Joi from 'joi'
-import { ConfigModule } from '@nestjs/config'
+import { ScrapingBeeService } from './scrapingbee.service'
 
 @Module({
-	imports: [
-		ConfigModule.forRoot({
-			load: [scrapingbeeConfig],
-			isGlobal: true,
-			envFilePath: '.env',
-			validationSchema: Env.IsNotTest() ? Joi.object(scrapingbeeConfigJoi) : null,
-		}),
-	],
+	imports: [ConfigValidationModule.register(ScrapingbeeConfigDto)],
 	controllers: [],
-	providers: [ScrapingBeeService, ScrapingBeeScrapeService, Logger, Api],
+	providers: [
+		ScrapingBeeService,
+		ScrapingBeeScrapeService,
+		Logger,
+		{
+			provide: ScrapingbeeClientToken,
+			inject: [getConfigToken(ScrapingbeeConfigDto)],
+			useFactory: (config: ScrapingbeeConfigDto) => new ScrapingBeeClient(config.SCRAPINGBEE_API_KEY),
+		},
+	],
 	exports: [ScrapingBeeService],
 })
 export class ScrapingBeeModule {}

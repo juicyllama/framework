@@ -1,11 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
-import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
 import { Account, BaseEntity } from '@juicyllama/core'
+import { IsNumber, IsString, IsEnum } from 'class-validator'
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
 import { Transaction } from '../transactions.entity'
 import { TransactionDiscountType } from './discounts.enums'
-import { IsNumber, IsString, IsEnum } from 'class-validator'
 
-@UseInterceptors(ClassSerializerInterceptor)
 @Entity('ecommerce_transactions_discounts')
 export class TransactionDiscount extends BaseEntity {
 	@PrimaryGeneratedColumn()
