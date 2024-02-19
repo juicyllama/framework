@@ -8,8 +8,8 @@ import { GoogleAnalyticsInstalledAppOAuthService } from '../oauth/google-analyti
 @Injectable()
 export class GoogleAnalyticsPropertyService {
 	constructor(
-		private readonly authService: GoogleAnalyticsOAuthService,
-		private readonly installedAppAuthService: GoogleAnalyticsInstalledAppOAuthService,
+		private readonly googleAnalyticsOAuthService: GoogleAnalyticsOAuthService,
+		private readonly googleAnalyticsInstalledAppOAuthService: GoogleAnalyticsInstalledAppOAuthService,
 	) {}
 
 	async runReport(installedApp: GoogleAnalyticsInstalledApp, payload: Object) {
@@ -24,10 +24,10 @@ export class GoogleAnalyticsPropertyService {
 	}
 
 	private async createAnalyticsDataClient(installedApp: GoogleAnalyticsInstalledApp) {
-		const tokens = await this.installedAppAuthService.loadSavedCredentials(installedApp)
+		const tokens = await this.googleAnalyticsInstalledAppOAuthService.loadSavedCredentials(installedApp)
 
-		const client = this.authService.getAuthenticatedClient(tokens)
-		const credentials = this.authService.createDataClientCredentials(client)
+		const client = this.googleAnalyticsOAuthService.getAuthenticatedClient(tokens)
+		const credentials = this.googleAnalyticsOAuthService.createDataClientCredentials(client)
 
 		return new BetaAnalyticsDataClient({ sslCreds: credentials })
 	}

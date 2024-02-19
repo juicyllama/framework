@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { faker } from '@faker-js/faker'
 
+import { createMockGoogleCredentials, createMockGoogleOauth, createMockInstalledAppLocator } from '../../mocks'
+
 import { InstalledApp, Oauth, OauthService } from '@juicyllama/app-store'
 
 import { GoogleAnalyticsInstalledAppOAuthService } from './google-analytics.installed-app-oauth.service'
@@ -30,7 +32,7 @@ describe('InstalledAppAuthService', () => {
 	})
 
 	describe('initOauth', () => {
-		const mockInstalledAppLocator = { installed_app_id: faker.number.int() }
+		const mockInstalledAppLocator = createMockInstalledAppLocator()
 
 		const mockState = faker.string.uuid()
 		const mockAuthUrl = faker.internet.url()
@@ -50,7 +52,7 @@ describe('InstalledAppAuthService', () => {
 
 		it('should update oauth if exists', async () => {
 			const mockOauth = new Oauth({
-				oauth_id: faker.number.int(),
+				...createMockGoogleOauth(),
 				...mockInstalledAppLocator,
 			})
 
@@ -62,7 +64,8 @@ describe('InstalledAppAuthService', () => {
 
 			expect(oauthService.create).not.toHaveBeenCalled()
 			expect(oauthService.update).toHaveBeenCalledWith({
-				...mockOauth,
+				oauth_id: mockOauth.oauth_id,
+				...mockInstalledAppLocator,
 				state: mockState,
 				redirect_url: mockAuthUrl,
 			})
@@ -71,14 +74,8 @@ describe('InstalledAppAuthService', () => {
 
 	describe('storeOauth', () => {
 		const mockState = faker.string.uuid()
-		const mockOauth = new Oauth({ oauth_id: faker.number.int() })
-		const mockCredentials = {
-			access_token: faker.string.hexadecimal(),
-			refresh_token: faker.string.hexadecimal(),
-			scope: faker.string.hexadecimal(),
-			token_type: 'Bearer',
-			expiry_date: faker.date.future().valueOf(),
-		}
+		const mockOauth = createMockGoogleOauth()
+		const mockCredentials = createMockGoogleCredentials()
 
 		it('should throw if oauth not found by state', async () => {
 			await expect(service.storeOauth(mockState, mockCredentials)).rejects.toBeInstanceOf(
@@ -114,14 +111,7 @@ describe('InstalledAppAuthService', () => {
 
 	describe('loadSavedCredentials', () => {
 		const mockInstalledAppLocator = { installed_app_id: faker.number.int() }
-		const mockOauth = new Oauth({
-			oauth_id: faker.number.int(),
-			access_token: faker.string.hexadecimal(),
-			refresh_token: faker.string.hexadecimal(),
-			scope: faker.string.hexadecimal(),
-			token_type: 'Bearer',
-			expires_at: faker.date.future(),
-		})
+		const mockOauth = createMockGoogleOauth()
 
 		it('should throw if oauth not found by state', async () => {
 			await expect(service.loadSavedCredentials(mockInstalledAppLocator)).rejects.toBeInstanceOf(

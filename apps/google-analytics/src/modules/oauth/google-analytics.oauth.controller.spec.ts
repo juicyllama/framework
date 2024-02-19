@@ -1,7 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { faker } from '@faker-js/faker'
 
+import { createMockGoogleCredentials, createMockInstalledAppLocator } from '../../mocks'
+
 import { BadRequestException } from '@nestjs/common'
+
+import { Oauth } from '@juicyllama/app-store'
 
 import { GoogleAnalyticsInstalledApp } from '../property/google-analytics.installed-app.entity'
 import { GoogleAnalyticsInstalledAppService } from '../installed-app/google-analytics.installed-app.service'
@@ -9,7 +13,6 @@ import { GoogleAnalyticsInstalledAppService } from '../installed-app/google-anal
 import { GoogleAnalyticsOAuthController } from './google-analytics.oauth.controller'
 import { GoogleAnalyticsOAuthService } from './google-analytics.oauth.service'
 import { GoogleAnalyticsInstalledAppOAuthService } from './google-analytics.installed-app-oauth.service'
-import { Oauth } from '@juicyllama/app-store'
 
 describe('AuthController', () => {
 	let controller: GoogleAnalyticsOAuthController
@@ -49,7 +52,7 @@ describe('AuthController', () => {
 	})
 
 	describe('init', () => {
-		const mockInstalledApp = new GoogleAnalyticsInstalledApp({ installed_app_id: faker.number.int() })
+		const mockInstalledApp = new GoogleAnalyticsInstalledApp(createMockInstalledAppLocator())
 		const mockAccountId = faker.number.int()
 
 		const mockOauthStarter = {
@@ -77,14 +80,8 @@ describe('AuthController', () => {
 	describe('callback', () => {
 		const mockState = faker.string.uuid()
 		const mockCode = faker.string.hexadecimal()
-		const mockCredentials = {
-			access_token: faker.string.hexadecimal(),
-			refresh_token: faker.string.hexadecimal(),
-			scope: faker.string.hexadecimal(),
-			token_type: 'Bearer',
-			expiry_date: faker.date.future().valueOf(),
-		}
-		const mockOauth = new Oauth({ installed_app_id: faker.number.int() })
+		const mockCredentials = createMockGoogleCredentials()
+		const mockOauth = new Oauth(createMockInstalledAppLocator())
 
 		it('should handle missing oauth record', async () => {
 			googleAnalyticsInstalledAppOAuthService.storeOauth.mockRejectedValue(
