@@ -7,6 +7,7 @@ import {
 	S3Client,
 	PutObjectCommandInput,
 } from '@aws-sdk/client-s3'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { Upload, Configuration } from '@aws-sdk/lib-storage'
 import { getApplyMd5BodyChecksumPlugin } from '@smithy/middleware-apply-body-checksum'
 import { awsS3Config } from './config/aws.s3.config'
@@ -153,7 +154,7 @@ export class AwsS3Service {
 	 * } options
 	 */
 
-	async findOne(options: { location: string; bucket: AwsS3Bucket; format: AwsS3Format }): Promise<any> {
+	async findOne(options: { location: string; bucket: AwsS3Bucket; format: AwsS3Format }): Promise<Express.Multer.File | string | undefined> {
 		const domain = 'app::aws::s3::AwsSecretsService::findOne'
 
 		this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}] ${options.location}`)
@@ -185,13 +186,27 @@ export class AwsS3Service {
 						}
 					: null,
 			)
-			return false
+			return
+		}
+
+		if(!result) {
+			this.logger.debug(`[${domain}] No file found`)
+			return
 		}
 
 		this.logger.debug(`[${domain}] File found`)
 
 		if (options.format) {
 			switch (options.format) {
+				case AwsS3Format.Express_Multer_File: {
+					const fileName = options.location.split('/').pop()
+					const file = {
+						originalname: fileName,
+						buffer: Buffer.from(result),
+					}
+					result = file
+					break
+				}
 				case AwsS3Format.JSON:
 					try {
 						result = JSON.parse(result.toString())
@@ -202,13 +217,41 @@ export class AwsS3Service {
 							bucket: this.getBucket(options.bucket),
 							format: options.format,
 						})
-						return false
+						return
 					}
+					break
 			}
 		}
 
 		return result
 	}
+
+	/**
+	 * Return the signed url from S3 for a private file
+	 *
+	 * @param {
+	* 		{String} location where in the bucket to store the file
+	* 		{AwsS3Bucket} bucket the bucket to access
+	* 		{expiresIn} the time in seconds the url is valid
+	* } options
+	*/
+
+   async getSignedUrl(options: { location: string; bucket: AwsS3Bucket, expiresIn: number }): Promise<string> {
+	   const domain = 'app::aws::s3::AwsSecretsService::getSignedUrl'
+
+	   this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}][${options.location}] Get signed URL`)
+
+	   const client = new S3Client(awsS3Config().client)
+
+	   const command = new GetObjectCommand({
+		   Bucket: this.getBucket(options.bucket),
+		   Key: options.location,
+	   })
+
+	   const url = await getSignedUrl(client, command, { expiresIn: options.expiresIn ?? 3600 });
+	   this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}][${options.location}]`, url)
+	   return url
+   }
 
 	/**
 	 * Deletes the content to S3

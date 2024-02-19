@@ -47,11 +47,11 @@ export class StorageService {
 			options.file = <Express.Multer.File>options.file
 			options.file = options.file.buffer
 			options.format = StorageFileFormat.BLOB
-		}
-
-		const cache_key = JLCache.cacheKey(domain, { location: options.location, permissions: options.permissions })
-		await this.cacheManager.del(cache_key)
-		await this.cacheManager.set(cache_key, options.file, CachePeriod.MONTH)
+		}else{
+			const cache_key = JLCache.cacheKey(domain, { location: options.location, permissions: options.permissions })
+			await this.cacheManager.del(cache_key)
+			await this.cacheManager.set(cache_key, options.file, CachePeriod.MONTH)
+		}		
 
 		let service: any
 
@@ -133,17 +133,20 @@ export class StorageService {
 		location: string,
 		permissions: StorageFileType,
 		format: StorageFileFormat = StorageFileFormat.BLOB,
-	): Promise<any> {
+	): Promise<Express.Multer.File | string | undefined> {
 		const domain = 'common::storage::read'
 
 		this.logger.debug(`[${domain}] Read`)
+		let file
 
 		const cache_key = JLCache.cacheKey(domain, { location: location, permissions: permissions })
 
-		let file = await this.cacheManager.get(cache_key)
-		if (file) {
-			this.logger.debug(`[${domain}] Returned from cache: ${location}`)
-			return file
+		if(format !== StorageFileFormat.Express_Multer_File) {
+			file = await this.cacheManager.get(cache_key)
+			if (file) {
+				this.logger.debug(`[${domain}] Returned from cache: ${location}`)
+				return <string>file
+			}
 		}
 
 		let service: any
@@ -157,17 +160,22 @@ export class StorageService {
 
 		if (!service) {
 			this.logger.error(`[${domain}] No storage app installed`)
-			return false
+			return
 		}
 
 		if (!file) {
 			this.logger.error(`[${domain}] No file found: ${location}`)
-			return false
+			return
 		}
 
-		await this.cacheManager.set(cache_key, file, CachePeriod.MONTH)
+		if(format !== StorageFileFormat.Express_Multer_File) {
+			await this.cacheManager.set(cache_key, file, CachePeriod.MONTH)
+		}
+
 		return file
 	}
+
+
 
 	/**
 	 * Deletes a file
