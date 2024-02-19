@@ -5,12 +5,20 @@ import {
 	PutObjectCommandInput,
 	S3Client,
 } from '@aws-sdk/client-s3'
+import { getSignedUrl, S3RequestPresigner } from '@aws-sdk/s3-request-presigner'
 import { Upload, Configuration } from '@aws-sdk/lib-storage'
 import { getApplyMd5BodyChecksumPlugin } from '@smithy/middleware-apply-body-checksum'
 import { Readable } from 'stream'
 import { InjectS3 } from './aws.s3.constants'
 import { AwsS3Bucket, AwsS3BucketType, AwsS3Format } from './aws.s3.enums'
 import { AwsS3ConfigDto } from './config/aws.s3.config.dto'
+import { Injectable } from '@nestjs/common'
+import { InjectConfig } from '@juicyllama/core'
+import { Logger } from '@juicyllama/utils'
+import { HttpRequest } from "@aws-sdk/protocol-http";
+import { parseUrl } from "@aws-sdk/url-parser";
+import { Hash } from "@aws-sdk/hash-node";
+import { formatUrl } from "@aws-sdk/util-format-url";
 
 function streamToString(stream: Readable): Promise<string> {
 	return new Promise((resolve, reject) => {
@@ -234,22 +242,48 @@ export class AwsS3Service {
 	* } options
 	*/
 
-   async getSignedUrl(options: { location: string; bucket: AwsS3Bucket, expiresIn: number }): Promise<string> {
-	   const domain = 'app::aws::s3::AwsSecretsService::getSignedUrl'
+   async getSignedFileUrl(options: { location: string; bucket: AwsS3Bucket, expiresIn: number }): Promise<string> {
+	   const domain = 'app::aws::s3::AwsSecretsService::getSignedFileUrl'
 
 	   this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}][${options.location}] Get signed URL`)
-
-	   const client = new S3Client(awsS3Config().client)
 
 	   const command = new GetObjectCommand({
 		   Bucket: this.getBucket(options.bucket),
 		   Key: options.location,
 	   })
 
-	   const url = await getSignedUrl(client, command, { expiresIn: options.expiresIn ?? 3600 });
+	   const url = await getSignedUrl(this.s3Client, command, { expiresIn: options.expiresIn ?? 3600 });
 	   this.logger.debug(`[${domain}][${this.getBucket(options.bucket)}][${options.location}]`, url)
 	   return url
    }
+
+
+   	/**
+	 * Return the signed url from S3 for a private object url
+	 *
+	 * @param {
+	* 		{url} url of the file in s3
+	* 		{expiresIn} the time in seconds the url is valid
+	* } options
+	*/
+
+   async getSignedUrl(options: { url: string; expiresIn: number }): Promise<string> {
+	const domain = 'app::aws::s3::AwsSecretsService::getSignedUrl'
+
+	this.logger.debug(`[${domain}] Get signed URL for ${options.url}`)
+
+	const s3ObjectUrl = parseUrl(options.url);
+	const presigner = new S3RequestPresigner({
+		credentials: this.s3Client.config.credentials,
+		region: this.s3Client.config.region,
+		sha256: Hash.bind(null, "sha256")
+	});
+
+	// Create a GET request from S3 url.
+	const result = await presigner.presign(new HttpRequest(s3ObjectUrl));
+	this.logger.debug(`[${domain}] Result: ${formatUrl(result)}`)
+	return formatUrl(result)
+}
 
 	/**
 	 * Deletes the content to S3

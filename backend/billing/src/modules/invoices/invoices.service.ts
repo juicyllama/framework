@@ -5,8 +5,8 @@ import {
 	BaseService,
 	Query,
 	StorageService,
-	StorageType,
-	User,
+	//StorageType,
+	//User,
 } from '@juicyllama/core'
 import { Logger, Modules } from '@juicyllama/utils'
 import { Inject, Injectable } from '@nestjs/common'
@@ -152,8 +152,9 @@ export class InvoicesService extends BaseService<T> {
 		}
 	}
 
-	async downloadInvoice(user: User, invoice_id: number): Promise<T> {
-		const file = await this.storageService.read(`invoices/${user.user_id}/${invoice_id}`, StorageType.PUBLIC)
-		return file
-	}
+	// TODO: this is not correct, shoudl be saved by account not user
+	// async downloadInvoice(user: User, invoice_id: number): Promise<T | undefined> {
+	// 	const file = await this.storageService.read(`/accounts/}invoices/${user.user_id}/${invoice_id}`, StorageType.PRIVATE)
+	// 	return file
+	// }
 }

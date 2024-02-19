@@ -12,8 +12,8 @@ import {
 	UserAuth,
 } from '@juicyllama/core'
 import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
-import { Controller, Inject, Param, Post, Query, Req } from '@nestjs/common'
-import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { Controller, Inject, Param, Query, Req } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { billingRoles as roles } from '../billing.constants'
 import { BILLING_INVOICES_T as T, billingInvoiceConstants as constants } from './invoices.constants'
 import { InvoicesService } from './invoices.service'
@@ -80,14 +80,14 @@ export class InvoicesController extends BaseController<T> {
 		return super.findOne(req, account_id, params, query)
 	}
 
-	@ApiOperation({ summary: `Download invoice file` })
-	@Post(`/download/:invoice_id`)
-	async downloadInvoice(
-		@Req() req: AuthenticatedRequest,
-		@AccountId() invoice_id: number,
-		@AccountId() account_id: number,
-	): Promise<T> {
-		await this.authService.check(req.user.user_id, account_id)
-		return await this.service.downloadInvoice(req.user, invoice_id)
-	}
+	// @ApiOperation({ summary: `Download invoice file` })
+	// @Post(`/download/:invoice_id`)
+	// async downloadInvoice(
+	// 	@Req() req: AuthenticatedRequest,
+	// 	@AccountId() invoice_id: number,
+	// 	@AccountId() account_id: number,
+	// ): Promise<T> {
+	// 	await this.authService.check(req.user.user_id, account_id)
+	// 	return await this.service.downloadInvoice(req.user, invoice_id)
+	// }
 }
