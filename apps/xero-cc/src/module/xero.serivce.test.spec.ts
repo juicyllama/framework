@@ -3,11 +3,12 @@ import { Scaffold, ScaffoldDto } from '@juicyllama/core'
 import { XeroService } from './xero.service'
 import { CurrencyCode, Invoice } from 'xero-node'
 import { XeroModule } from './xero.module'
+import { XeroInvoice } from './invoice/invoice.entity'
 
 const MODULE = XeroModule
 const SERVICE = XeroService
-const E = Invoice
-type T = Invoice
+const E = XeroInvoice
+type T = XeroInvoice
 
 describe('Xero Service', () => {
 	const scaffolding = new Scaffold<T>()

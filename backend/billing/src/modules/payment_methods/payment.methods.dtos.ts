@@ -1,7 +1,7 @@
+import { SupportedCurrencies } from '@juicyllama/utils'
 import { ApiProperty } from '@nestjs/swagger'
 import { IsDate, IsEnum, IsObject, IsString } from 'class-validator'
 import { PaymentMethodType } from './payment.methods.enums'
-import { SupportedCurrencies } from '@juicyllama/utils'
 
 export class PaymentMethodCreditCardDetails {
 	@IsString()

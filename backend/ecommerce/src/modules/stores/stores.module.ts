@@ -1,9 +1,4 @@
-import { Logger } from '@juicyllama/utils'
-import { forwardRef, Module } from '@nestjs/common'
-import { CacheModule } from '@nestjs/cache-manager'
-import { StoresService } from './stores.service'
-import { StoresController } from './stores.controller'
-import { ConfigModule } from '@nestjs/config'
+import { AppsModule } from '@juicyllama/app-store'
 import {
 	AccountModule,
 	AuthModule,
@@ -13,11 +8,16 @@ import {
 	jwtConfig,
 	Query,
 } from '@juicyllama/core'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { JwtModule } from '@nestjs/jwt'
-import { Store } from './stores.entity'
+import { Logger } from '@juicyllama/utils'
 import { WebsitesModule } from '@juicyllama/websites'
-import { AppsModule } from '@juicyllama/app-store'
+import { CacheModule } from '@nestjs/cache-manager'
+import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
+import { JwtModule } from '@nestjs/jwt'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { StoresController } from './stores.controller'
+import { Store } from './stores.entity'
+import { StoresService } from './stores.service'
 
 @Module({
 	imports: [
@@ -30,11 +30,11 @@ import { AppsModule } from '@juicyllama/app-store'
 		TypeOrmModule.forRoot(databaseConfig()),
 		TypeOrmModule.forFeature([Store]),
 		JwtModule.register(jwtConfig()),
-		forwardRef(() => AuthModule),
-		forwardRef(() => AccountModule),
-		forwardRef(() => BeaconModule),
-		forwardRef(() => WebsitesModule),
-		forwardRef(() => AppsModule),
+		AuthModule,
+		AccountModule,
+		BeaconModule,
+		WebsitesModule,
+		AppsModule,
 	],
 	controllers: [StoresController],
 	providers: [StoresService, Logger, Query],

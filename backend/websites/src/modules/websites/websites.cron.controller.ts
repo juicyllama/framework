@@ -1,6 +1,6 @@
-import { Controller, forwardRef, Inject, Post, UseGuards } from '@nestjs/common'
-import { ApiExcludeController } from '@nestjs/swagger'
 import { CronGuard, CronRunner } from '@juicyllama/core'
+import { Controller, Post, UseGuards } from '@nestjs/common'
+import { ApiExcludeController } from '@nestjs/swagger'
 import { WebsitesCronsService } from './websites.crons.service'
 import {
 	CRON_WEBSITES_WEBSITE_ICON_GENERATE_DOMAIN,
@@ -11,9 +11,7 @@ import {
 @ApiExcludeController()
 @Controller('websites/website/crons')
 export class WebsitesCronsController {
-	constructor(
-		@Inject(forwardRef(() => WebsitesCronsService)) private readonly websitesCronsService: WebsitesCronsService,
-	) {}
+	constructor(private readonly websitesCronsService: WebsitesCronsService) {}
 
 	@Post('generate/screenshots')
 	async generate_screenshots() {

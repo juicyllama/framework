@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { ConfigModule } from '@nestjs/config'
-import { Env, Logger, Api } from '@juicyllama/utils'
-import { MONGODB, mongodbConfig, Query } from '@juicyllama/core'
+import { getRepositoryToken } from '@nestjs/typeorm'
+import { Env, Logger } from '@juicyllama/utils'
+import { MONGODB, Query, getConfigToken } from '@juicyllama/core'
+import { GoogleConfigDto } from '../../../config/google.config.dto'
+import { GoogleMapsClientToken } from '../provider'
 import { GeocodingService } from './geocoding.service'
-import googleConfig from '../../../config/google.config'
 import { GoogleMapsGeocoding } from './geocoding.entity.mongo'
 
 describe('Geocoding Service', () => {
@@ -18,15 +18,39 @@ describe('Geocoding Service', () => {
 		}
 
 		moduleRef = await Test.createTestingModule({
-			imports: [
-				ConfigModule.forRoot({
-					isGlobal: true,
-					load: [mongodbConfig, googleConfig],
-				}),
-				TypeOrmModule.forRootAsync(mongodbConfig()),
-				TypeOrmModule.forFeature([GoogleMapsGeocoding], MONGODB),
+			providers: [
+				GeocodingService,
+				{
+					provide: Logger,
+					useValue: {
+						debug: jest.fn(),
+						error: jest.fn(),
+					},
+				},
+				{
+					provide: Query,
+					useValue: {
+						findOne: jest.fn(),
+						create: jest.fn(),
+					},
+				},
+				{
+					provide: getRepositoryToken(GoogleMapsGeocoding, MONGODB),
+					useValue: {},
+				},
+				{
+					provide: getConfigToken(GoogleConfigDto),
+					useValue: {
+						GOOGLE_MAPS_API_KEY: '',
+					},
+				},
+				{
+					provide: GoogleMapsClientToken,
+					useValue: {
+						geocode: jest.fn(),
+					},
+				},
 			],
-			providers: [GeocodingService, Logger, Query, Api],
 		}).compile()
 
 		geocodingService = moduleRef.get<GeocodingService>(GeocodingService)

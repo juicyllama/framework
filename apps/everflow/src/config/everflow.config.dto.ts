@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator'
 
-export class everflowConfigDto {
+export class EverflowConfigDto {
 	@IsString()
 	EVERFLOW_API_KEY!: string
 }

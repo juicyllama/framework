@@ -1,15 +1,13 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { Logger, Env, Api } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
-import { SpbConfig } from 'scrapingbee/src'
-import { ScrapingBeeClient } from 'scrapingbee'
+import { Logger, Env } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
+import { SpbConfig, ScrapingBeeClient } from 'scrapingbee'
+import { InjectScrapingbee } from './scrapingbee.constants'
 
 @Injectable()
 export class ScrapingBeeScrapeService {
 	constructor(
-		@Inject(forwardRef(() => Api)) private readonly api: Api,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		private readonly logger: Logger,
+		@InjectScrapingbee() private readonly client: ScrapingBeeClient,
 	) {}
 
 	async scrape(options: SpbConfig): Promise<any> {
@@ -20,15 +18,9 @@ export class ScrapingBeeScrapeService {
 			return
 		}
 
-		const key = this.configService.get<string>('scrapingbee.SCRAPINGBEE_API_KEY')
-		if (!key) {
-			this.logger.error(`[${domain}] Error: SCRAPINGBEE_API_KEY not found`)
-			throw new Error('SCRAPINGBEE_API_KEY not found')
-		}
 		try {
-			const client = new ScrapingBeeClient(key)
 			this.logger.debug(`[${domain}] Request`, options)
-			const response = await client.get(options)
+			const response = await this.client.get(options)
 
 			const decoder = new TextDecoder()
 			const text = decoder.decode(response.data)

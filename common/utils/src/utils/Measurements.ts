@@ -1,5 +1,4 @@
 export class Measurements {
-
 	static Grams = {
 		abbreviation: 'g',
 		name: 'gram',
@@ -68,5 +67,4 @@ export class Measurements {
 		const inches = Number(totalInches.toFixed(2)) - feet * 12
 		return Number(`${feet}.${inches.toFixed(0)}`)
 	}
-	
 }

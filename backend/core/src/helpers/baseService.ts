@@ -1,12 +1,12 @@
+import { CachePeriod, JLCache, Logger } from '@juicyllama/utils'
 import { Injectable } from '@nestjs/common'
-import { Query } from '../utils/typeorm/Query'
+import { Cache } from 'cache-manager'
 import { DeepPartial, FindOneOptions, Repository, ObjectLiteral } from 'typeorm'
 import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
 import { BeaconService } from '../modules/beacon/beacon.service'
-import { Cache } from 'cache-manager'
-import { CachePeriod, JLCache, Logger } from '@juicyllama/utils'
-import { ChartOptions, CurrencyOptions } from '../types/typeorm'
 import { ImportMode, BulkUploadResponse } from '../types/common'
+import { ChartOptions, CurrencyOptions } from '../types/typeorm'
+import { Query } from '../utils/typeorm/Query'
 
 /**
  * Base service for all services
@@ -156,7 +156,7 @@ export class BaseService<T extends ObjectLiteral> {
 	/**
 	 * Updates the record in the database
 	 * @param data
-	 * @param relations - any relations to include in the response 
+	 * @param relations - any relations to include in the response
 	 */
 
 	async update(data: DeepPartial<T>, relations: string[] = []): Promise<T> {
@@ -199,11 +199,11 @@ export class BaseService<T extends ObjectLiteral> {
 	 */
 	async sendBeacon(options: { action: 'CREATE' | 'UPDATE' | 'DELETE' | 'RELOAD'; data: T }) {
 		if (this.options?.beacon) {
-
 			// If the data is too large, only send the primary key
-			if(Buffer.byteLength(JSON.stringify(options.data)) > 10000){
+			if (Buffer.byteLength(JSON.stringify(options.data)) > 10000) {
 				options.data = <any>{
-					[this.query.getPrimaryKey(this.repository)]: options.data[this.query.getPrimaryKey(this.repository)]
+					[this.query.getPrimaryKey(this.repository)]:
+						options.data[this.query.getPrimaryKey(this.repository)],
 				}
 			}
 

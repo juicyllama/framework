@@ -1,5 +1,5 @@
-import { CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from 'typeorm'
 import { IsDate } from 'class-validator'
+import { CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from 'typeorm'
 
 export class BaseEntity {
 	@CreateDateColumn()

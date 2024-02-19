@@ -43,31 +43,34 @@ directories=(
 success_count=0
 failure_count=0
 declare -a failed_directories
+start_total=$SECONDS
 
 # Loop through each directory and run 'pnpm run test'
 for dir in "${directories[@]}"; do
+    start=$SECONDS
     echo "Running tests in $dir..."
     output=$(cd "$dir" && pnpm run test 2>&1)
     exit_code=$?
-    
+    duration=$((SECONDS - start))
+
     if [ $exit_code -eq 0 ]; then
-        echo "Tests succeeded in $dir"
+        echo "Tests succeeded in $dir. Took $duration seconds."
         ((success_count++))
     else
         if [[ "$output" != *ERR_PNPM_NO_SCRIPT* ]]; then
         ((failure_count++))
         failed_directories+=("$dir")
-            echo "Tests failed in $dir, displaying output:"
+            echo "Tests failed in $dir. Took $duration seconds. displaying output:"
             echo "$output"
         else
             echo "No test script found, skipping"
-        fi
-        
+        fi        
     fi
 done
 
+total_duration=$((SECONDS - start_total))
 # Print summary
-echo "Summary:"
+echo "Done in $total_duration seconds. Summary:"
 echo "Successes: $success_count"
 echo "Failures: $failure_count"
 if [ $failure_count -ne 0 ]; then

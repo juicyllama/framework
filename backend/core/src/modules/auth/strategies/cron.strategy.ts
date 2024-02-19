@@ -1,11 +1,11 @@
-import { forwardRef, ImATeapotException, Inject, Injectable, UnauthorizedException } from '@nestjs/common'
-import { PassportStrategy } from '@nestjs/passport'
+import { ImATeapotException, Injectable, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { PassportStrategy } from '@nestjs/passport'
 import Strategy from 'passport-headerapikey'
 
 @Injectable()
 export class CronStrategy extends PassportStrategy(Strategy, 'cron') {
-	constructor(@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService) {
+	constructor(private readonly configService: ConfigService) {
 		super({ header: 'CRON-API-KEY', prefix: '' }, true, async (apiKey: string, done: any) => {
 			return this.validate(apiKey, done)
 		})

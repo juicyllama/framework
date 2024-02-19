@@ -1,9 +1,7 @@
+import { Env, Logger } from '@juicyllama/utils'
 import { Test, TestingModule } from '@nestjs/testing'
-import { Env } from '@juicyllama/utils'
-import { forwardRef } from '@nestjs/common'
 import { AiModule } from './ai.module'
 import { AiService } from './ai.service'
-import { Logger } from '@juicyllama/utils'
 
 describe('AI', () => {
 	let moduleRef: TestingModule
@@ -17,7 +15,7 @@ describe('AI', () => {
 		}
 
 		moduleRef = await Test.createTestingModule({
-			imports: [forwardRef(() => AiModule)],
+			imports: [AiModule],
 		}).compile()
 
 		aiService = moduleRef.get<AiService>(AiService)

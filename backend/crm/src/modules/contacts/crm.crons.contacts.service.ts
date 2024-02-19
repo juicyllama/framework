@@ -1,17 +1,15 @@
 import { SettingsService } from '@juicyllama/core'
 import { CachePeriod, Env, Logger, Modules } from '@juicyllama/utils'
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
+import { Injectable } from '@nestjs/common'
 import { ContactPhoneStatus } from './phone/phone.enums'
 import { ContactPhoneService } from './phone/phone.service'
 
 @Injectable()
 export class CrmCronsContactsService {
 	constructor(
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => SettingsService)) private readonly settingsService: SettingsService,
-		@Inject(forwardRef(() => ContactPhoneService)) private readonly contactPhoneService: ContactPhoneService,
+		private readonly logger: Logger,
+		private readonly settingsService: SettingsService,
+		private readonly contactPhoneService: ContactPhoneService,
 	) {}
 
 	async validatePhoneNumbers() {

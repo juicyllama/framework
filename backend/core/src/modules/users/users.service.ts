@@ -1,5 +1,5 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Logger, Security } from '@juicyllama/utils'
+import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { AccountService } from '../accounts/account.service'
@@ -19,14 +19,14 @@ import { User } from './users.entity'
 @Injectable()
 export class UsersService extends BaseService<T> {
 	constructor(
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
+		@Inject(Query) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
+		readonly logger: Logger,
 		@Inject(forwardRef(() => AccountService)) readonly accountService: AccountService,
 		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
 		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
-		@Inject(forwardRef(() => StorageService)) readonly storageService: StorageService,
-		@Inject(forwardRef(() => UsersHooks)) readonly usersHooks: UsersHooks,
+		readonly storageService: StorageService,
+		readonly usersHooks: UsersHooks,
 	) {
 		super(query, repository, { beacon: beaconService })
 	}

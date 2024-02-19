@@ -1,10 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
-import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
+import { InstalledApp } from '@juicyllama/app-store'
 import { Account, BaseEntity } from '@juicyllama/core'
 import { Website } from '@juicyllama/websites'
-import { InstalledApp } from '@juicyllama/app-store'
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
 
-@UseInterceptors(ClassSerializerInterceptor)
 @Entity('ecommerce_stores')
 export class Store extends BaseEntity {
 	@PrimaryGeneratedColumn()

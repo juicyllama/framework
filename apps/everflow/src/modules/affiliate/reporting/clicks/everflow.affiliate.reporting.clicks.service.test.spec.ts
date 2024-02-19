@@ -1,8 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { Env } from '@juicyllama/utils'
+import { Api, Env, Logger } from '@juicyllama/utils'
 import { EverflowAffiliateReportingClicksService } from './everflow.affiliate.reporting.clicks.service'
-import { EverflowAffiliateReportingClicksModule } from './everflow.affiliate.reporting.clicks.module'
-import { forwardRef } from '@nestjs/common'
 
 describe('Affiliate Reporting Clicks Service', () => {
 	let moduleRef: TestingModule
@@ -15,7 +13,22 @@ describe('Affiliate Reporting Clicks Service', () => {
 		}
 
 		moduleRef = await Test.createTestingModule({
-			imports: [forwardRef(() => EverflowAffiliateReportingClicksModule)],
+			providers: [
+				EverflowAffiliateReportingClicksService,
+				{
+					provide: Api,
+					useValue: {
+						post: jest.fn(),
+					},
+				},
+				{
+					provide: Logger,
+					useValue: {
+						debug: jest.fn(),
+						error: jest.fn(),
+					},
+				},
+			],
 		}).compile()
 
 		everflowAffiliateReportingClicksService = moduleRef.get<EverflowAffiliateReportingClicksService>(

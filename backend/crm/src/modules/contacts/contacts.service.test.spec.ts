@@ -1,8 +1,8 @@
-import { Scaffold, ScaffoldDto } from '@juicyllama/core'
-import { contactMock } from './contacts.mocks'
 import { faker } from '@faker-js/faker'
+import { Scaffold, ScaffoldDto } from '@juicyllama/core'
 import { DeepPartial } from 'typeorm'
 import { Contact } from './contacts.entity'
+import { contactMock } from './contacts.mocks'
 import { ContactsModule } from './contacts.module'
 import { ContactsService } from './contacts.service'
 

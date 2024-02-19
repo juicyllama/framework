@@ -1,8 +1,8 @@
+import { Account, BaseEntity, Tag, User } from '@juicyllama/core'
+import { SupportedCurrencies } from '@juicyllama/utils'
 import { IsArray, IsBoolean, IsEnum, IsNumber, IsString, MaxLength, MinLength } from 'class-validator'
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { Account, BaseEntity, Tag, User } from '@juicyllama/core'
 import { Invoice } from '../invoices/invoices.entity'
-import { SupportedCurrencies } from '@juicyllama/utils'
 
 @Entity('billing_charges')
 export class Charge extends BaseEntity {

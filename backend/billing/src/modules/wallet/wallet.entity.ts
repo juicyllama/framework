@@ -1,9 +1,9 @@
+import { Account, BaseEntity } from '@juicyllama/core'
+import { SupportedCurrencies } from '@juicyllama/utils'
 import { IsEnum, IsNumber, MaxLength, MinLength } from 'class-validator'
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { Account, BaseEntity } from '@juicyllama/core'
 import { Charge } from '../charges/charges.entity'
 import { Payment } from '../payments/payments.entity'
-import { SupportedCurrencies } from '@juicyllama/utils'
 
 @Entity('billing_wallet')
 export class Wallet extends BaseEntity {

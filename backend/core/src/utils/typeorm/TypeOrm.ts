@@ -1,7 +1,7 @@
+import { isNil, omitBy, compact } from 'lodash'
 import { MoreThan, Repository, ColumnType, ObjectLiteral } from 'typeorm'
 import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere'
-import { isNil, omitBy, compact } from 'lodash'
 import { FindOneOptions } from 'typeorm/find-options/FindOneOptions'
 
 export class TypeOrm {

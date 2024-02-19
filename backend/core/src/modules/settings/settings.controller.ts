@@ -11,12 +11,12 @@ import {
 	Query,
 	Delete,
 } from '@nestjs/common'
-import { CreateSettingsDto, UpdateSettingsDto } from './settings.dto'
 import { ApiQuery, ApiParam, ApiOperation, ApiTags } from '@nestjs/swagger'
-import { SettingsService } from './settings.service'
 import { AccountId, CreateDecorator, UserAuth } from '../../decorators'
-import { SETTINGS_E, SETTINGS_T, SETTINGS_NAME } from './settings.constants'
 import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
+import { SETTINGS_E, SETTINGS_T, SETTINGS_NAME } from './settings.constants'
+import { CreateSettingsDto, UpdateSettingsDto } from './settings.dto'
+import { SettingsService } from './settings.service'
 
 @ApiTags('Settings')
 @UserAuth()

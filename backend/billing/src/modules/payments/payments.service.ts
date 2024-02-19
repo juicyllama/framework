@@ -1,12 +1,12 @@
-import { BadRequestException, forwardRef, Inject, Injectable, NotImplementedException } from '@nestjs/common'
+import { Account, AccountService, AppIntegrationName, BaseService, BeaconService, Query, User } from '@juicyllama/core'
+import { Logger, Strings, SupportedCurrencies, File } from '@juicyllama/utils'
+import { BadRequestException, Inject, Injectable, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
-import { Payment } from './payments.entity'
-import { Account, AccountService, AppIntegrationName, BaseService, BeaconService, Query, User } from '@juicyllama/core'
 import { Invoice } from '../invoices/invoices.entity'
-import { Logger, Strings, SupportedCurrencies, File } from '@juicyllama/utils'
 import { PaymentMethod } from '../payment_methods/payment.methods.entity'
 import { PaymentMethodsService } from '../payment_methods/payment.methods.service'
+import { Payment } from './payments.entity'
 import { PaymentStatus, PaymentType } from './payments.enums'
 
 const E = Payment
@@ -14,12 +14,12 @@ type T = Payment
 @Injectable()
 export class PaymentsService extends BaseService<T> {
 	constructor(
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
+		@Inject(Query) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
-		@Inject(forwardRef(() => PaymentMethodsService)) private readonly paymentMethodsService: PaymentMethodsService,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
+		readonly beaconService: BeaconService,
+		private readonly paymentMethodsService: PaymentMethodsService,
+		private readonly logger: Logger,
+		private readonly accountService: AccountService,
 	) {
 		super(query, repository, {
 			beacon: beaconService,

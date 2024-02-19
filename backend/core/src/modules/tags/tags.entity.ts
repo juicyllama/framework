@@ -1,6 +1,6 @@
+import { ApiProperty } from '@nestjs/swagger'
 import { IsDate, IsString, MaxLength, MinLength } from 'class-validator'
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm'
-import { ApiProperty } from '@nestjs/swagger'
 
 @Entity('tags')
 @Unique('tag_UNIQUE', ['name'])

@@ -1,10 +1,10 @@
+import { Api, Env, Logger } from '@juicyllama/utils'
 import { Test, TestingModule } from '@nestjs/testing'
-import { Env } from '@juicyllama/utils'
-import { WordpressCategoriesService } from './wordpress.categories.service'
-import { WordpressCategoriesModule } from './wordpress.categories.module'
-import { forwardRef } from '@nestjs/common'
 // @ts-ignore
 import * as mock from './mock.json'
+import { WordpressCategoriesUrlToken } from './wordpress.categories.constants'
+import { WordpressCategoriesService } from './wordpress.categories.service'
+
 describe('WordPress Categories Service', () => {
 	let moduleRef: TestingModule
 
@@ -16,7 +16,26 @@ describe('WordPress Categories Service', () => {
 		}
 
 		moduleRef = await Test.createTestingModule({
-			imports: [forwardRef(() => WordpressCategoriesModule)],
+			providers: [
+				WordpressCategoriesService,
+				{
+					provide: Api,
+					useValue: {
+						post: jest.fn(),
+					},
+				},
+				{
+					provide: Logger,
+					useValue: {
+						debug: jest.fn(),
+						error: jest.fn(),
+					},
+				},
+				{
+					provide: WordpressCategoriesUrlToken,
+					useValue: '',
+				},
+			],
 		}).compile()
 
 		wordpressCategoriesService = moduleRef.get<WordpressCategoriesService>(WordpressCategoriesService)
