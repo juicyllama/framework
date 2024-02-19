@@ -1,6 +1,6 @@
 {
 	"name": "@juicyllama/app-wordpress",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "Juicyllama NestJs Wordpress App",
 	"author": {
 		"name": "JuicyLlama Studio",
