@@ -5,7 +5,6 @@ const features = [
 		title: 'App Store',
 		text: 'Allow users to install apps from your own app store with just a few clicks.',
 		link: '/framework/frontend/core/app-store'
-	framework/frontend/core/common/form
 	},
 	{
 		icon: 'lock-duotone',
