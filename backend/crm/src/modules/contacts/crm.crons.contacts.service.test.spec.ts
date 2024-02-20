@@ -1,11 +1,11 @@
 import { Scaffold, ScaffoldDto } from '@juicyllama/core'
+import { DeepPartial } from 'typeorm'
+import { Contact } from '../contacts/contacts.entity'
+import { contactMock } from '../contacts/contacts.mocks'
+import { ContactsService } from '../contacts/contacts.service'
+import { PRIMARY_KEY } from '../contacts/contacts.service.test.spec'
 import { ContactPhone } from '../contacts/phone/phone.entity'
 import { CrmCronsContactsService } from './crm.crons.contacts.service'
-import { ContactsService } from '../contacts/contacts.service'
-import { DeepPartial } from 'typeorm'
-import { contactMock } from '../contacts/contacts.mocks'
-import { PRIMARY_KEY } from '../contacts/contacts.service.test.spec'
-import { Contact } from '../contacts/contacts.entity'
 import { CrmCronsModule } from './crm.crons.module'
 
 const E = ContactPhone

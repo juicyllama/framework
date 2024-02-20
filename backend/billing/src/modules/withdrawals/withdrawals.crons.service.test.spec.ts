@@ -1,15 +1,15 @@
-import { SupportedCurrencies } from '@juicyllama/utils'
 import { Scaffold, ScaffoldDto } from '@juicyllama/core'
+import { SupportedCurrencies } from '@juicyllama/utils'
 import { MockPaymentMethodBankRequest, MockPaymentRequest, MockWithdrawalRequest } from '../../test/mocks'
-import { WithdrawalsCronService } from './withdrawals.crons.service'
-import { PaymentsService } from '../payments/payments.service'
-import { PaymentMethodsService } from '../payment_methods/payment.methods.service'
-import { PaymentMethod } from '../payment_methods/payment.methods.entity'
-import { WithdrawalsService } from './withdrawals.service'
-import { Withdrawal } from './withdrawals.entity'
-import { Charge } from '../charges/charges.entity'
 import { BillingModule } from '../billing.module'
+import { Charge } from '../charges/charges.entity'
+import { PaymentsService } from '../payments/payments.service'
+import { PaymentMethod } from '../payment_methods/payment.methods.entity'
+import { PaymentMethodsService } from '../payment_methods/payment.methods.service'
 import { WalletService } from '../wallet/wallet.service'
+import { WithdrawalsCronService } from './withdrawals.crons.service'
+import { Withdrawal } from './withdrawals.entity'
+import { WithdrawalsService } from './withdrawals.service'
 
 const E = Charge
 type T = Charge

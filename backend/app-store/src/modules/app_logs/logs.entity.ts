@@ -1,8 +1,9 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { BaseEntity } from '@juicyllama/core'
 import { IsEnum, IsObject, IsString } from 'class-validator'
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { InstalledApp } from '../installed/installed.entity'
 import { AppsLogsType } from './logs.enums'
-import { BaseEntity } from '@juicyllama/core'
+
 @Entity('apps_logs')
 export class Log extends BaseEntity {
 	@PrimaryGeneratedColumn()

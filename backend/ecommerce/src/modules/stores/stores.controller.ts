@@ -1,7 +1,3 @@
-import { Body, Controller, forwardRef, Inject, Param, Query, Req, UploadedFile } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
-import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
-import { StoresService } from './stores.service'
 import {
 	Query as TQuery,
 	AccountId,
@@ -22,17 +18,21 @@ import {
 	UploadFieldsDecorator,
 	AuthenticatedRequest,
 } from '@juicyllama/core'
-import { CreateStoreDto as CreateDto, UpdateStoreDto as UpdateDto } from './stores.dto'
+import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
+import { Body, Controller, Inject, Param, Query, Req, UploadedFile } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { STORE_T as T, storeConstants as constants } from './stores.constants'
+import { CreateStoreDto as CreateDto, UpdateStoreDto as UpdateDto } from './stores.dto'
+import { StoresService } from './stores.service'
 
 @ApiTags('Stores')
 @UserAuth()
 @Controller('ecommerce/stores')
 export class StoresController extends BaseController<T> {
 	constructor(
-		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
-		@Inject(forwardRef(() => StoresService)) readonly service: StoresService,
-		@Inject(forwardRef(() => TQuery)) readonly tQuery: TQuery<T>,
+		readonly authService: AuthService,
+		readonly service: StoresService,
+		@Inject(TQuery) readonly tQuery: TQuery<T>,
 	) {
 		super(service, tQuery, constants, {
 			services: {

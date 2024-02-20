@@ -1,20 +1,4 @@
 import {
-	BadRequestException,
-	Body,
-	Controller,
-	forwardRef,
-	Inject,
-	Param,
-	Patch,
-	Query,
-	Req,
-	UploadedFile,
-} from '@nestjs/common'
-import { ApiOperation, ApiTags } from '@nestjs/swagger'
-import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
-import { Express } from 'express'
-import { ContactsService } from './contacts.service'
-import {
 	Query as TQuery,
 	AccountId,
 	AuthService,
@@ -23,6 +7,7 @@ import {
 	ReadManyDecorator,
 	ReadOneDecorator,
 	ReadStatsDecorator,
+	Tag,
 	TagsService,
 	UpdateDecorator,
 	UploadFileDecorator,
@@ -37,21 +22,25 @@ import {
 	CrudUploadFieldsResponse,
 	AuthenticatedRequest,
 } from '@juicyllama/core'
-import { Contact } from './contacts.entity'
-import { Tag } from '@juicyllama/core/dist/modules/tags/tags.entity'
+import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
+import { BadRequestException, Body, Controller, Inject, Param, Patch, Query, Req, UploadedFile } from '@nestjs/common'
+import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { Express } from 'express'
 import { contactsConstants as constants, CRM_CONTACTS_T as T, CRM_CONTACTS_E as E } from './contacts.constants'
 import { CreateContactDto as CreateDto, UpdateContactDto as UpdateDto } from './contacts.dto'
+import { Contact } from './contacts.entity'
+import { ContactsService } from './contacts.service'
 
 @ApiTags('Contacts')
 @UserAuth()
 @Controller('crm/contacts')
 export class ContactsController extends BaseController<T> {
 	constructor(
-		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
-		@Inject(forwardRef(() => ContactsService)) readonly service: ContactsService,
-		@Inject(forwardRef(() => TagsService)) readonly tagsService: TagsService,
-		@Inject(forwardRef(() => UsersService)) readonly usersService: UsersService,
-		@Inject(forwardRef(() => TQuery)) readonly tQuery: TQuery<T>,
+		readonly authService: AuthService,
+		readonly service: ContactsService,
+		readonly tagsService: TagsService,
+		readonly usersService: UsersService,
+		@Inject(TQuery) readonly tQuery: TQuery<T>,
 	) {
 		super(service, tQuery, constants, {
 			services: {

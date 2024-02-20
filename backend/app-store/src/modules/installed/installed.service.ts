@@ -22,11 +22,11 @@ export type T = InstalledApp
 export class InstalledAppsService extends BaseService<T> {
 	constructor(
 		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
-		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
-		@Inject(forwardRef(() => AppsService)) readonly appsService: AppsService,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => WordPressService)) readonly wordPressService: WordPressService,
+		@Inject(Query) readonly query: Query<T>,
+		readonly beaconService: BeaconService,
+		readonly appsService: AppsService,
+		private readonly logger: Logger,
+		readonly wordPressService: WordPressService,
 		@Inject(forwardRef(() => ShopifyService)) readonly shopifyService: ShopifyService,
 		private readonly googleAnalyticsService: GoogleAnalyticsService,
 	) {

@@ -1,22 +1,6 @@
-import {
-	BadRequestException,
-	Body,
-	Controller,
-	Param,
-	Patch,
-	Query,
-	Req,
-	UploadedFile,
-	forwardRef,
-	Inject,
-} from '@nestjs/common'
 import { StatsMethods, StatsResponseDto, Strings } from '@juicyllama/utils'
-import { CreateUserDto, UpdateUserDto } from './users.dto'
-import { UserRole } from './users.enums'
+import { BadRequestException, Body, Controller, Param, Patch, Query, Req, UploadedFile, Inject } from '@nestjs/common'
 import { ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
-import { AuthService } from '../auth/auth.service'
-import { AccountService } from '../accounts/account.service'
-import { UsersService } from './users.service'
 import {
 	AccountId,
 	CreateDecorator,
@@ -28,7 +12,16 @@ import {
 	BulkUploadDecorator,
 	UserAuth,
 } from '../../decorators'
+import { UploadFieldsDecorator, UploadImageDecorator } from '../../decorators/crud.decorator'
+import { crudDelete } from '../../helpers'
+import { crudBulkUpload } from '../../helpers/crudController'
+import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
+import { CrudUploadFieldsResponse, BulkUploadDto, BulkUploadResponse } from '../../types/common'
 import { Query as TQuery } from '../../utils/typeorm/Query'
+import { TypeOrm } from '../../utils/typeorm/TypeOrm'
+import { AccountService } from '../accounts/account.service'
+import { AuthService } from '../auth/auth.service'
+import { StorageService } from '../storage/storage.service'
 import {
 	UPLOAD_FIELDS,
 	DEFAULT_ORDER_BY,
@@ -40,24 +33,20 @@ import {
 	UPLOAD_DUPLICATE_FIELD,
 	usersConstants as constants,
 } from './users.constants'
-import { crudDelete } from '../../helpers'
-import { UploadFieldsDecorator, UploadImageDecorator } from '../../decorators/crud.decorator'
-import { crudBulkUpload } from '../../helpers/crudController'
-import { StorageService } from '../storage/storage.service'
-import { CrudUploadFieldsResponse, BulkUploadDto, BulkUploadResponse } from '../../types/common'
-import { TypeOrm } from '../../utils/typeorm/TypeOrm'
-import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
+import { CreateUserDto, UpdateUserDto } from './users.dto'
+import { UserRole } from './users.enums'
+import { UsersService } from './users.service'
 
 @ApiTags(Strings.capitalize(Strings.plural(NAME)))
 @UserAuth()
 @Controller(`/${Strings.plural(NAME)}`)
 export class UsersController {
 	constructor(
-		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
-		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
-		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<T>,
-		@Inject(forwardRef(() => UsersService)) private readonly service: UsersService,
-		@Inject(forwardRef(() => StorageService)) readonly storageService: StorageService,
+		private readonly authService: AuthService,
+		private readonly accountService: AccountService,
+		@Inject(TQuery) private readonly tQuery: TQuery<T>,
+		private readonly service: UsersService,
+		readonly storageService: StorageService,
 	) {}
 
 	@CreateDecorator(constants)

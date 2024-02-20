@@ -1,14 +1,14 @@
-import { Controller, Get, Post, Inject, forwardRef, Param, Res } from '@nestjs/common'
+import { Controller, Get, Post, Param, Res } from '@nestjs/common'
 import { ApiHideProperty } from '@nestjs/swagger'
-import { PaymentService } from './payment.service'
 import { molliePaymentStatus } from '../mollie.mapper'
 import { CustomerService } from '../customer/customer.service'
+import { PaymentService } from './payment.service'
 
 @Controller('app/mollie/payment')
 export class PaymentController {
 	constructor(
-		@Inject(forwardRef(() => PaymentService)) private readonly paymentService: PaymentService,
-		@Inject(forwardRef(() => CustomerService)) private readonly customerService: CustomerService,
+		private readonly paymentService: PaymentService,
+		private readonly customerService: CustomerService,
 	) {}
 
 	/**

@@ -1,5 +1,3 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { Logger, Modules } from '@juicyllama/utils'
 import {
 	BeaconService,
 	Query,
@@ -9,15 +7,17 @@ import {
 	StorageType,
 	BaseService,
 } from '@juicyllama/core'
-import { Contact } from './contacts.entity'
-import { InjectRepository } from '@nestjs/typeorm'
-import { DeepPartial, Repository } from 'typeorm'
+import { Logger, Modules } from '@juicyllama/utils'
+import { Inject, Injectable } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
-import { ContactSocialService } from './social/social.service'
-import { ContactPhoneService } from './phone/phone.service'
-import { ContactEmailService } from './email/email.service'
-import { ContactAddressService } from './address/address.service'
+import { InjectRepository } from '@nestjs/typeorm'
 import { isNil, omitBy } from 'lodash'
+import { DeepPartial, Repository } from 'typeorm'
+import { ContactAddressService } from './address/address.service'
+import { Contact } from './contacts.entity'
+import { ContactEmailService } from './email/email.service'
+import { ContactPhoneService } from './phone/phone.service'
+import { ContactSocialService } from './social/social.service'
 
 const E = Contact
 type T = Contact
@@ -26,15 +26,15 @@ type T = Contact
 export class ContactsService extends BaseService<T> {
 	constructor(
 		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
-		@Inject(forwardRef(() => StorageService)) private readonly storageService: StorageService,
-		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
-		@Inject(forwardRef(() => ContactSocialService)) private readonly contactSocialService: ContactSocialService,
-		@Inject(forwardRef(() => ContactPhoneService)) private readonly contactPhoneService: ContactPhoneService,
-		@Inject(forwardRef(() => ContactEmailService)) private readonly contactEmailService: ContactEmailService,
-		@Inject(forwardRef(() => ContactAddressService)) private readonly contactAddressService: ContactAddressService,
+		@Inject(Query) readonly query: Query<T>,
+		private readonly logger: Logger,
+		readonly beaconService: BeaconService,
+		private readonly storageService: StorageService,
+		private readonly lazyModuleLoader: LazyModuleLoader,
+		private readonly contactSocialService: ContactSocialService,
+		private readonly contactPhoneService: ContactPhoneService,
+		private readonly contactEmailService: ContactEmailService,
+		private readonly contactAddressService: ContactAddressService,
 	) {
 		super(query, repository, {
 			beacon: beaconService,

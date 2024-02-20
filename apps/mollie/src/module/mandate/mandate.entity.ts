@@ -1,9 +1,9 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { IsDate, IsEnum, IsObject, IsString, IsNumber } from 'class-validator'
-import { MollieCustomer } from '../customer/customer.entity'
+import { BaseEntity } from '@juicyllama/core'
 import { MandateMethod, MandateStatus } from '@mollie/api-client'
 import { MandateDetails } from '@mollie/api-client/dist/types/src/data/customers/mandates/data'
-import { BaseEntity } from '@juicyllama/core'
+import { IsDate, IsEnum, IsObject, IsString, IsNumber } from 'class-validator'
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { MollieCustomer } from '../customer/customer.entity'
 
 @Entity('apps_mollie_mandates')
 export class MollieMandate extends BaseEntity {

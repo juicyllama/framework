@@ -1,5 +1,3 @@
-import { Injectable, OnModuleInit } from '@nestjs/common'
-import { Logger } from '@juicyllama/utils'
 import {
 	AppCategory,
 	AppInputType,
@@ -8,6 +6,8 @@ import {
 	AppStoreIntegrationName,
 	AppSettingsDto,
 } from '@juicyllama/app-store'
+import { Logger } from '@juicyllama/utils'
+import { Injectable, OnModuleInit } from '@nestjs/common'
 
 @Injectable()
 export class WordpressInstallationService implements OnModuleInit {

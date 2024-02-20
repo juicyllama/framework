@@ -1,16 +1,16 @@
+import { Logger } from '@juicyllama/utils'
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { BeaconNotification } from './notification.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { In, Repository } from 'typeorm'
-import { Query } from '../../../utils/typeorm/Query'
 import { BaseService } from '../../../helpers'
-import { BeaconMessageDto } from '../beacon.dto'
-import { Logger } from '@juicyllama/utils'
-import { User } from '../../users/users.entity'
-import { UsersService } from '../../users/users.service'
-import { BeaconPushService } from '../push/push.service'
-import { UserRole } from '../../users/users.enums'
+import { Query } from '../../../utils/typeorm/Query'
 import { AuthService } from '../../auth/auth.service'
+import { User } from '../../users/users.entity'
+import { UserRole } from '../../users/users.enums'
+import { UsersService } from '../../users/users.service'
+import { BeaconMessageDto } from '../beacon.dto'
+import { BeaconPushService } from '../push/push.service'
+import { BeaconNotification } from './notification.entity'
 
 const E = BeaconNotification
 type T = BeaconNotification
@@ -18,12 +18,13 @@ type T = BeaconNotification
 @Injectable()
 export class BeaconNotificationService extends BaseService<T> {
 	constructor(
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
+		@Inject(Query) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => BeaconPushService)) private readonly beaconPushService: BeaconPushService,
+		private readonly logger: Logger,
+		private readonly beaconPushService: BeaconPushService,
 		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
-		@Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,
+		@Inject(forwardRef(() => UsersService))
+		private readonly usersService: UsersService,
 	) {
 		super(query, repository)
 	}

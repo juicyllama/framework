@@ -1,18 +1,18 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { Logger } from '@juicyllama/utils'
 import { Account, Tag } from '@juicyllama/core'
-import { ContactService } from './customer/contact.service'
-import { InvoiceService } from './invoice/invoice.service'
+import { Logger } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
 import { Invoice } from 'xero-node'
 import { AccountCodeService } from './accountCode/account.code.service'
+import { ContactService } from './customer/contact.service'
+import { InvoiceService } from './invoice/invoice.service'
 
 @Injectable()
 export class XeroService {
 	constructor(
-		@Inject(forwardRef(() => AccountCodeService)) private readonly accountCodeService: AccountCodeService,
-		@Inject(forwardRef(() => ContactService)) private readonly contactService: ContactService,
-		@Inject(forwardRef(() => InvoiceService)) private readonly invoiceService: InvoiceService,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		private readonly accountCodeService: AccountCodeService,
+		private readonly contactService: ContactService,
+		private readonly invoiceService: InvoiceService,
+		private readonly logger: Logger,
 	) {}
 
 	async createInvoice(options: {

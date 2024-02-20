@@ -1,7 +1,7 @@
-import { METHOD, Scaffold, ScaffoldDto, TestEndpoint } from '@juicyllama/core'
-import { contactRequestMock } from './contacts.mocks'
 import { faker } from '@faker-js/faker'
+import { METHOD, Scaffold, ScaffoldDto, TestEndpoint } from '@juicyllama/core'
 import { Contact } from './contacts.entity'
+import { contactRequestMock } from './contacts.mocks'
 import { ContactsModule } from './contacts.module'
 import { ContactsService } from './contacts.service'
 

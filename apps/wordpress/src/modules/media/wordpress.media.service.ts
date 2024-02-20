@@ -1,7 +1,9 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Api, Logger, Env } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
+import { WordpressConfigDto } from '../../config/wordpress.config.dto'
+import { getWordpressAxiosConfig } from '../../config/wordpress.config'
 import * as mock from './mock.json'
-import { wordpressConfigDto } from '../../config/wordpress.config.dto'
+import { InjectWordpressMediaUrl } from './wordpress.media.constants'
 import {
 	WordpressCreateMedia,
 	WordpressGetMedia,
@@ -9,22 +11,20 @@ import {
 	WordpressMedia,
 	WordpressUpdateMedia,
 } from './wordpress.media.dto'
-import { getWordpressAxiosConfig, getWordpressUrl } from '../../config/wordpress.config'
-
-const ENDPOINT = `/wp-json/wp/v2/media`
 
 @Injectable()
 export class WordpressMediaService {
 	constructor(
-		@Inject(forwardRef(() => Api)) private readonly api: Api,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		private readonly api: Api,
+		private readonly logger: Logger,
+		@InjectWordpressMediaUrl() private readonly urlBase: string,
 	) {}
 
 	async create(options: {
 		data: WordpressCreateMedia
 		imageBuffer: Buffer
 		filename: string
-		config?: wordpressConfigDto
+		config?: WordpressConfigDto
 	}): Promise<WordpressMedia> {
 		const domain = 'app::wordpress::media::create'
 
@@ -35,7 +35,7 @@ export class WordpressMediaService {
 		if (!options.config) throw new Error('Missing config')
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
+			const url = new URL(this.urlBase)
 
 			const media = await this.api.post(domain, url.toString(), options.imageBuffer, {
 				headers: {
@@ -55,7 +55,7 @@ export class WordpressMediaService {
 
 	async findAll(options?: {
 		arguments?: WordpressListMedia
-		config?: wordpressConfigDto
+		config?: WordpressConfigDto
 	}): Promise<WordpressMedia[]> {
 		const domain = 'app::wordpress::media::findAll'
 
@@ -66,7 +66,7 @@ export class WordpressMediaService {
 		if (!options?.config) throw new Error('Missing config')
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT)
+			const url = new URL(this.urlBase)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString())
 		} catch (err) {
@@ -79,7 +79,7 @@ export class WordpressMediaService {
 	async findOne(options: {
 		mediaId: number
 		arguments?: WordpressGetMedia
-		config?: wordpressConfigDto
+		config?: WordpressConfigDto
 	}): Promise<WordpressMedia> {
 		const domain = 'app::wordpress::media::findOne'
 
@@ -90,7 +90,7 @@ export class WordpressMediaService {
 		if (!options.config) throw new Error('Missing config')
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.mediaId)
+			const url = new URL(`${this.urlBase}/${options.mediaId}`)
 			url.search = new URLSearchParams(<any>options.arguments).toString()
 			return await this.api.get(domain, url.toString(), getWordpressAxiosConfig(options.config))
 		} catch (err) {
@@ -103,7 +103,7 @@ export class WordpressMediaService {
 	async update(options: {
 		mediaId: number
 		data: WordpressUpdateMedia
-		config?: wordpressConfigDto
+		config?: WordpressConfigDto
 	}): Promise<WordpressMedia> {
 		const domain = 'app::wordpress::media::update'
 
@@ -114,7 +114,7 @@ export class WordpressMediaService {
 		if (!options.config) throw new Error('Missing config')
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.mediaId)
+			const url = new URL(`${this.urlBase}/${options.mediaId}`)
 			return await this.api.post(domain, url.toString(), options.data, getWordpressAxiosConfig(options.config))
 		} catch (err) {
 			const e = err as Error
@@ -123,7 +123,7 @@ export class WordpressMediaService {
 		}
 	}
 
-	async remove(options: { mediaId: number; config?: wordpressConfigDto }): Promise<void> {
+	async remove(options: { mediaId: number; config?: WordpressConfigDto }): Promise<void> {
 		const domain = 'app::wordpress::media::remove'
 
 		if (Env.IsTest()) {
@@ -133,7 +133,7 @@ export class WordpressMediaService {
 		if (!options.config) throw new Error('Missing config')
 
 		try {
-			const url = new URL(getWordpressUrl(options.config) + ENDPOINT + '/' + options.mediaId)
+			const url = new URL(`${this.urlBase}/${options.mediaId}`)
 			await this.api.delete(domain, url.toString(), getWordpressAxiosConfig(options.config))
 		} catch (err) {
 			const e = err as Error

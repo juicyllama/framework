@@ -1,7 +1,7 @@
 import { ControllerConstants } from '@juicyllama/core'
+import { WebsiteDto, CreateWebsiteDto, UpdateWebsiteDto, WebsiteResponeDto } from './websites.dto'
 import { Website } from './websites.entity'
 import { WebsiteOrderBy, WebsiteRelations, WebsiteSelect } from './websites.enums'
-import { WebsiteDto, CreateWebsiteDto, UpdateWebsiteDto, WebsiteResponeDto } from './websites.dto'
 
 export const WEBSITES_E = Website
 export type WEBSITES_T = Website

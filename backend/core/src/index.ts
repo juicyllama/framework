@@ -113,7 +113,7 @@ export {
 	SwaggerPropertyDecorator,
 	UserAuth,
 	UserId,
-	UserCheck
+	UserCheck,
 } from './decorators'
 
 // Helpers

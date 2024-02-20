@@ -18,9 +18,12 @@ export const UserId = createParamDecorator((data: unknown, ctx: ExecutionContext
 	return Number(user_id)
 })
 
-
-export async function UserCheck(user: User, user_id: number, errorMessages: string = 'You can only access your own account'){
-    if(user.user_id !== user_id){
-        throw new BadRequestException('Permission Denied', { cause: new Error(), description: errorMessages })
-    }
+export async function UserCheck(
+	user: User,
+	user_id: number,
+	errorMessages: string = 'You can only access your own account',
+) {
+	if (user.user_id !== user_id) {
+		throw new BadRequestException('Permission Denied', { cause: new Error(), description: errorMessages })
+	}
 }

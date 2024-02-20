@@ -1,11 +1,11 @@
-import { BadRequestException, forwardRef, Inject, Injectable, NotImplementedException } from '@nestjs/common'
-import { LazyModuleLoader } from '@nestjs/core'
-import { Env, Logger, Modules, SupportedCurrencies, File, Strings } from '@juicyllama/utils'
 import { Account, AccountService, AppIntegrationName, BaseService, BeaconService, Query } from '@juicyllama/core'
+import { Env, Logger, Modules, SupportedCurrencies, File, Strings } from '@juicyllama/utils'
+import { BadRequestException, Inject, Injectable, NotImplementedException } from '@nestjs/common'
+import { LazyModuleLoader } from '@nestjs/core'
+import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
 import { PaymentMethod } from './payment.methods.entity'
 import { PaymentMethodStatus, PaymentMethodType } from './payment.methods.enums'
-import { InjectRepository } from '@nestjs/typeorm'
 import {
 	PaymentMethodBankTransferDetails,
 	PaymentMethodBankTransferEURDetails,
@@ -19,12 +19,12 @@ type T = PaymentMethod
 @Injectable()
 export class PaymentMethodsService extends BaseService<T> {
 	constructor(
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
+		@Inject(Query) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => BeaconService)) private readonly beaconService: BeaconService,
-		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
+		private readonly lazyModuleLoader: LazyModuleLoader,
+		private readonly logger: Logger,
+		private readonly beaconService: BeaconService,
+		private readonly accountService: AccountService,
 	) {
 		super(query, repository)
 	}
@@ -327,7 +327,7 @@ export class PaymentMethodsService extends BaseService<T> {
 		if (!process.env.BEACON_BILLING_PAYMENT_METHOD_EXPIRY) {
 			return
 		}
-		
+
 		if (!payment_method.account?.finance_email) {
 			const user = await this.accountService.getOwner(payment_method.account_id)
 			payment_method.account.finance_email = user.email

@@ -1,9 +1,9 @@
+import { Account, AppIntegrationName, BaseEntity } from '@juicyllama/core'
+import { SupportedCurrencies } from '@juicyllama/utils'
 import { IsBoolean, IsDate, IsEnum, IsNumber, IsObject, IsString, MaxLength, MinLength } from 'class-validator'
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { Account, AppIntegrationName, BaseEntity } from '@juicyllama/core'
 import { PaymentMethodBankTransferDetails, PaymentMethodCreditCardDetails } from './payment.methods.dtos'
 import { PaymentMethodStatus, PaymentMethodType } from './payment.methods.enums'
-import { SupportedCurrencies } from '@juicyllama/utils'
 
 @Entity('billing_payment_methods')
 export class PaymentMethod extends BaseEntity {

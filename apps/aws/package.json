@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-aws",
-    "version": "0.2.1",
+    "version": "0.2.4",
     "description": "Juicyllama NestJs AWS App",
     "author": {
         "name": "JuicyLlama Studio",
@@ -34,14 +34,19 @@
         "before:commit": "pnpm run lint && pnpm run format && pnpm run test && pnpm run build"
     },
     "dependencies": {
-        "@aws-sdk/client-s3": "^3.454.0",
-        "@aws-sdk/client-secrets-manager": "^3.454.0",
-        "@aws-sdk/client-sesv2": "^3.454.0",
-        "@aws-sdk/client-sns": "^3.454.0",
-        "@aws-sdk/client-rds": "^3.454.0",
-        "@aws-sdk/lib-storage": "^3.454.0",
-        "@smithy/middleware-apply-body-checksum": "2.0.17",
+        "@aws-sdk/client-rds": "^3.515.0",
+        "@aws-sdk/client-s3": "^3.515.0",
+        "@aws-sdk/client-secrets-manager": "^3.515.0",
+        "@aws-sdk/client-sesv2": "^3.515.0",
+        "@aws-sdk/client-sns": "^3.515.0",
+        "@aws-sdk/hash-node": "^3.374.0",
+        "@aws-sdk/lib-storage": "^3.515.0",
+        "@aws-sdk/protocol-http": "^3.374.0",
+        "@aws-sdk/s3-request-presigner": "^3.515.0",
+        "@aws-sdk/url-parser": "^3.374.0",
+        "@aws-sdk/util-format-url": "^3.515.0",
         "@juicyllama/core": "workspace:^",
-        "@juicyllama/utils": "workspace:^"
+        "@juicyllama/utils": "workspace:^",
+        "@smithy/middleware-apply-body-checksum": "2.0.17"
     }
 }

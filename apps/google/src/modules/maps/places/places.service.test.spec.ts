@@ -1,11 +1,11 @@
+import { getConfigToken, MONGODB, Query } from '@juicyllama/core'
+import { Env, Logger } from '@juicyllama/utils'
 import { Test, TestingModule } from '@nestjs/testing'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { ConfigModule } from '@nestjs/config'
-import { Env, Logger, Api } from '@juicyllama/utils'
-import { MONGODB, mongodbConfig, Query } from '@juicyllama/core'
-import { PlacesService } from './places.service'
-import googleConfig from '../../../config/google.config'
+import { getRepositoryToken } from '@nestjs/typeorm'
+import { GoogleConfigDto } from '../../../config/google.config.dto'
+import { GoogleMapsClientToken } from '../provider'
 import { GoogleMapsPlace } from './places.entity.mongo'
+import { PlacesService } from './places.service'
 
 describe('Places Service', () => {
 	let moduleRef: TestingModule
@@ -18,15 +18,39 @@ describe('Places Service', () => {
 		}
 
 		moduleRef = await Test.createTestingModule({
-			imports: [
-				ConfigModule.forRoot({
-					isGlobal: true,
-					load: [mongodbConfig, googleConfig],
-				}),
-				TypeOrmModule.forRootAsync(mongodbConfig()),
-				TypeOrmModule.forFeature([GoogleMapsPlace], MONGODB),
+			providers: [
+				PlacesService,
+				{
+					provide: Logger,
+					useValue: {
+						debug: jest.fn(),
+						error: jest.fn(),
+					},
+				},
+				{
+					provide: Query,
+					useValue: {
+						findOne: jest.fn(),
+						create: jest.fn(),
+					},
+				},
+				{
+					provide: getRepositoryToken(GoogleMapsPlace, MONGODB),
+					useValue: {},
+				},
+				{
+					provide: getConfigToken(GoogleConfigDto),
+					useValue: {
+						GOOGLE_MAPS_API_KEY: '',
+					},
+				},
+				{
+					provide: GoogleMapsClientToken,
+					useValue: {
+						geocode: jest.fn(),
+					},
+				},
 			],
-			providers: [PlacesService, Logger, Query, Api],
 		}).compile()
 
 		service = moduleRef.get<PlacesService>(PlacesService)

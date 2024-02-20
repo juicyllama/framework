@@ -1,3 +1,6 @@
+import { Account, BaseEntity, Tag, User, UserAvatarType } from '@juicyllama/core'
+import { Expose } from 'class-transformer'
+import { IsArray, IsDate, IsOptional, IsString, MaxLength, MinLength, IsEnum } from 'class-validator'
 import {
 	Column,
 	Entity,
@@ -8,17 +11,12 @@ import {
 	ManyToOne,
 	JoinColumn,
 } from 'typeorm'
-import { Expose } from 'class-transformer'
-import { IsArray, IsDate, IsOptional, IsString, MaxLength, MinLength, IsEnum } from 'class-validator'
-import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
-import { Account, BaseEntity, Tag, User, UserAvatarType } from '@juicyllama/core'
+import { ContactAddress } from './address/address.entity'
+import { ContactSubscriptionStatus } from './contacts.enums'
 import { ContactEmail } from './email/email.entity'
 import { ContactPhone } from './phone/phone.entity'
 import { ContactSocial } from './social/social.entity'
-import { ContactAddress } from './address/address.entity'
-import { ContactSubscriptionStatus } from './contacts.enums'
 
-@UseInterceptors(ClassSerializerInterceptor)
 @Entity('crm_contacts')
 export class Contact extends BaseEntity {
 	@PrimaryGeneratedColumn()
