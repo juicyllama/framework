@@ -30,7 +30,6 @@ export const WebsitesStore = defineStore('websites', {
 				for (let i = 0; i < this.$state.length; i++) {
 					if (this.$state[i].website_id === result.website_id) {
 						this.$state[i] = result
-
 					}
 				}
 				window.localStorage.setItem('websites', JSON.stringify(this.$state))
@@ -43,11 +42,11 @@ export const WebsitesStore = defineStore('websites', {
 			const result = await websiteService.delete({
 				url: WEBSITE_ENDPOINT + '/' + website_id,
 				q: $q,
-                record_id: website_id,
+				record_id: website_id,
 			})
 
 			if (result) {
-				this.$state = this.$state.filter((website) => website.website_id !== website_id)
+				this.$state = this.$state.filter(website => website.website_id !== website_id)
 				window.localStorage.setItem('websites', JSON.stringify(this.$state))
 			}
 
@@ -55,9 +54,8 @@ export const WebsitesStore = defineStore('websites', {
 		},
 
 		getWebsiteById(website_id: number): Website | undefined {
-			return this.$state.find((website) => website.website_id === website_id)
-		}
-
+			return this.$state.find(website => website.website_id === website_id)
+		},
 	},
-	getters: {}
+	getters: {},
 })

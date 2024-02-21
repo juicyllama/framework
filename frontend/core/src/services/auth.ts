@@ -1,5 +1,5 @@
 import instance from './index'
-import { PublicClientApplication } from "@azure/msal-browser";
+import { PublicClientApplication } from '@azure/msal-browser'
 import type { User } from '../types'
 import type { UserLogin } from '../types'
 import { goToDashboard, logger } from '../helpers'
@@ -19,11 +19,9 @@ export async function loginUser(payload: UserLogin, q: QVueGlobals, router?: Rou
 			default:
 				throw new Error(response.data.error.message)
 		}
-	}
-	else if (response.data.access_token) {
+	} else if (response.data.access_token) {
 		return response.data.access_token
-	}
-	else {
+	} else {
 		throw new Error('Unknown error')
 	}
 }
@@ -81,30 +79,31 @@ export function linkedInLogin(VITE_API_BASE_URL: string) {
 	window.location.href = `${VITE_API_BASE_URL}/auth/linkedin`
 }
 
-export function azureLogin(VITE_AZURE_AD_TENANT_ID: string, VITE_AZURE_AD_CLIENT_ID: string, VITE_AZURE_AD_EXPOSED_SCOPES: string, router: Router) {
-	const scopes = VITE_AZURE_AD_EXPOSED_SCOPES
-		.split(' ')
-		.map(scope => `api://${VITE_AZURE_AD_CLIENT_ID}/${scope}`)
+export function azureLogin(
+	VITE_AZURE_AD_TENANT_ID: string,
+	VITE_AZURE_AD_CLIENT_ID: string,
+	VITE_AZURE_AD_EXPOSED_SCOPES: string,
+	router: Router,
+) {
+	const scopes = VITE_AZURE_AD_EXPOSED_SCOPES.split(' ').map(scope => `api://${VITE_AZURE_AD_CLIENT_ID}/${scope}`)
 	const msalConfig = {
 		auth: {
 			clientId: VITE_AZURE_AD_CLIENT_ID,
 			authority: `https://login.microsoftonline.com/${VITE_AZURE_AD_TENANT_ID}`,
-			redirectUri: "https://local.sentinel.hiveuw.com:8080/login"
+			redirectUri: 'https://local.sentinel.hiveuw.com:8080/login',
 		},
 		cache: {
 			cacheLocation: 'localStorage', // This configures where your cache will be stored
-			storeAuthStateInCookie: false // Set this to "true" if you are having issues on IE11 or Edge
-		}
-	};
-	const msalInstance = new PublicClientApplication(msalConfig);
+			storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
+		},
+	}
+	const msalInstance = new PublicClientApplication(msalConfig)
 	msalInstance.initialize().then(() => {
-		msalInstance
-			.loginPopup({ scopes })
-			.then(async (authResponse) => {
-				const accessToken = authResponse.accessToken;
-				await userStore.processAccessToken(accessToken)
-				goToDashboard(router)
-			});
+		msalInstance.loginPopup({ scopes }).then(async authResponse => {
+			const accessToken = authResponse.accessToken
+			await userStore.processAccessToken(accessToken)
+			goToDashboard(router)
+		})
 	})
 }
 

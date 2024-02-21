@@ -50,19 +50,18 @@ instance.interceptors.response.use(
 
 		//alert(JSON.stringify(error.response?.data))
 
-		switch(error.response?.data?.statusCode){
+		switch (error.response?.data?.statusCode) {
 			case 401:
-
 				//if route is /login return error otherwise logout
-				if(window.location.pathname === '/login') {
+				if (window.location.pathname === '/login') {
 					return {
 						data: {
 							error: {
 								message: 'Login failed, please try again!',
 							},
-						}
+						},
 					}
-				}else{
+				} else {
 					const userStore = UserStore()
 					await userStore.logout()
 				}
@@ -75,7 +74,7 @@ instance.interceptors.response.use(
 							message: error.response.data.message,
 							status: error.response.data.statusCode,
 						},
-					}
+					},
 				}
 
 			default:

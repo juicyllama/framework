@@ -6,8 +6,8 @@ import { default as JLOauthStart } from './oauth/Start.vue'
 export default {
 	install(Vue: App) {
 		Vue.component('JLAppStore', JLAppStore),
-		Vue.component('JLAppStoreConnect', JLAppStoreConnect),
-		Vue.component('JLOauthStart', JLOauthStart)
+			Vue.component('JLAppStoreConnect', JLAppStoreConnect),
+			Vue.component('JLOauthStart', JLOauthStart)
 	},
 } as Plugin
 

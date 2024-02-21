@@ -5,10 +5,9 @@ type T = Wehbook
 export const SHOPIFY_WEBHOOKS_ENDPOINT = '/app/shopify/webhooks'
 
 export class ShopifyWebhooksService extends Api<T> {
-
 	constructor() {
 		super(SHOPIFY_WEBHOOKS_ENDPOINT)
-	  }
+	}
 
 	async registerAllOrdersWebhooks(installed_app_id: number): Promise<T[]> {
 		return await apiRequest<T[]>({
