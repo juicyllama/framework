@@ -1,5 +1,5 @@
-import { accountStore } from 'src'
-import instance from '..'
+import { accountStore } from '../../index'
+import instance from '../index'
 import { Api } from '../../helpers'
 import { Chat } from '../../types/social/chat'
 
