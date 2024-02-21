@@ -2,6 +2,7 @@ import { logger } from './logger'
 import { LogSeverity, StatsResponse } from '../types/common'
 import { QVueGlobals } from 'quasar'
 import instance from '../services/index'
+import { accountStore } from '../index'
 import {
 	FormApiOptionsCreate,
 	FormApiOptionsDelete,
@@ -20,7 +21,6 @@ export async function apiRequest<T>(options: {
 	headers?: { [key: string]: string }
 }): Promise<T> {
 	try {
-		const accountStore = (await import('../index')).accountStore
 		instance.defaults.headers.common['account-id'] = accountStore.selected_account?.account_id
 		instance.defaults.headers.common = { ...instance.defaults.headers.common, ...options.headers }
 

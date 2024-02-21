@@ -72,6 +72,7 @@ export class ChatService extends BaseService<T> {
 
 	async markAsRead(chat_id: number, user_id: number): Promise<void> {
 		const repo = this.chatUsersService.repository
+
 		await repo.update(
 			{
 				chat_id: chat_id,
@@ -81,6 +82,26 @@ export class ChatService extends BaseService<T> {
 				last_read_at: new Date(),
 			},
 		)
+
+		const chats = await super.findAll({
+			where: {
+				chat_id: chat_id,
+				user_id: user_id,
+			},
+		})
+
+		for(const chat of chats){
+			await this.beaconService.sendPush(
+				Strings.replacer(CHAT_PUSHER_EVENT, {
+					user_id: user_id,
+					chat_id: chat_id,
+				}),
+				{
+					action: 'UPDATE',
+					data: chat,
+				},
+			)
+		}
 	}
 
 	async postMessage(chat_id: number, user_id: number, message: string): Promise<ChatMessage> {

@@ -4,49 +4,49 @@ const features = [
 		icon: 'plugs-connected-duotone',
 		title: 'App Store',
 		text: 'Allow users to install apps from your own app store with just a few clicks.',
-		link: '/framework/frontend/core/components/app-store'
+		link: '/framework/frontend/core/app-store'
 	},
 	{
 		icon: 'lock-duotone',
 		title: 'Auth',
 		text: 'Drop in authentication system with login, register, forgot password, and more.',
-		link: '/framework/frontend/core/components/auth/login'
+		link: '/framework/frontend/core/auth/login'
 	},
 	{
 		icon: 'chart-line-duotone',
 		title: 'Chart',
 		text: 'Build beautiful charts with ease using our pre-built charting component.',
-		link: '/framework/frontend/core/components/common/chart'
+		link: '/framework/frontend/core/common/chart'
 	},
 	{
 		icon: 'keyboard-duotone',
 		title: 'Form',
 		text: 'Create forms with just a few lines of code. Supports validation, file uploads, and more.',
-		link: '/framework/frontend/core/components/common/form'
+		link: '/framework/frontend/core/common/form'
 	},
 	{
 		icon: 'square-duotone',
 		title: 'Stats',
 		text: 'Display stats in a beautiful way with our pre-built stats component.',
-		link: '/framework/frontend/core/components/common/stats'
+		link: '/framework/frontend/core/common/stats'
 	},
 	{
 		icon: 'table-duotone',
 		title: 'Table',
 		text: 'Render fully functional tables with just a few lines of code.',
-		link: '/framework/frontend/core/components/common/table'
+		link: '/framework/frontend/core/common/table'
 	},
 	{
 		icon: 'upload-duotone',
 		title: 'Upload',
 		text: 'Give users a way to upload files to your app with our pre-built upload component.',
-		link: '/framework/frontend/core/components/common/upload'
+		link: '/framework/frontend/core/common/upload'
 	},
 	{
 		icon: 'rectangle-duotone',
 		title: 'Widget System',
 		text: 'Create interactive dashboards with our pre-built widget system.',
-		link: '/framework/frontend/core/components/common/widgets'
+		link: '/framework/frontend/core/common/widgets'
 	},
 ]
 </script>
