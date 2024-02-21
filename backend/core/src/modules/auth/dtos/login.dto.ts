@@ -3,9 +3,14 @@ import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-valid
 
 export class LoginResponseDto {
 	access_token: string
+	refresh_token?: string
 
 	constructor(token: string) {
 		this.access_token = token
+	}
+
+	setRefreshToken(token: string) {
+		this.refresh_token = token
 	}
 }
 

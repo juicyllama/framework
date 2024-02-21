@@ -38,6 +38,7 @@ import { AUTH_ACCOUNT_IDS, AUTH_ACCOUNT_ROLE, AUTH_CODE } from './auth.constants
 import { LoginResponseDto, ValidateCodeDto } from './dtos/login.dto'
 import { CompletePasswordResetDto, InitiateResetPasswordDto } from './dtos/password.reset.dto'
 import { Role } from './role.entity'
+import { pick } from 'lodash'
 
 const E = Role
 type T = Role
@@ -47,6 +48,9 @@ type LoginPayload = {
 	user_id: number
 	account_ids: number[]
 }
+
+const ACCESS_TOKEN_EXPI = '60m' // A commonly recommended expiration time for an access token is short, ranging from 15 minutes to 1 hour, to minimize the window of vulnerability if it gets compromised.
+const REFRESH_TOKEN_EXPI = '14d' // Refresh tokens, which are used to obtain new access tokens without requiring user re-authentication, have a longer lifespan, often set between 14 days to 6 months, depending on the level of security required. Long-lived refresh tokens increase convenience but require careful handling to mitigate security risks.
 
 @Injectable()
 export class AuthService extends BaseService<T> {
@@ -101,13 +105,20 @@ export class AuthService extends BaseService<T> {
 
 	async createRefreshToken(user: User | LoginPayload) {
 		const payload = user instanceof User ? await this.constructLoginPayload(user) : user
-		return this.jwtService.sign(payload, {
+		const cleanedPayload = pick(payload, ['email', 'user_id', 'account_ids'])
+		if (!process.env.JWT_REFRESH_KEY) {
+			throw new Error('JWT_REFRESH_KEY not found')
+		}
+		return this.jwtService.sign(cleanedPayload, {
 			secret: process.env.JWT_REFRESH_KEY,
-			expiresIn: '7d',
+			expiresIn: REFRESH_TOKEN_EXPI,
 		})
 	}
 
 	decodeRefreshToken(token: string): LoginPayload {
+		if (!process.env.JWT_REFRESH_KEY) {
+			throw new Error('JWT_REFRESH_KEY not found')
+		}
 		try {
 			return this.jwtService.verify(token, {
 				secret: process.env.JWT_REFRESH_KEY,
@@ -126,8 +137,14 @@ export class AuthService extends BaseService<T> {
 				Bugsnag.setUser(user.user_id, user.email)
 			}
 		}
+		if (!process.env.JWT_KEY) {
+			throw new Error('JWT_KEY not found')
+		}
 		await this.usersService.update({ user_id: user.user_id, last_login_at: new Date() })
-		return new LoginResponseDto(this.jwtService.sign(payload, { secret: process.env.JWT_KEY }))
+		const cleanedPayload = pick(payload, ['email', 'user_id', 'account_ids'])
+		return new LoginResponseDto(
+			this.jwtService.sign(cleanedPayload, { secret: process.env.JWT_KEY, expiresIn: ACCESS_TOKEN_EXPI }),
+		)
 	}
 
 	async constructLoginPayload(user: User): Promise<LoginPayload> {

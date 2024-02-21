@@ -49,24 +49,28 @@ instance.interceptors.response.use(
 		// Do something with response error
 
 		//alert(JSON.stringify(error.response?.data))
-
-		switch(error.response?.data?.statusCode){
+		switch (error.response?.data?.statusCode) {
 			case 401:
-
 				//if route is /login return error otherwise logout
-				if(window.location.pathname === '/login') {
+				if (window.location.pathname === '/login') {
 					return {
 						data: {
 							error: {
 								message: 'Login failed, please try again!',
 							},
-						}
+						},
 					}
-				}else{
-					const userStore = UserStore()
-					await userStore.logout()
+				} else {
+					const requestURL = error.config.url
+					if (requestURL.includes('/auth/refresh')) {
+						const userStore = UserStore()
+						await userStore.logout()
+					} else {
+						instance.post('/auth/refresh', {}, { withCredentials: true }).then(response => {
+							token.set(response.data.access_token)
+						})
+					}
 				}
-
 				break
 			case 403:
 				return {
@@ -75,7 +79,7 @@ instance.interceptors.response.use(
 							message: error.response.data.message,
 							status: error.response.data.statusCode,
 						},
-					}
+					},
 				}
 
 			default:

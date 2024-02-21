@@ -1,7 +1,7 @@
-import { SuccessResponseDto } from '@juicyllama/utils'
-import { Response } from 'express'
+import { SuccessResponseDto, Logger } from '@juicyllama/utils'
 import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common'
 import { ApiHideProperty, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
+import { Response } from 'express'
 import { AccountId, UserAuth } from '../../decorators'
 import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
 import { User } from '../users/users.entity'
@@ -10,9 +10,11 @@ import { AuthService } from './auth.service'
 import { LoginResponseDto, ValidateCodeDto } from './dtos/login.dto'
 import { CompletePasswordResetDto, InitiateResetPasswordDto } from './dtos/password.reset.dto'
 import { InitiatePasswordlessLoginDto } from './dtos/passwordless.login.dto'
+import { GoogleOauthGuard } from './guards/google-oauth.guard'
 import { LinkedinOauthGuard } from './guards/linkedin-oauth.guard'
 import { LocalAuthGuard } from './guards/local-auth.guard'
-import { GoogleOauthGuard } from './guards/google-oauth.guard'
+
+const REFRESH_COOKIE_NAME = 'refreshToken'
 
 @ApiTags('Auth')
 @Controller('/auth')
@@ -20,6 +22,7 @@ export class AuthController {
 	constructor(
 		private readonly authService: AuthService,
 		private readonly usersService: UsersService,
+		private readonly logger: Logger,
 	) {}
 
 	@ApiOperation({
@@ -38,11 +41,7 @@ export class AuthController {
 	async login(@Req() req: AuthenticatedRequest, @Res({ passthrough: true }) res: Response) {
 		const loginResponseDto = this.authService.login(req.user)
 		const refreshToken = await this.authService.createRefreshToken(req.user)
-		res.cookie('refreshToken', refreshToken, {
-			httpOnly: true,
-			secure: true,
-			sameSite: 'strict',
-		})
+		setRefeshTokenCookie(res, refreshToken)
 		return loginResponseDto
 	}
 
@@ -57,14 +56,21 @@ export class AuthController {
 	})
 	@Post('refresh')
 	async refresh(@Req() req: AuthenticatedRequest, @Res({ passthrough: true }) res: Response) {
-		const oldRefreshToken = req.cookies['refreshToken']
+		const cookies = req.headers.cookie || ''
+		const oldRefreshToken = cookies
+			.split(';')
+			.find(cookie => cookie.trim().startsWith(REFRESH_COOKIE_NAME + '='))
+			?.split('=')[1]
+		if (!oldRefreshToken) {
+			throw new Error('No refresh token found')
+		}
 		const loginPayload = this.authService.decodeRefreshToken(oldRefreshToken)
 		const loginResponseDto = this.authService.login(loginPayload)
 		const newRefreshToken = await this.authService.createRefreshToken(loginPayload)
-		res.cookie('refreshToken', newRefreshToken, {
-			httpOnly: true,
-			secure: true,
-			sameSite: 'strict',
+		setRefeshTokenCookie(res, newRefreshToken)
+		this.logger.log('Refreshed token', {
+			user_id: loginPayload.user_id,
+			oldRefreshToken: '...' + oldRefreshToken.substring(-10),
 		})
 		return loginResponseDto
 	}
@@ -217,4 +223,21 @@ export class AuthController {
 			passed: account_ids.includes(account_id),
 		}
 	}
+}
+
+/**
+ * Set the refresh token as a secure, httpOnly cookie that's only sent to this server's refresh endpoint
+ */
+function setRefeshTokenCookie(res: Response, refreshToken: string) {
+	if (!process.env.BASE_URL_API) {
+		throw new Error('BASE_URL_APP env variable not set')
+	}
+	res.cookie(REFRESH_COOKIE_NAME, refreshToken, {
+		httpOnly: true,
+		secure: true,
+		domain: process.env.BASE_URL_API.replace('https://', '').replace('http://', ''),
+		sameSite: 'none', // required for cross-site requests as the frontend may be on a different domain
+		path: '/auth/refresh',
+		expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+	})
 }
