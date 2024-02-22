@@ -1,15 +1,14 @@
-import instance from './index'
 import { PublicClientApplication } from '@azure/msal-browser'
-import type { User } from '../types'
-import type { UserLogin } from '../types'
-import { goToDashboard, logger } from '../helpers'
-import { LogSeverity } from '../types'
 import { QVueGlobals } from 'quasar'
-import { userStore } from '../index'
 import { Router } from 'vue-router'
+import { goToDashboard, logger } from '../helpers'
+import { userStore } from '../index'
+import type { User, UserLogin } from '../types'
+import { LogSeverity } from '../types'
+import instance from './index'
 
 export async function loginUser(payload: UserLogin, q: QVueGlobals, router?: Router): Promise<string> {
-	const response = await instance.post(`auth/login`, payload, { withCredentials: true })
+	const response = await instance.post(`auth/login`, payload, { withCredentials: true }) // withCredentials: true is required for the refresh token cookie to be set
 
 	if (response.data.error) {
 		switch (response.data.error.message) {

@@ -13,6 +13,7 @@ import { InitiatePasswordlessLoginDto } from './dtos/passwordless.login.dto'
 import { GoogleOauthGuard } from './guards/google-oauth.guard'
 import { LinkedinOauthGuard } from './guards/linkedin-oauth.guard'
 import { LocalAuthGuard } from './guards/local-auth.guard'
+import { DEFAULT_REFRESH_EXPIRY_DAYS } from './auth.constants'
 
 const REFRESH_COOKIE_NAME = 'refreshToken'
 
@@ -233,11 +234,14 @@ function setRefeshTokenCookie(res: Response, refreshToken: string) {
 		throw new Error('BASE_URL_APP env variable not set')
 	}
 	res.cookie(REFRESH_COOKIE_NAME, refreshToken, {
-		httpOnly: true,
-		secure: true,
-		domain: process.env.BASE_URL_API.replace('https://', '').replace('http://', ''),
+		httpOnly: true, // don't allow JS to access the cookie
+		secure: true, // only send the cookie over HTTPS
+		domain: process.env.BASE_URL_API.replace('https://', '').replace('http://', ''), // only send the cookie to the API domain
 		sameSite: 'none', // required for cross-site requests as the frontend may be on a different domain
-		path: '/auth/refresh',
-		expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+		path: '/auth/refresh', // only send the cookie to the refresh endpoint
+		expires: new Date(
+			Date.now() +
+				Number(process.env.JWT_REFRESH_TOKEN_EXPIRY_DAYS || DEFAULT_REFRESH_EXPIRY_DAYS) * 1000 * 60 * 60 * 24,
+		),
 	})
 }

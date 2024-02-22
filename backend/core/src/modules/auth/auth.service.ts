@@ -2,9 +2,9 @@ import {
 	CachePeriod,
 	Enums,
 	Env,
+	File,
 	JLCache,
 	Logger,
-	File,
 	Modules,
 	OTP,
 	Strings,
@@ -14,16 +14,17 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import {
 	BadRequestException,
 	ForbiddenException,
-	forwardRef,
 	ImATeapotException,
 	Inject,
 	Injectable,
 	NotFoundException,
 	UnauthorizedException,
+	forwardRef,
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Cache } from 'cache-manager'
+import { pick } from 'lodash'
 import { In, Like, Repository } from 'typeorm'
 import { BaseService } from '../../helpers'
 import { Query } from '../../utils/typeorm/Query'
@@ -34,11 +35,16 @@ import { SettingsService } from '../settings/settings.service'
 import { User } from '../users/users.entity'
 import { UserRole, UserRoleNum } from '../users/users.enums'
 import { UsersService } from '../users/users.service'
-import { AUTH_ACCOUNT_IDS, AUTH_ACCOUNT_ROLE, AUTH_CODE } from './auth.constants'
+import {
+	AUTH_ACCOUNT_IDS,
+	AUTH_ACCOUNT_ROLE,
+	AUTH_CODE,
+	DEFAULT_ACCESS_TOKEN_EXPIRY_MINUTES,
+	DEFAULT_REFRESH_EXPIRY_DAYS,
+} from './auth.constants'
 import { LoginResponseDto, ValidateCodeDto } from './dtos/login.dto'
 import { CompletePasswordResetDto, InitiateResetPasswordDto } from './dtos/password.reset.dto'
 import { Role } from './role.entity'
-import { pick } from 'lodash'
 
 const E = Role
 type T = Role
@@ -48,9 +54,6 @@ type LoginPayload = {
 	user_id: number
 	account_ids: number[]
 }
-
-const ACCESS_TOKEN_EXPI = '60m' // A commonly recommended expiration time for an access token is short, ranging from 15 minutes to 1 hour, to minimize the window of vulnerability if it gets compromised.
-const REFRESH_TOKEN_EXPI = '14d' // Refresh tokens, which are used to obtain new access tokens without requiring user re-authentication, have a longer lifespan, often set between 14 days to 6 months, depending on the level of security required. Long-lived refresh tokens increase convenience but require careful handling to mitigate security risks.
 
 @Injectable()
 export class AuthService extends BaseService<T> {
@@ -111,7 +114,7 @@ export class AuthService extends BaseService<T> {
 		}
 		return this.jwtService.sign(cleanedPayload, {
 			secret: process.env.JWT_REFRESH_KEY,
-			expiresIn: REFRESH_TOKEN_EXPI,
+			expiresIn: `${DEFAULT_REFRESH_EXPIRY_DAYS}d`,
 		})
 	}
 
@@ -143,7 +146,10 @@ export class AuthService extends BaseService<T> {
 		await this.usersService.update({ user_id: user.user_id, last_login_at: new Date() })
 		const cleanedPayload = pick(payload, ['email', 'user_id', 'account_ids'])
 		return new LoginResponseDto(
-			this.jwtService.sign(cleanedPayload, { secret: process.env.JWT_KEY, expiresIn: ACCESS_TOKEN_EXPI }),
+			this.jwtService.sign(cleanedPayload, {
+				secret: process.env.JWT_KEY,
+				expiresIn: `${process.env.JWT_ACCESS_TOKEN_EXPIRY_MINUTES || DEFAULT_ACCESS_TOKEN_EXPIRY_MINUTES}m`,
+			}),
 		)
 	}
 
