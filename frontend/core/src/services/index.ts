@@ -30,6 +30,8 @@ instance.interceptors.request.use(config => {
 	return config
 })
 
+// Add the refresh token interceptor.
+// This will automatically refresh the access token when it expires by catching 401 errors, refreshing the token, and retrying the request with the new token
 applyRefreshTokenInterceptor(instance, token)
 
 instance.interceptors.response.use(
