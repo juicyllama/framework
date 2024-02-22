@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository, In } from 'typeorm'
 import { ChatMessage, ChatMessageService, ChatUsersService } from '../..'
 import { CHAT_MESSAGE_PUSHER_EVENT, CHAT_PUSHER_EVENT } from './chat.constants'
+import { ChatMessageType } from './message/chat.message.enums'
 
 const E = Chat
 type T = Chat
@@ -70,45 +71,82 @@ export class ChatService extends BaseService<T> {
 		return chat
 	}
 
-	async markAsRead(chat_id: number, user_id: number): Promise<void> {
-		const repo = this.chatUsersService.repository
-
-		await repo.update(
-			{
-				chat_id: chat_id,
-				user_id: user_id,
+	async findByUserId(user_id: number): Promise<Chat> {
+		const chat = await super.findOne({
+			where: {
+				users: {
+					user_id,
+				},
 			},
-			{
-				last_read_at: new Date(),
+			order: {
+				last_message_at: 'DESC',
 			},
-		)
+		})
+		return chat
+	}
 
+	async findAllByUserId(user_id: number): Promise<Chat[]> {
 		const chats = await super.findAll({
 			where: {
+				users: {
+					user_id,
+				},
+			},
+			order: {
+				last_message_at: 'DESC',
+			},
+		})
+		return chats
+	}
+
+	async markAsRead(chat_id: number, user_id: number): Promise<void> {
+		const chat = await super.findOne({
+			where: {
 				chat_id: chat_id,
-				user_id: user_id,
+				users: {
+					user_id,
+				},
 			},
 		})
 
-		for(const chat of chats){
-			await this.beaconService.sendPush(
-				Strings.replacer(CHAT_PUSHER_EVENT, {
-					user_id: user_id,
-					chat_id: chat_id,
-				}),
+		const repo = this.chatUsersService.repository
+
+		if (!chat) {
+			await repo.create({
+				chat_id: chat_id,
+				user_id: user_id,
+				last_read_at: new Date(),
+			})
+		} else {
+			await repo.update(
 				{
-					action: 'UPDATE',
-					data: chat,
+					chat_id: chat_id,
+					user_id: user_id,
+				},
+				{
+					last_read_at: new Date(),
 				},
 			)
 		}
+
+		await this.beaconService.sendPush(
+			Strings.replacer(CHAT_PUSHER_EVENT, {
+				user_id: user_id,
+				chat_id: chat_id,
+			}),
+			{
+				action: 'UPDATE',
+				data: chat,
+			},
+		)
 	}
 
-	async postMessage(chat_id: number, user_id: number, message: string): Promise<ChatMessage> {
+	async postMessage(chat_id: number, user_id: number, message: string, json?: any): Promise<ChatMessage> {
 		const result = await this.chatMessageService.create({
-			chat_id: chat_id,
-			user_id: user_id,
-			message: message,
+			chat_id,
+			user_id,
+			message,
+			json,
 		})
 
 		if (result.chat_message_id) {
@@ -132,30 +170,23 @@ export class ChatService extends BaseService<T> {
 		result.user = this.cleanseUser(await this.usersService.findById(user_id))
 
 		const chat = await this.findById(chat_id)
+		await this.sendPush(chat, result)
+		return result
+	}
 
-		for (const user of chat.users) {
-			await this.beaconService.sendPush(
-				Strings.replacer(CHAT_MESSAGE_PUSHER_EVENT, {
-					user_id: user.user_id,
-					chat_id: chat.chat_id,
-				}),
-				{
-					action: 'CREATE',
-					data: result,
-				},
-			)
-			await this.beaconService.sendPush(
-				Strings.replacer(CHAT_PUSHER_EVENT, {
-					user_id: user.user_id,
-					chat_id: chat.chat_id,
-				}),
-				{
-					action: 'UPDATE',
-					data: chat,
-				},
-			)
-		}
+	async systemMessage(chat_id: number, message: string, json?: any): Promise<ChatMessage> {
+		const chat = await this.findById(chat_id)
 
+		if (!chat) throw new Error('Chat not found')
+
+		const result = await this.chatMessageService.create({
+			chat_id,
+			message,
+			type: ChatMessageType.SYSTEM,
+			json,
+		})
+
+		await this.sendPush(chat, result)
 		return result
 	}
 
@@ -194,6 +225,31 @@ export class ChatService extends BaseService<T> {
 			last_name: user.last_name ? user.last_name.substring(0, 1) : '',
 			avatar_type: user.avatar_type,
 			avatar_image_url: user.avatar_image_url,
+		}
+	}
+
+	async sendPush(chat: Chat, result: ChatMessage): Promise<void> {
+		for (const user of chat.users) {
+			await this.beaconService.sendPush(
+				Strings.replacer(CHAT_MESSAGE_PUSHER_EVENT, {
+					user_id: user.user_id,
+					chat_id: chat.chat_id,
+				}),
+				{
+					action: 'CREATE',
+					data: result,
+				},
+			)
+			await this.beaconService.sendPush(
+				Strings.replacer(CHAT_PUSHER_EVENT, {
+					user_id: user.user_id,
+					chat_id: chat.chat_id,
+				}),
+				{
+					action: 'UPDATE',
+					data: chat,
+				},
+			)
 		}
 	}
 }

@@ -47,11 +47,11 @@ export class StorageService {
 			options.file = <Express.Multer.File>options.file
 			options.file = options.file.buffer
 			options.format = StorageFileFormat.BLOB
-		}else{
+		} else {
 			const cache_key = JLCache.cacheKey(domain, { location: options.location, permissions: options.permissions })
 			await this.cacheManager.del(cache_key)
 			await this.cacheManager.set(cache_key, options.file, CachePeriod.MONTH)
-		}		
+		}
 
 		let service: any
 
@@ -141,7 +141,7 @@ export class StorageService {
 
 		const cache_key = JLCache.cacheKey(domain, { location: location, permissions: permissions })
 
-		if(format !== StorageFileFormat.Express_Multer_File) {
+		if (format !== StorageFileFormat.Express_Multer_File) {
 			file = await this.cacheManager.get(cache_key)
 			if (file) {
 				this.logger.debug(`[${domain}] Returned from cache: ${location}`)
@@ -168,23 +168,22 @@ export class StorageService {
 			return
 		}
 
-		if(format !== StorageFileFormat.Express_Multer_File) {
+		if (format !== StorageFileFormat.Express_Multer_File) {
 			await this.cacheManager.set(cache_key, file, CachePeriod.MONTH)
 		}
 
 		return file
 	}
 
-
 	/**
 	 * Return a signed URL for a private file
 	 *
 	 * @param {
-	*  	{String} location where in the file should be saved
-	*  	{StorageFileType} permissions the type of file
-	*  	{expiresIn} time in seconds the URL should be valid
-	* } options
-	*/
+	 *  	{String} location where in the file should be saved
+	 *  	{StorageFileType} permissions the type of file
+	 *  	{expiresIn} time in seconds the URL should be valid
+	 * } options
+	 */
 
 	async getSignedUrl(
 		location: string,
@@ -198,7 +197,7 @@ export class StorageService {
 			permissions,
 			expiresIn,
 		})
-	
+
 		let url: string | undefined
 		let service: any
 
@@ -225,22 +224,19 @@ export class StorageService {
 	 * Return a signed URL for a bucket url
 	 *
 	 * @param {
-	*  	{String} url of the file needed signing
-	*  	{expiresIn} time in seconds the URL should be valid
-	* } options
-	*/
+	 *  	{String} url of the file needed signing
+	 *  	{expiresIn} time in seconds the URL should be valid
+	 * } options
+	 */
 
-	async getSignedUrlByUrl(
-		url: string,
-		expiresIn?: number,
-	): Promise<string> {
+	async getSignedUrlByUrl(url: string, expiresIn?: number): Promise<string> {
 		const domain = 'common::storage::getSignedUrlByUrl'
 
 		this.logger.debug(`[${domain}] getSignedUrlByUrl`, {
 			url,
-			expiresIn
+			expiresIn,
 		})
-	
+
 		let result = ''
 		let service: any
 

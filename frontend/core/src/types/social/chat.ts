@@ -1,5 +1,10 @@
-import { Account } from "../account"
-import { User } from "../user"
+import { Account } from '../account'
+import { User } from '../user'
+
+export enum ChatMessageType {
+	USER = 'USER',
+	SYSTEM = 'SYSTEM',
+}
 
 export interface ChatMessage {
 	chat_message_id: number
@@ -8,6 +13,10 @@ export interface ChatMessage {
 	user?: User
 	user_id: number
 	message: string
+	type: ChatMessageType
+	json?: any
+	created_at: Date
+	is_read?: boolean
 }
 
 export interface Chat {
@@ -17,6 +26,5 @@ export interface Chat {
 	users?: User[]
 	messages?: ChatMessage[]
 	last_message_at?: Date
+	created_at: Date
 }
-
-

@@ -82,9 +82,9 @@ export class Scaffold<T extends ObjectLiteral> {
 			CacheModule.registerAsync(cacheConfig()),
 			TypeOrmModule.forRoot(databaseConfig()),
 			JwtModule.register(jwtConfig()),
-			forwardRef(() => AccountModule), 
-			forwardRef(() => AuthModule), 
-			forwardRef(() => UsersModule)
+			forwardRef(() => AccountModule),
+			forwardRef(() => AuthModule),
+			forwardRef(() => UsersModule),
 		]
 
 		if (MODULE) {
@@ -152,8 +152,8 @@ export class Scaffold<T extends ObjectLiteral> {
 			await testCleanup(moduleRef, E)
 		} catch (e) {
 			const error = e as Error
-						await testCleanup(moduleRef, E)
-						console.warn(error.message, error)
+			await testCleanup(moduleRef, E)
+			console.warn(error.message, error)
 		}
 	}
 }

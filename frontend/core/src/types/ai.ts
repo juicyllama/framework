@@ -44,5 +44,4 @@ export interface Ai {
 	deleted_at?: Date
 
 	is_error?: boolean
-
 }

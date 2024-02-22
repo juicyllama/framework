@@ -3,8 +3,8 @@ import { settingsStore } from '../index'
 import { logger } from './logger'
 import { LogSeverity } from '../types'
 
-export async function goTo( redirect: string, router: Router) {
-	if(!redirect) {
+export async function goTo(redirect: string, router: Router) {
+	if (!redirect) {
 		throw new Error(`goTo: redirect is required`)
 	}
 	await router.push(redirect)
@@ -30,7 +30,7 @@ export async function goToLoginRedirect(router: Router, redirect?: string) {
 export async function goToLogin(router: Router, redirect?: string) {
 	logger({ severity: LogSeverity.VERBOSE, message: `[Helpers][goToLogin] Redirecting to /login?r=${redirect}` })
 
-	if(redirect === '/login') {
+	if (redirect === '/login') {
 		redirect = null
 	}
 
