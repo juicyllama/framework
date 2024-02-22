@@ -1,14 +1,15 @@
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
 import { UserStore } from '../store/user'
 import { logger } from '../helpers/logger'
 import { token } from '../store/token'
 import { LogSeverity } from '../types'
+import applyRefreshTokenInterceptor from './refreshToken.interceptor'
 
 const headers = {
 	'Content-Type': 'application/json',
 }
 
-const instance = axios.create({
+const instance: AxiosInstance = axios.create({
 	baseURL: import.meta.env.VITE_API_BASE_URL,
 	headers,
 })
@@ -28,6 +29,8 @@ instance.interceptors.request.use(config => {
 	logger({ severity: LogSeverity.VERBOSE, message: message })
 	return config
 })
+
+applyRefreshTokenInterceptor(instance, token)
 
 instance.interceptors.response.use(
 	response => {
@@ -61,18 +64,9 @@ instance.interceptors.response.use(
 						},
 					}
 				} else {
-					const requestURL = error.config.url
-					if (requestURL.includes('/auth/refresh')) {
-						// if the refresh token is expired, log the user out
-						const userStore = UserStore()
-						await userStore.logout()
-					} else {
-						// if the access token is expired, refresh it
-						instance.post('/auth/refresh', {}, { withCredentials: true }).then(response => {
-							// withCredentials: true is required for the refresh token cookie to be sent
-							token.set(response.data.access_token)
-						})
-					}
+					// if the refresh token is expired, log the user out
+					const userStore = UserStore()
+					await userStore.logout()
 				}
 				break
 			case 403:
