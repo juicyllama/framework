@@ -1,5 +1,5 @@
 // Add to imports
-import { AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { logger } from '../helpers/logger';
 import { LogSeverity } from '../types';
 
@@ -13,9 +13,10 @@ export default function applyRefreshTokenInterceptor(
 	instance: AxiosInstance,
 	token: { get: () => string; set: (token: string) => void },
 ) {
-	async function refreshTokenFunction() {
+	const refreshTokenFunction = async () => {
+		const instanceWithoutInterceptors = axios.create(instance.defaults) // Create a new instance without the interceptors to prevent infinite loops
 		logger({ severity: LogSeverity.VERBOSE, message: `Refreshing access token...` })
-		const response = await instance.post('/auth/refresh', {}, { withCredentials: true }) // withCredentials: true is required for the refresh token cookie to be sent
+		const response = await instanceWithoutInterceptors.post('/auth/refresh', {}, { withCredentials: true }) // withCredentials: true is required for the refresh token cookie to be sent
 		const newAccessToken = response.data.access_token
 		logger({ severity: LogSeverity.VERBOSE, message: `Access token refreshed` })
 		token.set(newAccessToken)
