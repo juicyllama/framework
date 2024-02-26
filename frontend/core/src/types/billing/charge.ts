@@ -1,8 +1,8 @@
-import { SupportedCurrencies } from "@juicyllama/vue-utils"
-import { Account } from "../account"
-import { Invoice } from "./invoice"
-import { Tag } from "../tags"
-import { User } from "../user"
+import { SupportedCurrencies } from '@juicyllama/vue-utils'
+import { Account } from '../account'
+import { Invoice } from './invoice'
+import { Tag } from '../tags'
+import { User } from '../user'
 
 export interface Charge {
 	readonly charge_id: number
@@ -10,9 +10,9 @@ export interface Charge {
 	account_id: number
 	name: string
 	description: string
-	amount_subtotal?: number 
+	amount_subtotal?: number
 	amount_tax?: number
-	amount_total: number 
+	amount_total: number
 	currency: SupportedCurrencies
 	tags?: Tag[]
 	invoice?: Invoice

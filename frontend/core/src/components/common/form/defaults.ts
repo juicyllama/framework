@@ -1,4 +1,4 @@
-import { FormViewSettings } from "src/types/form";
+import { FormViewSettings } from 'src/types/form'
 
 export const defaultFormSettings: FormViewSettings = {
 	lazy_rules: 'ondemand',

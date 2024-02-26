@@ -1,8 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
 import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
 import { BaseEntity, User } from '@juicyllama/core'
-import { IsNumber, IsString, IsBoolean } from 'class-validator'
+import { IsNumber, IsString, IsBoolean, IsEnum, IsObject } from 'class-validator'
 import { Chat } from '../chat.entity'
+import { ChatMessageType } from './chat.message.enums'
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Entity('social_chat_message')
@@ -24,13 +25,21 @@ export class ChatMessage extends BaseEntity {
 	@JoinColumn({ name: 'user_id' })
 	user?: User
 
-	@Column()
+	@Column({ nullable: true, default: null })
 	@IsNumber()
-	user_id!: number
+	user_id?: number
 
 	@Column('text')
 	@IsString()
 	message!: string
+
+	@Column({ type: 'enum', enum: ChatMessageType, default: ChatMessageType.USER })
+	@IsEnum(ChatMessageType)
+	type?: ChatMessageType
+
+	@Column({ type: 'json', default: null, nullable: true })
+	@IsObject()
+	json?: any
 
 	//built in runtime
 

@@ -27,8 +27,8 @@ type UploaderStoreState = {
 	allowedFileType: FILE_TYPES | null
 	importMode: UploadMode
 	mappers: Array<{
-		source: string,
-		target: string,
+		source: string
+		target: string
 		primaryKey: boolean
 	}>
 	uploadResult: {
@@ -64,11 +64,11 @@ export const useUploaderStore = defineStore('uploader', {
 			return state.mappers
 		},
 		getPrimaryKey(state) {
-			return state.mappers.find((mapper) => mapper.primaryKey)?.target
+			return state.mappers.find(mapper => mapper.primaryKey)?.target
 		},
 		getUploadResult(state) {
 			return state.uploadResult
-		}
+		},
 	},
 	actions: {
 		setColumnsToPick(data: Array<string>) {
@@ -86,10 +86,7 @@ export const useUploaderStore = defineStore('uploader', {
 		setFile(file) {
 			this.file = file
 		},
-		setUploadResult(data: {
-			status: UploadStatus
-			details: any
-		}) {
+		setUploadResult(data: { status: UploadStatus; details: any }) {
 			this.uploadResult = data
 		},
 		setImportMode(importMode: UploadMode) {

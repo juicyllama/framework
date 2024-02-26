@@ -18,7 +18,7 @@ describe('Query Bulk', () => {
 	let scaffold: ScaffoldDtoWithRepository<T>
 
 	beforeAll(async () => {
-		scaffold = await scaffolding.up(MODULE, SERVICE) as ScaffoldDtoWithRepository<T>
+		scaffold = (await scaffolding.up(MODULE, SERVICE)) as ScaffoldDtoWithRepository<T>
 	})
 
 	let first_name_shared = faker.person.firstName()

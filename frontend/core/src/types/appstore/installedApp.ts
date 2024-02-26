@@ -39,7 +39,7 @@ export interface AppStoreConnectionScreenSettings {
 	connection?: {
 		name?: string
 		hide?: boolean
-	},
+	}
 	// Allows user to override the default value of a field and/or hide it
 	overrides?: ConnectAppOptionsOverrides[]
 }
