@@ -9,7 +9,7 @@ const { header } = useAppConfig()
 <template>
   <UHeader>
     <template #logo>
-    	<img src="https://juicyllama.com/assets/images/logo-35x35-primary.png" />
+    	<img src="/assets/images/logo-35x35-primary.png" />
     </template>
 
     <template v-if="header?.search" #center>
