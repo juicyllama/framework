@@ -47,3 +47,10 @@ export interface CompetitorsInOrganicSearchParams {
 	export_decode: 1 | 0
 	display_sort: string
 }
+
+export interface KeywordDifficultySearchParams {
+	phrase: string
+	database: string
+	export_columns: string
+	export_escape: 1
+}
