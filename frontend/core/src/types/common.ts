@@ -1,4 +1,5 @@
 import { ButtonStyle } from './common/button'
+import { AvatarType } from './user'
 
 export * from './common/index'
 
@@ -45,6 +46,12 @@ export interface StatsResponse {
 	sum?: number
 }
 
+export interface Avatar {
+	options: AvatarOptions
+	name: string
+	type?: AvatarType
+	image_url?: string
+}
 export interface AvatarOptions {
 	size?: string
 	background_color?: string
@@ -80,4 +87,18 @@ export interface CustomButton extends ButtonStyle {
 	label?: string
 	icon?: Icon
 	action?: Function // a function to call when the button is clicked, output { data: formData, q: $q, schema: TableSchema | FormSchema, button: CustomButton }
+}
+
+export type StorageFileType = StorageType.PUBLIC | StorageType.PRIVATE | string
+
+export enum StorageType {
+	PUBLIC = 'PUBLIC',
+	PRIVATE = 'PRIVATE',
+}
+
+export enum StorageFileFormat {
+	BLOB = 'BLOB',
+	JSON = 'JSON',
+	CSV = 'CSV',
+	Express_Multer_File = 'Express_Multer_File',
 }

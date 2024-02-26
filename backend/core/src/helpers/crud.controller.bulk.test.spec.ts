@@ -1,12 +1,12 @@
-import { UsersService } from '../modules/users/users.service'
-import { User } from '../modules/users/users.entity'
-import { Scaffold, ScaffoldDto } from '../test'
-import { UsersModule } from '../modules/users/users.module'
-import { crudBulkUpload } from './crudController'
-import { UPLOAD_FIELDS, UPLOAD_DUPLICATE_FIELD } from '../modules/users/users.constants'
-import { ImportMode, UploadType } from '../types/common'
-import { Csv, File, Json } from '@juicyllama/utils'
 import { faker } from '@faker-js/faker'
+import { Csv, File, Json } from '@juicyllama/utils'
+import { UPLOAD_FIELDS, UPLOAD_DUPLICATE_FIELD } from '../modules/users/users.constants'
+import { User } from '../modules/users/users.entity'
+import { UsersModule } from '../modules/users/users.module'
+import { UsersService } from '../modules/users/users.service'
+import { Scaffold, ScaffoldDto } from '../test'
+import { ImportMode, UploadType } from '../types/common'
+import { crudBulkUpload } from './crudController'
 
 const E = User
 type T = User

@@ -64,7 +64,7 @@ if (route.query.code) {
 				new Error('OAuthType not found')
 		}
 
-		await redirect()
+		await redirect(router)
 	} catch (e) {
 		logger({
 			severity: LogSeverity.ERROR,
@@ -82,12 +82,12 @@ async function login(state: AuthFormState, router: Router) {
 	const user = await userStore.login({ email: state.email, password: state.password.value }, $q, router)
 
 	if (user?.user_id) {
-		await redirect()
+		await redirect(router)
 	}
 	loading.value = false
 }
 
-async function redirect(){
+async function redirect(router: Router){
 	if(route?.query?.r){
 		goToLoginRedirect(router, <string>route?.query?.r)
 	}

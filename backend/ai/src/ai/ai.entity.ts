@@ -1,9 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { AppIntegrationName, BaseEntity } from '@juicyllama/core'
+import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
 import { IsBoolean, IsEnum, IsString } from 'class-validator'
 import { Expose } from 'class-transformer'
-import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 import { AiSuccessType } from './ai.enums'
-import { AppIntegrationName, BaseEntity } from '@juicyllama/core'
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Entity('ai')

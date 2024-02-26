@@ -2,8 +2,8 @@
 
 We use prettier and eslint to maintain code style and best practices.
 
--   You can see our [prettier config here](https://github.com/juicyllama-npm/dev/blob/main/.prettierrc.js).
--   You can see our [eslint config here](https://github.com/juicyllama-npm/dev/blob/main/.eslintrc.js)
+- You can see our [prettier config here](https://github.com/juicyllama/framework/blob/main/.prettierrc.js){:target="_blank"}.
+- You can see our [eslint config here](https://github.com/juicyllama/framework/blob/main/.eslintrc.js){:target="_blank"}
 
 These will evolve over time, so please check them periodically to ensure you are using the most up to date coding styles.
 
@@ -11,8 +11,8 @@ These will evolve over time, so please check them periodically to ensure you are
 
 We follow two key principles when developing our framework:
 
--   [Abstraction Principle](<https://en.wikipedia.org/wiki/Abstraction_principle_(computer_programming)>) - We aim to abstract away the complexity of development to provide a fast and consistent interface for our developers client projects.
--   [KISS](https://en.wikipedia.org/wiki/KISS_principle) - We aim to keep things as simple as possible, don't use 20 lines of code when 1 will do, using external tooling like [lodash](https://lodash.com/) is fine, but don't overcomplicate things.
+- [Abstraction Principle](<https://en.wikipedia.org/wiki/Abstraction_principle_(computer_programming)>) - We aim to abstract away the complexity of development to provide a fast and consistent interface for our developers client projects.
+- [KISS](https://en.wikipedia.org/wiki/KISS_principle){:target="_blank"} - We aim to keep things as simple as possible, don't use 20 lines of code when 1 will do, using external tooling like [lodash](https://lodash.com/){:target="_blank"} is fine, but don't overcomplicate things.
 
 ## Naming Conventions
 
@@ -52,8 +52,8 @@ The later example allows better typing and readability. The slightly longer code
 
 ### NestJS
 
-We follow the [NestJS](https://nestjs.com/) file structure conventions. Ensuring each module is self-contained and can be easily moved between projects.
+We follow the [NestJS](https://nestjs.com/){:target="_blank"}  file structure conventions. Ensuring each module is self-contained and can be easily moved between projects.
 
 ### Vue
 
-We follow the [Vue](https://vuejs.org) file structure conventions.
+We follow the [Vue](https://v2.vuejs.org/v2/style-guide/?redirect=true){:target="_blank"} file structure conventions.

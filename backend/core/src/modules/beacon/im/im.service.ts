@@ -1,23 +1,21 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { BeaconMessageDto } from '../beacon.dto'
+import { Env, Logger, Modules } from '@juicyllama/utils'
+import { Inject, Injectable } from '@nestjs/common'
+import { LazyModuleLoader } from '@nestjs/core'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
-import { ConfigService } from '@nestjs/config'
-import { Env, Logger, Modules } from '@juicyllama/utils'
-import { LazyModuleLoader } from '@nestjs/core'
-import { Query } from '../../../utils/typeorm/Query'
-import { BeaconIm } from './im.entity'
 import { AppIntegrationName } from '../../../types'
+import { Query } from '../../../utils/typeorm/Query'
+import { BeaconMessageDto } from '../beacon.dto'
 import { BeaconStatus } from '../beacon.enums'
+import { BeaconIm } from './im.entity'
 
 @Injectable()
 export class BeaconImService {
 	constructor(
-		@Inject(forwardRef(() => Query)) private readonly query: Query<BeaconIm>,
+		@Inject(Query) private readonly query: Query<BeaconIm>,
 		@InjectRepository(BeaconIm) private readonly repository: Repository<BeaconIm>,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
+		private readonly logger: Logger,
+		private readonly lazyModuleLoader: LazyModuleLoader,
 	) {}
 
 	async create(message: BeaconMessageDto): Promise<boolean | undefined> {

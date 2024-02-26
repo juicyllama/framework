@@ -1,5 +1,5 @@
-import { Charge } from './charges.entity'
 import { ControllerConstants } from '@juicyllama/core'
+import { Charge } from './charges.entity'
 import { ChargeOrderBy, ChargeRelations, ChargeSelect } from './charges.enums'
 
 export const BILLING_CHARGES_NAME = 'charge'

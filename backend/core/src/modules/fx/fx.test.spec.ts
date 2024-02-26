@@ -1,8 +1,8 @@
 import { SupportedCurrencies } from '@juicyllama/utils'
+import { Scaffold, ScaffoldDto } from '../../test'
+import { FxRate } from './fx.entity'
 import { FxModule } from './fx.module'
 import { FxService } from './fx.service'
-import { FxRate } from './fx.entity'
-import { Scaffold, ScaffoldDto } from '../../test'
 import { fxMock } from './mock'
 
 describe('FxService', () => {

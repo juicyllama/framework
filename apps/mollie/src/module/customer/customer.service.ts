@@ -1,22 +1,21 @@
-import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common'
+import { Account, BaseService, Query } from '@juicyllama/core'
+import { Env, Logger } from '@juicyllama/utils'
+import { Customer, MollieClient } from '@mollie/api-client'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+import { InjectMollie } from '../provider'
 import { MollieCustomer } from './customer.entity'
-import { Enviroment, Logger } from '@juicyllama/utils'
-import { createMollieClient, Customer } from '@mollie/api-client'
-import { ConfigService } from '@nestjs/config'
 import customerMock from './customer.mock'
-import { Account, BaseService, Query } from '@juicyllama/core'
 
-const E = MollieCustomer
 type T = MollieCustomer
 @Injectable()
 export class CustomerService extends BaseService<T> {
 	constructor(
-		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		@InjectRepository(MollieCustomer) readonly repository: Repository<T>,
+		private readonly logger: Logger,
+		readonly query: Query<T>,
+		@InjectMollie() private readonly client: MollieClient,
 	) {
 		super(query, repository)
 	}
@@ -31,15 +30,12 @@ export class CustomerService extends BaseService<T> {
 		let mollie_response: Customer
 
 		try {
-			if (Enviroment[process.env.NODE_ENV] === Enviroment.test) {
+			if (Env.IsTest()) {
 				this.logger.verbose(`[Test] Mock mollie customer`)
 				mollie_response = customerMock()
 			} else {
 				this.logger.debug(`Create mollie customer`, account)
-				const mollieClient = createMollieClient({
-					apiKey: this.configService.get<string>('mollie.MOLLIE_API_KEY'),
-				})
-				mollie_response = await mollieClient.customers.create({
+				mollie_response = await this.client.customers.create({
 					name: `${account.company_name} (${account.account_id})`,
 					metadata: <any>{
 						account_id: account.account_id,

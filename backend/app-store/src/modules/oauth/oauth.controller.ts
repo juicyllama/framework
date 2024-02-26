@@ -1,19 +1,18 @@
-import { BadRequestException, Controller, forwardRef, Inject, Get, Query, Res, Req } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
-import { AppsService } from '../apps.service'
-import { AppStoreIntegrationName } from '../apps.enums'
-import { ConfigService } from '@nestjs/config'
-import { ApiOperation, ApiQuery } from '@nestjs/swagger'
-import { oauthQueryMappers } from './oauth.mappers'
 import { AuthService, AccountId, AuthenticatedRequest } from '@juicyllama/core'
+import { BadRequestException, Controller, Get, Query, Res, Req } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
+import { AppStoreIntegrationName } from '../apps.enums'
+import { AppsService } from '../apps.service'
+import { oauthQueryMappers } from './oauth.mappers'
 
 @ApiTags('Oauth')
 @Controller('oauth')
 export class OauthController {
 	constructor(
-		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
-		@Inject(forwardRef(() => AppsService)) private readonly appsService: AppsService,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		private readonly authService: AuthService,
+		private readonly appsService: AppsService,
+		private readonly configService: ConfigService,
 	) {}
 
 	@ApiOperation({

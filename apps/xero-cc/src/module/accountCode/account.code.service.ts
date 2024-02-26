@@ -1,11 +1,10 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { BaseService, Query, Tag } from '@juicyllama/core'
+import { Logger } from '@juicyllama/utils'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { XeroAccountCode } from './account.code.entity'
-import { BaseService, Query, Tag } from '@juicyllama/core'
-import { Logger } from '@juicyllama/utils'
 
-const E = XeroAccountCode
 type T = XeroAccountCode
 
 const DEFAULT_XERO_CC_DEFAULT_ACCOUNT_CODE = 'MISC'
@@ -13,9 +12,9 @@ const DEFAULT_XERO_CC_DEFAULT_ACCOUNT_CODE = 'MISC'
 @Injectable()
 export class AccountCodeService extends BaseService<T> {
 	constructor(
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
-		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
+		readonly query: Query<T>,
+		@InjectRepository(XeroAccountCode) readonly repository: Repository<T>,
+		readonly logger: Logger,
 	) {
 		super(query, repository)
 	}

@@ -34,7 +34,7 @@ export { Enviroment } from './enums/env'
 export { StatsMethods, StepType } from './enums/stats'
 export { SupportedCurrencies } from './enums/currencies'
 export { SupportedLanguages } from './enums/languages'
-export { FrequencyPerYear, SubscriptionFrequency } from './enums/dates'
+export { FrequencyPerYear, SubscriptionFrequency, DayNames, MonthNames, MonthNamesShort } from './enums/dates'
 export {
 	ChartsResponseDto,
 	ErrorResponseDto,
@@ -50,4 +50,3 @@ export { Language } from './types/languages'
 
 import dayjs from 'dayjs'
 export { dayjs }
-

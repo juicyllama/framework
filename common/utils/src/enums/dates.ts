@@ -26,7 +26,17 @@ export enum FrequencyPerYear {
 	NONE = 0,
 }
 
-export enum month_names {
+export enum DayNames {
+	'Monday',
+	'Tuesday',
+	'Wednesday',
+	'Thursday',
+	'Friday',
+	'Saturday',
+	'Sunday',
+}
+
+export enum MonthNames {
 	'January',
 	'February',
 	'March',
@@ -41,7 +51,7 @@ export enum month_names {
 	'December',
 }
 
-export enum month_names_short {
+export enum MonthNamesShort {
 	'Jan',
 	'Feb',
 	'Mar',

@@ -22,7 +22,7 @@ Some apps may start the Oauth flow from 3rd party app stores, in such cases we w
 
 #### API Call
 
-//todo
+::Incomplete
 
 You can see the endpoint details here.
 

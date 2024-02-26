@@ -1,7 +1,7 @@
 import { ControllerConstants } from '@juicyllama/core'
+import { StoreDto, CreateStoreDto, UpdateStoreDto, StoreResponeDto } from './stores.dto'
 import { Store } from './stores.entity'
 import { StoreSelect, StoreOrderBy, StoreRelations } from './stores.enums'
-import { StoreDto, CreateStoreDto, UpdateStoreDto, StoreResponeDto } from './stores.dto'
 
 export const STORE_E = Store
 export type STORE_T = Store

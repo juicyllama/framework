@@ -588,7 +588,7 @@ export class Query<T extends ObjectLiteral> {
 			event = `account_${result['account_id']}_`
 		} else if (result['account']) {
 			event = `account_${result['account'].account_id}_`
-		} else if (result['user']) {
+		} else if (result['user_id']) {
 			event = `user_${result['user_id']}_`
 		} else if (result['user']) {
 			event = `user_${result['user'].user_id}_`
@@ -898,14 +898,15 @@ export class Query<T extends ObjectLiteral> {
 					},
 				})
 
-				await this.upsert(repository, record, dedup_field)
+				const res = await this.upsert(repository, record, dedup_field)
 
 				if (r) {
 					result.updated++
 				} else {
 					result.created++
 				}
-				result.ids.push(r[this.getPrimaryKey(repository)])
+
+				result.ids.push(res.identifiers[0][this.getPrimaryKey(repository).toString()])
 			} catch (e: any) {
 				result.errored++
 				result.errors ||= []

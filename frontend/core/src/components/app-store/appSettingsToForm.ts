@@ -1,26 +1,34 @@
-import { App, FormFieldButtonType, FormFieldField, FormFieldType, FormField, AppInputType, ConnectAppOptions } from '../../types'
+import {
+	App,
+	FormFieldButtonType,
+	FormFieldField,
+	FormFieldType,
+	FormField,
+	AppInputType,
+	ConnectAppOptions,
+} from '../../types'
 import _ from 'lodash'
 
-export function buildAppForm(
-	app: App,
-	connectAppOptions: ConnectAppOptions
-): FormField[] {
+export function buildAppForm(app: App, connectAppOptions: ConnectAppOptions): FormField[] {
 	const fields = []
 
 	fields.push({
 		key: 'name',
-		value: connectAppOptions.connection && connectAppOptions.connection.name ? connectAppOptions.connection.name : '',
+		value:
+			connectAppOptions.connection && connectAppOptions.connection.name ? connectAppOptions.connection.name : '',
 		label: 'Connection Name',
 		hint: 'A friendly name for your app connection.',
-		field: connectAppOptions.connection && connectAppOptions.connection.hide ? FormFieldField.HIDDEN : FormFieldField.INPUT,
+		field:
+			connectAppOptions.connection && connectAppOptions.connection.hide
+				? FormFieldField.HIDDEN
+				: FormFieldField.INPUT,
 		type: FormFieldType.TEXT,
 		required: true,
 		loading: false,
 	})
 
 	for (const setting of app.settings) {
-
-		const override = connectAppOptions.overrides?.find((override) => override.key === setting.key)
+		const override = connectAppOptions.overrides?.find(override => override.key === setting.key)
 
 		const required =
 			setting.input?.required ||
@@ -30,7 +38,7 @@ export function buildAppForm(
 
 		let field = setting.input?.type === AppInputType.text ? FormFieldField.INPUT : null
 
-		if ((override?.hide === true ) || (_.isNil(override?.hide) && setting.hidden)) {
+		if (override?.hide === true || (_.isNil(override?.hide) && setting.hidden)) {
 			field = FormFieldField.HIDDEN
 		}
 
@@ -42,7 +50,7 @@ export function buildAppForm(
 
 		let value = ''
 
-		if(override?.value){
+		if (override?.value) {
 			value = override.value
 		}
 

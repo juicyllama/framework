@@ -1,18 +1,23 @@
-import { Test, TestingModule } from '@nestjs/testing'
-import { forwardRef, HttpServer, INestApplication, ValidationPipe } from '@nestjs/common'
-import { AccountService } from '../modules/accounts/account.service'
-import { Account } from '../modules/accounts/account.entity'
-import { User } from '../modules/users/users.entity'
+import { faker } from '@faker-js/faker'
 import { Api, Env, Logger } from '@juicyllama/utils'
-import { MockAccountRequest } from './mocks'
-import { testCleanup } from './closedown'
+import { CacheModule } from '@nestjs/cache-manager'
+import { HttpServer, INestApplication, ValidationPipe, forwardRef } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
+import { JwtModule } from '@nestjs/jwt'
+import { Test, TestingModule } from '@nestjs/testing'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { DeepPartial, ObjectLiteral, Repository } from 'typeorm'
+import { UsersModule, UsersService, cacheConfig, databaseConfig, jwtConfig } from '..'
+import { validationPipeOptions } from '../configs/nest.config'
+import { Account } from '../modules/accounts/account.entity'
 import { AccountModule } from '../modules/accounts/account.module'
+import { AccountService } from '../modules/accounts/account.service'
 import { AuthModule } from '../modules/auth/auth.module'
 import { AuthService } from '../modules/auth/auth.service'
+import { User } from '../modules/users/users.entity'
 import { Query } from '../utils/typeorm/Query'
-import { DeepPartial, Repository, ObjectLiteral } from 'typeorm'
-import { faker } from '@faker-js/faker'
-import { validationPipeOptions } from '../configs/nest.config'
+import { testCleanup } from './closedown'
+import { MockAccountRequest } from './mocks'
 
 let httpServer: HttpServer
 let moduleRef: TestingModule
@@ -27,6 +32,7 @@ export class ScaffoldDto<T extends ObjectLiteral> {
 	services!: {
 		accountService: AccountService
 		authService: AuthService
+		usersService: UsersService
 		logger: Logger
 		api: Api
 		service: any
@@ -45,7 +51,7 @@ export class ScaffoldDtoWithRepository<T extends ObjectLiteral> extends Scaffold
 	repository!: Repository<T>
 }
 
-export class Scaffold<T extends ObjectLiteral>  {
+export class Scaffold<T extends ObjectLiteral> {
 	async up(MODULE?: any, SERVICE?: any): Promise<ScaffoldDto<T>> {
 		if (Env.IsNotTest()) {
 			throw new Error(`Test suite should not be ran outside the test environment`)
@@ -56,6 +62,7 @@ export class Scaffold<T extends ObjectLiteral>  {
 		let service: any
 		let query: Query<T>
 		let repository: Repository<T> | undefined = undefined
+		let usersService: UsersService
 
 		let account: Account
 		let owner: User
@@ -66,7 +73,19 @@ export class Scaffold<T extends ObjectLiteral>  {
 			pattern: /[!-~]/,
 		})
 
-		const imports = [forwardRef(() => AccountModule), forwardRef(() => AuthModule)]
+		const imports = [
+			ConfigModule.forRoot({
+				load: [cacheConfig],
+				isGlobal: true,
+				envFilePath: '.env',
+			}),
+			CacheModule.registerAsync(cacheConfig()),
+			TypeOrmModule.forRoot(databaseConfig()),
+			JwtModule.register(jwtConfig()),
+			forwardRef(() => AccountModule),
+			forwardRef(() => AuthModule),
+			forwardRef(() => UsersModule),
+		]
 
 		if (MODULE) {
 			imports.push(forwardRef(() => MODULE))
@@ -92,14 +111,13 @@ export class Scaffold<T extends ObjectLiteral>  {
 		logger = await moduleRef.resolve(Logger)
 		api = await moduleRef.resolve(Api)
 		query = await moduleRef.resolve(Query<T>)
+		usersService = await moduleRef.resolve(UsersService)
 
 		if (SERVICE) {
 			service = await moduleRef.resolve(SERVICE)
 			repository = service.repository
 		}
-
 		const result = await accountService.onboard(MockAccountRequest(password))
-		account = result.account
 		owner = result.owner
 
 		const auth = await authService.login(owner)
@@ -116,9 +134,10 @@ export class Scaffold<T extends ObjectLiteral>  {
 				logger: logger,
 				api: api,
 				service: service,
+				usersService: usersService,
 			},
 			values: {
-				account: account,
+				account: owner.accounts[0],
 				owner: owner,
 				owner_access_token: owner_access_token,
 				owner_password: password,
@@ -133,6 +152,8 @@ export class Scaffold<T extends ObjectLiteral>  {
 			await testCleanup(moduleRef, E)
 		} catch (e) {
 			const error = e as Error
-			console.warn(error.message, error)		}
+			await testCleanup(moduleRef, E)
+			console.warn(error.message, error)
+		}
 	}
 }

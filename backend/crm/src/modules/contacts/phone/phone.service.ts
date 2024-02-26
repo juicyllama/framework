@@ -1,11 +1,11 @@
 import { BaseService, BeaconService, Query } from '@juicyllama/core'
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { Logger, Modules } from '@juicyllama/utils'
+import { Inject, Injectable } from '@nestjs/common'
+import { LazyModuleLoader } from '@nestjs/core'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
 import { ContactPhone } from './phone.entity'
 import { ContactPhoneStatus, ContactPhoneType } from './phone.enums'
-import { Logger, Modules } from '@juicyllama/utils'
-import { LazyModuleLoader } from '@nestjs/core'
 
 const E = ContactPhone
 type T = ContactPhone
@@ -13,11 +13,11 @@ type T = ContactPhone
 @Injectable()
 export class ContactPhoneService extends BaseService<T> {
 	constructor(
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
+		@Inject(Query) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
-		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
+		private readonly logger: Logger,
+		readonly beaconService: BeaconService,
+		private readonly lazyModuleLoader: LazyModuleLoader,
 	) {
 		super(query, repository, {
 			beacon: beaconService,

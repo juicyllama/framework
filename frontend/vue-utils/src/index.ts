@@ -22,6 +22,7 @@ export * from './utils/Color'
 export * from './utils/Dates'
 export * from './utils/Enums'
 export * from './utils/Numbers'
+export * from './utils/Json'
 
 export * from './enums/currencies'
 export * from './enums/dates'

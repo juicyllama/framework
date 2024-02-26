@@ -1,10 +1,10 @@
+import { Account, BaseEntity } from '@juicyllama/core'
+import { SupportedCurrencies } from '@juicyllama/utils'
 import { IsEnum, IsNumber, MaxLength, MinLength } from 'class-validator'
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { Account, BaseEntity } from '@juicyllama/core'
-import { Wallet } from '../wallet/wallet.entity'
 import { PaymentMethod } from '../payment_methods/payment.methods.entity'
+import { Wallet } from '../wallet/wallet.entity'
 import { WithdrawalStatus } from './withdrawals.enums'
-import { SupportedCurrencies } from '@juicyllama/utils'
 
 @Entity('billing_withdrawal')
 export class Withdrawal extends BaseEntity {

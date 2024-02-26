@@ -1,8 +1,8 @@
-import { SupportedCurrencies } from "@juicyllama/vue-utils"
-import { Account } from "../account"
-import { AppStoreIntegrationName } from "../appstore"
-import { Charge } from "./charge"
-import { Payment } from "./payment"
+import { SupportedCurrencies } from '@juicyllama/vue-utils'
+import { Account } from '../account'
+import { AppStoreIntegrationName } from '../appstore'
+import { Charge } from './charge'
+import { Payment } from './payment'
 
 export interface Invoice {
 	readonly invoice_id: number

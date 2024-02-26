@@ -1,22 +1,22 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
-import { Setting } from './settings.entity'
-import { Cache } from 'cache-manager'
-import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
 import { CachePeriod, Env, JLCache, Logger } from '@juicyllama/utils'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { Inject, Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Cache } from 'cache-manager'
+import { Repository } from 'typeorm'
+import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
 import { Query } from '../../utils/typeorm/Query'
+import { Setting } from './settings.entity'
 
 const cache_key = 'utils::settings'
 
 @Injectable()
 export class SettingsService {
 	constructor(
-		@Inject(forwardRef(() => Query)) private readonly query: Query<Setting>,
+		@Inject(Query) private readonly query: Query<Setting>,
 		@InjectRepository(Setting) private readonly repository: Repository<Setting>,
 		@Inject(CACHE_MANAGER) private cacheManager: Cache,
-		@Inject(Logger) private logger: Logger,
+		private logger: Logger,
 	) {}
 
 	async create(key: string, value: any, account_id?: number, user_id?: number): Promise<Setting> {

@@ -1,21 +1,21 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { BeaconMessageDto } from '../beacon.dto'
-import { BeaconPush } from './push.entity'
-import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
 import { Env, Logger, Modules } from '@juicyllama/utils'
-import { BeaconStatus } from '../beacon.enums'
+import { Inject, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { Query } from '../../../utils/typeorm/Query'
+import { InjectRepository } from '@nestjs/typeorm'
 import _ from 'lodash'
+import { Repository } from 'typeorm'
+import { Query } from '../../../utils/typeorm/Query'
+import { BeaconMessageDto } from '../beacon.dto'
+import { BeaconStatus } from '../beacon.enums'
+import { BeaconPush } from './push.entity'
 
 @Injectable()
 export class BeaconPushService {
 	constructor(
-		@Inject(forwardRef(() => Query)) private readonly query: Query<BeaconPush>,
+		@Inject(Query) private readonly query: Query<BeaconPush>,
 		@InjectRepository(BeaconPush) private readonly repository: Repository<BeaconPush>,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		private readonly logger: Logger,
+		private readonly configService: ConfigService,
 	) {}
 
 	async create(message: BeaconMessageDto): Promise<boolean | undefined> {

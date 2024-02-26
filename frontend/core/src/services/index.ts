@@ -48,19 +48,20 @@ instance.interceptors.response.use(
 		// Any status codes that falls outside the range of 2xx cause this function to trigger
 		// Do something with response error
 
-		switch(error.response?.data?.statusCode){
-			case 401:
+		//alert(JSON.stringify(error.response?.data))
 
+		switch (error.response?.data?.statusCode) {
+			case 401:
 				//if route is /login return error otherwise logout
-				if(window.location.pathname === '/login') {
+				if (window.location.pathname === '/login') {
 					return {
 						data: {
 							error: {
 								message: 'Login failed, please try again!',
 							},
-						}
+						},
 					}
-				}else{
+				} else {
 					const userStore = UserStore()
 					await userStore.logout()
 				}
@@ -73,8 +74,9 @@ instance.interceptors.response.use(
 							message: error.response.data.message,
 							status: error.response.data.statusCode,
 						},
-					}
+					},
 				}
+
 			default:
 				return Promise.reject(error)
 		}

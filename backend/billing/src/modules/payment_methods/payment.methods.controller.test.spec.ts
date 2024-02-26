@@ -1,12 +1,12 @@
-import { SupportedCurrencies, Strings } from '@juicyllama/utils'
-import { Scaffold, ScaffoldDto, TestEndpoint, METHOD } from '@juicyllama/core'
-import { PaymentMethodsService } from './payment.methods.service'
-import { PaymentMethod } from './payment.methods.entity'
-import { PaymentMethodType } from './payment.methods.enums'
 import { faker } from '@faker-js/faker'
-import { PaymentMethodsModule } from './payment.methods.module'
+import { Scaffold, ScaffoldDto, TestEndpoint, METHOD } from '@juicyllama/core'
+import { SupportedCurrencies, Strings } from '@juicyllama/utils'
 import { DeepPartial } from 'typeorm'
 import { MockPaymentMethodCCRequest } from '../../test/mocks'
+import { PaymentMethod } from './payment.methods.entity'
+import { PaymentMethodType } from './payment.methods.enums'
+import { PaymentMethodsModule } from './payment.methods.module'
+import { PaymentMethodsService } from './payment.methods.service'
 
 const E = PaymentMethod
 type T = PaymentMethod

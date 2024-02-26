@@ -4,6 +4,7 @@ import { token } from './store/token'
 import { UserStore } from './store/user'
 import { WebsitesStore } from './store/websites'
 import { SettingsStore } from './store/settings'
+import { SocialStore } from './store/social'
 import instance from './services/index'
 import classes from './assets/JLCore.module.css'
 import { ThemeStore } from './store/theme'
@@ -20,6 +21,8 @@ import {
 	JLUpload,
 	JLBillingPage,
 	JLInvoicePage,
+	JLAvatar,
+	JLAiAsk,
 } from './components'
 import { JLAccountProfile, JLAccountAvatar, JLAccountSwitcher, JLAccountBrand } from './components/core/account'
 import { JLUserAvatar, JLUserProfile, JLUserMenu } from './components/core/user'
@@ -33,6 +36,7 @@ let accountStore
 let themeStore
 let settingsStore
 let websitesStore
+let socialStore
 
 const JLCore = {
 	install(app: App, options: any) {
@@ -47,6 +51,7 @@ const JLCore = {
 		themeStore = ThemeStore($pinia)
 		settingsStore = SettingsStore($pinia)
 		websitesStore = WebsitesStore($pinia)
+		socialStore = SocialStore($pinia)
 	},
 }
 
@@ -76,12 +81,14 @@ export default {
 		Vue.component('JLOauthStart', JLOauthStart)
 		Vue.component('JLBillingPage', JLBillingPage)
 		Vue.component('JLInvoicePage', JLInvoicePage)
+		Vue.component('JLAvatar', JLAvatar)
+		Vue.component('JLAiAsk', JLAiAsk)
 	},
 } as Plugin
 
 export { JLCore, classes }
 export { token }
-export { userStore, accountStore, themeStore, settingsStore, websitesStore }
+export { userStore, accountStore, themeStore, settingsStore, websitesStore, socialStore }
 export * from './components'
 export * from './types/index'
 export { instance }
@@ -113,5 +120,7 @@ export {
 	JLUsersTable,
 	JLBillingPage,
 	JLInvoicePage,
-	OTP
+	OTP,
+	JLAvatar,
+	JLAiAsk,
 }

@@ -28,6 +28,7 @@
         "start:docker": "sh ./start-docker.sh",
         "lint:framework": "eslint \"**/src/**/*.ts\" --fix",
         "build": "pnpm -r --filter=!dev run build",
+        "lint": "sh ./pnpm-lint.sh",
         "test": "sh ./pnpm-test.sh"
     }
 }
