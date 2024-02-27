@@ -1,5 +1,5 @@
 import { BaseService, Query } from '@juicyllama/core'
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { Subscription } from './subscriptions.entity'
@@ -9,7 +9,7 @@ type T = Subscription
 @Injectable()
 export class SubscriptionsService extends BaseService<T> {
 	constructor(
-		@Inject(Query) readonly query: Query<T>,
+		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
 	) {
 		super(query, repository)

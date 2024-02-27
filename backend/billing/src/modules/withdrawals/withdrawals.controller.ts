@@ -3,14 +3,14 @@ import {
 	AccountService,
 	AuthenticatedRequest,
 	AuthService,
-	Query as JLQuery,
+	Query as TQuery,
 	ReadManyDecorator,
 	UserAuth,
 	UserRole,
 	UsersService,
 } from '@juicyllama/core'
 import { SupportedCurrencies } from '@juicyllama/utils'
-import { BadRequestException, Body, Controller, Inject, Post, Query, Req } from '@nestjs/common'
+import { BadRequestException, Body, Controller, Inject, Post, Query, Req, forwardRef } from '@nestjs/common'
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { FindOptionsWhere, In } from 'typeorm'
 import { PaymentMethodsService } from '../payment_methods/payment.methods.service'
@@ -25,13 +25,13 @@ import { WithdrawalsService } from './withdrawals.service'
 @Controller('billing/withdrawals')
 export class WithdrawalsController {
 	constructor(
-		private readonly accountService: AccountService,
-		private readonly authService: AuthService,
-		private readonly usersService: UsersService,
-		private readonly paymentMethodsService: PaymentMethodsService,
-		private readonly walletService: WalletService,
-		private readonly withdrawalsService: WithdrawalsService,
-		@Inject(JLQuery) private readonly query: JLQuery<BILLING_WITHDRAWAL_T>,
+		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
+		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
+		@Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,
+		@Inject(forwardRef(() => PaymentMethodsService)) private readonly paymentMethodsService: PaymentMethodsService,
+		@Inject(forwardRef(() => WalletService)) private readonly walletService: WalletService,
+		@Inject(forwardRef(() => WithdrawalsService)) private readonly withdrawalsService: WithdrawalsService,
+		@Inject(forwardRef(() => TQuery)) private readonly query: TQuery<BILLING_WITHDRAWAL_T>,
 	) {}
 
 	@ApiOperation({

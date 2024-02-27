@@ -1,6 +1,6 @@
 import { AccountModule, AuthModule, Query, TagsModule } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
-import { Module } from '@nestjs/common'
+import { Module, forwardRef } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import billingConfig from '../config/billing.config'
 import { ChargesModule } from './charges/charges.module'
@@ -15,17 +15,17 @@ import { WithdrawalsModule } from './withdrawals/withdrawals.module'
 @Module({
 	imports: [
 		ConfigModule.forFeature(billingConfig),
-		AuthModule,
-		AccountModule,
-		ChargesModule,
-		InvoicesModule,
-		PaymentsModule,
-		PaymentMethodsModule,
-		SubscriptionsModule,
-		TagsModule,
-		TaxModule,
-		WalletModule,
-		WithdrawalsModule,
+		forwardRef(() => AuthModule),
+		forwardRef(() => AccountModule),
+		forwardRef(() => ChargesModule),
+		forwardRef(() => InvoicesModule),
+		forwardRef(() => PaymentsModule),
+		forwardRef(() => PaymentMethodsModule),
+		forwardRef(() => SubscriptionsModule),
+		forwardRef(() => TagsModule),
+		forwardRef(() => TaxModule),
+		forwardRef(() => WalletModule),
+		forwardRef(() => WithdrawalsModule),
 	],
 	providers: [Logger, Query],
 })

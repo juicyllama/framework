@@ -11,6 +11,7 @@ import {
 	Query,
 	Req,
 	UploadedFile,
+	forwardRef
 } from '@nestjs/common'
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { AccountId } from '../../decorators/AccountId.decorator'
@@ -45,10 +46,10 @@ const PRIMARY_KEY = 'account_id'
 @Controller(`/${NAME}`)
 export class AccountController {
 	constructor(
-		private readonly authService: AuthService,
-		private readonly service: AccountService,
-		@Inject(TQuery) private readonly tQuery: TQuery<T>,
-		private readonly usersService: UsersService,
+		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
+		@Inject(forwardRef(() => AccountService)) private readonly service: AccountService,
+		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<T>,
+		@Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,
 	) {}
 
 	@CreateDecorator({ entity: SuccessAccountDto, name: NAME })

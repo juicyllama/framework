@@ -23,6 +23,7 @@ import {
 	Query,
 	Req,
 	Res,
+	forwardRef
 } from '@nestjs/common'
 import { ApiHideProperty, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { PaymentStatus } from '../payments/payments.enums'
@@ -47,11 +48,11 @@ import { PaymentMethodsService } from './payment.methods.service'
 @Controller('billing/payment/methods')
 export class PaymentMethodsController {
 	constructor(
-		private readonly logger: Logger,
-		private readonly accountService: AccountService,
-		private readonly authService: AuthService,
-		private readonly service: PaymentMethodsService,
-		@Inject(TQuery) private readonly tQuery: TQuery<BILLING_PAYMENT_MENTHODS_T>,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
+		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
+		@Inject(forwardRef(() => PaymentMethodsService)) private readonly service: PaymentMethodsService,
+		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<BILLING_PAYMENT_MENTHODS_T>,
 	) {}
 
 	/**

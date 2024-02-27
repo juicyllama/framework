@@ -1,5 +1,5 @@
 import { StatsMethods, StatsResponseDto, Strings } from '@juicyllama/utils'
-import { BadRequestException, Body, Controller, Param, Patch, Query, Req, UploadedFile, Inject } from '@nestjs/common'
+import { BadRequestException, Body, Controller, Param, Patch, Query, Req, UploadedFile, Inject, forwardRef } from '@nestjs/common'
 import { ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
 import {
 	AccountId,
@@ -42,11 +42,11 @@ import { UsersService } from './users.service'
 @Controller(`/${Strings.plural(NAME)}`)
 export class UsersController {
 	constructor(
-		private readonly authService: AuthService,
-		private readonly accountService: AccountService,
-		@Inject(TQuery) private readonly tQuery: TQuery<T>,
-		private readonly service: UsersService,
-		readonly storageService: StorageService,
+		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
+		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
+		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<T>,
+		@Inject(forwardRef(() => UsersService)) private readonly service: UsersService,
+		@Inject(forwardRef(() => StorageService)) readonly storageService: StorageService,
 	) {}
 
 	@CreateDecorator(constants)

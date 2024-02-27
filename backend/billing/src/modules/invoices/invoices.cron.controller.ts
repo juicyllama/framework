@@ -1,5 +1,5 @@
 import { CronGuard, CronRunner } from '@juicyllama/core'
-import { Controller, Post, UseGuards } from '@nestjs/common'
+import { Controller, Post, UseGuards, forwardRef, Inject } from '@nestjs/common'
 import { ApiExcludeController } from '@nestjs/swagger'
 import {
 	CRON_BILLING_INVOICES_GENERATE_DOMAIN,
@@ -12,7 +12,8 @@ import { InvoicesCronService } from './invoices.crons.service'
 @ApiExcludeController()
 @Controller('billing/invoices/crons')
 export class InvoicesCronsController {
-	constructor(private readonly invoicesCronService: InvoicesCronService) {}
+	constructor(
+		@Inject(forwardRef(() => InvoicesCronService)) private readonly invoicesCronService: InvoicesCronService) {}
 
 	@Post('generate')
 	async generate_invoices() {

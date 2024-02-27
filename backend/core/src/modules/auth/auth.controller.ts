@@ -1,5 +1,5 @@
 import { SuccessResponseDto } from '@juicyllama/utils'
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Post, Req, UseGuards, forwardRef, Inject } from '@nestjs/common'
 import { ApiHideProperty, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { AccountId, UserAuth } from '../../decorators'
 import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
@@ -17,8 +17,8 @@ import { GoogleOauthGuard } from './guards/google-oauth.guard'
 @Controller('/auth')
 export class AuthController {
 	constructor(
-		private readonly authService: AuthService,
-		private readonly usersService: UsersService,
+		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
+		@Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,
 	) {}
 
 	@ApiOperation({

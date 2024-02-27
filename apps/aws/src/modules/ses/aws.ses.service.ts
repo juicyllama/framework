@@ -1,7 +1,7 @@
 import { SESv2Client, SendEmailCommand, SendEmailRequest } from '@aws-sdk/client-sesv2'
 import { InjectConfig, type BeaconMessageDto } from '@juicyllama/core'
 import { Env, Logger, Markdown } from '@juicyllama/utils'
-import { Injectable } from '@nestjs/common'
+import { Injectable, forwardRef, Inject } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { InjectSes } from './aws.ses.constants'
 import { AwsSesConfigDto } from './config/aws.ses.config.dto'
@@ -9,9 +9,9 @@ import { AwsSesConfigDto } from './config/aws.ses.config.dto'
 @Injectable()
 export class AwsSesService {
 	constructor(
-		private readonly configService: ConfigService,
-		private readonly logger: Logger,
-		private readonly markdown: Markdown,
+		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		@Inject(forwardRef(() => Markdown)) private readonly markdown: Markdown,
 		@InjectConfig(AwsSesConfigDto) private readonly sesConfig: AwsSesConfigDto,
 		@InjectSes() private readonly sesClient: SESv2Client,
 	) {}

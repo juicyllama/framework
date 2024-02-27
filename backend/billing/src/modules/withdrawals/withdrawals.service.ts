@@ -1,6 +1,6 @@
 import { Account, BaseService, BeaconService, Query, User } from '@juicyllama/core'
 import { File, Strings } from '@juicyllama/utils'
-import { BadRequestException, Inject, Injectable } from '@nestjs/common'
+import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
 import { Withdrawal } from './withdrawals.entity'
@@ -13,10 +13,10 @@ type T = Withdrawal
 @Injectable()
 export class WithdrawalsService extends BaseService<T> {
 	constructor(
-		@Inject(Query) readonly query: Query<T>,
+		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		readonly beaconService: BeaconService,
-		private readonly walletService: WalletService,
+		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
+		@Inject(forwardRef(() => WalletService)) private readonly walletService: WalletService,
 	) {
 		super(query, repository, {
 			beacon: beaconService,

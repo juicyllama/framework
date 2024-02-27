@@ -1,6 +1,6 @@
 import { CachePeriod, Env, JLCache, Logger, Modules } from '@juicyllama/utils'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
 import { Cache } from 'cache-manager'
 import { StorageWriteResponseDto } from './storage.dto'
@@ -9,9 +9,9 @@ import { StorageFileFormat, StorageFileType } from './storage.enums'
 @Injectable()
 export class StorageService {
 	constructor(
-		private readonly logger: Logger,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(CACHE_MANAGER) private cacheManager: Cache,
-		private readonly lazyModuleLoader: LazyModuleLoader,
+		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
 	) {}
 
 	/**

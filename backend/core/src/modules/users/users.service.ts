@@ -19,14 +19,13 @@ import { User } from './users.entity'
 @Injectable()
 export class UsersService extends BaseService<T> {
 	constructor(
-		@Inject(Query) readonly query: Query<T>,
+		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		readonly logger: Logger,
 		@Inject(forwardRef(() => AccountService)) readonly accountService: AccountService,
 		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
 		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
-		readonly storageService: StorageService,
-		readonly usersHooks: UsersHooks,
+		@Inject(forwardRef(() => StorageService)) readonly storageService: StorageService,
+		@Inject(forwardRef(() => UsersHooks)) readonly usersHooks: UsersHooks,
 	) {
 		super(query, repository, { beacon: beaconService })
 	}

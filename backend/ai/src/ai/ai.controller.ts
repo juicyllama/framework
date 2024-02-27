@@ -1,5 +1,5 @@
 import { AuthService, JwtAuthGuard, AccountId, AuthenticatedRequest } from '@juicyllama/core'
-import { Body, Controller, Param, Patch, Post, Req, UseGuards } from '@nestjs/common'
+import { Body, Controller, Param, Patch, Post, Req, UseGuards, forwardRef, Inject } from '@nestjs/common'
 import {
 	ApiBearerAuth,
 	ApiForbiddenResponse,
@@ -28,8 +28,8 @@ import { AiService } from './ai.service'
 @ApiNotFoundResponse({ description: 'Not Found' })
 export class AiController {
 	constructor(
-		private readonly aiService: AiService,
-		private readonly authService: AuthService,
+		@Inject(forwardRef(() => AiService)) private readonly aiService: AiService,
+		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
 	) {}
 
 	@ApiOperation({ summary: 'Ask', description: 'Query public/general AI models' })

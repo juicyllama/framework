@@ -1,5 +1,5 @@
 import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
-import { Body, Controller, Inject, Param, Query, Req, UploadedFile } from '@nestjs/common'
+import { Body, Controller, Inject, Param, Query, Req, UploadedFile, forwardRef } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { Query as TQuery } from '../../utils/typeorm/Query'
 import { AccountId } from '../../decorators/AccountId.decorator'
@@ -28,9 +28,9 @@ import { TagsService } from './tags.service'
 @Controller(`/tags`)
 export class TagsController extends BaseController<T> {
 	constructor(
-		readonly authService: AuthService,
-		readonly service: TagsService,
-		@Inject(TQuery) readonly tQuery: TQuery<T>,
+		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
+		@Inject(forwardRef(() => TagsService)) readonly service: TagsService,
+		@Inject(forwardRef(() => TQuery))  readonly tQuery: TQuery<T>,
 	) {
 		super(service, tQuery, constants, {
 			services: {
