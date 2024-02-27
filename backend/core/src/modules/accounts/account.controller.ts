@@ -11,7 +11,7 @@ import {
 	Query,
 	Req,
 	UploadedFile,
-	forwardRef
+	forwardRef,
 } from '@nestjs/common'
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { AccountId } from '../../decorators/AccountId.decorator'

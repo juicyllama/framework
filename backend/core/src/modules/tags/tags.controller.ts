@@ -30,7 +30,7 @@ export class TagsController extends BaseController<T> {
 	constructor(
 		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
 		@Inject(forwardRef(() => TagsService)) readonly service: TagsService,
-		@Inject(forwardRef(() => TQuery))  readonly tQuery: TQuery<T>,
+		@Inject(forwardRef(() => TQuery)) readonly tQuery: TQuery<T>,
 	) {
 		super(service, tQuery, constants, {
 			services: {
