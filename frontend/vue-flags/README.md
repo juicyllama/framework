@@ -3,7 +3,7 @@
     <img src="https://juicyllama.com/assets/images/icon.png" width="100" alt="JuicyLlama Logo" />
   </a>
   
-Visit the [JuicyLlama Vue Flags](https://docs.juicyllama.com/framework/frontend/vue-flags) page for this module to learn more information.
+Visit the [JuicyLlama Vue Flags](https://juicyllama.com/framework/frontend/vue-flags) page for this module to learn more information.
 
-**Important:** See [licensing requirements here](https://docs.juicyllama.com/framework/frontend/vue-flags#licensing) before using this package. 
+**Important:** See [licensing requirements here](https://juicyllama.com/framework/frontend/vue-flags#licensing) before using this package. 
 </div>

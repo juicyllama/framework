@@ -2,9 +2,9 @@ import * as pkg from './package.json'
 
 const links = [
 	{
-		'aria-label': 'Wesbite',
-		to: 'https://juicyllama.com',
-		icon: 'i-heroicons-computer-desktop-20-solid',
+		'aria-label': 'Email',
+		to: 'mailto:studio@juicyllama.com',
+		icon: 'i-simple-icons-gmail',
 		target: '_blank'
 	},
 	{
