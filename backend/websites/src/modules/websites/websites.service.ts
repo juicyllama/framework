@@ -1,6 +1,6 @@
 import { BeaconService, Query, BaseService, StorageService, StorageType, StorageFileFormat } from '@juicyllama/core'
 import { Logger, File } from '@juicyllama/utils'
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
@@ -12,12 +12,12 @@ type T = Website
 @Injectable()
 export class WebsitesService extends BaseService<T> {
 	constructor(
-		readonly beaconService: BeaconService,
-		private readonly configService: ConfigService,
-		readonly logger: Logger,
-		@Inject(Query) readonly query: Query<T>,
+		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
+		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		@Inject(forwardRef(() => Query))  readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		private readonly storageService: StorageService,
+		@Inject(forwardRef(() => StorageService)) private readonly storageService: StorageService,
 	) {
 		super(query, repository, {
 			beacon: beaconService,

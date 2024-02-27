@@ -1,5 +1,5 @@
 import { SuccessResponseDto, Logger } from '@juicyllama/utils'
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Post, Req, UseGuards, forwardRef, Inject } from '@nestjs/common'
 import { ApiHideProperty, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { Response } from 'express'
 import { AccountId, UserAuth } from '../../decorators'
@@ -21,9 +21,9 @@ const REFRESH_COOKIE_NAME = 'refreshToken'
 @Controller('/auth')
 export class AuthController {
 	constructor(
-		private readonly authService: AuthService,
-		private readonly usersService: UsersService,
-		private readonly logger: Logger,
+		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
+		@Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 	) {}
 
 	@ApiOperation({

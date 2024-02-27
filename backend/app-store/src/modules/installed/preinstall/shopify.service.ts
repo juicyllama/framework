@@ -8,7 +8,7 @@ import { InstalledAppsService } from '../installed.service'
 @Injectable()
 export class ShopifyService {
 	constructor(
-		private readonly logger: Logger,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(forwardRef(() => InstalledAppsService)) private readonly installedAppsService: InstalledAppsService,
 	) {}
 

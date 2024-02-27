@@ -1,6 +1,6 @@
 import { Account, AccountService, AppIntegrationName, BaseService, BeaconService, Query } from '@juicyllama/core'
 import { Env, Logger, Modules, SupportedCurrencies, File, Strings } from '@juicyllama/utils'
-import { BadRequestException, Inject, Injectable, NotImplementedException } from '@nestjs/common'
+import { BadRequestException, Inject, Injectable, NotImplementedException, forwardRef } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
@@ -19,12 +19,12 @@ type T = PaymentMethod
 @Injectable()
 export class PaymentMethodsService extends BaseService<T> {
 	constructor(
-		@Inject(Query) readonly query: Query<T>,
+		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		private readonly lazyModuleLoader: LazyModuleLoader,
-		private readonly logger: Logger,
-		private readonly beaconService: BeaconService,
-		private readonly accountService: AccountService,
+		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		@Inject(forwardRef(() => BeaconService)) private readonly beaconService: BeaconService,
+		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
 	) {
 		super(query, repository)
 	}

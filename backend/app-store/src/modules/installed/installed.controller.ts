@@ -17,7 +17,7 @@ import {
 	AuthenticatedRequest,
 } from '@juicyllama/core'
 import { StatsMethods, StatsResponseDto } from '@juicyllama/utils'
-import { BadRequestException, Body, Controller, Inject, Param, Query, Req, Post } from '@nestjs/common'
+import { BadRequestException, Body, Controller, Inject, Param, Query, Req, Post, forwardRef } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { AppIntegrationType } from '../apps.enums'
 import { AppsService } from '../apps.service'
@@ -43,10 +43,10 @@ import { InstalledAppsService } from './installed.service'
 @Controller('/apps/installed')
 export class InstalledAppsController {
 	constructor(
-		private readonly authService: AuthService,
-		@Inject(TQuery) private readonly tQuery: TQuery<INSTALLED_APP_T>,
-		private readonly service: InstalledAppsService,
-		private readonly appsService: AppsService,
+		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
+		@Inject(forwardRef(() => TQuery))  private readonly tQuery: TQuery<INSTALLED_APP_T>,
+		@Inject(forwardRef(() => InstalledAppsService)) private readonly service: InstalledAppsService,
+		@Inject(forwardRef(() => AppsService)) private readonly appsService: AppsService,
 	) {}
 
 	//todo add swagger

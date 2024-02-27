@@ -1,5 +1,5 @@
 import { CronGuard, CronRunner } from '@juicyllama/core'
-import { Controller, Post, UseGuards } from '@nestjs/common'
+import { Controller, Post, UseGuards, Inject, forwardRef } from '@nestjs/common'
 import { ApiExcludeController } from '@nestjs/swagger'
 import { CRON_BILLING_SUBSCRIPTIONS_REBILL_DOMAIN } from './subscriptions.constants'
 import { SubscriptionsCronService } from './subscriptions.crons.service'
@@ -8,7 +8,8 @@ import { SubscriptionsCronService } from './subscriptions.crons.service'
 @ApiExcludeController()
 @Controller('/billing/subscriptions/crons')
 export class SubscriptionsCronController {
-	constructor(private readonly subscriptionsCronService: SubscriptionsCronService) {}
+	constructor(
+		@Inject(forwardRef(() => SubscriptionsCronService)) private readonly subscriptionsCronService: SubscriptionsCronService) {}
 
 	@Post('rebill')
 	async rebill() {

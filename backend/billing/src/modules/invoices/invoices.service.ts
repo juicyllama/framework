@@ -9,7 +9,7 @@ import {
 	//User,
 } from '@juicyllama/core'
 import { Logger, Modules } from '@juicyllama/utils'
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
@@ -21,12 +21,12 @@ type T = Invoice
 @Injectable()
 export class InvoicesService extends BaseService<T> {
 	constructor(
-		@Inject(Query) readonly query: Query<T>,
+		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		private readonly accountService: AccountService,
-		private readonly logger: Logger,
-		readonly storageService: StorageService,
-		private readonly lazyModuleLoader: LazyModuleLoader,
+		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
+		@Inject(forwardRef(() => StorageService)) readonly storageService: StorageService,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
 	) {
 		super(query, repository)
 	}

@@ -1,6 +1,6 @@
 import { SettingsService, CronRunner } from '@juicyllama/core'
 import { CachePeriod, Env, Logger, Modules } from '@juicyllama/utils'
-import { Injectable } from '@nestjs/common'
+import { Injectable, forwardRef, Inject } from '@nestjs/common'
 import { Cron, CronExpression } from '@nestjs/schedule'
 import { LessThan } from 'typeorm'
 import { PaymentMethod } from '../payment_methods/payment.methods.entity'
@@ -13,10 +13,10 @@ import { WalletService } from './wallet.service'
 @Injectable()
 export class WalletCronService {
 	constructor(
-		private readonly paymentMethodsService: PaymentMethodsService,
-		private readonly logger: Logger,
-		private readonly settingsService: SettingsService,
-		private readonly walletService: WalletService,
+		@Inject(forwardRef(() => PaymentMethodsService)) private readonly paymentMethodsService: PaymentMethodsService,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		@Inject(forwardRef(() => SettingsService)) private readonly settingsService: SettingsService,
+		@Inject(forwardRef(() => WalletService)) private readonly walletService: WalletService,
 	) {}
 
 	/**

@@ -19,14 +19,12 @@ import { AccountService } from './account.service'
 
 @Module({
 	imports: [
-		JwtModule.register(jwtConfig()),
-		TypeOrmModule.forRoot(databaseConfig()),
 		TypeOrmModule.forFeature([Account]),
 		forwardRef(() => AuthModule),
 		forwardRef(() => BeaconModule),
-		SettingsModule,
-		StorageModule,
-		TagsModule,
+		forwardRef(() => SettingsModule),
+		forwardRef(() => StorageModule),
+		forwardRef(() => TagsModule),
 		forwardRef(() => UsersModule),
 	],
 	controllers: [AccountController],

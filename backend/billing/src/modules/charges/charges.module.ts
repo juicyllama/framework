@@ -11,8 +11,6 @@ import { Invoice } from '../..'
 
 @Module({
 	imports: [
-		JwtModule.register(jwtConfig()),
-		TypeOrmModule.forRoot(databaseConfig()),
 		TypeOrmModule.forFeature([Charge, Invoice]),
 		forwardRef(() => AuthModule),
 		forwardRef(() => FxModule),
