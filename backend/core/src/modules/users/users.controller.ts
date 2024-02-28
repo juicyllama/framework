@@ -1,5 +1,16 @@
 import { StatsMethods, StatsResponseDto, Strings } from '@juicyllama/utils'
-import { BadRequestException, Body, Controller, Param, Patch, Query, Req, UploadedFile, Inject, forwardRef } from '@nestjs/common'
+import {
+	BadRequestException,
+	Body,
+	Controller,
+	Param,
+	Patch,
+	Query,
+	Req,
+	UploadedFile,
+	Inject,
+	forwardRef,
+} from '@nestjs/common'
 import { ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
 import {
 	AccountId,
