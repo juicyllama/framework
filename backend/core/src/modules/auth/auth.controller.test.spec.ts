@@ -48,7 +48,7 @@ describe('Auth Endpoints', () => {
 						expect(accessToken).toBeDefined()
 						scaffold.values.owner_access_token = accessToken || ''
 					} catch (e) {
-						console.error(res.body)
+						console.error(res.headers)
 						expect(e).toMatch('error')
 					}
 				})
