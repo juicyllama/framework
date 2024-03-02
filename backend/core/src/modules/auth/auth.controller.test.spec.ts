@@ -6,6 +6,8 @@ import { PRIMARY_KEY } from '../users/users.constants'
 import { AuthModule } from './auth.module'
 import { AuthService } from './auth.service'
 import { Role } from './role.entity'
+import { ACCESS_TOKEN_COOKIE_NAME } from './auth.constants'
+import { castArray } from 'lodash'
 
 const E = Role
 type T = Role
@@ -17,6 +19,12 @@ const new_password = faker.internet.password({
 	memorable: false,
 	pattern: /[!-~]/,
 })
+
+export function getCookieValueFromHeader(res: any, cookieName: string) {
+	const cookies: Array<string> = castArray(res.headers['set-cookie'])
+	const cookie = cookies.find(cookie => cookie.startsWith(cookieName + '='))
+	return cookie?.split('=')[1]
+}
 
 describe('Auth Endpoints', () => {
 	const scaffolding = new Scaffold<T>()
@@ -34,12 +42,13 @@ describe('Auth Endpoints', () => {
 					email: scaffold.values.owner.email,
 					password: scaffold.values.owner_password,
 				})
-				.then(async ({ body }) => {
+				.then(async res => {
 					try {
-						expect(body.access_token).toBeDefined()
-						scaffold.values.owner_access_token = body.access_token
+						const accessToken = getCookieValueFromHeader(res, ACCESS_TOKEN_COOKIE_NAME)
+						expect(accessToken).toBeDefined()
+						scaffold.values.owner_access_token = accessToken || ''
 					} catch (e) {
-						console.error(body)
+						console.error(res.body)
 						expect(e).toMatch('error')
 					}
 				})
@@ -64,8 +73,8 @@ describe('Auth Endpoints', () => {
 		it('Account Check', async () => {
 			await request(scaffold.server)
 				.get(`${url}/account/check`)
+				.set('Cookie', `${ACCESS_TOKEN_COOKIE_NAME}=${scaffold.values.owner_access_token}`)
 				.set({
-					Authorization: 'Bearer ' + scaffold.values.owner_access_token,
 					'account-id': scaffold.values.account.account_id.toString(),
 				})
 				.then(async ({ body }) => {
@@ -137,11 +146,12 @@ describe('Auth Endpoints', () => {
 					code: code,
 					password: new_password,
 				})
-				.then(async ({ body }) => {
+				.then(async res => {
 					try {
-						expect(body.access_token).toBeTruthy()
+						const accessToken = getCookieValueFromHeader(res, ACCESS_TOKEN_COOKIE_NAME)
+						expect(accessToken).toBeTruthy()
 					} catch (e) {
-						console.error(body)
+						console.error(res.headers)
 						expect(e).toMatch('error')
 					}
 				})
@@ -182,11 +192,12 @@ describe('Auth Endpoints', () => {
 					email: scaffold.values.owner.email,
 					code: code,
 				})
-				.then(async ({ body }) => {
+				.then(async res => {
 					try {
-						expect(body.access_token).toBeTruthy()
+						const accessToken = getCookieValueFromHeader(res, ACCESS_TOKEN_COOKIE_NAME)
+						expect(accessToken).toBeTruthy()
 					} catch (e) {
-						console.error(body)
+						console.error(res.headers)
 						expect(e).toMatch('error')
 					}
 				})

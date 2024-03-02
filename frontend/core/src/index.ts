@@ -1,6 +1,5 @@
 import type { App } from 'vue'
 import { AccountStore } from './store/account'
-import { token } from './store/token'
 import { UserStore } from './store/user'
 import { WebsitesStore } from './store/websites'
 import { SettingsStore } from './store/settings'
@@ -87,7 +86,6 @@ export default {
 } as Plugin
 
 export { JLCore, classes }
-export { token }
 export { userStore, accountStore, themeStore, settingsStore, websitesStore, socialStore }
 export * from './components'
 export * from './types/index'

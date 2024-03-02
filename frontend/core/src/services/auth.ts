@@ -7,48 +7,48 @@ import type { User, UserLogin } from '../types'
 import { LogSeverity } from '../types'
 import instance from './index'
 
-export async function loginUser(payload: UserLogin, q: QVueGlobals, router?: Router): Promise<string> {
+export async function loginUser(payload: UserLogin, q: QVueGlobals, router?: Router): Promise<boolean> {
 	const response = await instance.post(`auth/login`, payload, { withCredentials: true }) // withCredentials: true is required for the refresh token cookie to be set
 
 	if (response.data.error) {
 		switch (response.data.error.message) {
 			case 'Password requires changing':
 				await router.push('/reset?email=' + payload.email + '&message=' + response.data.error.message)
-				return
+				return false
 			default:
 				throw new Error(response.data.error.message)
 		}
-	} else if (response.data.access_token) {
-		return response.data.access_token
+	} else if (response.data.success) {
+		return true
 	} else {
 		throw new Error('Unknown error')
 	}
 }
 
 export const passwordlessLogin = async (email: string): Promise<void> => {
-	return await instance.post(`auth/passwordless`, { email: email })
+	return await instance.post(`auth/passwordless`, { email: email }, { withCredentials: true })
 }
 
-export const passwordlessLoginCode = async (email: string, code: string): Promise<string> => {
-	const response = await instance.post(`auth/passwordless/code`, { email: email, code: code })
+export const passwordlessLoginCode = async (email: string, code: string): Promise<boolean> => {
+	const response = await instance.post(`auth/passwordless/code`, { email: email, code: code, withCredentials: true })
 	return response.data.access_token
 }
 
 export const resetPassword = async (email: string): Promise<void> => {
-	await instance.post(`auth/password-reset`, { email: email })
+	await instance.post(`auth/password-reset`, { email: email }, { withCredentials: true })
 }
 
 export const resetPasswordCode = async (email: string, code: string): Promise<void> => {
-	await instance.post(`auth/password-reset/code`, { email: email, code: code })
+	await instance.post(`auth/password-reset/code`, { email: email, code: code }, { withCredentials: true })
 }
 
 export const resetPasswordComplete = async (email: string, code: string, pass: string): Promise<string> => {
-	const response = await instance.post(`auth/password-reset/complete`, { email: email, code: code, password: pass })
+	const response = await instance.post(`auth/password-reset/complete`, { email: email, code: code, password: pass, withCredentials: true })
 	return response.data.access_token
 }
 
 export const getUser = async (): Promise<User> => {
-	const response = await instance.get(`auth/profile`)
+	const response = await instance.get(`auth/profile`, { withCredentials: true })
 	logger({
 		severity: LogSeverity.VERBOSE,
 		message: `GetUser`,
@@ -59,7 +59,7 @@ export const getUser = async (): Promise<User> => {
 }
 
 export const accountAuthCheck = async (): Promise<boolean> => {
-	const response = await instance.get(`auth/account/check`)
+	const response = await instance.get(`auth/account/check`, { withCredentials: true })
 	logger({
 		severity: LogSeverity.VERBOSE,
 		message: `Auth Check - ${response.data.passed}`,
@@ -98,20 +98,19 @@ export function azureLogin(
 	}
 	const msalInstance = new PublicClientApplication(msalConfig)
 	msalInstance.initialize().then(() => {
-		msalInstance.loginPopup({ scopes }).then(async authResponse => {
-			const accessToken = authResponse.accessToken
-			await userStore.processAccessToken(accessToken)
+		msalInstance.loginPopup({ scopes }).then(async (/*authResponse*/) => {
+			await userStore.loadUserAndAccount()
 			goToDashboard(router)
 		})
 	})
 }
 
 export async function completeGoogleLogin(params, q: QVueGlobals) {
-	const response = await instance.get(`auth/google/redirect`, { params: params })
-	return userStore.processAccessToken(response.data.access_token, q)
+	await instance.get(`auth/google/redirect`, { params: params, withCredentials: true })
+	return userStore.loadUserAndAccount(q)
 }
 
 export async function completeLinkedInLogin(params, q: QVueGlobals) {
-	const response = await instance.get(`auth/linkedin/redirect`, { params: params })
-	return userStore.processAccessToken(response.data.access_token, q)
+	await instance.get(`auth/linkedin/redirect`, { params: params, withCredentials: true })
+	return userStore.loadUserAndAccount(q)
 }
