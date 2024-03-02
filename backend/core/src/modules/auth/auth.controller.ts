@@ -9,7 +9,7 @@ import { UsersService } from '../users/users.service'
 import {
 	ACCESS_TOKEN_COOKIE_NAME,
 	DEFAULT_ACCESS_TOKEN_EXPIRY_MINUTES,
-	DEFAULT_REFRESH_EXPIRY_DAYS,
+	DEFAULT_REFRESH_TOKEN_EXPIRY_DAYS,
 	REFRESH_TOKEN_COOKIE_NAME,
 } from './auth.constants'
 import { AuthService } from './auth.service'
@@ -248,37 +248,38 @@ export class AuthController {
 	}
 }
 
-function setAccessAndRefreshTokenCookies(res: Response, accessToken: string, refreshToken?: string) {
-	/**
-	 * Set the refresh token as a secure, httpOnly cookie that's only sent to this server's refresh endpoint
-	 */
-	function setTokenCookie(res: Response, name: string, value: string, expiryMinutes: number, path: string) {
-		if (!process.env.BASE_URL_API) {
-			throw new Error('BASE_URL_APP env variable not set')
-		}
-		res.cookie(name, value, {
-			httpOnly: true, // don't allow JS to access the cookie
-			secure: true, // only send the cookie over HTTPS
-			domain: process.env.BASE_URL_API.replace('https://', '').replace('http://', ''), // only send the cookie to the API domain
-			sameSite: 'none', // required for cross-site requests as the frontend may be on a different domain
-			expires: new Date(Date.now() + expiryMinutes * 1000 * 60),
-			path,
-		})
+function setAccessAndRefreshTokenCookies(res: Response, accessToken: string, refreshToken?: string): void {
+	if (!process.env.BASE_URL_API) {
+		throw new Error('BASE_URL_APP env variable not set')
 	}
-	setTokenCookie(
-		res,
-		ACCESS_TOKEN_COOKIE_NAME,
-		accessToken,
-		Number(process.env.JWT_ACCESS_TOKEN_EXPIRY_MINUTES || DEFAULT_ACCESS_TOKEN_EXPIRY_MINUTES),
-		'/',
-	)
+
+	const domain: string = process.env.BASE_URL_API.replace(/^https?:\/\//, '') // Remove protocol
+
+	// Set access token cookie
+	res.cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken, {
+		httpOnly: true,
+		secure: true, // Consider environment check for development vs. production
+		domain,
+		sameSite: 'none', // Adjust according to your requirements (Lax, Strict, None + Secure)
+		expires: new Date(
+			Date.now() +
+				Number(process.env.JWT_ACCESS_TOKEN_EXPIRY_MINUTES || DEFAULT_ACCESS_TOKEN_EXPIRY_MINUTES) * 60000,
+		), // Convert minutes to milliseconds
+		path: '/',
+	})
+
+	// Set refresh token cookie, if refresh token is provided
 	if (refreshToken) {
-		setTokenCookie(
-			res,
-			REFRESH_TOKEN_COOKIE_NAME,
-			refreshToken,
-			Number(process.env.JWT_REFRESH_TOKEN_EXPIRY_DAYS || DEFAULT_REFRESH_EXPIRY_DAYS) * 24 * 60,
-			'/auth/refresh', // only send the cookie to the refresh endpoint
-		)
+		res.cookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
+			httpOnly: true,
+			secure: true, // Consider environment check for development vs. production
+			domain,
+			sameSite: 'none', // Adjust according to your requirements
+			expires: new Date(
+				Date.now() +
+					Number(process.env.JWT_REFRESH_TOKEN_EXPIRY_DAYS || DEFAULT_REFRESH_TOKEN_EXPIRY_DAYS) * 86400000,
+			), // Convert days to milliseconds
+			path: '/auth/refresh',
+		})
 	}
 }

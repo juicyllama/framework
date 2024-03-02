@@ -40,7 +40,7 @@ import {
 	AUTH_ACCOUNT_ROLE,
 	AUTH_CODE,
 	DEFAULT_ACCESS_TOKEN_EXPIRY_MINUTES,
-	DEFAULT_REFRESH_EXPIRY_DAYS,
+	DEFAULT_REFRESH_TOKEN_EXPIRY_DAYS,
 } from './auth.constants'
 import { ValidateCodeDto } from './dtos/login.dto'
 import { CompletePasswordResetDto, InitiateResetPasswordDto } from './dtos/password.reset.dto'
@@ -114,7 +114,7 @@ export class AuthService extends BaseService<T> {
 		}
 		return this.jwtService.sign(cleanedPayload, {
 			secret: process.env.JWT_REFRESH_KEY,
-			expiresIn: `${DEFAULT_REFRESH_EXPIRY_DAYS}d`,
+			expiresIn: `${process.env.JWT_REFRESH_TOKEN_EXPIRY_DAYS || DEFAULT_REFRESH_TOKEN_EXPIRY_DAYS}d`,
 		})
 	}
 

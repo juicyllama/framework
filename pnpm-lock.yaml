@@ -210,6 +210,15 @@ importers:
         specifier: latest
         version: 3.17.1
 
+  apps/spyfu:
+    dependencies:
+      '@juicyllama/core':
+        specifier: workspace:^
+        version: link:../../backend/core
+      '@juicyllama/utils':
+        specifier: workspace:^
+        version: link:../../common/utils
+
   apps/wise:
     dependencies:
       '@juicyllama/billing':
