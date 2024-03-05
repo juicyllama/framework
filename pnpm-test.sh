@@ -33,6 +33,7 @@ directories=(
     "apps/scrapingbee"
     "apps/shopify"
     "apps/slack"
+    "apps/spyfu"
     "apps/wise"
     "apps/wordpress"
     "apps/xero-cc"

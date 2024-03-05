@@ -1,6 +1,5 @@
 import { Env, Logger, Modules } from '@juicyllama/utils'
 import { Inject, Injectable } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 import { LazyModuleLoader } from '@nestjs/core'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
@@ -9,13 +8,15 @@ import { Query } from '../../../utils/typeorm/Query'
 import { BeaconMessageDto } from '../beacon.dto'
 import { BeaconStatus } from '../beacon.enums'
 import { BeaconEmail } from './email.entity'
+import { BeaconConfigDto } from '../../../configs/beacon.config.dto'
+import { InjectConfig } from '../../config'
 
 @Injectable()
 export class BeaconEmailService {
 	constructor(
 		@Inject(Query) private readonly query: Query<BeaconEmail>,
 		@InjectRepository(BeaconEmail) private readonly repository: Repository<BeaconEmail>,
-		private readonly configService: ConfigService,
+		@InjectConfig(BeaconConfigDto) private readonly configService: BeaconConfigDto,
 		private readonly logger: Logger,
 		private readonly lazyModuleLoader: LazyModuleLoader,
 	) {}
@@ -36,8 +37,8 @@ export class BeaconEmailService {
 		}
 		if (!message.communication.email.from) {
 			message.communication.email.from = {
-				email: this.configService.get<string>('beacon.SYSTEM_EMAIL_ADDRESS') || '',
-				name: this.configService.get<string>('beacon.SYSTEM_EMAIL_NAME') || '',
+				email: this.configService.SYSTEM_EMAIL_ADDRESS || '',
+				name: this.configService.SYSTEM_EMAIL_NAME || '',
 			}
 		}
 

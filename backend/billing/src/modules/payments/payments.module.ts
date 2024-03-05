@@ -10,10 +10,10 @@ import { PaymentsSubscriber } from './payments.subscriber'
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([Payment, Invoice]), 
-		forwardRef(() => AccountModule), 
-		forwardRef(() => BeaconModule), 
-		forwardRef(() => PaymentMethodsModule)
+		TypeOrmModule.forFeature([Payment, Invoice]),
+		forwardRef(() => AccountModule),
+		forwardRef(() => BeaconModule),
+		forwardRef(() => PaymentMethodsModule),
 	],
 	controllers: [],
 	providers: [PaymentsService, PaymentsSubscriber, Logger, Query],

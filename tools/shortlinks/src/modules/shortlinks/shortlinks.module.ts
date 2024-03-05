@@ -1,24 +1,23 @@
+import {
+	AccountModule,
+	AuthModule,
+	BeaconModule,
+	ConfigValidationModule,
+	MiddlewareAccountId,
+	Query
+} from '@juicyllama/core'
+import { Logger } from '@juicyllama/utils'
 import { forwardRef, MiddlewareConsumer, Module } from '@nestjs/common'
-import { Env, Logger } from '@juicyllama/utils'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { AccountModule, AuthModule, BeaconModule, databaseConfig, MiddlewareAccountId, Query } from '@juicyllama/core'
+import { ShortlinksConfigDto } from '../../config/shortlinks.config.dto'
+import { ShortlinkClicksModule } from './clicks'
+import { ShortlinksController } from './shortlinks.controller'
 import { Shortlink } from './shortlinks.entity'
 import { ShortlinksService } from './shortlinks.service'
-import Joi from 'joi'
-import config from '../../config/config'
-import { configJoi } from '../../config/config.joi'
-import { ShortlinksController } from './shortlinks.controller'
-import { ConfigModule } from '@nestjs/config'
-import { ShortlinkClicksModule } from './clicks'
 
 @Module({
 	imports: [
-		ConfigModule.forRoot({
-			isGlobal: true,
-			load: [databaseConfig, config],
-			validationSchema: Env.IsNotTest() ? Joi.object(configJoi) : null,
-		}),
-		TypeOrmModule.forRoot(databaseConfig()),
+		ConfigValidationModule.register(ShortlinksConfigDto),
 		TypeOrmModule.forFeature([Shortlink]),
 		forwardRef(() => AccountModule),
 		forwardRef(() => AuthModule),

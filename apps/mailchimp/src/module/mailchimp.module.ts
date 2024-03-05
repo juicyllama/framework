@@ -1,4 +1,4 @@
-import { ConfigValidationModule, databaseConfig, getConfigToken, Query } from '@juicyllama/core'
+import { ConfigValidationModule, getConfigToken, Query } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
@@ -9,11 +9,7 @@ import { MailchimpContact } from './mailchimp.entity'
 import { MailchimpService } from './mailchimp.service'
 
 @Module({
-	imports: [
-		ConfigValidationModule.register(MailchimpConfigDto),
-		TypeOrmModule.forRoot(databaseConfig()),
-		TypeOrmModule.forFeature([MailchimpContact]),
-	],
+	imports: [ConfigValidationModule.register(MailchimpConfigDto), TypeOrmModule.forFeature([MailchimpContact])],
 	controllers: [],
 	providers: [
 		MailchimpService,
