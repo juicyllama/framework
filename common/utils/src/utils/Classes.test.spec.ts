@@ -71,7 +71,7 @@ class ClassE {
 describe('Classes', () => {
 	describe('ExtendsMultiple', () => {
 		it('should inherit properties and methods from all parent classes', () => {
-			const MixedClass = Classes.ExtendsMultiple(ClassA, ClassB)
+			const MixedClass = Classes.ExtendsMultiple([ClassA, ClassB])
 			const mixedInstance = new MixedClass(['Test'], [30]) // Adjusted for wrapping arrays
 
 			expect(mixedInstance.greet()).toBe('Hello from ClassA, Test')
@@ -79,7 +79,7 @@ describe('Classes', () => {
 		})
 
 		it('should call constructors of all parent classes', () => {
-			const MixedClass = Classes.ExtendsMultiple(ClassA, ClassB)
+			const MixedClass = Classes.ExtendsMultiple([ClassA, ClassB])
 			const mixedInstance = new MixedClass(['Test'], [30]) // Adjusted for wrapping arrays
 
 			expect(mixedInstance.name).toBe('Test')
@@ -87,35 +87,35 @@ describe('Classes', () => {
 		})
 
 		it('should handle instanceof checks correctly for the most derived and base classes', () => {
-			const MixedClass = Classes.ExtendsMultiple(ClassA, ClassB)
+			const MixedClass = Classes.ExtendsMultiple([ClassA, ClassB])
 			const mixedInstance = new MixedClass(['Test'], [30]) // Adjusted for wrapping arrays
 
 			expect(mixedInstance instanceof MixedClass).toBe(true)
 		})
 
 		it('should properly handle methods with the same name', () => {
-			const MixedClass = Classes.ExtendsMultiple(ClassA, ClassC)
+			const MixedClass = Classes.ExtendsMultiple([ClassA, ClassC])
 			const mixedInstance = new MixedClass(['Test'], ['Hello']) // Adjusted for wrapping arrays
 
 			expect(mixedInstance.greet()).toBe('ClassC says: Hello')
 		})
 
 		it('should ensure proper binding of methods', async () => {
-			const MixedClass = Classes.ExtendsMultiple(ClassA, ClassD)
+			const MixedClass = Classes.ExtendsMultiple([ClassA, ClassD])
 			const mixedInstance = new MixedClass(['Test'], ['Async Hello']) // Adjusted for wrapping arrays
 
 			await expect(mixedInstance.delayedGreet()).resolves.toBe('Delayed Greet: Async Hello')
 		})
 
 		it('should integrate seamlessly with other functionalities', () => {
-			const MixedClass = Classes.ExtendsMultiple(ClassA, ClassE)
+			const MixedClass = Classes.ExtendsMultiple([ClassA, ClassE])
 			const mixedInstance = new MixedClass(['Test'], [15]) // Adjusted for wrapping arrays
 
 			expect(mixedInstance.double()).toBe(30)
 		})
 
 		it('should maintain distinct instances without shared state', () => {
-			const MixedClass = Classes.ExtendsMultiple(ClassA, ClassB)
+			const MixedClass = Classes.ExtendsMultiple([ClassA, ClassB])
 			const instance1 = new MixedClass(['Instance1'], [10]) // Adjusted for wrapping arrays
 			const instance2 = new MixedClass(['Instance2'], [20]) // Adjusted for wrapping arrays
 

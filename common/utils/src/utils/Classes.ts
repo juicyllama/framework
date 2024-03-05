@@ -15,7 +15,7 @@ export class Classes {
 	 * @param baseClasses The base classes to extend.
 	 */
 	static ExtendsMultiple<TBase extends Constructor[]>(
-		...baseClasses: TBase
+		baseClasses: TBase,
 	): new (...args: any[]) => UnionToIntersection<InstanceType<TBase[number]>> {
 		class BaseClass extends (baseClasses[0] || class {}) {
 			constructor(...args: any[]) {
