@@ -51,9 +51,9 @@ jobs:
                 run: echo -e "shamefully-hoist=true\\n@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
 
             -   name: Install pnpm
-                uses: pnpm/action-setup@v2
+                uses: pnpm/action-setup@v3
                 with:
-                    version: 8
+                    version: 8.7.5
                     run_install: false
 
             -   name: Get pnpm store directory
