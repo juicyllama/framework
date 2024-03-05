@@ -14,6 +14,7 @@ import {
 	JLTable,
 	JLMenu,
 	JLChart,
+	JLChartWrapper,
 	JLStats,
 	JLDropdownButtonMenu,
 	WidgetsComponent,
@@ -68,6 +69,7 @@ export default {
 		Vue.component('JLMenu', JLMenu)
 		Vue.component('JLDropdownButtonMenu', JLDropdownButtonMenu)
 		Vue.component('JLChart', JLChart)
+		Vue.component('JLChartWrapper', JLChartWrapper)
 		Vue.component('JLStats', JLStats)
 		Vue.component('JLAccountSwitcher', JLAccountSwitcher)
 		Vue.component('JLAccountBrand', JLAccountBrand)
@@ -115,6 +117,7 @@ export {
 	JLDropdownButtonMenu,
 	JLStats,
 	JLChart,
+	JLChartWrapper,
 	JLUpload,
 	WidgetsComponent,
 	JLUsersTable,
