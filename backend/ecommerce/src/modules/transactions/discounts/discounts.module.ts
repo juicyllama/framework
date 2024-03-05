@@ -1,9 +1,3 @@
-import { Logger } from '@juicyllama/utils'
-import { forwardRef, Module } from '@nestjs/common'
-import { CacheModule } from '@nestjs/cache-manager'
-import { TransactionDiscountsService } from './discounts.service'
-import { TransactionDiscountsController } from './discounts.controller'
-import { ConfigModule } from '@nestjs/config'
 import {
 	AccountModule,
 	AuthModule,
@@ -13,10 +7,15 @@ import {
 	jwtConfig,
 	Query,
 } from '@juicyllama/core'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { Logger } from '@juicyllama/utils'
+import { CacheModule } from '@nestjs/cache-manager'
+import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { TransactionDiscountsController } from './discounts.controller'
 import { TransactionDiscount } from './discounts.entity'
-import { TransactionsModule } from '../transactions.module'
+import { TransactionDiscountsService } from './discounts.service'
 
 @Module({
 	imports: [
@@ -29,10 +28,9 @@ import { TransactionsModule } from '../transactions.module'
 		TypeOrmModule.forRoot(databaseConfig()),
 		TypeOrmModule.forFeature([TransactionDiscount]),
 		JwtModule.register(jwtConfig()),
-		forwardRef(() => AuthModule),
-		forwardRef(() => AccountModule),
-		forwardRef(() => BeaconModule),
-		forwardRef(() => TransactionsModule),
+		AuthModule,
+		AccountModule,
+		BeaconModule,
 	],
 	controllers: [TransactionDiscountsController],
 	providers: [TransactionDiscountsService, Logger, Query],

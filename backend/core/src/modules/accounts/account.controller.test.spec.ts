@@ -1,12 +1,11 @@
-import { Account } from './account.entity'
-import { User } from '../users/users.entity'
-import { MockAccountRequest } from '../../test'
 import { faker } from '@faker-js/faker'
-import { AccountModule } from './account.module'
 import request from 'supertest'
-import { Scaffold, ScaffoldDto, TestEndpoint } from '../../test'
-import { AccountService } from './account.service'
+import { MockAccountRequest, Scaffold, ScaffoldDto, TestEndpoint } from '../../test'
 import { METHOD } from '../../types'
+import { User } from '../users/users.entity'
+import { Account } from './account.entity'
+import { AccountModule } from './account.module'
+import { AccountService } from './account.service'
 
 const E = Account
 type T = Account

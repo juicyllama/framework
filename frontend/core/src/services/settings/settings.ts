@@ -20,7 +20,7 @@ export class SettingsService extends Api<T> {
 			method: 'POST',
 			data: {
 				value,
-				key
+				key,
 			},
 		})
 	}
@@ -30,7 +30,7 @@ export class SettingsService extends Api<T> {
 			method: 'PATCH',
 			data: {
 				value,
-				key
+				key,
 			},
 		})
 	}

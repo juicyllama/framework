@@ -1,7 +1,8 @@
 import { DynamicModule, Module, Type } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { plainToInstance } from 'class-transformer'
-import { validateSync } from 'class-validator'
+import { validate } from 'class-validator'
+
 import { getConfigToken } from './config.provider'
 
 @Module({})
@@ -11,19 +12,22 @@ export class ConfigValidationModule {
 	 * this specific feature
 	 */
 	static async register(schema: Type<object>): Promise<DynamicModule> {
-		await ConfigModule.envVariablesLoaded
-		const inst = plainToInstance(schema, process.env)
-		const errors = validateSync(inst)
-		if (errors.length) {
-			throw new Error(errors.map(e => e.toString()).join('\n'))
-		}
 		const token = getConfigToken(schema)
 		return {
 			module: ConfigValidationModule,
 			providers: [
 				{
 					provide: token,
-					useValue: inst,
+					useFactory: async () => {
+						await ConfigModule.envVariablesLoaded
+						const inst = plainToInstance(schema, process.env)
+						const errors = await validate(inst)
+						if (errors.length) {
+							throw new Error(errors.map(e => e.toString()).join('\n'))
+						}
+
+						return inst
+					},
 				},
 			],
 			exports: [token],

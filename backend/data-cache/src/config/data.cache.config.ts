@@ -1,5 +1,5 @@
-import { registerAs, ConfigModule } from '@nestjs/config'
 import { Security, Env } from '@juicyllama/utils'
+import { registerAs, ConfigModule } from '@nestjs/config'
 import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm'
 import path from 'path'
 import { DATA_CAHCE_NAME } from '../module/data.cache.constants'

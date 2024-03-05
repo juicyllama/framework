@@ -3,5 +3,5 @@
     <img src="https://juicyllama.com/assets/images/icon.png" width="100" alt="JuicyLlama Logo" />
   </a>
 
-Visit the [JuicyLlama NestJs Shortlinks Tool](https://docs.juicyllama.com/tools/shortlinks) page for this module to learn more information.
+Visit the [JuicyLlama NestJs Shortlinks Tool](https://juicyllama.com/tools/shortlinks) page for this module to learn more information.
 </div>

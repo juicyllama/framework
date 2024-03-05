@@ -1,16 +1,16 @@
-import { SupportedCurrencies } from "@juicyllama/vue-utils"
-import { Account } from "../account"
-import { User } from "../user"
+import { SupportedCurrencies } from '@juicyllama/vue-utils'
+import { Account } from '../account'
+import { User } from '../user'
 
 export declare enum SubscriptionFrequency {
-    DAILY = 1,
-    WEEKLY = 7,
-    BIWEEKLY = 14,
-    MONTHLY = 30,
-    BIMONTHLY = 60,
-    QUARTERLY = 90,
-    BIQUARTERLY = 180,
-    YEARLY = 365
+	DAILY = 1,
+	WEEKLY = 7,
+	BIWEEKLY = 14,
+	MONTHLY = 30,
+	BIMONTHLY = 60,
+	QUARTERLY = 90,
+	BIQUARTERLY = 180,
+	YEARLY = 365,
 }
 
 export interface Subscription {

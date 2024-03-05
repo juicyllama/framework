@@ -1,11 +1,11 @@
-import { BasicStrategy as Strategy } from 'passport-http'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
-import { forwardRef, Inject, Injectable, UnauthorizedException } from '@nestjs/common'
+import { BasicStrategy as Strategy } from 'passport-http'
 import { UsersService } from '../../users/users.service'
 
 @Injectable()
 export class BasicStrategy extends PassportStrategy(Strategy) {
-	constructor(@Inject(forwardRef(() => UsersService)) private usersService: UsersService) {
+	constructor(private usersService: UsersService) {
 		super({
 			usernameField: 'email',
 			passReqToCallback: true,

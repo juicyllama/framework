@@ -63,7 +63,7 @@ export const UserStore = defineStore('user', {
 		async login(data: UserLogin, q?: QVueGlobals, router?: Router): Promise<User> {
 			try {
 				const access_token = await loginUser(data, q, router)
-				if(!access_token) return
+				if (!access_token) return
 				return await this.processAccessToken(access_token, q)
 			} catch (e: any) {
 				logger({ severity: LogSeverity.ERROR, message: e.message, q: q })
@@ -110,8 +110,8 @@ export const UserStore = defineStore('user', {
 		},
 
 		async resetComplete(email: string, code: string, password: string, q?: QVueGlobals): Promise<T> {
-				const access_token = await resetPasswordComplete(email, code, password)
-				return await this.processAccessToken(access_token, q)
+			const access_token = await resetPasswordComplete(email, code, password)
+			return await this.processAccessToken(access_token, q)
 		},
 
 		async getUserAsync(): Promise<T> {
@@ -126,10 +126,9 @@ export const UserStore = defineStore('user', {
 			}
 
 			if (!this.$state.user) {
-
-				if(route.fullPath) {
+				if (route.fullPath) {
 					router.push(`/login?r=${route.fullPath}`)
-				}else{
+				} else {
 					this.logout(router, '/login')
 				}
 				return false
@@ -190,12 +189,11 @@ export const UserStore = defineStore('user', {
 			logger({ severity: LogSeverity.VERBOSE, message: `[Store][User][Logout] Logout User` })
 			window.localStorage.clear()
 			this.$state.user = null
-			await token.remove()
-
-			if(!router) {
-				if(redirect){
+			token.remove()
+			if (!router) {
+				if (redirect) {
 					window.location.href = redirect
-				}else{
+				} else {
 					window.location.href = '/'
 				}
 			}
@@ -220,7 +218,7 @@ export const UserStore = defineStore('user', {
 				await accountStore.setAccountByUser(user)
 			}
 
-			if(!user.accounts.map(accounts => accounts.account_id).includes(accountStore.getAccountId)){
+			if (!user.accounts.map(accounts => accounts.account_id).includes(accountStore.getAccountId)) {
 				await accountStore.setAccountByUser(user)
 			}
 
@@ -244,6 +242,6 @@ export const UserStore = defineStore('user', {
 		},
 		getPreLoginRedirect(state): string {
 			return state.preLoginRedirect ?? null
-		}
-	}
+		},
+	},
 })

@@ -1,8 +1,8 @@
-import { forwardRef, Module } from '@nestjs/common'
 import { CoreModule } from '@juicyllama/core'
+import { Module } from '@nestjs/common'
 import { EcommerceModule } from '../ecommerce.module'
 
 @Module({
-	imports: [forwardRef(() => CoreModule), forwardRef(() => EcommerceModule)],
+	imports: [CoreModule, EcommerceModule],
 })
 export class SandboxModule {}

@@ -1,8 +1,8 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { BeaconService, Query, BaseService } from '@juicyllama/core'
-import { Store } from './stores.entity'
+import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+import { Store } from './stores.entity'
 
 const E = Store
 type T = Store
@@ -11,8 +11,8 @@ type T = Store
 export class StoresService extends BaseService<T> {
 	constructor(
 		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
-		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
+		@Inject(Query) readonly query: Query<T>,
+		readonly beaconService: BeaconService,
 	) {
 		super(query, repository, {
 			beacon: beaconService,

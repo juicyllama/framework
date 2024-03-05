@@ -1,25 +1,24 @@
-import { forwardRef, MiddlewareConsumer, Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { JwtModule } from '@nestjs/jwt'
-import { StorageModule } from '../storage/storage.module'
-import { AuthModule } from '../auth/auth.module'
-import { UsersService } from './users.service'
-import { UsersHooks } from './users.hooks'
-import { databaseConfig, jwtConfig } from '../../configs'
-import { User } from './users.entity'
 import { Logger } from '@juicyllama/utils'
-import { Query } from '../../utils/typeorm/Query'
-import { BeaconModule } from '../beacon/beacon.module'
-import { AccountModule } from '../accounts/account.module'
-import { UsersController } from './users.controller'
+import { forwardRef, MiddlewareConsumer, Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
+import { TypeOrmModule } from '@nestjs/typeorm'
 import { MiddlewareAccountId } from '../../middleware'
-import { Account } from '../accounts/account.entity'
+import { Query } from '../../utils/typeorm/Query'
+import { AccountModule } from '../accounts/account.module'
+import { AuthModule } from '../auth/auth.module'
+import { BeaconModule } from '../beacon/beacon.module'
+import { StorageModule } from '../storage/storage.module'
+import { UsersController } from './users.controller'
+import { User } from './users.entity'
+import { UsersHooks } from './users.hooks'
+import { UsersService } from './users.service'
 
 @Module({
 	imports: [
-		JwtModule.register(jwtConfig()),
-		TypeOrmModule.forRoot(databaseConfig()),
-		TypeOrmModule.forFeature([Account, User]),
+		ConfigModule.forRoot({
+			isGlobal: true,
+		}),
+		TypeOrmModule.forFeature([User]),
 		forwardRef(() => AuthModule),
 		forwardRef(() => AccountModule),
 		forwardRef(() => BeaconModule),

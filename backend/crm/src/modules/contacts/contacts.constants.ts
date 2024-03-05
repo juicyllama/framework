@@ -1,7 +1,7 @@
 import { ControllerConstants } from '@juicyllama/core'
+import { ContactDto, ContactResponeDto, CreateContactDto, UpdateContactDto } from './contacts.dto'
 import { Contact } from './contacts.entity'
 import { ContactSelect, ContactOrderBy, ContactRelations } from './contacts.enums'
-import { ContactDto, ContactResponeDto, CreateContactDto, UpdateContactDto } from './contacts.dto'
 
 export const CRM_CONTACTS_E = Contact
 export type CRM_CONTACTS_T = Contact

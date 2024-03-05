@@ -1,6 +1,6 @@
 import { DateRangeDto } from '../dto/date.dto'
 import { StepType } from '../enums/stats'
-import { month_names, month_names_short, SubscriptionFrequency } from '../enums/dates'
+import { month_names, month_names_short, SubscriptionFrequency, DayNames } from '../enums/dates'
 
 const nth = function (d) {
 	if (d > 3 && d < 21) return 'th'
@@ -40,6 +40,7 @@ export class Dates {
 			.replace('MM', month.length === 1 ? '0' + month : month)
 			.replace('DD', day.length === 1 ? '0' + day : day)
 			.replace('Do', day + nth(parseInt(day)))
+			.replace('Day', this.dayName(date))
 			.replace('HH', hours.length === 1 ? '0' + hours : hours)
 			.replace('mm', minutes.length === 1 ? '0' + minutes : minutes)
 			.replace('ss', seconds.length === 1 ? '0' + seconds : seconds)
@@ -51,6 +52,13 @@ export class Dates {
 					? '0' + milliseconds
 					: milliseconds,
 			)
+	}
+
+
+	static dayName(date: Date): string {
+		let day = date.getDay() - 1
+		if (day === -1) day = 6
+		return DayNames[day]
 	}
 
 	private static formatZerolessValue(value: number): string {

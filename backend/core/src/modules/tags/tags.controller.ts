@@ -1,12 +1,8 @@
 import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
+import { Body, Controller, Inject, Param, Query, Req, UploadedFile, forwardRef } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { Body, Controller, forwardRef, Inject, Param, Query, Req, UploadedFile } from '@nestjs/common'
-import { TagsService } from './tags.service'
 import { Query as TQuery } from '../../utils/typeorm/Query'
-import { UserAuth } from '../../decorators/UserAuth.decorator'
-import { BaseController } from '../../helpers/baseController'
-import { TAGS_T as T, tagsConstants as constants } from './tags.constants'
-import { AuthService } from '../auth/auth.service'
+import { AccountId } from '../../decorators/AccountId.decorator'
 import {
 	BulkUploadDecorator,
 	CreateDecorator,
@@ -18,10 +14,14 @@ import {
 	UpdateDecorator,
 	UploadFieldsDecorator,
 } from '../../decorators/crud.decorator'
-import { AccountId } from '../../decorators/AccountId.decorator'
-import { CreateTagDto as CreateDto, UpdateTagDto as UpdateDto } from './tags.dtos'
-import { BulkUploadDto, BulkUploadResponse, CrudUploadFieldsResponse } from '../../types/common'
+import { UserAuth } from '../../decorators/UserAuth.decorator'
+import { BaseController } from '../../helpers/baseController'
 import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
+import { BulkUploadDto, BulkUploadResponse, CrudUploadFieldsResponse } from '../../types/common'
+import { AuthService } from '../auth/auth.service'
+import { TAGS_T as T, tagsConstants as constants } from './tags.constants'
+import { CreateTagDto as CreateDto, UpdateTagDto as UpdateDto } from './tags.dtos'
+import { TagsService } from './tags.service'
 
 @ApiTags('Tags')
 @UserAuth()

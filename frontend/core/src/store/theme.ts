@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 export const ThemeStore = defineStore('theme', {
 	state: () => ({
-		left_draw: Json.getLocalStorageObject<boolean>('theme_left_draw') ?? true
+		left_draw: Json.getLocalStorageObject<boolean>('theme_left_draw') ?? true,
 	}),
 	actions: {
 		setLeftDraw(boolean: boolean): boolean {

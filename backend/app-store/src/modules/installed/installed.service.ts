@@ -41,7 +41,7 @@ export class InstalledAppsService extends BaseService<T> {
 			installed_app.app = await this.appsService.findOne({ where: { app_id: installed_app.app_id } })
 		}
 
-		const public_settings: { [key: string]: any } = {};
+		const public_settings: { [key: string]: any } = {}
 		if (installed_app.app?.settings) {
 			for (const app_creds of installed_app.app.settings) {
 				if (!app_creds.private) {
@@ -52,7 +52,7 @@ export class InstalledAppsService extends BaseService<T> {
 			}
 		}
 
-		installed_app.settings = public_settings;
+		installed_app.settings = public_settings
 		return installed_app
 	}
 

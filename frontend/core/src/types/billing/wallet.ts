@@ -1,7 +1,7 @@
-import { SupportedCurrencies } from "@juicyllama/vue-utils"
-import { Account } from "../account"
-import { Charge } from "./charge"
-import { Payment } from "./payment"
+import { SupportedCurrencies } from '@juicyllama/vue-utils'
+import { Account } from '../account'
+import { Charge } from './charge'
+import { Payment } from './payment'
 
 export interface Wallet {
 	readonly wallet_id: number

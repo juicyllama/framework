@@ -1,10 +1,10 @@
+import { Api, Env, Logger } from '@juicyllama/utils'
 import { Test, TestingModule } from '@nestjs/testing'
-import { Env } from '@juicyllama/utils'
-import { WordpressPostsService } from './wordpress.posts.service'
-import { WordpressPostsModule } from './wordpress.posts.module'
-import { forwardRef } from '@nestjs/common'
 // @ts-ignore
 import * as mock from './mock.json'
+import { WordpressPostsUrlToken } from './wordpress.posts.constants'
+import { WordpressPostsService } from './wordpress.posts.service'
+
 describe('WordPress Posts Service', () => {
 	let moduleRef: TestingModule
 
@@ -16,7 +16,26 @@ describe('WordPress Posts Service', () => {
 		}
 
 		moduleRef = await Test.createTestingModule({
-			imports: [forwardRef(() => WordpressPostsModule)],
+			providers: [
+				WordpressPostsService,
+				{
+					provide: Api,
+					useValue: {
+						post: jest.fn(),
+					},
+				},
+				{
+					provide: Logger,
+					useValue: {
+						error: jest.fn(),
+						debug: jest.fn(),
+					},
+				},
+				{
+					provide: WordpressPostsUrlToken,
+					useValue: '',
+				},
+			],
 		}).compile()
 
 		wordpressPostsService = moduleRef.get<WordpressPostsService>(WordpressPostsService)

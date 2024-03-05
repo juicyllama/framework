@@ -1,6 +1,6 @@
-import { AppIntegrationStatus, AppScope } from '../apps.enums'
 import { SwaggerPropertyDecorator, SwaggerPropertyType } from '@juicyllama/core'
 import { IsNumber, IsObject } from 'class-validator'
+import { AppIntegrationStatus, AppScope } from '../apps.enums'
 
 export class CreateInstalledAppDto {
 	@SwaggerPropertyDecorator({

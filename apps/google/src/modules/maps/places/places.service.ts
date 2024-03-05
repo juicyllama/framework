@@ -1,13 +1,14 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { Client } from '@googlemaps/google-maps-services-js'
+import { InjectConfig, MONGODB, Query } from '@juicyllama/core'
+import { Logger, Env } from '@juicyllama/utils'
+import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { Api, Logger, Env } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
-import { MONGODB, Query } from '@juicyllama/core'
-import { GoogleMapsPlace } from './places.entity.mongo'
+import { GoogleConfigDto } from '../../../config/google.config.dto'
+import { InjectGoogleMaps } from '../provider'
 import * as mock from './mock.json'
+import { GoogleMapsPlace } from './places.entity.mongo'
 import { googlePlaceDetailsToEntity } from './places.mapper'
-import { Client } from '@googlemaps/google-maps-services-js'
 
 type PLACES_T = GoogleMapsPlace
 const CACHE_DAYS = 365
@@ -19,11 +20,11 @@ type GetPlaceByIdOpts = {
 @Injectable()
 export class PlacesService {
 	constructor(
-		@Inject(forwardRef(() => Api)) private readonly api: Api,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => Query)) private readonly query: Query<PLACES_T>,
+		private readonly logger: Logger,
+		@Inject(Query) private readonly query: Query<PLACES_T>,
 		@InjectRepository(GoogleMapsPlace, MONGODB) private readonly repository: Repository<PLACES_T>,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		@InjectConfig(GoogleConfigDto) private readonly config: GoogleConfigDto,
+		@InjectGoogleMaps() private readonly client: Client,
 	) {}
 
 	async getPlaceById(place_id: string, opts: GetPlaceByIdOpts = {}): Promise<PLACES_T> {
@@ -55,19 +56,18 @@ export class PlacesService {
 
 		const args = {
 			params: {
-				key: this.configService.get('google.GOOGLE_MAPS_API_KEY'),
+				key: this.config.GOOGLE_MAPS_API_KEY,
 				place_id: place_id,
 			},
 		}
-		const client = new Client()
-		const response = await client.placeDetails(args)
+		const response = await this.client.placeDetails(args)
 
 		const place = googlePlaceDetailsToEntity(response.data.result)
 
 		this.logger.debug(`[${domain}] Adding result into the data lake, calling API`, place)
 
 		if (result && place) {
-			await this.query.purge(this.repository, result);
+			await this.query.purge(this.repository, result)
 		}
 		return await this.query.create(this.repository, place)
 	}

@@ -1,12 +1,12 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { Account, Query } from '@juicyllama/core'
+import { SupportedCurrencies } from '@juicyllama/utils'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
-import { Wallet } from './wallet.entity'
-import { Account, Query } from '@juicyllama/core'
 import { GetBalanceResponseDto } from './wallet.dto'
-import { SupportedCurrencies } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
+import { Wallet } from './wallet.entity'
 
 const E = Wallet
 type T = Wallet
@@ -14,7 +14,7 @@ type T = Wallet
 @Injectable()
 export class WalletService {
 	constructor(
-		@Inject(forwardRef(() => Query)) private readonly query: Query<T>,
+		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@InjectRepository(E) private readonly repository: Repository<T>,
 		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
 	) {}
@@ -63,7 +63,7 @@ export class WalletService {
 	}
 
 	async findNegativeAccounts(): Promise<Wallet[]> {
-		let lessThan: number = this.configService.get('billing.BILLING_MINIMUM_CHARGE') || 0
+		const lessThan: number = this.configService.get('billing.BILLING_MINIMUM_CHARGE') || 0
 
 		const sql = `SELECT *
                      FROM billing_wallet

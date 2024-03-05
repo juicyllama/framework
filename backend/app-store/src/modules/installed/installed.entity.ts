@@ -1,8 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Index } from 'typeorm'
+import { Account, BaseEntity, User } from '@juicyllama/core'
 import { IsBoolean, IsDate, IsEnum, IsObject, IsString } from 'class-validator'
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Index } from 'typeorm'
 import { App } from '../apps.entity'
 import { AppIntegrationStatus, AppScope } from '../apps.enums'
-import { Account, BaseEntity, User } from '@juicyllama/core'
 
 @Entity('apps_installed')
 export class InstalledApp extends BaseEntity {

@@ -1,16 +1,3 @@
-import { BadRequestException, Body, Controller, forwardRef, Inject, Param, Query, Req, Post } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
-import { StatsMethods, StatsResponseDto } from '@juicyllama/utils'
-import { InstalledAppsService } from './installed.service'
-import { AppsService } from '../apps.service'
-import {
-	CreateInstalledAppDto,
-	InstalledAppPreCheckDto,
-	UpdateInstalledAppDto,
-	preInstallCheckResponse,
-} from './installed.dto'
-import { AppIntegrationType } from '../apps.enums'
-import { InstalledAppsOrderBy, InstalledAppsRelations, InstalledAppsSelect } from './installed.enums'
 import {
 	AccountId,
 	CreateDecorator,
@@ -29,6 +16,11 @@ import {
 	AuthService,
 	AuthenticatedRequest,
 } from '@juicyllama/core'
+import { StatsMethods, StatsResponseDto } from '@juicyllama/utils'
+import { BadRequestException, Body, Controller, Inject, Param, Query, Req, Post, forwardRef } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
+import { AppIntegrationType } from '../apps.enums'
+import { AppsService } from '../apps.service'
 import {
 	INSTALLED_APP_DEFAULT_ORDER_BY,
 	INSTALLED_APP_E,
@@ -37,14 +29,22 @@ import {
 	INSTALLED_APP_SEARCH_FIELDS,
 	INSTALLED_APP_T,
 } from './installed.constants'
+import {
+	CreateInstalledAppDto,
+	InstalledAppPreCheckDto,
+	UpdateInstalledAppDto,
+	preInstallCheckResponse,
+} from './installed.dto'
+import { InstalledAppsOrderBy, InstalledAppsRelations, InstalledAppsSelect } from './installed.enums'
+import { InstalledAppsService } from './installed.service'
 
 @ApiTags('Installed Apps')
 @UserAuth()
 @Controller('/apps/installed')
 export class InstalledAppsController {
 	constructor(
-		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
-		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<INSTALLED_APP_T>,
+		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
+		@Inject(forwardRef(() => TQuery))  private readonly tQuery: TQuery<INSTALLED_APP_T>,
 		@Inject(forwardRef(() => InstalledAppsService)) private readonly service: InstalledAppsService,
 		@Inject(forwardRef(() => AppsService)) private readonly appsService: AppsService,
 	) {}
@@ -123,7 +123,11 @@ export class InstalledAppsController {
 		relationsEnum: InstalledAppsRelations,
 		name: INSTALLED_APP_NAME,
 	})
-	async findAll(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Query() query: any): Promise<INSTALLED_APP_T[]> {
+	async findAll(
+		@Req() req: AuthenticatedRequest,
+		@AccountId() account_id: number,
+		@Query() query: any,
+	): Promise<INSTALLED_APP_T[]> {
 		await this.authService.check(req.user.user_id, account_id)
 		const records = await crudFindAll<INSTALLED_APP_T>({
 			service: this.service,
@@ -230,7 +234,11 @@ export class InstalledAppsController {
 		primaryKey: INSTALLED_APP_PRIMARY_KEY,
 		name: INSTALLED_APP_NAME,
 	})
-	async remove(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Param() params: any): Promise<INSTALLED_APP_T> {
+	async remove(
+		@Req() req: AuthenticatedRequest,
+		@AccountId() account_id: number,
+		@Param() params: any,
+	): Promise<INSTALLED_APP_T> {
 		await this.authService.check(req.user.user_id, account_id)
 		return await crudPurge<INSTALLED_APP_T>({
 			service: this.service,

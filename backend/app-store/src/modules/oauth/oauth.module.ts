@@ -1,19 +1,17 @@
-import { forwardRef, Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { BeaconModule, Query, AuthModule } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
+import { Module, forwardRef } from '@nestjs/common'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { AppsModule } from '../apps.module'
 import { Oauth } from './oauth.entity'
 import { OauthService } from './oauth.service'
-import { InstalledAppsModule } from '../installed/installed.module'
-import { BeaconModule, Query, AuthModule } from '@juicyllama/core'
 import { OauthController } from './oauth.controller'
-import { AppsModule } from '../apps.module'
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([Oauth]),
+		TypeOrmModule.forFeature([Oauth]), 
 		forwardRef(() => AuthModule),
 		forwardRef(() => AppsModule),
-		forwardRef(() => InstalledAppsModule),
 		forwardRef(() => BeaconModule),
 	],
 	controllers: [OauthController],

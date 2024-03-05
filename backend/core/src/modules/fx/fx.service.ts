@@ -1,6 +1,6 @@
 import { CachePeriod, Dates, JLCache, Logger, Modules, SupportedCurrencies } from '@juicyllama/utils'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Cache } from 'cache-manager'
@@ -19,9 +19,9 @@ export class FxService {
 	constructor(
 		@Inject(forwardRef(() => Query)) private readonly query: Query<FxRate>,
 		@InjectRepository(FxRate) private readonly repository: Repository<FxRate>,
-		@Inject(Logger) private readonly logger: Logger,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(CACHE_MANAGER) private cacheManager: Cache,
-		private readonly lazyModuleLoader: LazyModuleLoader,
+		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
 	) {}
 
 	/**

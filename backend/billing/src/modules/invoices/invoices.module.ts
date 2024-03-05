@@ -1,22 +1,19 @@
-import { Module, forwardRef } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { AccountModule, AuthModule, FxModule, Query, SettingsModule, StorageModule } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
-import { Invoice } from './invoices.entity'
-import { InvoicesService } from './invoices.service'
-import { InvoicesController } from './invoices.controller'
-import { Account, AccountModule, AuthModule, StorageModule, Query, SettingsModule, FxModule } from '@juicyllama/core'
-import { Charge } from '../charges/charges.entity'
-import { Payment } from '../payments/payments.entity'
-import { PaymentMethod } from '../payment_methods/payment.methods.entity'
+import { Module, forwardRef } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
-import { InvoicesCronService } from './invoices.crons.service'
-import { InvoicesCronsController } from './invoices.cron.controller'
+import { TypeOrmModule } from '@nestjs/typeorm'
 import { ChargesModule } from '../charges/charges.module'
 import { PaymentsModule } from '../payments/payments.module'
+import { InvoicesController } from './invoices.controller'
+import { InvoicesCronsController } from './invoices.cron.controller'
+import { InvoicesCronService } from './invoices.crons.service'
+import { Invoice } from './invoices.entity'
+import { InvoicesService } from './invoices.service'
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([Account, Charge, Invoice, Payment, PaymentMethod]),
+		TypeOrmModule.forFeature([Invoice]),
 		forwardRef(() => AuthModule),
 		forwardRef(() => AccountModule),
 		forwardRef(() => ChargesModule),

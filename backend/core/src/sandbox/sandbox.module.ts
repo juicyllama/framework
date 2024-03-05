@@ -1,15 +1,15 @@
-import { forwardRef, Module } from '@nestjs/common'
-import { CoreModule } from '../modules/core.module'
+import { Env } from '@juicyllama/utils'
 import { CacheModule } from '@nestjs/cache-manager'
+import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { TypeOrmModule } from '@nestjs/typeorm'
 import { JwtModule } from '@nestjs/jwt'
-import jwtConfig from '../configs/jwt.config'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import Joi from 'joi'
 import { databaseConfig, joiConfigJoi, ssoConfig } from '../configs'
 import cacheConfig from '../configs/cache.config'
-import Joi from 'joi'
+import jwtConfig from '../configs/jwt.config'
 import { ssoConfigJoi } from '../configs/sso.config.joi'
-import { Env } from '@juicyllama/utils'
+import { CoreModule } from '../modules/core.module'
 
 @Module({
 	imports: [
@@ -22,7 +22,7 @@ import { Env } from '@juicyllama/utils'
 		}),
 		CacheModule.registerAsync(cacheConfig()),
 		TypeOrmModule.forRoot(databaseConfig()),
-		forwardRef(() => CoreModule),
+		CoreModule,
 	],
 })
 export class SandboxModule {}

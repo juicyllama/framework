@@ -2,6 +2,7 @@ import { logger } from './logger'
 import { LogSeverity, StatsResponse } from '../types/common'
 import { QVueGlobals } from 'quasar'
 import instance from '../services/index'
+import { accountStore } from '../index'
 import {
 	FormApiOptionsCreate,
 	FormApiOptionsDelete,
@@ -16,11 +17,10 @@ export async function apiRequest<T>(options: {
 	method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 	data?: any
 	params?: any
-	q?: QVueGlobals,
+	q?: QVueGlobals
 	headers?: { [key: string]: string }
 }): Promise<T> {
 	try {
-		const accountStore = (await import('../index')).accountStore
 		instance.defaults.headers.common['account-id'] = accountStore.selected_account?.account_id
 		instance.defaults.headers.common = { ...instance.defaults.headers.common, ...options.headers }
 
@@ -29,10 +29,10 @@ export async function apiRequest<T>(options: {
 		let url = options.url
 
 		//clean up params
-		for(const key in options.params){
-			if(options.params[key] === undefined) delete options.params[key]
-			if(typeof options.params[key] === 'boolean'){
-				if(options.params[key]) options.params[key] = 1
+		for (const key in options.params) {
+			if (options.params[key] === undefined) delete options.params[key]
+			if (typeof options.params[key] === 'boolean') {
+				if (options.params[key]) options.params[key] = 1
 				else options.params[key] = 0
 			}
 		}
@@ -113,14 +113,14 @@ export class Api<T> {
 	url: string
 	options?: { headers?: { [key: string]: string } }
 	constructor(url?: string, options?: { headers?: { [key: string]: string } }) {
-		if (url){
-			this.url = url;
+		if (url) {
+			this.url = url
 		}
 		this.options = options
 	}
 
 	async create(options: FormApiOptionsCreate): Promise<T> {
-		if(!this.url && !options.url) throw new Error('No url provided')
+		if (!this.url && !options.url) throw new Error('No url provided')
 		return await apiRequest<T>({
 			url: options.url ?? this.url,
 			method: 'POST',
@@ -131,15 +131,15 @@ export class Api<T> {
 	}
 
 	async post(options: FormApiOptionsCreate): Promise<T> {
-		if(!this.url && !options.url) throw new Error('No url provided')
+		if (!this.url && !options.url) throw new Error('No url provided')
 		return this.create({
 			url: this.url,
-			...options
+			...options,
 		})
 	}
 
 	async findOne(options?: FormApiOptionsFindOne): Promise<T> {
-		if(!this.url && !options.url) throw new Error('No url provided')
+		if (!this.url && !options.url) throw new Error('No url provided')
 		let url = options?.url ?? this.url
 		if (options?.record_id) url = url + `/${options?.record_id}`
 		return await apiRequest<T>({
@@ -151,7 +151,7 @@ export class Api<T> {
 	}
 
 	async findAll(options?: FormApiOptionsFindAll): Promise<T[]> {
-		if(!this.url && !options?.url) throw new Error('No url provided')
+		if (!this.url && !options?.url) throw new Error('No url provided')
 		return await apiRequest<T[]>({
 			url: options?.url ?? this.url,
 			method: 'GET',
@@ -162,15 +162,15 @@ export class Api<T> {
 	}
 
 	async get(options?: FormApiOptionsFindAll): Promise<T[]> {
-		if(!this.url && !options?.url) throw new Error('No url provided')
+		if (!this.url && !options?.url) throw new Error('No url provided')
 		return this.findAll({
 			url: this.url,
-			...options
+			...options,
 		})
 	}
 
 	async stats(options?: FormApiOptionsStats): Promise<number> {
-		if(!this.url && !options?.url) throw new Error('No url provided')
+		if (!this.url && !options?.url) throw new Error('No url provided')
 
 		const response = await apiRequest<StatsResponse>({
 			url: (options?.url ?? this.url) + '/stats',
@@ -180,8 +180,8 @@ export class Api<T> {
 			headers: this.options?.headers,
 		})
 
-		if(!options?.method) return response.count
-		
+		if (!options?.method) return response.count
+
 		switch (options.method) {
 			case 'SUM':
 				return response.sum
@@ -193,7 +193,7 @@ export class Api<T> {
 	}
 
 	async update(options: FormApiOptionsUpdate): Promise<T> {
-		if(!this.url && !options.url) throw new Error('No url provided')
+		if (!this.url && !options.url) throw new Error('No url provided')
 		let url = options.url ?? this.url
 		if (options.record_id) url = url + `/${options.record_id}`
 
@@ -206,16 +206,30 @@ export class Api<T> {
 		})
 	}
 
+	async put(options: FormApiOptionsUpdate): Promise<T> {
+		if (!this.url && !options.url) throw new Error('No url provided')
+		let url = options.url ?? this.url
+		if (options.record_id) url = url + `/${options.record_id}`
+
+		return await apiRequest<T>({
+			url: url,
+			method: 'PUT',
+			data: options.data,
+			q: options.q,
+			headers: this.options?.headers,
+		})
+	}
+
 	async patch(options: FormApiOptionsUpdate): Promise<T> {
-		if(!this.url && !options.url) throw new Error('No url provided')
+		if (!this.url && !options.url) throw new Error('No url provided')
 		return this.update({
 			url: this.url,
-			...options
+			...options,
 		})
 	}
 
 	async delete(options: FormApiOptionsDelete): Promise<T> {
-		if(!this.url && !options.url) throw new Error('No url provided')
+		if (!this.url && !options.url) throw new Error('No url provided')
 		return await apiRequest<T>({
 			url: options.url ?? this.url + `/${options.record_id}`,
 			method: 'DELETE',

@@ -1,6 +1,3 @@
-import { Controller, forwardRef, Inject, Query, Param, UploadedFile } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
-import { WebsitesService as Service } from './websites.service'
 import {
 	Query as TQuery,
 	AuthService,
@@ -21,10 +18,12 @@ import {
 	DeleteDecorator,
 	AuthenticatedRequest,
 } from '@juicyllama/core'
-import { CreateWebsiteDto as CreateDto, UpdateWebsiteDto as UpdateDto } from './websites.dto'
-import { websiteConstants as constants, WEBSITES_T as T } from './websites.constants'
-import { Req, Body } from '@nestjs/common'
 import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
+import { Body, Controller, Inject, Query, Param, Req, UploadedFile, forwardRef } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
+import { websiteConstants as constants, WEBSITES_T as T } from './websites.constants'
+import { CreateWebsiteDto as CreateDto, UpdateWebsiteDto as UpdateDto } from './websites.dto'
+import { WebsitesService as Service } from './websites.service'
 
 @ApiTags('Websites')
 @UserAuth()
@@ -33,7 +32,7 @@ export class WebsitesController extends BaseController<T> {
 	constructor(
 		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
 		@Inject(forwardRef(() => Service)) readonly service: Service,
-		@Inject(forwardRef(() => TQuery)) readonly tQuery: TQuery<T>,
+		@Inject(forwardRef(() => TQuery))  readonly tQuery: TQuery<T>,
 	) {
 		super(service, tQuery, constants, {
 			services: {

@@ -3,7 +3,7 @@
 We have pre-built an app store type interface to make it easier for you to allow your users to add their own apps to their accounts.
 
 ::alert{type="warning"}
-This frontend implementation requires the backend to be setup and running, [you can learn more about this here](https://docs.juicyllama.com/framework/backend/core).
+This frontend implementation requires the backend to be setup and running, [you can learn more about this here](https://juicyllama.com/framework/backend/core).
 ::
 
 ::alert{type="danger"}
@@ -12,9 +12,7 @@ Create video overview with
 
 ## Apps Component
 
-::alert{type="danger"}
-TODO Document this
-::
+::Incomplete
 
 ## Oauth > Start
 

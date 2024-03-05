@@ -1,11 +1,18 @@
-import { AccountService, AppIntegrationName, BaseService, Query, StorageService, StorageType, User } from '@juicyllama/core'
+import { XeroService } from '@juicyllama/app-xero-cc'
+import {
+	AccountService,
+	AppIntegrationName,
+	BaseService,
+	Query,
+	StorageService,
+	//StorageType,
+	//User,
+} from '@juicyllama/core'
 import { Logger, Modules } from '@juicyllama/utils'
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
-
-import { XeroService } from '@juicyllama/app-xero-cc'
 import { toXeroInvoice } from './invoice.mapper.xero'
 import { Invoice } from './invoices.entity'
 
@@ -17,8 +24,8 @@ export class InvoicesService extends BaseService<T> {
 		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
 		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(forwardRef(() => StorageService)) readonly storageService: StorageService,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
 	) {
 		super(query, repository)
@@ -70,7 +77,7 @@ export class InvoicesService extends BaseService<T> {
 
 				const lineItems = []
 
-				for (const charge of (invoice.charges ?? [])) {
+				for (const charge of invoice.charges ?? []) {
 					let accountCode = process.env.XERO_CC_DEFAULT_ACCOUNT_CODE
 					let taxType = 'NONE'
 
@@ -140,12 +147,14 @@ export class InvoicesService extends BaseService<T> {
 				await xeroService.createInvoicePayment(invoice.app_invoice_id, amount)
 			} catch (e) {
 				const error = e as Error
-				this.logger.error(`[${domain}] Error: ${error.message}`, error)			}
+				this.logger.error(`[${domain}] Error: ${error.message}`, error)
+			}
 		}
 	}
 
-	async downloadInvoice(user: User, invoice_id: number): Promise<T> {
-		const file = await this.storageService.read(`invoices/${user.user_id}/${invoice_id}`, StorageType.PUBLIC)
-		return file
-	}
+	// TODO: this is not correct, shoudl be saved by account not user
+	// async downloadInvoice(user: User, invoice_id: number): Promise<T | undefined> {
+	// 	const file = await this.storageService.read(`/accounts/}invoices/${user.user_id}/${invoice_id}`, StorageType.PRIVATE)
+	// 	return file
+	// }
 }

@@ -1,11 +1,11 @@
-import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common'
+import { Account, BaseService, BeaconService, Query, User } from '@juicyllama/core'
+import { File, Strings } from '@juicyllama/utils'
+import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Account, AccountService, AuthService, BaseService, BeaconService, Query, User } from '@juicyllama/core'
-import { Withdrawal } from './withdrawals.entity'
 import { DeepPartial, Repository } from 'typeorm'
-import { Logger, File, Strings } from '@juicyllama/utils'
-import { WalletService } from '../wallet/wallet.service'
+import { Withdrawal } from './withdrawals.entity'
 import { WithdrawalStatus } from './withdrawals.enums'
+import { WalletService } from '../wallet/wallet.service'
 
 const E = Withdrawal
 type T = Withdrawal
@@ -15,9 +15,6 @@ export class WithdrawalsService extends BaseService<T> {
 	constructor(
 		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
-		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
-		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
 		@Inject(forwardRef(() => WalletService)) private readonly walletService: WalletService,
 	) {
@@ -34,7 +31,7 @@ export class WithdrawalsService extends BaseService<T> {
 		if (!data.amount) {
 			throw new BadRequestException('Amount is required')
 		}
-		const balance = await this.walletService.getBalance(<Account>data.account, data.currency)		
+		const balance = await this.walletService.getBalance(<Account>data.account, data.currency)
 		if (balance < data.amount) {
 			throw new BadRequestException('Insufficient funds')
 		}

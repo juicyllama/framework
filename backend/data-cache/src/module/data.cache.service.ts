@@ -1,10 +1,10 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { Repository, DeepPartial, FindOptionsWhere, FindManyOptions, ObjectLiteral } from 'typeorm'
 import { Query } from '@juicyllama/core'
 
 @Injectable()
 export class DataCacheService<T extends ObjectLiteral> {
-	constructor(@Inject(forwardRef(() => Query)) private readonly query: Query<T>) {}
+	constructor(@Inject(Query) private readonly query: Query<T>) {}
 
 	async set(repository: Repository<T>, data: DeepPartial<T>): Promise<T> {
 		return await this.query.create(repository, data)

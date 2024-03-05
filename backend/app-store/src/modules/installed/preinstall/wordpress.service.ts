@@ -1,5 +1,5 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { Logger, Modules } from '@juicyllama/utils'
+import { Injectable, forwardRef, Inject } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
 import { App } from '../../apps.entity'
 import { preInstallCheckResponse } from '../installed.dto'

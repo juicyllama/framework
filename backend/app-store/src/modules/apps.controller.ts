@@ -11,12 +11,10 @@ import {
 	AuthenticatedRequest,
 } from '@juicyllama/core'
 import { StatsMethods } from '@juicyllama/utils'
-import { forwardRef, Inject, Param, Query, Controller, Req } from '@nestjs/common'
+import { Inject, Param, Query, Controller, Req, forwardRef } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { APP_T as T } from './apps.constants'
+import { APP_T as T, appConstants as constants } from './apps.constants'
 import { AppsService as Service } from './apps.service'
-import { appConstants as constants } from './apps.constants'
-
 @ApiTags('Apps')
 @UserAuth()
 @Controller('/apps/store')
@@ -34,7 +32,11 @@ export class AppsController extends BaseController<T> {
 	}
 
 	@ReadManyDecorator(constants)
-	async findAll(@Req() req: AuthenticatedRequest, @Query() query: any, @AccountId() account_id: number): Promise<T[]> {
+	async findAll(
+		@Req() req: AuthenticatedRequest,
+		@Query() query: any,
+		@AccountId() account_id: number,
+	): Promise<T[]> {
 		return super.findAll(req, query, account_id)
 	}
 
@@ -48,8 +50,13 @@ export class AppsController extends BaseController<T> {
 		return super.stats(req, query, account_id, method)
 	}
 
-	@ReadOneDecorator({...constants, primaryKey: 'app_id'})
-	async findOne(@Req() req: AuthenticatedRequest, @AccountId() account_id: number, @Param() params: any, @Query() query: any): Promise<T> {
+	@ReadOneDecorator({ ...constants, primaryKey: 'app_id' })
+	async findOne(
+		@Req() req: AuthenticatedRequest,
+		@AccountId() account_id: number,
+		@Param() params: any,
+		@Query() query: any,
+	): Promise<T> {
 		return super.findOne(req, account_id, params, query)
 	}
 }

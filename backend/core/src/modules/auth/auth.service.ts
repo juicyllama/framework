@@ -1,58 +1,72 @@
 import {
-	BadRequestException,
-	ForbiddenException,
-	forwardRef,
-	ImATeapotException,
-	Inject,
-	Injectable,
-	NotFoundException,
-	UnauthorizedException,
-} from '@nestjs/common'
-import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import {
 	CachePeriod,
 	Enums,
 	Env,
+	File,
 	JLCache,
 	Logger,
-	File,
 	Modules,
 	OTP,
 	Strings,
 	SuccessResponseDto,
 } from '@juicyllama/utils'
-import { InjectRepository } from '@nestjs/typeorm'
-import { In, Like, Repository } from 'typeorm'
-import { UsersService } from '../users/users.service'
-import { Role } from './role.entity'
-import { AccountService } from '../accounts/account.service'
-import { SettingsService } from '../settings/settings.service'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import {
+	BadRequestException,
+	ForbiddenException,
+	ImATeapotException,
+	Inject,
+	Injectable,
+	NotFoundException,
+	UnauthorizedException,
+	forwardRef,
+} from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
+import { InjectRepository } from '@nestjs/typeorm'
 import { Cache } from 'cache-manager'
+import { pick } from 'lodash'
+import { In, Like, Repository } from 'typeorm'
 import { BaseService } from '../../helpers'
 import { Query } from '../../utils/typeorm/Query'
-import { BeaconService } from '../beacon/beacon.service'
-import { LoginResponseDto, ValidateCodeDto } from './dtos/login.dto'
-import { AUTH_ACCOUNT_IDS, AUTH_ACCOUNT_ROLE, AUTH_CODE } from './auth.constants'
-import { UserRole, UserRoleNum } from '../users/users.enums'
-import { User } from '../users/users.entity'
 import { Account } from '../accounts/account.entity'
+import { AccountService } from '../accounts/account.service'
+import { BeaconService } from '../beacon/beacon.service'
+import { SettingsService } from '../settings/settings.service'
+import { User } from '../users/users.entity'
+import { UserRole, UserRoleNum } from '../users/users.enums'
+import { UsersService } from '../users/users.service'
+import {
+	AUTH_ACCOUNT_IDS,
+	AUTH_ACCOUNT_ROLE,
+	AUTH_CODE,
+	DEFAULT_ACCESS_TOKEN_EXPIRY_MINUTES,
+	DEFAULT_REFRESH_EXPIRY_DAYS,
+} from './auth.constants'
+import { LoginResponseDto, ValidateCodeDto } from './dtos/login.dto'
 import { CompletePasswordResetDto, InitiateResetPasswordDto } from './dtos/password.reset.dto'
+import { Role } from './role.entity'
 
 const E = Role
 type T = Role
 
+type LoginPayload = {
+	email: string
+	user_id: number
+	account_ids: number[]
+}
+
 @Injectable()
 export class AuthService extends BaseService<T> {
 	constructor(
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
+		@Inject(Query) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
+		readonly logger: Logger,
 		@Inject(forwardRef(() => AccountService)) readonly accountService: AccountService,
-		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
-		@Inject(forwardRef(() => SettingsService)) readonly settingsService: SettingsService,
+		@Inject(forwardRef(() => BeaconService))
+		readonly beaconService: BeaconService,
+		readonly settingsService: SettingsService,
 		@Inject(forwardRef(() => UsersService)) readonly usersService: UsersService,
-		@Inject(forwardRef(() => JwtService)) readonly jwtService: JwtService,
+		readonly jwtService: JwtService,
 		@Inject(CACHE_MANAGER) private cacheManager: Cache,
 	) {
 		super(query, repository, { beacon: beaconService })
@@ -92,8 +106,33 @@ export class AuthService extends BaseService<T> {
 		return this.jwtService.sign(await this.constructLoginPayload(user), { secret: process.env.JWT_KEY })
 	}
 
-	async login(user: User) {
-		const payload = await this.constructLoginPayload(user)
+	async createRefreshToken(user: User | LoginPayload) {
+		const payload = user instanceof User ? await this.constructLoginPayload(user) : user
+		const cleanedPayload = pick(payload, ['email', 'user_id', 'account_ids'])
+		if (!process.env.JWT_REFRESH_KEY) {
+			throw new Error('JWT_REFRESH_KEY not found')
+		}
+		return this.jwtService.sign(cleanedPayload, {
+			secret: process.env.JWT_REFRESH_KEY,
+			expiresIn: `${DEFAULT_REFRESH_EXPIRY_DAYS}d`,
+		})
+	}
+
+	decodeRefreshToken(token: string): LoginPayload {
+		if (!process.env.JWT_REFRESH_KEY) {
+			throw new Error('JWT_REFRESH_KEY not found')
+		}
+		try {
+			return this.jwtService.verify(token, {
+				secret: process.env.JWT_REFRESH_KEY,
+			})
+		} catch (error) {
+			throw new UnauthorizedException('Invalid refresh token')
+		}
+	}
+
+	async login(user: User | LoginPayload) {
+		const payload = user instanceof User ? await this.constructLoginPayload(user) : user
 		if (!['development', 'test'].includes(Env.get())) {
 			let Bugsnag
 			if (Modules.bugsnag.isInstalled) {
@@ -101,12 +140,20 @@ export class AuthService extends BaseService<T> {
 				Bugsnag.setUser(user.user_id, user.email)
 			}
 		}
-		user.last_login_at = new Date()
-		delete user.password
-		await this.usersService.update(user)
-		return new LoginResponseDto(this.jwtService.sign(payload, { secret: process.env.JWT_KEY }))
+		if (!process.env.JWT_KEY) {
+			throw new Error('JWT_KEY not found')
+		}
+		await this.usersService.update({ user_id: user.user_id, last_login_at: new Date() })
+		const cleanedPayload = pick(payload, ['email', 'user_id', 'account_ids'])
+		return new LoginResponseDto(
+			this.jwtService.sign(cleanedPayload, {
+				secret: process.env.JWT_KEY,
+				expiresIn: `${process.env.JWT_ACCESS_TOKEN_EXPIRY_MINUTES || DEFAULT_ACCESS_TOKEN_EXPIRY_MINUTES}m`,
+			}),
+		)
 	}
-	async constructLoginPayload(user: User) {
+
+	async constructLoginPayload(user: User): Promise<LoginPayload> {
 		if (!user.accounts) {
 			throw new ImATeapotException(`Missing accounts on login payload, go grab a cuppa while you seek help!`)
 		}

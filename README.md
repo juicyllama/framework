@@ -7,7 +7,7 @@
 
 ### Install
 
-Visit the [JuicyLlama Docs Portal](https://docs.juicyllama.com/#installation) for installation instructions and more information.
+Visit the [JuicyLlama Docs Portal](https://juicyllama.com/#installation) for installation instructions and more information.
 
 ### Status
 Uptime monitoring can be found [here](https://status.juicyllama.com/) 

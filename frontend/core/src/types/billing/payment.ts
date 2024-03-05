@@ -1,7 +1,7 @@
-import { SupportedCurrencies } from "@juicyllama/vue-utils"
-import { Account } from "../account"
-import { Invoice } from "./invoice"
-import { PaymentMethod, PaymentMethodType } from "./payment_method"
+import { SupportedCurrencies } from '@juicyllama/vue-utils'
+import { Account } from '../account'
+import { Invoice } from './invoice'
+import { PaymentMethod, PaymentMethodType } from './payment_method'
 
 export enum PaymentType {
 	payment = 'payment',
@@ -14,8 +14,6 @@ export enum PaymentStatus {
 	declined = 'declined',
 	pending = 'pending',
 }
-
-
 
 export interface Payment {
 	readonly payment_id: number

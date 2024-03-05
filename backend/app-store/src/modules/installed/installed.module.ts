@@ -1,15 +1,14 @@
-import { forwardRef, Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { AuthModule, AccountModule, Query, UsersModule, BeaconModule } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
-import { OAuthModule } from '../oauth/oauth.module'
-import { InstalledApp } from './installed.entity'
-import { InstalledAppsController } from './installed.controller'
-import { InstalledAppsService } from './installed.service'
+import { Module, forwardRef } from '@nestjs/common'
+import { TypeOrmModule } from '@nestjs/typeorm'
 import { AppsModule } from '../apps.module'
-import { JwtModule } from '@nestjs/jwt'
-import { AuthModule, AccountModule, Query, UsersModule, jwtConfig, BeaconModule } from '@juicyllama/core'
-import { WordPressService } from './preinstall/wordpress.service'
+import { OAuthModule } from '../oauth/oauth.module'
+import { InstalledAppsController } from './installed.controller'
+import { InstalledApp } from './installed.entity'
+import { InstalledAppsService } from './installed.service'
 import { ShopifyService } from './preinstall/shopify.service'
+import { WordPressService } from './preinstall/wordpress.service'
 
 @Module({
 	imports: [

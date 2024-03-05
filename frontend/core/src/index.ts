@@ -122,5 +122,5 @@ export {
 	JLInvoicePage,
 	OTP,
 	JLAvatar,
-	JLAiAsk
+	JLAiAsk,
 }

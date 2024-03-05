@@ -1,9 +1,9 @@
+import { SupportedCurrencies } from '@juicyllama/utils'
 import { ApiProperty } from '@nestjs/swagger'
 import { IsEnum, IsOptional, IsString } from 'class-validator'
-import { AuthService } from '..'
+import { AuthService } from '../modules/auth/auth.service'
 import { FxService } from '../modules/fx/fx.service'
 import { UserRole } from '../modules/users/users.enums'
-import { SupportedCurrencies } from '@juicyllama/utils'
 
 export enum UploadType {
 	CSV = 'CSV',
@@ -110,11 +110,11 @@ export class BulkUploadDto {
 
 	@ApiProperty({
 		name: 'mappers',
-		description: `If your fields do not match the database fields, you can map them here. \n Example: \n 
-		\{ 
-			"someClientFieldName": "first_name", 
+		description: `If your fields do not match the database fields, you can map them here. \n Example: \n
+		\{
+			"someClientFieldName": "first_name",
 			"this.could.be.anything": "last_name"
-		}\ 
+		}\
 		`,
 		type: 'Object',
 		required: false,

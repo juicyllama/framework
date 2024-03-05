@@ -2,5 +2,5 @@
   <a href="https://juicyllama.com/" target="_blank">
     <img src="https://juicyllama.com/assets/images/icon.png" width="100" alt="JuicyLlama Logo" />
   </a>
-Visit the [JuicyLlama Ahrefs App](https://docs.juicyllama.com/framework/apps/ahrefs) docs for more information.
+Visit the [JuicyLlama Ahrefs App](https://juicyllama.com/framework/apps/ahrefs) docs for more information.
 </div>

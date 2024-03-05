@@ -1,11 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
+import { BaseEntity } from '@juicyllama/core'
 import { IsString, IsEnum, MinLength, MaxLength, IsNumber } from 'class-validator'
-import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
 import { Contact } from '../contacts.entity'
 import { ContactAddressType } from './address.enums'
-import { BaseEntity } from '@juicyllama/core'
 
-@UseInterceptors(ClassSerializerInterceptor)
 @Entity('crm_contacts_addresses')
 export class ContactAddress extends BaseEntity {
 	@PrimaryGeneratedColumn()

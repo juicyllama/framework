@@ -1,4 +1,5 @@
-import { Body, Controller, forwardRef, Inject, Param, Patch, Post, Req, UseGuards } from '@nestjs/common'
+import { AuthService, JwtAuthGuard, AccountId, AuthenticatedRequest } from '@juicyllama/core'
+import { Body, Controller, Param, Patch, Post, Req, UseGuards, forwardRef, Inject } from '@nestjs/common'
 import {
 	ApiBearerAuth,
 	ApiForbiddenResponse,
@@ -9,11 +10,10 @@ import {
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
-import { AuthService, JwtAuthGuard, AccountId, AuthenticatedRequest } from '@juicyllama/core'
-import { AiService } from './ai.service'
-import { Ai } from './ai.entity'
-import { AiChatRequest } from './ai.dto'
 import { DeepPartial } from 'typeorm'
+import { AiChatRequest } from './ai.dto'
+import { Ai } from './ai.entity'
+import { AiService } from './ai.service'
 
 @ApiTags('Ai')
 @Controller('ai')

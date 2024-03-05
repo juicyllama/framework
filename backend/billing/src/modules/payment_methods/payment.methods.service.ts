@@ -1,11 +1,11 @@
-import { BadRequestException, forwardRef, Inject, Injectable, NotImplementedException } from '@nestjs/common'
-import { LazyModuleLoader } from '@nestjs/core'
-import { Env, Logger, Modules, SupportedCurrencies, File, Strings } from '@juicyllama/utils'
 import { Account, AccountService, AppIntegrationName, BaseService, BeaconService, Query } from '@juicyllama/core'
+import { Env, Logger, Modules, SupportedCurrencies, File, Strings } from '@juicyllama/utils'
+import { BadRequestException, Inject, Injectable, NotImplementedException, forwardRef } from '@nestjs/common'
+import { LazyModuleLoader } from '@nestjs/core'
+import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
 import { PaymentMethod } from './payment.methods.entity'
 import { PaymentMethodStatus, PaymentMethodType } from './payment.methods.enums'
-import { InjectRepository } from '@nestjs/typeorm'
 import {
 	PaymentMethodBankTransferDetails,
 	PaymentMethodBankTransferEURDetails,
@@ -327,7 +327,7 @@ export class PaymentMethodsService extends BaseService<T> {
 		if (!process.env.BEACON_BILLING_PAYMENT_METHOD_EXPIRY) {
 			return
 		}
-		
+
 		if (!payment_method.account?.finance_email) {
 			const user = await this.accountService.getOwner(payment_method.account_id)
 			payment_method.account.finance_email = user.email

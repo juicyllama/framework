@@ -1,6 +1,6 @@
-import { SupportedCurrencies } from "@juicyllama/vue-utils"
-import { Account } from "../account"
-import { AppStoreIntegrationName } from "../appstore"
+import { SupportedCurrencies } from '@juicyllama/vue-utils'
+import { Account } from '../account'
+import { AppStoreIntegrationName } from '../appstore'
 
 export enum PaymentMethodStatus {
 	pending = 'pending',

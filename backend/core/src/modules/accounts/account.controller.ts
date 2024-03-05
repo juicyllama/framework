@@ -1,9 +1,9 @@
+import { StatsMethods, StatsResponseDto, Strings, SuccessResponseDto } from '@juicyllama/utils'
 import {
 	BadRequestException,
 	Body,
 	Controller,
 	Delete,
-	forwardRef,
 	Inject,
 	Param,
 	Patch,
@@ -11,10 +11,9 @@ import {
 	Query,
 	Req,
 	UploadedFile,
+	forwardRef,
 } from '@nestjs/common'
-import { StatsMethods, StatsResponseDto, Strings, SuccessResponseDto } from '@juicyllama/utils'
-import { AuthService } from '../auth/auth.service'
-import { AccountService } from './account.service'
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { AccountId } from '../../decorators/AccountId.decorator'
 import {
 	CreateDecorator,
@@ -24,16 +23,17 @@ import {
 	UpdateDecorator,
 	UploadImageDecorator,
 } from '../../decorators/crud.decorator'
+import { UserAuth } from '../../decorators/UserAuth.decorator'
+import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
+import { Query as TQuery } from '../../utils/typeorm/Query'
+import { TypeOrm } from '../../utils/typeorm/TypeOrm'
+import { AuthService } from '../auth/auth.service'
+import { UserRole } from '../users/users.enums'
+import { UsersService } from '../users/users.service'
 import { OnboardAccountDto, OnboardAdditionalAccountDto, SuccessAccountDto, UpdateAccountDto } from './account.dto'
 import { Account } from './account.entity'
 import { AccountOrderBy, AccountRelations, AccountSelect } from './account.enums'
-import { TypeOrm } from '../../utils/typeorm/TypeOrm'
-import { Query as TQuery } from '../../utils/typeorm/Query'
-import { UserAuth } from '../../decorators/UserAuth.decorator'
-import { UserRole } from '../users/users.enums'
-import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
-import { UsersService } from '../users/users.service'
-import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
+import { AccountService } from './account.service'
 
 const E = Account
 type T = Account

@@ -8,12 +8,10 @@ import { accountStore } from '../index'
 export async function askAi(question: string, q?: QVueGlobals): Promise<Ai> {
 	instance.defaults.headers.common['account-id'] = accountStore.selected_account?.account_id
 	try {
-		
-			const response = await instance.post(`ai/ask`, {
-				question: question,
-			})
-			return response.data
-		
+		const response = await instance.post(`ai/ask`, {
+			question: question,
+		})
+		return response.data
 	} catch (e: any) {
 		logger({ severity: LogSeverity.ERROR, message: e.message(), q: q })
 	}

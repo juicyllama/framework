@@ -1,8 +1,8 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { BaseService, BeaconService, Query } from '@juicyllama/core'
+import { Injectable, forwardRef, Inject } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { Log } from './logs.entity'
-import { BaseService, BeaconService, Query } from '@juicyllama/core'
 
 export const E = Log
 export type T = Log

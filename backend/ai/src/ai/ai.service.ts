@@ -1,12 +1,12 @@
-import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { AppIntegrationName, Query } from '@juicyllama/core'
 import { Env, Logger, Modules } from '@juicyllama/utils'
+import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Ai } from './ai.entity'
 import { DeepPartial, Repository } from 'typeorm'
-import { AppIntegrationName, Query } from '@juicyllama/core'
-import { AiSuccessType } from './ai.enums'
 import { AiChatRequest } from './ai.dto'
+import { Ai } from './ai.entity'
+import { AiSuccessType } from './ai.enums'
 import * as mock from './ai.mock.json'
 
 @Injectable()
@@ -14,7 +14,7 @@ export class AiService {
 	constructor(
 		@InjectRepository(Ai) private readonly repository: Repository<Ai>,
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => Query)) private readonly db_query: Query<Ai>,
+		@Inject(forwardRef(() => Query)) private readonly query: Query<Ai>,
 		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
 	) {}
 
@@ -31,7 +31,7 @@ export class AiService {
 		let ai: Ai | undefined = undefined
 
 		if (options.use_local_cache) {
-			ai = await this.db_query.findOne(this.repository, {
+			ai = await this.query.findOne(this.repository, {
 				where: {
 					request: options.question?.toLowerCase(),
 					is_general: true,
@@ -47,7 +47,7 @@ export class AiService {
 		let service: any
 
 		if (!ai) {
-			ai = await this.db_query.create(this.repository, {
+			ai = await this.query.create(this.repository, {
 				request: options.question?.toLowerCase(),
 				is_general: true,
 				is_sql: false,
@@ -100,7 +100,7 @@ export class AiService {
 				ai.error_message = error
 			}
 
-			return await this.db_query.update(this.repository, ai)
+			return await this.query.update(this.repository, ai)
 		}
 		throw new Error('No AI module installed, please contact your system admin.')
 	}
@@ -279,13 +279,13 @@ export class AiService {
 		if (!data.ai_id) {
 			throw new Error('ai_id is required')
 		}
-		const lana = await this.db_query.findOneById(this.repository, data.ai_id)
+		const lana = await this.query.findOneById(this.repository, data.ai_id)
 
 		if (!lana) {
 			throw new NotFoundException(`Ai #${data.ai_id} not found`)
 		}
 
-		return await this.db_query.update(this.repository, {
+		return await this.query.update(this.repository, {
 			ai_id: lana.ai_id,
 			...data,
 		})

@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy } from 'passport-linkedin-oauth2'
 import { UsersService } from '../../users/users.service'
@@ -7,7 +7,7 @@ export const enableLinkedinStrategy = process.env.LINKEDIN_KEY && process.env.LI
 
 @Injectable()
 export class LinkedinStrategy extends PassportStrategy(Strategy, 'linkedin') {
-	constructor(@Inject(forwardRef(() => UsersService)) private usersService: UsersService) {
+	constructor(private usersService: UsersService) {
 		if (!enableLinkedinStrategy) throw new Error('Linkedin is not enabled')
 		super({
 			clientID: process.env.LINKEDIN_KEY,

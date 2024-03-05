@@ -1,10 +1,10 @@
+import { Api, Env, File, Logger } from '@juicyllama/utils'
 import { Test, TestingModule } from '@nestjs/testing'
-import { Env, File } from '@juicyllama/utils'
-import { WordpressMediaService } from './wordpress.media.service'
-import { WordpressMediaModule } from './wordpress.media.module'
-import { forwardRef } from '@nestjs/common'
 // @ts-ignore
 import * as mock from './mock.json'
+import { WordpressMediaUrlToken } from './wordpress.media.constants'
+import { WordpressMediaService } from './wordpress.media.service'
+
 describe('WordPress Media Service', () => {
 	let moduleRef: TestingModule
 
@@ -16,7 +16,26 @@ describe('WordPress Media Service', () => {
 		}
 
 		moduleRef = await Test.createTestingModule({
-			imports: [forwardRef(() => WordpressMediaModule)],
+			providers: [
+				WordpressMediaService,
+				{
+					provide: Api,
+					useValue: {
+						post: jest.fn(),
+					},
+				},
+				{
+					provide: Logger,
+					useValue: {
+						debug: jest.fn(),
+						error: jest.fn(),
+					},
+				},
+				{
+					provide: WordpressMediaUrlToken,
+					useValue: '',
+				},
+			],
 		}).compile()
 
 		wordpressMediaService = moduleRef.get<WordpressMediaService>(WordpressMediaService)
