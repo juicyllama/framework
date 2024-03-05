@@ -48,9 +48,9 @@ jobs:
                         apps/xero-cc
 
             -   name: 'Install Node.js'
-                uses: actions/setup-node@v3
+                uses: actions/setup-node@v4
                 with:
-                    node-version: 18.18.2
+                    node-version: 19.0.0
 
             -   name: 'FontAwesome Auth'
                 run: echo -e "shamefully-hoist=true\\n@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
