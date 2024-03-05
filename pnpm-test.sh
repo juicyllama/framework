@@ -31,6 +31,7 @@ directories=(
     "apps/openai"
     "apps/pexels"
     "apps/scrapingbee"
+    "apps/semrush"
     "apps/shopify"
     "apps/slack"
     "apps/spyfu"

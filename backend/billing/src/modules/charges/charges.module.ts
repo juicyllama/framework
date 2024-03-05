@@ -1,6 +1,6 @@
 import { AuthModule, FxModule, Query } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
-import { forwardRef, Module } from '@nestjs/common'
+import { Module, forwardRef } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Invoice } from '../..'
 import { ChargesController } from './charges.controller'
