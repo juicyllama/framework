@@ -54,14 +54,14 @@ export class BeaconPushService {
 		if (Modules.pusher.isInstalled) {
 			app_integration_name = 'pusher'
 			service = await Modules.pusher.load()
-
-			if (
-				_.isUndefined(this.configService.PUSHER_APP_ID) ||
-				_.isUndefined(this.configService.PUSHER_APP_KEY) ||
-				_.isUndefined(this.configService.PUSHER_APP_SECRET) ||
-				_.isUndefined(this.configService.PUSHER_APP_CLUSTER) ||
-				_.isUndefined(this.configService.PUSHER_CHANNEL)
-			) {
+			const configKeys: (keyof BeaconConfigDto)[] = [
+				'PUSHER_APP_ID',
+				'PUSHER_APP_KEY',
+				'PUSHER_APP_SECRET',
+				'PUSHER_APP_CLUSTER',
+				'PUSHER_CHANNEL',
+			]
+			if (configKeys.find(key => _.isUndefined(this.configService[key]))) {
 				this.logger.warn(`[${domain}] Missing pusher config details`, {
 					config: {
 						app_id: this.configService.PUSHER_APP_ID,
@@ -89,9 +89,9 @@ export class BeaconPushService {
 			)
 
 			this.logger.log(
-				`[${domain}] Message Sent! Channel = ${this.configService.PUSHER_CHANNEL} | event = ${message.communication.event} | data = ${JSON.stringify(
-					message.options?.skipJsonSave ? null : message.json ?? null,
-				)}`,
+				`[${domain}] Message Sent! Channel = ${this.configService.PUSHER_CHANNEL} | event = ${
+					message.communication.event
+				} | data = ${JSON.stringify(message.options?.skipJsonSave ? null : message.json ?? null)}`,
 			)
 
 			await this.query.update(this.repository, {

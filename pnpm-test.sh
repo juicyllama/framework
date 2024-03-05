@@ -22,6 +22,7 @@ directories=(
     "backend/ecommerce"
     
     ### APPS ###
+    "apps/ahrefs"
     "apps/apilayer"
     "apps/aws"
     "apps/everflow"

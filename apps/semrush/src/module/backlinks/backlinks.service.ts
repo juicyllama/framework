@@ -16,7 +16,6 @@ export class BacklinksService {
 		@Inject(forwardRef(() => Api)) private readonly api: Api,
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@InjectConfig(SemrushConfigDto) private readonly configService: SemrushConfigDto,
-
 	) {
 		this.key = this.configService.SEMRUSH_API_KEY
 	}
