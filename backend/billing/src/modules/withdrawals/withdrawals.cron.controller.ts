@@ -9,7 +9,9 @@ import { WithdrawalsCronService } from './withdrawals.crons.service'
 @Controller('billing/withdrawals/crons')
 export class WithdrawalsCronsController {
 	constructor(
-		@Inject(forwardRef(() => WithdrawalsCronService)) private readonly withdrawalsCronService: WithdrawalsCronService) {}
+		@Inject(forwardRef(() => WithdrawalsCronService))
+		private readonly withdrawalsCronService: WithdrawalsCronService,
+	) {}
 
 	@Post('settle')
 	async settle_withdrawals() {

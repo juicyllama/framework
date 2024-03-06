@@ -8,10 +8,10 @@ import { PaymentMethodsService } from './payment.methods.service'
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([PaymentMethod]), 
-		forwardRef(() => AuthModule), 
-		forwardRef(() => AccountModule), 
-		forwardRef(() => BeaconModule)
+		TypeOrmModule.forFeature([PaymentMethod]),
+		forwardRef(() => AuthModule),
+		forwardRef(() => AccountModule),
+		forwardRef(() => BeaconModule),
 	],
 	controllers: [PaymentMethodsController],
 	providers: [PaymentMethodsService, Logger, Query],

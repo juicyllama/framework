@@ -23,7 +23,7 @@ import {
 	Query,
 	Req,
 	Res,
-	forwardRef
+	forwardRef,
 } from '@nestjs/common'
 import { ApiHideProperty, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { PaymentStatus } from '../payments/payments.enums'

@@ -8,8 +8,7 @@ import { WalletCronService } from './wallet.crons.service'
 @ApiExcludeController()
 @Controller('/billing/wallet/crons')
 export class WalletCronsController {
-	constructor(
-		@Inject(forwardRef(() => WalletCronService)) private readonly walletCronService: WalletCronService) {}
+	constructor(@Inject(forwardRef(() => WalletCronService)) private readonly walletCronService: WalletCronService) {}
 
 	@Post('settle')
 	async settle_invoice() {
