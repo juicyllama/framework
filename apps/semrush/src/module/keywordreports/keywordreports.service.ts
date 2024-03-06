@@ -1,12 +1,11 @@
-import { Injectable, Inject, forwardRef } from '@nestjs/common'
-import { Api, Logger } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
-import { ENDPOINT } from '../../utils/constants'
-import { parseTextData } from '../../utils/textToObj'
-import querystring from 'querystring'
-import { KeywordDifficultySearchParams } from '../../utils/intefaces'
-import { SemrushConfigDto } from '../../configs/semrush.config.dto'
 import { InjectConfig } from '@juicyllama/core'
+import { Api, Logger } from '@juicyllama/utils'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
+import querystring from 'querystring'
+import { SemrushConfigDto } from '../../configs/semrush.config.dto'
+import { ENDPOINT } from '../../utils/constants'
+import { KeywordDifficultySearchParams } from '../../utils/intefaces'
+import { parseTextData } from '../../utils/textToObj'
 
 @Injectable()
 export class KeywordReportsService {

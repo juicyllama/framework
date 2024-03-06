@@ -1,12 +1,11 @@
-import { Injectable, Inject, forwardRef } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
-import { Api, Logger } from '@juicyllama/utils'
-import { ENDPOINT } from '../../utils/constants'
-import { parseTextData } from '../../utils/textToObj'
-import querystring from 'querystring'
-import { AuthorityScoreParams, BacklinksOverviewParams } from '../../utils/intefaces'
-import { SemrushConfigDto } from '../../configs/semrush.config.dto'
 import { InjectConfig } from '@juicyllama/core'
+import { Api, Logger } from '@juicyllama/utils'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
+import querystring from 'querystring'
+import { SemrushConfigDto } from '../../configs/semrush.config.dto'
+import { ENDPOINT } from '../../utils/constants'
+import { AuthorityScoreParams, BacklinksOverviewParams } from '../../utils/intefaces'
+import { parseTextData } from '../../utils/textToObj'
 
 @Injectable()
 export class BacklinksService {
