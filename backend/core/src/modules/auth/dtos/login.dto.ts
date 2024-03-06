@@ -1,6 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator'
 
+export class LoginResponseDto {
+	access_token: string
+
+	constructor(token: string) {
+		this.access_token = token
+	}
+}
+
 export class LoginRequestDto {
 	@IsEmail()
 	@IsString()

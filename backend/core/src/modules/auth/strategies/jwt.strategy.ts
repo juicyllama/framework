@@ -11,12 +11,21 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 			jwtFromRequest: ExtractJwt.fromExtractors([
 				(request: Request) => {
 					let token = null
-					if (request && request.headers.cookie) {
-						// Manually parse the Cookie header
-						token = request.headers.cookie
-							.split(';')
-							.find(cookie => cookie.trim().startsWith(ACCESS_TOKEN_COOKIE_NAME + '='))
-							?.split('=')[1]
+					if (request) {
+						if (request.headers.cookie) {
+							// Manually parse the Cookie header
+							token = request.headers.cookie
+								.split(';')
+								.find(cookie => cookie.trim().startsWith(ACCESS_TOKEN_COOKIE_NAME + '='))
+								?.split('=')[1]
+						}
+						if (!token && request.headers.authorization) {
+							// Check for Bearer token in Authorization header
+							const bearerToken = request.headers.authorization.split(' ')[1]
+							if (bearerToken) {
+								token = bearerToken
+							}
+						}
 					}
 					return token || null
 				},

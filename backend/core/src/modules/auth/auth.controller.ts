@@ -13,7 +13,7 @@ import {
 	REFRESH_TOKEN_COOKIE_NAME,
 } from './auth.constants'
 import { AuthService } from './auth.service'
-import { ValidateCodeDto } from './dtos/login.dto'
+import { LoginResponseDto, ValidateCodeDto } from './dtos/login.dto'
 import { CompletePasswordResetDto, InitiateResetPasswordDto } from './dtos/password.reset.dto'
 import { InitiatePasswordlessLoginDto } from './dtos/passwordless.login.dto'
 import { GoogleOauthGuard } from './guards/google-oauth.guard'
@@ -37,15 +37,18 @@ export class AuthController {
 	@ApiQuery({ name: 'password', required: true, type: String, example: 'S7r0#gP@$s' })
 	@ApiOkResponse({
 		description: 'OK',
-		type: SuccessResponseDto,
+		type: LoginResponseDto,
 	})
 	@UseGuards(LocalAuthGuard)
 	@Post('login')
-	async login(@Req() req: AuthenticatedRequest, @Res({ passthrough: true }) res: Response) {
+	async login(
+		@Req() req: AuthenticatedRequest,
+		@Res({ passthrough: true }) res: Response,
+	): Promise<LoginResponseDto> {
 		const accessToken = await this.authService.login(req.user)
 		const refreshToken = await this.authService.createRefreshToken(req.user)
 		setAccessAndRefreshTokenCookies(res, accessToken, refreshToken)
-		return { success: true }
+		return new LoginResponseDto(accessToken)
 	}
 
 	@ApiOperation({
@@ -55,10 +58,13 @@ export class AuthController {
 	})
 	@ApiOkResponse({
 		description: 'OK',
-		type: SuccessResponseDto,
+		type: LoginResponseDto,
 	})
 	@Post('refresh')
-	async refresh(@Req() req: AuthenticatedRequest, @Res({ passthrough: true }) res: Response) {
+	async refresh(
+		@Req() req: AuthenticatedRequest,
+		@Res({ passthrough: true }) res: Response,
+	): Promise<LoginResponseDto> {
 		const cookies = req.headers.cookie || ''
 		const oldRefreshToken = cookies
 			.split(';')
@@ -75,7 +81,7 @@ export class AuthController {
 			user_id: loginPayload.user_id,
 			oldRefreshToken: '...' + oldRefreshToken.substring(-10),
 		})
-		return { success: true }
+		return new LoginResponseDto(newAccessToken)
 	}
 
 	@UserAuth({ skipAccountId: true })
@@ -126,16 +132,16 @@ export class AuthController {
 	})
 	@ApiOkResponse({
 		description: 'OK',
-		type: SuccessResponseDto,
+		type: LoginResponseDto,
 	})
 	@Post('password-reset/complete')
 	async completePasswordReset(
 		@Body() data: CompletePasswordResetDto,
 		@Res({ passthrough: true }) res: Response,
-	): Promise<SuccessResponseDto> {
+	): Promise<LoginResponseDto> {
 		const accessToken = await this.authService.completePasswordReset(data)
 		setAccessAndRefreshTokenCookies(res, accessToken)
-		return { success: true }
+		return new LoginResponseDto(accessToken)
 	}
 
 	@ApiOperation({
@@ -163,16 +169,16 @@ export class AuthController {
 	})
 	@ApiOkResponse({
 		description: 'OK',
-		type: SuccessResponseDto,
+		type: LoginResponseDto,
 	})
 	@Post('passwordless/code')
 	async validateCodeAndLogin(
 		@Body() data: ValidateCodeDto,
 		@Res({ passthrough: true }) res: Response,
-	): Promise<SuccessResponseDto> {
+	): Promise<LoginResponseDto> {
 		const accessToken = await this.authService.validateLoginCodeAndLogin(data)
 		setAccessAndRefreshTokenCookies(res, accessToken)
-		return { success: true }
+		return new LoginResponseDto(accessToken)
 	}
 
 	//todo test this
@@ -191,17 +197,17 @@ export class AuthController {
 	})
 	@ApiOkResponse({
 		description: 'OK',
-		type: SuccessResponseDto,
+		type: LoginResponseDto,
 	})
 	@UseGuards(GoogleOauthGuard)
 	@Get('google/redirect')
 	async googleAuthRedirect(
 		@Req() req: AuthenticatedRequest,
 		@Res({ passthrough: true }) res: Response,
-	): Promise<SuccessResponseDto> {
+	): Promise<LoginResponseDto> {
 		const accessToken = await this.authService.login(req.user)
 		setAccessAndRefreshTokenCookies(res, accessToken)
-		return { success: true }
+		return new LoginResponseDto(accessToken)
 	}
 
 	@ApiOperation({
@@ -218,17 +224,17 @@ export class AuthController {
 	})
 	@ApiOkResponse({
 		description: 'OK',
-		type: SuccessResponseDto,
+		type: LoginResponseDto,
 	})
 	@UseGuards(LinkedinOauthGuard)
 	@Get('linkedin/redirect')
 	async linkedinAuthRedirect(
 		@Req() req: AuthenticatedRequest,
 		@Res({ passthrough: true }) res: Response,
-	): Promise<SuccessResponseDto> {
+	): Promise<LoginResponseDto> {
 		const accessToken = await this.authService.login(req.user)
 		setAccessAndRefreshTokenCookies(res, accessToken)
-		return { success: true }
+		return new LoginResponseDto(accessToken)
 	}
 
 	@ApiHideProperty()

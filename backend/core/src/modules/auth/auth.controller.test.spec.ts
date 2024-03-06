@@ -23,7 +23,7 @@ const new_password = faker.internet.password({
 export function getCookieValueFromHeader(res: any, cookieName: string) {
 	const cookies: Array<string> = castArray(res.headers['set-cookie'])
 	const cookie = cookies.find(cookie => cookie.startsWith(cookieName + '='))
-	return cookie?.split('=')[1]
+	return cookie?.split('=')[1].split(';')[0]
 }
 
 describe('Auth Endpoints', () => {
@@ -44,7 +44,8 @@ describe('Auth Endpoints', () => {
 				})
 				.then(async res => {
 					try {
-						const accessToken = getCookieValueFromHeader(res, ACCESS_TOKEN_COOKIE_NAME)
+						const accessToken = getCookieValueFromHeader(res, ACCESS_TOKEN_COOKIE_NAME) // cookie token
+						expect(res.body.access_token).toBeDefined() // bearer token
 						expect(accessToken).toBeDefined()
 						scaffold.values.owner_access_token = accessToken || ''
 					} catch (e) {
@@ -70,11 +71,32 @@ describe('Auth Endpoints', () => {
 			})
 		})
 
-		it('Account Check', async () => {
+		it('Account Check (cookie)', async () => {
 			await request(scaffold.server)
 				.get(`${url}/account/check`)
 				.set('Cookie', `${ACCESS_TOKEN_COOKIE_NAME}=${scaffold.values.owner_access_token}`)
 				.set({
+					'account-id': scaffold.values.account.account_id.toString(),
+				})
+				.then(async ({ body }) => {
+					try {
+						expect(body.passed).toBeTruthy()
+					} catch (e) {
+						console.error(body)
+						expect(e).toMatch('error')
+					}
+				})
+				.catch(async e => {
+					console.error(e)
+					expect(e).toMatch('error')
+				})
+		})
+
+		it('Account Check (Bearer)', async () => {
+			await request(scaffold.server)
+				.get(`${url}/account/check`)
+				.set({
+					Authorization: 'Bearer ' + scaffold.values.owner_access_token,
 					'account-id': scaffold.values.account.account_id.toString(),
 				})
 				.then(async ({ body }) => {
@@ -148,8 +170,9 @@ describe('Auth Endpoints', () => {
 				})
 				.then(async res => {
 					try {
-						const accessToken = getCookieValueFromHeader(res, ACCESS_TOKEN_COOKIE_NAME)
+						const accessToken = getCookieValueFromHeader(res, ACCESS_TOKEN_COOKIE_NAME) // cookie token
 						expect(accessToken).toBeTruthy()
+						expect(res.body.access_token).toBeTruthy() // bearer token
 					} catch (e) {
 						console.error(res.headers)
 						expect(e).toMatch('error')
@@ -194,10 +217,11 @@ describe('Auth Endpoints', () => {
 				})
 				.then(async res => {
 					try {
-						const accessToken = getCookieValueFromHeader(res, ACCESS_TOKEN_COOKIE_NAME)
-						expect(accessToken).toBeTruthy()
+						const accessToken = getCookieValueFromHeader(res, ACCESS_TOKEN_COOKIE_NAME) // cookie token
+						expect(res.body.access_token).toBeTruthy()
+						expect(accessToken).toBeTruthy() // bearer token
 					} catch (e) {
-						console.error(res.headers)
+						console.error(res.body)
 						expect(e).toMatch('error')
 					}
 				})
