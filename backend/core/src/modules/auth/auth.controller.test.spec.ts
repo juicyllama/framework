@@ -5,12 +5,12 @@ import { METHOD } from '../../types'
 import { PRIMARY_KEY } from '../users/users.constants'
 import { AuthModule } from './auth.module'
 import { AuthService } from './auth.service'
-import { Role } from './role.entity'
 import { ACCESS_TOKEN_COOKIE_NAME } from './auth.constants'
 import { castArray } from 'lodash'
+import { UserAccount } from './user-account.entity'
 
-const E = Role
-type T = Role
+const E = UserAccount
+type T = UserAccount
 const MODULE = AuthModule
 const SERVICE = AuthService
 const url = '/auth'

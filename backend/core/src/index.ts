@@ -2,7 +2,7 @@
 export { FxRate } from './modules/fx/fx.entity'
 export { Tag } from './modules/tags/tags.entity'
 export { Setting } from './modules/settings/settings.entity'
-export { Role } from './modules/auth/role.entity'
+export { UserAccount } from './modules/auth/user-account.entity'
 export { User } from './modules/users/users.entity'
 export { Account } from './modules/accounts/account.entity'
 export { BeaconEmail } from './modules/beacon/email/email.entity'

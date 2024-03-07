@@ -16,7 +16,7 @@ import { SettingsModule } from '../settings/settings.module'
 import { UsersModule } from '../users/users.module'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
-import { Role } from './role.entity'
+import { UserAccount } from './user-account.entity'
 import { AzureADStrategy, enableAzureADStrategy } from './strategies/azure.strategy'
 import { BasicStrategy } from './strategies/basic.strategy'
 import { CronStrategy } from './strategies/cron.strategy'
@@ -47,7 +47,7 @@ if (enableLinkedinStrategy) {
 		CacheModule.registerAsync(cacheConfig()),
 		JwtModule.register(jwtConfig()),
 		TypeOrmModule.forRoot(databaseConfig()),
-		TypeOrmModule.forFeature([Role]),
+		TypeOrmModule.forFeature([UserAccount]),
 		forwardRef(() => AccountModule),
 		forwardRef(() => BeaconModule),
 		forwardRef(() => PassportModule),

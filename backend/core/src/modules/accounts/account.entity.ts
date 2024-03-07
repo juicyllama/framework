@@ -13,8 +13,10 @@ import {
 } from 'class-validator'
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, BeforeUpdate } from 'typeorm'
 import { BaseEntity } from '../../helpers/baseEntity'
-import { Role } from '../auth/role.entity'
 import { Tag } from '../tags/tags.entity'
+import { User } from '../users/users.entity'
+import { UserAccount } from '../auth/user-account.entity'
+
 @Entity('accounts')
 export class Account extends BaseEntity {
 	@PrimaryGeneratedColumn()
@@ -95,8 +97,18 @@ export class Account extends BaseEntity {
 	@IsArray()
 	tags?: Tag[]
 
-	@OneToMany(() => Role, role => role.account, { cascade: true })
-	roles?: Role[]
+	@ManyToMany(() => User, user => user.user_id)
+	@JoinTable({
+		name: 'users_accounts',
+		joinColumn: { name: 'account_id', referencedColumnName: 'account_id' },
+		inverseJoinColumn: { name: 'user_id', referencedColumnName: 'user_id' },
+	})
+	@IsArray()
+	users!: User[]
+
+	@OneToMany(() => UserAccount, userAccount => userAccount.account)
+	@IsArray()
+	user_accounts!: UserAccount[]
 
 	@BeforeUpdate()
 	async updateOnboardingDates(): Promise<void> {
