@@ -18,7 +18,7 @@ export async function loginUser(payload: UserLogin, q: QVueGlobals, router?: Rou
 			default:
 				throw new Error(response.data.error.message)
 		}
-	} else if (response.data.success) {
+	} else if (response.data.access_token) {
 		return true
 	} else {
 		throw new Error('Unknown error')
