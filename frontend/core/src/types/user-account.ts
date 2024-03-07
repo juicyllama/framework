@@ -7,7 +7,7 @@ export enum UserRole {
 	ADMIN = 'ADMIN',
 	OWNER = 'OWNER',
 }
-export interface Role {
+export interface UserAccount {
 	readonly role_id: number
 	readonly user: User
 	readonly user_id: number

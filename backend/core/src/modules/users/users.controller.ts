@@ -180,6 +180,10 @@ export class UsersController {
 		}
 
 		delete user.password
+		if (data.role) {
+			await this.authService.assignRole(user, await this.accountService.findById(account_id), data.role)
+			delete data.role
+		}
 		return await this.service.update({
 			...user,
 			...data,
