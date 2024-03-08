@@ -15,7 +15,6 @@
   import { onMounted, ref } from 'vue'
 
   const props = defineProps({
-	type: String,
 	options: Object,
 	data: Object
   })
@@ -29,7 +28,7 @@
 	try {
 	  const response = await fetch(url)
 	  dataLoadedFromAPI.value = await response.json()
-	  emit('loaded')
+	  emit('loaded', dataLoadedFromAPI.value)
 	} catch (error) {
 	  isError.value = true
 	} finally {
@@ -45,7 +44,7 @@
 
   onMounted(() => {
 
-	if(props.options?.loadSync && props.options?.url){
+	if(props.options?.url){
 		loadChart(props.options.url)
 	  return
 	}
