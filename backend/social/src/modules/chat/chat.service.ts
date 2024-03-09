@@ -199,7 +199,21 @@ export class ChatService extends BaseService<T> {
 				},
 			},
 		})
-		return chats
+
+		// filter chats to find the chat with the only same users
+		let matched_chats: Chat[] = []
+
+		for (const chat of chats) {
+			if (!chat.users) continue
+
+			const chat_users = chat.users.map(user => user.user_id)
+
+			if (isEqual(user_ids.sort(), chat_users.sort())) {
+				matched_chats.push(chat)
+			}
+		}
+
+		return matched_chats
 	}
 
 	async getUsers(chat_id: number): Promise<User[]> {
