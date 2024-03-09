@@ -3,7 +3,6 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { OpenaiService } from './openai.service'
 import OpenAI from 'openai'
 import { OpenAIClientToken } from './openai.constants'
-import { ChatCompletion } from 'openai/resources'
 
 describe('OpenAI', () => {
 	let moduleRef: TestingModule
@@ -65,7 +64,7 @@ describe('OpenAI', () => {
 				object: 'chat.completion',
 			})
 			try {
-				const result = <ChatCompletion>await openaiService.ask({
+				const result = <any>await openaiService.ask({
 					messages: [{ role: 'user', content: 'Say this is a test' }],
 				})
 				expect(result).toBeDefined()
