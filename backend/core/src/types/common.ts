@@ -264,3 +264,23 @@ export class BaseResponseDto {
 	})
 	updated_at?: Date
 }
+
+
+export class ErrorResponse {
+	@ApiProperty({
+		name: 'error',
+		description: 'The error message',
+		type: 'String',
+		required: true,
+	})
+	error!: string
+
+	@ApiProperty({
+		name: 'status',
+		description: 'The error status code',
+		type: 'Number',
+		required: false
+	})
+	status?: number
+	
+}

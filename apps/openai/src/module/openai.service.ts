@@ -1,4 +1,5 @@
 import { Logger } from '@juicyllama/utils'
+import { ErrorResponse } from '@juicyllama/core'
 import { Injectable } from '@nestjs/common'
 import OpenAI from 'openai'
 import { DeepPartial } from 'typeorm'
@@ -13,7 +14,7 @@ export class OpenaiService {
 
 	async ask(
 		options: DeepPartial<OpenAI.Chat.ChatCompletionCreateParamsNonStreaming>,
-	): Promise<OpenAI.Chat.ChatCompletion> {
+	): Promise<OpenAI.Chat.ChatCompletion | ErrorResponse> {
 		const domain = 'app::openai::ask'
 
 		const params = options as OpenAI.Chat.ChatCompletionCreateParamsNonStreaming
@@ -25,9 +26,10 @@ export class OpenaiService {
 		try {
 			const chatCompletion = (await this.client.chat.completions.create(params)) as OpenAI.Chat.ChatCompletion
 			this.logger.debug(`[${domain}] Response: ${JSON.stringify(chatCompletion, null, 2)}`)
-			return chatCompletion
+			return <OpenAI.Chat.ChatCompletion>chatCompletion
 		} catch (e) {
 			this.logger.error(`[${domain}] Error: ${JSON.stringify(e.message, null, 2)}`, e.response)
+			return <ErrorResponse>{ error: e.message, status: e.response?.status }
 		}
 	}
 

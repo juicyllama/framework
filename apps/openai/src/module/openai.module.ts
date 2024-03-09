@@ -5,7 +5,6 @@ import OpenAI from 'openai'
 import { OpenAiConfigDto } from '../configs/openai.config.dto'
 import { OpenaiService } from './openai.service'
 import { OpenAIClientToken } from './openai.constants'
-//import { OpenaiSqlService } from './sql/openai.sql.service'
 
 @Module({
 	imports: [ConfigValidationModule.register(OpenAiConfigDto)],
@@ -17,7 +16,7 @@ import { OpenAIClientToken } from './openai.constants'
 			provide: OpenAIClientToken,
 			inject: [getConfigToken(OpenAiConfigDto)],
 			useFactory: (config: OpenAiConfigDto) => {
-				return new OpenAI({ apiKey: config.OPENAI_API_KEY })
+				return new OpenAI({ apiKey: config.OPENAI_API_KEY, organization: config.OPENAI_ORG ?? undefined })
 			},
 		},
 	],

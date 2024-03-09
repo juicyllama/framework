@@ -1,4 +1,4 @@
-import { AppIntegrationName, Query } from '@juicyllama/core'
+import { AppIntegrationName, ErrorResponse, Query } from '@juicyllama/core'
 import { Env, Logger, Modules } from '@juicyllama/utils'
 import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
@@ -76,9 +76,15 @@ export class AiService {
 				}
 
 				//general AI question
-				const result = await service.ask(options.openaiOptions)
+				let result = await service.ask(options.openaiOptions)
 
-				if (result?.created) {
+				if(result?.error) {
+					result = <ErrorResponse>result
+					ai.success = AiSuccessType.ERROR
+					ai.error_message = result.error
+					this.logger.error(`[${domain}] ${result.status ? result.status + ': ' : ''}${result.error}`, result)
+				}
+				else if (result?.created) {
 					ai.response = result.choices[0].message.content
 					ai.success = AiSuccessType.SUCCESS
 				} else {
