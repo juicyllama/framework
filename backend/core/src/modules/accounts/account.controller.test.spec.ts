@@ -6,6 +6,8 @@ import { User } from '../users/users.entity'
 import { Account } from './account.entity'
 import { AccountModule } from './account.module'
 import { AccountService } from './account.service'
+import { ACCESS_TOKEN_COOKIE_NAME } from '../auth/auth.constants'
+import { getCookieValueFromHeader } from '../auth/auth.controller.test.spec'
 
 const E = Account
 type T = Account
@@ -64,12 +66,15 @@ describe(`${NAME} Endpoints`, () => {
 					email: owner.email,
 					password: password,
 				})
-				.then(async ({ body }) => {
+				.then(async res => {
 					try {
-						expect(body.access_token).toBeDefined()
-						owner_access_token = body.access_token
+						const accessToken = getCookieValueFromHeader(res, ACCESS_TOKEN_COOKIE_NAME)
+						if (!accessToken) {
+							throw new Error('No access token found')
+						}
+						owner_access_token = accessToken
 					} catch (e) {
-						console.error(body)
+						console.error(res.header)
 						expect(e).toMatch('error')
 					}
 				})
@@ -164,9 +169,9 @@ describe(`${NAME} Endpoints`, () => {
 			await request(scaffold.server)
 				.post(url + '/additional')
 				.set({
-					Authorization: 'Bearer ' + owner_access_token,
 					'account-id': account.account_id.toString(),
 				})
+				.set('Cookie', `${ACCESS_TOKEN_COOKIE_NAME}=${owner_access_token}`)
 				.send({ account_name: faker.word.sample() })
 				.then(async ({ body }) => {
 					try {

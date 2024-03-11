@@ -5,6 +5,7 @@ import request from 'supertest'
 import { Account } from '../modules/accounts/account.entity'
 import { METHOD } from '../types'
 import { ScaffoldDto } from './scaffold'
+import { ACCESS_TOKEN_COOKIE_NAME } from '../modules/auth/auth.constants'
 
 //todo is there a way to pass the request type dynamically to merge some of these switch statements?
 
@@ -29,12 +30,15 @@ export async function TestEndpoint<T extends ObjectLiteral>(options: {
 	let E: T | undefined = undefined
 
 	const headers = {
-		Authorization: 'Bearer ' + (options.access_token ?? options.scaffold.values.owner_access_token),
 		'account-id': options.account
 			? options.account.account_id.toString()
 			: options.scaffold.values.account.account_id.toString(),
 		...options.headers,
 	}
+
+	const accessTokenCookie = `${ACCESS_TOKEN_COOKIE_NAME}=${
+		options.access_token ?? options.scaffold.values.owner_access_token
+	}`
 
 	switch (options.type) {
 		case METHOD.CREATE:
@@ -43,6 +47,7 @@ export async function TestEndpoint<T extends ObjectLiteral>(options: {
 			const requestBuilder = request(options.scaffold.server)
 				.post(url)
 				.set(headers)
+				.set('Cookie', accessTokenCookie)
 				.send(<any>options.data)
 			if (options.attach) {
 				requestBuilder.attach(options.attach.field, options.attach.file)
@@ -76,6 +81,7 @@ export async function TestEndpoint<T extends ObjectLiteral>(options: {
 		case METHOD.PATCH:
 			await request(options.scaffold.server)
 				.patch(`${options.url}?${querystring.stringify(options.queryParams)}`)
+				.set('Cookie', accessTokenCookie)
 				.set(headers)
 				.send(<any>options.data)
 				.then(async ({ body }) => {
@@ -104,6 +110,7 @@ export async function TestEndpoint<T extends ObjectLiteral>(options: {
 		case METHOD.PUT:
 			await request(options.scaffold.server)
 				.put(`${options.url}?${querystring.stringify(options.queryParams)}`)
+				.set('Cookie', accessTokenCookie)
 				.set(headers)
 				.send(<any>options.data)
 				.then(async ({ body }) => {
@@ -132,6 +139,7 @@ export async function TestEndpoint<T extends ObjectLiteral>(options: {
 		case METHOD.GET:
 			await request(options.scaffold.server)
 				.get(`${options.url}?${querystring.stringify(options.queryParams)}`)
+				.set('Cookie', accessTokenCookie)
 				.set(headers)
 				.then(async ({ body }) => {
 					try {
@@ -158,6 +166,7 @@ export async function TestEndpoint<T extends ObjectLiteral>(options: {
 		case METHOD.LIST:
 			await request(options.scaffold.server)
 				.get(`${options.url}?${querystring.stringify(options.queryParams)}`)
+				.set('Cookie', accessTokenCookie)
 				.set(headers)
 				.then(async ({ body }) => {
 					try {
@@ -185,6 +194,7 @@ export async function TestEndpoint<T extends ObjectLiteral>(options: {
 		case METHOD.COUNT:
 			await request(options.scaffold.server)
 				.get(`${options.url}/stats?method=${StatsMethods.COUNT}`)
+				.set('Cookie', accessTokenCookie)
 				.set(headers)
 				.then(async ({ body }) => {
 					try {
@@ -211,6 +221,7 @@ export async function TestEndpoint<T extends ObjectLiteral>(options: {
 			const chartsUrl = `${options.url}/charts?${querystring.stringify(options.queryParams)}`
 			await request(options.scaffold.server)
 				.get(chartsUrl)
+				.set('Cookie', accessTokenCookie)
 				.set(headers)
 				.then(async ({ body }) => {
 					try {
@@ -236,6 +247,7 @@ export async function TestEndpoint<T extends ObjectLiteral>(options: {
 		case METHOD.DELETE:
 			await request(options.scaffold.server)
 				.delete(`${options.url}?${querystring.stringify(options.queryParams)}`)
+				.set('Cookie', accessTokenCookie)
 				.set(headers)
 				.then(async ({ body }) => {
 					try {
