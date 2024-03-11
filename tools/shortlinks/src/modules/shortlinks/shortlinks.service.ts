@@ -1,3 +1,5 @@
+import { Account, BaseService, BeaconService, InjectConfig, Query } from '@juicyllama/core'
+import { Logger } from '@juicyllama/utils'
 import {
 	BadRequestException,
 	forwardRef,
@@ -7,16 +9,14 @@ import {
 	Req,
 	UnprocessableEntityException,
 } from '@nestjs/common'
-import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
-import { ShortenURLDto } from './shortlinks.dto'
-import { nanoid } from 'nanoid'
 import { isURL } from 'class-validator'
-import { Query, BaseService, BeaconService, Account } from '@juicyllama/core'
-import { Logger } from '@juicyllama/utils'
-import { ConfigService } from '@nestjs/config'
-import { Shortlink } from './shortlinks.entity'
+import { nanoid } from 'nanoid'
+import { Repository } from 'typeorm'
+import { ShortlinksConfigDto } from '../../config/shortlinks.config.dto'
 import { ShortlinkClick, ShortlinkClicksService } from './clicks'
+import { ShortenURLDto } from './shortlinks.dto'
+import { Shortlink } from './shortlinks.entity'
 
 type T = Shortlink
 const E = Shortlink
@@ -24,7 +24,7 @@ const E = Shortlink
 @Injectable()
 export class ShortlinksService extends BaseService<T> {
 	constructor(
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		@InjectConfig(ShortlinksConfigDto) private readonly configService: ShortlinksConfigDto,
 		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
 		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
@@ -46,7 +46,7 @@ export class ShortlinksService extends BaseService<T> {
 		}
 
 		const url_code = nanoid(10)
-		const baseURL = this.configService.get<string>('tools_shortlinks.BASE_URL_SHORTLINKS')
+		const baseURL = this.configService.BASE_URL_SHORTLINKS
 
 		try {
 			const url = await this.query.findOneByWhere(this.repository, {

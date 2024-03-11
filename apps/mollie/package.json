@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-mollie",
-    "version": "0.0.46",
+    "version": "0.1.0",
     "description": "Juicyllama NestJs Mollie App",
     "author": {
         "name": "JuicyLlama Studio",

@@ -1,9 +1,7 @@
 import { InstalledAppsModule } from '@juicyllama/app-store'
-import { AuthModule, BeaconModule, cacheConfig, databaseConfig, FxModule, jwtConfig, Query } from '@juicyllama/core'
+import { AuthModule, BeaconModule, FxModule, jwtConfig, Query } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
-import { CacheModule } from '@nestjs/cache-manager'
 import { Module } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { StoresModule } from '../stores/stores.module'
@@ -14,13 +12,6 @@ import { TransactionsService } from './transactions.service'
 
 @Module({
 	imports: [
-		ConfigModule.forRoot({
-			load: [cacheConfig],
-			isGlobal: true,
-			envFilePath: '.env',
-		}),
-		CacheModule.registerAsync(cacheConfig()),
-		TypeOrmModule.forRoot(databaseConfig()),
 		TypeOrmModule.forFeature([Transaction]),
 		JwtModule.register(jwtConfig()),
 		AuthModule,

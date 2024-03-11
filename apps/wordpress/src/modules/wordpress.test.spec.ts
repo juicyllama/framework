@@ -1,10 +1,14 @@
 import { Api, Env } from '@juicyllama/utils'
 import { Test, TestingModule } from '@nestjs/testing'
-import { WordpressConfigDto } from '../config/wordpress.config.dto'
+import { TypeOrmModule } from '@nestjs/typeorm'
 import { getWordpressAxiosConfig } from '../config/wordpress.config'
+import { WordpressConfigDto } from '../config/wordpress.config.dto'
 import { WordpressUsersModule } from './users/wordpress.users.module'
 import { WordpressUsersService } from './users/wordpress.users.service'
 import { WordpressContext } from './wordpress.enums'
+import { ConfigModule } from '@nestjs/config'
+import { databaseConfig } from '@juicyllama/core'
+
 describe('WordPress', () => {
 	let moduleRef: TestingModule
 
@@ -17,7 +21,7 @@ describe('WordPress', () => {
 		}
 
 		moduleRef = await Test.createTestingModule({
-			imports: [WordpressUsersModule],
+			imports: [ConfigModule.forRoot(), TypeOrmModule.forRoot(databaseConfig()), WordpressUsersModule],
 		}).compile()
 
 		wordpressUsersService = moduleRef.get<WordpressUsersService>(WordpressUsersService)

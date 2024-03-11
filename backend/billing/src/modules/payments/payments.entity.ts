@@ -28,7 +28,7 @@ export class Payment extends BaseEntity {
 	@IsNumber()
 	amount!: number
 
-	@Column('varchar', { length: 3 })
+	@Column({ type: 'enum', enum: SupportedCurrencies })
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)
 	@MaxLength(3)
@@ -47,11 +47,11 @@ export class Payment extends BaseEntity {
 	@IsNumber()
 	app_payment_id!: number
 
-	@Column({ default: PaymentType.payment })
+	@Column({ type: 'enum', enum: PaymentType, default: PaymentType.payment })
 	@IsEnum(PaymentType)
 	type?: PaymentType
 
-	@Column({ default: PaymentMethodType.creditcard })
+	@Column({ type: 'enum', enum: PaymentMethodType, default: PaymentMethodType.creditcard })
 	@IsEnum(PaymentMethodType)
 	method?: PaymentMethodType
 

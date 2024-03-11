@@ -32,7 +32,7 @@ export class Wallet extends BaseEntity {
 	@IsNumber()
 	balance!: number
 
-	@Column('varchar', { length: 3 })
+	@Column({ type: 'enum', enum: SupportedCurrencies })
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)
 	@MaxLength(3)

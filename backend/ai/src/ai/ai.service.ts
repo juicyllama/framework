@@ -78,13 +78,12 @@ export class AiService {
 				//general AI question
 				let result = await service.ask(options.openaiOptions)
 
-				if(result?.error) {
+				if (result?.error) {
 					result = <ErrorResponse>result
 					ai.success = AiSuccessType.ERROR
 					ai.error_message = result.error
 					this.logger.error(`[${domain}] ${result.status ? result.status + ': ' : ''}${result.error}`, result)
-				}
-				else if (result?.created) {
+				} else if (result?.created) {
 					ai.response = result.choices[0].message.content
 					ai.success = AiSuccessType.SUCCESS
 				} else {

@@ -19,8 +19,8 @@ export class Log extends BaseEntity {
 	@Column()
 	installed_app_id?: number
 
-	@Column({ default: AppsLogsType.ERROR })
 	@IsEnum(AppsLogsType)
+	@Column({ type: 'enum', enum: AppsLogsType, default: AppsLogsType.ERROR })
 	type?: AppsLogsType
 
 	@Column({ default: null, nullable: true })

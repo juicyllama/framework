@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 import { RmqContext, RmqOptions, Transport } from '@nestjs/microservices'
 
 @Injectable()
 export class RmqService {
-	constructor(private readonly configService: ConfigService) {}
+	constructor() {}
 
 	getOptions(options: { queue: string; noAck?: boolean; prefetchCount?: number }): RmqOptions {
 		if (!options.queue) {
@@ -15,7 +14,7 @@ export class RmqService {
 			options.noAck = false
 		}
 
-		const RABBIT_MQ_URI = this.configService.get<string>('RABBIT_MQ_URI')
+		const RABBIT_MQ_URI = process.env.RABBIT_MQ_URI
 		if (!RABBIT_MQ_URI) {
 			throw new Error('RABBIT_MQ_URI is required')
 		}
@@ -24,7 +23,7 @@ export class RmqService {
 			transport: Transport.RMQ,
 			options: {
 				urls: [RABBIT_MQ_URI],
-				queue: this.configService.get<string>(`RABBIT_MQ_${options.queue}_QUEUE`),
+				queue: process.env[`RABBIT_MQ_${options.queue}_QUEUE`],
 				noAck: options.noAck,
 				persistent: true,
 				socketOptions: {

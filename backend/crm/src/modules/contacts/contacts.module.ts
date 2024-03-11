@@ -2,8 +2,6 @@ import {
 	AccountModule,
 	AuthModule,
 	BeaconModule,
-	cacheConfig,
-	databaseConfig,
 	jwtConfig,
 	Query,
 	StorageModule,
@@ -11,9 +9,7 @@ import {
 	UsersModule,
 } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
-import { CacheModule } from '@nestjs/cache-manager'
 import { Module } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ContactAddress } from './address/address.entity'
@@ -30,13 +26,6 @@ import { ContactSocialService } from './social/social.service'
 
 @Module({
 	imports: [
-		ConfigModule.forRoot({
-			load: [cacheConfig],
-			isGlobal: true,
-			envFilePath: '.env',
-		}),
-		CacheModule.registerAsync(cacheConfig()),
-		TypeOrmModule.forRoot(databaseConfig()),
 		TypeOrmModule.forFeature([Contact, ContactAddress, ContactEmail, ContactPhone, ContactSocial]),
 		JwtModule.register(jwtConfig()),
 		AuthModule,

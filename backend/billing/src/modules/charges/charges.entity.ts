@@ -40,7 +40,7 @@ export class Charge extends BaseEntity {
 	@IsNumber()
 	amount_total!: number // amount including tax
 
-	@Column('varchar', { length: 3 })
+	@Column({ type: 'enum', enum: SupportedCurrencies })
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)
 	@MaxLength(3)

@@ -1,6 +1,6 @@
-import type { Role } from './role'
 import type { AuthFormState } from '../helpers/validators'
 import type { User } from './user'
+import { UserAccount } from './user-account'
 
 export interface CreateAccount extends AuthFormState {
 	account_name?: string
@@ -32,7 +32,7 @@ export interface Account {
 	customer_service_name?: string
 	readonly created_at: Date
 	updated_at: Date
-	roles?: Role[]
+	user_accounts?: UserAccount[]
 	avatar_image_url?: string
 	onboarding_step?: number
 	onboarding_completed?: boolean
