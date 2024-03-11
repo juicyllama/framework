@@ -30,7 +30,8 @@
 		"build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types ",
 		"format": "prettier --write \"src/**/*.ts\"",
 		"lint": "eslint \"**/*.{js,ts,vue}\" --quiet --fix",
-		"test": "vitest --silent --run"
+		"test": "vitest --silent --run",
+		"before:commit": "pnpm run lint && pnpm run format && pnpm run test && pnpm run build"
 	},
 	"dependencies": {
 		"@juicyllama/vue-dev": "workspace:^",

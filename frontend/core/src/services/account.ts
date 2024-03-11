@@ -10,6 +10,8 @@ export const createAccount = async (payload: CreateAccount): Promise<NewAccountD
 		owners_password: payload.password?.value,
 		owners_first_name: payload.first_name,
 		owners_last_name: payload.last_name,
+		currency_code: payload.currency_code,
+		password_reset: payload.password_reset,
 	})
 	return response.data
 }

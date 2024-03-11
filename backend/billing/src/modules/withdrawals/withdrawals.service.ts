@@ -68,6 +68,7 @@ export class WithdrawalsService extends BaseService<T> {
 				withdrawal: withdrawal,
 				user: user,
 				amount: amount,
+				env: process.env,
 			})
 		} else {
 			markdown = `A withdrawal request of ${amount} has been received and will be processed as soon as possible.`

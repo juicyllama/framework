@@ -240,6 +240,7 @@ export class PaymentsService extends BaseService<T> {
 					payment: payment,
 					user: user,
 					amount: amount,
+					env: process.env,
 				})
 			} else {
 				markdown = `A payment of ${amount} has been received via ${Strings.capitalize(
@@ -296,6 +297,7 @@ export class PaymentsService extends BaseService<T> {
 				payment_method: payment_method,
 				user: user,
 				amount: amount_formatted,
+				env: process.env,
 			})
 		} else {
 			markdown = `A payment of ${amount_formatted} has been declined. Please check with your payment provider or update your payment method on file.`

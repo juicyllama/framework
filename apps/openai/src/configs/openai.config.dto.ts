@@ -6,5 +6,5 @@ export class OpenAiConfigDto {
 
 	@IsString()
 	@IsOptional()
-	OPENAI_ORG?: string
+	OPENAI_ORG_ID?: string
 }

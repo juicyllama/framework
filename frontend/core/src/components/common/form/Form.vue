@@ -21,6 +21,7 @@ import { default as InstalledAppButton } from '../../../components/common/form/p
 import countries from '../../../assets/json/countries.json'
 import languages from '../../../assets/json/languages.json'
 import { JLNotice, NoticeType, Strings } from '@juicyllama/vue-utils'
+import PasswordGenerator from './plugins/PasswordGenerator.vue'
 
 const props = defineProps<{
 	options: FormSchema
@@ -29,9 +30,11 @@ const props = defineProps<{
 const emit = defineEmits([
 	'updatedField',
 	'updateFormField',
+	'updatedForm',
 	'submittedForm',
 	'pluginPhoneNumber',
 	'pluginInstalledApp',
+	'pluginPassword',
 ])
 const $q = useQuasar()
 const formData = reactive({})
@@ -52,6 +55,8 @@ function updatedField(value: string) {
 	logger({ severity: LogSeverity.VERBOSE, message: `Updated JLForm field ${value} to ${formData[value]}` })
 	emit('updatedField', formData[value])
 	emit('updateFormField', { [value]: formData[value] })
+	const data = pipeFormData(formData, props.options.fields)
+	emit('updatedForm', data)
 }
 
 async function buttonPressed(button: FormCustomButton) {
@@ -105,6 +110,17 @@ function phoneNumberUpdated(value: any, field: FormField) {
 	updatedField(field.key)
 	emit('pluginPhoneNumber', {
 		integration_name: FormFieldPlugin.TELEPHONE,
+		value: value,
+		field: field,
+		formData: formData,
+	})
+}
+
+function passwordUpdated(value: any, field: FormField) {
+	formData[field.key] = value
+	updatedField(field.key)
+	emit('pluginPassword', {
+		integration_name: FormFieldPlugin.PASSWORD_GENERATOR,
 		value: value,
 		field: field,
 		formData: formData,
@@ -166,6 +182,7 @@ if (props.options.onFormLoad) {
 					v-model="formData[field.key]"
 					:label="!field.settings?.stack_label ? field.label : null"
 					:type="field.type"
+					:autocomplete="field.autocomplete ? field.autocomplete : field.type === FormFieldType.PASSWORD ? 'new-password' : field.type === FormFieldType.EMAIL ? 'email' : 'off'"
 					:name="field.key"
 					:step="field.type === FormFieldType.NUMBER ? 'any' : null"
 					:min="field.type === FormFieldType.NUMBER ? (field.required ? 1 : 0) : null"
@@ -211,6 +228,7 @@ if (props.options.onFormLoad) {
 					v-model="formData[field.key]"
 					:label="!field.settings?.stack_label ? field.label : null"
 					:name="field.key"
+					:autocomplete="field.autocomplete ?? 'off'"
 					type="textarea"
 					:placeholder="field.placeholder"
 					:input-class="`JLInput JLTextarea JLInput${Strings.capitalize(
@@ -252,6 +270,7 @@ if (props.options.onFormLoad) {
 					v-if="field.field === FormFieldField.DROPDOWN"
 					v-model="formData[field.key]"
 					:options="field.dropdown"
+					:autocomplete="field.autocomplete ?? 'off'"
 					:name="field.key"
 					:input-class="`JLSelect JLSelect${Strings.capitalize(field.field)} JLSelect${Strings.capitalize(
 						field.key,
@@ -308,6 +327,7 @@ if (props.options.onFormLoad) {
 						field.key,
 					)} ${field.classes ?? ''}`"
 					:dense="field.settings?.dense"
+					:autocomplete="field.autocomplete ?? 'off'"
 					:hide-bottom-space="field.settings?.hideBottomSpace"
 					:disable="field.disabled"
 					:multiple="field.multiple"
@@ -357,6 +377,7 @@ if (props.options.onFormLoad) {
 					)} ${field.classes ?? ''}`"
 					:dense="field.settings?.dense"
 					:hide-bottom-space="field.settings?.hideBottomSpace"
+					:autocomplete="field.autocomplete ?? 'off'"
 					:disable="field.disabled"
 					:multiple="field.multiple"
 					:label="!field.settings?.stack_label ? field.label : null"
@@ -430,6 +451,13 @@ if (props.options.onFormLoad) {
 					:icon="props.options.icons"
 					:value="formData[field.key]"
 					@tel="phoneNumberUpdated($event, field)" />
+
+				<PasswordGenerator
+					v-if="field.field === FormFieldField.PLUGIN && field.plugin === FormFieldPlugin.PASSWORD_GENERATOR"
+					:field="field"
+					:schema="props.options"
+					:password="formData[field.key]"
+					@updated="passwordUpdated($event, field)" />
 
 				<InstalledAppButton
 					v-if="field.field === FormFieldField.PLUGIN && field.plugin === FormFieldPlugin.INSTALL_APP"

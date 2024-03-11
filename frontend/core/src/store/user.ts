@@ -154,12 +154,9 @@ export const UserStore = defineStore('user', {
 					record_id: this.$state.user.user_id,
 					data: data,
 				})
-				if (user) {
+				if (user.user_id) {
 					logger({ severity: LogSeverity.LOG, message: 'Profile updated successfully', q: q })
-					await this.setUser({
-						...this.$state.user,
-						...data,
-					})
+					await this.setUser(user)
 					return user
 				}
 			} catch (e: any) {

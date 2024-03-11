@@ -43,7 +43,12 @@ export const resetPasswordCode = async (email: string, code: string): Promise<vo
 }
 
 export const resetPasswordComplete = async (email: string, code: string, pass: string): Promise<string> => {
-	const response = await instance.post(`auth/password-reset/complete`, { email: email, code: code, password: pass, withCredentials: true })
+	const response = await instance.post(`auth/password-reset/complete`, {
+		email: email,
+		code: code,
+		password: pass,
+		withCredentials: true,
+	})
 	return response.data.access_token
 }
 

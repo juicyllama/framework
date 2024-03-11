@@ -16,7 +16,7 @@ import { OpenAIClientToken } from './openai.constants'
 			provide: OpenAIClientToken,
 			inject: [getConfigToken(OpenAiConfigDto)],
 			useFactory: (config: OpenAiConfigDto) => {
-				return new OpenAI({ apiKey: config.OPENAI_API_KEY, organization: config.OPENAI_ORG ?? undefined })
+				return new OpenAI({ apiKey: config.OPENAI_API_KEY, organization: config.OPENAI_ORG_ID ?? undefined })
 			},
 		},
 	],

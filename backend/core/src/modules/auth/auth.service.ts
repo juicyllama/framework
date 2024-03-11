@@ -272,6 +272,7 @@ export class AuthService extends BaseService<T> {
 				hrefs: {
 					cta: `${process.env.BASE_URL_APP}/password/reset?code=${code}`,
 				},
+				env: process.env,
 			})
 		} else {
 			markdown = `Hi ${
@@ -323,6 +324,7 @@ export class AuthService extends BaseService<T> {
 				hrefs: {
 					cta: `${process.env.BASE_URL_APP}/passwordless?code=${code}`,
 				},
+				env: process.env,
 			})
 		} else {
 			markdown = `Hi ${

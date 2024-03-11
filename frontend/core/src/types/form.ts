@@ -71,6 +71,7 @@ export enum FormFieldPlugin {
 	INSTALL_APP = 'INSTALL_APP',
 	NOTICE = 'NOTICE',
 	DATE_RANGE = 'DATE_RANGE',
+	PASSWORD_GENERATOR = 'PASSWORD_GENERATOR',
 }
 
 export interface FormFieldPluginTelephoneOptions {
@@ -119,6 +120,22 @@ export interface FormFieldPluginInstallAppOptions extends ConnectAppOptions {
 
 export interface FormFieldPluginInstallAppResult extends FormFieldPluginResult {
 	installed_app: InstalledApp
+}
+
+export interface FormFieldPluginPasswordGeneratorOptions {
+	password_length?: number
+	hide?: {
+		password_strength?: boolean
+		password_options?: boolean
+		password_length?: boolean
+	}
+	force?: {
+		uppercase?: boolean
+		lowercase?: boolean
+		numbers?: boolean
+		symbols?: boolean
+	}
+	type?: FormFieldPlugin.PASSWORD_GENERATOR
 }
 
 export interface FormFieldPluginResult {
@@ -207,6 +224,7 @@ export interface FormField {
 		| FormFieldPluginInstallAppOptions
 		| NoticeProps
 		| FormFieldPluginDateRangeOptions
+		| FormFieldPluginPasswordGeneratorOptions
 	add?: boolean
 	edit?: boolean
 	dropdown?: DropdownOptions[]
@@ -215,6 +233,7 @@ export interface FormField {
 	settings?: FormViewSettings
 	error?: string
 	classes?: string
+	autocomplete?: string
 }
 
 export interface FormSchema {
