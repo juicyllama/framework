@@ -1,6 +1,6 @@
 import instance from './index'
 import type { User } from '../types/user'
-import type { UserRole } from '../types/role'
+import type { UserRole } from '../types/user-account'
 import { Api, apiRequest } from '../helpers/api'
 import { accountStore } from '../index'
 
