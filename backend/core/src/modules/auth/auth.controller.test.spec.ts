@@ -117,10 +117,10 @@ describe('Auth Endpoints', () => {
 				.set('Cookie', `${ACCESS_TOKEN_COOKIE_NAME}=${scaffold.values.owner_access_token}`)
 				.then(async res => {
 					try {
-						// const accessToken = getCookieValueFromHeader(res, ACCESS_TOKEN_COOKIE_NAME) // cookie token
-						// const refreshToken = getCookieValueFromHeader(res, REFRESH_TOKEN_COOKIE_NAME) // cookie token
-						// expect(accessToken).toBeFalsy()
-						// expect(refreshToken).toBeFalsy()
+						const accessToken = getCookieValueFromHeader(res, ACCESS_TOKEN_COOKIE_NAME) // cookie token
+						const refreshToken = getCookieValueFromHeader(res, REFRESH_TOKEN_COOKIE_NAME) // cookie token
+						expect(accessToken).toBeFalsy()
+						expect(refreshToken).toBeFalsy()
 						expect(res.body.success).toBeTruthy()
 					} catch (e) {
 						console.error(res.headers)
