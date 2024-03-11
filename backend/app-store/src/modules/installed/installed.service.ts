@@ -1,15 +1,19 @@
 import { forwardRef, Inject, Injectable, BadRequestException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { InstalledApp } from './installed.entity'
+
 import { BaseService, BeaconService, Query } from '@juicyllama/core'
+import { Logger, Modules } from '@juicyllama/utils'
+
 import { AppsService } from '../apps.service'
 import { AppStoreIntegrationName } from '../apps.enums'
-import { Logger } from '@juicyllama/utils'
 import { App } from '../apps.entity'
+
+import { InstalledApp } from './installed.entity'
 import { CreateInstalledAppDto, preInstallCheckResponse } from './installed.dto'
 import { WordPressService } from './preinstall/wordpress.service'
 import { ShopifyService } from './preinstall/shopify.service'
+import { GoogleAnalyticsService } from './preinstall/google-analytics.service'
 
 export const E = InstalledApp
 export type T = InstalledApp
@@ -24,6 +28,7 @@ export class InstalledAppsService extends BaseService<T> {
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(forwardRef(() => WordPressService)) readonly wordPressService: WordPressService,
 		@Inject(forwardRef(() => ShopifyService)) readonly shopifyService: ShopifyService,
+		private readonly googleAnalyticsService: GoogleAnalyticsService,
 	) {
 		super(query, repository, {
 			beacon: beaconService,
@@ -59,12 +64,20 @@ export class InstalledAppsService extends BaseService<T> {
 	/**
 	 * Returns the redirection URL to kick off the OAUTH2 flow
 	 * @param installed_app
-	 * @returns string
+	 * @returns Promise<string>
 	 */
-	createOauthLink(installed_app: T): string {
+	async createOauthLink(installed_app: T): Promise<string> {
 		switch (installed_app.app?.integration_name) {
 			case AppStoreIntegrationName.shopify:
 				return `${process.env.BASE_URL_API}/app/shopify/auth/install?installed_app_id=${installed_app.installed_app_id}`
+
+			case AppStoreIntegrationName.ga4:
+				const { GoogleAnalyticsApp } = await Modules.googleAnalytics.load()
+
+				const url = new URL(GoogleAnalyticsApp.createRoute('/oauth/init'), process.env.BASE_URL_API)
+				url.searchParams.set('installed_app_id', installed_app.installed_app_id.toString())
+
+				return url.toString()
 
 			default:
 				throw new BadRequestException(`${installed_app.app?.integration_name} OAUTH2 LINK NOT IMPLEMENTED`)
@@ -106,6 +119,9 @@ export class InstalledAppsService extends BaseService<T> {
 
 			case AppStoreIntegrationName.shopify:
 				return await this.shopifyService.precheckShopify(domain, app, settings, account_id)
+
+			case AppStoreIntegrationName.ga4:
+				return await this.googleAnalyticsService.precheckGoogleAnalytics(domain, app, settings, account_id)
 
 			default:
 				return {
