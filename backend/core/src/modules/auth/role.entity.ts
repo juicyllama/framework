@@ -26,7 +26,7 @@ export class Role extends BaseEntity {
 	account_id!: number
 
 	@IsEnum(UserRole)
-	@Column({ default: UserRole.MEMBER })
+	@Column({ type: 'enum', enum: UserRole, default: UserRole.MEMBER })
 	role!: UserRole
 
 	constructor(partial: Partial<User>) {

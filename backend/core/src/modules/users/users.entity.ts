@@ -50,9 +50,9 @@ export class User extends BaseEntity {
 	@Expose({ groups: ['ADMIN', 'OWNER'] })
 	password_reset?: boolean
 
-	@Column({ default: UserAvatarType.NONE })
+	@Column({ type: 'enum', enum: UserAvatarType, default: UserAvatarType.NONE })
 	@IsEnum(UserAvatarType)
-	avatar_type!: UserAvatarType
+	avatar_type?: UserAvatarType = UserAvatarType.NONE
 
 	@Column({ default: null, nullable: true })
 	@IsUrl()
