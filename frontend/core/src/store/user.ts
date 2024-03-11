@@ -240,6 +240,9 @@ export const UserStore = defineStore('user', {
 		getUser(state): User {
 			return state.user ?? null
 		},
+		getEmail(state): string {
+			return state.user?.email ?? null
+		},
 		getPreLoginRedirect(state): string {
 			return state.preLoginRedirect ?? null
 		},
