@@ -1,7 +1,7 @@
 import { AuthService, JwtAuthGuard, AccountId, AuthenticatedRequest } from '@juicyllama/core'
 import { Body, Controller, Param, Patch, Post, Req, UseGuards, forwardRef, Inject } from '@nestjs/common'
 import {
-	ApiBearerAuth,
+	ApiCookieAuth,
 	ApiForbiddenResponse,
 	ApiNotFoundResponse,
 	ApiOkResponse,
@@ -17,7 +17,7 @@ import { AiService } from './ai.service'
 
 @ApiTags('Ai')
 @Controller('ai')
-@ApiBearerAuth()
+@ApiCookieAuth()
 @UseGuards(JwtAuthGuard)
 @ApiUnauthorizedResponse({
 	description: 'Authentication problem, check access token or account permissions',

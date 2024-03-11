@@ -21,6 +21,10 @@
     "name": "Google Cloud",
     "description": "Google Cloud Platform, offered by Google, is a suite of cloud computing services that runs on the same infrastructure that Google uses internally for its end-user products, such as Google Search, Gmail, file storage, and YouTube."
 },{
+	"key": "google-analytics",
+	"name": "Google Analytics",
+	"description": "Google Analytics is a web analytics service offered by Google that tracks and reports website traffic and also the mobile app traffic & events, currently as a platform inside the Google Marketing Platform brand. "
+},{
     "key": "mailchimp",
     "name": "Mailchimp",
 	"pageNotAvailable": true,

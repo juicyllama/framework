@@ -40,9 +40,9 @@ import {
 	AUTH_ACCOUNT_ROLE,
 	AUTH_CODE,
 	DEFAULT_ACCESS_TOKEN_EXPIRY_MINUTES,
-	DEFAULT_REFRESH_EXPIRY_DAYS,
+	DEFAULT_REFRESH_TOKEN_EXPIRY_DAYS,
 } from './auth.constants'
-import { LoginResponseDto, ValidateCodeDto } from './dtos/login.dto'
+import { ValidateCodeDto } from './dtos/login.dto'
 import { CompletePasswordResetDto, InitiateResetPasswordDto } from './dtos/password.reset.dto'
 import { Role } from './role.entity'
 
@@ -114,7 +114,7 @@ export class AuthService extends BaseService<T> {
 		}
 		return this.jwtService.sign(cleanedPayload, {
 			secret: process.env.JWT_REFRESH_KEY,
-			expiresIn: `${DEFAULT_REFRESH_EXPIRY_DAYS}d`,
+			expiresIn: `${process.env.JWT_REFRESH_TOKEN_EXPIRY_DAYS || DEFAULT_REFRESH_TOKEN_EXPIRY_DAYS}d`,
 		})
 	}
 
@@ -131,7 +131,11 @@ export class AuthService extends BaseService<T> {
 		}
 	}
 
-	async login(user: User | LoginPayload) {
+	/**
+	 * @param user
+	 * @returns JWT access token
+	 */
+	async login(user: User | LoginPayload): Promise<string> {
 		const payload = user instanceof User ? await this.constructLoginPayload(user) : user
 		if (!['development', 'test'].includes(Env.get())) {
 			let Bugsnag
@@ -145,12 +149,10 @@ export class AuthService extends BaseService<T> {
 		}
 		await this.usersService.update({ user_id: user.user_id, last_login_at: new Date() })
 		const cleanedPayload = pick(payload, ['email', 'user_id', 'account_ids'])
-		return new LoginResponseDto(
-			this.jwtService.sign(cleanedPayload, {
-				secret: process.env.JWT_KEY,
-				expiresIn: `${process.env.JWT_ACCESS_TOKEN_EXPIRY_MINUTES || DEFAULT_ACCESS_TOKEN_EXPIRY_MINUTES}m`,
-			}),
-		)
+		return this.jwtService.sign(cleanedPayload, {
+			secret: process.env.JWT_KEY,
+			expiresIn: `${process.env.JWT_ACCESS_TOKEN_EXPIRY_MINUTES || DEFAULT_ACCESS_TOKEN_EXPIRY_MINUTES}m`,
+		})
 	}
 
 	async constructLoginPayload(user: User): Promise<LoginPayload> {
@@ -173,7 +175,12 @@ export class AuthService extends BaseService<T> {
 		await this.sendVerificationCode(user, <string>code)
 		return !!user.user_id
 	}
-	async completePasswordReset(data: CompletePasswordResetDto) {
+
+	/**
+	 * @param data
+	 * @returns JWT access token
+	 */
+	async completePasswordReset(data: CompletePasswordResetDto): Promise<string> {
 		const user = await this.usersService.findOneByEmail(data.email)
 		this.handleUserNotFoundException(user)
 		const verificationCode = await this.getValidationCode(user)
@@ -190,9 +197,7 @@ export class AuthService extends BaseService<T> {
 		this.logger.log(`[CACHE][DELETE] USER_${user.user_id}_VALIDATION_CODE`)
 		await this.cacheManager.del(`USER_${user.user_id}_VALIDATION_CODE`)
 
-		return new LoginResponseDto(
-			this.jwtService.sign(await this.constructLoginPayload(user), { secret: process.env.JWT_KEY }),
-		)
+		return this.jwtService.sign(await this.constructLoginPayload(user), { secret: process.env.JWT_KEY })
 	}
 	async initiatePasswordlessLogin(data: InitiateResetPasswordDto) {
 		const user = await this.usersService.findOneByEmail(data.email)
@@ -227,6 +232,10 @@ export class AuthService extends BaseService<T> {
 		this.logger.log(`[CACHE][GET] ${cache_key} = `, result)
 		return result
 	}
+	/**
+	 * @param data
+	 * @returns JWT access token
+	 */
 	async validateLoginCodeAndLogin(data: ValidateCodeDto) {
 		const user = await this.usersService.findOneByEmail(data.email)
 		this.handleUserNotFoundException(user)
@@ -240,9 +249,7 @@ export class AuthService extends BaseService<T> {
 		const cache_key = JLCache.cacheKey(AUTH_CODE, { user_id: user.user_id })
 		this.logger.log(`[CACHE][DELETE] ${cache_key}`)
 		await this.cacheManager.del(cache_key)
-		return new LoginResponseDto(
-			this.jwtService.sign(await this.constructLoginPayload(user), { secret: process.env.JWT_KEY }),
-		)
+		return this.jwtService.sign(await this.constructLoginPayload(user), { secret: process.env.JWT_KEY })
 	}
 	handleUserNotFoundException(user: User) {
 		if (!user) {
