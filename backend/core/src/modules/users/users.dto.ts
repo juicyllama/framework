@@ -72,7 +72,6 @@ export class UserDto {
 	@IsUrl()
 	@IsOptional()
 	avatar_image_url?: string
-
 }
 
 export class CreateUserDto extends UserDto {

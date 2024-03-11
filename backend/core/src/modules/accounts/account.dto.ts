@@ -75,7 +75,6 @@ export class OnboardAccountDto {
 	})
 	currency?: SupportedCurrencies
 
-
 	@ApiProperty({
 		example: false,
 		required: false,

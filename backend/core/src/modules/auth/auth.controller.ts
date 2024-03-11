@@ -84,6 +84,49 @@ export class AuthController {
 		return new LoginResponseDto(newAccessToken)
 	}
 
+	@ApiOperation({
+		summary: 'Token To Cookie',
+		description:
+			'Posting with a Bearer Authorization token will set a cookie with the access token and a cookie with the refresh token',
+	})
+	@ApiOkResponse({
+		description: 'OK',
+		type: LoginResponseDto,
+	})
+	@Post('token-to-cookie')
+	@UserAuth({ skipAccountId: true })
+	async tokenToCookie(
+		@Req() req: AuthenticatedRequest,
+		@Res({ passthrough: true }) res: Response,
+	): Promise<LoginResponseDto> {
+		const user = await this.usersService.findById(req.user.user_id)
+		const newAccessToken = await this.authService.login(user)
+		const newRefreshToken = await this.authService.createRefreshToken(user)
+		setAccessAndRefreshTokenCookies(res, newAccessToken, newRefreshToken)
+		this.logger.log('Set new cookie token', {
+			user_id: user.user_id,
+		})
+		return new LoginResponseDto(newAccessToken)
+	}
+
+	@ApiOperation({
+		summary: 'Logout',
+		description: 'Clears the access and refresh token cookies',
+	})
+	@ApiOkResponse({
+		description: 'OK',
+		type: SuccessResponseDto,
+	})
+	@Post('logout')
+	@UserAuth({ skipAccountId: true })
+	async logout(@Res({ passthrough: true }) res: Response): Promise<SuccessResponseDto> {
+		res.clearCookie(ACCESS_TOKEN_COOKIE_NAME)
+		res.clearCookie(REFRESH_TOKEN_COOKIE_NAME)
+		return {
+			success: true,
+		}
+	}
+
 	@UserAuth({ skipAccountId: true })
 	@ApiOperation({
 		summary: 'Profile',
