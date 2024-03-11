@@ -14,11 +14,11 @@ export class MollieMandate extends BaseEntity {
 	@IsString()
 	ext_mandate_id: string
 
-	@Column({ default: null, nullable: true })
+	@Column({ type: 'enum', enum: MandateStatus, nullable: true, default: null })
 	@IsEnum(MandateStatus)
 	status?: MandateStatus
 
-	@Column({ default: null, nullable: true })
+	@Column({ type: 'enum', enum: MandateMethod, nullable: true, default: null })
 	@IsEnum(MandateMethod)
 	method?: MandateMethod
 

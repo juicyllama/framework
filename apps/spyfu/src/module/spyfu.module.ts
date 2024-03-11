@@ -24,10 +24,9 @@ import { KeywordsService } from './keywords/keywords.service'
 		forwardRef(() => DomainStatsModule),
 		forwardRef(() => KombatModule),
 		forwardRef(() => KeywordssModule),
-
 	],
 	controllers: [],
-	providers: [CompetitorsService, DomainStatsService, KombatService,KeywordsService, Logger, Api],
-	exports: [CompetitorsService, DomainStatsService, KombatService,KeywordsService],
+	providers: [CompetitorsService, DomainStatsService, KombatService, KeywordsService, Logger, Api],
+	exports: [CompetitorsService, DomainStatsService, KombatService, KeywordsService],
 })
 export class SpyfuModule {}

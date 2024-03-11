@@ -80,7 +80,6 @@ export interface IKeyword {
 	adPosition: number | null
 }
 
-
 export interface IResponse<T> extends BaseResponse {
 	results: T[]
 }

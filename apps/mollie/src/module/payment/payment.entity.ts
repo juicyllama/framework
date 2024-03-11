@@ -15,7 +15,7 @@ export class MolliePayment extends BaseEntity {
 	@IsString()
 	ext_payment_id?: string
 
-	@Column()
+	@Column({ type: 'enum', enum: PaymentStatus })
 	@IsEnum(PaymentStatus)
 	status: PaymentStatus
 
@@ -23,12 +23,12 @@ export class MolliePayment extends BaseEntity {
 	@IsNumber({ maxDecimalPlaces: 2 })
 	amount: number
 
-	@Column({ length: 3 })
+	@Column({ type: 'enum', enum: SupportedCurrencies })
 	@IsEnum(SupportedCurrencies)
 	@MaxLength(3)
 	currency: SupportedCurrencies
 
-	@Column()
+	@Column({ type: 'enum', enum: PaymentMethod })
 	@IsEnum(PaymentMethod)
 	method: PaymentMethod
 

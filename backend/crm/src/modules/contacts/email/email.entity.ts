@@ -17,7 +17,7 @@ export class ContactEmail extends BaseEntity {
 	@IsNumber()
 	contact_id!: number
 
-	@Column({ default: null, nullable: true })
+	@Column({ type: 'enum', enum: ContactEmailType, default: null, nullable: true })
 	@IsEnum(ContactEmailType)
 	type?: ContactEmailType
 

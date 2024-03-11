@@ -26,7 +26,7 @@ export class Withdrawal extends BaseEntity {
 	@IsNumber()
 	amount!: number
 
-	@Column('varchar', { length: 3 })
+	@Column({ type: 'enum', enum: SupportedCurrencies })
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)
 	@MaxLength(3)
@@ -38,7 +38,7 @@ export class Withdrawal extends BaseEntity {
 	@JoinColumn({ name: 'payment_method_id' })
 	readonly payment_method!: PaymentMethod
 
-	@Column({ default: WithdrawalStatus.PENDING })
+	@Column({ type: 'enum', enum: WithdrawalStatus, default: WithdrawalStatus.PENDING })
 	@IsEnum(WithdrawalStatus)
 	status?: WithdrawalStatus
 

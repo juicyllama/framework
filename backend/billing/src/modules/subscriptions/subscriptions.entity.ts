@@ -41,13 +41,13 @@ export class Subscription extends BaseEntity {
 	@IsNumber()
 	amount_total!: number // amount including tax
 
-	@Column('varchar', { length: 3 })
+	@Column({ type: 'enum', enum: SupportedCurrencies })
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)
 	@MaxLength(3)
 	currency!: SupportedCurrencies
 
-	@Column()
+	@Column({ type: 'enum', enum: SubscriptionFrequency })
 	@IsEnum(SubscriptionFrequency)
 	frequency!: SubscriptionFrequency
 

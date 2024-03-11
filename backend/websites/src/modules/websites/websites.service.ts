@@ -15,7 +15,7 @@ export class WebsitesService extends BaseService<T> {
 		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
 		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => Query))  readonly query: Query<T>,
+		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
 		@Inject(forwardRef(() => StorageService)) private readonly storageService: StorageService,
 	) {

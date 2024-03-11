@@ -17,7 +17,7 @@ export class WiseTransaction extends BaseEntity {
 	@IsNumber({ maxDecimalPlaces: 2 })
 	amount!: number
 
-	@Column({ length: 3 })
+	@Column({ type: 'enum', enum: SupportedCurrencies })
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)
 	@MaxLength(3)
