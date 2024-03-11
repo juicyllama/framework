@@ -8,10 +8,7 @@ import { AwsSesService } from './aws.ses.service'
 import { AwsSesConfigDto } from './config/aws.ses.config.dto'
 
 @Module({
-	imports: [
-		ConfigValidationModule.register(AwsConfigDto),
-		ConfigValidationModule.register(AwsSesConfigDto)
-	],
+	imports: [ConfigValidationModule.register(AwsConfigDto), ConfigValidationModule.register(AwsSesConfigDto)],
 	controllers: [],
 	providers: [
 		AwsSesService,

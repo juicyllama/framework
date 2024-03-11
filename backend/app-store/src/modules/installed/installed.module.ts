@@ -9,6 +9,7 @@ import { InstalledApp } from './installed.entity'
 import { InstalledAppsService } from './installed.service'
 import { ShopifyService } from './preinstall/shopify.service'
 import { WordPressService } from './preinstall/wordpress.service'
+import { GoogleAnalyticsService } from './preinstall/google-analytics.service'
 
 @Module({
 	imports: [
@@ -21,7 +22,7 @@ import { WordPressService } from './preinstall/wordpress.service'
 		forwardRef(() => OAuthModule),
 	],
 	controllers: [InstalledAppsController],
-	providers: [InstalledAppsService, WordPressService, ShopifyService, Logger, Query],
+	providers: [InstalledAppsService, WordPressService, ShopifyService, GoogleAnalyticsService, Logger, Query],
 	exports: [InstalledAppsService, WordPressService, ShopifyService],
 })
 export class InstalledAppsModule {}
