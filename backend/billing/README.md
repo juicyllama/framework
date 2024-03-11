@@ -3,5 +3,5 @@
     <img src="https://juicyllama.com/assets/images/icon.png" width="100" alt="JuicyLlama Logo" />
   </a>
 
-Visit the [JuicyLlama Billing Module](https://juicyllama.com/backend/billing) page for this module to learn more information.
+Visit the [JuicyLlama Billing Module](https://juicyllama.com/framework/backend/billing) to learn more.
 </div>

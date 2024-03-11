@@ -9,7 +9,9 @@ import { SubscriptionsCronService } from './subscriptions.crons.service'
 @Controller('/billing/subscriptions/crons')
 export class SubscriptionsCronController {
 	constructor(
-		@Inject(forwardRef(() => SubscriptionsCronService)) private readonly subscriptionsCronService: SubscriptionsCronService) {}
+		@Inject(forwardRef(() => SubscriptionsCronService))
+		private readonly subscriptionsCronService: SubscriptionsCronService,
+	) {}
 
 	@Post('rebill')
 	async rebill() {

@@ -28,6 +28,7 @@ export class Modules {
 	public static readonly wordpress = new Module('@juicyllama/app-wordpress')
 	public static readonly xerocc = new Module('@juicyllama/app-xero-cc')
 	public static readonly semrush = new Module('@juicyllama/app-semrush')
+	public static readonly googleAnalytics = new Module('@juicyllama/app-google-analytics4')
 
 	//framework lazyload modules
 	public static readonly datacache = new Module('@juicyllama/data-cache')
@@ -43,6 +44,11 @@ export class Modules {
 	 */
 
 	static isInstalled(name: string): boolean {
+		// makes it true if used within the app's sandbox
+		if (Modules.isCurrentModule(name)) {
+			return true
+		}
+
 		try {
 			const p = require.resolve(name, { paths: require.main?.paths })
 			return !!p
@@ -54,6 +60,14 @@ export class Modules {
 	}
 
 	static async load<T = any>(name: string): Promise<T> {
+		if (Modules.isCurrentModule(name)) {
+			return require(process.cwd())
+		}
+
 		return require.main?.require(name)
+	}
+
+	private static isCurrentModule(name: string) {
+		return process.env.npm_package_name === name
 	}
 }
