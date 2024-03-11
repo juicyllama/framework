@@ -1,24 +1,23 @@
-import { Router, RouteLocationNormalizedLoaded } from 'vue-router'
+import { Json } from '@juicyllama/vue-utils'
 import { defineStore } from 'pinia'
-import type { User, UserLogin } from '../types'
-import { UserPreferences } from '../types'
+import { QVueGlobals } from 'quasar'
+import { RouteLocationNormalizedLoaded, Router } from 'vue-router'
+import { goToLogin, logger } from '../helpers'
 import {
 	accountAuthCheck,
 	getUser as loadUserFromApi,
 	loginUser,
+	logoutUser,
 	passwordlessLogin,
 	passwordlessLoginCode,
 	resetPassword,
 	resetPasswordCode,
 	resetPasswordComplete,
 } from '../services/auth'
-import { logger } from '../helpers'
-import { goToLogin } from '../helpers'
-import { UsersService, USERS_ENDPOINT } from '../services/users'
+import { USERS_ENDPOINT, UsersService } from '../services/users'
+import type { User, UserLogin } from '../types'
+import { LogSeverity, UserPreferences } from '../types'
 import { AccountStore } from './account'
-import { QVueGlobals } from 'quasar'
-import { LogSeverity } from '../types'
-import { Json } from '@juicyllama/vue-utils'
 
 type T = User
 
@@ -184,6 +183,7 @@ export const UserStore = defineStore('user', {
 		async logout(router?: Router, redirect?: string) {
 			logger({ severity: LogSeverity.VERBOSE, message: `[Store][User][Logout] Logout User` })
 			window.localStorage.clear()
+			await logoutUser()
 			this.$state.user = null
 			if (!router) {
 				if (redirect) {
