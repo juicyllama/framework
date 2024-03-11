@@ -26,7 +26,11 @@ export async function loginUser(payload: UserLogin, q: QVueGlobals, router?: Rou
 }
 
 export const tokenToCookie = async (token: string): Promise<void> => {
-	await instance.post(`auth/token-to-cookie`, { headers: { Authorization: `Bearer ${token}` } })
+	await instance.post(
+		`auth/token-to-cookie`,
+		{ headers: { Authorization: `Bearer ${token}` } },
+		{ withCredentials: true },
+	)
 }
 
 export const logoutUser = async (): Promise<void> => {
