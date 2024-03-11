@@ -1,6 +1,5 @@
-import { registerAs } from '@nestjs/config'
-import { ConfigService } from '@nestjs/config'
 import { CacheStore } from '@nestjs/cache-manager'
+import { registerAs } from '@nestjs/config'
 import { redisStore } from 'cache-manager-redis-store'
 
 export default registerAs(
@@ -8,14 +7,16 @@ export default registerAs(
 	() =>
 		<any>{
 			isGlobal: true,
-			inject: [ConfigService],
-			useFactory: async (configService: ConfigService) => {
+			useFactory: async () => {
+				if (!process.env.REDIS_HOST) {
+					throw new Error('REDIS_HOST must be set')
+				}
 				const store = await redisStore({
 					socket: {
-						host: configService.get('REDIS_HOST'),
-						port: +configService.get('REDIS_PORT'),
+						host: process.env.REDIS_HOST,
+						port: +(process.env.REDIS_PORT || 6379),
 					},
-					password: configService.get('REDIS_PASSWORD'),
+					password: process.env.REDIS_PASSWORD,
 				})
 				return {
 					store: store as unknown as CacheStore,

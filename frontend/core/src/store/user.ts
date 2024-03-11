@@ -133,18 +133,18 @@ export const UserStore = defineStore('user', {
 				return false
 			}
 
-			const roles = this.$state.user.roles
+			const user_accounts = this.$state.user.user_accounts
 
-			if (!roles) {
+			if (!user_accounts) {
 				this.logout(router, '/login')
 				return false
 			}
 
-			const role = roles.find(role => {
-				if (role.account_id === account_id) return role
+			const user_account = user_accounts.find(user_account => {
+				if (user_account.account_id === account_id) return user_account
 			})
 
-			return ['ADMIN', 'OWNER'].includes(role.role)
+			return ['ADMIN', 'OWNER'].includes(user_account.role)
 		},
 
 		async updateOwnProfile(data: Partial<User>, q?: QVueGlobals): Promise<T> {

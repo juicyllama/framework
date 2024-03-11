@@ -4,6 +4,7 @@ import { AccountModule } from '../../modules/accounts/account.module'
 import { AccountService } from '../../modules/accounts/account.service'
 import { Scaffold } from '../../test'
 import { ScaffoldDtoWithRepository } from '../../test/scaffold'
+import { UserRole } from '../../modules/users/users.enums'
 
 type T = Account
 const E = Account
@@ -51,13 +52,14 @@ describe('TypeORM query', () => {
 
 		it('Perform a findOneById scaffold.query with relations', async () => {
 			const result = await scaffold.query.findOneById(scaffold.repository, scaffold.values.account.account_id, [
-				'roles',
+				'user_accounts',
 			])
 			expect(result).toBeDefined()
 			expect(result.account_id).toBeDefined()
 			expect(result.account_id).toEqual(scaffold.values.account.account_id)
-			expect(result.roles).toBeDefined()
-			expect(result.roles?.[0]).toBeDefined()
+			expect(result.user_accounts).toBeDefined()
+			expect(result.user_accounts?.[0]).toBeDefined()
+			expect(result.user_accounts[0].role).toEqual(UserRole.OWNER)
 		})
 	})
 
@@ -75,13 +77,15 @@ describe('TypeORM query', () => {
 			const result = await scaffold.query.findOneByWhere(
 				scaffold.repository,
 				{ account_id: scaffold.values.account.account_id },
-				{ relations: ['roles'] },
+				{ relations: ['user_accounts'] },
 			)
+					
 			expect(result).toBeDefined()
 			expect(result.account_id).toBeDefined()
 			expect(result.account_id).toEqual(scaffold.values.account.account_id)
-			expect(result.roles).toBeDefined()
-			expect(result.roles?.[0]).toBeDefined()
+			expect(result.user_accounts).toBeDefined()
+			expect(result.user_accounts?.[0]).toBeDefined()
+			expect(result.user_accounts[0].role).toEqual(UserRole.OWNER)
 		})
 	})
 
@@ -104,13 +108,14 @@ describe('TypeORM query', () => {
 		it('Perform a findOne scaffold.query with options & relations', async () => {
 			const result = await scaffold.query.findOne(scaffold.repository, {
 				where: { account_id: scaffold.values.account.account_id },
-				relations: ['roles'],
+				relations: ['user_accounts'],
 			})
 			expect(result).toBeDefined()
 			expect(result.account_id).toBeDefined()
 			expect(result.account_id).toEqual(scaffold.values.account.account_id)
-			expect(result.roles).toBeDefined()
-			expect(result.roles?.[0]).toBeDefined()
+			expect(result.user_accounts).toBeDefined()
+			expect(result.user_accounts?.[0]).toBeDefined()
+			expect(result.user_accounts[0].role).toEqual(UserRole.OWNER)
 		})
 	})
 
@@ -133,7 +138,7 @@ describe('TypeORM query', () => {
 		})
 
 		it('Perform a findAll scaffold.query with relations', async () => {
-			const result = await scaffold.query.findAll(scaffold.repository, { relations: ['roles'] })
+			const result = await scaffold.query.findAll(scaffold.repository, { relations: ['user_accounts'] })
 			expect(result).toBeDefined()
 			expect(result[0]).toBeDefined()
 			expect(result[0].account_id).toBeDefined()
@@ -142,13 +147,14 @@ describe('TypeORM query', () => {
 		it('Perform a findAll scaffold.query with options & relations', async () => {
 			const result = await scaffold.query.findAll(scaffold.repository, {
 				where: { account_id: scaffold.values.account.account_id },
-				relations: ['roles'],
+				relations: ['user_accounts'],
 			})
 			expect(result).toBeDefined()
 			expect(result[0]).toBeDefined()
 			expect(result[0].account_id).toBeDefined()
-			expect(result[0].roles).toBeDefined()
-			expect(result[0]?.roles?.[0]).toBeDefined()
+			expect(result[0].user_accounts).toBeDefined()
+			expect(result[0].user_accounts?.[0]).toBeDefined()
+			expect(result[0].user_accounts[0].role).toEqual(UserRole.OWNER)
 		})
 
 		it('Filter out invalid select items', async () => {
@@ -326,7 +332,7 @@ describe('TypeORM query', () => {
 		it('Perform a getRelations query', async () => {
 			const result = scaffold.query.getRelations(scaffold.repository)
 			expect(result).toBeDefined()
-			expect(result['roles']).toEqual(true)
+			expect(result['user_accounts']).toEqual(true)
 		})
 
 		it('Perform a getEventName query', async () => {

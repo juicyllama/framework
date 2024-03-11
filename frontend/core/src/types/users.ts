@@ -20,7 +20,7 @@ export enum UserOrderBy {
 
 export enum UserRelations {
 	accounts = 'accounts',
-	roles = 'roles',
+	user_accounts = 'user_accounts',
 }
 
 export interface UserMenuOptions {

@@ -14,8 +14,8 @@ import {
 import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm'
 import { BaseEntity } from '../../helpers/baseEntity'
 import { Account } from '../accounts/account.entity'
-import { Role } from '../auth/role.entity'
 import { UserAvatarType } from './users.enums'
+import { UserAccount } from '../auth/user-account.entity'
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -50,9 +50,9 @@ export class User extends BaseEntity {
 	@Expose({ groups: ['ADMIN', 'OWNER'] })
 	password_reset?: boolean
 
-	@Column({ default: UserAvatarType.NONE })
+	@Column({ type: 'enum', enum: UserAvatarType, default: UserAvatarType.NONE })
 	@IsEnum(UserAvatarType)
-	avatar_type!: UserAvatarType
+	avatar_type?: UserAvatarType = UserAvatarType.NONE
 
 	@Column({ default: null, nullable: true })
 	@IsUrl()
@@ -65,7 +65,6 @@ export class User extends BaseEntity {
 	last_login_at?: Date
 
 	//RELATIONS
-
 	@ManyToMany(() => Account, account => account.account_id)
 	@JoinTable({
 		name: 'users_accounts',
@@ -75,8 +74,9 @@ export class User extends BaseEntity {
 	@IsArray()
 	accounts!: Account[]
 
-	@OneToMany(() => Role, role => role.user, { cascade: true })
-	roles?: Role[]
+	@OneToMany(() => UserAccount, userAccount => userAccount.user)
+	@IsArray()
+	user_accounts!: UserAccount[]
 
 	constructor(partial: Partial<User>) {
 		super()

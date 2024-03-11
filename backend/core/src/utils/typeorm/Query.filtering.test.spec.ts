@@ -206,7 +206,7 @@ describe('TypeORM query findAll filtering RHS Colon syntax', () => {
 
 	describe('Query with relation filters', () => {
 		it('Get by relation Query', async () => {
-			const queryOwner = { 'roles.role': 'OWNER' }
+			const queryOwner = { 'user_accounts.role': 'OWNER' }
 			const whereOwner = scaffold.query.buildWhere({
 				repository: scaffold.repository,
 				account_id: scaffold.values.account.account_id,
@@ -217,7 +217,7 @@ describe('TypeORM query findAll filtering RHS Colon syntax', () => {
 			expect(resultWithOwner).toBeDefined()
 			expect(resultWithOwner.length).toBe(1)
 
-			const queryMember = { 'roles.role': 'MEMBER' }
+			const queryMember = { 'user_accounts.role': 'MEMBER' }
 
 			const whereMember = scaffold.query.buildWhere({
 				repository: scaffold.repository,
@@ -235,7 +235,7 @@ describe('TypeORM query findAll filtering RHS Colon syntax', () => {
 				repository: scaffold.repository,
 				account_id: scaffold.values.account.account_id,
 				query: queryOwner,
-				search_fields: ['roles.role'],
+				search_fields: ['user_accounts.role'],
 			})
 			const resultWithOwner = await scaffold.query.findAll(scaffold.repository, { where: whereOwner })
 
@@ -248,7 +248,7 @@ describe('TypeORM query findAll filtering RHS Colon syntax', () => {
 				repository: scaffold.repository,
 				account_id: scaffold.values.account.account_id,
 				query: queryMember,
-				search_fields: ['roles.role'],
+				search_fields: ['user_accounts.role'],
 			})
 			const resultWithMember = await scaffold.query.findAll(scaffold.repository, { where: whereMember })
 			expect(resultWithMember).toBeDefined()

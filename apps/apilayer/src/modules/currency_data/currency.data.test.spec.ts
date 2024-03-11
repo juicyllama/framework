@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { Dates, Env } from '@juicyllama/utils'
 import { CurrencyDataModule } from './currency.data.module'
 import { CurrencyDataService } from './currency.data.service'
+import { ConfigModule } from '@nestjs/config'
 
 describe('Number Verification Service', () => {
 	let moduleRef: TestingModule
@@ -14,7 +15,9 @@ describe('Number Verification Service', () => {
 		}
 
 		moduleRef = await Test.createTestingModule({
-			imports: [CurrencyDataModule],
+			imports: [
+				ConfigModule.forRoot(),
+				CurrencyDataModule],
 		}).compile()
 
 		currencyDataService = moduleRef.get<CurrencyDataService>(CurrencyDataService)

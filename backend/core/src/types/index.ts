@@ -13,7 +13,7 @@ export {
 	ControllerOptionalProps,
 	ControllerRoles,
 	BaseResponseDto,
-	ErrorResponse
+	ErrorResponse,
 } from './common'
 export { OauthInterface } from './oauth.interface'
 
