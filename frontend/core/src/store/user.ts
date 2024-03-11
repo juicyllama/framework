@@ -13,7 +13,6 @@ import {
 	resetPasswordComplete,
 } from '../services/auth'
 import { logger } from '../helpers'
-import { token } from './token'
 import { goToLogin } from '../helpers'
 import { UsersService, USERS_ENDPOINT } from '../services/users'
 import { AccountStore } from './account'
@@ -62,9 +61,9 @@ export const UserStore = defineStore('user', {
 
 		async login(data: UserLogin, q?: QVueGlobals, router?: Router): Promise<User> {
 			try {
-				const access_token = await loginUser(data, q, router)
-				if (!access_token) return
-				return await this.processAccessToken(access_token, q)
+				const success = await loginUser(data, q, router)
+				if (!success) return
+				return await this.loadUserAndAccount(q)
 			} catch (e: any) {
 				logger({ severity: LogSeverity.ERROR, message: e.message, q: q })
 			}
@@ -82,8 +81,8 @@ export const UserStore = defineStore('user', {
 
 		async passwordlssCode(email: string, code: string, q?: QVueGlobals): Promise<T> {
 			try {
-				const access_token = await passwordlessLoginCode(email, code)
-				return await this.processAccessToken(access_token, q)
+				await passwordlessLoginCode(email, code)
+				return await this.loadUserAndAccount(q)
 			} catch (e: any) {
 				logger({ severity: LogSeverity.ERROR, message: e.message })
 			}
@@ -110,8 +109,8 @@ export const UserStore = defineStore('user', {
 		},
 
 		async resetComplete(email: string, code: string, password: string, q?: QVueGlobals): Promise<T> {
-			const access_token = await resetPasswordComplete(email, code, password)
-			return await this.processAccessToken(access_token, q)
+			await resetPasswordComplete(email, code, password)
+			return await this.loadUserAndAccount(q)
 		},
 
 		async getUserAsync(): Promise<T> {
@@ -189,7 +188,6 @@ export const UserStore = defineStore('user', {
 			logger({ severity: LogSeverity.VERBOSE, message: `[Store][User][Logout] Logout User` })
 			window.localStorage.clear()
 			this.$state.user = null
-			token.remove()
 			if (!router) {
 				if (redirect) {
 					window.location.href = redirect
@@ -201,8 +199,7 @@ export const UserStore = defineStore('user', {
 			await goToLogin(router, redirect)
 		},
 
-		async processAccessToken(access_token: string, q?: QVueGlobals): Promise<T> {
-			await token.set(access_token)
+		async loadUserAndAccount(q?: QVueGlobals): Promise<T> {
 			const user = await loadUserFromApi()
 
 			if (!user?.user_id) {
@@ -239,6 +236,9 @@ export const UserStore = defineStore('user', {
 	getters: {
 		getUser(state): User {
 			return state.user ?? null
+		},
+		getEmail(state): string {
+			return state.user?.email ?? null
 		},
 		getPreLoginRedirect(state): string {
 			return state.preLoginRedirect ?? null

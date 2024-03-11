@@ -1,11 +1,17 @@
-import { SuccessResponseDto, Logger } from '@juicyllama/utils'
-import { Body, Controller, Get, Post, Req, UseGuards, forwardRef, Inject, Res } from '@nestjs/common'
+import { Logger, SuccessResponseDto } from '@juicyllama/utils'
+import { Body, Controller, Get, Inject, Post, Req, Res, UseGuards, forwardRef } from '@nestjs/common'
 import { ApiHideProperty, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { Response } from 'express'
 import { AccountId, UserAuth } from '../../decorators'
 import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
 import { User } from '../users/users.entity'
 import { UsersService } from '../users/users.service'
+import {
+	ACCESS_TOKEN_COOKIE_NAME,
+	DEFAULT_ACCESS_TOKEN_EXPIRY_MINUTES,
+	DEFAULT_REFRESH_TOKEN_EXPIRY_DAYS,
+	REFRESH_TOKEN_COOKIE_NAME,
+} from './auth.constants'
 import { AuthService } from './auth.service'
 import { LoginResponseDto, ValidateCodeDto } from './dtos/login.dto'
 import { CompletePasswordResetDto, InitiateResetPasswordDto } from './dtos/password.reset.dto'
@@ -13,9 +19,6 @@ import { InitiatePasswordlessLoginDto } from './dtos/passwordless.login.dto'
 import { GoogleOauthGuard } from './guards/google-oauth.guard'
 import { LinkedinOauthGuard } from './guards/linkedin-oauth.guard'
 import { LocalAuthGuard } from './guards/local-auth.guard'
-import { DEFAULT_REFRESH_EXPIRY_DAYS } from './auth.constants'
-
-const REFRESH_COOKIE_NAME = 'refreshToken'
 
 @ApiTags('Auth')
 @Controller('/auth')
@@ -28,8 +31,7 @@ export class AuthController {
 
 	@ApiOperation({
 		summary: 'Login',
-		description:
-			'Posting the users email and password if successfully authenticated will return a token. Pass this bearer token in the `Authorization header (Authorization: Bearer {TOKEN})` to access restricted endpoints.',
+		description: 'Posting the users email and password if successfully authenticated will create a token cookie.',
 	})
 	@ApiQuery({ name: 'email', required: true, type: String, example: 'jon.doe@example.com' })
 	@ApiQuery({ name: 'password', required: true, type: String, example: 'S7r0#gP@$s' })
@@ -39,11 +41,14 @@ export class AuthController {
 	})
 	@UseGuards(LocalAuthGuard)
 	@Post('login')
-	async login(@Req() req: AuthenticatedRequest, @Res({ passthrough: true }) res: Response) {
-		const loginResponseDto = this.authService.login(req.user)
+	async login(
+		@Req() req: AuthenticatedRequest,
+		@Res({ passthrough: true }) res: Response,
+	): Promise<LoginResponseDto> {
+		const accessToken = await this.authService.login(req.user)
 		const refreshToken = await this.authService.createRefreshToken(req.user)
-		setRefeshTokenCookie(res, refreshToken)
-		return loginResponseDto
+		setAccessAndRefreshTokenCookies(res, accessToken, refreshToken)
+		return new LoginResponseDto(accessToken)
 	}
 
 	@ApiOperation({
@@ -56,24 +61,27 @@ export class AuthController {
 		type: LoginResponseDto,
 	})
 	@Post('refresh')
-	async refresh(@Req() req: AuthenticatedRequest, @Res({ passthrough: true }) res: Response) {
+	async refresh(
+		@Req() req: AuthenticatedRequest,
+		@Res({ passthrough: true }) res: Response,
+	): Promise<LoginResponseDto> {
 		const cookies = req.headers.cookie || ''
 		const oldRefreshToken = cookies
 			.split(';')
-			.find(cookie => cookie.trim().startsWith(REFRESH_COOKIE_NAME + '='))
+			.find(cookie => cookie.trim().startsWith(REFRESH_TOKEN_COOKIE_NAME + '='))
 			?.split('=')[1]
 		if (!oldRefreshToken) {
 			throw new Error('No refresh token found')
 		}
 		const loginPayload = this.authService.decodeRefreshToken(oldRefreshToken)
-		const loginResponseDto = this.authService.login(loginPayload)
+		const newAccessToken = await this.authService.login(loginPayload)
 		const newRefreshToken = await this.authService.createRefreshToken(loginPayload)
-		setRefeshTokenCookie(res, newRefreshToken)
+		setAccessAndRefreshTokenCookies(res, newAccessToken, newRefreshToken)
 		this.logger.log('Refreshed token', {
 			user_id: loginPayload.user_id,
 			oldRefreshToken: '...' + oldRefreshToken.substring(-10),
 		})
-		return loginResponseDto
+		return new LoginResponseDto(newAccessToken)
 	}
 
 	@UserAuth({ skipAccountId: true })
@@ -127,8 +135,13 @@ export class AuthController {
 		type: LoginResponseDto,
 	})
 	@Post('password-reset/complete')
-	async completePasswordReset(@Body() data: CompletePasswordResetDto): Promise<LoginResponseDto> {
-		return this.authService.completePasswordReset(data)
+	async completePasswordReset(
+		@Body() data: CompletePasswordResetDto,
+		@Res({ passthrough: true }) res: Response,
+	): Promise<LoginResponseDto> {
+		const accessToken = await this.authService.completePasswordReset(data)
+		setAccessAndRefreshTokenCookies(res, accessToken)
+		return new LoginResponseDto(accessToken)
 	}
 
 	@ApiOperation({
@@ -159,8 +172,13 @@ export class AuthController {
 		type: LoginResponseDto,
 	})
 	@Post('passwordless/code')
-	async validateCodeAndLogin(@Body() data: ValidateCodeDto): Promise<LoginResponseDto> {
-		return this.authService.validateLoginCodeAndLogin(data)
+	async validateCodeAndLogin(
+		@Body() data: ValidateCodeDto,
+		@Res({ passthrough: true }) res: Response,
+	): Promise<LoginResponseDto> {
+		const accessToken = await this.authService.validateLoginCodeAndLogin(data)
+		setAccessAndRefreshTokenCookies(res, accessToken)
+		return new LoginResponseDto(accessToken)
 	}
 
 	//todo test this
@@ -183,8 +201,13 @@ export class AuthController {
 	})
 	@UseGuards(GoogleOauthGuard)
 	@Get('google/redirect')
-	async googleAuthRedirect(@Req() req: AuthenticatedRequest): Promise<LoginResponseDto> {
-		return this.authService.login(req.user)
+	async googleAuthRedirect(
+		@Req() req: AuthenticatedRequest,
+		@Res({ passthrough: true }) res: Response,
+	): Promise<LoginResponseDto> {
+		const accessToken = await this.authService.login(req.user)
+		setAccessAndRefreshTokenCookies(res, accessToken)
+		return new LoginResponseDto(accessToken)
 	}
 
 	@ApiOperation({
@@ -205,8 +228,13 @@ export class AuthController {
 	})
 	@UseGuards(LinkedinOauthGuard)
 	@Get('linkedin/redirect')
-	async linkedinAuthRedirect(@Req() req: AuthenticatedRequest): Promise<LoginResponseDto> {
-		return this.authService.login(req.user)
+	async linkedinAuthRedirect(
+		@Req() req: AuthenticatedRequest,
+		@Res({ passthrough: true }) res: Response,
+	): Promise<LoginResponseDto> {
+		const accessToken = await this.authService.login(req.user)
+		setAccessAndRefreshTokenCookies(res, accessToken)
+		return new LoginResponseDto(accessToken)
 	}
 
 	@ApiHideProperty()
@@ -226,22 +254,38 @@ export class AuthController {
 	}
 }
 
-/**
- * Set the refresh token as a secure, httpOnly cookie that's only sent to this server's refresh endpoint
- */
-function setRefeshTokenCookie(res: Response, refreshToken: string) {
+function setAccessAndRefreshTokenCookies(res: Response, accessToken: string, refreshToken?: string): void {
 	if (!process.env.BASE_URL_API) {
 		throw new Error('BASE_URL_APP env variable not set')
 	}
-	res.cookie(REFRESH_COOKIE_NAME, refreshToken, {
-		httpOnly: true, // don't allow JS to access the cookie
-		secure: true, // only send the cookie over HTTPS
-		domain: process.env.BASE_URL_API.replace('https://', '').replace('http://', ''), // only send the cookie to the API domain
-		sameSite: 'none', // required for cross-site requests as the frontend may be on a different domain
-		path: '/auth/refresh', // only send the cookie to the refresh endpoint
+
+	const domain: string = process.env.BASE_URL_API.replace(/^https?:\/\//, '') // Remove protocol
+
+	// Set access token cookie
+	res.cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken, {
+		httpOnly: true,
+		secure: true, // Consider environment check for development vs. production
+		domain,
+		sameSite: 'none', // Adjust according to your requirements (Lax, Strict, None + Secure)
 		expires: new Date(
 			Date.now() +
-				Number(process.env.JWT_REFRESH_TOKEN_EXPIRY_DAYS || DEFAULT_REFRESH_EXPIRY_DAYS) * 1000 * 60 * 60 * 24,
-		),
+				Number(process.env.JWT_ACCESS_TOKEN_EXPIRY_MINUTES || DEFAULT_ACCESS_TOKEN_EXPIRY_MINUTES) * 60000,
+		), // Convert minutes to milliseconds
+		path: '/',
 	})
+
+	// Set refresh token cookie, if refresh token is provided
+	if (refreshToken) {
+		res.cookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
+			httpOnly: true,
+			secure: true, // Consider environment check for development vs. production
+			domain,
+			sameSite: 'none', // Adjust according to your requirements
+			expires: new Date(
+				Date.now() +
+					Number(process.env.JWT_REFRESH_TOKEN_EXPIRY_DAYS || DEFAULT_REFRESH_TOKEN_EXPIRY_DAYS) * 86400000,
+			), // Convert days to milliseconds
+			path: '/auth/refresh',
+		})
+	}
 }

@@ -13,7 +13,8 @@ import { InvoicesCronService } from './invoices.crons.service'
 @Controller('billing/invoices/crons')
 export class InvoicesCronsController {
 	constructor(
-		@Inject(forwardRef(() => InvoicesCronService)) private readonly invoicesCronService: InvoicesCronService) {}
+		@Inject(forwardRef(() => InvoicesCronService)) private readonly invoicesCronService: InvoicesCronService,
+	) {}
 
 	@Post('generate')
 	async generate_invoices() {

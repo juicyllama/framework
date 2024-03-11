@@ -46,9 +46,9 @@ Should you wish to have more granular control, you can import the important deco
 
 ```ts
 import { UseGuards } from '@nestjs/common'
-import { ApiBearerAuth } from '@nestjs/swagger'
+import { ApiCookieAuth } from '@nestjs/swagger'
 import { JwtAuthGuard } from '@juicyllama/core'
 
-@ApiBearerAuth()
+@ApiCookieAuth()
 @UseGuards(JwtAuthGuard)
 ```

@@ -3,6 +3,7 @@ export enum AppStoreIntegrationName {
 	mollie = 'mollie',
 	shopify = 'shopify',
 	wordpress = 'wordpress',
+	ga4 = 'ga4',
 }
 
 export enum AppIntegrationStatus {

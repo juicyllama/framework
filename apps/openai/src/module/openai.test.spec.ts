@@ -1,7 +1,5 @@
 import { Env, Logger } from '@juicyllama/utils'
-import { forwardRef } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
-import { OpenaiModule } from './openai.module'
 import { OpenaiService } from './openai.service'
 import OpenAI from 'openai'
 import { OpenAIClientToken } from './openai.constants'
@@ -66,7 +64,7 @@ describe('OpenAI', () => {
 				object: 'chat.completion',
 			})
 			try {
-				const result = await openaiService.ask({
+				const result = <any>await openaiService.ask({
 					messages: [{ role: 'user', content: 'Say this is a test' }],
 				})
 				expect(result).toBeDefined()
