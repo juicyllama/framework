@@ -14,7 +14,7 @@ export class UserAccount extends BaseEntity {
 	account_id!: number
 
 	@IsEnum(UserRole)
-	@Column({ default: UserRole.MEMBER })
+	@Column({ type: 'enum', enum: UserRole, default: UserRole.MEMBER })
 	role!: UserRole
 
 	@ManyToOne(() => User, user => user.accounts, {

@@ -78,13 +78,13 @@ export class Transaction extends BaseEntity {
 	@IsNumber()
 	billing_address_id?: number
 
-	@Column({ default: TransactionPaymentStatus.PENDING })
+	@Column({ type: 'enum', enum: TransactionPaymentStatus, default: TransactionPaymentStatus.PENDING })
 	@IsEnum(TransactionPaymentStatus)
-	payment_status!: TransactionPaymentStatus
+	payment_status?: TransactionPaymentStatus
 
-	@Column({ default: TransactionFulfillmentStatus.PENDING })
+	@Column({ type: 'enum', enum: TransactionFulfillmentStatus, default: TransactionFulfillmentStatus.PENDING })
 	@IsEnum(TransactionFulfillmentStatus)
-	fulfillment_status!: TransactionFulfillmentStatus
+	fulfillment_status?: TransactionFulfillmentStatus
 
 	@Column()
 	@IsString()

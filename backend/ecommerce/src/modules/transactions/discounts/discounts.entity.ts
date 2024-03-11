@@ -35,7 +35,7 @@ export class TransactionDiscount extends BaseEntity {
 	@IsString()
 	code!: string
 
-	@Column({ default: null, nullable: true })
+	@Column({ type: 'enum', enum: TransactionDiscountType })
 	@IsEnum(TransactionDiscountType)
 	type!: TransactionDiscountType
 

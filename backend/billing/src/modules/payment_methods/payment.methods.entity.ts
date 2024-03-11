@@ -21,7 +21,7 @@ export class PaymentMethod extends BaseEntity {
 	@IsNumber()
 	account_id!: number
 
-	@Column({ default: PaymentMethodType.creditcard })
+	@Column({ type: 'enum', enum: PaymentMethodType, default: PaymentMethodType.creditcard })
 	@IsEnum(PaymentMethodType)
 	method!: PaymentMethodType
 
@@ -29,7 +29,7 @@ export class PaymentMethod extends BaseEntity {
 	@IsObject()
 	details?: PaymentMethodCreditCardDetails | PaymentMethodBankTransferDetails
 
-	@Column('varchar', { length: 3 })
+	@Column({ type: 'enum', enum: SupportedCurrencies })
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)
 	@MaxLength(3)
@@ -47,7 +47,7 @@ export class PaymentMethod extends BaseEntity {
 	@IsBoolean()
 	can_refund?: boolean
 
-	@Column({ default: null, nullable: true })
+	@Column({ type: 'enum', enum: AppIntegrationName, nullable: true, default: null })
 	@IsEnum(AppIntegrationName)
 	app_integration_name?: AppIntegrationName
 
@@ -63,9 +63,9 @@ export class PaymentMethod extends BaseEntity {
 	@IsNumber()
 	attempts?: number
 
-	@Column({ default: PaymentMethodStatus.pending })
+	@Column({ type: 'enum', enum: PaymentMethodStatus, default: PaymentMethodStatus.pending })
 	@IsEnum(PaymentMethodStatus)
-	status?: PaymentMethodStatus
+	status?: PaymentMethodStatus = PaymentMethodStatus.pending
 
 	@Column({ default: null, nullable: true })
 	@IsString()

@@ -23,15 +23,15 @@ export class App extends BaseEntity {
 	url!: string
 
 	@IsEnum(AppIntegrationType)
-	@Column()
+	@Column({ type: 'enum', enum: AppIntegrationType })
 	integration_type!: AppIntegrationType
 
 	@IsEnum(AppStoreIntegrationName)
-	@Column()
+	@Column({ type: 'enum', enum: AppStoreIntegrationName })
 	integration_name!: AppStoreIntegrationName
 
 	@IsEnum(AppCategory)
-	@Column()
+	@Column({ type: 'enum', enum: AppCategory })
 	category!: AppCategory
 
 	//Allow apps to have parent apps (pass through apps) which can be used for whitelabel / saas based applications which have multiple clients

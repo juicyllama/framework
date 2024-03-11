@@ -33,7 +33,7 @@ export class BeaconEmail {
 	@IsObject()
 	cta?: any
 
-	@Column({ default: BeaconStatus.PENDING })
+	@Column({ type: 'enum', enum: BeaconStatus, default: BeaconStatus.PENDING })
 	@IsEnum(BeaconStatus)
 	status?: BeaconStatus
 

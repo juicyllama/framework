@@ -26,9 +26,9 @@ export class Account extends BaseEntity {
 	@IsString()
 	account_name!: string
 
-	@Column({ type: 'varchar', default: SupportedCurrencies.USD })
+	@Column({ type: 'enum', enum: SupportedCurrencies, default: SupportedCurrencies.USD })
 	@IsEnum(SupportedCurrencies)
-	currency!: SupportedCurrencies
+	currency?: SupportedCurrencies = SupportedCurrencies.USD
 
 	@Column({ default: null, nullable: true })
 	@IsString()

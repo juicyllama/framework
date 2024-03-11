@@ -31,7 +31,7 @@ export class Invoice extends BaseEntity {
 	@IsNumber()
 	account_id!: number
 
-	@Column({ default: null, nullable: true })
+	@Column({ type: 'enum', enum: AppIntegrationName, nullable: true, default: null })
 	@IsEnum(AppIntegrationName)
 	app_integration_name?: AppIntegrationName
 
@@ -39,7 +39,7 @@ export class Invoice extends BaseEntity {
 	@IsNumber()
 	app_invoice_id?: number
 
-	@Column('varchar', { length: 3 })
+	@Column({ type: 'enum', enum: SupportedCurrencies })
 	@IsEnum(SupportedCurrencies)
 	@MinLength(3)
 	@MaxLength(3)

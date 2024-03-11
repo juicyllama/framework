@@ -64,7 +64,7 @@ export class Contact extends BaseEntity {
 	@IsArray()
 	tags?: Tag[]
 
-	@Column({ default: UserAvatarType.NONE })
+	@Column({ type: 'enum', enum: UserAvatarType, default: UserAvatarType.NONE })
 	@IsEnum(UserAvatarType)
 	avatar_type?: UserAvatarType
 
@@ -77,7 +77,7 @@ export class Contact extends BaseEntity {
 	@IsDate()
 	dob?: Date
 
-	@Column({ default: ContactSubscriptionStatus.pending })
+	@Column({ type: 'enum', enum: ContactSubscriptionStatus, default: ContactSubscriptionStatus.pending })
 	@IsEnum(ContactSubscriptionStatus)
 	subscribed_status?: ContactSubscriptionStatus
 

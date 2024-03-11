@@ -26,8 +26,8 @@ export class Ai extends BaseEntity {
 	@Column({ default: false, nullable: true })
 	is_sql?: boolean
 
+	@Column({ type: 'enum', enum: AppIntegrationName, nullable: true, default: null })
 	@IsEnum(AppIntegrationName)
-	@Column({ default: false, nullable: true })
 	app_integration_name?: AppIntegrationName
 
 	//The response from the AI model
@@ -51,8 +51,8 @@ export class Ai extends BaseEntity {
 	training_response?: string
 
 	//Did the AI generate the correct answer?
+	@Column({ type: 'enum', enum: AiSuccessType, nullable: true, default: null })
 	@IsEnum(AiSuccessType)
-	@Column({ default: null, nullable: true })
 	success?: AiSuccessType
 
 	@IsString()

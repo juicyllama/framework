@@ -23,17 +23,17 @@ export class InstalledApp extends BaseEntity {
 	@IsString()
 	name!: string
 
+	@Column({ type: 'enum', enum: AppScope, default: AppScope.ACCOUNT })
 	@IsEnum(AppScope)
-	@Column({ default: AppScope.ACCOUNT })
-	scope!: AppScope
+	scope?: AppScope = AppScope.ACCOUNT
 
 	@Column('json', { default: null, nullable: true })
 	@IsObject()
 	settings?: any
 
+	@Column({ type: 'enum', enum: AppIntegrationStatus, default: AppIntegrationStatus.DISCONNCTED })
 	@IsEnum(AppIntegrationStatus)
-	@Column({ default: AppIntegrationStatus.DISCONNCTED })
-	readonly integration_status?: AppIntegrationStatus
+	readonly integration_status?: AppIntegrationStatus = AppIntegrationStatus.DISCONNCTED
 
 	// The URL to redirect to to start the OAUTH2 flow
 	@Column({ nullable: true, default: null })

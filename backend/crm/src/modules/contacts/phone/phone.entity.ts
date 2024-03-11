@@ -1,6 +1,6 @@
 import { BaseEntity } from '@juicyllama/core'
-import { IsString, IsEnum, MinLength, MaxLength, IsNumber } from 'class-validator'
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
+import { IsEnum, IsNumber, IsString, MaxLength, MinLength } from 'class-validator'
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { Contact } from '../contacts.entity'
 import { ContactPhoneStatus, ContactPhoneType } from './phone.enums'
 
@@ -17,7 +17,7 @@ export class ContactPhone extends BaseEntity {
 	@IsNumber()
 	contact_id!: number
 
-	@Column({ default: null, nullable: true })
+	@Column({ type: 'enum', enum: ContactPhoneType, default: null, nullable: true })
 	@IsEnum(ContactPhoneType)
 	type?: ContactPhoneType
 
@@ -35,7 +35,7 @@ export class ContactPhone extends BaseEntity {
 	@IsString()
 	number_local_format?: string
 
-	@Column({ default: ContactPhoneStatus.UNVERIFIED })
+	@Column({ type: 'enum', enum: ContactPhoneStatus, default: ContactPhoneStatus.UNVERIFIED })
 	@IsEnum(ContactPhoneStatus)
 	status?: ContactPhoneStatus
 
