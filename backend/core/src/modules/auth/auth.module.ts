@@ -40,7 +40,7 @@ if (enableLinkedinStrategy) {
 		ConfigModule.forFeature(jwtConfig),
 		ConfigValidationModule.register(SSOConfigDto),
 		JwtModule.register(jwtConfig()),
-		TypeOrmModule.forFeature([Role]),
+		TypeOrmModule.forFeature([UserAccount]),
 		forwardRef(() => AccountModule),
 		forwardRef(() => BeaconModule),
 		forwardRef(() => PassportModule),
