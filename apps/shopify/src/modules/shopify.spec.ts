@@ -1,8 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing'
-import { ConfigModule } from '@nestjs/config'
 import { Env } from '@juicyllama/utils'
-import { ShopifyModule } from './shopify.module'
+import { ConfigModule } from '@nestjs/config'
+import { Test, TestingModule } from '@nestjs/testing'
+import { TypeOrmModule } from '@nestjs/typeorm'
 import { ShopifyInstallationService } from './shopify.installation'
+import { ShopifyModule } from './shopify.module'
+import { cacheConfig, databaseConfig } from '@juicyllama/core'
+import { CacheModule } from '@nestjs/cache-manager'
 
 describe('Shopify', () => {
 	let moduleRef: TestingModule
@@ -15,8 +18,10 @@ describe('Shopify', () => {
 		moduleRef = await Test.createTestingModule({
 			imports: [
 				ConfigModule.forRoot({
-					isGlobal: true,
+					isGlobal: true
 				}),
+				TypeOrmModule.forRoot(databaseConfig()),
+				CacheModule.registerAsync(cacheConfig()),
 				ShopifyModule,
 			],
 		}).compile()

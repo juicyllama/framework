@@ -7,10 +7,7 @@ import { Ai } from './ai.entity'
 import { AiService } from './ai.service'
 
 @Module({
-	imports: [
-		TypeOrmModule.forFeature([Ai]), 
-		forwardRef(() => AuthModule),
-	],
+	imports: [TypeOrmModule.forFeature([Ai]), forwardRef(() => AuthModule)],
 	controllers: [AiController],
 	providers: [AiService, Logger, Query],
 	exports: [AiService],

@@ -9,7 +9,7 @@ import { OauthController } from './oauth.controller'
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([Oauth]), 
+		TypeOrmModule.forFeature([Oauth]),
 		forwardRef(() => AuthModule),
 		forwardRef(() => AppsModule),
 		forwardRef(() => BeaconModule),

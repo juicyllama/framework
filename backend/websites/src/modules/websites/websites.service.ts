@@ -1,9 +1,17 @@
-import { BeaconService, Query, BaseService, StorageService, StorageType, StorageFileFormat } from '@juicyllama/core'
-import { Logger, File } from '@juicyllama/utils'
+import {
+	BaseService,
+	BeaconService,
+	InjectConfig,
+	Query,
+	StorageFileFormat,
+	StorageService,
+	StorageType,
+} from '@juicyllama/core'
+import { File, Logger } from '@juicyllama/utils'
 import { Inject, Injectable, forwardRef } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+import { WebsitesConfigDto } from '../../config/websites.config.dto'
 import { Website } from './websites.entity'
 
 const E = Website
@@ -13,9 +21,9 @@ type T = Website
 export class WebsitesService extends BaseService<T> {
 	constructor(
 		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		@InjectConfig(WebsitesConfigDto) private readonly configService: WebsitesConfigDto,
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => Query))  readonly query: Query<T>,
+		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
 		@Inject(forwardRef(() => StorageService)) private readonly storageService: StorageService,
 	) {
@@ -27,11 +35,11 @@ export class WebsitesService extends BaseService<T> {
 	async create(data: Partial<T>) {
 		const website = await super.create(data)
 
-		if (this.configService.get<string>('websites.CRON_WEBSITES_WEBSITE_SCREENSHOT_GENERATE')) {
+		if (this.configService.CRON_WEBSITES_WEBSITE_SCREENSHOT_GENERATE) {
 			await this.generateScreenshot(website)
 		}
 
-		if (this.configService.get<string>('websites.CRON_WEBSITES_WEBSITE_ICON_GENERATE')) {
+		if (this.configService.CRON_WEBSITES_WEBSITE_ICON_GENERATE) {
 			await this.generateIcon(website)
 		}
 

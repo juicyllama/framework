@@ -1,6 +1,5 @@
 import { Logger } from '@juicyllama/utils'
 import { forwardRef, MiddlewareConsumer, Module } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { MiddlewareAccountId } from '../../middleware'
 import { Query } from '../../utils/typeorm/Query'
@@ -12,12 +11,11 @@ import { UsersController } from './users.controller'
 import { User } from './users.entity'
 import { UsersHooks } from './users.hooks'
 import { UsersService } from './users.service'
+import { ConfigModule } from '@nestjs/config'
 
 @Module({
 	imports: [
-		ConfigModule.forRoot({
-			isGlobal: true,
-		}),
+		ConfigModule.forRoot(), // TODO: find a way to remove forRoot. Without it Nest apps freeze on boot.
 		TypeOrmModule.forFeature([User]),
 		forwardRef(() => AuthModule),
 		forwardRef(() => AccountModule),

@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { Env } from '@juicyllama/utils'
 import { NumberVerificationService } from './number.verification.service'
 import { NumberVerificationModule } from './number.verification.module'
+import { ConfigModule } from '@nestjs/config'
 
 describe('Number Verification Service', () => {
 	let moduleRef: TestingModule
@@ -14,7 +15,7 @@ describe('Number Verification Service', () => {
 		}
 
 		moduleRef = await Test.createTestingModule({
-			imports: [NumberVerificationModule],
+			imports: [ConfigModule.forRoot(), NumberVerificationModule],
 		}).compile()
 
 		numberVerificationService = moduleRef.get<NumberVerificationService>(NumberVerificationService)
