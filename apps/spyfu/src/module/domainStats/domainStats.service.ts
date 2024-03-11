@@ -1,8 +1,9 @@
-import { Injectable, Inject, forwardRef } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
+import { InjectConfig } from '@juicyllama/core'
 import { Api, Logger } from '@juicyllama/utils'
-import { ENDPOINT } from '../../utils/constants'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
 import querystring from 'querystring'
+import { SpyfuConfigDto } from '../../configs/spyfu.config.dto'
+import { ENDPOINT } from '../../utils/constants'
 import { IDomainStatsResponse, LatestDomainStatsParams } from '../../utils/intefaces'
 
 @Injectable()
@@ -12,9 +13,9 @@ export class DomainStatsService {
 	constructor(
 		@Inject(forwardRef(() => Api)) private readonly api: Api,
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		@InjectConfig(SpyfuConfigDto) private readonly configService: SpyfuConfigDto,
 	) {
-		this.key = this.configService.get<string>('spyfu.SPYFU_API_KEY')
+		this.key = this.configService.SPYFU_API_KEY
 	}
 
 	async latest(queryParams: Partial<LatestDomainStatsParams>): Promise<IDomainStatsResponse> {

@@ -76,14 +76,14 @@ export * from './utils/redoc/index'
 
 // Configs
 export {
-	beaconConfig,
+	BeaconConfigDto,
 	cacheConfig,
 	jwtConfig,
 	mongodbConfig,
 	typeormConfig,
 	systemConfig,
 	systemConfigJoi,
-	ssoConfig,
+	SSOConfigDto,
 	loadEnvVariables,
 	redocConfig,
 	joiConfigJoi,

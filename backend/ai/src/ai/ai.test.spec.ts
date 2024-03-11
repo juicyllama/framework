@@ -2,6 +2,10 @@ import { Env, Logger } from '@juicyllama/utils'
 import { Test, TestingModule } from '@nestjs/testing'
 import { AiModule } from './ai.module'
 import { AiService } from './ai.service'
+import { CacheModule } from '@nestjs/cache-manager'
+import { cacheConfig, databaseConfig } from '@juicyllama/core'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { ConfigModule } from '@nestjs/config'
 
 describe('AI', () => {
 	let moduleRef: TestingModule
@@ -15,7 +19,12 @@ describe('AI', () => {
 		}
 
 		moduleRef = await Test.createTestingModule({
-			imports: [AiModule],
+			imports: [
+				ConfigModule.forRoot(),
+				TypeOrmModule.forRoot(databaseConfig()),
+				CacheModule.registerAsync(cacheConfig()),
+				AiModule,
+			],
 		}).compile()
 
 		aiService = moduleRef.get<AiService>(AiService)

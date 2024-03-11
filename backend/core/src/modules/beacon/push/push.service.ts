@@ -1,6 +1,5 @@
 import { Env, Logger, Modules } from '@juicyllama/utils'
 import { Inject, Injectable } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
 import _ from 'lodash'
 import { Repository } from 'typeorm'
@@ -8,6 +7,8 @@ import { Query } from '../../../utils/typeorm/Query'
 import { BeaconMessageDto } from '../beacon.dto'
 import { BeaconStatus } from '../beacon.enums'
 import { BeaconPush } from './push.entity'
+import { BeaconConfigDto } from '../../../configs/beacon.config.dto'
+import { InjectConfig } from '../../config'
 
 @Injectable()
 export class BeaconPushService {
@@ -15,7 +16,7 @@ export class BeaconPushService {
 		@Inject(Query) private readonly query: Query<BeaconPush>,
 		@InjectRepository(BeaconPush) private readonly repository: Repository<BeaconPush>,
 		private readonly logger: Logger,
-		private readonly configService: ConfigService,
+		@InjectConfig(BeaconConfigDto) private readonly configService: BeaconConfigDto,
 	) {}
 
 	async create(message: BeaconMessageDto): Promise<boolean | undefined> {
@@ -53,46 +54,44 @@ export class BeaconPushService {
 		if (Modules.pusher.isInstalled) {
 			app_integration_name = 'pusher'
 			service = await Modules.pusher.load()
-
-			if (
-				_.isUndefined(this.configService.get<string>('beacon.PUSHER_APP_ID')) ||
-				_.isUndefined(this.configService.get<string>('beacon.PUSHER_APP_KEY')) ||
-				_.isUndefined(this.configService.get<string>('beacon.PUSHER_APP_SECRET')) ||
-				_.isUndefined(this.configService.get<string>('beacon.PUSHER_APP_CLUSTER')) ||
-				_.isUndefined(this.configService.get<string>('beacon.PUSHER_CHANNEL'))
-			) {
+			const configKeys: (keyof BeaconConfigDto)[] = [
+				'PUSHER_APP_ID',
+				'PUSHER_APP_KEY',
+				'PUSHER_APP_SECRET',
+				'PUSHER_APP_CLUSTER',
+				'PUSHER_CHANNEL',
+			]
+			if (configKeys.find(key => _.isUndefined(this.configService[key]))) {
 				this.logger.warn(`[${domain}] Missing pusher config details`, {
 					config: {
-						app_id: this.configService.get<string>('beacon.PUSHER_APP_ID'),
-						app_key: this.configService.get<string>('beacon.PUSHER_APP_KEY'),
+						app_id: this.configService.PUSHER_APP_ID,
+						app_key: this.configService.PUSHER_APP_KEY,
 						app_secret: '*********',
-						app_cluster: this.configService.get<string>('beacon.PUSHER_APP_CLUSTER'),
-						channel: this.configService.get<string>('beacon.PUSHER_CHANNEL'),
+						app_cluster: this.configService.PUSHER_APP_CLUSTER,
+						channel: this.configService.PUSHER_CHANNEL,
 					},
 				})
 				return false
 			}
 
 			const pusher = new service({
-				appId: this.configService.get<string>('beacon.PUSHER_APP_ID'),
-				key: this.configService.get<string>('beacon.PUSHER_APP_KEY'),
-				secret: this.configService.get<string>('beacon.PUSHER_APP_SECRET'),
-				cluster: this.configService.get<string>('beacon.PUSHER_APP_CLUSTER'),
-				useTLS: this.configService.get<string>('beacon.PUSHER_USE_TLS'),
+				appId: this.configService.PUSHER_APP_ID,
+				key: this.configService.PUSHER_APP_KEY,
+				secret: this.configService.PUSHER_APP_SECRET,
+				cluster: this.configService.PUSHER_APP_CLUSTER,
+				useTLS: this.configService.PUSHER_USE_TLS,
 			})
 
 			pusher.trigger(
-				this.configService.get<string>('beacon.PUSHER_CHANNEL'),
+				this.configService.PUSHER_CHANNEL,
 				message.communication.event,
 				message.options?.skipJsonSave ? null : message.json ?? null,
 			)
 
 			this.logger.log(
-				`[${domain}] Message Sent! Channel = ${this.configService.get<string>(
-					'beacon.PUSHER_CHANNEL',
-				)} | event = ${message.communication.event} | data = ${JSON.stringify(
-					message.options?.skipJsonSave ? null : message.json ?? null,
-				)}`,
+				`[${domain}] Message Sent! Channel = ${this.configService.PUSHER_CHANNEL} | event = ${
+					message.communication.event
+				} | data = ${JSON.stringify(message.options?.skipJsonSave ? null : message.json ?? null)}`,
 			)
 
 			await this.query.update(this.repository, {

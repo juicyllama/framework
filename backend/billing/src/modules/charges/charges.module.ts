@@ -2,11 +2,11 @@ import { AuthModule, FxModule, Query } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
 import { Module, forwardRef } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { Invoice } from '../..'
 import { ChargesController } from './charges.controller'
 import { Charge } from './charges.entity'
 import { ChargesService } from './charges.service'
 import { ChargesSubscriber } from './charges.subscriber'
-import { Invoice } from '../..'
 
 @Module({
 	imports: [TypeOrmModule.forFeature([Charge, Invoice]), forwardRef(() => AuthModule), forwardRef(() => FxModule)],
