@@ -33,7 +33,7 @@ export const AccountStore = defineStore('account', {
 				logger({ severity: LogSeverity.ERROR, message: e.message })
 			}
 		},
-		async createAccount(data: CreateAccount): Promise<NewAccountDetails>{
+		async createAccount(data: CreateAccount): Promise<NewAccountDetails> {
 			return await createAccount(data)
 		},
 		async resyncAccount(account_id?: number): Promise<Account> {

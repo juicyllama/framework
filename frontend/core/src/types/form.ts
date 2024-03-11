@@ -128,14 +128,13 @@ export interface FormFieldPluginPasswordGeneratorOptions {
 		password_strength?: boolean
 		password_options?: boolean
 		password_length?: boolean
-	},
+	}
 	force?: {
 		uppercase?: boolean
 		lowercase?: boolean
 		numbers?: boolean
 		symbols?: boolean
-	
-	},
+	}
 	type?: FormFieldPlugin.PASSWORD_GENERATOR
 }
 

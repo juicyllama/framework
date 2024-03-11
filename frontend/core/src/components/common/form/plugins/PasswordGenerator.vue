@@ -148,7 +148,7 @@ watch(() => checkedSymbols.value, (newValue) => {
 			</q-input>
         </div>
         <div class="flex flex-row" v-if="!hidePasswordStrength">
-            <div v-for="(v,i) in 5" class="password-strength-col">
+            <div v-for="(v,i) in 5" :key="i" class="password-strength-col">
             	<div :class="i<passwordScore ? ( passwordScore <=2? 'bg-red' : (passwordScore <=4 ? 'bg-orange' : 'bg-green')) : 'bg-gray'"></div>
             </div>
         </div>
