@@ -7,7 +7,7 @@ import { JwtModule } from '@nestjs/jwt'
 import { Test, TestingModule } from '@nestjs/testing'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { DeepPartial, ObjectLiteral, Repository } from 'typeorm'
-import { UsersModule, UsersService, cacheConfig, databaseConfig, jwtConfig } from '..'
+import { UsersModule, UsersService, cacheConfig, databaseConfig, jwtConfig, mongodbConfig } from '..'
 import { validationPipeOptions } from '../configs/nest.config'
 import { Account } from '../modules/accounts/account.entity'
 import { AccountModule } from '../modules/accounts/account.module'
@@ -81,6 +81,7 @@ export class Scaffold<T extends ObjectLiteral> {
 			}),
 			CacheModule.registerAsync(cacheConfig()),
 			TypeOrmModule.forRoot(databaseConfig()),
+			TypeOrmModule.forRootAsync(mongodbConfig()),
 			JwtModule.register(jwtConfig()),
 			forwardRef(() => AccountModule),
 			forwardRef(() => AuthModule),
@@ -120,9 +121,8 @@ export class Scaffold<T extends ObjectLiteral> {
 		const result = await accountService.onboard(MockAccountRequest(password))
 		owner = result.owner
 
-		const auth = await authService.login(owner)
-		owner_access_token = auth.access_token
-
+		owner_access_token = await authService.login(owner)
+		
 		return {
 			server: httpServer,
 			module: moduleRef,
@@ -139,7 +139,7 @@ export class Scaffold<T extends ObjectLiteral> {
 			values: {
 				account: owner.accounts[0],
 				owner: owner,
-				owner_access_token: owner_access_token,
+				owner_access_token,
 				owner_password: password,
 				record: undefined,
 				mock: undefined,
