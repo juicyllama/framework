@@ -18,7 +18,7 @@ import { UsersService, USERS_ENDPOINT } from '../services/users'
 import { AccountStore } from './account'
 import { QVueGlobals } from 'quasar'
 import { LogSeverity } from '../types'
-import { Json } from '@juicyllama/vue-utils'
+import { Json } from '@juicyllama/utils'
 
 type T = User
 

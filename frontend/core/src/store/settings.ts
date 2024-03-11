@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { Settings } from '../types'
-import { Json } from '@juicyllama/vue-utils'
+import { Json } from '@juicyllama/utils'
 
 type T = Settings
 

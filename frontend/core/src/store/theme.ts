@@ -1,4 +1,4 @@
-import { Json } from '@juicyllama/vue-utils'
+import { Json } from '@juicyllama/utils'
 import { defineStore } from 'pinia'
 
 export const ThemeStore = defineStore('theme', {

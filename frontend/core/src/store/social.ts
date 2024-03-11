@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Json } from '@juicyllama/vue-utils'
+import { Json } from '@juicyllama/utils'
 import { Chat } from '../types/social/chat'
 import { SOCIAL_CHAT_ENDPOINT, socialChatService } from '../services/social/chat'
 

@@ -775,6 +775,9 @@ importers:
 
   frontend/core:
     dependencies:
+      '@juicyllama/utils':
+        specifier: workspace:^
+        version: link:../../common/utils
       '@juicyllama/vue-dev':
         specifier: workspace:^
         version: link:../vue-dev

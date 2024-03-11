@@ -20,7 +20,7 @@ import { default as Telephone } from '../../../components/common/form/plugins/Te
 import { default as InstalledAppButton } from '../../../components/common/form/plugins/InstallApp.vue'
 import countries from '../../../assets/json/countries.json'
 import languages from '../../../assets/json/languages.json'
-import { JLNotice, NoticeType, Strings } from '@juicyllama/vue-utils'
+import { JLNotice, NoticeType, Strings } from '@juicyllama/utils'
 
 const props = defineProps<{
 	options: FormSchema

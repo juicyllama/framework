@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Ref, ref, reactive, computed, watch } from 'vue'
-import { Strings } from '@juicyllama/vue-utils'
+import { Strings } from '@juicyllama/utils'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import FieldContents from './FieldContents.vue'

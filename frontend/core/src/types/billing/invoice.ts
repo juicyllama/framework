@@ -1,4 +1,4 @@
-import { SupportedCurrencies } from '@juicyllama/vue-utils'
+import { SupportedCurrencies } from '@juicyllama/utils'
 import { Account } from '../account'
 import { AppStoreIntegrationName } from '../appstore'
 import { Charge } from './charge'

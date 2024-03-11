@@ -1,6 +1,6 @@
 import { Button, ButtonStyle, CustomButton, DropdownOptions, Icon, IconSettings } from './common'
 import { QVueGlobals } from 'quasar'
-import { NoticeProps } from '@juicyllama/vue-utils'
+import { NoticeProps } from '@juicyllama/utils'
 import { ConnectAppOptions, InstalledApp } from '../types/appstore'
 
 export interface FormApiOptionsCreate {

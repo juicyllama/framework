@@ -34,6 +34,7 @@
 	},
 	"dependencies": {
 		"@juicyllama/vue-dev": "workspace:^",
-		"@juicyllama/vue-utils": "workspace:^"
+		"@juicyllama/vue-utils": "workspace:^",
+		"@juicyllama/utils": "workspace:^"
 	}
 }

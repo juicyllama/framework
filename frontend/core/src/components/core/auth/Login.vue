@@ -8,7 +8,7 @@ import { validateEmail, isPasswordValid, logger } from '../../../helpers'
 import { goToLoginRedirect } from '../../../helpers'
 import { useQuasar } from 'quasar'
 
-import { Strings } from '@juicyllama/vue-utils'
+import { Strings } from '@juicyllama/utils'
 import { completeGoogleLogin, completeLinkedInLogin } from '../../../services/auth'
 import { FormViewSettings, LogSeverity, FormViewDesignSettings } from '../../../types'
 

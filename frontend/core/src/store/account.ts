@@ -7,7 +7,7 @@ import { UserStore } from './user'
 import { LogSeverity } from '../types'
 import { QVueGlobals } from 'quasar'
 import { getUser } from '../services/auth'
-import { Json } from '@juicyllama/vue-utils'
+import { Json } from '@juicyllama/utils'
 
 export const AccountStore = defineStore('account', {
 	state: () => ({
