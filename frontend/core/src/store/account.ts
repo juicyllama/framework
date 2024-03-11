@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { User, UserLogin } from '../types'
+import type { NewAccountDetails, User, UserLogin } from '../types'
 import { logger } from '../helpers/logger'
 import { createAccount, getAccount, updateAccount, updateAccountAvatar } from '../services/account'
 import type { Account, CreateAccount } from '../types'
@@ -32,6 +32,9 @@ export const AccountStore = defineStore('account', {
 			} catch (e: any) {
 				logger({ severity: LogSeverity.ERROR, message: e.message })
 			}
+		},
+		async createAccount(data: CreateAccount): Promise<NewAccountDetails>{
+			return await createAccount(data)
 		},
 		async resyncAccount(account_id?: number): Promise<Account> {
 			if (!account_id) {

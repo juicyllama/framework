@@ -6,6 +6,8 @@ export interface CreateAccount extends AuthFormState {
 	account_name?: string
 	first_name?: string
 	last_name?: string
+	currency_code?: string
+	password_reset?: boolean
 }
 
 export interface NewAccountDetails {

@@ -33,6 +33,7 @@ export class AccountHooks {
 				hrefs: {
 					dashboard: process.env.BASE_URL_APP + '/dashboard',
 				},
+				env: process.env,
 			})
 		} else {
 			markdown = `${owner.first_name ?? 'Hello'}, we are really pleased to welcome ${
@@ -78,6 +79,7 @@ export class AccountHooks {
 				hrefs: {
 					reset: process.env.BASE_URL_APP + '/reset',
 				},
+				env: process.env,
 			})
 		} else {
 			markdown = `${

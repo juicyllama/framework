@@ -121,29 +121,6 @@ export class UsersController {
 		}
 	}
 
-	//todo fix to restrict to correct account_id
-	// @ReadChartsDecorator({ entity: E, selectEnum: UserSelect, name: NAME })
-	// async charts(
-	// 	@Query() query: any: any,
-	// 	@Query('search') search: string,
-	// 	@Query('from') from: string,
-	// 	@Query('to') to: string,
-	// 	@Query('fields') fields: string[],
-	// 	@Query('period') period?: ChartsPeriod,
-	// ): Promise<ChartsResponseDto> {
-	// 	return await crudCharts<T>({
-	// 		service: this.service,
-	// 		tQuery: this.tQuery,
-	// 		query,
-	// 		search,
-	// 		period,
-	// 		fields,
-	// 		...(from && { from: new Date(from) }),
-	// 		...(to && { to: new Date(to) }),
-	// 		searchFields: SEARCH_FIELDS,
-	// 	})
-	// }
-
 	@ReadOneDecorator(constants)
 	async findOne(@AccountId() account_id: number, @Param() params: any): Promise<T> {
 		const user = await this.service.findOne({

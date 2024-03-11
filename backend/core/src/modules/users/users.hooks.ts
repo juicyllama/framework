@@ -31,6 +31,7 @@ export class UsersHooks {
 				hrefs: {
 					reset: process.env.BASE_URL_APP + '/reset?email=' + user.email,
 				},
+				env: process.env,
 			})
 		} else {
 			markdown = `${user.first_name}, you have been invited to join ${
@@ -77,6 +78,7 @@ export class UsersHooks {
 				hrefs: {
 					login: process.env.BASE_URL_APP + '/login',
 				},
+				env: process.env,
 			})
 		} else {
 			markdown = `${user.first_name}, ${

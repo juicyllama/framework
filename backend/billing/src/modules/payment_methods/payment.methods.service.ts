@@ -339,6 +339,7 @@ export class PaymentMethodsService extends BaseService<T> {
 			markdown = await File.read(process.env.BEACON_BILLING_PAYMENT_METHOD_EXPIRY + '/email.md')
 			markdown = Strings.replacer(markdown, {
 				payment_method: payment_method,
+				env: process.env,
 			})
 		} else {
 			markdown = `The payment method on file for ${payment_method.account.account_name} is expiring soon. Please update your payment method.`

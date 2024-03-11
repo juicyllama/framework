@@ -1,9 +1,9 @@
 import { Classes } from '@juicyllama/utils'
 import { ApiProperty, PartialType } from '@nestjs/swagger'
-import { IsString, IsBoolean, IsOptional, IsEmail, MinLength, MaxLength, IsEnum } from 'class-validator'
+import { IsString, IsBoolean, IsOptional, IsEmail, MinLength, MaxLength, IsEnum, IsUrl } from 'class-validator'
 import { SwaggerPropertyDecorator, SwaggerPropertyType } from '../../decorators/Swagger.decorator'
 import { BaseResponseDto } from '../../types/common'
-import { UserRole } from './users.enums'
+import { UserAvatarType, UserRole } from './users.enums'
 
 export class UserDto {
 	@ApiProperty({
@@ -54,6 +54,25 @@ export class UserDto {
 	@IsBoolean()
 	@IsOptional()
 	password_reset?: boolean
+
+	@ApiProperty({
+		description: 'User avatar type, defualt is NONE',
+		example: UserAvatarType.IMAGE,
+		required: false,
+	})
+	@IsEnum(UserAvatarType)
+	@IsOptional()
+	avatar_type?: UserAvatarType
+
+	@ApiProperty({
+		description: 'The URL if the user has an avatar image, default is null',
+		example: 'https://example.ext/avatar.jpg',
+		required: false,
+	})
+	@IsUrl()
+	@IsOptional()
+	avatar_image_url?: string
+
 }
 
 export class CreateUserDto extends UserDto {

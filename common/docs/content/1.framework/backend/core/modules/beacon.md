@@ -154,13 +154,13 @@ Add the hook to your .env file pointing to your template directory
 
 | Hook | Injected Object                    |
 | ------ | ------------------------------- |
-| `BEACON_ACCOUNT_CREATE`  | `{ account: Account, owner: User, hrefs: {	dashboard: String } }` |
-| `BEACON_ACCOUNT_ADMIN_TEMPORARY_PASSWORD`    |  `{ owner: User, password: String, hrefs: { reset: String } }` |
-| `BEACON_USER_INVITED`  | `{ account: Account, user: User, hrefs: {	reset: String } }` |
-| `BEACON_USER_ADDED`  | `{ account: Account, user: User, hrefs: { login: String } }` |
-| `BEACON_USER_AUTH_VERIFICATION_CODE`  | `{ user: User, code: String, { hrefs: { cta: String } }` |
-| `BEACON_USER_AUTH_PASSWORDLESS_CODE`  | `{ user: User, code: String, { hrefs: { cta: String } }` |
-| `BEACON_BILLING_WITHDRAWAL_REQUEST`  | `{ withdrawal: Withdrawal, user: User, amount: Intl.NumberFormat }` |
-| `BEACON_BILLING_PAYMENT_RECEIVED`  | `{ payment: Payment, user: User, amount: Intl.NumberFormat }` |
-| `BEACON_BILLING_PAYMENT_DECLINED`  | `{ payment_method: PaymentMethod, user: User, amount: Intl.NumberFormat }` |
-| `BEACON_BILLING_PAYMENT_METHOD_EXPIRY`  | `{ payment_method: PaymentMethod}` |
+| `BEACON_ACCOUNT_CREATE`  | `{ account: Account, owner: User, hrefs: {	dashboard: String }, env: process.env }` |
+| `BEACON_ACCOUNT_ADMIN_TEMPORARY_PASSWORD`    |  `{ owner: User, password: String, hrefs: { reset: String }, env: process.env }` |
+| `BEACON_USER_INVITED`  | `{ account: Account, user: User, hrefs: {	reset: String },env: process.env }` |
+| `BEACON_USER_ADDED`  | `{ account: Account, user: User, hrefs: { login: String }, env: process.env }` |
+| `BEACON_USER_AUTH_VERIFICATION_CODE`  | `{ user: User, code: String, { hrefs: { cta: String }, env: process.env }` |
+| `BEACON_USER_AUTH_PASSWORDLESS_CODE`  | `{ user: User, code: String, { hrefs: { cta: String }, env: process.env }` |
+| `BEACON_BILLING_WITHDRAWAL_REQUEST`  | `{ withdrawal: Withdrawal, user: User, amount: Intl.NumberFormat, env: process.env }` |
+| `BEACON_BILLING_PAYMENT_RECEIVED`  | `{ payment: Payment, user: User, amount: Intl.NumberFormat, env: process.env }` |
+| `BEACON_BILLING_PAYMENT_DECLINED`  | `{ payment_method: PaymentMethod, user: User, amount: Intl.NumberFormat, env: process.env }` |
+| `BEACON_BILLING_PAYMENT_METHOD_EXPIRY`  | `{ payment_method: PaymentMethod, env: process.env }` |

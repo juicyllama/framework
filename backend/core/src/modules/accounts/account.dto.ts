@@ -1,6 +1,6 @@
 import { SupportedCurrencies } from '@juicyllama/utils'
 import { ApiProperty, PartialType } from '@nestjs/swagger'
-import { IsString, MinLength, MaxLength, IsOptional, IsEnum, IsEmail } from 'class-validator'
+import { IsString, MinLength, MaxLength, IsOptional, IsEnum, IsEmail, IsBoolean } from 'class-validator'
 import { User } from '../users/users.entity'
 import { Account } from './account.entity'
 
@@ -74,6 +74,15 @@ export class OnboardAccountDto {
 		required: false,
 	})
 	currency?: SupportedCurrencies
+
+
+	@ApiProperty({
+		example: false,
+		required: false,
+	})
+	@IsBoolean()
+	@IsOptional()
+	password_reset?: boolean
 }
 
 export class OnboardAdditionalAccountDto {

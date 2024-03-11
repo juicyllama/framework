@@ -192,7 +192,7 @@ importers:
         version: link:../../common/utils
       '@shopify/shopify-api':
         specifier: latest
-        version: 9.4.1
+        version: 9.5.0
     devDependencies:
       '@types/uuid':
         specifier: ^9.0.7
@@ -970,6 +970,9 @@ importers:
       vue3-q-tel-input:
         specifier: ^1.1.7
         version: 1.1.7(quasar@2.14.6)(vue@3.4.21)
+      zxcvbn:
+        specifier: ^4.4.2
+        version: 4.4.2
 
   frontend/vue-flags:
     dependencies:
@@ -4951,6 +4954,7 @@ packages:
     dependencies:
       is-glob: 4.0.3
       micromatch: 4.0.5
+      napi-wasm: 1.1.0
     bundledDependencies:
       - napi-wasm
 
@@ -5633,14 +5637,14 @@ packages:
     resolution: {integrity: sha512-RbhOOTCNoCrbfkRyoXODZp75MlpiHMgbE5MEBZAnnnLyQNgrigEj4p0lzsMDyc1zVsJDLrivB58tgg3emX0eEA==}
     dev: false
 
-  /@shopify/admin-api-client@0.2.7:
-    resolution: {integrity: sha512-GCa7jqV9jTeUlOZiLSuxaxmnaRzIwP/3cwHklBLUfpClOq8eZPdZeeRtUygndFQG4NSa7AtCwO68hMFY7AbAKw==}
+  /@shopify/admin-api-client@0.2.8:
+    resolution: {integrity: sha512-UyGhssHLw8Cwl7ai9SFtiZj0A78Ldt0qKotKg7r95mNTfKLao01oVjJFOZCZfFK+1x7ePUdh+UD+pbsb17KshA==}
     dependencies:
-      '@shopify/graphql-client': 0.10.2
+      '@shopify/graphql-client': 0.10.3
     dev: false
 
-  /@shopify/graphql-client@0.10.2:
-    resolution: {integrity: sha512-KYZ2m/VFDOCv457tgeUT+NsRC6qhKtLR/8EPcEbO3GSwfnzejYAfibMfnVNoRDJAJ+jIREVZ47/PbVJ+Hf9CCA==}
+  /@shopify/graphql-client@0.10.3:
+    resolution: {integrity: sha512-w9noa5wbuyQegOdmqR5Yfj0GQJKmwuDiqIzDETgZhTMcmV45CNxVRxCWx6BQt3MpLzgk0A8G9iaoppfHXzkhfA==}
     dev: false
 
   /@shopify/network@3.2.1:
@@ -5648,12 +5652,12 @@ packages:
     engines: {node: ^14.17.0 || >=16.0.0}
     dev: false
 
-  /@shopify/shopify-api@9.4.1:
-    resolution: {integrity: sha512-pz7mjCbkuJWHTcwAr3vvhvKnfnvdFKFi0ptt7xI4MZp9GRrnkKXxQEHPxNcvzMWyM6k3XQnWLzBU1f+GkfiICg==}
+  /@shopify/shopify-api@9.5.0:
+    resolution: {integrity: sha512-DqfkeHJn3uch3ujSzku9R2Q3rsCtW7QHbyPHIahORQsQVKj+YAhkDjw1V+pMQRTbveL2HHW6D2r8GQvEPOU2Gw==}
     dependencies:
-      '@shopify/admin-api-client': 0.2.7
+      '@shopify/admin-api-client': 0.2.8
       '@shopify/network': 3.2.1
-      '@shopify/storefront-api-client': 0.3.2
+      '@shopify/storefront-api-client': 0.3.3
       compare-versions: 6.1.0
       isbot: 4.4.0
       jose: 5.2.2
@@ -5664,10 +5668,10 @@ packages:
       - encoding
     dev: false
 
-  /@shopify/storefront-api-client@0.3.2:
-    resolution: {integrity: sha512-bB1FWtIfM/jg/zqgZ6ykve3vGrfxfSzrw+ZNLTUoZrHVlfL1l146UCpUlKbGC0O/YOJvonHzvGWQDAUXO2rXDw==}
+  /@shopify/storefront-api-client@0.3.3:
+    resolution: {integrity: sha512-yoZul8r2mhb/XCDh55UxKNuo/PDB+bldTOt+rRz9uCKC9WkVQfGfMLwJhKb92i3CT/cxWNREPqEN5z1H+B9+IQ==}
     dependencies:
-      '@shopify/graphql-client': 0.10.2
+      '@shopify/graphql-client': 0.10.3
     dev: false
 
   /@shuding/opentype.js@1.4.0-beta.0:
@@ -17205,6 +17209,9 @@ packages:
       - supports-color
     dev: false
 
+  /napi-wasm@1.1.0:
+    resolution: {integrity: sha512-lHwIAJbmLSjF9VDRm9GoVOy9AGp3aIvkjv+Kvz9h16QR3uSVYH78PNQUnT2U4X53mhlnV2M7wrhibQ3GHicDmg==}
+
   /natural-compare-lite@1.4.0:
     resolution: {integrity: sha512-Tj+HTDSJJKaZnfiuw+iaF9skdPpTo2GtEly5JHnWV/hfv2Qj/9RKsGISQtLh2ox3l5EAGw487hnBee0sIJ6v2g==}
     dev: false
@@ -23943,4 +23950,8 @@ packages:
 
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
+    dev: false
+
+  /zxcvbn@4.4.2:
+    resolution: {integrity: sha512-Bq0B+ixT/DMyG8kgX2xWcI5jUvCwqrMxSFam7m0lAf78nf04hv6lNCsyLYdyYTrCVMqNDY/206K7eExYCeSyUQ==}
     dev: false
