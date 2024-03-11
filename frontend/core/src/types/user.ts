@@ -1,5 +1,5 @@
-import type { Role, UserRole } from './role'
 import type { Account } from './account'
+import { UserAccount, UserRole } from './user-account'
 
 export enum AvatarType {
 	NONE = 'NONE',
@@ -21,7 +21,7 @@ export interface User {
 	readonly created_at: Date
 	updated_at: Date
 	last_login_at: Date
-	roles: Role[]
+	user_accounts: UserAccount[]
 	role: UserRole
 	avatar_type: AvatarType
 	avatar_image_url: string

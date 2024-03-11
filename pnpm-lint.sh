@@ -22,6 +22,7 @@ directories=(
     "backend/ecommerce"
     
     ### APPS ###
+    "apps/ahrefs"
     "apps/apilayer"
     "apps/aws"
     "apps/everflow"
@@ -47,10 +48,10 @@ failure_count=0
 declare -a failed_directories
 start_total=$SECONDS
 
-# Loop through each directory and run 'pnpm run test'
+# Loop through each directory and run 'pnpm run lint'
 for dir in "${directories[@]}"; do
     start=$SECONDS
-    echo "Running tests in $dir..."
+    echo "Running lint in $dir..."
     output=$(cd "$dir" && pnpm run lint 2>&1)
     exit_code=$?
     duration=$((SECONDS - start))
@@ -62,10 +63,10 @@ for dir in "${directories[@]}"; do
         if [[ "$output" != *ERR_PNPM_NO_SCRIPT* ]]; then
         ((failure_count++))
         failed_directories+=("$dir")
-            echo "Tests failed in $dir. Took $duration seconds. displaying output:"
+            echo "Lint failed in $dir. Took $duration seconds. displaying output:"
             echo "$output"
         else
-            echo "No test script found, skipping"
+            echo "No lint script found, skipping"
         fi        
     fi
 done

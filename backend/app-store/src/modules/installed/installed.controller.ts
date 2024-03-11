@@ -105,7 +105,7 @@ export class InstalledAppsController {
 		installed_app.app = app
 
 		if (app.integration_type === AppIntegrationType.OAUTH2) {
-			installed_app.oauth_redirect_url = this.service.createOauthLink(installed_app)
+			installed_app.oauth_redirect_url = await this.service.createOauthLink(installed_app)
 
 			await this.service.update({
 				installed_app_id: installed_app.installed_app_id,

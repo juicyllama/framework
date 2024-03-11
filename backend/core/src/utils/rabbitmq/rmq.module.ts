@@ -1,5 +1,4 @@
 import { DynamicModule, Module } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 import { ClientsModule, Transport } from '@nestjs/microservices'
 import { RmqService } from './rmq.service'
 
@@ -19,8 +18,8 @@ export class RmqModule {
 				ClientsModule.registerAsync([
 					{
 						name,
-						useFactory: (configService: ConfigService) => {
-							const rabbitMqUri = configService.get<string>('RABBIT_MQ_URI')
+						useFactory: () => {
+							const rabbitMqUri = process.env.RABBIT_MQ_URI
 							if (!rabbitMqUri) {
 								throw new Error('RABBIT_MQ_URI is not defined in the configuration.')
 							}
@@ -28,11 +27,11 @@ export class RmqModule {
 								transport: Transport.RMQ,
 								options: {
 									urls: [rabbitMqUri], // Ensured it's not undefined
-									queue: configService.get<string>(`RABBIT_MQ_${name}_QUEUE`),
+									queue: process.env[`RABBIT_MQ_${name}_QUEUE`],
 								},
 							}
 						},
-						inject: [ConfigService],
+						inject: [],
 					},
 				]),
 			],

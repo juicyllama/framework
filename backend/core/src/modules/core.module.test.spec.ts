@@ -1,5 +1,9 @@
 import { Env } from '@juicyllama/utils'
+import { CacheModule } from '@nestjs/cache-manager'
+import { ConfigModule } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { cacheConfig, databaseConfig } from '../configs'
 import { CoreModule } from './core.module'
 
 describe('Core Bootup', () => {
@@ -15,7 +19,14 @@ describe('Core Bootup', () => {
 		it('Does it boot up without issue?', async () => {
 			try {
 				moduleRef = await Test.createTestingModule({
-					imports: [CoreModule],
+					imports: [
+						ConfigModule.forRoot({
+							isGlobal: true
+						}),
+						TypeOrmModule.forRoot(databaseConfig()),
+						CacheModule.registerAsync(cacheConfig()),
+						CoreModule,
+					],
 					controllers: [],
 					providers: [],
 				}).compile()

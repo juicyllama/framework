@@ -41,7 +41,7 @@ export function usersTableSchema(
 			offset: '0',
 			order_by: 'first_name',
 			order_by_type: 'ASC',
-			select: ['user_id', 'first_name', 'last_name', 'email', 'roles', 'last_login_at'].toString(),
+			select: ['user_id', 'first_name', 'last_name', 'email', 'user_accounts', 'last_login_at'].toString(),
 			relations: '',
 		},
 		functions: {
@@ -120,8 +120,8 @@ export function usersTableSchema(
 			},
 			{
 				align: 'left',
-				label: 'Role',
-				field: 'roles',
+				label: 'Roles',
+				field: 'user_accounts',
 				sortable: false,
 				show: visibleColumns ? visibleColumns?.includes('roles') : true,
 				format: val => val[0].role,

@@ -29,6 +29,7 @@ import { In, Like, Repository } from 'typeorm'
 import { BaseService } from '../../helpers'
 import { Query } from '../../utils/typeorm/Query'
 import { Account } from '../accounts/account.entity'
+import { UserAccount } from './user-account.entity'
 import { AccountService } from '../accounts/account.service'
 import { BeaconService } from '../beacon/beacon.service'
 import { SettingsService } from '../settings/settings.service'
@@ -44,10 +45,9 @@ import {
 } from './auth.constants'
 import { ValidateCodeDto } from './dtos/login.dto'
 import { CompletePasswordResetDto, InitiateResetPasswordDto } from './dtos/password.reset.dto'
-import { Role } from './role.entity'
 
-const E = Role
-type T = Role
+const E = UserAccount
+type T = UserAccount
 
 type LoginPayload = {
 	email: string
@@ -81,23 +81,13 @@ export class AuthService extends BaseService<T> {
 			userRole = await this.create({
 				user_id: user.user_id,
 				account_id: account.account_id,
-				role: role,
+				role,
 			})
 		} else {
-			userRole = await this.update({
-				role_id: userRole.role_id,
-				role: role,
-			})
+			userRole.role = role
+			userRole = await this.repository.save(userRole)
 		}
 
-		if (user.roles) {
-			user.roles.push(userRole)
-			user.roles = [...new Map(user.roles.map(item => [item['role_id'], item])).values()]
-		} else {
-			user.roles = [userRole]
-		}
-
-		user = await this.usersService.update(user)
 		this.logger.debug(`[${domain}] User #${user.user_id} is now a ${role} of account #${account.account_id}!`)
 		return user
 	}
@@ -379,7 +369,11 @@ export class AuthService extends BaseService<T> {
 	}
 
 	async isGodUser(user: User): Promise<boolean> {
-		const GOD_DOMAINS = await this.settingsService.findValue('GOD_DOMAINS')
+		let GOD_DOMAINS = await this.settingsService.findValue('GOD_DOMAINS')
+		if (Env.IsTest()) {
+			GOD_DOMAINS ||= []
+			GOD_DOMAINS.push('juicyllama.com')
+		}
 		return !!(GOD_DOMAINS && GOD_DOMAINS.includes(user.email.split('@')[1]))
 	}
 
@@ -460,24 +454,18 @@ export class AuthService extends BaseService<T> {
 		}
 		return user_role
 	}
-	async getRole(user_id: number, account_id: number) {
+	async getRole(user_id: number, account_id: number): Promise<UserAccount | null> {
 		return await this.repository.findOne({
 			where: {
-				user: {
-					user_id: user_id,
-				},
-				account: {
-					account_id: account_id,
-				},
+				user_id,
+				account_id,
 			},
 		})
 	}
-	async getRoles(user_id: number) {
+	async getRoles(user_id: number): Promise<UserAccount[]> {
 		return await this.repository.find({
 			where: {
-				user: {
-					user_id: user_id,
-				},
+				user_id,
 			},
 		})
 	}
@@ -546,15 +534,9 @@ export class AuthService extends BaseService<T> {
 			user.accounts = await this.accountService.findAll({
 				take: 99999999,
 			})
-			const roles = []
 			for (const account of user.accounts) {
-				roles.push({
-					user_id: user.user_id,
-					account_id: account.account_id,
-					role: UserRole.OWNER,
-				})
+				await this.assignRole(user, account, UserRole.OWNER)
 			}
-			user.roles = roles
 		}
 		return user
 	}

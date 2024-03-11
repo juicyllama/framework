@@ -212,7 +212,7 @@ export class Api<T> {
 		if (options.record_id) url = url + `/${options.record_id}`
 
 		return await apiRequest<T>({
-			url: url,
+			url,
 			method: 'PUT',
 			data: options.data,
 			q: options.q,
@@ -230,8 +230,11 @@ export class Api<T> {
 
 	async delete(options: FormApiOptionsDelete): Promise<T> {
 		if (!this.url && !options.url) throw new Error('No url provided')
+		let url = options.url ?? this.url
+		if (options.record_id) url = url + `/${options.record_id}`
+
 		return await apiRequest<T>({
-			url: options.url ?? this.url + `/${options.record_id}`,
+			url,
 			method: 'DELETE',
 			q: options.q,
 			headers: this.options?.headers,

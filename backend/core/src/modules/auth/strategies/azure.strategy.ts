@@ -2,9 +2,9 @@ import { Env } from '@juicyllama/utils'
 import { Injectable } from '@nestjs/common'
 import { PassportStrategy, AuthGuard } from '@nestjs/passport'
 import { BearerStrategy, IBearerStrategyOption } from 'passport-azure-ad'
-import { defaultSSOString } from '../../../configs/sso.config.joi'
 import { UsersService } from '../../users/users.service'
 import { AZURE_AD } from '../auth.constants'
+import { defaultSSOString } from '../../../configs/sso.config.dto'
 
 const AZURE_AD_CLIENT_ID = process.env.AZURE_AD_CLIENT_ID ?? defaultSSOString
 const AZURE_AD_TENANT_ID = process.env.AZURE_AD_TENANT_ID ?? defaultSSOString
