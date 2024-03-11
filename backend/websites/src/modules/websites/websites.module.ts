@@ -1,6 +1,6 @@
 import { AuthModule, BeaconModule, Query, SettingsModule, StorageModule } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
-import { Module } from '@nestjs/common'
+import { Module, forwardRef } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import websitesConfig from '../../config/websites.config'
@@ -17,10 +17,10 @@ import { WebsitesService } from './websites.service'
 			isGlobal: true,
 			load: [websitesConfig],
 		}),
-		AuthModule,
-		BeaconModule,
-		SettingsModule,
-		StorageModule,
+		forwardRef(() => AuthModule),
+		forwardRef(() => BeaconModule),
+		forwardRef(() => SettingsModule),
+		forwardRef(() => StorageModule),
 	],
 	controllers: [WebsitesController, WebsitesCronsController],
 	providers: [WebsitesService, WebsitesCronsService, Logger, Query],

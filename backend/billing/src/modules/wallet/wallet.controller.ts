@@ -3,12 +3,12 @@ import {
 	AccountService,
 	AuthenticatedRequest,
 	AuthService,
-	Query as JLQuery,
+	Query as TQuery,
 	ReadManyDecorator,
 	UserAuth,
 	UserRole,
 } from '@juicyllama/core'
-import { Controller, Get, Inject, Query, Req } from '@nestjs/common'
+import { Controller, Get, Inject, Query, Req, forwardRef } from '@nestjs/common'
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { IsNull } from 'typeorm'
 import { BILLING_WALLET_E, BILLING_WALLET_NAME, BILLING_WALLET_T } from './wallet.constants'
@@ -21,10 +21,10 @@ import { WalletService } from './wallet.service'
 @Controller('/billing/wallet')
 export class WalletController {
 	constructor(
-		private readonly authService: AuthService,
-		private readonly accountService: AccountService,
-		private readonly walletService: WalletService,
-		@Inject(JLQuery) private readonly query: JLQuery<BILLING_WALLET_T>,
+		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
+		@Inject(forwardRef(() => AccountService)) private readonly accountService: AccountService,
+		@Inject(forwardRef(() => WalletService)) private readonly walletService: WalletService,
+		@Inject(forwardRef(() => TQuery)) private readonly query: TQuery<BILLING_WALLET_T>,
 	) {}
 
 	@ApiOperation({ summary: 'Get Balance' })

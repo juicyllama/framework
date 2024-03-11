@@ -1,6 +1,6 @@
 import { AuthModule, AccountModule, Query, UsersModule, BeaconModule } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
-import { Module } from '@nestjs/common'
+import { Module, forwardRef } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { AppsModule } from '../apps.module'
 import { OAuthModule } from '../oauth/oauth.module'
@@ -14,12 +14,12 @@ import { GoogleAnalyticsService } from './preinstall/google-analytics.service'
 @Module({
 	imports: [
 		TypeOrmModule.forFeature([InstalledApp]),
-		AccountModule,
-		AppsModule,
-		AuthModule,
-		BeaconModule,
-		UsersModule,
-		OAuthModule,
+		forwardRef(() => AccountModule),
+		forwardRef(() => AppsModule),
+		forwardRef(() => AuthModule),
+		forwardRef(() => BeaconModule),
+		forwardRef(() => UsersModule),
+		forwardRef(() => OAuthModule),
 	],
 	controllers: [InstalledAppsController],
 	providers: [InstalledAppsService, WordPressService, ShopifyService, GoogleAnalyticsService, Logger, Query],

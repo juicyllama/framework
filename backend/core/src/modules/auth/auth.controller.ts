@@ -1,6 +1,7 @@
-import { SuccessResponseDto } from '@juicyllama/utils'
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common'
+import { SuccessResponseDto, Logger } from '@juicyllama/utils'
+import { Body, Controller, Get, Post, Req, UseGuards, forwardRef, Inject, Res } from '@nestjs/common'
 import { ApiHideProperty, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
+import { Response } from 'express'
 import { AccountId, UserAuth } from '../../decorators'
 import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
 import { User } from '../users/users.entity'
@@ -9,16 +10,20 @@ import { AuthService } from './auth.service'
 import { LoginResponseDto, ValidateCodeDto } from './dtos/login.dto'
 import { CompletePasswordResetDto, InitiateResetPasswordDto } from './dtos/password.reset.dto'
 import { InitiatePasswordlessLoginDto } from './dtos/passwordless.login.dto'
+import { GoogleOauthGuard } from './guards/google-oauth.guard'
 import { LinkedinOauthGuard } from './guards/linkedin-oauth.guard'
 import { LocalAuthGuard } from './guards/local-auth.guard'
-import { GoogleOauthGuard } from './guards/google-oauth.guard'
+import { DEFAULT_REFRESH_EXPIRY_DAYS } from './auth.constants'
+
+const REFRESH_COOKIE_NAME = 'refreshToken'
 
 @ApiTags('Auth')
 @Controller('/auth')
 export class AuthController {
 	constructor(
-		private readonly authService: AuthService,
-		private readonly usersService: UsersService,
+		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
+		@Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 	) {}
 
 	@ApiOperation({
@@ -34,8 +39,41 @@ export class AuthController {
 	})
 	@UseGuards(LocalAuthGuard)
 	@Post('login')
-	async login(@Req() req: AuthenticatedRequest): Promise<LoginResponseDto> {
-		return this.authService.login(req.user)
+	async login(@Req() req: AuthenticatedRequest, @Res({ passthrough: true }) res: Response) {
+		const loginResponseDto = this.authService.login(req.user)
+		const refreshToken = await this.authService.createRefreshToken(req.user)
+		setRefeshTokenCookie(res, refreshToken)
+		return loginResponseDto
+	}
+
+	@ApiOperation({
+		summary: 'Refresh Token',
+		description:
+			'Posting with a refesh token cookie will return a new access token and set a cookie with the new refresh token',
+	})
+	@ApiOkResponse({
+		description: 'OK',
+		type: LoginResponseDto,
+	})
+	@Post('refresh')
+	async refresh(@Req() req: AuthenticatedRequest, @Res({ passthrough: true }) res: Response) {
+		const cookies = req.headers.cookie || ''
+		const oldRefreshToken = cookies
+			.split(';')
+			.find(cookie => cookie.trim().startsWith(REFRESH_COOKIE_NAME + '='))
+			?.split('=')[1]
+		if (!oldRefreshToken) {
+			throw new Error('No refresh token found')
+		}
+		const loginPayload = this.authService.decodeRefreshToken(oldRefreshToken)
+		const loginResponseDto = this.authService.login(loginPayload)
+		const newRefreshToken = await this.authService.createRefreshToken(loginPayload)
+		setRefeshTokenCookie(res, newRefreshToken)
+		this.logger.log('Refreshed token', {
+			user_id: loginPayload.user_id,
+			oldRefreshToken: '...' + oldRefreshToken.substring(-10),
+		})
+		return loginResponseDto
 	}
 
 	@UserAuth({ skipAccountId: true })
@@ -186,4 +224,24 @@ export class AuthController {
 			passed: account_ids.includes(account_id),
 		}
 	}
+}
+
+/**
+ * Set the refresh token as a secure, httpOnly cookie that's only sent to this server's refresh endpoint
+ */
+function setRefeshTokenCookie(res: Response, refreshToken: string) {
+	if (!process.env.BASE_URL_API) {
+		throw new Error('BASE_URL_APP env variable not set')
+	}
+	res.cookie(REFRESH_COOKIE_NAME, refreshToken, {
+		httpOnly: true, // don't allow JS to access the cookie
+		secure: true, // only send the cookie over HTTPS
+		domain: process.env.BASE_URL_API.replace('https://', '').replace('http://', ''), // only send the cookie to the API domain
+		sameSite: 'none', // required for cross-site requests as the frontend may be on a different domain
+		path: '/auth/refresh', // only send the cookie to the refresh endpoint
+		expires: new Date(
+			Date.now() +
+				Number(process.env.JWT_REFRESH_TOKEN_EXPIRY_DAYS || DEFAULT_REFRESH_EXPIRY_DAYS) * 1000 * 60 * 60 * 24,
+		),
+	})
 }

@@ -18,7 +18,7 @@ describe('TypeORM query', () => {
 	let scaffold: ScaffoldDtoWithRepository<T>
 
 	beforeAll(async () => {
-		scaffold = await scaffolding.up(MODULE, SERVICE) as ScaffoldDtoWithRepository<T>
+		scaffold = (await scaffolding.up(MODULE, SERVICE)) as ScaffoldDtoWithRepository<T>
 		scaffold.values.mock = MOCK_ACCOUNT
 	})
 

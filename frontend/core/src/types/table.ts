@@ -90,12 +90,12 @@ export interface TableSchema {
 }
 
 export interface IFilterType {
-	label: string,
+	label: string
 	method: string
 }
 
 export interface IFilter {
-	label: string,
-	type: string | IFilterType,
+	label: string
+	type: string | IFilterType
 	value: string | number
 }

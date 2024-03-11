@@ -12,7 +12,7 @@ import {
 	UserAuth,
 } from '@juicyllama/core'
 import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
-import { Controller, Inject, Param, Query, Req } from '@nestjs/common'
+import { Controller, Inject, Param, Query, Req, forwardRef } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { billingRoles as roles } from '../billing.constants'
 import { BILLING_INVOICES_T as T, billingInvoiceConstants as constants } from './invoices.constants'
@@ -23,10 +23,10 @@ import { InvoicesService } from './invoices.service'
 @Controller('billing/invoices')
 export class InvoicesController extends BaseController<T> {
 	constructor(
-		readonly authService: AuthService,
-		readonly service: InvoicesService,
-		@Inject(TQuery) readonly tQuery: TQuery<T>,
-		readonly fxService: FxService,
+		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
+		@Inject(forwardRef(() => InvoicesService)) readonly service: InvoicesService,
+		@Inject(forwardRef(() => TQuery)) readonly tQuery: TQuery<T>,
+		@Inject(forwardRef(() => FxService)) readonly fxService: FxService,
 	) {
 		super(service, tQuery, constants, {
 			services: {

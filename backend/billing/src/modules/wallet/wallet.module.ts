@@ -13,11 +13,11 @@ import { WalletService } from './wallet.service'
 @Module({
 	imports: [
 		TypeOrmModule.forFeature([Wallet]),
-		AuthModule,
-		AccountModule,
+		forwardRef(() => AuthModule),
+		forwardRef(() => AccountModule),
 		forwardRef(() => ChargesModule),
-		PaymentMethodsModule,
-		SettingsModule,
+		forwardRef(() => PaymentMethodsModule),
+		forwardRef(() => SettingsModule),
 	],
 	controllers: [WalletController, WalletCronsController],
 	providers: [WalletService, WalletCronService, Logger, Query],

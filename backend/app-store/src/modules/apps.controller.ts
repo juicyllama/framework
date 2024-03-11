@@ -11,7 +11,7 @@ import {
 	AuthenticatedRequest,
 } from '@juicyllama/core'
 import { StatsMethods } from '@juicyllama/utils'
-import { Inject, Param, Query, Controller, Req } from '@nestjs/common'
+import { Inject, Param, Query, Controller, Req, forwardRef } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { APP_T as T, appConstants as constants } from './apps.constants'
 import { AppsService as Service } from './apps.service'
@@ -20,9 +20,9 @@ import { AppsService as Service } from './apps.service'
 @Controller('/apps/store')
 export class AppsController extends BaseController<T> {
 	constructor(
-		readonly authService: AuthService,
-		@Inject(TQuery) readonly tQuery: TQuery<T>,
-		readonly service: Service,
+		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
+		@Inject(forwardRef(() => TQuery)) readonly tQuery: TQuery<T>,
+		@Inject(forwardRef(() => Service)) readonly service: Service,
 	) {
 		super(service, tQuery, constants, <ControllerOptionalProps>{
 			services: {

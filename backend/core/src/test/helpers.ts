@@ -25,7 +25,7 @@ export async function TestEndpoint<T extends ObjectLiteral>(options: {
 	emitCheckResultKeys?: string[] //if values are not provided back in the result
 	skipResultCheck?: boolean // if true results will be returned without checking
 	headers?: { [key: string]: string }
-}): Promise<T | undefined> { 
+}): Promise<T | undefined> {
 	let E: T | undefined = undefined
 
 	const headers = {

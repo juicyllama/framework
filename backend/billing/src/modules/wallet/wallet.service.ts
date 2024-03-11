@@ -1,6 +1,6 @@
 import { Account, Query } from '@juicyllama/core'
 import { SupportedCurrencies } from '@juicyllama/utils'
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
@@ -14,9 +14,9 @@ type T = Wallet
 @Injectable()
 export class WalletService {
 	constructor(
-		@Inject(Query) private readonly query: Query<T>,
+		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@InjectRepository(E) private readonly repository: Repository<T>,
-		private readonly configService: ConfigService,
+		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
 	) {}
 
 	async getBalance(account: Account, currency: SupportedCurrencies): Promise<number> {

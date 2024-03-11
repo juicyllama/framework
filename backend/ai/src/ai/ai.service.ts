@@ -1,6 +1,6 @@
-import { AppIntegrationName, Query } from '@juicyllama/core'
+import { AppIntegrationName, ErrorResponse, Query } from '@juicyllama/core'
 import { Env, Logger, Modules } from '@juicyllama/utils'
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
@@ -13,9 +13,9 @@ import * as mock from './ai.mock.json'
 export class AiService {
 	constructor(
 		@InjectRepository(Ai) private readonly repository: Repository<Ai>,
-		private readonly logger: Logger,
-		private readonly db_query: Query<Ai>,
-		private readonly lazyModuleLoader: LazyModuleLoader,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		@Inject(forwardRef(() => Query)) private readonly query: Query<Ai>,
+		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
 	) {}
 
 	async chat(options: AiChatRequest): Promise<Ai> {
@@ -31,7 +31,7 @@ export class AiService {
 		let ai: Ai | undefined = undefined
 
 		if (options.use_local_cache) {
-			ai = await this.db_query.findOne(this.repository, {
+			ai = await this.query.findOne(this.repository, {
 				where: {
 					request: options.question?.toLowerCase(),
 					is_general: true,
@@ -47,7 +47,7 @@ export class AiService {
 		let service: any
 
 		if (!ai) {
-			ai = await this.db_query.create(this.repository, {
+			ai = await this.query.create(this.repository, {
 				request: options.question?.toLowerCase(),
 				is_general: true,
 				is_sql: false,
@@ -76,9 +76,15 @@ export class AiService {
 				}
 
 				//general AI question
-				const result = await service.ask(options.openaiOptions)
+				let result = await service.ask(options.openaiOptions)
 
-				if (result?.created) {
+				if(result?.error) {
+					result = <ErrorResponse>result
+					ai.success = AiSuccessType.ERROR
+					ai.error_message = result.error
+					this.logger.error(`[${domain}] ${result.status ? result.status + ': ' : ''}${result.error}`, result)
+				}
+				else if (result?.created) {
 					ai.response = result.choices[0].message.content
 					ai.success = AiSuccessType.SUCCESS
 				} else {
@@ -100,7 +106,7 @@ export class AiService {
 				ai.error_message = error
 			}
 
-			return await this.db_query.update(this.repository, ai)
+			return await this.query.update(this.repository, ai)
 		}
 		throw new Error('No AI module installed, please contact your system admin.')
 	}
@@ -279,13 +285,13 @@ export class AiService {
 		if (!data.ai_id) {
 			throw new Error('ai_id is required')
 		}
-		const lana = await this.db_query.findOneById(this.repository, data.ai_id)
+		const lana = await this.query.findOneById(this.repository, data.ai_id)
 
 		if (!lana) {
 			throw new NotFoundException(`Ai #${data.ai_id} not found`)
 		}
 
-		return await this.db_query.update(this.repository, {
+		return await this.query.update(this.repository, {
 			ai_id: lana.ai_id,
 			...data,
 		})

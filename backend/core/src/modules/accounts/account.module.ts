@@ -1,8 +1,6 @@
 import { Logger } from '@juicyllama/utils'
 import { forwardRef, MiddlewareConsumer, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { JwtModule } from '@nestjs/jwt'
-import { databaseConfig, jwtConfig } from '../../configs'
 import { MiddlewareAccountId } from '../../middleware'
 import { Query } from '../../utils/typeorm/Query'
 import { AuthModule } from '../auth/auth.module'
@@ -19,14 +17,12 @@ import { AccountService } from './account.service'
 
 @Module({
 	imports: [
-		JwtModule.register(jwtConfig()),
-		TypeOrmModule.forRoot(databaseConfig()),
 		TypeOrmModule.forFeature([Account]),
 		forwardRef(() => AuthModule),
 		forwardRef(() => BeaconModule),
-		SettingsModule,
-		StorageModule,
-		TagsModule,
+		forwardRef(() => SettingsModule),
+		forwardRef(() => StorageModule),
+		forwardRef(() => TagsModule),
 		forwardRef(() => UsersModule),
 	],
 	controllers: [AccountController],

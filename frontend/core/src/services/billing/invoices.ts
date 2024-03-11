@@ -6,9 +6,9 @@ export const BILLING_INVOICE_ENDPOINT = '/billing/invoices'
 export const BILLING_INVOICE_PUSHER_EVENT = 'account_${account_id}_billing_invoices'
 
 export class BillingInvoiceService extends Api<T> {
-    constructor() {
-        super(BILLING_INVOICE_ENDPOINT)
-    }
+	constructor() {
+		super(BILLING_INVOICE_ENDPOINT)
+	}
 }
 
 export const billingInvoiceService = new BillingInvoiceService()

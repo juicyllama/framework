@@ -1,6 +1,6 @@
 import { CachePeriod, Dates, JLCache, Logger, Modules, SupportedCurrencies } from '@juicyllama/utils'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Cache } from 'cache-manager'
@@ -17,11 +17,11 @@ const DOMAIN = 'core::fx::service::convert'
 @Injectable()
 export class FxService {
 	constructor(
-		@Inject(Query) private readonly query: Query<FxRate>,
+		@Inject(forwardRef(() => Query)) private readonly query: Query<FxRate>,
 		@InjectRepository(FxRate) private readonly repository: Repository<FxRate>,
-		private readonly logger: Logger,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(CACHE_MANAGER) private cacheManager: Cache,
-		private readonly lazyModuleLoader: LazyModuleLoader,
+		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
 	) {}
 
 	/**

@@ -1,6 +1,6 @@
 import { SettingsService, CronRunner } from '@juicyllama/core'
 import { CachePeriod, Env, Logger, Modules } from '@juicyllama/utils'
-import { Injectable } from '@nestjs/common'
+import { Injectable, forwardRef, Inject } from '@nestjs/common'
 import { Cron, CronExpression } from '@nestjs/schedule'
 import { PaymentMethodsService } from '../payment_methods/payment.methods.service'
 import { CRON_BILLING_WITHDRAWALS_SETTLE_DOMAIN } from './withdrawals.constants'
@@ -11,10 +11,10 @@ import { WithdrawalsService } from './withdrawals.service'
 @Injectable()
 export class WithdrawalsCronService {
 	constructor(
-		private readonly paymentMethodsService: PaymentMethodsService,
-		readonly logger: Logger,
-		private readonly settingsService: SettingsService,
-		private readonly withdrawalsService: WithdrawalsService,
+		@Inject(forwardRef(() => PaymentMethodsService)) private readonly paymentMethodsService: PaymentMethodsService,
+		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
+		@Inject(forwardRef(() => SettingsService)) private readonly settingsService: SettingsService,
+		@Inject(forwardRef(() => WithdrawalsService)) private readonly withdrawalsService: WithdrawalsService,
 	) {}
 
 	/**

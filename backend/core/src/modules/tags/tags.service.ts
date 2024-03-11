@@ -1,6 +1,6 @@
 import { CachePeriod, JLCache } from '@juicyllama/utils'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Cache } from 'cache-manager'
 import { MoreThanOrEqual, Repository } from 'typeorm'
@@ -16,9 +16,9 @@ type T = Tag
 @Injectable()
 export class TagsService extends BaseService<T> {
 	constructor(
-		@Inject(Query) readonly query: Query<T>,
+		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		readonly beaconService: BeaconService,
+		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
 		@Inject(CACHE_MANAGER) private cacheManager: Cache,
 	) {
 		super(query, repository, {

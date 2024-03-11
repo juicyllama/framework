@@ -1,4 +1,11 @@
-import { FormFieldField, FormFieldType, FormViewSettings, IconSettings, TableExtraType, TableSchema } from '../../../types'
+import {
+	FormFieldField,
+	FormFieldType,
+	FormViewSettings,
+	IconSettings,
+	TableExtraType,
+	TableSchema,
+} from '../../../types'
 import { USERS_ENDPOINT, USERS_PUSHER_CHANNEL, UsersService } from '../../../services/users'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'

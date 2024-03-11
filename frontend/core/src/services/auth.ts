@@ -1,15 +1,14 @@
-import instance from './index'
-import { PublicClientApplication } from "@azure/msal-browser";
-import type { User } from '../types'
-import type { UserLogin } from '../types'
-import { goToDashboard, logger } from '../helpers'
-import { LogSeverity } from '../types'
+import { PublicClientApplication } from '@azure/msal-browser'
 import { QVueGlobals } from 'quasar'
-import { userStore } from '../index'
 import { Router } from 'vue-router'
+import { goToDashboard, logger } from '../helpers'
+import { userStore } from '../index'
+import type { User, UserLogin } from '../types'
+import { LogSeverity } from '../types'
+import instance from './index'
 
 export async function loginUser(payload: UserLogin, q: QVueGlobals, router?: Router): Promise<string> {
-	const response = await instance.post(`auth/login`, payload)
+	const response = await instance.post(`auth/login`, payload, { withCredentials: true }) // withCredentials: true is required for the refresh token cookie to be set
 
 	if (response.data.error) {
 		switch (response.data.error.message) {
@@ -19,11 +18,9 @@ export async function loginUser(payload: UserLogin, q: QVueGlobals, router?: Rou
 			default:
 				throw new Error(response.data.error.message)
 		}
-	}
-	else if (response.data.access_token) {
+	} else if (response.data.access_token) {
 		return response.data.access_token
-	}
-	else {
+	} else {
 		throw new Error('Unknown error')
 	}
 }
@@ -81,30 +78,31 @@ export function linkedInLogin(VITE_API_BASE_URL: string) {
 	window.location.href = `${VITE_API_BASE_URL}/auth/linkedin`
 }
 
-export function azureLogin(VITE_AZURE_AD_TENANT_ID: string, VITE_AZURE_AD_CLIENT_ID: string, VITE_AZURE_AD_EXPOSED_SCOPES: string, router: Router) {
-	const scopes = VITE_AZURE_AD_EXPOSED_SCOPES
-		.split(' ')
-		.map(scope => `api://${VITE_AZURE_AD_CLIENT_ID}/${scope}`)
+export function azureLogin(
+	VITE_AZURE_AD_TENANT_ID: string,
+	VITE_AZURE_AD_CLIENT_ID: string,
+	VITE_AZURE_AD_EXPOSED_SCOPES: string,
+	router: Router,
+) {
+	const scopes = VITE_AZURE_AD_EXPOSED_SCOPES.split(' ').map(scope => `api://${VITE_AZURE_AD_CLIENT_ID}/${scope}`)
 	const msalConfig = {
 		auth: {
 			clientId: VITE_AZURE_AD_CLIENT_ID,
 			authority: `https://login.microsoftonline.com/${VITE_AZURE_AD_TENANT_ID}`,
-			redirectUri: "https://local.sentinel.hiveuw.com:8080/login"
+			redirectUri: 'https://local.sentinel.hiveuw.com:8080/login',
 		},
 		cache: {
 			cacheLocation: 'localStorage', // This configures where your cache will be stored
-			storeAuthStateInCookie: false // Set this to "true" if you are having issues on IE11 or Edge
-		}
-	};
-	const msalInstance = new PublicClientApplication(msalConfig);
+			storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
+		},
+	}
+	const msalInstance = new PublicClientApplication(msalConfig)
 	msalInstance.initialize().then(() => {
-		msalInstance
-			.loginPopup({ scopes })
-			.then(async (authResponse) => {
-				const accessToken = authResponse.accessToken;
-				await userStore.processAccessToken(accessToken)
-				goToDashboard(router)
-			});
+		msalInstance.loginPopup({ scopes }).then(async authResponse => {
+			const accessToken = authResponse.accessToken
+			await userStore.processAccessToken(accessToken)
+			goToDashboard(router)
+		})
 	})
 }
 

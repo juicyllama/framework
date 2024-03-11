@@ -1,14 +1,15 @@
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
 import { UserStore } from '../store/user'
 import { logger } from '../helpers/logger'
 import { token } from '../store/token'
 import { LogSeverity } from '../types'
+import applyRefreshTokenInterceptor from './refreshToken.interceptor'
 
 const headers = {
 	'Content-Type': 'application/json',
 }
 
-const instance = axios.create({
+const instance: AxiosInstance = axios.create({
 	baseURL: import.meta.env.VITE_API_BASE_URL,
 	headers,
 })
@@ -28,6 +29,10 @@ instance.interceptors.request.use(config => {
 	logger({ severity: LogSeverity.VERBOSE, message: message })
 	return config
 })
+
+// Add the refresh token interceptor.
+// This will automatically refresh the access token when it expires by catching 401 errors, refreshing the token, and retrying the request with the new token
+applyRefreshTokenInterceptor(instance, token)
 
 instance.interceptors.response.use(
 	response => {
@@ -49,24 +54,22 @@ instance.interceptors.response.use(
 		// Do something with response error
 
 		//alert(JSON.stringify(error.response?.data))
-
-		switch(error.response?.data?.statusCode){
+		switch (error.response?.data?.statusCode) {
 			case 401:
-
 				//if route is /login return error otherwise logout
-				if(window.location.pathname === '/login') {
+				if (window.location.pathname === '/login') {
 					return {
 						data: {
 							error: {
 								message: 'Login failed, please try again!',
 							},
-						}
+						},
 					}
-				}else{
+				} else {
+					// if the refresh token is expired, log the user out
 					const userStore = UserStore()
 					await userStore.logout()
 				}
-
 				break
 			case 403:
 				return {
@@ -75,7 +78,7 @@ instance.interceptors.response.use(
 							message: error.response.data.message,
 							status: error.response.data.statusCode,
 						},
-					}
+					},
 				}
 
 			default:

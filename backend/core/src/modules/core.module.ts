@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { Module, forwardRef } from '@nestjs/common'
 import { AccountModule } from './accounts/account.module'
 import { AuthModule } from './auth/auth.module'
 import { BeaconModule } from './beacon/beacon.module'
@@ -10,15 +10,15 @@ import { TagsModule } from './tags/tags.module'
 import { UsersModule } from './users/users.module'
 @Module({
 	imports: [
-		AccountModule,
-		AuthModule,
-		BeaconModule,
-		ConfigValidationModule,
-		FxModule,
-		SettingsModule,
-		StorageModule,
-		TagsModule,
-		UsersModule,
+		forwardRef(() => AccountModule),
+		forwardRef(() => AuthModule),
+		forwardRef(() => BeaconModule),
+		forwardRef(() => ConfigValidationModule),
+		forwardRef(() => FxModule),
+		forwardRef(() => SettingsModule),
+		forwardRef(() => StorageModule),
+		forwardRef(() => TagsModule),
+		forwardRef(() => UsersModule),
 	],
 	controllers: [],
 	providers: [],

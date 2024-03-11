@@ -1,5 +1,5 @@
 import { AuthService, AccountId, AuthenticatedRequest } from '@juicyllama/core'
-import { BadRequestException, Controller, Get, Query, Res, Req } from '@nestjs/common'
+import { BadRequestException, Controller, Get, Query, Res, Req, forwardRef, Inject } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { AppStoreIntegrationName } from '../apps.enums'
@@ -10,9 +10,9 @@ import { oauthQueryMappers } from './oauth.mappers'
 @Controller('oauth')
 export class OauthController {
 	constructor(
-		private readonly authService: AuthService,
-		private readonly appsService: AppsService,
-		private readonly configService: ConfigService,
+		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
+		@Inject(forwardRef(() => AppsService)) private readonly appsService: AppsService,
+		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
 	) {}
 
 	@ApiOperation({

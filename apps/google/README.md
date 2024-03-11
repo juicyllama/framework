@@ -3,5 +3,5 @@
     <img src="https://juicyllama.com/assets/images/icon.png" width="100" alt="JuicyLlama Logo" />
   </a>
 
-Visit the [JuicyLlama Google App](https://docs.juicyllama.com/apps/google) page for this module to learn more information.
+Visit the [JuicyLlama Google App](https://juicyllama.com/apps/google) page for this module to learn more information.
 </div>

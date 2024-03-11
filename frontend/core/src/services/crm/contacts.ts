@@ -7,10 +7,9 @@ type T = Contact
 export const CONTACTS_ENDPOINT = '/crm/contacts'
 export const CONTACTS_PUSHER_EVENT = 'account_${account_id}_crm_contacts'
 export class ContactsService extends Api<T> {
-
 	constructor() {
 		super(CONTACTS_ENDPOINT)
-	  }
+	}
 
 	async create(options: FormApiOptionsCreate): Promise<T> {
 		return await super.create(options)
