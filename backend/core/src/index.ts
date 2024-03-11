@@ -166,6 +166,7 @@ export {
 	ControllerOptionalProps,
 	ControllerRoles,
 	BaseResponseDto,
+	ErrorResponse,
 } from './types'
 
 //Mocks

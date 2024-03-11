@@ -1,5 +1,5 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { BeaconService, Query, BaseService, UsersService } from '@juicyllama/core'
+import { BeaconService, Query, BaseService, UsersService, User } from '@juicyllama/core'
 import { Strings } from '@juicyllama/utils'
 import { Chat } from './chat.entity'
 import { InjectRepository } from '@nestjs/typeorm'
@@ -7,6 +7,7 @@ import { DeepPartial, Repository, In } from 'typeorm'
 import { ChatMessage, ChatMessageService, ChatUsersService } from '../..'
 import { CHAT_MESSAGE_PUSHER_EVENT, CHAT_PUSHER_EVENT } from './chat.constants'
 import { ChatMessageType } from './message/chat.message.enums'
+import { isEqual } from 'lodash'
 
 const E = Chat
 type T = Chat
@@ -29,6 +30,7 @@ export class ChatService extends BaseService<T> {
 
 		// get all chats involving the users
 		const chats = await super.findAll({
+			select: ['chat_id', 'users'],
 			where: {
 				users: {
 					user_id: In(data.users.map(user => user.user_id)),
@@ -42,10 +44,9 @@ export class ChatService extends BaseService<T> {
 			if (!chat.users) continue
 
 			const users = data.users.map(user => user.user_id)
+			const chat_users = chat.users.map(user => user.user_id)
 
-			const matches = chat.users.map(user => users.includes(user.user_id as number))
-
-			if (matches.every(Boolean)) {
+			if (isEqual(users.sort(), chat_users.sort())) {
 				matched_chat = chat
 				break
 			}
@@ -198,7 +199,26 @@ export class ChatService extends BaseService<T> {
 				},
 			},
 		})
-		return chats
+
+		// filter chats to find the chat with the only same users
+		let matched_chats: Chat[] = []
+
+		for (const chat of chats) {
+			if (!chat.users) continue
+
+			const chat_users = chat.users.map(user => user.user_id)
+
+			if (isEqual(user_ids.sort(), chat_users.sort())) {
+				matched_chats.push(chat)
+			}
+		}
+
+		return matched_chats
+	}
+
+	async getUsers(chat_id: number): Promise<User[]> {
+		const chat = await super.findById(chat_id)
+		return chat.users
 	}
 
 	cleanse(chat: Chat): Chat {
