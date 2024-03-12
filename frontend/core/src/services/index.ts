@@ -54,7 +54,7 @@ instance.interceptors.response.use(
 		switch (error.response?.data?.statusCode) {
 			case 401:
 				//if route is /login return error otherwise logout
-				if (window.location.pathname === '/login') {
+				if (window.location.pathname === '/login' || error.response.config.url.includes('auth/logout')) {
 					return {
 						data: {
 							error: {

@@ -25,7 +25,11 @@ export default function applyRefreshTokenInterceptor(instance: AxiosInstance) {
 		},
 		async error => {
 			const originalRequest = error.config
-			if (error.response?.status === 401 && !originalRequest._retry) {
+			if (
+				error.response?.status === 401 &&
+				!originalRequest._retry &&
+				!originalRequest.url.includes('auth/logout')
+			) {
 				originalRequest._retry = true // Marking the request to prevent infinite retry loops
 				try {
 					await refreshTokenFunction() // Refresh the token
