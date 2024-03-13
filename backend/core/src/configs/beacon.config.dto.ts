@@ -1,4 +1,5 @@
 import { IsString, IsBoolean, IsOptional } from 'class-validator'
+import { Transform } from 'class-transformer'
 
 export class BeaconConfigDto {
 	@IsOptional()
@@ -25,8 +26,9 @@ export class BeaconConfigDto {
 	@IsString()
 	PUSHER_APP_CLUSTER?: string
 
-	@IsBoolean()
+	@Transform(({ value }) => [true, 'enabled', 'true', 1, '1'].indexOf(value) > -1)
 	@IsOptional()
+	@IsBoolean()
 	PUSHER_USE_TLS?: boolean = true
 
 	@IsOptional()
