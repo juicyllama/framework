@@ -26,6 +26,7 @@ export class BeaconConfigDto {
 	PUSHER_APP_CLUSTER?: string
 
 	@IsBoolean()
+	@IsOptional()
 	PUSHER_USE_TLS?: boolean = true
 
 	@IsOptional()
