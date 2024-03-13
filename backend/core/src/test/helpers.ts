@@ -430,18 +430,18 @@ function checkResult<T extends ObjectLiteral>(data: DeepPartial<T>, result: T, e
 	for (const key of Object.keys(data)) {
 		if (emitCheckResultKeys && emitCheckResultKeys.includes(key)) continue
 		try {
-			switch (typeof data[key]) {
+			switch (typeof data[key as keyof DeepPartial<T>]) {
 				case 'object':
 					continue
 				case 'number':
 					const logger = new Logger()
-					expect(Number(result[key]).toFixed(2)).toBe(Number(data[key]).toFixed(2))
+					expect(Number(result[key]).toFixed(2)).toBe(Number(data[key as keyof DeepPartial<T>]).toFixed(2))
 					break
 				default:
-					expect(result[key]).toBe(data[key])
+					expect(result[key]).toBe(data[key as keyof DeepPartial<T>])
 			}
 		} catch (e) {
-			throw new Error(`checkResult failed - ${key} issue, expected: ${data[key]} found: ${result[key]}  `)
+			throw new Error(`checkResult failed - ${key} issue, expected: ${data[key as keyof DeepPartial<T>]} found: ${result[key]}  `)
 		}
 	}
 }

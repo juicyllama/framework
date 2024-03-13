@@ -894,7 +894,7 @@ export class Query<T extends ObjectLiteral> {
 			try {
 				const r = await this.findOne(repository, {
 					where: {
-						[dedup_field]: record[dedup_field],
+						[dedup_field]: record[dedup_field as keyof DeepPartial<T>],
 					},
 				})
 
@@ -941,14 +941,14 @@ export class Query<T extends ObjectLiteral> {
 		const records: any[] = []
 
 		for (const row of data) {
-			records.push(row[dedup_field])
+			records.push(row[dedup_field as keyof DeepPartial<T>])
 		}
 
 		for (const record of data) {
 			try {
 				const r = await this.findOne(repository, <any>{
 					where: {
-						[dedup_field]: record[dedup_field],
+						[dedup_field]: record[dedup_field  as keyof DeepPartial<T>],
 					},
 				})
 
