@@ -43,16 +43,16 @@ describe('Auth Service', () => {
 			userAccount.user.email = 'god@juicyllama.com'
 			await scaffold.services.usersService.update(userAccount.user)
 			await scaffold.repository?.save(userAccount)
-			expect(await scaffold.services.service.isGodUser(godUser)).toBe(true);
+			expect(await scaffold.services.service.isGodUser(godUser)).toBe(true)
 			// Act
-			const result = await scaffold.services.service.processGodUser(godUser);
+			const result = await scaffold.services.service.processGodUser(godUser)
 			// Assert
-			expect(result).toBeDefined();
+			expect(result).toBeDefined()
 			const userAccounts = await scaffold.services.service.findAll()
 			expect(userAccounts.length).toEqual(1)
-			expect(userAccounts[0].role).toBe(UserRole.OWNER);
-		});
-	});
+			expect(userAccounts[0].role).toBe(UserRole.OWNER)
+		})
+	})
 
 	afterAll(async () => {
 		await scaffolding.down(E)

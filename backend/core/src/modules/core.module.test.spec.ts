@@ -21,7 +21,7 @@ describe('Core Bootup', () => {
 				moduleRef = await Test.createTestingModule({
 					imports: [
 						ConfigModule.forRoot({
-							isGlobal: true
+							isGlobal: true,
 						}),
 						TypeOrmModule.forRoot(databaseConfig()),
 						CacheModule.registerAsync(cacheConfig()),

@@ -122,7 +122,7 @@ export class Scaffold<T extends ObjectLiteral> {
 		owner = result.owner
 
 		owner_access_token = await authService.login(owner)
-		
+
 		return {
 			server: httpServer,
 			module: moduleRef,

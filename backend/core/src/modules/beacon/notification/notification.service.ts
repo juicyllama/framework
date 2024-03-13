@@ -1,12 +1,11 @@
 import { Logger } from '@juicyllama/utils'
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { In, Repository } from 'typeorm'
+import { Repository } from 'typeorm'
 import { BaseService } from '../../../helpers'
 import { Query } from '../../../utils/typeorm/Query'
 import { AuthService } from '../../auth/auth.service'
 import { User } from '../../users/users.entity'
-import { UserRole } from '../../users/users.enums'
 import { UsersService } from '../../users/users.service'
 import { BeaconMessageDto } from '../beacon.dto'
 import { BeaconPushService } from '../push/push.service'
@@ -34,22 +33,14 @@ export class BeaconNotificationService extends BaseService<T> {
 
 		this.logger.debug(`[${domain}] Beacon Notification`, message)
 
-		let users: User[] = await this.usersService.findAll({
+		const users: User[] = await this.usersService.findAll({
 			where: {
-				roles: {
-					account: {
-						account_id: message.account?.account_id,
-					},
-					role: message.options?.roles ? In(message.options?.roles) : null,
+				accounts: {
+					account_id: message.account?.account_id,
 				},
+				//role: message.options?.roles ? In(message.options?.roles) : null, //TODO: make work
 			},
 		})
-
-		//If owner, add god users also
-		if (message.options?.roles?.includes(UserRole.OWNER)) {
-			const god_users = await this.authService.getGodUsers()
-			users = [...users, ...god_users]
-		}
 
 		if (message.unique) {
 			const olderMsg = await this.query.findOne(this.repository, { where: { unique: message.unique } })

@@ -234,6 +234,9 @@ export const UserStore = defineStore('user', {
 		getUser(state): User {
 			return state.user ?? null
 		},
+		getUserId(state): number {
+			return state.user?.user_id ?? null
+		},
 		getEmail(state): string {
 			return state.user?.email ?? null
 		},

@@ -236,11 +236,16 @@ export class AuthService extends BaseService<T> {
 				'Your login code is invalid or expired, please generate a new verification code',
 			)
 		}
-		const cache_key = JLCache.cacheKey(AUTH_CODE, { user_id: user.user_id })
-		this.logger.log(`[CACHE][DELETE] ${cache_key}`)
-		await this.cacheManager.del(cache_key)
+		this.removeValidationCode(user)
 		return this.jwtService.sign(await this.constructLoginPayload(user), { secret: process.env.JWT_KEY })
 	}
+
+	removeValidationCode(user: User): void {
+		const cache_key = JLCache.cacheKey(AUTH_CODE, { user_id: user.user_id })
+		this.logger.log(`[CACHE][DELETE] ${cache_key}`)
+		this.cacheManager.del(cache_key)
+	}
+
 	handleUserNotFoundException(user: User) {
 		if (!user) {
 			throw new NotFoundException('User not found')

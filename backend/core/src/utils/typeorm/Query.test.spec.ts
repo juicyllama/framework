@@ -79,7 +79,7 @@ describe('TypeORM query', () => {
 				{ account_id: scaffold.values.account.account_id },
 				{ relations: ['user_accounts'] },
 			)
-					
+
 			expect(result).toBeDefined()
 			expect(result.account_id).toBeDefined()
 			expect(result.account_id).toEqual(scaffold.values.account.account_id)
