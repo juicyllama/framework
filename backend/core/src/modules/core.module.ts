@@ -8,6 +8,7 @@ import { SettingsModule } from './settings/settings.module'
 import { StorageModule } from './storage/storage.module'
 import { TagsModule } from './tags/tags.module'
 import { UsersModule } from './users/users.module'
+import { WebsocketModule } from './websocket/websocket.module';
 @Module({
 	imports: [
 		forwardRef(() => AccountModule),
@@ -19,6 +20,7 @@ import { UsersModule } from './users/users.module'
 		forwardRef(() => StorageModule),
 		forwardRef(() => TagsModule),
 		forwardRef(() => UsersModule),
+		forwardRef(() => WebsocketModule),
 	],
 	controllers: [],
 	providers: [],

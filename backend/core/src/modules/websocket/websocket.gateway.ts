@@ -1,9 +1,20 @@
-import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
+import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets'
 
-@WebSocketGateway()
+@WebSocketGateway({ namespace: '/websockets' })
+@UseGuards(WsJwtGuard)
 export class WebsocketGateway {
-  @SubscribeMessage('message')
-  handleMessage(client: any, payload: any): string {
-    return 'Hello world!';
-  }
+	constructor(readonly logger: Logger) {}
+
+	@WebSocketServer()
+	server: Server<any, ServerToClientEvent>
+
+	afterInit(client: any) {
+		client.use(SocketAuthMiddleware() as any)
+		this.logger.log('Websocket server initialized')
+	}
+
+	@SubscribeMessage('message')
+	handleMessage(client: any, payload: any): string {
+		return 'Hello world!'
+	}
 }
