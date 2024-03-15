@@ -19,7 +19,7 @@ export class OpenaiService {
 		const params = options as OpenAI.Chat.ChatCompletionCreateParamsNonStreaming
 
 		if (!params.model) {
-			params.model = 'gpt-3.5-turbo-1106'
+			params.model = 'gpt-4-0125-preview'
 		}
 
 		try {
