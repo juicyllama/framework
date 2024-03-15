@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-openai",
-    "version": "0.0.13",
+    "version": "0.1.0",
     "description": "Juicyllama NestJS OpenAI App",
     "author": {
         "name": "JuicyLlama Studio",
