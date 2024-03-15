@@ -24,6 +24,6 @@ import { KombatService } from './kombat/kombat.service'
 	],
 	controllers: [],
 	providers: [CompetitorsService, DomainStatsService, KombatService, KeywordsService, SEOService, Logger, Api],
-	exports: [CompetitorsService, DomainStatsService, KombatService, KeywordsService, SEOService],
+	exports: [CompetitorsService, DomainStatsService, KombatService, KeywordsService, SEOService, SEOService],
 })
 export class SpyfuModule {}
