@@ -9,7 +9,6 @@ const E = User
 const MODULE = UsersModule
 const SERVICE = UsersService
 
-
 /**
  * These tests focus on the validation of the controller/data, not the actual adding of data, this is tested at: Query.file.bulkInsert.spec.ts
  */
@@ -24,41 +23,36 @@ describe('@AccountId() Tests', () => {
 
 	describe('@AccountId()', () => {
 		it('account-id header property', async () => {
-
-			try{
+			try {
 				const response = await request(scaffold.server)
-				.get(`/users/${scaffold.values.owner.user_id}`)
-				.set({
-					Authorization: 'Bearer ' + scaffold.values.owner_access_token,
-					'account-id': scaffold.values.account.account_id.toString(),
-				})
+					.get(`/users/${scaffold.values.owner.user_id}`)
+					.set({
+						Authorization: 'Bearer ' + scaffold.values.owner_access_token,
+						'account-id': scaffold.values.account.account_id.toString(),
+					})
 
 				expect(response.body).toBeDefined()
 				expect(response.body.user_id).toEqual(scaffold.values.owner.user_id)
-
-			}catch(e){
+			} catch (e) {
 				console.error(e)
 				expect(e).toMatch('error')
 			}
 		})
 
 		it('fallback to first account found when no account-id passed', async () => {
-
-			try{
+			try {
 				const response = await request(scaffold.server)
-				.get(`/users/${scaffold.values.owner.user_id}`)
-				.set({
-					Authorization: 'Bearer ' + scaffold.values.owner_access_token,
-				})
+					.get(`/users/${scaffold.values.owner.user_id}`)
+					.set({
+						Authorization: 'Bearer ' + scaffold.values.owner_access_token,
+					})
 				expect(response.body).toBeDefined()
 				expect(response.body.user_id).toEqual(scaffold.values.owner.user_id)
-
-			}catch(e){
+			} catch (e) {
 				console.error(e)
 				expect(e).toMatch('error')
 			}
 		})
-
 	})
 
 	afterAll(async () => {
