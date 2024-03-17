@@ -441,7 +441,9 @@ function checkResult<T extends ObjectLiteral>(data: DeepPartial<T>, result: T, e
 					expect(result[key]).toBe(data[key as keyof DeepPartial<T>])
 			}
 		} catch (e) {
-			throw new Error(`checkResult failed - ${key} issue, expected: ${data[key as keyof DeepPartial<T>]} found: ${result[key]}  `)
+			throw new Error(
+				`checkResult failed - ${key} issue, expected: ${data[key as keyof DeepPartial<T>]} found: ${result[key]}  `,
+			)
 		}
 	}
 }

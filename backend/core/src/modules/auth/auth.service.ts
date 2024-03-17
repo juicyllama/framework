@@ -503,8 +503,12 @@ export class AuthService extends BaseService<T> {
 		}
 	}
 
-	referrerCheck(referrer: string | URL, allowed: string | string[], domain: any) {
-		if (Env.IsProd()) {
+	referrerCheck(referrer: string | URL, allowed: string | string[] | URL | URL[], domain?: any) {
+		if (!domain) {
+			domain = 'auth::service::referrerCheck'
+		}
+
+		if (!Env.IsDev()) {
 			if (!referrer) {
 				this.logger.warn(`[${domain}] No referrer found`, {
 					NODE_ENV: process.env.NODE_ENV,
@@ -512,22 +516,31 @@ export class AuthService extends BaseService<T> {
 				})
 				throw new UnauthorizedException()
 			}
-			const referrer_url = new URL(referrer)
+
+			const referrer_url = this.getHostFromUrlOrString(referrer)
 
 			if (allowed instanceof Array) {
-				if (!allowed.includes(referrer_url.origin)) {
-					this.logger.error(`[${domain}] Referrer does not match`, {
-						referrer: referrer_url,
-						allowed: allowed,
-						NODE_ENV: process.env.NODE_ENV,
-					})
-					throw new UnauthorizedException()
+				const allowed_urls: string[] = []
+
+				for (const a of allowed) {
+					const a_url = this.getHostFromUrlOrString(a)
+					allowed_urls.push(a_url)
+					if (a_url === referrer_url) return true
 				}
+
+				this.logger.error(`[${domain}] Referrer does not match`, {
+					referrer_url,
+					allowed_urls,
+					NODE_ENV: process.env.NODE_ENV,
+				})
+				throw new UnauthorizedException()
 			} else {
-				if (referrer_url.origin !== allowed) {
+				const allowed_url = this.getHostFromUrlOrString(allowed)
+
+				if (referrer_url !== allowed_url) {
 					this.logger.error(`[${domain}] Referrer does not match`, {
-						referrer: referrer_url,
-						allowed: allowed,
+						referrer_url,
+						allowed_url,
 						NODE_ENV: process.env.NODE_ENV,
 					})
 					throw new UnauthorizedException()
@@ -546,5 +559,17 @@ export class AuthService extends BaseService<T> {
 			}
 		}
 		return user
+	}
+
+	getHostFromUrlOrString(url: string | URL): string {
+		if (url instanceof URL) {
+			return url.host
+		}
+
+		const temp = new URL(url)
+		if (!temp?.host) {
+			return url.replace(/\//g, '')
+		}
+		return temp.host
 	}
 }
