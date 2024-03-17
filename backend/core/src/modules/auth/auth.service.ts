@@ -275,7 +275,7 @@ export class AuthService extends BaseService<T> {
 				user: user,
 				code: code,
 				hrefs: {
-					cta: `${process.env.BASE_URL_APP}/password/reset?code=${code}`,
+					cta: `${process.env.BASE_URL_APP}/reset?email=${user.email}&code=${code}`,
 				},
 				env: process.env,
 			})
