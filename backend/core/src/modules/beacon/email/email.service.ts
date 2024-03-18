@@ -47,6 +47,14 @@ export class BeaconEmailService {
 			return
 		}
 
+		if(Env.IsDev()) {
+			message.subject = `[DEV] ${message.subject}`
+		}
+
+		if(Env.IsSandbox()) {
+			message.subject = `[SANDBOX] ${message.subject}`
+		}
+
 		const email_data = {
 			communication: message.communication,
 			subject: message.subject,
