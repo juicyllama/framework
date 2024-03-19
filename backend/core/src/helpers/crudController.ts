@@ -425,7 +425,9 @@ function cleanDtos<T extends ObjectLiteral>(dtos: DeepPartial<T>[], options: any
 	)
 
 	// Remove any records with no dedup_field
-	const clean = unique.filter(record => !_.isEmpty(record) && !_.isEmpty(record[options.dedup_field]))
+	const clean = unique.filter(
+		record => !_.isEmpty(record) && !_.isEmpty(record[options.dedup_field as keyof typeof record]),
+	)
 	logger.debug(
 		`[${domain}] Removed ${unique.length - clean.length} records with no value in ${options.dedup_field} field`,
 	)

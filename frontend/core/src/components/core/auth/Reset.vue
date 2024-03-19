@@ -54,6 +54,10 @@ if(route.query.code){
 	state.code = <string>route.query.code
 }
 
+if(state.email && state.code){
+	await processCode(state.code)
+}
+
 const loading = ref(false)
 
 async function resetPassword(state: AuthFormState) {
@@ -84,7 +88,7 @@ async function newEmail(state: AuthFormState) {
 </script>
 
 <template>
-	<div>
+	<div id="JLResetPassword">
 		<q-form autofocus @submit="resetPassword(state)" v-if="state.stage === 0">
 			<slot name="header">
 				<q-card-section>
@@ -123,10 +127,12 @@ async function newEmail(state: AuthFormState) {
 			<AuthActions submit_label="Reset Password" :loading="loading"></AuthActions>
 		</q-form>
 		<q-form autofocus v-else-if="state.stage === 1">
-			<q-card-section>
-				<div class="text-h6">Verify Account</div>
-			</q-card-section>
-			<q-separator inset />
+			<slot name="header-verify">
+				<q-card-section>
+					<div class="text-h6">Verify Account</div>
+				</q-card-section>
+				<q-separator inset />
+			</slot>
 			<q-card-section class="column q-mt-md">
 				<OTP @complete="processCode"></OTP>
 			</q-card-section>
@@ -137,10 +143,12 @@ async function newEmail(state: AuthFormState) {
 		</q-form>
 
 		<q-form autofocus @submit="newEmail(state)" v-if="state.stage === 2">
-			<q-card-section>
-				<div class="text-h6">New Password</div>
-			</q-card-section>
-			<q-separator inset />
+			<slot name="header-new-password">
+				<q-card-section>
+					<div class="text-h6">New Password</div>
+				</q-card-section>
+				<q-separator inset />
+			</slot>
 			<q-card-section class="column q-gutter-md">
 				<q-input
 					name="new-password"

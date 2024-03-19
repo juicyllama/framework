@@ -54,6 +54,82 @@ describe('Auth Service', () => {
 		})
 	})
 
+	describe('referrerCheck', () => {
+		it('exact match', async () => {
+			const result = await scaffold.services.service.referrerCheck(
+				'http://localhost:3000',
+				'http://localhost:3000',
+			)
+			expect(result).toBe(true)
+		})
+
+		it('exact match without http://', async () => {
+			const result = await scaffold.services.service.referrerCheck('localhost:3000', 'localhost:3000')
+			expect(result).toBe(true)
+		})
+
+		it('no match', async () => {
+			try {
+				await scaffold.services.service.referrerCheck('http://localhost:3000', 'http://localhost:3001')
+				expect(true).toBe(false)
+			} catch (e) {
+				expect(e).toBeDefined()
+			}
+		})
+
+		it('no match without http', async () => {
+			try {
+				await scaffold.services.service.referrerCheck('localhost:3000', 'localhost:3001')
+				expect(true).toBe(false)
+			} catch (e) {
+				expect(e).toBeDefined()
+			}
+		})
+
+		it('trailing slash', async () => {
+			const result = await scaffold.services.service.referrerCheck(
+				'http://localhost:3000',
+				'http://localhost:3000/',
+			)
+			expect(result).toBe(true)
+		})
+
+		it('trailing slash without http', async () => {
+			const result = await scaffold.services.service.referrerCheck('localhost:3000', 'localhost:3000/')
+			expect(result).toBe(true)
+		})
+
+		it('https to none', async () => {
+			const result = await scaffold.services.service.referrerCheck('https://localhost:3000', 'localhost:3000/')
+			expect(result).toBe(true)
+		})
+
+		it('https to none (array)', async () => {
+			const result = await scaffold.services.service.referrerCheck('https://localhost:3000', ['localhost:3000/'])
+			expect(result).toBe(true)
+		})
+
+		it('backslash to none (array)', async () => {
+			const result = await scaffold.services.service.referrerCheck('localhost:3000/', ['localhost:3000'])
+			expect(result).toBe(true)
+		})
+
+		it('none to backslash (array)', async () => {
+			const result = await scaffold.services.service.referrerCheck('localhost:3000', ['localhost:3000/'])
+			expect(result).toBe(true)
+		})
+
+		it('https to none with slash', async () => {
+			const result = await scaffold.services.service.referrerCheck('https://localhost:3000/', 'localhost:3000')
+			expect(result).toBe(true)
+		})
+
+		it('https to none with slash (array)', async () => {
+			const result = await scaffold.services.service.referrerCheck('https://localhost:3000/', ['localhost:3000'])
+			expect(result).toBe(true)
+		})
+	})
+
 	afterAll(async () => {
 		await scaffolding.down(E)
 	})

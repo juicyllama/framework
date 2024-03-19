@@ -277,7 +277,7 @@ export class Query<T extends ObjectLiteral> {
 			logger.debug(`[QUERY][UPDATE][${repository.metadata.tableName}]`, data)
 		}
 
-		if (!data[this.getPrimaryKey(repository)]) {
+		if (!this.getRecordId(repository, data)) {
 			throw new Error(
 				`Primary key ${<string>this.getPrimaryKey(repository)} missing from update to ${
 					repository.metadata.tableName
@@ -286,8 +286,8 @@ export class Query<T extends ObjectLiteral> {
 		}
 
 		try {
-			await repository.update(data[this.getPrimaryKey(repository)], <any>data)
-			return await this.findOneById(repository, data[this.getPrimaryKey(repository)], relations)
+			await repository.update(this.getRecordId(repository, data), <any>data)
+			return await this.findOneById(repository, this.getRecordId(repository, data), relations)
 		} catch (e) {
 			this.logUpdateError(e, repository, data)
 			throw e
@@ -551,6 +551,10 @@ export class Query<T extends ObjectLiteral> {
 		await this.raw(repository, sql_drop)
 	}
 
+	/**
+	 * @param repository
+	 * @returns The primary key's name of the table
+	 */
 	getPrimaryKey(repository: Repository<T>): keyof DeepPartial<T> {
 		const pk = repository.metadata.columns.find(column => {
 			if (column.isPrimary) {
@@ -561,6 +565,16 @@ export class Query<T extends ObjectLiteral> {
 			throw new Error('no primary key was found')
 		}
 		return <keyof DeepPartial<T>>pk
+	}
+
+	/**
+	 *
+	 * @param repository
+	 * @param record
+	 * @returns The primary key's value of the record
+	 */
+	getRecordId(repository: Repository<T>, record: DeepPartial<T>): number {
+		return record[this.getPrimaryKey(repository)] as unknown as number
 	}
 
 	getTableName(repository: Repository<T>) {
@@ -894,7 +908,7 @@ export class Query<T extends ObjectLiteral> {
 			try {
 				const r = await this.findOne(repository, {
 					where: {
-						[dedup_field]: record[dedup_field],
+						[dedup_field]: record[dedup_field as keyof DeepPartial<T>],
 					},
 				})
 
@@ -941,14 +955,14 @@ export class Query<T extends ObjectLiteral> {
 		const records: any[] = []
 
 		for (const row of data) {
-			records.push(row[dedup_field])
+			records.push(row[dedup_field as keyof DeepPartial<T>])
 		}
 
 		for (const record of data) {
 			try {
 				const r = await this.findOne(repository, <any>{
 					where: {
-						[dedup_field]: record[dedup_field],
+						[dedup_field]: record[dedup_field as keyof DeepPartial<T>],
 					},
 				})
 
