@@ -9,10 +9,8 @@ export const WebsocketJwtAuthMiddleware = (): SocketIOMiddleware => {
 	return (client: Socket, next) => {
 		try {
 			WebsocketJwtAuthGuard.validateToken(client)
-			console.log('WebsocketJwtAuthMiddleware')
 			next()
 		} catch (err) {
-			console.log('WebsocketJwtAuthMiddleware error: ', err)
 			next(err as Error)
 		}
 	}

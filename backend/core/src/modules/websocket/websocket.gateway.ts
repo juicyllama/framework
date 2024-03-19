@@ -16,7 +16,6 @@ import { WebsocketJwtAuthMiddleware } from './ws-auth/websocket.jwt-auth.middlew
 import { Socket, Server } from 'socket.io'
 
 @UseGuards(WebsocketJwtAuthGuard)
-@Injectable()
 @WebSocketGateway()
 export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 	logger: Logger = new Logger()

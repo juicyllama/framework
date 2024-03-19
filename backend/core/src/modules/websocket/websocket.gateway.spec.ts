@@ -1,8 +1,7 @@
 import { INestApplication } from '@nestjs/common'
 import { IoAdapter } from '@nestjs/platform-socket.io'
 import { Test, TestingModule } from '@nestjs/testing'
-import { Socket } from 'socket.io'
-import ioc from 'socket.io-client'
+import ioc, { Socket } from 'socket.io-client'
 import * as jwt from 'jwt-simple'
 import { WebsocketGateway } from './websocket.gateway'
 
@@ -33,30 +32,27 @@ describe('WebsocketGateway', () => {
 	// 	expect(gateway).toBeDefined()
 	// })
 
-	it(`should handle message`, async () => {
+	it(`should throw error with an invalid token`, async () => {
 		await app.listen(8081)
-		const clientSocket = ioc(`http://localhost:${8081}`, {
+		const clientSocket= ioc(`http://localhost:${8081}`, {
+			extraHeaders: {
+				authorization: `Bearer invalid_token`,
+			},
+		})
+		const errorCall = async () => await awaitSocket(clientSocket, 1000)
+		expect(errorCall).rejects.toThrow('Timeout')
+	})
+
+
+	it(`should connect with valid token`, async () => {
+		await app.listen(8081)
+		const clientSocket= ioc(`http://localhost:${8081}`, {
 			extraHeaders: {
 				authorization: `Bearer ${token}`,
 			},
 		})
-		await new Promise((resolve, reject) => {
-			// @ts-ignore
-			clientSocket.on('connect', () => {
-				console.log('Client connected successfully')
-				resolve(1)
-			})
-
-			clientSocket.on('error', error => {
-				console.error('An error occurred:', error)
-				reject(error)
-			})
-
-			clientSocket.on('disconnect', reason => {
-				// console.log('Client disconnected:', reason)
-				reject(reason)
-			})
-		})
+		await awaitSocket(clientSocket, 1000)
+		
 		// clientSocket.send(
 		// 	JSON.stringify({
 		// 		event: 'push',
@@ -74,3 +70,30 @@ describe('WebsocketGateway', () => {
 		// )
 	})
 })
+
+async function awaitSocket(clientSocket: Socket, timeoutMs: number = 1000) {
+	return await new Promise((resolve, reject) => {
+		let done = false
+		setTimeout(() => {
+			if (!done) {
+				reject('Timeout')
+			}
+		}, timeoutMs)
+		// @ts-ignore
+		clientSocket.on('connect', () => {
+			done = true
+			resolve(1)
+		})
+
+		clientSocket.on('error', error => {
+			console.error('An error occurred:', error)
+			done = true
+			reject(error)
+		})
+
+		clientSocket.on('disconnect', reason => {
+			done = true
+			reject(reason)
+		})
+	})
+}
