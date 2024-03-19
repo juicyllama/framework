@@ -1,5 +1,4 @@
 import { Logger } from '@juicyllama/utils'
-import { Injectable } from '@nestjs/common'
 import { UseGuards } from '@nestjs/common'
 import {
 	OnGatewayConnection,
@@ -9,38 +8,47 @@ import {
 	WebSocketGateway,
 	WebSocketServer,
 } from '@nestjs/websockets'
-// import { Server } from 'socket.io'
-import { WebsocketJwtAuthGuard } from './ws-auth/websocket.jwt-auth.guard'
+import { Server } from 'socket.io'
 import { WebsocketServerToClientDto } from './websocket.server-to-client.dto'
+import { WebsocketJwtAuthGuard } from './ws-auth/websocket.jwt-auth.guard'
 import { WebsocketJwtAuthMiddleware } from './ws-auth/websocket.jwt-auth.middleware'
-import { Socket, Server } from 'socket.io'
+import { WebsocketService } from './websocket.service'
 
 @UseGuards(WebsocketJwtAuthGuard)
-@WebSocketGateway()
+@WebSocketGateway({ cors: true })
 export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-	logger: Logger = new Logger()
+	websocketServiceCtrl: any
 
-	@WebSocketServer() server: Server<any, WebsocketServerToClientDto> | undefined = undefined
+	constructor(
+		private readonly logger: Logger,
+		private websocketService: WebsocketService,
+	) {}
 
-	afterInit(client: any) {
-		client.use(WebsocketJwtAuthMiddleware() as any)
-		this.logger.log('Websocket server initialized', this.server?.sockets.sockets, this.server?._opts)
-		// this.server.emit('event', 'Hello world!')
+	//@ts-ignore
+	@WebSocketServer() server: Server<any, WebsocketServerToClientDto>
+
+	afterInit(server: Server) {
+		server.use(WebsocketJwtAuthMiddleware() as any)
+		if (this.server) {
+			this.logger.debug('Websocket server initialized')
+			this.websocketServiceCtrl = this.websocketService.setServer(server)
+		} else {
+			throw new Error('Websocket server not initialized')
+		}
 	}
 
 	handleConnection(client: any, ...args: any[]) {
-		if (!this.server) {
-			this.logger.error('Server is not initialized')
-			return
-		}
-		const { sockets } = this.server.sockets
-
-		this.logger.log(`Client id: ${client.id} connected`)
-		this.logger.debug(`Number of connected clients: ${sockets.size}`)
+		this.websocketServiceCtrl.setUser(client.user.user_id, client.id)
+		this.logger.debug(
+			`Client id: ${client.id} connected. user_id=${client.user.user_id}. Number of connected clients: ${this.server.sockets.sockets.size}`,
+		)
 	}
 
 	handleDisconnect(client: any) {
-		this.logger.log(`Cliend id:${client.id} disconnected`)
+		this.websocketServiceCtrl.removeUser(client.user.user_id)
+		this.logger.debug(
+			`Cliend id:${client.id} disconnected. user_id=${client.user.user_id}. Number of connected clients: ${this.server.sockets.sockets.size}`,
+		)
 	}
 
 	@SubscribeMessage('message')

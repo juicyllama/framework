@@ -1,4 +1,4 @@
-import { IsArray, IsBoolean, IsObject, IsString, IsUrl } from 'class-validator'
+import { IsArray, IsBoolean, IsObject, IsString, IsUrl, IsNumber } from 'class-validator'
 import { Account } from '../accounts/account.entity'
 import { UserRole } from '../users/users.enums'
 import { BeaconCommunicationEmailDto } from './email/email.dto'
@@ -36,6 +36,9 @@ export class BeaconCommunicationDto {
 
 	@IsObject()
 	im?: BeaconCommunicationImDto
+
+	@IsNumber()
+	userId?: number
 }
 
 export class BeaconMessageCtaDto {

@@ -2,13 +2,18 @@ import { Socket } from 'socket.io'
 import { WebsocketJwtAuthGuard } from './websocket.jwt-auth.guard'
 
 export type SocketIOMiddleware = {
-	(client: Socket, next: (err?: Error) => void): void
+	(client: AuthSocket, next: (err?: Error) => void): void
+}
+
+export interface AuthSocket extends Socket {
+	user: any
 }
 
 export const WebsocketJwtAuthMiddleware = (): SocketIOMiddleware => {
-	return (client: Socket, next) => {
+	return (client: AuthSocket, next) => {
 		try {
-			WebsocketJwtAuthGuard.validateToken(client)
+			const payload = WebsocketJwtAuthGuard.validateToken(client)
+			client.user = payload
 			next()
 		} catch (err) {
 			next(err as Error)
