@@ -48,7 +48,7 @@ describe('WebsocketGateway', () => {
 		await app.close()
 	})
 
-	it('should be defined', () => {
+	it('gateway should be defined', () => {
 		expect(gateway).toBeDefined()
 	})
 
@@ -56,13 +56,12 @@ describe('WebsocketGateway', () => {
 		expect(listenAndOpenSocket('invalid_token')).rejects.toThrow('Timeout')
 	})
 
-	it(`should connect with valid token`, async () => {
+	it(`should connect with a valid token`, async () => {
 		await listenAndOpenSocket(token)
 	})
 
 	it(`should send message to all users`, async () => {
 		await listenAndOpenSocket(token)
-
 		service.emit('testABC', { test: 'test123' })
 		const event = await connectSocket(clientSocket, 'testABC')
 		expect(event).toEqual({ test: 'test123' })
@@ -100,7 +99,7 @@ describe('WebsocketGateway', () => {
 		expect(eventUser2).toBeDefined()
 	})
 
-	it(`A user should not receive message that was not sent to him (opposite users)`, async () => {
+	it(`A user should not receive message that was not sent to him (opposite case)`, async () => {
 		await listenAndOpenSocket(token) // user 1
 
 		// user 2
@@ -120,6 +119,8 @@ describe('WebsocketGateway', () => {
 		expect(eventUser2).toBeUndefined()
 	})
 })
+
+// helpers
 
 async function waitForSocket(clientSocket: Socket, timeoutMs: number = 1000) {
 	return await new Promise((resolve, reject) => {
