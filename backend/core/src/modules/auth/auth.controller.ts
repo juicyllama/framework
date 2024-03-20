@@ -1,7 +1,7 @@
 import { Logger, SuccessResponseDto } from '@juicyllama/utils'
 import { Body, Controller, Get, Inject, Post, Req, Res, UseGuards, forwardRef } from '@nestjs/common'
 import { ApiHideProperty, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
-import { Response } from 'express'
+import { Response, CookieOptions } from 'express'
 import { AccountId, UserAuth } from '../../decorators'
 import { AuthenticatedRequest } from '../../types/authenticated-request.interface'
 import { User } from '../users/users.entity'
@@ -120,8 +120,8 @@ export class AuthController {
 	@Post('logout')
 	@UserAuth({ skipAccountId: true })
 	async logout(@Res({ passthrough: true }) res: Response): Promise<SuccessResponseDto> {
-		res.clearCookie(ACCESS_TOKEN_COOKIE_NAME)
-		res.clearCookie(REFRESH_TOKEN_COOKIE_NAME)
+		res.clearCookie(ACCESS_TOKEN_COOKIE_NAME, getAuthCookieOpts(false))
+		res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, getAuthCookieOpts(true))
 		return {
 			success: true,
 		}
@@ -297,33 +297,29 @@ export class AuthController {
 	}
 }
 
-function setAccessAndRefreshTokenCookies(res: Response, accessToken: string, refreshToken?: string): void {
+function getAuthCookieOpts(isRefreshToken: boolean): CookieOptions {
 	if (!process.env.BASE_URL_API) {
 		throw new Error('BASE_URL_APP env variable not set')
 	}
-
 	const domain: string = process.env.BASE_URL_API.replace(/^https?:\/\//, '') // Remove protocol
 
-	// Set access token cookie
-	res.cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken, {
+	return {
 		httpOnly: true,
 		secure: true, // Consider environment check for development vs. production
 		domain,
-		sameSite: 'none', // Adjust according to your requirements (Lax, Strict, None + Secure)
-		maxAge: Number(process.env.JWT_ACCESS_TOKEN_EXPIRY_MINUTES || DEFAULT_ACCESS_TOKEN_EXPIRY_MINUTES) * 60 * 1000,
-		path: '/',
-	})
+		sameSite: 'none', // Adjust according to your requirements
+		maxAge: isRefreshToken
+			? Number(process.env.JWT_REFRESH_TOKEN_EXPIRY_DAYS || DEFAULT_REFRESH_TOKEN_EXPIRY_DAYS) * 86400 * 1000 // Days to milliseconds
+			: Number(process.env.JWT_ACCESS_TOKEN_EXPIRY_MINUTES || DEFAULT_ACCESS_TOKEN_EXPIRY_MINUTES) * 60 * 1000, // Minutes to milliseconds
+		path: isRefreshToken ? '/auth/refresh' : '/',
+	}
+}
 
+function setAccessAndRefreshTokenCookies(res: Response, accessToken: string, refreshToken?: string): void {
+	// Set access token cookie
+	res.cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken, getAuthCookieOpts(false))
 	// Set refresh token cookie, if refresh token is provided
 	if (refreshToken) {
-		res.cookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
-			httpOnly: true,
-			secure: true, // Consider environment check for development vs. production
-			domain,
-			sameSite: 'none', // Adjust according to your requirements
-			maxAge:
-				Number(process.env.JWT_REFRESH_TOKEN_EXPIRY_DAYS || DEFAULT_REFRESH_TOKEN_EXPIRY_DAYS) * 86400 * 1000, // Convert days to milliseconds
-			path: '/auth/refresh',
-		})
+		res.cookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken, getAuthCookieOpts(true))
 	}
 }
