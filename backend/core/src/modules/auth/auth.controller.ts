@@ -310,10 +310,7 @@ function setAccessAndRefreshTokenCookies(res: Response, accessToken: string, ref
 		secure: true, // Consider environment check for development vs. production
 		domain,
 		sameSite: 'none', // Adjust according to your requirements (Lax, Strict, None + Secure)
-		expires: new Date(
-			Date.now() +
-				Number(process.env.JWT_ACCESS_TOKEN_EXPIRY_MINUTES || DEFAULT_ACCESS_TOKEN_EXPIRY_MINUTES) * 60000,
-		), // Convert minutes to milliseconds
+		maxAge: Number(process.env.JWT_ACCESS_TOKEN_EXPIRY_MINUTES || DEFAULT_ACCESS_TOKEN_EXPIRY_MINUTES) * 60 * 1000,
 		path: '/',
 	})
 
@@ -324,10 +321,8 @@ function setAccessAndRefreshTokenCookies(res: Response, accessToken: string, ref
 			secure: true, // Consider environment check for development vs. production
 			domain,
 			sameSite: 'none', // Adjust according to your requirements
-			expires: new Date(
-				Date.now() +
-					Number(process.env.JWT_REFRESH_TOKEN_EXPIRY_DAYS || DEFAULT_REFRESH_TOKEN_EXPIRY_DAYS) * 86400000,
-			), // Convert days to milliseconds
+			maxAge:
+				Number(process.env.JWT_REFRESH_TOKEN_EXPIRY_DAYS || DEFAULT_REFRESH_TOKEN_EXPIRY_DAYS) * 86400 * 1000, // Convert days to milliseconds
 			path: '/auth/refresh',
 		})
 	}

@@ -13,7 +13,7 @@ const instance = axios.create({
 	headers,
 })
 
-instance.defaults.withCredentials = true
+instance.defaults.withCredentials = true // Send accessToken and refreshToken cookies with every request
 
 instance.interceptors.request.use(config => {
 	let message = `[${config.method}] ${config.url}`
