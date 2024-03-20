@@ -1,54 +1,29 @@
 import { Logger } from '@juicyllama/utils'
-import { Injectable } from '@nestjs/common'
+import { Injectable, Inject, OnApplicationShutdown } from '@nestjs/common'
 import { Server } from 'socket.io'
-
-type WebsocketServiceCtrl = {
-	setUser: (userId: number, socketId: string) => void
-	removeUser: (userId: number) => void
-}
+import Redis from 'ioredis'
+import { REDIS_PUB_CLIENT, WEBSOCKETS_REDIS_CHANNEL } from './websocket.constants'
 
 @Injectable()
-export class WebsocketService {
+export class WebsocketService implements OnApplicationShutdown {
 	private server: Server | null = null
 	private connectedUserSockets: Map<number, string> = new Map() // user_id -> socket_id
 
-	constructor(private readonly logger: Logger) {}
+	constructor(
+		private readonly logger: Logger,
+		@Inject(REDIS_PUB_CLIENT) private readonly redisPubClient: Redis,
+	) {}
 
-	public setServer(server: Server): WebsocketServiceCtrl {
-		this.server = server
-		return {
-			setUser: (userId: number, socketId: string) => {
-				this.connectedUserSockets.set(userId, socketId)
-				this.logger.debug(`User ${userId} connected with socketId ${socketId}`)
-			},
-
-			removeUser: (userId: number) => {
-				this.connectedUserSockets.delete(userId)
-				this.logger.debug(`User ${userId} disconnected`)
-			},
-		}
+	onApplicationShutdown() {
+		this.redisPubClient.disconnect()
+		// Add more disconnect calls if you have multiple Redis clients
 	}
 
-	public emit(event: string, data: any, userId?: number) {
-		if (!this.server) throw new Error('Server not initialized')
-		if (userId) {
-			const socketId = this.connectedUserSockets.get(userId)
-			if (socketId) {
-				this.logger.debug(`Emitting to user ${userId} with socketId ${socketId}`)
-				this.server.to(socketId).emit(event, data)
-			} else {
-				this.logger.debug(
-					`User ${userId} not connected. connectedUserSockets: ${Object.keys(this.connectedUserSockets)}`,
-				)
-			}
-			return
-		} else {
-			this.server.emit(event, data)
+	public async emit(event: string, data: any, userId?: number) {
+		this.logger.debug(`Emitting event ${event} to user ${userId || 'all'}`)
+		if (this.redisPubClient.status !== 'ready') {
+			throw new Error('Redis client not ready')
 		}
+		await this.redisPubClient.publish(WEBSOCKETS_REDIS_CHANNEL, JSON.stringify({ event, data, userId }))
 	}
-
-	// public getServer(): Server {
-	// 	if (!this.server) throw new Error('Server not initialized')
-	// 	return this.server
-	// }
 }

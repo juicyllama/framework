@@ -1,15 +1,14 @@
-import { Env, Logger, Modules } from '@juicyllama/utils'
+import { Logger } from '@juicyllama/utils'
 import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import _ from 'lodash'
 import { Repository } from 'typeorm'
+import { BeaconConfigDto } from '../../../configs/beacon.config.dto'
 import { Query } from '../../../utils/typeorm/Query'
+import { InjectConfig } from '../../config'
+import { WebsocketService } from '../../websocket/websocket.service'
 import { BeaconMessageDto } from '../beacon.dto'
 import { BeaconStatus } from '../beacon.enums'
 import { BeaconPush } from './push.entity'
-import { BeaconConfigDto } from '../../../configs/beacon.config.dto'
-import { InjectConfig } from '../../config'
-import { WebsocketService } from '../../websocket/websocket.service'
 
 @Injectable()
 export class BeaconPushService {
@@ -50,12 +49,10 @@ export class BeaconPushService {
 			return false
 		}
 
-		let service: any
-		
-		pusher.trigger(
-			this.configService.PUSHER_CHANNEL,
+		await this.websocketService.emit(
 			message.communication.event,
 			message.options?.skipJsonSave ? null : message.json ?? null,
+			message.communication.userId,
 		)
 
 		this.logger.log(
@@ -70,7 +67,5 @@ export class BeaconPushService {
 			status: BeaconStatus.SENT,
 			pushed_at: new Date(),
 		})
-
-		
 	}
 }
