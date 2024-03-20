@@ -56,14 +56,13 @@ export class BeaconPushService {
 		)
 
 		this.logger.log(
-			`[${domain}] Message Sent! Channel = ${this.configService.PUSHER_CHANNEL} | event = ${
+			`[${domain}] Message Sent! | event = ${
 				message.communication.event
 			} | data = ${JSON.stringify(message.options?.skipJsonSave ? null : message.json ?? null)}`,
 		)
 
 		await this.query.update(this.repository, {
 			push_id: push.push_id,
-			app_integration_name: 'websocket',
 			status: BeaconStatus.SENT,
 			pushed_at: new Date(),
 		})

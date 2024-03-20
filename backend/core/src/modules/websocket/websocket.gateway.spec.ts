@@ -90,7 +90,7 @@ describe('WebsocketGateway', () => {
 	it(`should send message to two users, each on a different server`, async () => {
 		await listenAndOpenSocket(token, PORT1) // 
 		// user 2
-		const user2Socket = ioc(`http://localhost:${PORT2}`, {
+		const user2Socket = ioc(`http://localhost:${PORT2}`, { // port of the other app
 			extraHeaders: {
 				authorization: `Bearer ${token2}`,
 			},

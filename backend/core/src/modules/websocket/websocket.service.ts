@@ -1,22 +1,17 @@
 import { Logger } from '@juicyllama/utils'
-import { Injectable, Inject, OnApplicationShutdown } from '@nestjs/common'
-import { Server } from 'socket.io'
+import { Inject, Injectable, OnApplicationShutdown } from '@nestjs/common'
 import Redis from 'ioredis'
-import { REDIS_PUB_CLIENT, WEBSOCKETS_REDIS_CHANNEL } from './websocket.constants'
+import { REDIS_PUB_CLIENT_TOKEN, WEBSOCKETS_REDIS_CHANNEL } from './websocket.constants'
 
 @Injectable()
 export class WebsocketService implements OnApplicationShutdown {
-	private server: Server | null = null
-	private connectedUserSockets: Map<number, string> = new Map() // user_id -> socket_id
-
 	constructor(
 		private readonly logger: Logger,
-		@Inject(REDIS_PUB_CLIENT) private readonly redisPubClient: Redis,
+		@Inject(REDIS_PUB_CLIENT_TOKEN) private readonly redisPubClient: Redis,
 	) {}
 
 	onApplicationShutdown() {
 		this.redisPubClient.disconnect()
-		// Add more disconnect calls if you have multiple Redis clients
 	}
 
 	public async emit(event: string, data: any, userId?: number) {

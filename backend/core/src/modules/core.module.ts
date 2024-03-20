@@ -11,6 +11,7 @@ import { UsersModule } from './users/users.module'
 import { WebsocketModule } from './websocket/websocket.module';
 @Module({
 	imports: [
+		forwardRef(() => WebsocketModule),
 		forwardRef(() => AccountModule),
 		forwardRef(() => AuthModule),
 		forwardRef(() => BeaconModule),
@@ -20,7 +21,6 @@ import { WebsocketModule } from './websocket/websocket.module';
 		forwardRef(() => StorageModule),
 		forwardRef(() => TagsModule),
 		forwardRef(() => UsersModule),
-		forwardRef(() => WebsocketModule),
 	],
 	controllers: [],
 	providers: [],
