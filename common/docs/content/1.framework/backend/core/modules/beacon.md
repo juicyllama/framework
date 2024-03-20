@@ -14,7 +14,7 @@ The beacon module allows you to notify users in a multitude of different ways, i
 -   Webhooks
 
 ::alert{type="danger"}
-This module is currently in development and is limited to Email, SMS, PUSHER right now.
+This module is currently in development and is limited to Email, SMS, Websockets right now.
 ::
 
 ::alert{type="info"}
@@ -121,7 +121,6 @@ The beacon module can integrate with the following modules:
 | ------ | ------------------------------- |
 | Email  | [app-aws]()                     |
 | SMS    | [app-aws]()                     |
-| Push   | [app-pusher]()                  |
 | IM     | [app-slack](../../../apps/slack/0.index.md) |
 
 
