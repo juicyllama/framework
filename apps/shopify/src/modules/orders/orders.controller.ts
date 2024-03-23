@@ -2,7 +2,7 @@ import { InstalledAppsService } from '@juicyllama/app-store'
 import { AccountId, UserAuth } from '@juicyllama/core'
 import { Transaction } from '@juicyllama/ecommerce'
 import { Logger } from '@juicyllama/utils'
-import { Controller, Get, Query, BadRequestException, Body, Post } from '@nestjs/common'
+import { Controller, Get, Query, BadRequestException, Body, Post, forwardRef, Inject } from '@nestjs/common'
 import { ApiHideProperty } from '@nestjs/swagger'
 import { ApiVersion } from '@shopify/shopify-api'
 import { ShopifyOrder, ShopifyQueryListOrders } from './orders.dto'
@@ -11,9 +11,9 @@ import { ShopifyOrdersService } from './orders.service'
 @Controller('app/shopify/orders')
 export class ShopifyOrdersController {
 	constructor(
-		private readonly logger: Logger,
-		private readonly shopifyOrdersService: ShopifyOrdersService,
-		private readonly installedAppsService: InstalledAppsService,
+		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
+		@Inject(forwardRef(() => ShopifyOrdersService)) readonly shopifyOrdersService: ShopifyOrdersService,
+		@Inject(forwardRef(() => InstalledAppsService)) readonly installedAppsService: InstalledAppsService,
 	) {}
 
 	/**

@@ -1,14 +1,12 @@
-import { InstalledApp, InstalledAppsService } from '@juicyllama/app-store'
-import { Store, StoresService } from '@juicyllama/ecommerce'
+import { InstalledApp } from '@juicyllama/app-store'
+import { Store } from '@juicyllama/ecommerce'
 import { Logger } from '@juicyllama/utils'
-import { Injectable } from '@nestjs/common'
+import { Injectable, forwardRef, Inject } from '@nestjs/common'
 
 @Injectable()
 export class ShopifyShopService {
 	constructor(
-		private readonly logger: Logger,
-		private readonly installedAppService: InstalledAppsService,
-		private readonly storesService: StoresService,
+		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
 	) {}
 
 	/**

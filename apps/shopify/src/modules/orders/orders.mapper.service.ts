@@ -1,3 +1,4 @@
+import { Logger } from '@juicyllama/utils'
 import { InstalledApp } from '@juicyllama/app-store'
 import {
 	ContactsService,
@@ -8,29 +9,36 @@ import {
 	ContactAddress,
 } from '@juicyllama/crm'
 import {
+	BundlesService,
+	SkusService,
 	Store,
 	Transaction,
 	TransactionDiscount,
 	TransactionDiscountsService,
 	TransactionDiscountType,
 	TransactionFulfillmentStatus,
+	TransactionItemsService,
 	TransactionPaymentStatus,
 	TransactionsService,
 	UpdateTransactionDto,
 } from '@juicyllama/ecommerce'
-import { Injectable } from '@nestjs/common'
+import { Injectable, forwardRef, Inject } from '@nestjs/common'
 import { ShopifyOrder, ShopifyOrderDiscountCodes } from './orders.dto'
 import { ShopifyOrderDicountCodeType, ShopifyOrderFinancialStatus, ShopifyOrderFulfillmentStatus } from './orders.enums'
 
 @Injectable()
 export class ShopifyOrdersMapperService {
 	constructor(
-		private readonly contactsService: ContactsService,
-		private readonly contactEmailService: ContactEmailService,
-		private readonly contactAddressService: ContactAddressService,
-		private readonly contactPhoneService: ContactPhoneService,
-		private readonly transactionsService: TransactionsService,
-		private readonly transactionsDiscountService: TransactionDiscountsService,
+		@Inject(forwardRef(() => Logger)) readonly contactsService: ContactsService,
+		@Inject(forwardRef(() => Logger)) readonly contactEmailService: ContactEmailService,
+		@Inject(forwardRef(() => Logger)) readonly contactAddressService: ContactAddressService,
+		@Inject(forwardRef(() => Logger)) readonly contactPhoneService: ContactPhoneService,
+		@Inject(forwardRef(() => Logger)) readonly transactionsService: TransactionsService,
+		@Inject(forwardRef(() => Logger)) readonly transactionsDiscountService: TransactionDiscountsService,
+		@Inject(forwardRef(() => Logger)) readonly transactionItemsService: TransactionItemsService,
+		@Inject(forwardRef(() => Logger)) readonly skusService: SkusService,
+		@Inject(forwardRef(() => Logger)) readonly bundlesService: BundlesService,
+		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
 	) {}
 
 	async createEcommerceTransaction(
@@ -38,6 +46,7 @@ export class ShopifyOrdersMapperService {
 		store: Store,
 		installed_app: InstalledApp,
 	): Promise<Transaction> {
+
 		let contact: Contact
 		let shipping_address: ContactAddress | undefined = undefined
 		let billing_address: ContactAddress | undefined = undefined
@@ -118,11 +127,11 @@ export class ShopifyOrdersMapperService {
 			shipping_address_id: shipping_address?.address_id,
 			billing_address_id: billing_address?.address_id,
 			payment_status:
-				order.financial_status &&
-				this.shopifyOrderFinancialStatusToEcommerceTransactionStatus(order.financial_status),
+				(order.financial_status &&
+				this.shopifyOrderFinancialStatusToEcommerceTransactionStatus(order.financial_status)) ?? TransactionPaymentStatus.PENDING,
 			fulfillment_status:
-				order.fulfillment_status &&
-				this.shopifyOrderFulfillmentStatusToEcommerceTransactionStatus(order.fulfillment_status),
+				(order.fulfillment_status &&
+				this.shopifyOrderFulfillmentStatusToEcommerceTransactionStatus(order.fulfillment_status)) ?? TransactionFulfillmentStatus.PENDING,
 			currency: order.currency,
 			subtotal_price: order.subtotal_price,
 			total_shipping: Number(order.total_shipping_price_set?.shop_money?.amount),
@@ -144,6 +153,36 @@ export class ShopifyOrdersMapperService {
 			store.account_id,
 			transaction.transaction_id,
 		)
+
+		if(order.line_items) {
+
+			for(const item of order.line_items) {
+				
+				let sku = await this.skusService.findBySku(item.sku)
+				let bundle = await this.bundlesService.findBySku(item.sku)
+
+				if(sku) {
+					await this.transactionItemsService.create({
+						transaction_id: transaction.transaction_id,
+						sku_id: sku.sku_id,
+						quantity: item.quantity,
+					})
+				} else if(bundle) {
+					await this.transactionItemsService.create({
+						transaction_id: transaction.transaction_id,
+						bundle_id: bundle.bundle_id,
+						quantity: item.quantity,
+					})
+				} else {
+					this.logger.error(`SKU or Bundle not found for ${item.sku}`, {
+						transaction,
+						shopify_order: order,
+						store
+					})
+				}
+			}
+
+		}
 
 		return transaction
 	}

@@ -1,0 +1,63 @@
+{
+    "id": 9182982,
+    "reference_id": "TG-PILLS",
+    "bundle_root_information": null,
+    "created_date": "2021-03-04T09:37:03.6766667+00:00",
+    "channel": {
+        "id": 87385,
+        "name": "Privileged Access Token Monday, February 22, 2021"
+    },
+    "sku": "TG-PILLS",
+    "name": "TG-PILLS",
+    "barcode": "757450452940",
+    "gtin": null,
+    "upc": null,
+    "unit_price": null,
+    "total_fulfillable_quantity": 11875,
+    "total_onhand_quantity": 11953,
+    "total_committed_quantity": 78,
+    "fulfillable_inventory_items": [
+        {
+            "id": 6498066,
+            "name": "Testogen Supplement",
+            "quantity": 1
+        }
+    ],
+    "fulfillable_quantity_by_fulfillment_center": [
+        {
+            "id": 17,
+            "name": "Grapevine 2 (TX)",
+            "fulfillable_quantity": 2700,
+            "onhand_quantity": 2717,
+            "committed_quantity": 17
+        },
+        {
+            "id": 88,
+            "name": "Trenton (NJ)",
+            "fulfillable_quantity": 3049,
+            "onhand_quantity": 3087,
+            "committed_quantity": 38
+        },
+        {
+            "id": 19,
+            "name": "Twin Lakes (WI)",
+            "fulfillable_quantity": 3194,
+            "onhand_quantity": 3194,
+            "committed_quantity": 0
+        },
+        {
+            "id": 135,
+            "name": "Fontana 2, CA",
+            "fulfillable_quantity": 2931,
+            "onhand_quantity": 2954,
+            "committed_quantity": 23
+        },
+        {
+            "id": 120,
+            "name": "Venray (NL)",
+            "fulfillable_quantity": 1,
+            "onhand_quantity": 1,
+            "committed_quantity": 0
+        }
+    ]
+}

@@ -1,12 +1,16 @@
 import { InstalledAppsModule, OAuthModule } from '@juicyllama/app-store'
 import { Logger } from '@juicyllama/utils'
-import { Module } from '@nestjs/common'
+import { Module, forwardRef } from '@nestjs/common'
 import { ShopifyWebhooksService } from './webhooks.service'
 import { ShopifyWebhooksController } from './webhooks.controller'
 import { ShopifyProviderModule } from '../provider/provider.module'
 
 @Module({
-	imports: [OAuthModule, InstalledAppsModule, ShopifyProviderModule],
+	imports: [
+		forwardRef(() => OAuthModule), 
+		forwardRef(() => InstalledAppsModule), 
+		forwardRef(() => ShopifyProviderModule)
+	],
 	controllers: [ShopifyWebhooksController],
 	providers: [ShopifyWebhooksService, Logger],
 	exports: [ShopifyWebhooksService],

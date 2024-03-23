@@ -1,5 +1,5 @@
 import { CronGuard, CronRunner } from '@juicyllama/core'
-import { Controller, Post, UseGuards } from '@nestjs/common'
+import { Controller, Post, UseGuards, forwardRef, Inject } from '@nestjs/common'
 import { ApiExcludeController } from '@nestjs/swagger'
 import { ShopifyOrdersCronService } from './orders.cron.service'
 import { CRON_APP_SHOPIFY_SYNC_ORDERS_DOMIN } from './orders.constants'
@@ -8,7 +8,9 @@ import { CRON_APP_SHOPIFY_SYNC_ORDERS_DOMIN } from './orders.constants'
 @ApiExcludeController()
 @Controller('app/shopify/crons/orders')
 export class ShopifyOrdersCronController {
-	constructor(private readonly shopifyOrdersCronService: ShopifyOrdersCronService) {}
+	constructor(
+		@Inject(forwardRef(() => ShopifyOrdersCronService)) readonly shopifyOrdersCronService: ShopifyOrdersCronService,
+		) {}
 
 	@Post('sync')
 	async syncOrders() {

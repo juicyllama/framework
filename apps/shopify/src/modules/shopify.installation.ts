@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common'
+import { Injectable, OnModuleInit, forwardRef, Inject } from '@nestjs/common'
 import { Logger } from '@juicyllama/utils'
 import {
 	AppCategory,
@@ -12,8 +12,8 @@ import {
 @Injectable()
 export class ShopifyInstallationService implements OnModuleInit {
 	constructor(
-		private readonly logger: Logger,
-		private readonly appsService: AppsService,
+		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
+		@Inject(forwardRef(() => AppsService)) readonly appsService: AppsService,
 	) {}
 
 	async onModuleInit() {

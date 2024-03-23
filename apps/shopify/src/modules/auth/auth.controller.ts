@@ -2,7 +2,7 @@ import { AppIntegrationStatus, InstalledAppsService, Oauth, OauthService } from 
 import { AccountId, InjectConfig, UserAuth } from '@juicyllama/core'
 import { StoresService } from '@juicyllama/ecommerce'
 import { Logger } from '@juicyllama/utils'
-import { Controller, Get, Query, Req, Res, BadRequestException } from '@nestjs/common'
+import { Controller, Get, Query, Req, Res, BadRequestException, forwardRef, Inject } from '@nestjs/common'
 import { ApiHideProperty } from '@nestjs/swagger'
 import { Shopify } from '@shopify/shopify-api'
 import { v4 as uuidv4 } from 'uuid'
@@ -14,12 +14,12 @@ import { ShopifyConfigDto } from '../../config/shopify.config.dto'
 @Controller('app/shopify/auth')
 export class ShopifyAuthController {
 	constructor(
-		private readonly logger: Logger,
+		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
 		@InjectConfig(ShopifyConfigDto) private readonly configService: ShopifyConfigDto,
 		@InjectShopify() private readonly shopify: Shopify,
-		private readonly oauthService: OauthService,
-		private readonly installedAppsService: InstalledAppsService,
-		private readonly storesService: StoresService,
+		@Inject(forwardRef(() => OauthService)) readonly oauthService: OauthService,
+		@Inject(forwardRef(() => InstalledAppsService)) readonly installedAppsService: InstalledAppsService,
+		@Inject(forwardRef(() => StoresService)) readonly storesService: StoresService,
 	) {}
 
 	@UserAuth()
