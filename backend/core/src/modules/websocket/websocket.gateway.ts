@@ -61,7 +61,6 @@ export class WebsocketGateway
 		})
 
 		this.redisSubClient.on('message', (channel, message) => {
-			this.logger.debug(`[Websocket] Received message from ${channel}: ${message}`)
 			const json = JSON.parse(message) as WebsocketRedisEvent
 			this.emitToSockets(json)
 		})
@@ -72,7 +71,9 @@ export class WebsocketGateway
 		if (msg.userId) {
 			const socketId = this.connectedUserSockets.get(msg.userId)
 			if (socketId) {
-				this.logger.debug(`[Websocket] Emitting to user ${msg.userId} with socketId ${socketId}`)
+				this.logger.debug(
+					`[Websocket] Emitting to user ${msg.userId} with socketId ${socketId}. event=${msg.event}`,
+				)
 				this.server.to(socketId).emit(msg.event, msg.data)
 			} else {
 				this.logger.debug(
@@ -81,6 +82,7 @@ export class WebsocketGateway
 			}
 			return
 		} else {
+			this.logger.debug(`[Websocket] Emitting to all users. event=${msg.event}`)
 			this.server.emit(msg.event, msg.data)
 		}
 	}

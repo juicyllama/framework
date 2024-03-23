@@ -21,7 +21,7 @@ export async function openWebsocket() {
 	const accessToken = await refreshToken() // Refresh the token
 	if (_.isString(baseURL) && _.isString(accessToken)) {
 		try {
-			const _socket = io(baseURL, {
+			const _socket: Socket = io(baseURL, {
 				extraHeaders: {
 					Authorization: `Bearer ${accessToken}`,
 				},
@@ -34,6 +34,20 @@ export async function openWebsocket() {
 				})
 				_socket.on('connect_error', error => {
 					console.error('[Websocket] Connection error', error)
+					logger({
+						severity: LogSeverity.ERROR,
+						message: `[Websocket] Connection error. msg=${error.message}`,
+						object: error,
+					})
+					refreshToken().then(newToken => {
+						logger({
+							severity: LogSeverity.VERBOSE,
+							message: `[Websocket] Reconnecting with new token`,
+							object: error,
+						})
+						_socket.io.opts.extraHeaders.Authorization = `Bearer ${newToken}`
+						_socket.connect()
+					})
 					reject(error)
 				})
 			})
@@ -70,8 +84,8 @@ export async function subscribeWebsocket(event: string, listener: (data: any) =>
 			message: `[Websocket] Waiting for connection`,
 		})
 	}
-	await connectionPromise
-	socket.on(event, listener)
+	const _socket = await connectionPromise
+	_socket.on(event, listener)
 	logger({ severity: LogSeverity.VERBOSE, message: `[Websocket] Listening for events: ${event}` })
 }
 
