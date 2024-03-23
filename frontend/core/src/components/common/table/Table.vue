@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, Ref, ref } from 'vue'
+import { onMounted, onBeforeUnmount, Ref, ref } from 'vue'
 import { isEmpty, isNull, result } from 'lodash'
 import { defineStore } from 'pinia'
 import { useQuasar } from 'quasar'
@@ -7,7 +7,7 @@ import Table from '../../../components/common/table/components/Table.vue'
 import { FindOptions, LogSeverity } from '../../../types'
 import { logger, TableColumn, TableSchema } from '../../../index'
 import { default as JLAreYouSure } from '../AreYouSure.vue'
-import { subscribeWebsocket } from '../../../services/websockets'
+import { subscribeWebsocket, unsubscribeWebsocket } from '../../../services/websockets'
 
 const props = defineProps<{
 	options: TableSchema
@@ -341,6 +341,11 @@ onMounted(async () => {
 	await subscribeWebsocket(props.options.event, processTableChange)
 	await getData()
 })
+
+onBeforeUnmount(async () => {
+	await unsubscribeWebsocket(props.options.event, processTableChange)
+})
+
 </script>
 
 <template>

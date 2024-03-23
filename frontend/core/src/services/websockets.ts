@@ -60,31 +60,26 @@ export function closeWebsocket() {
 	}
 }
 
-export async function subscribeWebsocket(event: string, callback: Function): Promise<void> {
+export async function subscribeWebsocket(event: string, listener: (data: any) => void): Promise<void> {
 	if (!connectionPromise) {
 		await openWebsocket()
 	}
-	logger({
-		severity: LogSeverity.VERBOSE,
-		message: `[Websocket] Waiting for connection`,
-	})
-	await connectionPromise
-	socket.on(event, async data => {
+	if (!socket) {
 		logger({
 			severity: LogSeverity.VERBOSE,
-			message: `New websocket event: ${event}`,
-			table: data,
+			message: `[Websocket] Waiting for connection`,
 		})
-		await callback(data)
-	})
+	}
+	await connectionPromise
+	socket.on(event, listener)
 	logger({ severity: LogSeverity.VERBOSE, message: `[Websocket] Listening for events: ${event}` })
 }
 
-export async function unsubscribeWebsocket(event: string): Promise<void> {
+export async function unsubscribeWebsocket(event: string, listener?: (data: any) => void): Promise<void> {
 	if (!socket) {
 		logger({ severity: LogSeverity.ERROR, message: `[Websocket] Not open` })
 		return
 	}
-	socket.off(event)
+	socket.off(event, listener)
 	logger({ severity: LogSeverity.VERBOSE, message: `[Websocket] Unbind for events: ${event}` })
 }
