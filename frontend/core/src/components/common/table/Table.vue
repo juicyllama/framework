@@ -4,10 +4,10 @@ import { isEmpty, isNull, result } from 'lodash'
 import { defineStore } from 'pinia'
 import { useQuasar } from 'quasar'
 import Table from '../../../components/common/table/components/Table.vue'
-import { loadPusher } from '../../../plugins'
 import { FindOptions, LogSeverity } from '../../../types'
 import { logger, TableColumn, TableSchema } from '../../../index'
 import { default as JLAreYouSure } from '../AreYouSure.vue'
+import { subscribeWebsocket } from '../../../services/websockets'
 
 const props = defineProps<{
 	options: TableSchema
@@ -61,10 +61,6 @@ const UseListStore = defineStore(`table_options_${props.options.event}`, {
 })
 
 const useListStore = UseListStore()
-
-async function subscribe() {
-	await loadPusher(props.options.event, processTableChange)
-}
 
 function buildDefaults() {
 	if (isNull(useListStore.options)) {
@@ -342,7 +338,7 @@ async function pluginAction(data: any) {
 
 onMounted(async () => {
 	await buildDefaults()
-	await subscribe()
+	await subscribeWebsocket(props.options.event, processTableChange)
 	await getData()
 })
 </script>

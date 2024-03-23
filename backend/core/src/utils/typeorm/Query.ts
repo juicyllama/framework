@@ -602,6 +602,8 @@ export class Query<T extends ObjectLiteral> {
 			event = `account_${result['account_id']}_`
 		} else if (result['account']) {
 			event = `account_${result['account'].account_id}_`
+		} else if (result['accounts']?.length > 0) {
+			event = `account_${result['accounts'][0].account_id}_`
 		} else if (result['user_id']) {
 			event = `user_${result['user_id']}_`
 		} else if (result['user']) {

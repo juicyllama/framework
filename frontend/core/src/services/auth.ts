@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { PublicClientApplication } from '@azure/msal-browser'
 import { QVueGlobals } from 'quasar'
 import { Router } from 'vue-router'
@@ -31,6 +32,16 @@ export const tokenToCookie = async (token: string): Promise<void> => {
 		{},
 		{ headers: { Authorization: `Bearer ${token}` }, withCredentials: true },
 	)
+}
+
+/**
+ *
+ * @returns The new access token and sets a new refresh token cookie
+ */
+export const refreshToken = async (): Promise<string> => {
+	const instanceWithoutInterceptors = axios.create(instance.defaults) // Create a new instance without the interceptors to prevent infinite loops
+	const response = await instanceWithoutInterceptors.post('/auth/refresh', {}, { withCredentials: true }) // withCredentials: true is required for the refresh token cookie to be sent
+	return response.data.access_token
 }
 
 export const logoutUser = async (): Promise<void> => {

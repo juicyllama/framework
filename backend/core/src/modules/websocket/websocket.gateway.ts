@@ -38,9 +38,9 @@ export class WebsocketGateway
 	async afterInit(server: Server) {
 		server.use(WebsocketJwtAuthMiddleware() as any)
 		if (this.server) {
-			this.logger.debug('Websocket server initialized')
+			this.logger.debug('[Websocket] server initialized')
 		} else {
-			throw new Error('Websocket server not initialized')
+			throw new Error('[Websocket] server not initialized')
 		}
 		await this.subscribeToEvents()
 	}
@@ -52,14 +52,16 @@ export class WebsocketGateway
 	private async subscribeToEvents() {
 		await this.redisSubClient.subscribe(WEBSOCKETS_REDIS_CHANNEL, (err, count) => {
 			if (err) {
-				this.logger.error('Failed to subscribe: %s', err.message)
+				this.logger.error('[Websocket] Failed to subscribe: %s', err.message)
 			} else {
-				this.logger.debug(`Subscribed successfully! This client is currently subscribed to ${count} channels.`)
+				this.logger.debug(
+					`[Websocket] Subscribed successfully! This client is currently subscribed to ${count} channels.`,
+				)
 			}
 		})
 
 		this.redisSubClient.on('message', (channel, message) => {
-			this.logger.debug(`Received message from ${channel}: ${message}`)
+			this.logger.debug(`[Websocket] Received message from ${channel}: ${message}`)
 			const json = JSON.parse(message) as WebsocketRedisEvent
 			this.emitToSockets(json)
 		})
@@ -70,11 +72,11 @@ export class WebsocketGateway
 		if (msg.userId) {
 			const socketId = this.connectedUserSockets.get(msg.userId)
 			if (socketId) {
-				this.logger.debug(`Emitting to user ${msg.userId} with socketId ${socketId}`)
+				this.logger.debug(`[Websocket] Emitting to user ${msg.userId} with socketId ${socketId}`)
 				this.server.to(socketId).emit(msg.event, msg.data)
 			} else {
 				this.logger.debug(
-					`User ${msg.userId} not connected. connectedUserSockets: ${Object.keys(this.connectedUserSockets)}`,
+					`[Websocket] User ${msg.userId} not connected. connectedUserSockets: ${Object.keys(this.connectedUserSockets)}`,
 				)
 			}
 			return
@@ -86,14 +88,14 @@ export class WebsocketGateway
 	handleConnection(client: any) {
 		this.connectedUserSockets.set(client.user.user_id, client.id)
 		this.logger.debug(
-			`Client id: ${client.id} connected. user_id=${client.user.user_id}. Number of connected clients: ${this.server.sockets.sockets.size}`,
+			`[Websocket]  Client id: ${client.id} connected. user_id=${client.user.user_id}. Number of connected clients: ${this.server.sockets.sockets.size}`,
 		)
 	}
 
 	handleDisconnect(client: any) {
 		this.connectedUserSockets.delete(client.user.user_id)
 		this.logger.debug(
-			`Cliend id:${client.id} disconnected. user_id=${client.user.user_id}. Number of connected clients: ${this.server.sockets.sockets.size}`,
+			`[Websocket] Cliend id: ${client.id} disconnected. user_id=${client.user.user_id}. Number of connected clients: ${this.server.sockets.sockets.size}`,
 		)
 	}
 

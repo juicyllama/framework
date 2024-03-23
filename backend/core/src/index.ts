@@ -34,6 +34,7 @@ export { AccountService } from './modules/accounts/account.service'
 export { BeaconService } from './modules/beacon/beacon.service'
 export { BeaconEmailService } from './modules/beacon/email/email.service'
 export { StorageService } from './modules/storage/storage.service'
+export { WebsocketService } from './modules/websocket/websocket.service'
 
 // Enums
 export {

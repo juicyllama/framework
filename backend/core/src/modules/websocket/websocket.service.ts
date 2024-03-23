@@ -15,7 +15,7 @@ export class WebsocketService implements OnApplicationShutdown {
 	}
 
 	public async emit(event: string, data: any, userId?: number) {
-		this.logger.debug(`Emitting event ${event} to user ${userId || 'all'}`)
+		this.logger.debug(`[WebsocketService] Emitting event ${event} to user ${userId || 'ALL'}`)
 		if (this.redisPubClient.status !== 'ready') {
 			throw new Error('Redis client not ready')
 		}
