@@ -3,7 +3,7 @@ import { Subscription } from '../../types'
 
 type T = Subscription
 export const BILLING_SUBSCRIPTIONS_ENDPOINT = '/billing/subscriptions'
-export const BILLING_SUBSCRIPTIONS_PUSHER_EVENT = 'account_${account_id}_billing_subscriptions'
+export const BILLING_SUBSCRIPTIONS_WEBSOCKET_EVENT = 'account_${account_id}_billing_subscriptions'
 
 export class BillingSubscriptionsService extends Api<T> {
 	constructor() {

@@ -6,7 +6,7 @@ import {
 	TableExtraType,
 	TableSchema,
 } from '../../../types'
-import { USERS_ENDPOINT, USERS_PUSHER_CHANNEL, UsersService } from '../../../services/users'
+import { USERS_ENDPOINT, USERS_WEBSOCKET_CHANNEL, UsersService } from '../../../services/users'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import { accountStore } from '../../../index'
@@ -27,7 +27,7 @@ export function usersTableSchema(
 	return {
 		title: 'Users',
 		name: 'Users',
-		event: Strings.replacer(USERS_PUSHER_CHANNEL, { account_id: accountStore.getAccountId }),
+		event: Strings.replacer(USERS_WEBSOCKET_CHANNEL, { account_id: accountStore.getAccountId }),
 		endpoint: USERS_ENDPOINT,
 		icon: icon,
 		show: {

@@ -7,7 +7,7 @@ title: Table
 This component renders a fully functional table with pagination, sorting, filtering, and more.
 
 ::alert{type="info"}
-This component uses pusher (if enabled on your backend application) to keep the frontend in sync with the backend, without the user needing to reload the page.
+This component uses websocket (if enabled on your backend application) to keep the frontend in sync with the backend, without the user needing to reload the page.
 ::
 
 ## Props
@@ -58,7 +58,7 @@ import type { TableSchema, TableColumn } from '@juicyllama/frontend-core'
 const options = {
 	title: 'Users',
 	name: 'Users',
-	event: `users_list`, // if using Pusher
+	event: `users_list`, // if using WEBSOCKET
 	endpoint: `/users`, // if using REST API
 	find: [],
 	functions: [],
