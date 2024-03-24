@@ -23,6 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 							// Manually parse the Cookie header
 							token = request.headers.cookie
 								.split(';')
+								.reverse() // reverse to find the last cookie with the name
 								.find(cookie => cookie.trim().startsWith(ACCESS_TOKEN_COOKIE_NAME + '='))
 								?.split('=')[1]
 						}
