@@ -1,4 +1,4 @@
-import { Logger } from '@juicyllama/utils'
+import { Logger, Modules } from '@juicyllama/utils'
 import { InstalledApp } from '@juicyllama/app-store'
 import {
 	ContactsService,
@@ -8,44 +8,55 @@ import {
 	Contact,
 	ContactAddress,
 } from '@juicyllama/crm'
-import {
-	BundlesService,
-	SkusService,
-	Store,
-	Transaction,
-	TransactionDiscount,
-	TransactionDiscountsService,
-	TransactionDiscountType,
-	TransactionFulfillmentStatus,
-	TransactionItemsService,
-	TransactionPaymentStatus,
-	TransactionsService,
-	UpdateTransactionDto,
-} from '@juicyllama/ecommerce'
 import { Injectable, forwardRef, Inject } from '@nestjs/common'
-import { ShopifyOrder, ShopifyOrderDiscountCodes } from './orders.dto'
-import { ShopifyOrderDicountCodeType, ShopifyOrderFinancialStatus, ShopifyOrderFulfillmentStatus } from './orders.enums'
+import { Store } from '../../../../stores/stores.entity'
+import { Transaction } from '../../../transactions.entity'
+import { TransactionsService } from '../../../transactions.service'
+import { TransactionDiscountsService } from '../../../discounts/discounts.service'
+import { TransactionItemsService } from '../../../items/items.service'
+import { SkusService } from '../../../../product/skus/skus.service'
+import { BundlesService } from '../../../../product/bundles/bundles.service'
+import { TransactionFulfillmentStatus, TransactionPaymentStatus } from '../../../transactions.enums'
+import { UpdateTransactionDto } from '../../../transactions.dto'
+import { TransactionDiscount } from '../../../discounts/discounts.entity'
+import { TransactionDiscountType } from '../../../discounts/discounts.enums'
 
 @Injectable()
-export class ShopifyOrdersMapperService {
+export class TransactionsShopifyMapperService {
 	constructor(
-		@Inject(forwardRef(() => Logger)) readonly contactsService: ContactsService,
-		@Inject(forwardRef(() => Logger)) readonly contactEmailService: ContactEmailService,
-		@Inject(forwardRef(() => Logger)) readonly contactAddressService: ContactAddressService,
-		@Inject(forwardRef(() => Logger)) readonly contactPhoneService: ContactPhoneService,
-		@Inject(forwardRef(() => Logger)) readonly transactionsService: TransactionsService,
-		@Inject(forwardRef(() => Logger)) readonly transactionsDiscountService: TransactionDiscountsService,
-		@Inject(forwardRef(() => Logger)) readonly transactionItemsService: TransactionItemsService,
-		@Inject(forwardRef(() => Logger)) readonly skusService: SkusService,
-		@Inject(forwardRef(() => Logger)) readonly bundlesService: BundlesService,
+		@Inject(forwardRef(() => ContactsService)) readonly contactsService: ContactsService,
+		@Inject(forwardRef(() => ContactEmailService)) readonly contactEmailService: ContactEmailService,
+		@Inject(forwardRef(() => ContactAddressService)) readonly contactAddressService: ContactAddressService,
+		@Inject(forwardRef(() => ContactPhoneService)) readonly contactPhoneService: ContactPhoneService,
+		@Inject(forwardRef(() => TransactionsService)) readonly transactionsService: TransactionsService,
+		@Inject(forwardRef(() => TransactionDiscountsService))
+		readonly transactionsDiscountService: TransactionDiscountsService,
+		@Inject(forwardRef(() => TransactionItemsService)) readonly transactionItemsService: TransactionItemsService,
+		@Inject(forwardRef(() => SkusService)) readonly skusService: SkusService,
+		@Inject(forwardRef(() => BundlesService)) readonly bundlesService: BundlesService,
 		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
 	) {}
 
-	async createEcommerceTransaction(
-		order: ShopifyOrder,
-		store: Store,
-		installed_app: InstalledApp,
-	): Promise<Transaction> {
+	async pushTransaction(order: any, store: Store, installed_app: InstalledApp) {
+		const existingTransaction = await this.transactionsService.findOne({
+			where: {
+				store_id: store.store_id,
+				order_id: order.id.toString(),
+			},
+		})
+
+		if (existingTransaction) {
+			return await this.updateTransaction(existingTransaction, order)
+		} else {
+			return await this.createTransaction(order, store, installed_app)
+		}
+	}
+
+	async createTransaction(order: any, store: Store, installed_app: InstalledApp): Promise<Transaction> {
+		if (Modules.shopify.isInstalled) {
+			const { ShopifyOrder } = await Modules.shopify.load()
+			order as typeof ShopifyOrder
+		}
 
 		let contact: Contact
 		let shipping_address: ContactAddress | undefined = undefined
@@ -128,10 +139,12 @@ export class ShopifyOrdersMapperService {
 			billing_address_id: billing_address?.address_id,
 			payment_status:
 				(order.financial_status &&
-				this.shopifyOrderFinancialStatusToEcommerceTransactionStatus(order.financial_status)) ?? TransactionPaymentStatus.PENDING,
+					this.shopifyOrderFinancialStatusToEcommerceTransactionStatus(order.financial_status)) ??
+				TransactionPaymentStatus.PENDING,
 			fulfillment_status:
 				(order.fulfillment_status &&
-				this.shopifyOrderFulfillmentStatusToEcommerceTransactionStatus(order.fulfillment_status)) ?? TransactionFulfillmentStatus.PENDING,
+					this.shopifyOrderFulfillmentStatusToEcommerceTransactionStatus(order.fulfillment_status)) ??
+				TransactionFulfillmentStatus.PENDING,
 			currency: order.currency,
 			subtotal_price: order.subtotal_price,
 			total_shipping: Number(order.total_shipping_price_set?.shop_money?.amount),
@@ -154,20 +167,18 @@ export class ShopifyOrdersMapperService {
 			transaction.transaction_id,
 		)
 
-		if(order.line_items) {
+		if (order.line_items) {
+			for (const item of order.line_items) {
+				const sku = await this.skusService.findBySku(item.sku)
+				const bundle = await this.bundlesService.findBySku(item.sku)
 
-			for(const item of order.line_items) {
-				
-				let sku = await this.skusService.findBySku(item.sku)
-				let bundle = await this.bundlesService.findBySku(item.sku)
-
-				if(sku) {
+				if (sku) {
 					await this.transactionItemsService.create({
 						transaction_id: transaction.transaction_id,
 						sku_id: sku.sku_id,
 						quantity: item.quantity,
 					})
-				} else if(bundle) {
+				} else if (bundle) {
 					await this.transactionItemsService.create({
 						transaction_id: transaction.transaction_id,
 						bundle_id: bundle.bundle_id,
@@ -177,17 +188,21 @@ export class ShopifyOrdersMapperService {
 					this.logger.error(`SKU or Bundle not found for ${item.sku}`, {
 						transaction,
 						shopify_order: order,
-						store
+						store,
 					})
 				}
 			}
-
 		}
 
 		return transaction
 	}
 
-	async updateEcommerceTransaction(transaction: Transaction, order: ShopifyOrder): Promise<Transaction> {
+	async updateTransaction(transaction: Transaction, order: any): Promise<Transaction> {
+		if (Modules.shopify.isInstalled) {
+			const { ShopifyOrder } = await Modules.shopify.load()
+			order as typeof ShopifyOrder
+		}
+
 		let has_changed = false
 		const changed: UpdateTransactionDto = {}
 
@@ -202,7 +217,7 @@ export class ShopifyOrdersMapperService {
 		}
 
 		const newFulfillmentStatus = this.shopifyOrderFulfillmentStatusToEcommerceTransactionStatus(
-			order.fulfillment_status || ShopifyOrderFulfillmentStatus.null,
+			order.fulfillment_status || 'null',
 		)
 		if (transaction.fulfillment_status !== newFulfillmentStatus) {
 			changed.fulfillment_status = newFulfillmentStatus
@@ -259,44 +274,42 @@ export class ShopifyOrdersMapperService {
 		}
 	}
 
-	shopifyOrderFinancialStatusToEcommerceTransactionStatus(
-		status: ShopifyOrderFinancialStatus,
-	): TransactionPaymentStatus {
+	shopifyOrderFinancialStatusToEcommerceTransactionStatus(status: string): TransactionPaymentStatus {
 		switch (status) {
-			case ShopifyOrderFinancialStatus.pending:
-				return TransactionPaymentStatus.PENDING
-			case ShopifyOrderFinancialStatus.authorized:
+			case 'authorized':
 				return TransactionPaymentStatus.AURHORIZED
-			case ShopifyOrderFinancialStatus.partially_paid:
+			case 'partially_paid':
 				return TransactionPaymentStatus.PARTPAID
-			case ShopifyOrderFinancialStatus.paid:
+			case 'paid':
 				return TransactionPaymentStatus.PAID
-			case ShopifyOrderFinancialStatus.partially_refunded:
+			case 'partially_refunded':
 				return TransactionPaymentStatus.PATRIALREFUND
-			case ShopifyOrderFinancialStatus.refunded:
+			case 'refunded':
 				return TransactionPaymentStatus.REFUNDED
-			case ShopifyOrderFinancialStatus.voided:
+			case 'voided':
 				return TransactionPaymentStatus.CANCELLED
+			case 'pending':
+			default:
+				return TransactionPaymentStatus.PENDING
 		}
 	}
 
-	shopifyOrderFulfillmentStatusToEcommerceTransactionStatus(
-		status: ShopifyOrderFulfillmentStatus,
-	): TransactionFulfillmentStatus {
+	shopifyOrderFulfillmentStatusToEcommerceTransactionStatus(status: any): TransactionFulfillmentStatus {
 		switch (status) {
-			case ShopifyOrderFulfillmentStatus.fulfilled:
+			case 'fulfilled':
 				return TransactionFulfillmentStatus.SHIPPED
-			case ShopifyOrderFulfillmentStatus.partial:
+			case 'partial':
 				return TransactionFulfillmentStatus.PARTIALLY_SHIPPED
-			case ShopifyOrderFulfillmentStatus.restocked:
+			case 'restocked':
 				return TransactionFulfillmentStatus.RETURNED
-			case ShopifyOrderFulfillmentStatus.null:
+			case 'null':
+			default:
 				return TransactionFulfillmentStatus.PENDING
 		}
 	}
 
 	async shopifyDiscountCodesToEcommerceDicounts(
-		discounts: ShopifyOrderDiscountCodes[],
+		discounts: any[],
 		account_id: number,
 		transaction_id: number,
 	): Promise<TransactionDiscount[]> {
@@ -305,13 +318,13 @@ export class ShopifyOrdersMapperService {
 			let discount_type = TransactionDiscountType.FIXED
 
 			switch (discount.type) {
-				case ShopifyOrderDicountCodeType.fixed_amount:
+				case 'fixed_amount':
 					discount_type = TransactionDiscountType.FIXED
 					break
-				case ShopifyOrderDicountCodeType.percentage:
+				case 'percentage':
 					discount_type = TransactionDiscountType.PERCENTAGE
 					break
-				case ShopifyOrderDicountCodeType.shipping:
+				case 'shipping':
 					discount_type = TransactionDiscountType.SHIPPING
 					break
 			}

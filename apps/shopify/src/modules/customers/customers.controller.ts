@@ -5,9 +5,7 @@ import { ApiHideProperty } from '@nestjs/swagger'
 
 @Controller('app/shopify/customers')
 export class ShopifyCustomersController {
-	constructor(
-		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
-	) {}
+	constructor(@Inject(forwardRef(() => Logger)) readonly logger: Logger) {}
 
 	/**
 	 * This endpoint is used for shopify to show customer data (GDPR)

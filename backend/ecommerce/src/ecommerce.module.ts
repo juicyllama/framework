@@ -14,10 +14,10 @@ import { TransactionItemsModule } from './modules/transactions/items/items.modul
 		forwardRef(() => SkusModule),
 		forwardRef(() => StockModule),
 		forwardRef(() => StockLocationsModule),
-		forwardRef(() => StoresModule), 
-		forwardRef(() => TransactionsModule), 
+		forwardRef(() => StoresModule),
+		forwardRef(() => TransactionsModule),
 		forwardRef(() => TransactionDiscountsModule),
-		forwardRef(() => TransactionItemsModule)
+		forwardRef(() => TransactionItemsModule),
 	],
 })
 export class EcommerceModule {}

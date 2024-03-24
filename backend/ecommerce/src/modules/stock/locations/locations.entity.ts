@@ -24,7 +24,7 @@ export class StockLocation extends BaseEntity {
 	@Column()
 	@IsString()
 	name!: string
-	
+
 	@Column()
 	@IsString()
 	city!: string

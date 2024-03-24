@@ -9,11 +9,11 @@ import { ShopifyWebhooksModule } from './webhooks/webhooks.module'
 
 @Module({
 	imports: [
-		forwardRef(() => AppsModule), 
-		forwardRef(() => ShopifyAuthModule), 
-		forwardRef(() => ShopifyOrdersModule), 
-		forwardRef(() => ShopifyWebhooksModule), 
-		forwardRef(() => ShopifyProviderModule)
+		forwardRef(() => AppsModule),
+		forwardRef(() => ShopifyAuthModule),
+		forwardRef(() => ShopifyOrdersModule),
+		forwardRef(() => ShopifyWebhooksModule),
+		forwardRef(() => ShopifyProviderModule),
 	],
 	providers: [ShopifyInstallationService, Logger],
 	exports: [ShopifyProviderModule],

@@ -6,10 +6,7 @@ import { ShopifyShopController } from './shop.controller'
 import { ShopifyShopService } from './shop.service'
 
 @Module({
-	imports: [
-		forwardRef(() => InstalledAppsModule), 
-		forwardRef(() => StoresModule)
-	],
+	imports: [forwardRef(() => InstalledAppsModule), forwardRef(() => StoresModule)],
 	controllers: [ShopifyShopController],
 	providers: [ShopifyShopService, Logger],
 	exports: [ShopifyShopService],

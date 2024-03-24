@@ -6,10 +6,7 @@ import { ShopifyCustomersController } from './customers.controller'
 import { ShopifyCustomersService } from './customers.service'
 
 @Module({
-	imports: [
-		forwardRef(() => InstalledAppsModule), 
-		forwardRef(() => StoresModule)
-	],
+	imports: [forwardRef(() => InstalledAppsModule), forwardRef(() => StoresModule)],
 	controllers: [ShopifyCustomersController],
 	providers: [ShopifyCustomersService, Logger],
 	exports: [ShopifyCustomersService],

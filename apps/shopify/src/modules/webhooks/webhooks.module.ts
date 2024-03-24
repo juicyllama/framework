@@ -7,9 +7,9 @@ import { ShopifyProviderModule } from '../provider/provider.module'
 
 @Module({
 	imports: [
-		forwardRef(() => OAuthModule), 
-		forwardRef(() => InstalledAppsModule), 
-		forwardRef(() => ShopifyProviderModule)
+		forwardRef(() => OAuthModule),
+		forwardRef(() => InstalledAppsModule),
+		forwardRef(() => ShopifyProviderModule),
 	],
 	controllers: [ShopifyWebhooksController],
 	providers: [ShopifyWebhooksService, Logger],

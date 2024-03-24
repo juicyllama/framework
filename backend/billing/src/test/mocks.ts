@@ -44,7 +44,7 @@ export function MockPaymentRequest(account: Account, min?: number, max?: number)
 		account_id: account.account_id,
 		account: account,
 		currency: SupportedCurrencies.USD,
-		amount: Number(faker.finance.amount(min ?? 0, max ?? 1000)),
+		amount: Number(faker.finance.amount({min: min ?? 0, max: max ?? 1000})),
 		payment_method: MockPaymentMethodCCRequest(account),
 		payment_method_id: 1,
 		app_payment_id: 123456,

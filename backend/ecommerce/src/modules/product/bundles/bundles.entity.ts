@@ -18,7 +18,7 @@ export class Bundle extends BaseEntity {
 
 	@Column()
 	account_id!: number
-	
+
 	@Column()
 	@IsString()
 	sku!: string

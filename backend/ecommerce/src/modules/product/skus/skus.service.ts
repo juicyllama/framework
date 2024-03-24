@@ -12,7 +12,6 @@ type T = Sku
 const cache_key = 'ecommerce::skus'
 const cache_period = CachePeriod.MONTH
 
-
 @Injectable()
 export class SkusService extends BaseService<T> {
 	constructor(
@@ -27,7 +26,7 @@ export class SkusService extends BaseService<T> {
 				cacheManager: cacheManager,
 				field: 'sku',
 				ttl: cache_period,
-			}
+			},
 		})
 	}
 

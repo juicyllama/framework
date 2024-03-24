@@ -38,7 +38,6 @@ export class ShopifyOrderLineItem {
 	sku!: string
 }
 
-
 export class ShopifyOrder {
 	@IsNumber()
 	id!: number

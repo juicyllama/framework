@@ -6,11 +6,7 @@ import { Stock } from './stock.entity'
 import { StockService } from './stock.service'
 
 @Module({
-	imports: [
-		TypeOrmModule.forFeature([Stock]),
-		forwardRef(() => AuthModule),
-		forwardRef(() => BeaconModule),
-	],
+	imports: [TypeOrmModule.forFeature([Stock]), forwardRef(() => AuthModule), forwardRef(() => BeaconModule)],
 	controllers: [],
 	providers: [StockService, Logger, Query],
 	exports: [StockService],

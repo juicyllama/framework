@@ -26,7 +26,7 @@ export class BundlesService extends BaseService<T> {
 				cacheManager: cacheManager,
 				field: 'sku',
 				ttl: cache_period,
-			}
+			},
 		})
 	}
 

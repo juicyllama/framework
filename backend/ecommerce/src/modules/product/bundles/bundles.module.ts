@@ -6,11 +6,7 @@ import { Bundle } from './bundles.entity'
 import { BundlesService } from './bundles.service'
 
 @Module({
-	imports: [
-		TypeOrmModule.forFeature([Bundle]),
-		forwardRef(() => AuthModule),
-		forwardRef(() => BeaconModule),
-	],
+	imports: [TypeOrmModule.forFeature([Bundle]), forwardRef(() => AuthModule), forwardRef(() => BeaconModule)],
 	controllers: [],
 	providers: [BundlesService, Logger, Query],
 	exports: [BundlesService],

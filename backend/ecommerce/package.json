@@ -40,5 +40,8 @@
         "@juicyllama/crm": "workspace:^",
         "@juicyllama/utils": "workspace:^",
         "@juicyllama/websites": "workspace:^"
+    },
+    "optionalDependencies": {
+        "@juicyllama/app-shopify": "workspace:^"
     }
 }

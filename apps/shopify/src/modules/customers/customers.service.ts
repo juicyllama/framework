@@ -4,9 +4,7 @@ import { Injectable, forwardRef, Inject } from '@nestjs/common'
 
 @Injectable()
 export class ShopifyCustomersService {
-	constructor(
-		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
-	) {}
+	constructor(@Inject(forwardRef(() => Logger)) readonly logger: Logger) {}
 
 	/**
 	 * Purge a contact

@@ -50,7 +50,7 @@ export class Sku extends BaseEntity {
 	@Column({ nullable: true, default: null })
 	@IsString()
 	image_url?: string
-	
+
 	@Column({ nullable: true, default: null })
 	@IsString()
 	barcode?: string

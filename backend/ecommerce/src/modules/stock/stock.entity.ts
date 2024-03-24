@@ -41,7 +41,6 @@ export class Stock extends BaseEntity {
 	@IsNumber()
 	stock_location_id?: number
 
-
 	constructor(partial: Partial<Stock>) {
 		super()
 		Object.assign(this, partial)

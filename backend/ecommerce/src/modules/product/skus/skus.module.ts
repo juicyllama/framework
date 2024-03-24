@@ -6,11 +6,7 @@ import { Sku } from './sku.entity'
 import { SkusService } from './skus.service'
 
 @Module({
-	imports: [
-		TypeOrmModule.forFeature([Sku]),
-		forwardRef(() => AuthModule),
-		forwardRef(() => BeaconModule),
-	],
+	imports: [TypeOrmModule.forFeature([Sku]), forwardRef(() => AuthModule), forwardRef(() => BeaconModule)],
 	controllers: [],
 	providers: [SkusService, Logger, Query],
 	exports: [SkusService],
