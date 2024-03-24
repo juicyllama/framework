@@ -1,6 +1,6 @@
 import { BaseEntity } from '@juicyllama/core'
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
-import { IsString, IsNumber } from 'class-validator'
+import { IsString } from 'class-validator'
 import { InstalledApp } from '@juicyllama/app-store'
 
 @Entity('ecommerce_stock_locations')
