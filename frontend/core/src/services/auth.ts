@@ -8,7 +8,7 @@ import { LogSeverity } from '../types'
 import instance from './index'
 
 export async function loginUser(payload: UserLogin, q: QVueGlobals, router?: Router): Promise<boolean> {
-	const response = await instance.post(`auth/login`, payload, { withCredentials: true }) // withCredentials: true is required for the refresh token cookie to be set
+	const response = await instance.post(`auth/login`, payload)
 
 	if (response.data.error) {
 		switch (response.data.error.message) {
@@ -26,32 +26,28 @@ export async function loginUser(payload: UserLogin, q: QVueGlobals, router?: Rou
 }
 
 export const tokenToCookie = async (token: string): Promise<void> => {
-	await instance.post(
-		`auth/token-to-cookie`,
-		{},
-		{ headers: { Authorization: `Bearer ${token}` }, withCredentials: true },
-	)
+	await instance.post(`auth/token-to-cookie`, {}, { headers: { Authorization: `Bearer ${token}` } })
 }
 
 export const logoutUser = async (): Promise<void> => {
-	await instance.post(`auth/logout`, {}, { withCredentials: true })
+	await instance.post(`auth/logout`, {})
 }
 
 export const passwordlessLogin = async (email: string): Promise<void> => {
-	return await instance.post(`auth/passwordless`, { email: email }, { withCredentials: true })
+	return await instance.post(`auth/passwordless`, { email: email })
 }
 
 export const passwordlessLoginCode = async (email: string, code: string): Promise<boolean> => {
-	const response = await instance.post(`auth/passwordless/code`, { email: email, code: code, withCredentials: true })
+	const response = await instance.post(`auth/passwordless/code`, { email: email, code: code })
 	return response.data.access_token
 }
 
 export const resetPassword = async (email: string): Promise<void> => {
-	await instance.post(`auth/password-reset`, { email: email }, { withCredentials: true })
+	await instance.post(`auth/password-reset`, { email: email })
 }
 
 export const resetPasswordCode = async (email: string, code: string): Promise<void> => {
-	await instance.post(`auth/password-reset/code`, { email: email, code: code }, { withCredentials: true })
+	await instance.post(`auth/password-reset/code`, { email: email, code: code })
 }
 
 export const resetPasswordComplete = async (email: string, code: string, pass: string): Promise<string> => {
@@ -59,13 +55,12 @@ export const resetPasswordComplete = async (email: string, code: string, pass: s
 		email: email,
 		code: code,
 		password: pass,
-		withCredentials: true,
 	})
 	return response.data.access_token
 }
 
 export const getUser = async (): Promise<User> => {
-	const response = await instance.get(`auth/profile`, { withCredentials: true })
+	const response = await instance.get(`auth/profile`)
 	logger({
 		severity: LogSeverity.VERBOSE,
 		message: `GetUser`,
@@ -76,7 +71,7 @@ export const getUser = async (): Promise<User> => {
 }
 
 export const accountAuthCheck = async (): Promise<boolean> => {
-	const response = await instance.get(`auth/account/check`, { withCredentials: true })
+	const response = await instance.get(`auth/account/check`)
 	logger({
 		severity: LogSeverity.VERBOSE,
 		message: `Auth Check - ${response.data.passed}`,
@@ -123,11 +118,11 @@ export function azureLogin(
 }
 
 export async function completeGoogleLogin(params, q: QVueGlobals) {
-	await instance.get(`auth/google/redirect`, { params: params, withCredentials: true })
+	await instance.get(`auth/google/redirect`, { params: params })
 	return userStore.loadUserAndAccount(q)
 }
 
 export async function completeLinkedInLogin(params, q: QVueGlobals) {
-	await instance.get(`auth/linkedin/redirect`, { params: params, withCredentials: true })
+	await instance.get(`auth/linkedin/redirect`, { params: params })
 	return userStore.loadUserAndAccount(q)
 }
