@@ -277,7 +277,7 @@ export class TransactionsShopifyMapperService {
 	shopifyOrderFinancialStatusToEcommerceTransactionStatus(status: string): TransactionPaymentStatus {
 		switch (status) {
 			case 'authorized':
-				return TransactionPaymentStatus.AURHORIZED
+				return TransactionPaymentStatus.AUTHORIZED
 			case 'partially_paid':
 				return TransactionPaymentStatus.PARTPAID
 			case 'paid':
