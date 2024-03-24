@@ -39,6 +39,7 @@
     "dependencies": {
         "@juicyllama/app-store": "workspace:^",
         "@juicyllama/core": "workspace:^",
+        "@juicyllama/ecommerce": "workspace:^",
         "@juicyllama/utils": "workspace:^",
         "@shopify/shopify-api": "latest"
     },
