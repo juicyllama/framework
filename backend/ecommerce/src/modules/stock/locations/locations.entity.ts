@@ -18,7 +18,7 @@ export class StockLocation extends BaseEntity {
 	installed_app_id?: number
 
 	@Column({ default: null, nullable: true })
-	@IsNumber()
+	@IsString()
 	ext_id?: string
 
 	@Column()

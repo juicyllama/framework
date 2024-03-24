@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ## INSTALL PACKAGES##
 
 directories=(
