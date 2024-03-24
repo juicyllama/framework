@@ -20,7 +20,17 @@ import {
 	AuthenticatedRequest,
 } from '@juicyllama/core'
 import { ChartsPeriod, ChartsResponseDto, StatsMethods } from '@juicyllama/utils'
-import { BadRequestException, Body, Controller, Inject, Param, Query, Req, UploadedFile } from '@nestjs/common'
+import {
+	BadRequestException,
+	Body,
+	Controller,
+	Inject,
+	Param,
+	Query,
+	Req,
+	UploadedFile,
+	forwardRef,
+} from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { StoresService } from '../stores/stores.service'
 import { transactionConstants as constants, TRANSACTION_T as T } from './transactions.constants'
@@ -32,11 +42,11 @@ import { TransactionsService } from './transactions.service'
 @Controller('ecommerce/transactions')
 export class TransactionsController extends BaseController<T> {
 	constructor(
-		readonly authService: AuthService,
-		readonly service: TransactionsService,
-		readonly storesService: StoresService,
+		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
+		@Inject(forwardRef(() => TransactionsService)) readonly service: TransactionsService,
+		@Inject(forwardRef(() => StoresService)) readonly storesService: StoresService,
+		@Inject(forwardRef(() => FxService)) readonly fxService: FxService,
 		@Inject(TQuery) readonly tQuery: TQuery<T>,
-		readonly fxService: FxService,
 	) {
 		super(service, tQuery, constants, {
 			services: {

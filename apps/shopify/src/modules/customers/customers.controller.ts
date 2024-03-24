@@ -1,17 +1,11 @@
-import { InstalledAppsService } from '@juicyllama/app-store'
 import { Transaction } from '@juicyllama/ecommerce'
 import { Logger } from '@juicyllama/utils'
-import { Controller, Query, Body, Post } from '@nestjs/common'
+import { Controller, Query, Body, Post, forwardRef, Inject } from '@nestjs/common'
 import { ApiHideProperty } from '@nestjs/swagger'
-import { ShopifyCustomersService } from './customers.service'
 
 @Controller('app/shopify/customers')
 export class ShopifyCustomersController {
-	constructor(
-		private readonly logger: Logger,
-		private readonly shopifyShopService: ShopifyCustomersService,
-		private readonly installedAppsService: InstalledAppsService,
-	) {}
+	constructor(@Inject(forwardRef(() => Logger)) readonly logger: Logger) {}
 
 	/**
 	 * This endpoint is used for shopify to show customer data (GDPR)

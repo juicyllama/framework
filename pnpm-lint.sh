@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ## INSTALL PACKAGES##
 
 directories=(
@@ -33,6 +35,7 @@ directories=(
     "apps/pexels"
     "apps/scrapingbee"
     "apps/semrush"
+    "apps/shipbob"
     "apps/shopify"
     "apps/slack"
     "apps/spyfu"

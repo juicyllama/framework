@@ -1,7 +1,7 @@
 import { InstalledAppsService } from '@juicyllama/app-store'
 import { AccountId, UserAuth } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
-import { Controller, Get, Query, Body, Post } from '@nestjs/common'
+import { Controller, Get, Query, Body, Post, forwardRef, Inject } from '@nestjs/common'
 import { ApiHideProperty } from '@nestjs/swagger'
 import { ApiVersion } from '@shopify/shopify-api'
 import { ShopifyWebhook, ShopifyWebhookCreate } from './webhooks.dto'
@@ -11,9 +11,9 @@ import { ShopifyWebhooksService } from './webhooks.service'
 @Controller('app/shopify/webhooks')
 export class ShopifyWebhooksController {
 	constructor(
-		private readonly logger: Logger,
-		private readonly shopifyWebhooksService: ShopifyWebhooksService,
-		private readonly installedAppsService: InstalledAppsService,
+		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
+		@Inject(forwardRef(() => ShopifyWebhooksService)) readonly shopifyWebhooksService: ShopifyWebhooksService,
+		@Inject(forwardRef(() => InstalledAppsService)) readonly installedAppsService: InstalledAppsService,
 	) {}
 
 	@UserAuth()

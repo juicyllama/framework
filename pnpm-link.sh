@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ## INSTALL PACKAGES##
 
 ### COMMON ###
@@ -23,6 +25,7 @@ pnpm link --global --dir backend/ecommerce
 pnpm link --global --dir backend/social
 
 ### APPS ###
+pnpm link --global --dir apps/ahrefs
 pnpm link --global --dir apps/apilayer
 pnpm link --global --dir apps/aws
 pnpm link --global --dir apps/everflow
@@ -33,14 +36,13 @@ pnpm link --global --dir apps/openai
 pnpm link --global --dir apps/pexels
 pnpm link --global --dir apps/scrapingbee
 pnpm link --global --dir apps/semrush
+pnpm link --global --dir apps/shipbob
 pnpm link --global --dir apps/shopify
 pnpm link --global --dir apps/slack
 pnpm link --global --dir apps/spyfu
 pnpm link --global --dir apps/wise
 pnpm link --global --dir apps/wordpress
 pnpm link --global --dir apps/xero-cc
-pnpm link --global --dir apps/semrush
-
 
 # NestJS DI
 pnpm link --global --dir node_modules/@nestjs/core

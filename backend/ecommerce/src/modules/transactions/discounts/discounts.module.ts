@@ -1,6 +1,6 @@
 import { AccountModule, AuthModule, BeaconModule, jwtConfig, Query } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
-import { Module } from '@nestjs/common'
+import { Module, forwardRef } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { TransactionDiscountsController } from './discounts.controller'
@@ -11,9 +11,9 @@ import { TransactionDiscountsService } from './discounts.service'
 	imports: [
 		TypeOrmModule.forFeature([TransactionDiscount]),
 		JwtModule.register(jwtConfig()),
-		AuthModule,
-		AccountModule,
-		BeaconModule,
+		forwardRef(() => AuthModule),
+		forwardRef(() => AccountModule),
+		forwardRef(() => BeaconModule),
 	],
 	controllers: [TransactionDiscountsController],
 	providers: [TransactionDiscountsService, Logger, Query],

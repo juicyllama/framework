@@ -1,8 +1,7 @@
 import { InstalledAppsModule } from '@juicyllama/app-store'
-import { AuthModule, BeaconModule, FxModule, jwtConfig, Query } from '@juicyllama/core'
+import { AuthModule, BeaconModule, FxModule, Query } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
-import { Module } from '@nestjs/common'
-import { JwtModule } from '@nestjs/jwt'
+import { Module, forwardRef } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { StoresModule } from '../stores/stores.module'
 import { TransactionDiscountsModule } from './discounts/discounts.module'
@@ -13,13 +12,12 @@ import { TransactionsService } from './transactions.service'
 @Module({
 	imports: [
 		TypeOrmModule.forFeature([Transaction]),
-		JwtModule.register(jwtConfig()),
-		AuthModule,
-		BeaconModule,
-		StoresModule,
-		TransactionDiscountsModule,
-		FxModule,
-		InstalledAppsModule,
+		forwardRef(() => AuthModule),
+		forwardRef(() => BeaconModule),
+		forwardRef(() => StoresModule),
+		forwardRef(() => TransactionDiscountsModule),
+		forwardRef(() => FxModule),
+		forwardRef(() => InstalledAppsModule),
 	],
 	controllers: [TransactionsController],
 	providers: [TransactionsService, Logger, Query],

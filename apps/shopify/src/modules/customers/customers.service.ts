@@ -1,13 +1,10 @@
-import { Contact, ContactsService } from '@juicyllama/crm'
+import { Contact } from '@juicyllama/crm'
 import { Logger } from '@juicyllama/utils'
-import { Injectable } from '@nestjs/common'
+import { Injectable, forwardRef, Inject } from '@nestjs/common'
 
 @Injectable()
 export class ShopifyCustomersService {
-	constructor(
-		private readonly logger: Logger,
-		private readonly constactsService: ContactsService,
-	) {}
+	constructor(@Inject(forwardRef(() => Logger)) readonly logger: Logger) {}
 
 	/**
 	 * Purge a contact

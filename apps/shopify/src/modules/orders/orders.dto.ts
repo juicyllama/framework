@@ -23,6 +23,21 @@ export class ShopifyPriceSet {
 	presentment_money!: ShopifyMoney
 }
 
+export class ShopifyOrderLineItem {
+	@IsNumber()
+	id!: number
+
+	@IsString()
+	@IsOptional()
+	title?: string
+
+	@IsNumber()
+	quantity!: number
+
+	@IsString()
+	sku!: string
+}
+
 export class ShopifyOrder {
 	@IsNumber()
 	id!: number
@@ -110,6 +125,10 @@ export class ShopifyOrder {
 	@IsString()
 	@IsOptional()
 	landing_site_ref?: string
+
+	@IsArray()
+	@IsOptional()
+	line_items?: ShopifyOrderLineItem[]
 
 	@IsNumber()
 	@IsOptional()
