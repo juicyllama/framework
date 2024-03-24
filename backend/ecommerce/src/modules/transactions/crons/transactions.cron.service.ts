@@ -3,7 +3,6 @@ import { CronRunner } from '@juicyllama/core'
 import { Logger, Modules } from '@juicyllama/utils'
 import { Injectable, forwardRef, Inject } from '@nestjs/common'
 import { Cron, CronExpression } from '@nestjs/schedule'
-import { ApiVersion } from '@shopify/shopify-api'
 import _ from 'lodash'
 import { LessThan, IsNull, In } from 'typeorm'
 import { CRON_ECOMMERCE_TRANSACTIONS_SYNC_DOMAIN } from './transactions.constants'
@@ -109,7 +108,7 @@ export class SyncTransactionsCronService {
 
 							const options = <any>_.omitBy(
 								{
-									api_version: ApiVersion.January24,
+									api_version: '2024-01',
 									status: 'any',
 									updated_at_min: installed_app.last_check_at ?? null,
 								},
