@@ -18,26 +18,6 @@ type App = {
 	service: WebsocketService
 	module: TestingModule
 }
-async function createApp(port: number): Promise<App> {
-	const module: TestingModule = await Test.createTestingModule({
-		imports: [WebsocketModule],
-	}).compile()
-	const gateway = module.get<WebsocketGateway>(WebsocketGateway)
-	const service = module.get<WebsocketService>(WebsocketService)
-
-	const app = module.createNestApplication()
-	await app.listen(port)
-	return { app, gateway, service, module }
-}
-
-function createSocket(port: number, token: string): Socket {
-	return ioc(`http://localhost:${port}`, {
-		// port of the other app
-		extraHeaders: {
-			authorization: `Bearer ${token}`,
-		},
-	})
-}
 
 describe('WebsocketGateway', () => {
 	if (!process.env.JWT_KEY) {
@@ -79,6 +59,7 @@ describe('WebsocketGateway', () => {
 
 	it(`should throw error with an invalid token`, async () => {
 		await expect(listenAndOpenSocket('invalid_token')).rejects.toEqual('Timeout')
+		
 	})
 
 	it(`should not throw error with a valid token`, async () => {
@@ -181,12 +162,12 @@ async function waitForSocket(clientSocket: Socket, timeoutMs: number = 1000) {
 		clientSocket.on('error', error => {
 			console.error('An error occurred:', error)
 			clearTimeout(timeoutId)
-			reject(error)
+			reject('error ' + error)
 		})
 
 		clientSocket.on('disconnect', reason => {
 			clearTimeout(timeoutId)
-			reject(reason)
+			reject('disconnect ' + reason)
 		})
 	})
 }
@@ -200,5 +181,25 @@ async function connectSocket(clientSocket: Socket, eventName: string, timeoutMs:
 			clearTimeout(timeoutId)
 			resolve(data)
 		})
+	})
+}
+
+async function createApp(port: number): Promise<App> {
+	const module: TestingModule = await Test.createTestingModule({
+		imports: [WebsocketModule],
+	}).compile()
+	const gateway = module.get<WebsocketGateway>(WebsocketGateway)
+	const service = module.get<WebsocketService>(WebsocketService)
+
+	const app = module.createNestApplication()
+	await app.listen(port)
+	return { app, gateway, service, module }
+}
+
+function createSocket(port: number, token: string): Socket {
+	return ioc(`http://localhost:${port}`, {
+		extraHeaders: {
+			authorization: `Bearer ${token}`,
+		},
 	})
 }

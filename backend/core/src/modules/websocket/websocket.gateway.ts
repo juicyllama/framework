@@ -56,8 +56,8 @@ export class WebsocketGateway
 					`[Websocket] Failed to subscribe to Redis channel "${WEBSOCKETS_REDIS_CHANNEL}": %s`,
 					err.message,
 				)
+				throw err
 			}
-			throw err
 		})
 
 		this.redisSubClient.on('message', (channel, message) => {
