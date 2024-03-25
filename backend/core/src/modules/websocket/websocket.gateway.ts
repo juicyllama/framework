@@ -9,8 +9,8 @@ import {
 	WebSocketServer,
 } from '@nestjs/websockets'
 import { Server } from 'socket.io'
-import { WebsocketJwtAuthGuard } from './ws-auth/websocket.jwt-auth.guard'
-import { WebsocketJwtAuthMiddleware } from './ws-auth/websocket.jwt-auth.middleware'
+import { WebsocketJwtAuthGuard } from './websocket.jwt-auth.guard'
+import { WebsocketJwtAuthMiddleware } from './websocket.jwt-auth.middleware'
 import { WebsocketService } from './websocket.service'
 import Redis from 'ioredis'
 import { REDIS_SUB_CLIENT_TOKEN, WEBSOCKETS_REDIS_CHANNEL, WebsocketRedisEvent } from './websocket.constants'
