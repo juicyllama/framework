@@ -127,7 +127,6 @@
 		"vitest": "^0.33.0"
 	},
 	"devDependencies": {
-		"@types/ioredis": "^5.0.0",
-		"@types/socket.io": "^3.0.2"
+		"@types/ioredis": "^5.0.0"
 	}
 }

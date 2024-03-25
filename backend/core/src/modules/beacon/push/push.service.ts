@@ -23,17 +23,17 @@ export class BeaconPushService {
 	async create(message: BeaconMessageDto): Promise<boolean | undefined> {
 		const domain = 'utils::beacon::push::create'
 
-		// if (Env.IsTest()) {
-		// 	this.logger.verbose(`[${domain}] Skipping as testing`)
-		// 	return true
-		// }
-
 		if (!message.communication.event) {
 			this.logger.error(`The message must include communication.event details`)
 			return false
 		}
 
-		if (message.unique && (await this.query.findOne(this.repository, { where: { unique: message.unique } }))) {
+		if (
+			message.unique &&
+			(await this.query.findOne(this.repository, {
+				where: { unique: message.unique, user_id: message.communication.userId ?? null },
+			}))
+		) {
 			this.logger.log(`[${domain}] Skipping as message is already sent`)
 			return
 		}
@@ -59,7 +59,8 @@ export class BeaconPushService {
 		this.logger.log(
 			`[${domain}] Message Sent! | event = ${
 				message.communication.event
-			} | data = ${JSON.stringify(message.options?.skipJsonSave ? null : message.json ?? null)}`,
+			} | user_id = ${message.communication.userId || 'ALL'} |
+			data = ${JSON.stringify(message.options?.skipJsonSave ? null : message.json ?? null)}`,
 		)
 
 		await this.query.update(this.repository, {

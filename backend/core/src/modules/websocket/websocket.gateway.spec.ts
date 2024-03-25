@@ -30,6 +30,15 @@ async function createApp(port: number): Promise<App> {
 	return { app, gateway, service, module }
 }
 
+function createSocket(port: number, token: string): Socket {
+	return ioc(`http://localhost:${port}`, {
+		// port of the other app
+		extraHeaders: {
+			authorization: `Bearer ${token}`,
+		},
+	})
+}
+
 describe('WebsocketGateway', () => {
 	if (!process.env.JWT_KEY) {
 		throw new Error('JWT_KEY not found')
@@ -42,11 +51,7 @@ describe('WebsocketGateway', () => {
 	let clientSocket: Socket
 
 	async function listenAndOpenSocket(authToken: string, port = PORT1) {
-		clientSocket = ioc(`http://localhost:${port}`, {
-			extraHeaders: {
-				authorization: `Bearer ${authToken}`,
-			},
-		})
+		clientSocket = createSocket(port, authToken)
 		await waitForSocket(clientSocket, 1000)
 		// clientSocket.onAny((eventName, ...args) => {
 		// 	console.log(`Received event: ${eventName}`)
@@ -88,16 +93,15 @@ describe('WebsocketGateway', () => {
 	})
 
 	it(`should send message to two users, each on a different server`, async () => {
-		await listenAndOpenSocket(token, PORT1) // 
+		await listenAndOpenSocket(token, PORT1) //
 		// user 2
-		const user2Socket = ioc(`http://localhost:${PORT2}`, { // port of the other app
-			extraHeaders: {
-				authorization: `Bearer ${token2}`,
-			},
-		})
+		const user2Socket = createSocket(PORT2, token2)
 		await waitForSocket(user2Socket, 1000)
 
-		const promises = [connectSocket(clientSocket, 'testTwoServersTwoUsers', 1000), connectSocket(user2Socket, 'testTwoServersTwoUsers', 1000)]
+		const promises = [
+			connectSocket(clientSocket, 'testTwoServersTwoUsers', 1000),
+			connectSocket(user2Socket, 'testTwoServersTwoUsers', 1000),
+		]
 		app1.service.emit('testTwoServersTwoUsers', { test: 'test123' })
 		const [eventUser1, eventUser2] = await Promise.all(promises)
 		user2Socket.close()
@@ -120,11 +124,7 @@ describe('WebsocketGateway', () => {
 	it(`A user should not receive message that was not sent to him`, async () => {
 		await listenAndOpenSocket(token) // user 1
 		// user 2
-		const user2Socket = ioc(`http://localhost:${PORT1}`, {
-			extraHeaders: {
-				authorization: `Bearer ${token2}`,
-			},
-		})
+		const user2Socket = createSocket(PORT1, token2)
 		await waitForSocket(user2Socket, 1000)
 
 		const promises = [connectSocket(clientSocket, 'testABC', 1000), connectSocket(user2Socket, 'testABC', 1000)]
@@ -139,12 +139,7 @@ describe('WebsocketGateway', () => {
 		await listenAndOpenSocket(token) // user 1
 
 		// user 2
-		const user2token = jwt.encode(USER2, process.env.JWT_KEY as string)
-		const user2Socket = ioc(`http://localhost:${PORT1}`, {
-			extraHeaders: {
-				authorization: `Bearer ${user2token}`,
-			},
-		})
+		const user2Socket = createSocket(PORT1, token2)
 		await waitForSocket(user2Socket, 1000)
 
 		const promises = [connectSocket(clientSocket, 'testABC', 1000), connectSocket(user2Socket, 'testABC', 1000)]
