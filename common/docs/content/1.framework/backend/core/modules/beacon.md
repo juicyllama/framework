@@ -14,7 +14,7 @@ The beacon module allows you to notify users in a multitude of different ways, i
 -   Webhooks
 
 ::alert{type="danger"}
-This module is currently in development and is limited to Email, SMS, Websockets right now.
+This module is currently in development and is limited to Email, SMS, and WebSockets right now.
 ::
 
 ::alert{type="info"}

@@ -50,14 +50,14 @@ export class WebsocketGateway
 	}
 
 	private async subscribeToEvents() {
-		await this.redisSubClient.subscribe(WEBSOCKETS_REDIS_CHANNEL, (err, count) => {
+		await this.redisSubClient.subscribe(WEBSOCKETS_REDIS_CHANNEL, err => {
 			if (err) {
-				this.logger.error('[Websocket] Failed to subscribe: %s', err.message)
-			} else {
-				this.logger.debug(
-					`[Websocket] Subscribed successfully! This client is currently subscribed to ${count} channels.`,
+				this.logger.error(
+					`[Websocket] Failed to subscribe to Redis channel "${WEBSOCKETS_REDIS_CHANNEL}": %s`,
+					err.message,
 				)
 			}
+			throw err
 		})
 
 		this.redisSubClient.on('message', (channel, message) => {
@@ -67,7 +67,7 @@ export class WebsocketGateway
 	}
 
 	private emitToSockets(msg: WebsocketRedisEvent) {
-		if (!this.server) throw new Error('Server not initialized')
+		if (!this.server) throw new Error('[Websocket] Server not initialized')
 		if (msg.userId) {
 			const socketId = this.connectedUserSockets.get(msg.userId)
 			if (socketId) {
@@ -75,10 +75,6 @@ export class WebsocketGateway
 					`[Websocket] Emitting to user ${msg.userId} with socketId ${socketId}. event=${msg.event}`,
 				)
 				this.server.to(socketId).emit(msg.event, msg.data)
-			} else {
-				this.logger.debug(
-					`[Websocket] User ${msg.userId} not connected. connectedUserSockets: ${Object.keys(this.connectedUserSockets)}`,
-				)
 			}
 			return
 		} else {
@@ -104,6 +100,7 @@ export class WebsocketGateway
 	@SubscribeMessage('message')
 	handleMessage(client: any, payload: any): string {
 		this.logger.log('handleMessage', payload)
-		return 'Hello world!'
+		// TBD: Implement
+		return 'Client to server messages are not supported.'
 	}
 }

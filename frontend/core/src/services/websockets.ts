@@ -25,18 +25,22 @@ export async function openWebsocket() {
 				extraHeaders: {
 					Authorization: `Bearer ${accessToken}`,
 				},
+				reconnection: true,
+				reconnectionDelay: 10, // start fast because it might be a temporary network issue or a need to refresh the token
+				reconnectionDelayMax: 5000, // gradually increase the delay to avoid flooding the server
+				reconnectionAttempts: Infinity, // keep trying to reconnect forever. user might have logged out and logged back in again
 			})
-			connectionPromise = new Promise<Socket>((resolve, reject) => {
+			connectionPromise = new Promise<Socket>(resolve => {
 				_socket.on('connect', () => {
-					socket = _socket
 					logger({ severity: LogSeverity.VERBOSE, message: `[Websocket] Connected` })
-					socket.onAny((event, data) =>
+					_socket.onAny((event, data) =>
 						logger({
 							severity: LogSeverity.VERBOSE,
 							message: `[Websocket] Incoming message "${event}"`,
 							object: data,
 						}),
 					)
+					socket = _socket
 					resolve(_socket)
 				})
 				_socket.on('connect_error', error => {
@@ -52,9 +56,8 @@ export async function openWebsocket() {
 							object: error,
 						})
 						_socket.io.opts.extraHeaders.Authorization = `Bearer ${newToken}`
-						_socket.connect()
+						_socket.connect() // Reconnect with new token
 					})
-					reject(error)
 				})
 			})
 			await connectionPromise
@@ -76,6 +79,7 @@ export function closeWebsocket() {
 	if (socket) {
 		socket.close()
 		socket = null
+		connectionPromise = null
 		logger({ severity: LogSeverity.WARN, message: `[Websocket] Disconnected` })
 	}
 }
