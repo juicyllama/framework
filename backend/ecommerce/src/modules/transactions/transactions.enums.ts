@@ -47,7 +47,7 @@ export enum TransactionRelations {
 
 export enum TransactionPaymentStatus {
 	PENDING = 'PENDING',
-	AURHORIZED = 'AURHORIZED',
+	AUTHORIZED = 'AUTHORIZED',
 	PARTPAID = 'PARTPAID',
 	PAID = 'PAID',
 	REFUNDED = 'REFUNDED',

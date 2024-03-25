@@ -10,7 +10,7 @@ import {
 	UserAuth,
 } from '@juicyllama/core'
 import { StatsMethods, StatsResponseDto } from '@juicyllama/utils'
-import { Controller, Inject, Param, Query } from '@nestjs/common'
+import { Controller, Inject, Param, Query, forwardRef } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import {
 	TRANSACTION_DISCOUNT_T,
@@ -28,7 +28,7 @@ import { TransactionDiscountsService } from './discounts.service'
 @Controller('ecommerce/transactions/discounts')
 export class TransactionDiscountsController {
 	constructor(
-		private readonly service: TransactionDiscountsService,
+		@Inject(forwardRef(() => TransactionDiscountsService)) private readonly service: TransactionDiscountsService,
 		@Inject(TQuery) private readonly tQuery: TQuery<TRANSACTION_DISCOUNT_T>,
 	) {}
 

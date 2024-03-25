@@ -2,6 +2,7 @@ export enum AppStoreIntegrationName {
 	ahrefs = 'ahrefs',
 	mollie = 'mollie',
 	shopify = 'shopify',
+	shipbob = 'shipbob',
 	wordpress = 'wordpress',
 	ga4 = 'ga4',
 }
@@ -27,6 +28,7 @@ export enum AppCategory {
 	crm = 'crm',
 	cms = 'cms',
 	ecommerce = 'ecommerce',
+	fulfillment = 'fulfillment',
 	payments = 'payments',
 	seo = 'seo',
 }

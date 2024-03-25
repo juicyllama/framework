@@ -7,5 +7,5 @@
     },
     "include": [
         "src/**/*.ts"
-    ],
+, "../../backend/ecommerce/src/modules/transactions/crons/orders.cron.controller.ts", "../../backend/ecommerce/src/modules/transactions/crons/orders.cron.service.spec.ts", "../../backend/ecommerce/src/modules/transactions/crons/orders.cron.service.ts", "../../backend/ecommerce/src/modules/transactions/crons/orders.constants.ts", "../../backend/ecommerce/src/modules/transactions/mappers/shopify/orders.mapper.service.spec.ts", "../../backend/ecommerce/src/modules/transactions/mappers/shopify/shopify.orders.service.ts"    ],
 }

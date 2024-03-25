@@ -1,0 +1,50 @@
+{
+        "id": 7,
+        "name": "Grapevine 1 (TX)",
+        "abbreviation": "DFW-1",
+        "timezone": "Central Standard Time",
+        "is_active": true,
+        "is_receiving_enabled": true,
+        "is_shipping_enabled": true,
+        "access_granted": false,
+        "attributes": [
+            "Eco-Pack",
+            "Fragile Pack"
+        ],
+        "services": [
+            {
+                "service_type": "Receiving",
+                "enabled": false,
+                "address": {
+                    "name": "ShipBob, Inc.",
+                    "address1": "4051 Freeport Parkway",
+                    "address2": "Suite 300",
+                    "city": "Grapevine",
+                    "state": "TX",
+                    "country": "US",
+                    "zip_code": "76051",
+                    "phone_number": "8444744726",
+                    "email": "support@shipbob.com"
+                }
+            },
+            {
+                "service_type": "Returns",
+                "enabled": false,
+                "address": {
+                    "name": "ShipBob, Inc. [ATTN: Returns]",
+                    "address1": "4051 Freeport Parkway",
+                    "address2": "Suite 300 Door 1",
+                    "city": "Grapevine",
+                    "state": "TX",
+                    "country": "US",
+                    "zip_code": "76051",
+                    "phone_number": "8444744726",
+                    "email": "support@shipbob.com"
+                }
+            }
+        ],
+        "region": {
+            "id": 5,
+            "name": "Southwest"
+        }
+    }

@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/ecommerce",
-    "version": "0.4.2",
+    "version": "0.5.0",
     "description": "Juicyllama Ecommerce Module",
     "author": {
         "name": "JuicyLlama Studio",
@@ -38,6 +38,7 @@
         "@juicyllama/app-store": "workspace:^",
         "@juicyllama/core": "workspace:^",
         "@juicyllama/crm": "workspace:^",
+        "@juicyllama/dev": "workspace:^",
         "@juicyllama/utils": "workspace:^",
         "@juicyllama/websites": "workspace:^"
     }
