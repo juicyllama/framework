@@ -30,12 +30,18 @@ export async function openWebsocket() {
 				_socket.on('connect', () => {
 					socket = _socket
 					logger({ severity: LogSeverity.VERBOSE, message: `[Websocket] Connected` })
+					socket.onAny((event, data) =>
+						logger({
+							severity: LogSeverity.VERBOSE,
+							message: `[Websocket] Incoming message "${event}"`,
+							object: data,
+						}),
+					)
 					resolve(_socket)
 				})
 				_socket.on('connect_error', error => {
-					console.error('[Websocket] Connection error', error)
 					logger({
-						severity: LogSeverity.ERROR,
+						severity: error.message === 'Token expired' ? LogSeverity.VERBOSE : LogSeverity.ERROR,
 						message: `[Websocket] Connection error. msg=${error.message}`,
 						object: error,
 					})
