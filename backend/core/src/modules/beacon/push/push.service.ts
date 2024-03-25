@@ -42,6 +42,7 @@ export class BeaconPushService {
 			event: message.communication.event,
 			data: message.options?.skipJsonSave ? null : message.json ?? null,
 			unique: message.unique,
+			...(message.communication.userId && { user_id: message.communication.userId }),
 		})
 
 		if (!push) {

@@ -39,6 +39,10 @@ export class BeaconPush {
 	@IsDate()
 	pushed_at?: Date
 
+	@Column({ default: null, nullable: true })
+	@IsNumber()
+	user_id?: number
+
 	constructor(partial: Partial<BeaconPush>) {
 		Object.assign(this, partial)
 	}
