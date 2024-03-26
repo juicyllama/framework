@@ -1,7 +1,7 @@
 import { Account, BaseEntity } from '@juicyllama/core'
 import { IsNumber, IsString } from 'class-validator'
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Unique } from 'typeorm'
-import { InstalledApp } from '@juicyllama/app-store'
+import { App, InstalledApp } from '@juicyllama/app-store'
 
 @Unique('ecommerce_skus_UNIQUE', ['account_id', 'sku'])
 @Entity('ecommerce_skus')
@@ -29,6 +29,15 @@ export class Sku extends BaseEntity {
 	@Column({ nullable: true, default: null })
 	@IsString()
 	description?: string
+
+	@ManyToOne(() => App, app => app.app_id, {
+		onDelete: 'CASCADE',
+	})
+	@JoinColumn({ name: 'app_id' })
+	app?: App
+
+	@Column({ default: null, nullable: true })
+	app_id?: number
 
 	@ManyToOne(() => InstalledApp, installed_app => installed_app.installed_app_id, {
 		onDelete: 'CASCADE',

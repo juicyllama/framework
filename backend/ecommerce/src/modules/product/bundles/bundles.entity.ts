@@ -2,7 +2,7 @@ import { Account, BaseEntity } from '@juicyllama/core'
 import { IsString, IsArray, IsNumber } from 'class-validator'
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinColumn, Unique, JoinTable } from 'typeorm'
 import { Sku } from '../skus/sku.entity'
-import { InstalledApp } from '@juicyllama/app-store'
+import { App, InstalledApp } from '@juicyllama/app-store'
 
 @Unique('ecommerce_bundles_UNIQUE', ['account_id', 'sku'])
 @Entity('ecommerce_bundles')
@@ -30,6 +30,15 @@ export class Bundle extends BaseEntity {
 	@Column({ nullable: true, default: null })
 	@IsString()
 	description?: string
+
+	@ManyToOne(() => App, app => app.app_id, {
+		onDelete: 'CASCADE',
+	})
+	@JoinColumn({ name: 'app_id' })
+	app?: App
+
+	@Column({ default: null, nullable: true })
+	app_id?: number
 
 	@ManyToOne(() => InstalledApp, installed_app => installed_app.installed_app_id, {
 		onDelete: 'CASCADE',

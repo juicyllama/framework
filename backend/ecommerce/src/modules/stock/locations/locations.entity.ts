@@ -1,12 +1,21 @@
 import { BaseEntity } from '@juicyllama/core'
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
 import { IsString } from 'class-validator'
-import { InstalledApp } from '@juicyllama/app-store'
+import { App, InstalledApp } from '@juicyllama/app-store'
 
 @Entity('ecommerce_stock_locations')
 export class StockLocation extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	readonly stock_location_id!: number
+
+	@ManyToOne(() => App, app => app.app_id, {
+		onDelete: 'CASCADE',
+	})
+	@JoinColumn({ name: 'app_id' })
+	app?: App
+
+	@Column({ default: null, nullable: true })
+	app_id?: number
 
 	@ManyToOne(() => InstalledApp, installed_app => installed_app.installed_app_id, {
 		onDelete: 'CASCADE',

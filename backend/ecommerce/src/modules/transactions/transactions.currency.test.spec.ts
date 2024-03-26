@@ -88,9 +88,9 @@ describe('Transactions Currency Testing', () => {
 						payment_status: TransactionPaymentStatus.PAID,
 						fulfillment_status: TransactionFulfillmentStatus.PENDING,
 						currency: oneOfCurrency(),
-						subtotal_price: Number(faker.finance.amount({min: 0, max: 100, dec: 2})),
-						total_tax: Number(faker.finance.amount({min: 0, max: 100, dec: 2})),
-						total_price: Number(faker.finance.amount({min: 0, max: 100, dec: 2})),
+						subtotal_price: Number(faker.finance.amount({ min: 0, max: 100, dec: 2 })),
+						total_tax: Number(faker.finance.amount({ min: 0, max: 100, dec: 2 })),
+						total_price: Number(faker.finance.amount({ min: 0, max: 100, dec: 2 })),
 					}),
 				)
 			}
