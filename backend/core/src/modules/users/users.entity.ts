@@ -70,6 +70,7 @@ export class User extends BaseEntity {
 		name: 'users_accounts',
 		joinColumn: { name: 'user_id', referencedColumnName: 'user_id' },
 		inverseJoinColumn: { name: 'account_id', referencedColumnName: 'account_id' },
+		synchronize: false,
 	})
 	@IsArray()
 	accounts!: Account[]
