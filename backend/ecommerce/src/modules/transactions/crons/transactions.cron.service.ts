@@ -11,7 +11,7 @@ import { LazyModuleLoader } from '@nestjs/core'
 import { TransactionsShopifyMapperService } from './mappers/shopify/transactions.service'
 
 @Injectable()
-export class SyncTransactionsCronService {
+export class TransactionsCronSyncService {
 	constructor(
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(forwardRef(() => InstalledAppsService)) private readonly installedAppsService: InstalledAppsService,

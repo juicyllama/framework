@@ -14,7 +14,7 @@ export class ShipbobProductsService {
 	) {}
 
 	async findAll(options?: {
-		arguments?: ShipbobProductFindParams
+		params?: ShipbobProductFindParams
 		config?: ShipbobConfigDto
 	}): Promise<ShipbobProduct[]> {
 		const domain = 'app::shipbob::products::findAll'
@@ -25,10 +25,31 @@ export class ShipbobProductsService {
 		}
 		if (!options?.config) throw new Error('Missing config')
 
+		const url = new URL(SHIPBOB_URL_PRODUCTS)
+		url.search = new URLSearchParams(<any>options.params).toString()
+
+		const products: ShipbobProduct[] = []
+		let page = 1
+		const limit = options.params?.Limit ?? 50
+
 		try {
-			const url = new URL(SHIPBOB_URL_PRODUCTS)
-			url.search = new URLSearchParams(<any>options.arguments).toString()
-			return await this.api.get(domain, url.toString(), shipbobAxiosConfig(options.config))
+			let results = await this.api.get(domain, url.toString(), shipbobAxiosConfig(options.config))
+
+			products.push(...results)
+
+			this.logger.log(`[${domain}] ${products.length} Products added, fetching next page`)
+
+			while (results.length === limit) {
+				page++
+				url.searchParams.set('Page', page.toString())
+				results = await this.api.get(domain, url.toString(), shipbobAxiosConfig(options.config))
+				products.push(...results)
+				this.logger.log(`[${domain}] ${products.length} Products added, fetching next page`)
+			}
+
+			this.logger.log(`[${domain}] ${products.length} Products found`)
+
+			return products
 		} catch (err) {
 			const e = err as Error
 			this.logger.error(`[${domain}] Error finding products: ${e.message}`, e)
