@@ -34,7 +34,7 @@ export class StockLocationsService extends BaseService<T> {
 		if (location) return location
 
 		location = await this.repository.findOne({
-			where: { name: ext_id },
+			where: { ext_id },
 		})
 
 		if (location) {

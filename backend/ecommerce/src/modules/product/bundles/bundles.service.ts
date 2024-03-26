@@ -35,7 +35,7 @@ export class BundlesService extends BaseService<T> {
 		if (result) return result
 
 		result = await this.repository.findOne({
-			where: { sku: sku },
+			where: { sku },
 		})
 
 		if (result) {

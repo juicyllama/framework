@@ -17,7 +17,7 @@ export class TransactionsCronController {
 	async syncOrders() {
 		return await CronRunner(
 			CRON_ECOMMERCE_TRANSACTIONS_SYNC_DOMAIN,
-			this.syncTransactionsCronService.syncTransactions(),
+			this.syncTransactionsCronService.cronSyncTransactions(),
 		)
 	}
 }

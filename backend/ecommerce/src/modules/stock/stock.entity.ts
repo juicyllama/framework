@@ -31,7 +31,7 @@ export class Stock extends BaseEntity {
 	@IsDate()
 	expires_at?: Date
 
-	@ManyToOne(() => Sku, sku => sku.sku_id, {
+	@ManyToOne(() => StockLocation, stock_location => stock_location.stock_location_id, {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn({ name: 'stock_location_id' })

@@ -24,7 +24,7 @@ export class TransactionsCronSyncService {
 	@Cron(process.env.CRON_ECOMMERCE_TRANSACTIONS_SYNC_FREQUENCY ?? CronExpression.EVERY_10_MINUTES, {
 		disabled: !process.env.CRON_ECOMMERCE_TRANSACTIONS_SYNC,
 	})
-	async cronSyncOrders() {
+	async cronSyncTransactions() {
 		return await CronRunner(CRON_ECOMMERCE_TRANSACTIONS_SYNC_DOMAIN, this.syncTransactions())
 	}
 
@@ -130,9 +130,10 @@ export class TransactionsCronSyncService {
 									account_id: installed_app.account_id,
 								},
 							)
-
-							res(`${orders.length} Orders synced`)
 					}
+
+					res(installed_app.installed_app_id)
+
 				} catch (err) {
 					rej(err)
 				}
