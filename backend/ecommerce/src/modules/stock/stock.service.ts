@@ -18,4 +18,18 @@ export class StockService extends BaseService<T> {
 			beacon: beaconService,
 		})
 	}
+
+	async getStockOnHand(sku_id: number): Promise<number> {
+		const stock = await super.findAll({
+			where: { sku_id },
+		})
+
+		let stock_count = 0
+
+		stock.forEach(stock => {
+			stock_count += stock.quantity
+		})
+
+		return stock_count
+	}
 }

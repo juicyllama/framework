@@ -1,9 +1,8 @@
 import { AppStoreIntegrationName, InstalledAppsService, AppIntegrationStatus } from '@juicyllama/app-store'
 import { CronRunner } from '@juicyllama/core'
-import { Logger, Modules } from '@juicyllama/utils'
+import { Logger, Modules, Dates } from '@juicyllama/utils'
 import { Injectable, forwardRef, Inject } from '@nestjs/common'
 import { Cron, CronExpression } from '@nestjs/schedule'
-import _ from 'lodash'
 import { LessThan, IsNull, In } from 'typeorm'
 import { CRON_ECOMMERCE_TRANSACTIONS_SYNC_DOMAIN } from './transactions.constants'
 import { StoresService } from '../../stores/stores.service'
@@ -62,37 +61,23 @@ export class TransactionsCronSyncService {
 
 		for (const installed_app of installed_apps) {
 			const appPromise = new Promise(async (res, rej) => {
+				const updateRunTimes = {
+					installed_app_id: installed_app.installed_app_id,
+					last_check_at: new Date(),
+					next_check_at: new Date(new Date().getTime() + 1000 * 60 * 10), // 10 minutes
+				}
+
 				try {
-					const store = await this.storesService
-						.findOne({ where: { installed_app_id: installed_app.installed_app_id } })
-						.catch(err => {
-							this.logger.warn(`[${domain}] Error looking up store`, {
-								installed_app_id: installed_app.installed_app_id,
-								error: err,
-							})
-							throw err
-						})
+					const store = await this.storesService.findOne({
+						where: { installed_app_id: installed_app.installed_app_id },
+					})
+
 					if (!store) {
 						this.logger.error(`[${domain}] Store not found`, {
 							installed_app_id: installed_app.installed_app_id,
 						})
 						rej(new Error(`Store not found for installed app ${installed_app.installed_app_id}`))
 					}
-
-					const updateRunTimes = {
-						installed_app_id: installed_app.installed_app_id,
-						last_check_at: new Date(),
-						next_check_at: new Date(new Date().getTime() + 1000 * 60 * 10), // 10 minutes
-					}
-
-					await this.installedAppsService.update(updateRunTimes).catch(err => {
-						this.logger.warn(`[${domain}] Error updating installed app`, {
-							installed_app_id: installed_app.installed_app_id,
-							error: err,
-						})
-						throw err
-					})
-					this.logger.log(`[${domain}] Installed App Runtimes Updated`, updateRunTimes)
 
 					switch (installed_app.app?.integration_name) {
 						case AppStoreIntegrationName.shopify:
@@ -106,14 +91,15 @@ export class TransactionsCronSyncService {
 							const shopifyOrdersModule = await this.lazyModuleLoader.load(() => ShopifyOrdersModule)
 							const shopifyOrdersService = shopifyOrdersModule.get(ShopifyOrdersService)
 
-							const options = <any>_.omitBy(
-								{
-									api_version: '2024-01',
-									status: 'any',
-									updated_at_min: installed_app.last_check_at ?? null,
-								},
-								_.isNil,
-							)
+							if (!installed_app.last_check_at) {
+								installed_app.last_check_at = Dates.daysAgo(90)
+							}
+
+							const options = {
+								api_version: '2024-01',
+								status: 'any',
+								updated_at_min: installed_app.last_check_at.toISOString(),
+							}
 
 							const orders = await shopifyOrdersService.listOrders(installed_app, options)
 
@@ -132,6 +118,8 @@ export class TransactionsCronSyncService {
 							)
 					}
 
+					await this.installedAppsService.update(updateRunTimes)
+					this.logger.log(`[${domain}] Installed App Runtimes Updated`, updateRunTimes)
 					res(installed_app.installed_app_id)
 				} catch (err) {
 					rej(err)
