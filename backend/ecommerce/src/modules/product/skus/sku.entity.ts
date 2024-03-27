@@ -1,5 +1,5 @@
 import { Account, BaseEntity } from '@juicyllama/core'
-import { IsNumber, IsString } from 'class-validator'
+import { IsNumber, IsString, IsBoolean } from 'class-validator'
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Unique, OneToMany } from 'typeorm'
 import { App, InstalledApp } from '@juicyllama/app-store'
 import { BundleSkus } from '../bundles/bundles.skus.entity'
@@ -56,6 +56,10 @@ export class Sku extends BaseEntity {
 	@Column({ nullable: true, default: null })
 	@IsString()
 	category?: string
+
+	@Column({ default: false })
+	@IsBoolean()
+	digital_product?: boolean
 
 	@Column({ nullable: true, default: null })
 	@IsString()
