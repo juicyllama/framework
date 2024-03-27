@@ -1,6 +1,7 @@
-import { IsEnum, IsNumber, IsDate, IsString, IsObject } from 'class-validator'
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { IsDate, IsEnum, IsNumber, IsObject, IsString } from 'class-validator'
 import { BeaconStatus } from '../beacon.enums'
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { AppIntegrationName } from '../../../types/apps.enums'
 
 @Entity('beacon_push')
 export class BeaconPush {
@@ -16,9 +17,9 @@ export class BeaconPush {
 	@IsObject()
 	data?: any
 
-	@Column({ default: null, nullable: true })
-	@IsString()
-	app_integration_name?: string
+	@Column({ type: 'enum', enum: AppIntegrationName })
+	@IsEnum(AppIntegrationName)
+	app_integration_name?: AppIntegrationName
 
 	@Column({ type: 'enum', enum: BeaconStatus, default: BeaconStatus.PENDING })
 	@IsEnum(BeaconStatus)
@@ -37,6 +38,10 @@ export class BeaconPush {
 	@Column({ default: null, nullable: true })
 	@IsDate()
 	pushed_at?: Date
+
+	@Column({ default: null, nullable: true })
+	@IsNumber()
+	user_id?: number
 
 	constructor(partial: Partial<BeaconPush>) {
 		Object.assign(this, partial)

@@ -18,4 +18,3 @@ We have several types of utils to help speed up your development, these are:
 -   [Assets](assets.md)
 -   [DTOs](dtos.md)
 -   [Enums](enums.md)
--   [Pusher](pusher.md)

@@ -79,7 +79,8 @@ export class UsersService extends BaseService<T> {
 			throw new Error('User ID is required')
 		}
 
-		await this.repository.save(data)
+		const result = await this.repository.save(data)
+		await this.sendBeacon({ action: 'UPDATE', data: result })
 		return await this.query.findOneById(this.repository, data.user_id)
 	}
 

@@ -17,11 +17,13 @@ import { BeaconPush } from './push/push.entity'
 import { BeaconPushService } from './push/push.service'
 import { BeaconSms } from './sms/sms.entity'
 import { BeaconSmsService } from './sms/sms.service'
+import { WebsocketModule } from '../websocket/websocket.module'
 
 @Module({
 	imports: [
 		ConfigValidationModule.register(BeaconConfigDto),
 		TypeOrmModule.forFeature([BeaconEmail, BeaconSms, BeaconPush, BeaconIm, BeaconNotification]),
+		WebsocketModule,
 		forwardRef(() => AuthModule),
 		forwardRef(() => UsersModule),
 	],

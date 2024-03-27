@@ -47,11 +47,11 @@ export class BeaconEmailService {
 			return
 		}
 
-		if(Env.IsDev()) {
+		if (Env.IsDev()) {
 			message.subject = `[DEV] ${message.subject}`
 		}
 
-		if(Env.IsSandbox()) {
+		if (Env.IsSandbox()) {
 			message.subject = `[SANDBOX] ${message.subject}`
 		}
 

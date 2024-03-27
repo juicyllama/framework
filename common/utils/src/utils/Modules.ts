@@ -35,7 +35,6 @@ export class Modules {
 
 	//non-framework lazyload modules
 	public static readonly bugsnag = new Module('@bugsnag/js')
-	public static readonly pusher = new Module('pusher')
 	public static readonly showdown = new Module('showdown')
 
 	/**

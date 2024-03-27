@@ -18,6 +18,7 @@ import { USERS_ENDPOINT, UsersService } from '../services/users'
 import type { User, UserLogin } from '../types'
 import { LogSeverity, UserPreferences } from '../types'
 import { AccountStore } from './account'
+import { closeWebsocket, openWebsocket } from '../services/websockets'
 
 type T = User
 
@@ -181,6 +182,7 @@ export const UserStore = defineStore('user', {
 		},
 
 		async logout(router?: Router, redirect?: string) {
+			closeWebsocket()
 			logger({ severity: LogSeverity.VERBOSE, message: `[Store][User][Logout] Logout User` })
 			window.localStorage.clear()
 			await logoutUser()
@@ -219,6 +221,8 @@ export const UserStore = defineStore('user', {
 			logger({ severity: LogSeverity.LOG, message: `Login Successful`, q: q })
 
 			await this.setUser(user)
+
+			await openWebsocket()
 
 			return user
 		},

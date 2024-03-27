@@ -15,7 +15,7 @@ import type { TableSchema } from '@juicyllama/frontend-core'
 | `name`      | `string`   | The name of the table                                                                     |
 | `schema`    | `array`    | The array of [TableColumn](#tablecolumn)                                                  |
 | `title`     | `[string]` | The title of the table                                                                    |
-| `event`     | `[string]` | The event pusher should listen for                                                        |
+| `event`     | `[string]` | The event the websocket should listen for                                                        |
 | `endpoint`  | `[string]` | The endpoint to fetch the data from                                                       |
 | `icon`      | `[object]` | The [IconSettings](common.md/#icon-settings) to use for the table |
 | `show`      | `[object]` | The [show](#show) object to use for the table                                             |

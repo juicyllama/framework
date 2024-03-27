@@ -45,7 +45,6 @@ export default defineConfig({
 				'dotenv',
 				'javascript-time-ago',
 				'pinia',
-				'pusher-js',
 				'quasar',
 				'vue',
 				'vue-router',

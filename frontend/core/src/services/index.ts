@@ -1,16 +1,14 @@
 import axios from 'axios'
-import { UserStore } from '../store/user'
 import { logger } from '../helpers/logger'
+import { UserStore } from '../store/user'
 import { LogSeverity } from '../types'
 import applyRefreshTokenInterceptor from './refreshToken.interceptor'
 
-const headers = {
-	'Content-Type': 'application/json',
-}
-
 const instance = axios.create({
 	baseURL: import.meta.env.VITE_API_BASE_URL,
-	headers,
+	headers: {
+		'Content-Type': 'application/json',
+	},
 })
 
 instance.defaults.withCredentials = true // Send accessToken and refreshToken cookies with every request

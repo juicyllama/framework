@@ -6,7 +6,7 @@ import { accountStore } from '../index'
 
 type T = User
 export const USERS_ENDPOINT = '/users'
-export const USERS_PUSHER_CHANNEL = 'account_${account_id}_users'
+export const USERS_WEBSOCKET_CHANNEL = 'account_${account_id}_users'
 
 export class UsersService extends Api<T> {
 	constructor() {
