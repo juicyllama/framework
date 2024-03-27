@@ -98,7 +98,7 @@ export class Sku extends BaseEntity {
 	customs_description?: string
 
 	@OneToMany(() => BundleSkus, bundleSkus => bundleSkus.sku)
-	skuBundles?: BundleSkus[];
+	skuBundles?: BundleSkus[]
 
 	constructor(partial: Partial<Sku>) {
 		super()

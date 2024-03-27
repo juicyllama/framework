@@ -133,7 +133,6 @@ export class TransactionsCronSyncService {
 					}
 
 					res(installed_app.installed_app_id)
-
 				} catch (err) {
 					rej(err)
 				}

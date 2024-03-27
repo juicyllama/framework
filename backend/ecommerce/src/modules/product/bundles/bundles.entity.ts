@@ -1,6 +1,16 @@
 import { Account, BaseEntity } from '@juicyllama/core'
 import { IsString, IsArray, IsNumber } from 'class-validator'
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinColumn, Unique, JoinTable, OneToMany } from 'typeorm'
+import {
+	Column,
+	Entity,
+	PrimaryGeneratedColumn,
+	ManyToOne,
+	ManyToMany,
+	JoinColumn,
+	Unique,
+	JoinTable,
+	OneToMany,
+} from 'typeorm'
 import { Sku } from '../skus/sku.entity'
 import { App, InstalledApp } from '@juicyllama/app-store'
 import { BundleSkus } from './bundles.skus.entity'
@@ -65,7 +75,7 @@ export class Bundle extends BaseEntity {
 	skus?: Sku[]
 
 	@OneToMany(() => BundleSkus, bundleSkus => bundleSkus.bundle)
-	bundleSkus?: BundleSkus[];
+	bundleSkus?: BundleSkus[]
 
 	constructor(partial: Partial<Bundle>) {
 		super()
