@@ -99,15 +99,15 @@ export class TransactionsCronSyncService {
 
 							const { ShopifyOrdersModule, ShopifyOrdersService } = await Modules.shopify.load()
 
-							console.log('Modules.shopify.load()')
+							console.log('Modules.shopify.load()', { ShopifyOrdersModule, ShopifyOrdersService })
 
 							const shopifyOrdersModule = await this.lazyModuleLoader.load(() => ShopifyOrdersModule)
 
-							console.log('shopifyOrdersModule')
+							console.log('shopifyOrdersModule', shopifyOrdersModule)
 
 							const shopifyOrdersService = shopifyOrdersModule.get(ShopifyOrdersService)
 
-							console.log('shopifyOrdersService')
+							console.log('shopifyOrdersService', shopifyOrdersService)
 
 							if (!installed_app.last_check_at) {
 								installed_app.last_check_at = Dates.daysAgo(90)
