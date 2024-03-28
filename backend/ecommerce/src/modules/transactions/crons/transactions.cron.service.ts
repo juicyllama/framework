@@ -73,6 +73,10 @@ export class TransactionsCronSyncService {
 
 					this.logger.debug(
 						`[${domain}][Installed App #${installed_app.installed_app_id}][Store #${store?.store_id}]`,
+						{
+							installed_app: installed_app,
+							store: store,
+						},
 					)
 
 					if (!store) {
@@ -90,17 +94,20 @@ export class TransactionsCronSyncService {
 							}
 
 							this.logger.debug(
-								`[${domain}][Installed App #${installed_app.installed_app_id}][Store #${store?.store_id}] Shopify store: ${installed_app.settings.SHOPIFY_SHOP_NAME}`,
-								{
-									installed_app: installed_app,
-									store: store,
-								},
+								`[${domain}][Installed App #${installed_app.installed_app_id}][Store #${store?.store_id}] Shopify store: ${installed_app.settings.SHOPIFY_SHOP_NAME}`
 							)
 
 							const { ShopifyOrdersModule, ShopifyOrdersService } = await Modules.shopify.load()
 
+							console.log('Modules.shopify.load()')
+
 							const shopifyOrdersModule = await this.lazyModuleLoader.load(() => ShopifyOrdersModule)
+
+							console.log('shopifyOrdersModule')
+
 							const shopifyOrdersService = shopifyOrdersModule.get(ShopifyOrdersService)
+
+							console.log('shopifyOrdersService')
 
 							if (!installed_app.last_check_at) {
 								installed_app.last_check_at = Dates.daysAgo(90)
