@@ -11,7 +11,6 @@ import { UsersController } from './users.controller'
 import { User } from './users.entity'
 import { UsersHooks } from './users.hooks'
 import { UsersService } from './users.service'
-import { ConfigModule } from '@nestjs/config'
 
 @Module({
 	imports: [
