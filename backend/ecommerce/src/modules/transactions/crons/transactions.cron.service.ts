@@ -61,12 +61,6 @@ export class TransactionsCronSyncService {
 
 		for (const installed_app of installed_apps) {
 			const appPromise = new Promise(async (res, rej) => {
-				const updateRunTimes = {
-					installed_app_id: installed_app.installed_app_id,
-					last_check_at: new Date(),
-					next_check_at: new Date(new Date().getTime() + 1000 * 60 * 10), // 10 minutes
-				}
-
 				try {
 					const store = await this.storesService.findOne({
 						where: { installed_app_id: installed_app.installed_app_id },
@@ -116,13 +110,27 @@ export class TransactionsCronSyncService {
 									account_id: installed_app.account_id,
 								},
 							)
+							break
+						default:
+							this.logger.error(`[${domain}] Integration not supported`, {
+								installed_app_id: installed_app.installed_app_id,
+								integration_name: installed_app.app?.integration_name,
+							})
+							rej(new Error(`Integration not supported`))
+							break
+					}
+
+					const updateRunTimes = {
+						installed_app_id: installed_app.installed_app_id,
+						last_check_at: new Date(),
+						next_check_at: Dates.addMinutes(new Date(), 10),
 					}
 
 					await this.installedAppsService.update(updateRunTimes)
 					this.logger.log(`[${domain}] Installed App Runtimes Updated`, updateRunTimes)
 					res(installed_app.installed_app_id)
-				} catch (err) {
-					rej(err)
+				} catch (err: any) {
+					rej(err.message)
 				}
 			})
 
