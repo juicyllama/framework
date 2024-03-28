@@ -9,12 +9,11 @@ import { BeaconSmsService } from './sms/sms.service'
 @Injectable()
 export class BeaconService {
 	constructor(
-		private readonly beaconEmailService: BeaconEmailService,
-		private readonly beaconPushService: BeaconPushService,
-		private readonly beaconSmsService: BeaconSmsService,
-		private readonly beaconImService: BeaconImService,
-		@Inject(forwardRef(() => BeaconNotificationService))
-		private readonly beaconNotificationService: BeaconNotificationService,
+		@Inject(forwardRef(() => BeaconEmailService)) private readonly beaconEmailService: BeaconEmailService,
+		@Inject(forwardRef(() => BeaconPushService)) private readonly beaconPushService: BeaconPushService,
+		@Inject(forwardRef(() => BeaconSmsService)) private readonly beaconSmsService: BeaconSmsService,
+		@Inject(forwardRef(() => BeaconImService)) private readonly beaconImService: BeaconImService,
+		@Inject(forwardRef(() => BeaconNotificationService)) private readonly beaconNotificationService: BeaconNotificationService,
 	) {}
 
 	/**

@@ -22,7 +22,7 @@ export class UserAccount extends BaseEntity {
 		onUpdate: 'CASCADE',
 		createForeignKeyConstraints: false, // This is a workaround for a bug in TypeORM that causes the tests to fail because the table cannot be dropped
 	})
-	@JoinColumn([{ name: 'user_id', referencedColumnName: 'user_id' }])
+	@JoinColumn({ name: 'user_id', referencedColumnName: 'user_id' })
 	user!: User
 
 	@ManyToOne(() => Account, account => account.users, {
@@ -30,6 +30,6 @@ export class UserAccount extends BaseEntity {
 		onUpdate: 'CASCADE',
 		createForeignKeyConstraints: false, // This is a workaround for a bug in TypeORM that causes the tests to fail because the table cannot be dropped
 	})
-	@JoinColumn([{ name: 'account_id', referencedColumnName: 'account_id' }])
+	@JoinColumn({ name: 'account_id', referencedColumnName: 'account_id' })
 	account!: Account
 }

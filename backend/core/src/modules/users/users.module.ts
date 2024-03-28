@@ -15,7 +15,7 @@ import { ConfigModule } from '@nestjs/config'
 
 @Module({
 	imports: [
-		ConfigModule.forRoot(), // TODO: find a way to remove forRoot. Without it Nest apps freeze on boot.
+		//ConfigModule.forRoot(), // TODO: find a way to remove forRoot. Without it Nest apps freeze on boot.
 		TypeOrmModule.forFeature([User]),
 		forwardRef(() => AuthModule),
 		forwardRef(() => AccountModule),

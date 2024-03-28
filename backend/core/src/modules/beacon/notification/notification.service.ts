@@ -19,11 +19,9 @@ export class BeaconNotificationService extends BaseService<T> {
 	constructor(
 		@Inject(Query) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		private readonly logger: Logger,
-		private readonly beaconPushService: BeaconPushService,
-		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
-		@Inject(forwardRef(() => UsersService))
-		private readonly usersService: UsersService,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		@Inject(forwardRef(() => BeaconPushService)) private readonly beaconPushService: BeaconPushService,
+		@Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,
 	) {
 		super(query, repository)
 	}

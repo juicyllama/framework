@@ -1,7 +1,7 @@
 import { Env, Logger, Modules } from '@juicyllama/utils'
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import _ from 'lodash'
+import { isUndefined } from 'lodash'
 import { Repository } from 'typeorm'
 import { Query } from '../../../utils/typeorm/Query'
 import { BeaconMessageDto } from '../beacon.dto'
@@ -15,7 +15,7 @@ export class BeaconPushService {
 	constructor(
 		@Inject(Query) private readonly query: Query<BeaconPush>,
 		@InjectRepository(BeaconPush) private readonly repository: Repository<BeaconPush>,
-		private readonly logger: Logger,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@InjectConfig(BeaconConfigDto) private readonly configService: BeaconConfigDto,
 	) {}
 
@@ -61,7 +61,7 @@ export class BeaconPushService {
 				'PUSHER_APP_CLUSTER',
 				'PUSHER_CHANNEL',
 			]
-			if (configKeys.find(key => _.isUndefined(this.configService[key]))) {
+			if (configKeys.find(key => isUndefined(this.configService[key]))) {
 				this.logger.warn(`[${domain}] Missing pusher config details`, {
 					config: {
 						app_id: this.configService.PUSHER_APP_ID,
