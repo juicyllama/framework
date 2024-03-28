@@ -89,6 +89,14 @@ export class TransactionsCronSyncService {
 								rej(new Error(`Shopify module not installed`))
 							}
 
+							this.logger.debug(
+								`[${domain}][Installed App #${installed_app.installed_app_id}][Store #${store?.store_id}] Shopify store: ${installed_app.settings.SHOPIFY_SHOP_NAME}`,
+								{
+									installed_app: installed_app,
+									store: store,
+								},
+							)
+
 							const { ShopifyOrdersModule, ShopifyOrdersService } = await Modules.shopify.load()
 
 							const shopifyOrdersModule = await this.lazyModuleLoader.load(() => ShopifyOrdersModule)
@@ -104,6 +112,10 @@ export class TransactionsCronSyncService {
 								updated_at_min: installed_app.last_check_at.toISOString(),
 							}
 
+							this.logger.debug(
+								`[${domain}][Installed App #${installed_app.installed_app_id}][Store #${store?.store_id}] Get orders`, options
+							)
+
 							const orders = await shopifyOrdersService.listOrders(installed_app, options)
 
 							for (const order of orders) {
@@ -112,7 +124,7 @@ export class TransactionsCronSyncService {
 
 							order_count += orders.length
 
-							this.logger.log(
+							this.logger.debug(
 								`[${domain}] ${orders.length} Orders synced for store: ${installed_app.settings.SHOPIFY_SHOP_NAME}`,
 								{
 									installed_app_id: installed_app.installed_app_id,
