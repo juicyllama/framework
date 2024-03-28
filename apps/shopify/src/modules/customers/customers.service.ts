@@ -1,4 +1,3 @@
-import { Contact } from '@juicyllama/crm'
 import { Logger } from '@juicyllama/utils'
 import { Injectable, forwardRef, Inject } from '@nestjs/common'
 
@@ -10,7 +9,7 @@ export class ShopifyCustomersService {
 	 * Purge a contact
 	 */
 
-	async purge(contact: Contact): Promise<void> {
+	async purge(contact: any): Promise<void> {
 		const domain = 'app::shopify::customer::purge'
 
 		this.logger.log(`[${domain}] Purge Customer`, {
