@@ -62,9 +62,18 @@ export class TransactionsCronSyncService {
 		for (const installed_app of installed_apps) {
 			const appPromise = new Promise(async (res, rej) => {
 				try {
+					this.logger.debug(
+						`[${domain}][Installed App #${installed_app.installed_app_id}] Syncing Orders`,
+						installed_app,
+					)
+
 					const store = await this.storesService.findOne({
 						where: { installed_app_id: installed_app.installed_app_id },
 					})
+
+					this.logger.debug(
+						`[${domain}][Installed App #${installed_app.installed_app_id}][Store #${store?.store_id}]`,
+					)
 
 					if (!store) {
 						this.logger.error(`[${domain}] Store not found`, {
@@ -130,7 +139,7 @@ export class TransactionsCronSyncService {
 					this.logger.log(`[${domain}] Installed App Runtimes Updated`, updateRunTimes)
 					res(installed_app.installed_app_id)
 				} catch (err: any) {
-					rej(err.message)
+					rej(`[InstalledApp #${installed_app.installed_app_id}] ` + err.message)
 				}
 			})
 
