@@ -13,7 +13,8 @@ export class BeaconService {
 		@Inject(forwardRef(() => BeaconPushService)) private readonly beaconPushService: BeaconPushService,
 		@Inject(forwardRef(() => BeaconSmsService)) private readonly beaconSmsService: BeaconSmsService,
 		@Inject(forwardRef(() => BeaconImService)) private readonly beaconImService: BeaconImService,
-		@Inject(forwardRef(() => BeaconNotificationService)) private readonly beaconNotificationService: BeaconNotificationService,
+		@Inject(forwardRef(() => BeaconNotificationService))
+		private readonly beaconNotificationService: BeaconNotificationService,
 	) {}
 
 	/**
