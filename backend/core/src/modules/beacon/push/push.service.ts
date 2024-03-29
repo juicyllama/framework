@@ -31,7 +31,7 @@ export class BeaconPushService {
 				where: { unique: message.unique, user_id: message.communication.userId ?? null },
 			}))
 		) {
-			this.logger.log(`[${domain}] Skipping as message is already sent`)
+			this.logger.verbose(`[${domain}] Skipping as message is already sent`)
 			return
 		}
 
@@ -53,7 +53,7 @@ export class BeaconPushService {
 			message.communication.userId,
 		)
 
-		this.logger.debug(
+		this.logger.verbose(
 			`[${domain}] Message Sent! | event = ${
 				message.communication.event
 			} | user_id = ${message.communication.userId || 'ALL'} |
