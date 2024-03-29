@@ -169,6 +169,11 @@ export class TransactionsShopifyMapperService {
 
 		if (order.line_items) {
 			for (const item of order.line_items) {
+
+				if(!item.sku || item.sku === '') {
+					continue
+				}
+
 				const sku = await this.skusService.findBySku(item.sku)
 				const bundle = await this.bundlesService.findBySku(item.sku)
 
