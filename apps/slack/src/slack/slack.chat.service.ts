@@ -19,6 +19,12 @@ export class SlackChatService {
 			return { ok: true } as ChatPostMessageResponse
 		}
 
+		if(Env.IsDev()){
+			if(message.text){
+				message.text = `[DEV] ${message.text}`
+			}
+		}
+
 		try {
 			this.logger.debug(`[${domain}] Request`, message)
 			const response = await this.app.client.chat.postMessage(message)

@@ -51,9 +51,9 @@ export class BeaconImService {
 				service = slackModule.get(SlackService)
 
 				const slackMessage = {
-					channel: message.communication?.im?.slack.channel,
-					text: message.markdown,
-					mrkdwn: message.markdown,
+					text: message.communication?.im?.slack.text ?? message.markdown,
+					mrkdwn: message.communication?.im?.slack.mrkdwn ?? message.markdown,
+					...message.communication?.im?.slack,
 				}
 
 				const result = await service.sendMessage(slackMessage)

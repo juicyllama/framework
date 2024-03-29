@@ -1,5 +1,5 @@
 import { Account, BaseEntity } from '@juicyllama/core'
-import { IsString, IsArray, IsNumber } from 'class-validator'
+import { IsString, IsArray, IsNumber, IsBoolean } from 'class-validator'
 import {
 	Column,
 	Entity,
@@ -76,6 +76,10 @@ export class Bundle extends BaseEntity {
 
 	@OneToMany(() => BundleSkus, bundleSkus => bundleSkus.bundle)
 	bundleSkus?: BundleSkus[]
+
+	@Column({ default: false })
+	@IsBoolean()
+	disabled?: boolean
 
 	constructor(partial: Partial<Bundle>) {
 		super()

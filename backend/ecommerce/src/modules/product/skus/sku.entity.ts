@@ -104,6 +104,10 @@ export class Sku extends BaseEntity {
 	@OneToMany(() => BundleSkus, bundleSkus => bundleSkus.sku)
 	skuBundles?: BundleSkus[]
 
+	@Column({ default: false })
+	@IsBoolean()
+	disabled?: boolean
+
 	constructor(partial: Partial<Sku>) {
 		super()
 		Object.assign(this, partial)
