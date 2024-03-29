@@ -60,13 +60,12 @@ export class AuthService extends BaseService<T> {
 	constructor(
 		@Inject(Query) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		readonly logger: Logger,
+		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
 		@Inject(forwardRef(() => AccountService)) readonly accountService: AccountService,
-		@Inject(forwardRef(() => BeaconService))
-		readonly beaconService: BeaconService,
-		readonly settingsService: SettingsService,
+		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
+		@Inject(forwardRef(() => SettingsService)) readonly settingsService: SettingsService,
 		@Inject(forwardRef(() => UsersService)) readonly usersService: UsersService,
-		readonly jwtService: JwtService,
+		@Inject(forwardRef(() => JwtService)) readonly jwtService: JwtService,
 		@Inject(CACHE_MANAGER) private cacheManager: Cache,
 	) {
 		super(query, repository, { beacon: beaconService })

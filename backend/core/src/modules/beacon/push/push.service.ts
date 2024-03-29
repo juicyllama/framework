@@ -1,10 +1,8 @@
 import { Logger } from '@juicyllama/utils'
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { BeaconConfigDto } from '../../../configs/beacon.config.dto'
 import { Query } from '../../../utils/typeorm/Query'
-import { InjectConfig } from '../../config'
 import { WebsocketService } from '../../websocket/websocket.service'
 import { BeaconMessageDto } from '../beacon.dto'
 import { BeaconStatus } from '../beacon.enums'
@@ -15,8 +13,7 @@ export class BeaconPushService {
 	constructor(
 		@Inject(Query) private readonly query: Query<BeaconPush>,
 		@InjectRepository(BeaconPush) private readonly repository: Repository<BeaconPush>,
-		private readonly logger: Logger,
-		@InjectConfig(BeaconConfigDto) private readonly configService: BeaconConfigDto,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		readonly websocketService: WebsocketService,
 	) {}
 

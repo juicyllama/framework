@@ -1,5 +1,5 @@
 import { Env, Logger, Modules } from '@juicyllama/utils'
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
@@ -14,8 +14,8 @@ export class BeaconImService {
 	constructor(
 		@Inject(Query) private readonly query: Query<BeaconIm>,
 		@InjectRepository(BeaconIm) private readonly repository: Repository<BeaconIm>,
-		private readonly logger: Logger,
-		private readonly lazyModuleLoader: LazyModuleLoader,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
 	) {}
 
 	async create(message: BeaconMessageDto): Promise<boolean | undefined> {
@@ -51,9 +51,9 @@ export class BeaconImService {
 				service = slackModule.get(SlackService)
 
 				const slackMessage = {
-					channel: message.communication?.im?.slack.channel,
-					text: message.markdown,
-					mrkdwn: message.markdown,
+					text: message.communication?.im?.slack.text ?? message.markdown,
+					mrkdwn: message.communication?.im?.slack.mrkdwn ?? message.markdown,
+					...message.communication?.im?.slack,
 				}
 
 				const result = await service.sendMessage(slackMessage)

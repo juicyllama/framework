@@ -1,5 +1,5 @@
 import { Env, Logger, Modules } from '@juicyllama/utils'
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
 import { LazyModuleLoader } from '@nestjs/core'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository } from 'typeorm'
@@ -14,8 +14,8 @@ export class BeaconSmsService {
 	constructor(
 		@Inject(Query) private readonly query: Query<BeaconSms>,
 		@InjectRepository(BeaconSms) private readonly repository: Repository<BeaconSms>,
-		private readonly logger: Logger,
-		private readonly lazyModuleLoader: LazyModuleLoader,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
 	) {}
 
 	async create(message: BeaconMessageDto): Promise<boolean | undefined> {

@@ -1,9 +1,8 @@
 import { AppStoreIntegrationName, InstalledAppsService, AppIntegrationStatus } from '@juicyllama/app-store'
 import { CronRunner } from '@juicyllama/core'
-import { Logger, Modules } from '@juicyllama/utils'
+import { Logger, Modules, Dates } from '@juicyllama/utils'
 import { Injectable, forwardRef, Inject } from '@nestjs/common'
 import { Cron, CronExpression } from '@nestjs/schedule'
-import _ from 'lodash'
 import { LessThan, IsNull, In } from 'typeorm'
 import { CRON_ECOMMERCE_TRANSACTIONS_SYNC_DOMAIN } from './transactions.constants'
 import { StoresService } from '../../stores/stores.service'
@@ -16,7 +15,7 @@ export class TransactionsCronSyncService {
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(forwardRef(() => InstalledAppsService)) private readonly installedAppsService: InstalledAppsService,
 		@Inject(forwardRef(() => StoresService)) private readonly storesService: StoresService,
-		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
+		readonly lazyModuleLoader: LazyModuleLoader,
 		@Inject(forwardRef(() => TransactionsShopifyMapperService))
 		private readonly transactionsShopifyMapperService: TransactionsShopifyMapperService,
 	) {}
@@ -24,7 +23,7 @@ export class TransactionsCronSyncService {
 	@Cron(process.env.CRON_ECOMMERCE_TRANSACTIONS_SYNC_FREQUENCY ?? CronExpression.EVERY_10_MINUTES, {
 		disabled: !process.env.CRON_ECOMMERCE_TRANSACTIONS_SYNC,
 	})
-	async cronSyncOrders() {
+	async cronSyncTransactions() {
 		return await CronRunner(CRON_ECOMMERCE_TRANSACTIONS_SYNC_DOMAIN, this.syncTransactions())
 	}
 
@@ -63,36 +62,29 @@ export class TransactionsCronSyncService {
 		for (const installed_app of installed_apps) {
 			const appPromise = new Promise(async (res, rej) => {
 				try {
-					const store = await this.storesService
-						.findOne({ where: { installed_app_id: installed_app.installed_app_id } })
-						.catch(err => {
-							this.logger.warn(`[${domain}] Error looking up store`, {
-								installed_app_id: installed_app.installed_app_id,
-								error: err,
-							})
-							throw err
-						})
+					this.logger.debug(
+						`[${domain}][Installed App #${installed_app.installed_app_id}] Syncing Orders`,
+						installed_app,
+					)
+
+					const store = await this.storesService.findOne({
+						where: { installed_app_id: installed_app.installed_app_id },
+					})
+
+					this.logger.debug(
+						`[${domain}][Installed App #${installed_app.installed_app_id}][Store #${store?.store_id}]`,
+						{
+							installed_app: installed_app,
+							store: store,
+						},
+					)
+
 					if (!store) {
 						this.logger.error(`[${domain}] Store not found`, {
 							installed_app_id: installed_app.installed_app_id,
 						})
 						rej(new Error(`Store not found for installed app ${installed_app.installed_app_id}`))
 					}
-
-					const updateRunTimes = {
-						installed_app_id: installed_app.installed_app_id,
-						last_check_at: new Date(),
-						next_check_at: new Date(new Date().getTime() + 1000 * 60 * 10), // 10 minutes
-					}
-
-					await this.installedAppsService.update(updateRunTimes).catch(err => {
-						this.logger.warn(`[${domain}] Error updating installed app`, {
-							installed_app_id: installed_app.installed_app_id,
-							error: err,
-						})
-						throw err
-					})
-					this.logger.log(`[${domain}] Installed App Runtimes Updated`, updateRunTimes)
 
 					switch (installed_app.app?.integration_name) {
 						case AppStoreIntegrationName.shopify:
@@ -101,18 +93,28 @@ export class TransactionsCronSyncService {
 								rej(new Error(`Shopify module not installed`))
 							}
 
+							this.logger.debug(
+								`[${domain}][Installed App #${installed_app.installed_app_id}][Store #${store?.store_id}] Shopify store: ${installed_app.settings.SHOPIFY_SHOP_NAME}`
+							)
+
 							const { ShopifyOrdersModule, ShopifyOrdersService } = await Modules.shopify.load()
 
 							const shopifyOrdersModule = await this.lazyModuleLoader.load(() => ShopifyOrdersModule)
+
 							const shopifyOrdersService = shopifyOrdersModule.get(ShopifyOrdersService)
 
-							const options = <any>_.omitBy(
-								{
-									api_version: '2024-01',
-									status: 'any',
-									updated_at_min: installed_app.last_check_at ?? null,
-								},
-								_.isNil,
+							if (!installed_app.last_check_at) {
+								installed_app.last_check_at = Dates.daysAgo(90)
+							}
+
+							const options = {
+								api_version: '2024-01',
+								status: 'any',
+								updated_at_min: installed_app.last_check_at.toISOString(),
+							}
+
+							this.logger.debug(
+								`[${domain}][Installed App #${installed_app.installed_app_id}][Store #${store?.store_id}] Get orders`, options
 							)
 
 							const orders = await shopifyOrdersService.listOrders(installed_app, options)
@@ -123,18 +125,34 @@ export class TransactionsCronSyncService {
 
 							order_count += orders.length
 
-							this.logger.log(
+							this.logger.debug(
 								`[${domain}] ${orders.length} Orders synced for store: ${installed_app.settings.SHOPIFY_SHOP_NAME}`,
 								{
 									installed_app_id: installed_app.installed_app_id,
 									account_id: installed_app.account_id,
 								},
 							)
-
-							res(`${orders.length} Orders synced`)
+							break
+						default:
+							this.logger.error(`[${domain}] Integration not supported`, {
+								installed_app_id: installed_app.installed_app_id,
+								integration_name: installed_app.app?.integration_name,
+							})
+							rej(new Error(`Integration not supported`))
+							break
 					}
-				} catch (err) {
-					rej(err)
+
+					const updateRunTimes = {
+						installed_app_id: installed_app.installed_app_id,
+						last_check_at: new Date(),
+						next_check_at: Dates.addMinutes(new Date(), 10),
+					}
+
+					await this.installedAppsService.update(updateRunTimes)
+					this.logger.log(`[${domain}] Installed App Runtimes Updated`, updateRunTimes)
+					res(installed_app.installed_app_id)
+				} catch (err: any) {
+					rej(`[InstalledApp #${installed_app.installed_app_id}] ` + err.message)
 				}
 			})
 

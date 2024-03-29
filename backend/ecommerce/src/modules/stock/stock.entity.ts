@@ -1,7 +1,7 @@
 import { BaseEntity } from '@juicyllama/core'
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
 import { Sku } from '../product/skus/sku.entity'
-import { IsNumber, IsString, IsDate } from 'class-validator'
+import { IsNumber } from 'class-validator'
 import { StockLocation } from './locations/locations.entity'
 
 @Entity('ecommerce_stock')
@@ -23,15 +23,7 @@ export class Stock extends BaseEntity {
 	@IsNumber()
 	quantity!: number
 
-	@Column({ default: null, nullable: true })
-	@IsString()
-	lot_number?: string
-
-	@Column({ default: null, nullable: true })
-	@IsDate()
-	expires_at?: Date
-
-	@ManyToOne(() => Sku, sku => sku.sku_id, {
+	@ManyToOne(() => StockLocation, stock_location => stock_location.stock_location_id, {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn({ name: 'stock_location_id' })

@@ -1,8 +1,19 @@
 import { Account, BaseEntity } from '@juicyllama/core'
-import { IsString, IsArray, IsNumber } from 'class-validator'
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinColumn, Unique, JoinTable } from 'typeorm'
+import { IsString, IsArray, IsNumber, IsBoolean } from 'class-validator'
+import {
+	Column,
+	Entity,
+	PrimaryGeneratedColumn,
+	ManyToOne,
+	ManyToMany,
+	JoinColumn,
+	Unique,
+	JoinTable,
+	OneToMany,
+} from 'typeorm'
 import { Sku } from '../skus/sku.entity'
 import { App, InstalledApp } from '@juicyllama/app-store'
+import { BundleSkus } from './bundles.skus.entity'
 
 @Unique('ecommerce_bundles_UNIQUE', ['account_id', 'sku'])
 @Entity('ecommerce_bundles')
@@ -58,9 +69,17 @@ export class Bundle extends BaseEntity {
 		name: 'ecommerce_bundles_skus',
 		joinColumn: { name: 'bundle_id', referencedColumnName: 'bundle_id' },
 		inverseJoinColumn: { name: 'sku_id', referencedColumnName: 'sku_id' },
+		synchronize: false,
 	})
 	@IsArray()
 	skus?: Sku[]
+
+	@OneToMany(() => BundleSkus, bundleSkus => bundleSkus.bundle)
+	bundleSkus?: BundleSkus[]
+
+	@Column({ default: false })
+	@IsBoolean()
+	disabled?: boolean
 
 	constructor(partial: Partial<Bundle>) {
 		super()

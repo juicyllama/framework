@@ -23,6 +23,7 @@ export class Modules {
 	public static readonly pexels = new Module('@juicyllama/app-pexels')
 	public static readonly scrapingbee = new Module('@juicyllama/app-scrapingbee')
 	public static readonly shopify = new Module('@juicyllama/app-shopify')
+	public static readonly shipbob = new Module('@juicyllama/app-shipbob')
 	public static readonly slack = new Module('@juicyllama/app-slack')
 	public static readonly wise = new Module('@juicyllama/app-wise')
 	public static readonly wordpress = new Module('@juicyllama/app-wordpress')

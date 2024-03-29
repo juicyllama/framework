@@ -1,7 +1,8 @@
 import { Account, BaseEntity } from '@juicyllama/core'
-import { IsNumber, IsString } from 'class-validator'
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Unique } from 'typeorm'
+import { IsNumber, IsString, IsBoolean } from 'class-validator'
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Unique, OneToMany } from 'typeorm'
 import { App, InstalledApp } from '@juicyllama/app-store'
+import { BundleSkus } from '../bundles/bundles.skus.entity'
 
 @Unique('ecommerce_skus_UNIQUE', ['account_id', 'sku'])
 @Entity('ecommerce_skus')
@@ -56,6 +57,10 @@ export class Sku extends BaseEntity {
 	@IsString()
 	category?: string
 
+	@Column({ default: false })
+	@IsBoolean()
+	digital_product?: boolean
+
 	@Column({ nullable: true, default: null })
 	@IsString()
 	image_url?: string
@@ -95,6 +100,13 @@ export class Sku extends BaseEntity {
 	@Column({ nullable: true, default: null })
 	@IsString()
 	customs_description?: string
+
+	@OneToMany(() => BundleSkus, bundleSkus => bundleSkus.sku)
+	skuBundles?: BundleSkus[]
+
+	@Column({ default: false })
+	@IsBoolean()
+	disabled?: boolean
 
 	constructor(partial: Partial<Sku>) {
 		super()

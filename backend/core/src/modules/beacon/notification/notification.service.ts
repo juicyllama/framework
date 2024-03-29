@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { BaseService } from '../../../helpers'
 import { Query } from '../../../utils/typeorm/Query'
-import { AuthService } from '../../auth/auth.service'
 import { User } from '../../users/users.entity'
 import { UsersService } from '../../users/users.service'
 import { BeaconMessageDto } from '../beacon.dto'
@@ -19,11 +18,9 @@ export class BeaconNotificationService extends BaseService<T> {
 	constructor(
 		@Inject(Query) readonly query: Query<T>,
 		@InjectRepository(E) readonly repository: Repository<T>,
-		private readonly logger: Logger,
-		private readonly beaconPushService: BeaconPushService,
-		@Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
-		@Inject(forwardRef(() => UsersService))
-		private readonly usersService: UsersService,
+		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
+		@Inject(forwardRef(() => BeaconPushService)) private readonly beaconPushService: BeaconPushService,
+		@Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,
 	) {
 		super(query, repository)
 	}

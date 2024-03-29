@@ -8,7 +8,7 @@ import { User } from '../users/users.entity'
 @Injectable()
 export class UsersHooks {
 	constructor(
-		private readonly configService: ConfigService,
+		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
 		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
 	) {}
 
