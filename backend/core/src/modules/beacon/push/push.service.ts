@@ -53,7 +53,7 @@ export class BeaconPushService {
 			message.communication.userId,
 		)
 
-		this.logger.log(
+		this.logger.debug(
 			`[${domain}] Message Sent! | event = ${
 				message.communication.event
 			} | user_id = ${message.communication.userId || 'ALL'} |
