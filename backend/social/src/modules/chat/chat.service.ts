@@ -5,7 +5,7 @@ import { Chat } from './chat.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial, Repository, In } from 'typeorm'
 import { ChatMessage, ChatMessageService, ChatUsersService } from '../..'
-import { CHAT_MESSAGE_PUSHER_EVENT, CHAT_PUSHER_EVENT } from './chat.constants'
+import { CHAT_MESSAGE_WEBSOCKET_EVENT, CHAT_WEBSOCKET_EVENT } from './chat.constants'
 import { ChatMessageType } from './message/chat.message.enums'
 import { isEqual } from 'lodash'
 
@@ -58,7 +58,7 @@ export class ChatService extends BaseService<T> {
 
 		for (const user of chat.users) {
 			await this.beaconService.sendPush(
-				Strings.replacer(CHAT_PUSHER_EVENT, {
+				Strings.replacer(CHAT_WEBSOCKET_EVENT, {
 					user_id: user.user_id,
 					chat_id: chat.chat_id,
 				}),
@@ -131,7 +131,7 @@ export class ChatService extends BaseService<T> {
 		}
 
 		await this.beaconService.sendPush(
-			Strings.replacer(CHAT_PUSHER_EVENT, {
+			Strings.replacer(CHAT_WEBSOCKET_EVENT, {
 				user_id: user_id,
 				chat_id: chat_id,
 			}),
@@ -251,7 +251,7 @@ export class ChatService extends BaseService<T> {
 	async sendPush(chat: Chat, result: ChatMessage): Promise<void> {
 		for (const user of chat.users) {
 			await this.beaconService.sendPush(
-				Strings.replacer(CHAT_MESSAGE_PUSHER_EVENT, {
+				Strings.replacer(CHAT_MESSAGE_WEBSOCKET_EVENT, {
 					user_id: user.user_id,
 					chat_id: chat.chat_id,
 				}),
@@ -261,7 +261,7 @@ export class ChatService extends BaseService<T> {
 				},
 			)
 			await this.beaconService.sendPush(
-				Strings.replacer(CHAT_PUSHER_EVENT, {
+				Strings.replacer(CHAT_WEBSOCKET_EVENT, {
 					user_id: user.user_id,
 					chat_id: chat.chat_id,
 				}),

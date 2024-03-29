@@ -50,13 +50,14 @@ export class BeaconService {
 		return result || false
 	}
 
-	async sendPush(event: string, json: any): Promise<void> {
+	async sendPush(event: string, json: any, userId?: number): Promise<void> {
 		await this.notify({
 			methods: {
 				push: true,
 			},
 			communication: {
 				event: event,
+				...(userId && { userId }),
 			},
 			json: json,
 		})

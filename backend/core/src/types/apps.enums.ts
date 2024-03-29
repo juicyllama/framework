@@ -1,6 +1,5 @@
 export enum AppIntegrationName {
 	aws = 'aws',
-	pusher = 'pusher',
 	mailchimp = 'mailchimp',
 	mollie = 'mollie',
 	openai = 'openai',
