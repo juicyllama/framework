@@ -56,11 +56,19 @@ export class TransactionsCronSyncService {
 
 		this.logger.log(`[${domain}] ${installed_apps.length} Apps Need Syncing`)
 
-		const appPromises = []
-		let order_count = 0
+		const results = {
+			total: 0,
+			processed: 0,
+			orders: 0,
+			success: 0,
+			errored: 0,
+			errors: <any>[],
+		}
+		
+		results.total = installed_apps.length
 
 		for (const installed_app of installed_apps) {
-			const appPromise = new Promise(async (res, rej) => {
+			
 				try {
 					this.logger.debug(
 						`[${domain}][Installed App #${installed_app.installed_app_id}] Syncing Orders`,
@@ -83,14 +91,18 @@ export class TransactionsCronSyncService {
 						this.logger.error(`[${domain}] Store not found`, {
 							installed_app_id: installed_app.installed_app_id,
 						})
-						rej(new Error(`Store not found for installed app ${installed_app.installed_app_id}`))
+						results.errored++
+						results.errors.push(new Error(`Store not found for installed app ${installed_app.installed_app_id}`))
+						continue
 					}
 
 					switch (installed_app.app?.integration_name) {
 						case AppStoreIntegrationName.shopify:
 							if (!Modules.shopify.isInstalled) {
 								this.logger.error(`[${domain}] Shopify module not installed`)
-								rej(new Error(`Shopify module not installed`))
+								results.errored++
+								results.errors.push(new Error(`Shopify module not installed`))
+								continue
 							}
 
 							this.logger.debug(
@@ -123,7 +135,7 @@ export class TransactionsCronSyncService {
 								await this.transactionsShopifyMapperService.pushTransaction(order, store, installed_app)
 							}
 
-							order_count += orders.length
+							results.orders += orders.length
 
 							this.logger.debug(
 								`[${domain}] ${orders.length} Orders synced for store: ${installed_app.settings.SHOPIFY_SHOP_NAME}`,
@@ -138,8 +150,9 @@ export class TransactionsCronSyncService {
 								installed_app_id: installed_app.installed_app_id,
 								integration_name: installed_app.app?.integration_name,
 							})
-							rej(new Error(`Integration not supported`))
-							break
+							results.errored++
+							results.errors.push(new Error(`Integration not supported`))
+							continue
 					}
 
 					const updateRunTimes = {
@@ -150,25 +163,16 @@ export class TransactionsCronSyncService {
 
 					await this.installedAppsService.update(updateRunTimes)
 					this.logger.log(`[${domain}] Installed App Runtimes Updated`, updateRunTimes)
-					res(installed_app.installed_app_id)
+					results.success++
 				} catch (err: any) {
-					rej(`[InstalledApp #${installed_app.installed_app_id}] ` + err.message)
+					this.logger.error(`[${domain}][InstalledApp #${installed_app.installed_app_id}] Error syncing orders`, err)
+					results.errored++
+					results.errors.push(err)
 				}
-			})
+		
+				results.processed++
+			}
 
-			appPromises.push(appPromise)
-		}
-
-		const promiseResults = await Promise.allSettled(appPromises)
-
-		return {
-			installed_apps: installed_apps.length,
-			orders: order_count,
-			success: promiseResults.filter(o => o.status === 'fulfilled').length,
-			failed: promiseResults.filter(o => o.status === 'rejected').length,
-			failures: promiseResults
-				.filter((rej: PromiseSettledResult<unknown>) => rej.status === 'rejected')
-				.map((rej: PromiseSettledResult<unknown>) => (rej as PromiseRejectedResult).reason),
-		}
+		return results
 	}
 }
