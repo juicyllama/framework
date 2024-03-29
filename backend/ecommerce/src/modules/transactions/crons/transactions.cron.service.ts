@@ -15,7 +15,7 @@ export class TransactionsCronSyncService {
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(forwardRef(() => InstalledAppsService)) private readonly installedAppsService: InstalledAppsService,
 		@Inject(forwardRef(() => StoresService)) private readonly storesService: StoresService,
-		@Inject(forwardRef(() => LazyModuleLoader)) private readonly lazyModuleLoader: LazyModuleLoader,
+		readonly lazyModuleLoader: LazyModuleLoader,
 		@Inject(forwardRef(() => TransactionsShopifyMapperService))
 		private readonly transactionsShopifyMapperService: TransactionsShopifyMapperService,
 	) {}
@@ -99,15 +99,9 @@ export class TransactionsCronSyncService {
 
 							const { ShopifyOrdersModule, ShopifyOrdersService } = await Modules.shopify.load()
 
-							console.log('Modules.shopify.load()', { ShopifyOrdersModule, ShopifyOrdersService })
-
 							const shopifyOrdersModule = await this.lazyModuleLoader.load(() => ShopifyOrdersModule)
 
-							console.log('shopifyOrdersModule', shopifyOrdersModule)
-
 							const shopifyOrdersService = shopifyOrdersModule.get(ShopifyOrdersService)
-
-							console.log('shopifyOrdersService', shopifyOrdersService)
 
 							if (!installed_app.last_check_at) {
 								installed_app.last_check_at = Dates.daysAgo(90)

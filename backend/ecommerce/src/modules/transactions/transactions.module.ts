@@ -13,7 +13,6 @@ import { TransactionsCronController } from './crons/transactions.cron.controller
 import { TransactionsCronSyncService } from './crons/transactions.cron.service'
 import { TransactionsShopifyMapperService } from './crons/mappers/shopify/transactions.service'
 import { BundlesModule, SkusModule, TransactionItemsModule } from '../..'
-import { LazyModuleLoader } from '@nestjs/core'
 
 @Module({
 	imports: [
@@ -30,7 +29,7 @@ import { LazyModuleLoader } from '@nestjs/core'
 		forwardRef(() => SkusModule),
 	],
 	controllers: [TransactionsController, TransactionsCronController],
-	providers: [TransactionsService, TransactionsCronSyncService, TransactionsShopifyMapperService, Logger, Query, LazyModuleLoader],
+	providers: [TransactionsService, TransactionsCronSyncService, TransactionsShopifyMapperService, Logger, Query],
 	exports: [TransactionsService, TransactionsShopifyMapperService],
 })
 export class TransactionsModule {}
