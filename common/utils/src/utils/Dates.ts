@@ -1,7 +1,6 @@
 import { DateRangeDto } from '../dto/date.dto'
 import { StepType } from '../enums/stats'
 import { MonthNames, MonthNamesShort, SubscriptionFrequency, DayNames } from '../enums/dates'
-import { Strings } from './Strings'
 
 const nth = function (d: number) {
 	if (d > 3 && d < 21) return 'th'
@@ -340,52 +339,43 @@ export class Dates {
 		return new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 365 * years)
 	}
 
-
-	static daysToGo(days: number, top_level?:boolean): string {
-
-		const remainingDaysString = (remainingDays: number) => { 
-			if(top_level){
+	static daysToGo(days: number, top_level?: boolean): string {
+		const remainingDaysString = (remainingDays: number) => {
+			if (top_level) {
 				return ''
 			}
-			if(remainingDays > 0) {
-				return remainingDays === 1 ? ` and ${remainingDays} day` : `${remainingDays} days` 
+			if (remainingDays > 0) {
+				return remainingDays === 1 ? ` and ${remainingDays} day` : `${remainingDays} days`
 			}
 			return ''
 		}
 
-		if(days > 365) {
+		if (days > 365) {
 			const years = Math.floor(days / 365)
 			const remainingDays = days % 365
-			if(years === 1) {
+			if (years === 1) {
 				return `${years} year${remainingDaysString(remainingDays)}`
 			}
 			return `${years} years${remainingDaysString(remainingDays)}`
-		}
-		else
-
-		if(days > 40) {
+		} else if (days > 40) {
 			const months = Math.floor(days / 30)
 			const remainingDays = days % 30
-			if(months === 1) {
+			if (months === 1) {
 				return `${months} month${remainingDaysString(remainingDays)}`
 			}
 			return `${months} months${remainingDaysString(remainingDays)}`
-		}
-		else if(days > 7) {
+		} else if (days > 7) {
 			const weeks = Math.floor(days / 7)
 			const remainingDays = days % 7
-			if(weeks === 1) {
+			if (weeks === 1) {
 				return `${weeks} week${remainingDaysString(remainingDays)}`
 			}
 			return `${weeks} weeks${remainingDaysString(remainingDays)}`
-		}
-		else {
-			if(days === 1) {
+		} else {
+			if (days === 1) {
 				return `${days} day`
 			}
 			return `${days} days`
 		}
-
 	}
-
 }

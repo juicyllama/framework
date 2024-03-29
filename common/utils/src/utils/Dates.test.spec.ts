@@ -55,7 +55,7 @@ describe('Dates', () => {
 
 		it('5 minutes', async () => {
 			const future = new Date()
-			future.setSeconds(future.getSeconds() + (60*5))
+			future.setSeconds(future.getSeconds() + 60 * 5)
 			const ahead = Dates.ahead(future)
 			expect(ahead).toEqual('5.00 minutes')
 		})
@@ -69,14 +69,14 @@ describe('Dates', () => {
 
 		it('2 hours', async () => {
 			const future = new Date()
-			future.setSeconds(future.getSeconds() + (3600 * 2))
+			future.setSeconds(future.getSeconds() + 3600 * 2)
 			const ahead = Dates.ahead(future)
 			expect(ahead).toEqual('2.00 hours')
 		})
 
 		it('2 1/2 hours', async () => {
 			const future = new Date()
-			future.setSeconds(future.getSeconds() + (3600 * 2.5))
+			future.setSeconds(future.getSeconds() + 3600 * 2.5)
 			const ahead = Dates.ahead(future)
 			expect(ahead).toEqual('2.50 hours')
 		})

@@ -185,8 +185,8 @@ export class TransactionsShopifyMapperService {
 						quantity: item.quantity,
 					})
 				} else {
-					this.logger.error(`SKU or Bundle not found for ${item.sku}`, {
-						shopify_order: order,
+					this.logger.error(`SKU or Bundle not found for: ${item.sku}`, {
+						line_item: item,
 					})
 				}
 			}

@@ -32,7 +32,8 @@
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"src/**/*.ts\" --fix",
         "test": "export $(grep -v '^#' ../../.env.development) && NODE_ENV=test && jest --runInBand --passWithNoTests",
-        "test:geocoding": "export $(grep -v '^#' ../.env.development) && NODE_ENV=test && jest --runInBand --testPathPattern=common/utils/src/utils/Geocoding.test.spec.ts"
+        "test:geocoding": "export $(grep -v '^#' ../.env.development) && NODE_ENV=test && jest --runInBand --testPathPattern=common/utils/src/utils/Geocoding.test.spec.ts",
+        "before:commit": "pnpm run lint && pnpm run format && pnpm run test && pnpm run build"
     },
     "dependencies": {
         "@turf/bbox": "^6.5.0",

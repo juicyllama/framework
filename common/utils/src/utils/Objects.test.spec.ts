@@ -11,7 +11,5 @@ describe('Objects', () => {
 
 		const cleaned = Objects.clean(object)
 		expect(cleaned).toEqual({ a: 'a' })
-
 	})
-
 })
