@@ -84,7 +84,7 @@ export class TransactionItemsService extends BaseService<T> {
 		})
 
 		for (const transaction of transactions) {
-			if (transaction.sku) {
+			if (transaction.sku && !transaction.sku.disabled) {
 				result.push({
 					sku: transaction.sku.sku,
 					name: transaction.sku.name,
@@ -93,13 +93,14 @@ export class TransactionItemsService extends BaseService<T> {
 				})
 			} else if (transaction.bundle?.bundleSkus) {
 				transaction.bundle.bundleSkus.forEach(sku => {
-					console.log(sku)
-					result.push({
-						sku: sku.sku?.sku,
-						name: sku.sku?.name,
-						quantity: (sku.quantity ?? 1) * transaction.quantity,
-						digital_product: sku.sku?.digital_product ?? false,
-					})
+					if (sku.sku && !sku.sku.disabled) {
+						result.push({
+							sku: sku.sku.sku,
+							name: sku.sku.name,
+							quantity: (sku.quantity ?? 1) * transaction.quantity,
+							digital_product: sku.sku.digital_product ?? false,
+						})
+					}
 				})
 			} else {
 				this.logger.error(
