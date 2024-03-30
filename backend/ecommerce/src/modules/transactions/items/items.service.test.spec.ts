@@ -140,6 +140,41 @@ describe('Transactions Items Testing', () => {
 
 			const count = await transactionItemsService.getSkuSoldCount(sku.sku_id, Dates.daysAgo(1), new Date())
 			expect(count).toBe(10)
+
+			await scaffold.services.service.purge(transaction)
+		})
+	})
+
+	describe('getSkus()', () => {
+		it('Get sku data from transaction ID', async () => {
+			const transaction = await scaffold.services.service.create({
+				account_id: scaffold.values.account.account_id,
+				store_id: store.store_id,
+				installed_app_id: installed_app.installed_app_id,
+				order_id: faker.string.numeric(10),
+				order_number: faker.string.numeric(10),
+				payment_status: TransactionPaymentStatus.PAID,
+				fulfillment_status: TransactionFulfillmentStatus.PENDING,
+				currency: 'USD',
+				subtotal_price: Number(faker.finance.amount({ min: 0, max: 100, dec: 2 })),
+				total_tax: Number(faker.finance.amount({ min: 0, max: 100, dec: 2 })),
+				total_price: Number(faker.finance.amount({ min: 0, max: 100, dec: 2 })),
+			})
+
+			await transactionItemsService.create({
+				transaction_id: transaction.transaction_id,
+				sku_id: sku.sku_id,
+				quantity: 5,
+			})
+
+			const result = await transactionItemsService.getSkus(transaction.transaction_id)
+			expect(result).toBeDefined()
+			expect(result.length).toBe(1)
+			expect(result[0].sku).toBe(sku.sku)
+			expect(result[0].name).toBe(sku.name)
+			expect(result[0].quantity).toBe(5)
+
+			await scaffold.services.service.purge(transaction)
 		})
 	})
 

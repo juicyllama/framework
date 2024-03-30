@@ -65,4 +65,46 @@ export class TransactionItemsService extends BaseService<T> {
 
 		return sold_count
 	}
+
+	async getSkus(transaction_id: number): Promise<
+		{
+			sku: string
+			name: string
+			quantity: number
+		}[]
+	> {
+		const result = []
+
+		const transactions = await super.findAll({
+			relations: ['transaction', 'sku', 'bundle', 'bundle.bundleSkus'],
+			where: {
+				transaction_id,
+			},
+		})
+
+		for (const transaction of transactions) {
+			if (transaction.sku) {
+				result.push({
+					sku: transaction.sku.sku,
+					name: transaction.sku.name,
+					quantity: transaction.quantity,
+				})
+			} else if (transaction.bundle?.bundleSkus) {
+				transaction.bundle.bundleSkus.forEach(sku => {
+					result.push({
+						sku: sku.sku?.sku,
+						name: sku.sku?.name,
+						quantity: (sku.quantity ?? 1) * transaction.quantity,
+					})
+				})
+			} else {
+				this.logger.error(
+					`[ecommerce::transactions::items::getSkuSoldCount] Transaction ${transaction.transaction_id} does not have a SKU or Bundle.bundleSkus`,
+					transaction,
+				)
+			}
+		}
+
+		return result
+	}
 }
