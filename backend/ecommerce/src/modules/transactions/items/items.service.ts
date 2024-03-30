@@ -23,7 +23,7 @@ export class TransactionItemsService extends BaseService<T> {
 
 	async getSkuSoldCount(sku_id: number, from: Date, to: Date): Promise<number> {
 		const transactions = await super.findAll({
-			relations: ['transaction', 'sku', 'bundle', 'bundle.bundleSkus'],
+			relations: ['transaction', 'sku', 'bundle', 'bundle.bundleSkus', 'bundle.bundleSkus.sku'],
 			where: [
 				{
 					transaction: {
@@ -71,12 +71,13 @@ export class TransactionItemsService extends BaseService<T> {
 			sku: string
 			name: string
 			quantity: number
+			digital_product: boolean
 		}[]
 	> {
 		const result = []
 
 		const transactions = await super.findAll({
-			relations: ['transaction', 'sku', 'bundle', 'bundle.bundleSkus'],
+			relations: ['transaction', 'sku', 'bundle', 'bundle.bundleSkus', 'bundle.bundleSkus.sku'],
 			where: {
 				transaction_id,
 			},
@@ -88,13 +89,16 @@ export class TransactionItemsService extends BaseService<T> {
 					sku: transaction.sku.sku,
 					name: transaction.sku.name,
 					quantity: transaction.quantity,
+					digital_product: transaction.sku.digital_product ?? false,
 				})
 			} else if (transaction.bundle?.bundleSkus) {
 				transaction.bundle.bundleSkus.forEach(sku => {
+					console.log(sku)
 					result.push({
 						sku: sku.sku?.sku,
 						name: sku.sku?.name,
 						quantity: (sku.quantity ?? 1) * transaction.quantity,
+						digital_product: sku.sku?.digital_product ?? false,
 					})
 				})
 			} else {
