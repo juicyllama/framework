@@ -82,16 +82,19 @@ export class Strings {
 	/**
 	 * Returns a formatted string
 	 * * Lowercase
-	 * * Remove spaces
-	 * * Remove dashes
+	 * * Remove spaces - if skipClean
+	 * * Remove dashes - if skipClean
 	 *
 	 * @param {string} string
 	 * @returns {string}
 	 */
 
-	static az09Lowercase(string: string): string {
-		string = string.replace(/-/gi, '')
-		string = string.replace(/ /gi, '')
+	static az09Lowercase(string: string, skipClean?: boolean): string {
+		if (!skipClean) {
+			string = string.replace(/-/gi, '')
+			string = string.replace(/ /gi, '')
+		}
+
 		return string.toLowerCase()
 	}
 
