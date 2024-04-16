@@ -20,7 +20,7 @@ async function bootstrap() {
 	app.useGlobalPipes(new ValidationPipe(validationPipeOptions))
 	app.useGlobalFilters(new TypeOrmFilter())
 
-	if (!process.env.PORT || !process.env.BASE_URL_API){
+	if (!process.env.PORT || !process.env.BASE_URL_API) {
 		throw new Error(`BASE_URL_API is not defined`)
 	}
 
@@ -45,11 +45,7 @@ async function bootstrap() {
 	}
 
 	app.listen(Number(process.env.PORT))
-	logger.debug(
-		`[${domain}] ${Env.get()} server running: ${process.env.BASE_URL_API}:${
-			process.env.PORT
-		}`,
-	)
+	logger.debug(`[${domain}] ${Env.get()} server running: ${process.env.BASE_URL_API}:${process.env.PORT}`)
 }
 
 try {

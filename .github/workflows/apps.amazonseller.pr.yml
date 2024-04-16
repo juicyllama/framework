@@ -1,0 +1,81 @@
+#
+# GitHub Actions workflow.
+#
+# Perfoms the following actions on a pull request:
+# * Lint the code
+# * Run the tests
+# * Confirm the build runs
+#
+
+name: PR Checks (Amazon Seller)
+
+on:
+    pull_request:
+        branches:
+            - main
+        paths:
+            - 'apps/amazonseller/**'
+    workflow_dispatch:
+    workflow_call:
+
+jobs:
+    pr_checks:
+        name: 'Pull Request Package: Amazon Seller'
+        runs-on: ubuntu-latest
+        steps:
+
+            -   name: 'Checkout'
+                uses: actions/checkout@v4
+                with:
+                    token: ${{ secrets.GH_CI_CD_RELEASE }}
+                    sparse-checkout: |
+                        .docker
+                        docker-compose.yml
+                        .env.development
+                        pnpm-lock.yaml
+                        pnpm-workspace.yaml
+                        tsconfig.json
+                        common/dev
+                        common/utils
+                        backend/app-store
+                        backend/core
+                        apps/amazonseller
+
+            -   name: Install Node.js
+                uses: actions/setup-node@v4
+                with:
+                    node-version: 18.18.2
+
+            -   name: Prepare
+                run: echo -e "shamefully-hoist=true\\n@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_AUTH_TOKEN }}" > .npmrc
+
+            -   name: Install pnpm
+                uses: pnpm/action-setup@v3
+                with:
+                    version: 8
+                    run_install: false
+
+            -   name: Get pnpm store directory
+                shell: bash
+                run: |
+                    echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+            - uses: actions/cache@v4
+              name: Setup pnpm cache
+              with:
+                path: ${{ env.STORE_PATH }}
+                key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+                restore-keys: |
+                    ${{ runner.os }}-pnpm-store-
+
+            -   name: Install dependencies
+                run: pnpm install --shamefully-hoist --no-frozen-lockfile
+
+            -   name: Lint
+                run: cd apps/amazonseller/ && pnpm run && pnpm run lint
+
+            -   name: Build Docker Image
+                run: pnpm run start:docker
+
+            -   name: Test
+                run: cd apps/amazonseller/ && pnpm run test

@@ -10,7 +10,7 @@ export type T = App
 export class AppsService extends BaseService<T> {
 	constructor(
 		@InjectRepository(E) readonly repository: Repository<T>,
-		@Inject(forwardRef(() => Query)) readonly query: Query<T>,		
+		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
 	) {
 		super(query, repository, {

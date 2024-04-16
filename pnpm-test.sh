@@ -25,6 +25,7 @@ directories=(
     
     ### APPS ###
     "apps/ahrefs"
+    "apps/amazonseller"
     "apps/apilayer"
     "apps/aws"
     "apps/everflow"

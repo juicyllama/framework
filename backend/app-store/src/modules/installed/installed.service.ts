@@ -71,6 +71,9 @@ export class InstalledAppsService extends BaseService<T> {
 			case AppStoreIntegrationName.shopify:
 				return `${process.env.BASE_URL_API}/app/shopify/auth/install?installed_app_id=${installed_app.installed_app_id}`
 
+			case AppStoreIntegrationName.amazonseller:
+				return `${process.env.BASE_URL_API}/app/amazonseller/auth/install?installed_app_id=${installed_app.installed_app_id}`
+
 			case AppStoreIntegrationName.ga4:
 				const { GoogleAnalyticsApp } = await Modules.googleAnalytics.load()
 

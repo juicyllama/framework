@@ -1,5 +1,6 @@
 export enum AppStoreIntegrationName {
 	ahrefs = 'ahrefs',
+	amazonseller = 'amazonseller',
 	mollie = 'mollie',
 	shopify = 'shopify',
 	shipbob = 'shipbob',
@@ -29,6 +30,7 @@ export enum AppCategory {
 	cms = 'cms',
 	ecommerce = 'ecommerce',
 	fulfillment = 'fulfillment',
+	marketplace = 'marketplace',
 	payments = 'payments',
 	seo = 'seo',
 }
@@ -65,5 +67,5 @@ export enum AppOrderBy {
 
 export enum AppRelations {
 	'parent' = 'parent',
-	'children' = 'children'
+	'children' = 'children',
 }

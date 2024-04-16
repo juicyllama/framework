@@ -3,7 +3,7 @@ import { AccountId, InjectConfig, UserAuth } from '@juicyllama/core'
 import { StoresService } from '@juicyllama/ecommerce'
 import { Logger } from '@juicyllama/utils'
 import { Controller, Get, Query, Req, Res, BadRequestException, forwardRef, Inject } from '@nestjs/common'
-import { ApiHideProperty } from '@nestjs/swagger'
+import { ApiExcludeController } from '@nestjs/swagger'
 import { Shopify } from '@shopify/shopify-api'
 import { v4 as uuidv4 } from 'uuid'
 import { ShopifyAuthRedirect, ShopifyAuthScopes } from '../../config/shopify.config'
@@ -12,6 +12,7 @@ import { ShopifyAuthRedirectQuery } from './auth.dto'
 import { ShopifyConfigDto } from '../../config/shopify.config.dto'
 
 @Controller('app/shopify/auth')
+@ApiExcludeController()
 export class ShopifyAuthController {
 	constructor(
 		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
@@ -23,14 +24,13 @@ export class ShopifyAuthController {
 	) {}
 
 	@UserAuth()
-	@ApiHideProperty()
 	@Get('install')
 	async install(
 		@Req() req: any,
 		@Query('installed_app_id') installed_app_id: number,
 		@AccountId() account_id: string,
 	): Promise<Oauth> {
-		const domain = 'app::shopify::auth::controller::start'
+		const domain = 'app::shopify::auth::controller::install'
 
 		this.logger.log(`[${domain}] Install`, {
 			installed_app_id: installed_app_id,
@@ -113,7 +113,6 @@ export class ShopifyAuthController {
 		})
 	}
 
-	@ApiHideProperty()
 	@Get('redirect')
 	async redirect(@Query() query: ShopifyAuthRedirectQuery, @Req() req: any, @Res() res: any): Promise<void> {
 		const domain = 'app::shopify::auth::controller::redirect'
@@ -134,7 +133,6 @@ export class ShopifyAuthController {
 		return
 	}
 
-	@ApiHideProperty()
 	@Get('complete')
 	async complete(@Query() query: ShopifyAuthRedirectQuery, @Req() req: any, @Res() res: any): Promise<void> {
 		const domain = 'app::shopify::auth::controller::complete'

@@ -26,6 +26,7 @@ pnpm link --global --dir backend/social
 
 ### APPS ###
 pnpm link --global --dir apps/ahrefs
+pnpm link --global --dir apps/amazonseller
 pnpm link --global --dir apps/apilayer
 pnpm link --global --dir apps/aws
 pnpm link --global --dir apps/everflow

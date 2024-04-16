@@ -18,11 +18,11 @@ export class Oauth extends BaseEntity {
 	@Column()
 	installed_app_id?: number
 
-	@Column({ nullable: true, default: null })
+	@Column('text', { nullable: true, default: null })
 	@IsString()
 	access_token?: string
 
-	@Column({ nullable: true, default: null })
+	@Column('text', { nullable: true, default: null })
 	@IsString()
 	refresh_token?: string
 

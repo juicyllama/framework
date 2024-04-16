@@ -1,0 +1,182 @@
+[
+  {
+    "name": "USA",
+    "api_url": "https://sellingpartnerapi-na.amazon.com",
+    "api_endpoint": "sellingpartnerapi-na.amazon.com",
+    "url": "https://sellercentral.amazon.com",
+    "country": "United States of America",
+    "marketplaceId": "ATVPDKIKX0DER",
+    "countryCode": "US",
+    "AWSRegion": "us-east-1"
+  },
+  {
+    "name": "Canada",
+    "api_url": "https://sellingpartnerapi-na.amazon.com",
+    "api_endpoint": "sellingpartnerapi-na.amazon.com",
+    "url": "https://sellercentral.amazon.ca",
+    "country": "Canada",
+    "marketplaceId": "A2EUQ1WTGCTBG2",
+    "countryCode": "CA",
+    "AWSRegion": "us-east-1"
+  },
+  {
+    "name": "Mexico",
+    "api_url": "https://sellingpartnerapi-na.amazon.com",
+    "api_endpoint": "sellingpartnerapi-na.amazon.com",
+    "url": "https://sellercentral.amazon.com.mx",
+    "country": "Mexico",
+    "marketplaceId": "A1AM78C64UM0Y8",
+    "countryCode": "MX",
+    "AWSRegion": "us-east-1"
+  },
+  {
+    "name": "Brazil",
+    "api_url": "https://sellingpartnerapi-na.amazon.com",
+    "api_endpoint": "sellingpartnerapi-na.amazon.com",
+    "url": "https://sellercentral.amazon.com.br",
+    "country": "Brazil",
+    "marketplaceId": "A2Q3Y263D00KWC",
+    "countryCode": "BR",
+    "AWSRegion": "us-east-1"
+  },
+  {
+    "name": "UK",
+    "api_url": "https://sellingpartnerapi-eu.amazon.com",
+    "api_endpoint": "sellingpartnerapi-eu.amazon.com",
+    "url": "https://sellercentral-europe.amazon.com",
+    "country": "United Kingdom",
+    "marketplaceId": "A1F83G8C2ARO7P",
+    "countryCode": "GB",
+    "AWSRegion": "eu-west-1"
+  },
+  {
+    "name": "Spain",
+    "api_url": "https://sellingpartnerapi-eu.amazon.com",
+    "api_endpoint": "sellingpartnerapi-eu.amazon.com",
+    "url": "https://sellercentral-europe.amazon.com",
+    "country": "Spain",
+    "marketplaceId": "A1RKKUPIHCS9HS",
+    "countryCode": "ES",
+    "AWSRegion": "eu-west-1"
+  },
+  {
+    "name": "France",
+    "api_url": "https://sellingpartnerapi-eu.amazon.com",
+    "api_endpoint": "sellingpartnerapi-eu.amazon.com",
+    "url": "https://sellercentral-europe.amazon.com",
+    "country": "France",
+    "marketplaceId": "A13V1IB3VIYZZH",
+    "countryCode": "FR",
+    "AWSRegion": "eu-west-1"
+  },
+  {
+    "name": "Germany",
+    "api_url": "https://sellingpartnerapi-eu.amazon.com",
+    "api_endpoint": "sellingpartnerapi-eu.amazon.com",
+    "url": "https://sellercentral-europe.amazon.com",
+    "country": "Germany",
+    "marketplaceId": "A1PA6795UKMFR9",
+    "countryCode": "DE",
+    "AWSRegion": "eu-west-1"
+  },
+  {
+    "name": "Italy",
+    "api_url": "https://sellingpartnerapi-eu.amazon.com",
+    "api_endpoint": "sellingpartnerapi-eu.amazon.com",
+    "url": "https://sellercentral-europe.amazon.com",
+    "country": "Italy",
+    "marketplaceId": "APJ6JRA9NG5V4",
+    "countryCode": "IT",
+    "AWSRegion": "eu-west-1"
+  },
+  {
+    "name": "Netherlands",
+    "api_url": "https://sellingpartnerapi-eu.amazon.com",
+    "api_endpoint": "sellingpartnerapi-eu.amazon.com",
+    "url": "https://sellercentral.amazon.nl",
+    "country": "Netherlands",
+    "marketplaceId": "A1805IZSGTT6HS",
+    "countryCode": "NL",
+    "AWSRegion": "eu-west-1"
+  },
+  {
+    "name": "Sweden",
+    "api_url": "https://sellingpartnerapi-eu.amazon.com",
+    "api_endpoint": "sellingpartnerapi-eu.amazon.com",
+    "url": "https://sellercentral.amazon.se",
+    "country": "Sweden",
+    "marketplaceId": "A2NODRKZP88ZB9",
+    "countryCode": "SE",
+    "AWSRegion": "eu-west-1"
+  },
+  {
+    "name": "Poland",
+    "api_url": "https://sellingpartnerapi-eu.amazon.com",
+    "api_endpoint": "sellingpartnerapi-eu.amazon.com",
+    "url": "https://sellercentral.amazon.pl",
+    "country": "Poland",
+    "marketplaceId": "A1C3SOZRARQ6R3",
+    "countryCode": "PL",
+    "AWSRegion": "eu-west-1"
+  },
+  {
+    "name": "Turkey",
+    "api_url": "https://sellingpartnerapi-eu.amazon.com",
+    "api_endpoint": "sellingpartnerapi-eu.amazon.com",
+    "url": "https://sellercentral.amazon.com.tr",
+    "country": "Turkey",
+    "marketplaceId": "A33AVAJ2PDY3EV",
+    "countryCode": "TR",
+    "AWSRegion": "eu-west-1"
+  },
+  {
+    "name": "U.A.E.",
+    "api_url": "https://sellingpartnerapi-eu.amazon.com",
+    "api_endpoint": "sellingpartnerapi-eu.amazon.com",
+    "url": "https://sellercentral.amazon.ae",
+    "country": "United Arab Emirates",
+    "marketplaceId": "A2VIGQ35RCS4UG",
+    "countryCode": "AE",
+    "AWSRegion": "eu-west-1"
+  },
+  {
+    "name": "India",
+    "api_url": "https://sellingpartnerapi-eu.amazon.com",
+    "api_endpoint": "sellingpartnerapi-eu.amazon.com",
+    "url": "https://sellercentral.amazon.in",
+    "country": "India",
+    "marketplaceId": "A21TJRUUN4KGV",
+    "countryCode": "IN",
+    "AWSRegion": "eu-west-1"
+  },
+  {
+    "name": "Singapore",
+    "api_url": "https://sellingpartnerapi-fe.amazon.com",
+    "api_endpoint": "sellingpartnerapi-fe.amazon.com",
+    "url": "https://sellercentral.amazon.sg",
+    "country": "Singapore",
+    "marketplaceId": "A19VAU5U5O7RUS",
+    "countryCode": "SG",
+    "AWSRegion": "us-west-2"
+  },
+  {
+    "name": "Australia",
+    "api_url": "https://sellingpartnerapi-fe.amazon.com",
+    "api_endpoint": "sellingpartnerapi-fe.amazon.com",
+    "url": "https://sellercentral.amazon.com.au",
+    "country": "Australia",
+    "marketplaceId": "A39IBJ37TRP1C6",
+    "countryCode": "AU",
+    "AWSRegion": "us-west-2"
+  },
+  {
+    "name": "Japan",
+    "api_url": "https://sellingpartnerapi-fe.amazon.com",
+    "api_endpoint": "sellingpartnerapi-fe.amazon.com",
+    "url": "https://sellercentral.amazon.co.jp",
+    "country": "Japan",
+    "marketplaceId": "A1VC38T7YXB528",
+    "countryCode": "JP",
+    "AWSRegion": "us-west-2"
+  }
+]
