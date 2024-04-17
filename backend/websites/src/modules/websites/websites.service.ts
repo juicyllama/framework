@@ -40,7 +40,16 @@ export class WebsitesService extends BaseService<T> {
 		}
 
 		if (this.configService.CRON_WEBSITES_WEBSITE_ICON_GENERATE) {
-			await this.generateIcon(website)
+			try {
+				await this.generateIcon(website)
+			} catch (e: any) {
+				this.logger.error(`[Website #${website.website_id}] Failed to generate icon`, {
+					error: {
+						message: e?.message,
+						stack: e?.stack,
+					},
+				})
+			}
 		}
 
 		return website

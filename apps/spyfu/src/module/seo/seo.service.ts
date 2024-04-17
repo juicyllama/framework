@@ -1,9 +1,10 @@
 import { Injectable, Inject, forwardRef } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 import { Api, Logger } from '@juicyllama/utils'
 import { ENDPOINT } from '../../utils/constants'
 import querystring from 'querystring'
 import { IMostValuableKeywordsResponse, MostValuableKeywordsParams } from '../../utils/intefaces'
+import { InjectConfig } from '@juicyllama/core'
+import { SpyfuConfigDto } from '../../configs/spyfu.config.dto'
 
 @Injectable()
 export class SEOService {
@@ -12,9 +13,9 @@ export class SEOService {
 	constructor(
 		@Inject(forwardRef(() => Api)) private readonly api: Api,
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		@InjectConfig(SpyfuConfigDto) private readonly configService: SpyfuConfigDto,
 	) {
-		this.key = this.configService.get<string>('spyfu.SPYFU_API_KEY')
+		this.key = this.configService.SPYFU_API_KEY
 	}
 
 	async mostValuableKeyword(

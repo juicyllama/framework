@@ -1,6 +1,6 @@
 import { ConfigValidationModule } from '@juicyllama/core'
 import { Api, Logger } from '@juicyllama/utils'
-import { forwardRef, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { SemrushConfigDto } from '../configs/semrush.config.dto'
 import { BacklinksModule } from './backlinks/backlinks.module'
 import { BacklinksService } from './backlinks/backlinks.service'
@@ -12,9 +12,9 @@ import { KeywordReportsService } from './keywordreports/keywordreports.service'
 @Module({
 	imports: [
 		ConfigValidationModule.register(SemrushConfigDto),
-		forwardRef(() => DomainReportModule),
-		forwardRef(() => BacklinksModule),
-		forwardRef(() => KeywordReportsModule),
+		DomainReportModule,
+		BacklinksModule,
+		KeywordReportsModule,
 	],
 	controllers: [],
 	providers: [DomainReportService, BacklinksService, KeywordReportsService, Logger, Api],
