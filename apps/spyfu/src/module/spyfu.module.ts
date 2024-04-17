@@ -1,6 +1,6 @@
 import { ConfigValidationModule } from '@juicyllama/core'
 import { Api, Logger } from '@juicyllama/utils'
-import { forwardRef, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { SpyfuConfigDto } from '../configs/spyfu.config.dto'
 import { CompetitorsModule } from './competitors/competitors.module'
 import { CompetitorsService } from './competitors/competitors.service'
@@ -16,11 +16,11 @@ import { KombatService } from './kombat/kombat.service'
 @Module({
 	imports: [
 		ConfigValidationModule.register(SpyfuConfigDto),
-		forwardRef(() => CompetitorsModule),
-		forwardRef(() => DomainStatsModule),
-		forwardRef(() => KombatModule),
-		forwardRef(() => KeywordssModule),
-		forwardRef(() => SEOModule),
+		CompetitorsModule,
+		DomainStatsModule,
+		KombatModule,
+		KeywordssModule,
+		SEOModule,
 	],
 	controllers: [],
 	providers: [CompetitorsService, DomainStatsService, KombatService, KeywordsService, SEOService, Logger, Api],
