@@ -1,5 +1,5 @@
 import { SESv2Client } from '@aws-sdk/client-sesv2'
-import { ConfigValidationModule, getConfigToken } from '@juicyllama/core'
+import { BeaconConfigDto, ConfigValidationModule, getConfigToken } from '@juicyllama/core'
 import { Logger, Markdown } from '@juicyllama/utils'
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
@@ -11,8 +11,9 @@ import { AwsSesConfigDto } from './config/aws.ses.config.dto'
 @Module({
 	imports: [
 		ConfigModule,
-		ConfigValidationModule.register(AwsConfigDto), 
-		ConfigValidationModule.register(AwsSesConfigDto)
+		ConfigValidationModule.register(AwsConfigDto),
+		ConfigValidationModule.register(AwsSesConfigDto),
+		ConfigValidationModule.register(BeaconConfigDto),
 	],
 	controllers: [],
 	providers: [
