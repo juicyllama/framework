@@ -59,7 +59,6 @@ describe('WebsocketGateway', () => {
 
 	it(`should throw error with an invalid token`, async () => {
 		await expect(listenAndOpenSocket('invalid_token')).rejects.toEqual('Timeout')
-		
 	})
 
 	it(`should not throw error with a valid token`, async () => {

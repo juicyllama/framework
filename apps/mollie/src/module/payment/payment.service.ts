@@ -73,10 +73,10 @@ export class PaymentService extends BaseService<T> {
 					method: PaymentMethod.creditcard,
 					customerId: mollie_payment.customer.ext_customer_id,
 					sequenceType: SequenceType.first,
-					redirectUrl: `${this.configService.get<string>('BASE_URL_API')}/app/mollie/payment/redirect/${
+					redirectUrl: `${this.configService.get<string>('system.BASE_URL_API')}/app/mollie/payment/redirect/${
 						mollie_payment.mollie_payment_id
 					}`,
-					webhookUrl: `${this.configService.get<string>('BASE_URL_API')}/app/mollie/payment/webhook/${
+					webhookUrl: `${this.configService.get<string>('system.BASE_URL_API')}/app/mollie/payment/webhook/${
 						mollie_payment.mollie_payment_id
 					}`,
 				})

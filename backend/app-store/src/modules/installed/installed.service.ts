@@ -28,6 +28,7 @@ export class InstalledAppsService extends BaseService<T> {
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(forwardRef(() => WordPressService)) readonly wordPressService: WordPressService,
 		@Inject(forwardRef(() => ShopifyService)) readonly shopifyService: ShopifyService,
+		@Inject(forwardRef(() => GoogleAnalyticsService))
 		private readonly googleAnalyticsService: GoogleAnalyticsService,
 	) {
 		super(query, repository, {

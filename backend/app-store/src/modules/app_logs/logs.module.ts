@@ -6,10 +6,7 @@ import { Log } from './logs.entity'
 import { LogsService } from './logs.service'
 
 @Module({
-	imports: [
-		TypeOrmModule.forFeature([Log]), 
-		forwardRef(() => BeaconModule)
-	],
+	imports: [TypeOrmModule.forFeature([Log]), forwardRef(() => BeaconModule)],
 	controllers: [],
 	providers: [LogsService, Logger, Query],
 	exports: [LogsService],

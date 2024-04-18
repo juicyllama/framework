@@ -44,7 +44,7 @@ import { InstalledAppsService } from './installed.service'
 export class InstalledAppsController {
 	constructor(
 		@Inject(forwardRef(() => AuthService)) readonly authService: AuthService,
-		@Inject(forwardRef(() => TQuery))  private readonly tQuery: TQuery<INSTALLED_APP_T>,
+		@Inject(forwardRef(() => TQuery)) private readonly tQuery: TQuery<INSTALLED_APP_T>,
 		@Inject(forwardRef(() => InstalledAppsService)) private readonly service: InstalledAppsService,
 		@Inject(forwardRef(() => AppsService)) private readonly appsService: AppsService,
 	) {}

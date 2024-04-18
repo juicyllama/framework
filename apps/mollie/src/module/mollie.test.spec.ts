@@ -57,7 +57,6 @@ describe('MollieService', () => {
 		})
 	})
 
-
 	describe('Charge', () => {
 		xit('Should return a payment result - FIXME! add molie ID', async () => {
 			const response = await scaffold.services.service.charge(
