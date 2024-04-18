@@ -1,15 +1,14 @@
 import { SESv2Client, SendEmailCommand, SendEmailRequest } from '@aws-sdk/client-sesv2'
-import { InjectConfig, type BeaconMessageDto } from '@juicyllama/core'
+import { BeaconConfigDto, InjectConfig, type BeaconMessageDto } from '@juicyllama/core'
 import { Env, Logger, Markdown } from '@juicyllama/utils'
 import { Injectable, forwardRef, Inject } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 import { InjectSes } from './aws.ses.constants'
 import { AwsSesConfigDto } from './config/aws.ses.config.dto'
 
 @Injectable()
 export class AwsSesService {
 	constructor(
-		@Inject(forwardRef(() => ConfigService)) private readonly configService: ConfigService,
+		@InjectConfig(BeaconConfigDto) private readonly beaconConfig: BeaconConfigDto,
 		@Inject(forwardRef(() => Logger)) private readonly logger: Logger,
 		@Inject(forwardRef(() => Markdown)) private readonly markdown: Markdown,
 		@InjectConfig(AwsSesConfigDto) private readonly sesConfig: AwsSesConfigDto,
@@ -120,7 +119,7 @@ export class AwsSesService {
 		if (message?.communication?.email?.from?.name) {
 			return message.communication.email.from.name
 		}
-		const emailName = this.configService.get<string>('SYSTEM_EMAIL_NAME')
+		const emailName = this.beaconConfig.SYSTEM_EMAIL_NAME
 		if (emailName) {
 			return emailName
 		}
@@ -131,7 +130,7 @@ export class AwsSesService {
 		if (message?.communication?.email?.from?.email) {
 			return message.communication.email.from.email
 		}
-		const email = this.configService.get<string>('SYSTEM_EMAIL_ADDRESS')
+		const email = this.beaconConfig.SYSTEM_EMAIL_ADDRESS
 		if (email) {
 			return email
 		}
