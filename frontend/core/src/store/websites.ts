@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { Json } from '@juicyllama/vue-utils'
 import { QVueGlobals } from 'quasar'
 import { websiteService as service, WEBSITE_ENDPOINT } from '../services/websites/website'
 import { Website } from '../types'
@@ -9,14 +10,12 @@ const primayKey = 'website_id'
 
 export const WebsitesStore = defineStore(localStore, {
 	state: () => ({
-		[localStore]: window.localStorage.getItem(localStore)
-			? <T[]>JSON.parse(window.localStorage.getItem(localStore) ?? '[]')
-			: [],
+		[localStore]: Json.getLocalStorageObject<T[]>(localStore),
 	}),
 	actions: {
 		async create(data: Partial<T>): Promise<T> {
 			const result = await service.create({
-				data
+				data,
 			})
 			const results = <T[]>this.$state[localStore] ?? []
 			results.push(result)
@@ -26,10 +25,10 @@ export const WebsitesStore = defineStore(localStore, {
 			return result
 		},
 		async findOne(record_id: number): Promise<T | undefined> {
-			const result = await service.findOne({record_id})
-			if(!result) return undefined
+			const result = await service.findOne({ record_id })
+			if (!result) return undefined
 			const results = <T[]>this.$state[localStore]
-			const index = results.findIndex((r) => r[primayKey] === result[primayKey])
+			const index = results.findIndex(r => r[primayKey] === result[primayKey])
 			results[index] = result
 			this.$state[localStore] = results
 			window.localStorage.setItem(localStore, JSON.stringify(results))
@@ -43,10 +42,10 @@ export const WebsitesStore = defineStore(localStore, {
 		},
 		async update(data: Partial<T>): Promise<T> {
 			const result = await service.update({
-				data
+				data,
 			})
 			const results = <T[]>this.$state[localStore]
-			const index = results.findIndex((r) => r[primayKey] === result[primayKey])
+			const index = results.findIndex(r => r[primayKey] === result[primayKey])
 			results[index] = result
 			this.$state[localStore] = results
 			window.localStorage.setItem(localStore, JSON.stringify(results))
@@ -54,10 +53,10 @@ export const WebsitesStore = defineStore(localStore, {
 		},
 		async delete(record_id: number): Promise<T> {
 			const result = await service.delete({
-				record_id
+				record_id,
 			})
 			const results = <T[]>this.$state[localStore]
-			const index = results.findIndex((r) => r[primayKey] === result[primayKey])
+			const index = results.findIndex(r => r[primayKey] === result[primayKey])
 			results.splice(index, 1)
 			this.$state[localStore] = results
 			window.localStorage.setItem(localStore, JSON.stringify(results))
