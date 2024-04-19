@@ -1,15 +1,25 @@
 import { defineStore } from 'pinia'
 import { QVueGlobals } from 'quasar'
-import { websiteService, WEBSITE_ENDPOINT } from '../services/websites/website'
+import { websiteService as service, WEBSITE_ENDPOINT } from '../services/websites/website'
 import { Website } from '../types'
 
-export const WebsitesStore = defineStore('websites', {
+type T = Website
+const localStore = 'websites'
+
+export const WebsitesStore = defineStore(localStore, {
 	state: () => {
-		return <Website[]>JSON.parse(window.localStorage.getItem('websites') ?? '[]')
+		return <T[]>JSON.parse(window.localStorage.getItem(localStore) ?? '[]')
 	},
 	actions: {
+		async findAll(): Promise<T[]> {
+			const result = await service.findAll({})
+			window.sessionStorage.setItem(localStore, JSON.stringify(result))
+			this.$state[localStore] = result
+			return result
+		},
+		/** depreciate for consistancy of function names (replaced by findAll) */
 		async loadWebsites(): Promise<Website[]> {
-			const result = await websiteService.findAll({})
+			const result = await service.findAll({})
 			if (result) {
 				this.setWebsites(result)
 			}
@@ -20,7 +30,7 @@ export const WebsitesStore = defineStore('websites', {
 			this.$state = data
 		},
 		async updateWebsite(website_id: number, data: Partial<Website>, $q?: QVueGlobals): Promise<Website> {
-			const result = await websiteService.update({
+			const result = await service.update({
 				url: WEBSITE_ENDPOINT + '/' + website_id,
 				data: data,
 				q: $q,
@@ -39,7 +49,7 @@ export const WebsitesStore = defineStore('websites', {
 		},
 
 		async deleteWebsite(website_id: number, $q?: QVueGlobals): Promise<Website> {
-			const result = await websiteService.delete({
+			const result = await service.delete({
 				url: WEBSITE_ENDPOINT + '/' + website_id,
 				q: $q,
 				record_id: website_id,
@@ -57,5 +67,9 @@ export const WebsitesStore = defineStore('websites', {
 			return this.$state.find(website => website.website_id === website_id)
 		},
 	},
-	getters: {},
+	getters: {
+		get(state): T[] | null {
+			return state[localStore]
+		},
+	},
 })
