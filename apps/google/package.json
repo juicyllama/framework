@@ -35,7 +35,7 @@
         "before:commit": "pnpm run lint && pnpm run format && pnpm run test && pnpm run build"
     },
     "dependencies": {
-        "@googlemaps/google-maps-services-js": "^3.3.38",
+        "@googlemaps/google-maps-services-js": "^3.4.0",
         "@juicyllama/core": "workspace:^",
         "@juicyllama/utils": "workspace:^",
         "axios": "^1.5.0"
