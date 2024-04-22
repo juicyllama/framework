@@ -1,6 +1,6 @@
 {
     "name": "@juicyllama/app-google",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "Juicyllama NestJs Google App",
     "author": {
         "name": "JuicyLlama Studio",
