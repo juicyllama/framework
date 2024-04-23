@@ -89,6 +89,7 @@ export default {
 
 export { JLCore, classes }
 export { userStore, accountStore, themeStore, settingsStore, websitesStore, socialStore }
+export { WebsitesStore, SettingsStore, UserStore, AccountStore, ThemeStore, SocialStore }
 export * from './components'
 export * from './types/index'
 export { instance }

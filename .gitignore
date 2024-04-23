@@ -6,3 +6,4 @@ build
 yarn.lock
 .DS_Store
 **/temp-*
+pnpm-lock.yaml

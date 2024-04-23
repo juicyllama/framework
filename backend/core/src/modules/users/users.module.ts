@@ -1,5 +1,6 @@
 import { Logger } from '@juicyllama/utils'
 import { forwardRef, MiddlewareConsumer, Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { MiddlewareAccountId } from '../../middleware'
 import { Query } from '../../utils/typeorm/Query'
@@ -14,7 +15,7 @@ import { UsersService } from './users.service'
 
 @Module({
 	imports: [
-		//ConfigModule.forRoot(), // TODO: find a way to remove forRoot. Without it Nest apps freeze on boot.
+		ConfigModule.forRoot(), // TODO: find a way to remove forRoot. Without it Nest apps freeze on boot.
 		TypeOrmModule.forFeature([User]),
 		forwardRef(() => AuthModule),
 		forwardRef(() => AccountModule),

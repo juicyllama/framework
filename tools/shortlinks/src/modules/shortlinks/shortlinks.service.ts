@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { isURL } from 'class-validator'
-import { nanoid } from 'nanoid'
+import uuid from 'uuid'
 import { Repository } from 'typeorm'
 import { ShortlinksConfigDto } from '../../config/shortlinks.config.dto'
 import { ShortlinkClick, ShortlinkClicksService } from './clicks'
@@ -45,7 +45,7 @@ export class ShortlinksService extends BaseService<T> {
 			throw new BadRequestException('String Must be a Valid URL')
 		}
 
-		const url_code = nanoid(10)
+		const url_code = customNanoID()
 		const baseURL = this.configService.BASE_URL_SHORTLINKS
 
 		try {
@@ -107,4 +107,14 @@ export class ShortlinksService extends BaseService<T> {
 		await this.shortlinkClicksService.query.create(this.shortlinkClicksService.repository, click)
 		return shortlink
 	}
+}
+
+function customNanoID(): string {
+	const hexUUID = uuid.v4().substring(0, 10).replace(/-/g, '') // Remove dashes
+	const buffer = Buffer.from(hexUUID, 'hex')
+	return buffer
+		.toString('base64') // Convert hex to base64
+		.replace(/\+/g, '-') // Replace + with - to make it URL safe
+		.replace(/\//g, '_') // Replace / with _ to make it URL safe
+		.replace(/=/g, '') // Remove padding
 }

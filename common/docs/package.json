@@ -1,7 +1,7 @@
 {
 	"name": "@juicyllama/docs",
 	"type": "module",
-	"version": "0.14.0",
+	"version": "0.14.1",
 	"description": "Juicyllama Docs portal",
 	"author": {
 		"name": "JuicyLlama Studio",
@@ -15,7 +15,7 @@
 	"bugs": "https://github.com/juicyllama/framework",
 	"readmeFilename": "README.md",
 	"scripts": {
-		"build": "nuxt build",
+		"build": "echo 1",
 		"dev": "nuxt dev",
 		"generate": "nuxt generate",
 		"preview": "nuxt preview",

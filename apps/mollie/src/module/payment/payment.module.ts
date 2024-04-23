@@ -1,7 +1,8 @@
 import { PaymentsModule } from '@juicyllama/billing'
-import { AccountModule, Query } from '@juicyllama/core'
+import { AccountModule, Query, systemConfig } from '@juicyllama/core'
 import { Logger } from '@juicyllama/utils'
 import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { CustomerModule } from '../customer/customer.module'
 import { MandateModule } from '../mandate/mandate.module'
@@ -12,6 +13,7 @@ import { PaymentService } from './payment.service'
 
 @Module({
 	imports: [
+		ConfigModule.forFeature(systemConfig),
 		TypeOrmModule.forFeature([MolliePayment]),
 		MollieProviderModule,
 		AccountModule,

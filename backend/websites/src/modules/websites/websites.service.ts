@@ -40,7 +40,16 @@ export class WebsitesService extends BaseService<T> {
 		}
 
 		if (this.configService.CRON_WEBSITES_WEBSITE_ICON_GENERATE) {
-			await this.generateIcon(website)
+			try {
+				await this.generateIcon(website)
+			} catch (e: any) {
+				this.logger.error(`[Website #${website.website_id}] Failed to generate icon`, {
+					error: {
+						message: e?.message,
+						stack: e?.stack,
+					},
+				})
+			}
 		}
 
 		return website
@@ -61,7 +70,7 @@ export class WebsitesService extends BaseService<T> {
 
 				if (!base64) {
 					this.logger.warn(`[${domain}][Website #${website.website_id}] No Screenshot Found`, base64)
-					throw new Error(`No screenshot found for ${website.url}`)
+					return
 				}
 
 				const png = await File.createFileFromBase64(base64, 'screenshot.png')
@@ -71,7 +80,7 @@ export class WebsitesService extends BaseService<T> {
 						`[${domain}][Website #${website.website_id}] Failed to create png from screenshot`,
 						png,
 					)
-					throw new Error(`Failed to create png from screenshot for website ${website.url}`)
+					return
 				}
 
 				const result = await this.storageService.write({
@@ -82,11 +91,11 @@ export class WebsitesService extends BaseService<T> {
 				})
 
 				if (!result?.url) {
-					this.logger.warn(
+					this.logger.error(
 						`[${domain}][Website #${website.website_id}] Failed to upload file to storage`,
 						result,
 					)
-					throw new Error(`ailed to upload file to storage`)
+					return
 				}
 
 				this.logger.log(`[${domain}][Website #${website.website_id}] Screenshot Generated & Saved`, result)
@@ -100,7 +109,8 @@ export class WebsitesService extends BaseService<T> {
 				return website
 			})
 			.catch(error => {
-				throw new Error(error.message)
+				this.logger.error(`[${domain}][Website #${website.website_id}] Failed to generate screenshot`, error)
+				return
 			})
 	}
 
@@ -115,7 +125,7 @@ export class WebsitesService extends BaseService<T> {
 
 			if (favicons?.icons.length === 0) {
 				this.logger.warn(`[${domain}][Website #${website.website_id}] No Icons Found`, favicons)
-				throw new Error(`No icons found for ${website.url}`)
+				return
 			}
 
 			const icons = favicons.icons.sort((a: any, b: any) => {
@@ -148,8 +158,11 @@ export class WebsitesService extends BaseService<T> {
 			})
 
 			if (!result?.url) {
-				this.logger.warn(`[${domain}][Website #${website.website_id}] Failed to upload file to storage`, result)
-				throw new Error(`ailed to upload file to storage`)
+				this.logger.error(
+					`[${domain}][Website #${website.website_id}] Failed to upload file to storage`,
+					result,
+				)
+				return
 			}
 
 			this.logger.log(`[${domain}][Website #${website.website_id}] Icon Generated & Saved`, result)
