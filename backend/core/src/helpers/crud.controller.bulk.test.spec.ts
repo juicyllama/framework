@@ -200,6 +200,29 @@ describe('Crud Bulk Upload Controller', () => {
 				expect(lastUser.email).toEqual(email)
 			})
 		})
+
+		describe('JSON Raw Uploads with a numberic value', () => {
+			it('Upload 1 User', async () => {
+				const first_name = faker.person.firstName()
+				const last_name = 123
+				const email = faker.internet.email({ firstName: first_name, lastName: 'last_name' })
+
+				const res = await crudBulkUpload<T>({
+					raw: `[{ "first_name": "${first_name}", "last_name": ${last_name}, "email": "${email}"}]`,
+					fields: UPLOAD_FIELDS,
+					dedup_field: UPLOAD_DUPLICATE_FIELD,
+					upload_type: UploadType.JSON,
+					import_mode: ImportMode.CREATE,
+					service: scaffold.services.service,
+				})
+				expect(res.created).toEqual(1)
+				const users = await scaffold.services.service.findAll({})
+				const lastUser = users.pop()
+				expect(lastUser.first_name).toEqual(first_name)
+				expect(lastUser.last_name).toEqual('123')
+				expect(lastUser.email).toEqual(email)
+			})
+		})
 	})
 
 	describe('Mappers', () => {

@@ -416,7 +416,7 @@ export async function crudPurge<T extends ObjectLiteral>(options: {
 function cleanDtos<T extends ObjectLiteral>(dtos: DeepPartial<T>[], options: any, domain: string): DeepPartial<T>[] {
 	//remove empty values
 	for (const d in dtos) {
-		dtos[d] = <DeepPartial<T>>_.omitBy<DeepPartial<T>>(dtos[d], _.isEmpty)
+		dtos[d] = <DeepPartial<T>>_.omitBy<DeepPartial<T>>(dtos[d], isEmpty)
 	}
 
 	const unique = _.uniqBy(dtos, options.dedup_field)
@@ -426,7 +426,7 @@ function cleanDtos<T extends ObjectLiteral>(dtos: DeepPartial<T>[], options: any
 
 	// Remove any records with no dedup_field
 	const clean = unique.filter(
-		record => !_.isEmpty(record) && !_.isEmpty(record[options.dedup_field as keyof typeof record]),
+		record => !_.isEmpty(record) && !isEmpty(record[options.dedup_field as keyof typeof record]),
 	)
 	logger.debug(
 		`[${domain}] Removed ${unique.length - clean.length} records with no value in ${options.dedup_field} field`,
@@ -465,4 +465,8 @@ function expandLanguageFields<T>(result: T | T[], lang_fields?: string[]): T | T
 		}
 	}
 	return result
+}
+
+function isEmpty(value: any) {
+	return _.isEmpty(value) && !_.isDate(value) && !_.isNumber(value) && !_.isBoolean(value)
 }
