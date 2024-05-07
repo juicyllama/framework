@@ -201,7 +201,7 @@ describe('Crud Bulk Upload Controller', () => {
 			})
 		})
 
-		describe('JSON Raw Uploads with a numberic value', () => {
+		describe('JSON Raw Uploads with a numeric value', () => {
 			it('Upload 1 User', async () => {
 				const first_name = faker.person.firstName()
 				const last_name = 123
