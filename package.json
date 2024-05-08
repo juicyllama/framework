@@ -30,5 +30,8 @@
         "build": "pnpm -r --filter=!dev run build",
         "lint": "sh ./pnpm-lint.sh",
         "test": "sh ./pnpm-test.sh"
-    }
+    },
+    "resolutions": {
+		"core-js": "^3.37.0"
+	}
 }

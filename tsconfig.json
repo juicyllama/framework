@@ -38,6 +38,7 @@
             "node",
             "jest",
 			"multer",
+            "core-js"
         ],
     },
     "exclude": [
