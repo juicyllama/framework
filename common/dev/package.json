@@ -126,8 +126,13 @@
 		"uuid": "^9.0.1",
 		"vitest": "^0.33.0"
 	},
+    "overrides": {
+        "core-js": "^3.37.0"
+    },
 	"devDependencies": {
-		"@types/ioredis": "^5.0.0",
-		"@types/core-js": "^2.5.8"
+		"@types/ioredis": "^5.0.0"
+	},
+	"resolutions": {
+		"core-js": "^3.37.0"
 	}
 }
