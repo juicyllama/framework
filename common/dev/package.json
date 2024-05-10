@@ -127,6 +127,7 @@
 		"vitest": "^0.33.0"
 	},
 	"devDependencies": {
-		"@types/ioredis": "^5.0.0"
+		"@types/ioredis": "^5.0.0",
+		"@types/core-js": "^2.5.8"
 	}
 }
