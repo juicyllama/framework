@@ -42,7 +42,7 @@
         "core-js": "^3.37.0"
     },
     "devDependencies": {
-        "@types/core-js ": "^2.5.0"
+        "@types/core-js ": "^2.5.8"
     },
     "overrides": {
         "axios": "^1.4.0",
