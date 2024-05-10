@@ -49,6 +49,7 @@
         "showdown": "2.1.0"
     },
     "devDependencies": {
-        "@juicyllama/dev": "workspace:^"
+        "@juicyllama/dev": "workspace:^",
+        "@types/core-js": "^2.5.0"
     }
 }
