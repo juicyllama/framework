@@ -17,6 +17,9 @@ export class OrdersController {
 	@UserAuth()
 	@Post()
 	async getOrders(@AccountId() account_id: number, @Query() query: any): Promise<AmazonSellerFullOrderDto[]> {
+		
+		console.log('Running....')
+		
 		const installed_app = await this.installedAppsService.findOne({
 			where: {
 				installed_app_id: query.installed_app_id,
