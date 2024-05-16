@@ -143,7 +143,10 @@ export class ChatService extends BaseService<T> {
 	}
 
 	async postMessage(options: {
-		chat_id: number, user_id: number, message: string, json?: any
+		chat_id: number
+		user_id: number
+		message: string
+		json?: any
 	}): Promise<ChatMessage> {
 		const result = await this.chatMessageService.create(options)
 
@@ -260,7 +263,7 @@ export class ChatService extends BaseService<T> {
 					action: 'CREATE',
 					data: result,
 				},
-				user.user_id
+				user.user_id,
 			)
 			await this.beaconService.sendPush(
 				Strings.replacer(CHAT_WEBSOCKET_EVENT, {
@@ -271,7 +274,6 @@ export class ChatService extends BaseService<T> {
 					action: 'UPDATE',
 					data: chat,
 				},
-				
 			)
 		}
 	}

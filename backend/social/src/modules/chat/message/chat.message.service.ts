@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { BeaconService, Query, BaseService } from '@juicyllama/core'
 import { InjectRepository } from '@nestjs/typeorm'
-import { DeepPartial, Repository } from 'typeorm'
+import { Repository } from 'typeorm'
 import { ChatMessage } from './chat.message.entity'
 import { ChatUsersService } from '../users/chat.users.service'
 import { ChatService } from '../chat.service'

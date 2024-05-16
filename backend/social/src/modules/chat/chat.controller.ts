@@ -184,9 +184,9 @@ export class ChatController extends BaseController<T> {
 		}
 
 		return await this.chatService.postMessage({
-			chat_id: chat.chat_id, 
-			user_id: req.user.user_id, 
-			message: body.message
+			chat_id: chat.chat_id,
+			user_id: req.user.user_id,
+			message: body.message,
 		})
 	}
 }
