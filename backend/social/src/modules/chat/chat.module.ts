@@ -7,8 +7,8 @@ import { ChatUsers } from './users/chat.users.entity'
 import { ChatUsersService } from './users/chat.users.service'
 import { ChatService } from './chat.service'
 import { ChatMessage } from './message/chat.message.entity'
-import { ChatMessageService } from './message/chat.message.service'
 import { ChatController } from './chat.controller'
+import { ChatMessageService } from './message/chat.message.service'
 
 @Module({
 	imports: [

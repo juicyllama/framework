@@ -1,9 +1,11 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { BeaconService, Query, BaseService } from '@juicyllama/core'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { DeepPartial, Repository } from 'typeorm'
 import { ChatMessage } from './chat.message.entity'
 import { ChatUsersService } from '../users/chat.users.service'
+import { ChatService } from '../chat.service'
+import { Logger } from '@juicyllama/utils'
 
 const E = ChatMessage
 type T = ChatMessage
@@ -15,6 +17,8 @@ export class ChatMessageService extends BaseService<T> {
 		@Inject(forwardRef(() => Query)) readonly query: Query<T>,
 		@Inject(forwardRef(() => BeaconService)) readonly beaconService: BeaconService,
 		@Inject(forwardRef(() => ChatUsersService)) readonly chatUsersService: ChatUsersService,
+		@Inject(forwardRef(() => ChatService)) readonly chatService: ChatService,
+		@Inject(forwardRef(() => Logger)) readonly logger: Logger,
 	) {
 		super(query, repository, {
 			beacon: beaconService,

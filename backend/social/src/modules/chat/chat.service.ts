@@ -142,25 +142,22 @@ export class ChatService extends BaseService<T> {
 		)
 	}
 
-	async postMessage(chat_id: number, user_id: number, message: string, json?: any): Promise<ChatMessage> {
-		const result = await this.chatMessageService.create({
-			chat_id,
-			user_id,
-			message,
-			json,
-		})
+	async postMessage(options: {
+		chat_id: number, user_id: number, message: string, json?: any
+	}): Promise<ChatMessage> {
+		const result = await this.chatMessageService.create(options)
 
 		if (result.chat_message_id) {
 			await super.update({
-				chat_id: chat_id,
+				chat_id: options.chat_id,
 				last_message_at: new Date(),
 			})
 
 			const repo = this.chatUsersService.repository
 			await repo.update(
 				{
-					chat_id: chat_id,
-					user_id: user_id,
+					chat_id: options.chat_id,
+					user_id: options.user_id,
 				},
 				{
 					last_read_at: new Date(),
@@ -168,9 +165,9 @@ export class ChatService extends BaseService<T> {
 			)
 		}
 
-		result.user = this.cleanseUser(await this.usersService.findById(user_id))
+		result.user = this.cleanseUser(await this.usersService.findById(options.user_id))
 
-		const chat = await this.findById(chat_id)
+		const chat = await this.findById(options.chat_id)
 		await this.sendPush(chat, result)
 		return result
 	}
@@ -249,6 +246,10 @@ export class ChatService extends BaseService<T> {
 	}
 
 	async sendPush(chat: Chat, result: ChatMessage): Promise<void> {
+		if (!chat.users) {
+			chat.users = await this.getUsers(chat.chat_id)
+		}
+
 		for (const user of chat.users) {
 			await this.beaconService.sendPush(
 				Strings.replacer(CHAT_MESSAGE_WEBSOCKET_EVENT, {
@@ -259,6 +260,7 @@ export class ChatService extends BaseService<T> {
 					action: 'CREATE',
 					data: result,
 				},
+				user.user_id
 			)
 			await this.beaconService.sendPush(
 				Strings.replacer(CHAT_WEBSOCKET_EVENT, {
@@ -269,6 +271,7 @@ export class ChatService extends BaseService<T> {
 					action: 'UPDATE',
 					data: chat,
 				},
+				
 			)
 		}
 	}
