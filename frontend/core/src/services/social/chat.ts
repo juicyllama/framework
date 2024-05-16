@@ -5,8 +5,8 @@ import { Chat } from '../../types/social/chat'
 
 type SOCIAL_CHAT_T = Chat
 export const SOCIAL_CHAT_ENDPOINT = '/social/chat'
-export const SOCIAL_CHAT_EVENT = 'account_${account_id}_social_chat'
-export const SOCIAL_CHAT_USER_EVENT = 'user_${user_id}_social_chat'
+export const SOCIAL_CHAT_USER_EVENT = 'user_${user_id}_social_chat' //all chats for user
+export const SOCIAL_CHAT_USER_MESSAGE = 'user_${user_id}_social_chat_${chat_id}_messages' //for a specific chat
 
 export class SocialChatService extends Api<any> {
 	constructor() {

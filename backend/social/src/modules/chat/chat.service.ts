@@ -201,7 +201,7 @@ export class ChatService extends BaseService<T> {
 		})
 
 		// filter chats to find the chat with the only same users
-		let matched_chats: Chat[] = []
+		const matched_chats: Chat[] = []
 
 		for (const chat of chats) {
 			if (!chat.users) continue
