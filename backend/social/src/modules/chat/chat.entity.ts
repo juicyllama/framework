@@ -19,6 +19,8 @@ export class Chat extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	readonly chat_id!: number
 
+	//TODO: add chat_identifier, move to USER not ACCOUNT
+
 	@ManyToOne(() => Account, (account: Account) => account.account_id, {
 		onDelete: 'CASCADE',
 	})

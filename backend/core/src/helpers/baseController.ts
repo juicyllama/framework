@@ -193,9 +193,6 @@ export class BaseController<T extends ObjectLiteral> {
 			)
 		}
 
-		console.log('BaseController constants', this.constants)
-		console.log('BaseController Update params', params)
-
 		return await crudUpdate<T>({
 			service: this.service,
 			data: new this.constants.entity(data),

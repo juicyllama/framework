@@ -4,6 +4,8 @@ import {
 	ListObjectsCommand,
 	PutObjectCommandInput,
 	S3Client,
+	ServiceInputTypes,
+	ServiceOutputTypes,
 } from '@aws-sdk/client-s3'
 import { getSignedUrl, S3RequestPresigner } from '@aws-sdk/s3-request-presigner'
 import { Upload, Configuration } from '@aws-sdk/lib-storage'
@@ -19,6 +21,7 @@ import { HttpRequest } from '@aws-sdk/protocol-http'
 import { parseUrl } from '@aws-sdk/url-parser'
 import { Hash } from '@aws-sdk/hash-node'
 import { formatUrl } from '@aws-sdk/util-format-url'
+import { MiddlewareStack } from '@aws-sdk/types';
 
 function streamToString(stream: Readable): Promise<string> {
 	return new Promise((resolve, reject) => {
@@ -70,9 +73,8 @@ export class AwsS3Service {
 		}
 
 		try {
-			//bug fix for aws s3 checksum on large files: https://github.com/aws/aws-sdk-js-v3/issues/4321
-			this.s3Client.middlewareStack.use(getApplyMd5BodyChecksumPlugin(this.s3Client.config))
-
+			this.s3Client.middlewareStack.use(getApplyMd5BodyChecksumPlugin(this.s3Client.config) as any as MiddlewareStack<ServiceInputTypes, ServiceOutputTypes>);
+			
 			const params = {
 				Bucket: this.getBucket(options.bucket),
 				Key: options.location,
@@ -90,7 +92,7 @@ export class AwsS3Service {
 
 			const upload = new Upload({
 				client: this.s3Client,
-				params,
+				params,			
 				...options.sizing,
 			})
 

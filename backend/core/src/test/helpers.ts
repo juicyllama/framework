@@ -58,7 +58,7 @@ export async function TestEndpoint<T extends ObjectLiteral>(options: {
 						if (options.PRIMARY_KEY) {
 							expect(body[options.PRIMARY_KEY]).toBeDefined()
 						}
-						options.skipResultCheck || checkResult<T>(<any>options.data, body, options.emitCheckResultKeys)
+						options.skipResultCheck || checkResult<T>(<any>options.data, body, options.emitCheckResultKeys, options.type, options.url)
 						E = body
 					} catch (e) {
 						E = body
@@ -89,7 +89,7 @@ export async function TestEndpoint<T extends ObjectLiteral>(options: {
 						if (options.PRIMARY_KEY) {
 							expect(body[options.PRIMARY_KEY]).toBeDefined()
 						}
-						checkResult<T>(<any>options.data, body, options.emitCheckResultKeys)
+						options.skipResultCheck || checkResult<T>(<any>options.data, body, options.emitCheckResultKeys, options.type, options.url)
 						E = body
 					} catch (e) {
 						outputError<T>({
@@ -118,7 +118,7 @@ export async function TestEndpoint<T extends ObjectLiteral>(options: {
 						if (options.PRIMARY_KEY) {
 							expect(body[options.PRIMARY_KEY]).toBeDefined()
 						}
-						checkResult<T>(<any>options.data, body, options.emitCheckResultKeys)
+						options.skipResultCheck || checkResult<T>(<any>options.data, body, options.emitCheckResultKeys, options.type, options.url)
 						E = body
 					} catch (e) {
 						outputError<T>({
@@ -289,7 +289,7 @@ export async function TestService<T extends ObjectLiteral>(options: {
 				}
 				//@ts-ignore
 				expect(record[options.PRIMARY_KEY]).toBeDefined()
-				checkResult<T>(<any>options.mock, record)
+				checkResult<T>(<any>options.mock, record, undefined, options.type)
 				return record
 			} catch (e) {
 				outputError<T>({
@@ -308,7 +308,7 @@ export async function TestService<T extends ObjectLiteral>(options: {
 				const arr = await options.scaffold.services.service.findAll()
 				expect(arr.length).toBeGreaterThan(0)
 				expect(arr[0][options.PRIMARY_KEY]).toBeDefined()
-				checkResult<T>(<any>options.mock, arr[0])
+				checkResult<T>(<any>options.mock, arr[0], undefined, options.type)
 				return arr
 			} catch (e) {
 				outputError<T>({
@@ -327,7 +327,7 @@ export async function TestService<T extends ObjectLiteral>(options: {
 				const record = await options.scaffold.services.service.findOne()
 				//@ts-ignore
 				expect(record[options.PRIMARY_KEY]).toBeDefined()
-				checkResult<T>(<any>options.mock, record)
+				checkResult<T>(<any>options.mock, record, undefined, options.type)
 				return record
 			} catch (e) {
 				outputError<T>({
@@ -367,7 +367,7 @@ export async function TestService<T extends ObjectLiteral>(options: {
 					...options.mock,
 				})
 				expect(record[options.PRIMARY_KEY]).toBeDefined()
-				checkResult(options.mock, record)
+				checkResult(options.mock, record, undefined, options.type)
 				return record
 			} catch (e) {
 				outputError<T>({
@@ -404,10 +404,9 @@ function outputError<T extends ObjectLiteral>(options: {
 	access_token?: string // If not provided, will use owner_access_token
 	account?: Account // If not provided, will use owner_account
 }): void {
-	const logger = new Logger()
 	const domain = `[TEST][${options.type}][${options.url}]`
 
-	logger.error(`${domain}`, {
+	console.error(`${domain}`, {
 		response: options.response,
 		request: {
 			type: options.type,
@@ -426,7 +425,8 @@ function outputError<T extends ObjectLiteral>(options: {
 	expect(options.error).toMatch('error')
 }
 
-function checkResult<T extends ObjectLiteral>(data: DeepPartial<T>, result: T, emitCheckResultKeys?: string[]) {
+function checkResult<T extends ObjectLiteral>(data: DeepPartial<T>, result: T, emitCheckResultKeys?: string[], type?: string, url?: string) {
+	const domain = `[TEST][${type}][${url}]`
 	for (const key of Object.keys(data)) {
 		if (emitCheckResultKeys && emitCheckResultKeys.includes(key)) continue
 		try {
@@ -434,7 +434,6 @@ function checkResult<T extends ObjectLiteral>(data: DeepPartial<T>, result: T, e
 				case 'object':
 					continue
 				case 'number':
-					const logger = new Logger()
 					expect(Number(result[key]).toFixed(2)).toBe(Number(data[key as keyof DeepPartial<T>]).toFixed(2))
 					break
 				default:
@@ -442,7 +441,7 @@ function checkResult<T extends ObjectLiteral>(data: DeepPartial<T>, result: T, e
 			}
 		} catch (e) {
 			throw new Error(
-				`checkResult failed - ${key} issue, expected: ${data[key as keyof DeepPartial<T>]} found: ${result[key]}  `,
+				`${domain} checkResult failed - ${key} issue, expected: ${data[key as keyof DeepPartial<T>]} found: ${result[key]}  `,
 			)
 		}
 	}
