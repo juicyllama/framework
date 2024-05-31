@@ -21,8 +21,9 @@
     "dependencies": {
         "@azure/msal-browser": "^3.6.0",
         "@babel/types": "^7.22.19",
-        "@bugsnag/js": "^7.21.0",
-        "@bugsnag/plugin-vue": "^7.19.0",
+        "@bugsnag/js": "^7.23.0",
+        "@bugsnag/plugin-vue": "^7.22.7",
+        "@bugsnag/browser-performance": "^2.5.0",
         "@pinia/testing": "^0.1.3",
         "@quasar/app-vite": "^1.6.2",
         "@quasar/extras": "^1.16.6",
