@@ -6,18 +6,18 @@ import { LogSeverity } from '../types/common'
 import { User } from '../types/user'
 
 
-export function startBugsnag(version: string) {
+export function startBugsnag(apiKey: string, version: string, releaseStage?: string) {
 	Bugsnag.start({
-		apiKey: <string>process.env.VITE_BUGSNAG,
+		apiKey: apiKey,
 		plugins: [new BugsnagPluginVue()],
-		releaseStage: process.env.NODE_ENV,
+		releaseStage: releaseStage,
 		onError: function (event) {
 			event.addMetadata('app', {
 				version,
 			})
 		},
 	})
-	BugsnagPerformance.start({ apiKey: <string>process.env.VITE_BUGSNAG })
+	BugsnagPerformance.start({ apiKey: apiKey})
 	return Bugsnag.getPlugin('vue')
 }
 
