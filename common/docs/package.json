@@ -15,7 +15,7 @@
 	"bugs": "https://github.com/juicyllama/framework",
 	"readmeFilename": "README.md",
 	"scripts": {
-		"build": "echo 1",
+		"build": "nuxt build",
 		"dev": "nuxt dev",
 		"generate": "nuxt generate",
 		"preview": "nuxt preview",

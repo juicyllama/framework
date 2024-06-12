@@ -1,6 +1,5 @@
 version: 1
 applications:
-
     - appRoot: common/docs/
       frontend:
           phases:
@@ -13,7 +12,7 @@ applications:
               commands:
                 - npm run build
           artifacts:
-            baseDirectory: .amplify-hosting
+            baseDirectory: .output/public
             files:
               - '**/*'
           cache:

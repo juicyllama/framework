@@ -6,7 +6,7 @@
 # * Release to NPM
 #
 
-name: 'Release: JuicyLlama Docs'
+name: 'Release: JuicyLlama Website'
 
 on:
     push:
@@ -15,6 +15,7 @@ on:
         paths:
             - 'common/docs/*'
             - 'common/docs/**'
+            - 'amplify.yml'
     workflow_dispatch:
 
 
@@ -57,5 +58,5 @@ jobs:
 
             -   name: 'Release to hosting provider'
                 run: |
-                    URL="${{ secrets.JUICYLLAMA_DOCS_RELEASE_WEBHOOK }}"
+                    URL="${{ secrets.JUICYLLAMA_WWW_RELEASE_WEBHOOK }}"
                     curl -X POST -d {} "$URL" -H "Content-Type: application/json"
