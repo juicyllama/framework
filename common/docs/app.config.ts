@@ -14,6 +14,12 @@ const links = [
 		target: '_blank'
 	},
 	{
+		'aria-label': 'LinkedIn',
+		to: 'https://www.linkedin.com/company/juicyllama/',
+		icon: 'i-simple-icons-linkedin',
+		target: '_blank'
+	},
+	{
 		'aria-label': 'Discord',
 		to: 'https://discord.com/invite/KGv76Q9S3s',
 		icon: 'i-simple-icons-discord',
