@@ -65,7 +65,7 @@ const features = [
 					class="card"
 					v-for="item in features" :key="item.title">
 					<a :href="`${item.link}`" class="focus:outline-none" color="primary" orientation="vertical" tabindex="-1">
-						<div class="gap-x-8 gap-y-4 rounded-xl flex flex-col flex-1 px-4 py-5 sm:p-6 dark:bg-gray-900/50">
+						<div class="gap-x-8 gap-y-4 rounded-xl flex flex-col flex-1 px-4 py-5 sm:p-6">
 							<div class="">
 								<div class="mb-2 pointer-events-none">
 									<Icon :name="`ph:${item.icon}`" class="w-8 h-8 flex-shrink-0 text-gray-900 dark:text-white" />

@@ -6,15 +6,15 @@ import Apps from './components/Apps.vue'
 import CTAs from './components/CTAs.vue'
 
 useHead({
-  title: 'Docs :: JuicyLlama Rapid Development Framework',
+  title: 'No-code, Low-code, Full-code automation experts :: JuicyLlama',
   meta: [
-    { name: 'description', content: 'Developer portal for working with our open source framework' }
+    { name: 'description', content: 'We enable businesses to fully automate and optimize any process with technology.' }
   ],
 })
 defineOgImage({
   component: 'Docs',
-  title: 'JuicyLlama Rapid Development Framework',
-  description: 'Developer portal for working with our fullstack open source framework'
+  title: 'No-code, Low-code, Full-code automation experts',
+  description: 'We enable businesses to fully automate and optimize any process with technology',
 })
 </script>
 
@@ -24,5 +24,5 @@ defineOgImage({
 	<CTAs />
 	<Backend />
 	<Apps />
-	<Frontend />
+
 </template>

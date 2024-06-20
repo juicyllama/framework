@@ -1,5 +1,3 @@
-import { Client } from '@googlemaps/google-maps-services-js';
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	ssr: true,
 	extends: ['@nuxt/ui-pro'],
@@ -10,6 +8,7 @@ export default defineNuxtConfig({
 	  '@nuxtjs/fontaine',
 	  '@nuxtjs/google-fonts',
 	  'nuxt-og-image',
+	  '@nuxtjs/tailwindcss'
 	],
 	css: [
 		'@/assets/css/classes-that-nuxt-missing.css',
@@ -22,9 +21,6 @@ export default defineNuxtConfig({
 		globals.forEach((c) => c.global = true)
 	  }
 	},
-	experimental: {
-		inlineSSRStyles: false
-	},
 	components: {
 		dirs: ['~/components']
 	},
@@ -33,6 +29,9 @@ export default defineNuxtConfig({
 		fallback: 'dark',
 		storageKey: 'jl-docs-color-mode'
 	},
+	routeRules: {
+		'/api/search.json': { prerender: true },
+	  },
 	ui: {
 	  icons: ['heroicons', 'simple-icons']
 	},
@@ -51,10 +50,6 @@ export default defineNuxtConfig({
 		client: false,
 		server: false
 	},
-	routeRules: {
-	  '/api/search.json': { prerender: true },
-	},
-	// Devtools / Typescript
 	devtools: { enabled: true },
 	typescript: { strict: false },
 	content: {
@@ -70,5 +65,5 @@ export default defineNuxtConfig({
 		prerender: {
 		  failOnError: false
 		}
-	}
+	},
   })
