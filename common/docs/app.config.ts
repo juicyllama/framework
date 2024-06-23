@@ -50,7 +50,7 @@ export default defineAppConfig({
 	  }
 	},
 	seo: {
-	  siteName: 'Docs :: JuicyLlama Rapid Development Framework',
+	  siteName: 'JuicyLlama :: Workflow Automation Experts',
 	},
 	header: {
 	  logo: {

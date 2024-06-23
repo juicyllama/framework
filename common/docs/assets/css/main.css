@@ -10,16 +10,6 @@
   --card-backgound-border: #00000010 1px solid;
   --card-backgound-color-hover: #f3c61410;
 }
-html.dark {
-  --q-primary: #e0b10e;
-  --color-primary-DEFAULT: #e0b10e;
-  --color-primary-hover: #f3c614;
-  --typography-font-display: 'Nunito', 'Montserrat', sans-serif;
-  --typography-font-body: 'Nunito', 'Montserrat', sans-serif;
-  --card-backgound-color: black;
-  --card-backgound-border: #00000080 1px solid;
-  --card-backgound-color-hover: #f3c61410;
-}
 
 ::selection {
   background-color: #b5cadc !important;
@@ -41,6 +31,10 @@ p a:hover {
 
 .app--main-menu a:hover {
   color: var(--color-primary-hover);
+}
+
+.text-primary {
+  color: var(--color-primary-DEFAULT);
 }
 
 .button-primary {

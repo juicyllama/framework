@@ -1,5 +1,5 @@
 <template>
-	<div class="py-16 sm:py-24 dark bg-gray-900">
+	<div class="py-16 sm:py-24 bg-gray-900">
 		<div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl gap-16 items-center text-center sm:gap-y-24 grid lg:grid-cols-3 ">
 			<div>
 				<h2 class="text-4xl font-bold tracking-tight">Streamline Workflows with Expert <span class="text-primary">Consultation</span></h2>

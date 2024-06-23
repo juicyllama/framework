@@ -1,18 +1,6 @@
 <script setup lang="ts">
 import type { NavItem } from '@nuxt/content/dist/runtime/types'
 const navigation = inject<Ref<NavItem[]>>('navigation', ref([]))
-
-useHead({
-  title: 'Backend :: Docs :: JuicyLlama Rapid Development Framework',
-  meta: [
-    { name: 'description', content: 'JuicyLlama backend modules available' }
-  ],
-})
-defineOgImage({
-  component: 'Docs',
-  title: 'Backend',
-  description: 'JuicyLlama backend modules available'
-})
 </script>
 
 <template>

@@ -1,10 +1,4 @@
 <script setup lang="ts">
-useHead({
-  title: 'Developers :: Docs :: JuicyLlama Rapid Development Framework',
-  meta: [
-    { name: 'description', content: 'Contribute to the open source framework' }
-  ],
-})
 
 const links = [
 	{

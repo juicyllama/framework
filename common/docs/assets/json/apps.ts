@@ -1,4 +1,6 @@
-[{
+import { Integrations } from "../types/integrations";
+
+export default [{
     "key": "ahrefs",
     "name": "Ahrefs",
     "description": "Ahrefs is an SEO software suite that contains tools for link building, keyword research, competitor analysis, rank tracking and site audits."
@@ -49,7 +51,7 @@
     "description": "ScrapingBee is a web scraping API that handles proxies and Headless browser for you, so you can focus on extracting the data you want, and nothing else."
 },{
     "key": "shopify",
-    "name": "Shopify",
+    "name": Integrations.SHOPIFY,
     "description": "Shopify is a Canadian multinational e-commerce company headquartered in Ottawa, Ontario."
 },{
     "key": "slack",

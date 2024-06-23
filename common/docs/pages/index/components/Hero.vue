@@ -2,15 +2,14 @@
 <template>
 
 	<div class="relative z-[1] text-center">
-		<h1 class="text-5xl font-bold tracking-tight dark sm:text-7xl">  
+		<h1 class="text-5xl font-bold tracking-tight sm:text-7xl">  
 			Workflow
 			<br>
 			<span class="text-primary">Automation</span> Experts
 		</h1>
 
-
-		<p class="mt-6 text-lg tracking-tight text-gray-600 dark:text-gray-300"> 
-			We help businesses scale by automating and optimize workflows, using code-free, low-code, or full-code solutions.
+		<p class="mt-6 text-lg tracking-tight"> 
+			We help businesses scale by automating and optimizing workflows, using code-free, low-code, or full-code solutions.
 			<br>We do this in part via our open-source modular development framework. </p>
 		<div class="mt-10 flex flex-wrap gap-x-6 gap-y-3 justify-center">
 			<a type="button"
