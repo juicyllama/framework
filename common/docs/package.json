@@ -38,7 +38,7 @@
 		"vite-plugin-require": "^1.2.14",
 		"vue": "latest",
 		"vue-writer": "^2.0.2"
-	},
+	},	
 	"devDependencies": {
 		"@nuxt/devtools": "1.0.6",
 		"@nuxt/eslint-config": "^0.2.0",
@@ -52,8 +52,5 @@
 	},
 	"resolutions": {
 		"vue": "3.3.13"
-	},
-	"engines": {
-		"node": ">=18.0.0"
 	}
 }
