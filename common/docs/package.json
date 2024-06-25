@@ -1,7 +1,7 @@
 {
 	"name": "@juicyllama/docs",
 	"type": "module",
-	"version": "0.14.10",
+	"version": "0.14.11",
 	"description": "Juicyllama Docs portal",
 	"author": {
 		"name": "JuicyLlama Studio",
@@ -38,7 +38,7 @@
 		"vite-plugin-require": "^1.2.14",
 		"vue": "latest",
 		"vue-writer": "^2.0.2"
-	},	
+	},
 	"devDependencies": {
 		"@nuxt/devtools": "1.0.6",
 		"@nuxt/eslint-config": "^0.2.0",
