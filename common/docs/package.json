@@ -1,7 +1,7 @@
 {
 	"name": "@juicyllama/docs",
 	"type": "module",
-	"version": "0.14.11",
+	"version": "0.14.12",
 	"description": "Juicyllama Docs portal",
 	"author": {
 		"name": "JuicyLlama Studio",
