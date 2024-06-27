@@ -47,7 +47,20 @@ export default [{
         "integrations": [
             Integrations.GOOGLE_ANALYTICS, Integrations.GOOGLE_SHEETS, Integrations.SLACK, Integrations.SPYFU, Integrations.DATAFORSEO
         ]
-    }
+    },
+    {
+        "id": "JL-00050",
+            "title": "Affiliate Off Boarding Automation",
+            "handle": "affiliate-off-boarding-automation",
+            "what": "Our client wanted to automate the offboarding of affiliates who have not sent any traffic in the last 90 days.",
+            "why": "To keep their affiliate program clean and ensure they are not investing resources in tooling for people who are not sending traffic.",
+            "cost_benefit": "Thousands of dollars in wasted resources",
+            "solution": "We built an automation flow which finds affiliates who have not sent traffic in the last 90 days from their everflow system. It does some checks and filtering to ensure no false positives. It checks if the affiliate has an active profile with Klaviyo and if they do, it supresses their email. It checks if the affiliate has an account on their Slack community, and if so, removes the user. It then removes them from the everflow system. Finally it send the client a nice summary of which users have been removed from which systems.",
+            "stack": [Stack.N8N],
+            "integrations": [
+                Integrations.EVERFLOW, Integrations.KLAYVIO, Integrations.SLACK
+            ]
+        }
 ]
 
 /*
