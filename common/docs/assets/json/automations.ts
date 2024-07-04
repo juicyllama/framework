@@ -58,9 +58,48 @@ export default [{
             "solution": "We built an automation flow which finds affiliates who have not sent traffic in the last 90 days from their everflow system. It does some checks and filtering to ensure no false positives. It checks if the affiliate has an active profile with Klaviyo and if they do, it supresses their email. It checks if the affiliate has an account on their Slack community, and if so, removes the user. It then removes them from the everflow system. Finally it send the client a nice summary of which users have been removed from which systems.",
             "stack": [Stack.N8N],
             "integrations": [
-                Integrations.EVERFLOW, Integrations.KLAYVIO, Integrations.SLACK
+                Integrations.EVERFLOW, Integrations.KLAVIYO, Integrations.SLACK
             ]
-        }
+        },
+        {
+            "id": "JL-00051",
+                "title": "Daily Sales Report",
+                "handle": "daily-sales-report",
+                "what": "Our client wanted a easy to digest sales report delivered daily to their slack channel.",
+                "why": "To understand how the sales performed yesterday, across different stores and also marketplaces.",
+                "cost_benefit": "Thousands of dollars in wasted resources",
+                "solution": "We built an automation flow which pulled in sales data from Shopify (which also collected sales from Marketplaces). We split out shopify and marketplaces sales along with showing totals. Finally delivering the report to their slack channel.",
+                "stack": [Stack.N8N],
+                "integrations": [
+                    Integrations.SHOPIFY, Integrations.SLACK
+                ]
+            },
+            {
+                "id": "JL-00048",
+                    "title": "Ecommerce Traffic Light Reporting",
+                    "handle": "ecommerce-traffic-light-reporting",
+                    "what": "Deliver an easy to digest report showing ecommerce perfomance over time.",
+                    "why": "To monitor ecommerce performance and ensure the revenue is increasing over time.",
+                    "cost_benefit": "Thousands of dollars in wasted resources",
+                    "solution": "We build an automation flow which pulled in sales data from both Shopify and Recharge. We broke down the data into different categories and time periods. Finally sending the traffic light report to their slack channel.",
+                    "stack": [Stack.N8N],
+                    "integrations": [
+                        Integrations.SHOPIFY, Integrations.SLACK, Integrations.RECHARGE, Integrations.GOOGLE_SHEETS
+                    ]
+                },
+                {
+                    "id": "JL-00011",
+                        "title": "Affiliate Traffic Light Reporting",
+                        "handle": "affiliate-traffic-light-reporting",
+                        "what": "Deliver an easy to digest report showing affiliate perfomance over time.",
+                        "why": "To monitor affiliate performance and ensure it is increasing over time.",
+                        "cost_benefit": "Thousands of dollars in wasted resources",
+                        "solution": "We build an automation flow which pulled in affiliate data from Everflow. We broke down the data into different categories and time periods. Finally sending the traffic light report to their slack channel.",
+                        "stack": [Stack.N8N],
+                        "integrations": [
+                            Integrations.EVERFLOW, Integrations.SLACK, Integrations.GOOGLE_SHEETS
+                        ]
+                    }
 ]
 
 /*
