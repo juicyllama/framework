@@ -99,7 +99,20 @@ export default [{
                         "integrations": [
                             Integrations.EVERFLOW, Integrations.SLACK, Integrations.GOOGLE_SHEETS
                         ]
-                    }
+                    },
+                    {
+                        "id": "JL-00047",
+                            "title": "CRO Traffic Light Reporting",
+                            "handle": "cro-traffic-light-reporting",
+                            "what": "Deliver an easy to digest report showing how well the website is perfoming over time.",
+                            "why": "To see if our conversino rate optimisation work is adding value and increasing revenue.",
+                            "cost_benefit": "Hours saved each week in manual reporting time.",
+                            "solution": "We built an automation flow which pulled in website data from Google Analytics. We broke down the data into different categories and time periods. Finally sending the traffic light report to their slack channel.",
+                            "stack": [Stack.N8N],
+                            "integrations": [
+                                Integrations.GOOGLE_ANALYTICS, Integrations.SLACK, Integrations.GOOGLE_SHEETS
+                            ]
+                        }
 ]
 
 /*
