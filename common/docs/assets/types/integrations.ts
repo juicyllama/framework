@@ -1,7 +1,7 @@
 export enum Integrations {
     BUFFER = 'Buffer',
     CREATIFY = 'Creatify',
-    DATAFORSEO = 'DataforSEO',
+    DATAFORSEO = 'Dataforseo',
     EVERFLOW = 'Everflow',
     GOOGLE_SHEETS = 'Google Sheets',
     GOOGLE_ANALYTICS = 'Google Analytics',
