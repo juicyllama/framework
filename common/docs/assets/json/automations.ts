@@ -11,19 +11,17 @@ export default [{
     "solution": "Create workflow that when a new post is added to the blog on Shopify it uses AI tooling to craft videos / posts and automatically posts them to their different social media networks. We use Buffer to spread out the posts and ensure they can handle content automation upstream.",
     "stack": [Stack.N8N],
     "integrations": [Integrations.SHOPIFY, Integrations.BUFFER, Integrations.OPENAI, Integrations.CREATIFY]
-}
-//,{
-//     "id": "JL-00002",
-//     "title": "Automate weekly newsletter from blog content",
-//     "handle": "blog-content-to-weekly-newsletter",
-//     "what": "Our client would like to drive traffic to new content and keep their email lists warm by sending a weekly newsletter with any blog posts uploaded.",
-//     "why": " ",
-//     "cost_benefit": "",
-//     "solution": "",
-//     "stack": [Stack.N8N],
-//     "integrations": []
-// }
-,{
+},{
+    "id": "JL-00002",
+    "title": "Automate weekly newsletter to customers from blog content",
+    "handle": "blog-content-to-weekly-newsletter",
+    "what": "Our client would like to drive traffic to new content and keep their email lists warm by sending a weekly newsletter with blog posts uploaded in the last week.",
+    "why": "Keep customers engaged and drive traffic to new content",
+    "cost_benefit": "Hours saved in manual work and large increase in campaign revenue due to engaged audience",
+    "solution": "A workflow which collects any new blog posts from the last week, it then builds a newsletter template, creates the Klaviyo campaign, assigns the newsletter and creates the send job. Finally it sends a slack message with a link to the new campaign.",
+    "stack": [Stack.N8N],
+    "integrations": [Integrations.KLAVIYO, Integrations.SHOPIFY, Integrations.SLACK]
+},{
 "id": "JL-00046",
     "title": "Weekly Inventory Report with Sales Performance",
     "handle": "weekly-investory-reporting-sales-performance",
