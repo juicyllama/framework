@@ -110,7 +110,20 @@ export default [{
                             "integrations": [
                                 Integrations.GOOGLE_ANALYTICS, Integrations.SLACK, Integrations.GOOGLE_SHEETS
                             ]
-                        }
+                        },
+                        {
+                            "id": "JL-00057",
+                                "title": "Powering a client portal based on a google sheet",
+                                "handle": "powering-a-client-portal-based-on-a-google-sheet",
+                                "what": "Create a client portal that includes a table of data which can be updated by the client via a google sheet.",
+                                "why": "Our client wanted to allow vetted users access to a portal which initally contains a searchable table with private data. The client would like to build an app in a way it can be extended over time. Time was critical here as the client wanted to demo the solution within a few days.",
+                                "cost_benefit": "Day or even weeks of development time saved",
+                                "solution": "We built a bubble.io client portal with user authentication alongside an N8N workflow connecting a Google Sheet to Bubble's database, allowing syncrinization from the google sheet to the client portal. The client can update the google sheet and within 60 seconds the changes will be live inside their client portal.",
+                                "stack": [Stack.N8N, Stack.BUBBLE],
+                                "integrations": [
+                                    Integrations.GOOGLE_SHEETS
+                                ]
+                            },
 ]
 
 /*
