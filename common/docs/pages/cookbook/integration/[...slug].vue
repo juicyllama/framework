@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import automations from '../../../assets/json/automations';
-import { Automation } from '../../../assets/types/automation';
+import type { Automation } from '../../../assets/types/automation';
 
 definePageMeta({
   layout: 'cookbook',
