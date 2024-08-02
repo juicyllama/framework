@@ -1,7 +1,8 @@
 export default defineNuxtConfig({
-	ssr: true,
-	extends: ['@nuxt/ui-pro'],
-	modules: [
+ ssr: true,
+ extends: ['@nuxt/ui-pro'],
+
+ modules: [
 	  '@nuxt/content',
 	  '@nuxt/ui',
 	  '@nuxthq/studio',
@@ -10,60 +11,74 @@ export default defineNuxtConfig({
 	  'nuxt-og-image',
 	  '@nuxtjs/tailwindcss'
 	],
-	css: [
-		'@/assets/css/classes-that-nuxt-missing.css',
-		'@/assets/css/main.css',
-	  ],
-	hooks: {
-	  'components:extend': (components) => {
-		const globals = components.filter((c) => ['UButton', 'UIcon'].includes(c.pascalName))
 
-		globals.forEach((c) => c.global = true)
+ css: [
+					'@/assets/css/classes-that-nuxt-missing.css',
+					'@/assets/css/main.css',
+	  ],
+
+ hooks: {
+	  'components:extend': (components) => {
+					const globals = components.filter((c) => ['UButton', 'UIcon'].includes(c.pascalName))
+
+					globals.forEach((c) => c.global = true)
 	  }
 	},
-	components: {
-		dirs: ['~/components']
+
+ components: {
+					dirs: ['~/components']
 	},
-	colorMode: {
-		preference: 'dark',
-		fallback: 'dark',
-		storageKey: 'jl-docs-color-mode'
+
+ colorMode: {
+					preference: 'dark',
+					fallback: 'dark',
+					storageKey: 'jl-docs-color-mode'
 	},
-	routeRules: {
-		'/api/search.json': { prerender: true },
+
+ routeRules: {
+					'/api/search.json': { prerender: true },
 	  },
-	ui: {
+
+ ui: {
 	  icons: ['heroicons', 'simple-icons']
 	},
-	// Fonts
+
+ // Fonts
 	fontMetrics: {
 	  fonts: ['DM Sans']
 	},
-	googleFonts: {
+
+ googleFonts: {
 	  display: 'swap',
 	  download: true,
 	  families: {
-		Nunito:  [400, 500, 600, 700, 800, 900],
+					Nunito:  [400, 500, 600, 700, 800, 900],
 	  }
 	},
-	sourcemap: {
-		client: false,
-		server: false
+
+ sourcemap: {
+					client: false,
+					server: false
 	},
-	devtools: { enabled: true },
-	typescript: { strict: false },
-	content: {
-		defaultLocale: 'en',
-		markdown: {
-			mdc: true,
-		},
-		highlight: {
-			preload: ['sql'],
-		  }
+
+ devtools: { enabled: true },
+ typescript: { strict: false },
+
+ content: {
+					defaultLocale: 'en',
+					markdown: {
+									mdc: true,
+					},
+					highlight: {
+									preload: ['sql'],
+							}
 	},
-	nitro: {
-		prerender: {
-		  failOnError: false
-		}
+
+ nitro: {
+					prerender: {
+							failOnError: false
+					}
 	},
-  })
+
+ compatibilityDate: '2024-08-02'
+})

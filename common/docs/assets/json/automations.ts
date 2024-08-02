@@ -124,6 +124,32 @@ export default [{
                                     Integrations.GOOGLE_SHEETS
                                 ]
                             },
+                            {
+                                "id": "JL-00058",
+                                    "title": "Everflow Server to Server Integration With Shopify",
+                                    "handle": "everflow-server-to-server-integration-with-shopify",
+                                    "what": "Ensure that the client's Shopify store is sending the correct data, including every single conversion to Everflow for their affiliate program.",
+                                    "why": "The standard everflow shopify intergration is quite flakey and results in conversion loss, our client was not happy with even a single sale being lost.",
+                                    "cost_benefit": "Unquantifiable as the client was losing trust in the affiliate program",
+                                    "solution": "An N8N workflow that listens to the Shopify webhook for new orders, it then sends the conversion to Everflow via their server to server API. This ensures that every single conversion is tracked.",
+                                    "stack": [Stack.N8N],
+                                    "integrations": [
+                                        Integrations.SHOPIFY, Integrations.EVERFLOW
+                                    ]
+                                },
+                                {
+                                    "id": "JL-00059",
+                                        "title": "Everflow Post Conversion Automation",
+                                        "handle": "everflow-post-conversion-automation",
+                                        "what": "The client wanted to automate the process of sending conversion emails to affiliates and also updating Shopify with the affiliate ID for internal awareness.",
+                                        "why": "The standard everflow conversion emails are quite basic and the client wanted to add some customisation to the emails.",
+                                        "cost_benefit": "Unquantifiable, but part of a larger affiliate program improvement project",
+                                        "solution": "An N8N workflow that listens to the Everflow webhook for new conversions. It then reads a email template from Klaviyo, sends a transactional email via SendGrid and finally updates Shopify.",
+                                        "stack": [Stack.N8N],
+                                        "integrations": [
+                                            Integrations.SHOPIFY, Integrations.EVERFLOW, Integrations.KLAVIYO, Integrations.SENDGRID
+                                        ]
+                                    },
 ]
 
 /*

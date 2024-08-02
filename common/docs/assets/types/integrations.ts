@@ -8,6 +8,7 @@ export enum Integrations {
     KLAVIYO = 'Klaviyo',
     OPENAI = 'Openai',
     RECHARGE = 'Recharge',
+    SENDGRID = 'Sendgrid',
     SHIPBOB = 'Shipbob',
     SHOPIFY = 'Shopify',
     SLACK = 'Slack', 

@@ -10,7 +10,7 @@
 
 		<p class="mt-6 text-lg tracking-tight"> 
 			We help businesses scale by automating and optimizing workflows, using code-free, low-code, or full-code solutions.
-			<br>We do this in part via our open-source modular development framework. </p>
+			<br>We do this in part via our open-source modular development framework and tooling. </p>
 		<div class="mt-10 flex flex-wrap gap-x-6 gap-y-3 justify-center">
 			<a type="button"
 				class="button-secondary"
@@ -21,8 +21,8 @@
 			
 			<a type="button"
 				class="button-primary"
-				href="/framework">
-				<Icon name="ph:rocket-launch-duotone" class="flex-shrink-0 h-6 w-6" /> Framework
+				href="/tools">
+				<Icon name="ph:rocket-launch-duotone" class="flex-shrink-0 h-6 w-6" /> Free Tools
 			</a>
 			
 		</div>
